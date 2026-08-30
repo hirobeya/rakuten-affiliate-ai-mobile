@@ -1,1 +1,12 @@
-rakuten-affiliate-ai-mobile
+# rakuten-affiliate-ai-mobile
+
+スマホ向けの楽天アフィリエイト商品選定・投稿支援アプリです。
+
+- 楽天市場の商品検索
+- 売れやすさ / 収益性の参考スコア
+- 上位商品の比較
+- 「今日売るならこれ」の提案
+- ターゲット / 訴求ポイントの表示
+- 楽天ROOM / Threads / Instagram向け投稿文生成
+
+APIキー等の秘密情報はリポジトリに含めず、Vercelの環境変数で管理します。
