@@ -10,3 +10,4 @@
 - 楽天ROOM / Threads / Instagram向け投稿文生成
 
 APIキー等の秘密情報はリポジトリに含めず、Vercelの環境変数で管理します。
+自動デプロイ確認
