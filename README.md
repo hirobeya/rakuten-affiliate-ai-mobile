@@ -1,0 +1,1 @@
+rakuten-affiliate-ai-mobile
