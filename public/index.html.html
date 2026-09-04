@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ウレナビ</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#171717}
+.w{max-width:680px;margin:auto;padding:14px 12px 55px}
+h1{font-size:23px;margin:0 0 6px}
+.sub,.muted{font-size:12px;color:#777;line-height:1.55}
+.box,.item,.today,.decision,.compare{background:#fff;border-radius:18px;padding:14px;margin-top:12px}
+.box{box-shadow:0 6px 22px #0000000a}
+label{display:block;font-weight:800;font-size:13px;margin:12px 0 6px}
+.f{position:relative}
+input,select{width:100%;min-height:50px;border:1px solid #e5e7eb;border-radius:14px;padding:12px 42px 12px 13px;font-size:16px;background:#fff}
+.x{display:none;position:absolute;right:10px;top:10px;border:0;border-radius:50%;width:30px;height:30px}
+.x.on{display:block}
+.go{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px;background:#b73727;color:#fff;font-size:17px;font-weight:900}
+.hist{display:none;position:absolute;left:0;right:0;top:56px;z-index:20;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 12px 28px #0002;overflow:hidden}
+.hist.on{display:block}
+.hh{display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #eee;font-size:11px;font-weight:800}
+.hc{border:0;background:none;color:#888;font-size:11px}
+.ho{display:block;width:100%;border:0;border-bottom:1px solid #f2f2f2;background:#fff;text-align:left;padding:10px 11px;font-size:13px}
+.ho small{display:block;color:#999;font-size:10px}
+.today{background:linear-gradient(#fffdf8,#fff7e8);border:1px solid #efdeb8}
+.today h2,.decision h2,.compare h2{font-size:16px;margin:0 0 8px}
+.name{font-size:15px;font-weight:900;line-height:1.4}
+.guide{margin-top:9px;padding:10px;border-radius:11px;background:#f8fbff;border:1px solid #dce8f5}
+.gt{font-size:11px;font-weight:900;color:#2f5d87}
+.target{font-size:12px;font-weight:800;line-height:1.5;margin-top:4px}
+.pts{margin:5px 0 0;padding-left:18px;font-size:12px;line-height:1.55}
+.btns,.acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.btns button,.btns a,.acts button,.acts a{padding:10px;border:0;border-radius:10px;text-align:center;text-decoration:none;font-size:12px;font-weight:800}
+.btns button,.acts button{background:#eef1f4}
+.btns a,.acts a{background:#111;color:#fff}
+.decision{border:1px solid #f0d8d2;background:linear-gradient(#fff,#fff9f7)}
+.dm{font-size:14px;font-weight:900;color:#8f2f22;line-height:1.5}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+.mini{border:1px solid #e5e7eb;border-radius:11px;padding:7px;min-width:0}
+.mini b{font-size:10px;font-weight:900}
+.mini span{font-size:9px;color:#666;line-height:1.35}
+.compare-list{display:grid;gap:8px}
+.cc{border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+.cc-top{display:flex;justify-content:space-between;gap:8px}
+.rk{font-size:11px;font-weight:900}
+.cn{font-size:12px;font-weight:800;line-height:1.35}
+.cp{font-size:16px;font-weight:900;margin-top:5px}
+.cm{font-size:10px;color:#666;line-height:1.5}
+.cs{font-size:11px;font-weight:900}
+.top{display:flex;gap:10px}
+.img{width:82px;height:82px;object-fit:cover;border-radius:11px}
+.item h3{font-size:14px;line-height:1.4;margin:0 0 5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.price{font-size:18px;font-weight:900}
+.rank{font-size:12px;font-weight:900;color:#9a1f1f;margin-bottom:6px}
+.q,.chips{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}
+.q span,.chip{font-size:10px;padding:5px 7px;border-radius:999px;background:#f1f3f5}
+.q .g{background:#edf8f0;color:#216e39;font-weight:800}
+.ins{margin-top:9px;padding:9px;border-radius:11px;background:#fff8f6;border:1px solid #f1d6d0}
+.it{font-size:11px;font-weight:900;color:#8f2f22}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:9px}
+.tab{border:1px solid #e5e7eb;background:#fff;border-radius:9px;padding:7px 3px;font-size:10px;font-weight:800}
+.tab.on{background:#111;color:#fff}
+.copy{white-space:pre-wrap;background:#fafafa;border:1px solid #e5e7eb;border-radius:11px;padding:9px;margin-top:9px;font-size:12px;line-height:1.5}
+
+/* ログインテスト */
+#loginGate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
+.loginCard{width:100%;max-width:420px;background:#fff;border-radius:24px;padding:30px 20px;text-align:center;box-shadow:0 10px 35px #00000012}
+.loginLogo{font-size:32px;font-weight:900;margin-bottom:8px}
+.loginCatch{font-size:16px;font-weight:900;margin-bottom:10px}
+.loginText{font-size:13px;line-height:1.7;color:#777;margin-bottom:22px}
+.loginBtn{width:100%;border:0;border-radius:15px;padding:16px;background:#111;color:#fff;font-size:16px;font-weight:900}
+.loginNote{margin-top:12px;font-size:11px;color:#999}
+#app{display:none}
+.appHead{display:flex;justify-content:flex-end;margin-bottom:4px}
+.logoutBtn{border:0;background:#eef1f4;color:#666;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:800}
+</style>
+</head>
+
+<body>
+
+<div id="loginGate">
+  <div class="loginCard">
+    <div class="loginLogo">ウレナビ</div>
+    <div class="loginCatch">売れる商品選びを、もっと簡単に。</div>
+    <div class="loginText">
+      楽天の商品を検索して、<br>
+      売れやすさ・収益性・訴求ポイントまで<br>
+      AIがまとめて分析します。
+    </div>
+    <button id="testLogin" class="loginBtn">ログインして始める</button>
+    <div class="loginNote">※現在はログイン機能の動作確認版です</div>
+  </div>
+</div>
+
+<div id="app">
+<main class="w">
+
+<div class="appHead">
+  <button id="logoutBtn" class="logoutBtn">ログアウト</button>
+</div>
+
+<h1>ウレナビ</h1>
+
+<div class="sub">
+商品を探して、売れやすさと収益性を評価。誰にどう売るかまで決めます。<br>
+※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
+</div>
+
+<section class="box">
+<label>探したい商品</label>
+
+<div class="f">
+<input id="k" autocomplete="off">
+<button id="x" class="x">×</button>
+<div id="hist" class="hist"></div>
+</div>
+
+<label>最低価格</label>
+<select id="min">
+<option value="">選択してください</option>
+<option value="0">0円〜</option>
+<option value="500">500円〜</option>
+<option value="1000">1,000円〜</option>
+<option value="3000">3,000円〜</option>
+<option value="5000">5,000円〜</option>
+<option value="10000">10,000円〜</option>
+<option value="30000">30,000円〜</option>
+<option value="50000">50,000円〜</option>
+<option value="100000">100,000円〜</option>
+</select>
+
+<label>最高価格</label>
+<select id="max">
+<option value="">選択してください</option>
+<option value="500">〜500円</option>
+<option value="1000">〜1,000円</option>
+<option value="3000">〜3,000円</option>
+<option value="5000">〜5,000円</option>
+<option value="10000">〜10,000円</option>
+<option value="30000">〜30,000円</option>
+<option value="50000">〜50,000円</option>
+<option value="100000">〜100,000円</option>
+<option value="300000">〜300,000円</option>
+<option value="1000000">〜1,000,000円</option>
+<option value="999999998">上限まで</option>
+</select>
+
+<label>優先する並び</label>
+<select id="sort">
+<option value="">選択してください</option>
+<option value="-reviewCount">レビュー件数が多い</option>
+<option value="-affiliateRate">アフィリエイト料率が高い</option>
+<option value="-reviewAverage">レビュー評価が高い</option>
+<option value="standard">楽天標準</option>
+<option value="+itemPrice">価格が安い</option>
+</select>
+
+<button id="go" class="go">商品を探して評価する</button>
+<div id="st" class="muted"></div>
+</section>
+
+<section id="res"></section>
+</main>
+</div>
+
+<script>
+const loginGate=document.getElementById('loginGate');
+const app=document.getElementById('app');
+const testLogin=document.getElementById('testLogin');
+const logoutBtn=document.getElementById('logoutBtn');
+
+function showApp(){
+  loginGate.style.display='none';
+  app.style.display='block';
+}
+function showLogin(){
+  app.style.display='none';
+  loginGate.style.display='flex';
+}
+testLogin.onclick=()=>{
+  sessionStorage.setItem('urenaviLoginTest','1');
+  showApp();
+};
+logoutBtn.onclick=()=>{
+  sessionStorage.removeItem('urenaviLoginTest');
+  showLogin();
+};
+if(sessionStorage.getItem('urenaviLoginTest')==='1') showApp();
+else showLogin();
+
+const $=s=>document.querySelector(s),
+fmt=n=>new Intl.NumberFormat('ja-JP').format(+n||0),
+esc=s=>String(s).replace(/[&<>"']/g,c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[c]));
+
+const k=$('#k'),x=$('#x'),H='raiHistory3';
+
+x.onclick=()=>{
+k.value='';
+x.classList.remove('on');
+closeH();
+k.focus()
+};
+
+k.oninput=()=>x.classList.toggle('on',!!k.value);
+
+function hist(){
+try{
+return JSON.parse(localStorage.getItem(H)||'[]')
+}catch{
+return[]
+}
+}
+
+function drawH(){
+let h=hist(),e=$('#hist');
+
+e.innerHTML=h.length
+?`<div class="hh">
+<span>最近の検索</span>
+<button class="hc">履歴を消す</button>
+</div>
+${h.map((v,i)=>`
+<button class="ho" data-i="${i}">
+${esc(v.k)}
+<small>
+${v.min?fmt(v.min)+'円〜':'下限なし'} /
+${v.max?'〜'+fmt(v.max)+'円':'上限なし'}
+</small>
+</button>
+`).join('')}`
+:'<div class="hh">まだ履歴はありません</div>';
+
+e.querySelector('.hc')?.addEventListener('click',q=>{
+q.stopPropagation();
+localStorage.removeItem(H);
+drawH()
+});
+
+e.querySelectorAll('.ho').forEach(b=>b.onclick=q=>{
+q.stopPropagation();
+let v=h[+b.dataset.i];
+k.value=v.k;
+x.classList.add('on');
+$('#min').value=v.min;
+$('#max').value=v.max;
+$('#sort').value=v.sort;
+closeH()
+})
+}
+
+function openH(){
+drawH();
+$('#hist').classList.add('on')
+}
+
+function closeH(){
+$('#hist').classList.remove('on')
+}
+
+k.onfocus=openH;
+k.onclick=openH;
+
+document.onclick=e=>{
+if(!e.target.closest('.f'))closeH()
+};
+
+function saveH(v){
+let h=hist().filter(z=>JSON.stringify(z)!==JSON.stringify(v));
+h.unshift(v);
+localStorage.setItem(H,JSON.stringify(h.slice(0,6)))
+}
+
+function aud(i){
+let t=i.itemName||'',p=+i.itemPrice||0;
+
+if(/バイク|ツーリング|ライダー/.test(t))
+return'バイク・ツーリングで小物を身軽に持ちたい人';
+
+if(/登山|アウトドア|キャンプ|釣り/.test(t))
+return'アウトドアで両手を空けたい人';
+
+if(/イヤホン|ヘッドホン/.test(t))
+return'通勤や移動中に音楽を楽しみたい人';
+
+if(/SSD|HDD|ストレージ/i.test(t))
+return'PCやスマホの容量不足を解消したい人';
+
+if(/キーボード|マウス/.test(t))
+return'PC作業を快適にしたい人';
+
+if(/メンズ|男性/.test(t))
+return'実用性重視で選ぶ男性';
+
+if(/レディース|女性/.test(t))
+return'使いやすさとデザインを両立したい女性';
+
+return p<=10000
+?'レビューを見ながら失敗しにくく選びたい人'
+:'品質重視で比較検討したい人'
+}
+
+function pts(i){
+let a=[],
+r=+i.reviewCount||0,
+v=+i.reviewAverage||0,
+p=+i.itemPrice||0,
+rate=+i.affiliateRate||0;
+
+if((i.relevance||0)>=90)
+a.push('検索意図との一致度が高い');
+
+if(r>=300)
+a.push(`レビュー${fmt(r)}件で安心材料が多い`);
+else if(r>=50)
+a.push(`レビュー${fmt(r)}件で実績を伝えやすい`);
+
+if(v>=4.5&&r>=20)
+a.push(`★${v.toFixed(1)}の高評価を訴求できる`);
+
+if(p>=1000&&p<=10000)
+a.push(`${fmt(p)}円で比較的買いやすい価格帯`);
+
+if(rate>=4)
+a.push(`料率${rate.toFixed(1)}%で収益性も確保`);
+
+return a.slice(0,3)
+}
+
+function post(i,p='room'){
+let u=i.affiliateUrl||i.itemUrl,
+pr=fmt(i.itemPrice),
+av=(+i.reviewAverage||0).toFixed(1),
+rv=fmt(i.reviewCount),
+tar=aud(i),
+po=pts(i)[0]||'レビューと価格のバランスがポイント';
+
+if(p==='threads')
+return `※アフィリエイト広告を利用しています
+
+これ、紹介候補として強い。
+${i.itemName}
+${pr}円｜★${av}（${rv}件）
+
+${tar}に刺さりそう。
+ポイントは「${po}」。
+${u}`;
+
+if(p==='instagram')
+return `※アフィリエイト広告を利用しています
+
+楽天で見つけた注目アイテム✨
+
+${i.itemName}
+${pr}円 / ★${av}（${rv}件）
+
+おすすめしたいのは
+${tar}
+
+✔ ${pts(i).join('\n✔ ')}
+
+保存して比較👇
+${u}`;
+
+return `※アフィリエイト広告を利用しています
+
+楽天で見つけた注目アイテム📌
+
+${i.itemName}
+価格：${pr}円
+レビュー：★${av}（${rv}件）
+
+こんな人におすすめ👇
+${tar}
+
+${pts(i).map(z=>'・'+z).join('\n')}
+
+気になる方はこちら👇
+${u}`
+}
+
+function short(i){
+return esc(
+(i.itemName||'')
+.replace(/[【\[][^】\]]*[】\]]/g,'')
+.slice(0,38)
+)
+}
+
+function today(a){
+if(!a.length)return'';
+
+let i=[...a].sort((a,b)=>
+(b.sellability||0)-(a.sellability||0)||
+(b.score||0)-(a.score||0)
+)[0];
+
+return `
+<section class="today">
+<h2>今日売るならこれ</h2>
+<div class="name">${short(i)}</div>
+
+<div class="muted">
+売れやすさ ${i.sellability}/100・AI ${i.score}/100。
+まず成約を狙うならこの商品を優先。
+</div>
+
+<div class="guide">
+<div class="gt">狙う相手</div>
+<div class="target">${esc(aud(i))}</div>
+
+<ul class="pts">
+${pts(i).map(z=>`<li>${esc(z)}</li>`).join('')}
+</ul>
+</div>
+
+<div class="btns">
+<button class="tc">投稿文をコピー</button>
+<a href="${i.affiliateUrl||i.itemUrl}" target="_blank">楽天で見る</a>
+</div>
+</section>
+`
+}
+
+function decision(a){
+let t=a.slice(0,3);
+if(!t.length)return'';
+
+let s=[...t].sort((a,b)=>b.sellability-a.sellability)[0],
+p=[...t].sort((a,b)=>b.profitability-a.profitability)[0];
+
+return `
+<section class="decision">
+<h2>AIの最終結論</h2>
+
+<div class="dm">
+迷ったら総合1位。まずは売れやすさを取りにいく。
+</div>
+
+<div class="dg">
+<div class="mini">
+<b>総合</b>
+<span>${short(t[0])}</span>
+</div>
+
+<div class="mini">
+<b>売れやすさ</b>
+<span>${short(s)}</span>
+</div>
+
+<div class="mini">
+<b>利益</b>
+<span>${short(p)}</span>
+</div>
+</div>
+</section>
+`
+}
+
+function compare(a){
+let t=a.slice(0,3);
+if(t.length<2)return'';
+
+return `
+<section class="compare">
+<h2>上位${t.length}商品を比較</h2>
+
+<div class="compare-list">
+${t.map((i,n)=>`
+<div class="cc">
+<div class="cc-top">
+<div class="rk">${n+1}位</div>
+<div class="cs">AI ${i.score}/100</div>
+</div>
+
+<div class="cn">${esc(i.itemName)}</div>
+<div class="cp">${fmt(i.itemPrice)}円</div>
+
+<div class="cm">
+★${(+i.reviewAverage||0).toFixed(1)} /
+${fmt(i.reviewCount)}件　
+料率 ${(+i.affiliateRate||0).toFixed(1)}%<br>
+売れやすさ ${i.sellability} /
+収益性 ${i.profitability}
+</div>
+</div>
+`).join('')}
+</div>
+
+<div class="muted" style="margin-top:8px">
+総合順位は「売れやすさ70%＋収益性30%」で算出。
+報酬目安は商品価格×料率の概算で、
+1商品1個あたり上限1,000円を反映しています。
+</div>
+</section>
+`
+}
+
+function render(a){
+$('#res').innerHTML=
+today(a)+
+decision(a)+
+compare(a)+
+a.map((i,n)=>`
+<article class="item">
+
+<div class="rank">
+おすすめ ${n+1}位　AI ${i.score}/100
+</div>
+
+<div class="q">
+<span class="g">
+検索一致 ${i.relevance>=95?'◎':i.relevance>=85?'○':'△'}
+</span>
+
+<span class="g">
+売れやすさ ${i.sellability>=80?'◎':i.sellability>=65?'○':'△'}
+</span>
+
+<span>
+収益性 ${i.profitability>=65?'◎':i.profitability>=45?'○':'△'}
+</span>
+</div>
+
+<div class="top">
+${i.mediumImageUrls?.[0]
+?`<img class="img" src="${i.mediumImageUrls[0]}">`
+:''}
+
+<div>
+<h3>${esc(i.itemName)}</h3>
+
+<div class="price">
+${fmt(i.itemPrice)}円
+</div>
+
+<div class="muted">
+★${(+i.reviewAverage||0).toFixed(1)} /
+${fmt(i.reviewCount)}件　
+料率 ${(+i.affiliateRate||0).toFixed(1)}%
+</div>
+</div>
+</div>
+
+<div class="ins">
+<div class="it">AIスコアの根拠</div>
+
+<div class="chips">
+<span class="chip">関連度 ${i.relevance}</span>
+<span class="chip">売れやすさ ${i.sellability}</span>
+<span class="chip">収益性 ${i.profitability}</span>
+<span class="chip">報酬目安 約${fmt(i.estimatedCommission)}円/件</span>
+</div>
+</div>
+
+<div class="guide">
+<div class="gt">この商品は誰に・何を刺す？</div>
+
+<div class="target">
+${esc(aud(i))}
+</div>
+
+<ul class="pts">
+${pts(i).map(z=>`<li>${esc(z)}</li>`).join('')}
+</ul>
+</div>
+
+<div class="tabs">
+<button class="tab on" data-i="${n}" data-p="room">
+楽天ROOM
+</button>
+
+<button class="tab" data-i="${n}" data-p="threads">
+Threads
+</button>
+
+<button class="tab" data-i="${n}" data-p="instagram">
+Instagram
+</button>
+</div>
+
+<div class="copy">
+${esc(post(i))}
+</div>
+
+<div class="acts">
+<button class="cb" data-i="${n}" data-p="room">
+投稿文をコピー
+</button>
+
+<a href="${i.affiliateUrl||i.itemUrl}" target="_blank">
+楽天で見る
+</a>
+</div>
+
+</article>
+`).join('');
+
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+let ar=b.closest('.item'),
+i=+b.dataset.i,
+p=b.dataset.p;
+
+ar.querySelectorAll('.tab')
+.forEach(z=>z.classList.remove('on'));
+
+b.classList.add('on');
+
+ar.querySelector('.copy').textContent=
+post(a[i],p);
+
+ar.querySelector('.cb').dataset.p=p
+});
+
+document.querySelectorAll('.cb').forEach(b=>b.onclick=async()=>{
+await navigator.clipboard.writeText(
+post(a[+b.dataset.i],b.dataset.p)
+);
+
+b.textContent='コピーしました'
+});
+
+let tc=$('.tc');
+
+if(tc){
+let i=[...a]
+.sort((a,b)=>b.sellability-a.sellability)[0];
+
+tc.onclick=async()=>{
+await navigator.clipboard.writeText(post(i));
+tc.textContent='コピーしました'
+}
+}
+}
+
+$('#go').onclick=async()=>{
+let keyword=k.value.trim(),
+min=$('#min').value,
+max=$('#max').value,
+sort=$('#sort').value;
+
+if(!keyword)
+return $('#st').textContent=
+'商品キーワードを入力してください。';
+
+if(!sort)
+return $('#st').textContent=
+'優先する並びを選択してください。';
+
+if(min&&max&&+max<=+min)
+return $('#st').textContent=
+'最高価格は最低価格より大きい金額を選んでください。';
+
+$('#st').textContent='検索中…';
+
+let q=new URLSearchParams({
+keyword,
+sort
+});
+
+if(min&&min!=='0')
+q.set('minPrice',min);
+
+if(max)
+q.set('maxPrice',max);
+
+try{
+let r=await fetch('/api/search?'+q),
+d=await r.json();
+
+if(!r.ok)
+throw Error(d.message||'検索失敗');
+
+saveH({
+k:keyword,
+min,
+max,
+sort
+});
+
+render(d.items||[]);
+
+$('#st').textContent=
+`${(d.items||[]).length}件をおすすめ順に表示しました。`;
+
+}catch(e){
+$('#st').textContent=
+'エラー：'+e.message
+}
+}
+</script>
+
+</body>
+</html>
