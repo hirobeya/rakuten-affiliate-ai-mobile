@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ウレナビ｜楽天アフィリエイトの商品選び・投稿作成支援Webアプリ</title>
+<meta name="description" content="楽天アフィリエイトで何を売るか迷う時間を減らす。商品検索、売れやすさ・収益性比較、おすすめ提案、楽天ROOM・Threads・Instagram向け投稿文作成まで。">
+
+<style>
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+  color:#17223b;
+  background:#fff;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.wrap{
+  max-width:1080px;
+  margin:auto;
+  padding:0 22px;
+}
+
+.hero{
+  background:linear-gradient(145deg,#fffaf5 0%,#fff 52%,#f2f6ff 100%);
+  padding:22px 0 64px;
+  overflow:hidden;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:950;
+  font-size:24px;
+  color:#162747;
+}
+
+.logo{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#ef6a2e;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+}
+
+.navbtn{
+  padding:10px 16px;
+  border-radius:999px;
+  background:#172a4b;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+}
+
+.heroGrid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:44px;
+  align-items:center;
+  padding-top:58px;
+}
+
+.eyebrow{
+  display:inline-flex;
+  background:#fff0e7;
+  color:#c74e1e;
+  font-size:13px;
+  font-weight:900;
+  padding:8px 12px;
+  border-radius:999px;
+}
+
+.hero h1{
+  font-size:clamp(34px,5vw,62px);
+  line-height:1.12;
+  margin:18px 0 16px;
+  letter-spacing:-.03em;
+}
+
+.orange{
+  color:#e65d26;
+}
+
+.lead{
+  font-size:18px;
+  line-height:1.8;
+  color:#4d5870;
+  margin:0 0 24px;
+}
+
+.cta{
+  display:inline-block;
+  background:#ef642b;
+  color:#fff;
+  padding:16px 26px;
+  border-radius:14px;
+  font-weight:950;
+  box-shadow:0 12px 28px #ef642b30;
+}
+
+.subcta{
+  font-size:12px;
+  color:#697386;
+  margin-top:10px;
+}
+
+.device{
+  background:#172a4b;
+  border-radius:28px;
+  padding:14px;
+  box-shadow:0 28px 60px #18284525;
+}
+
+.screen{
+  background:#f7f8fa;
+  border-radius:18px;
+  padding:18px;
+}
+
+.screenTop{
+  font-weight:950;
+  font-size:18px;
+  margin-bottom:12px;
+}
+
+.search{
+  background:#fff;
+  border:1px solid #e2e6ed;
+  padding:11px;
+  border-radius:10px;
+  font-size:12px;
+  color:#687083;
+}
+
+.rank{
+  margin-top:12px;
+  display:grid;
+  gap:8px;
+}
+
+.row{
+  background:#fff;
+  border-radius:11px;
+  padding:10px;
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  gap:8px;
+  align-items:center;
+}
+
+.n{
+  font-size:11px;
+  font-weight:950;
+  color:#e65d26;
+}
+
+.p{
+  font-size:11px;
+  font-weight:850;
+}
+
+.s{
+  font-size:12px;
+  font-weight:950;
+  color:#1e5a9a;
+}
+
+.today{
+  margin-top:10px;
+  background:#fff8e9;
+  border:1px solid #f3dfae;
+  border-radius:12px;
+  padding:11px;
+}
+
+.today b{
+  font-size:12px;
+}
+
+.today p{
+  font-size:10px;
+  line-height:1.55;
+  margin:5px 0 0;
+  color:#596274;
+}
+
+.section{
+  padding:76px 0;
+}
+
+.title{
+  text-align:center;
+  font-size:32px;
+  line-height:1.35;
+  margin:0 0 12px;
+}
+
+.desc{
+  text-align:center;
+  color:#657086;
+  line-height:1.75;
+  margin:0 auto 38px;
+  max-width:720px;
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+
+.step{
+  background:#f8fafc;
+  border:1px solid #e7eaf0;
+  border-radius:18px;
+  padding:22px 14px;
+  text-align:center;
+}
+
+.ico{
+  font-size:27px;
+}
+
+.step b{
+  display:block;
+  margin-top:9px;
+  font-size:14px;
+}
+
+.step span{
+  display:block;
+  font-size:11px;
+  line-height:1.5;
+  color:#737d8f;
+  margin-top:5px;
+}
+
+.why{
+  background:#f7f8fb;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:24px;
+  border:1px solid #e7eaf0;
+}
+
+.card b{
+  font-size:18px;
+}
+
+.card p{
+  color:#677187;
+  line-height:1.7;
+  font-size:14px;
+  margin-bottom:0;
+}
+
+.priceBox{
+  max-width:760px;
+  margin:auto;
+  border-radius:26px;
+  background:#172a4b;
+  color:#fff;
+  padding:32px;
+  text-align:center;
+}
+
+.limited{
+  display:inline-block;
+  background:#ef642b;
+  padding:7px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:13px;
+}
+
+.price{
+  font-size:54px;
+  font-weight:950;
+  margin:12px 0 4px;
+  color:#ffb25e;
+}
+
+.price small{
+  font-size:17px;
+  color:#fff;
+}
+
+.future{
+  font-size:13px;
+  color:#d9dfeb;
+  line-height:1.7;
+}
+
+.priceBox .cta{
+  margin-top:18px;
+  background:#fff;
+  color:#172a4b;
+  box-shadow:none;
+}
+
+.notes{
+  font-size:11px;
+  color:#6f7785;
+  text-align:center;
+  line-height:1.7;
+  margin-top:16px;
+}
+
+.footer{
+  padding:28px 0;
+  text-align:center;
+  color:#8b93a1;
+  font-size:11px;
+  border-top:1px solid #eee;
+}
+
+@media(max-width:760px){
+  .heroGrid{
+    grid-template-columns:1fr;
+    gap:30px;
+    padding-top:38px;
+  }
+
+  .device{
+    max-width:520px;
+    width:100%;
+    margin:auto;
+  }
+
+  .flow{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .flow .step:last-child{
+    grid-column:1/-1;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    padding:56px 0;
+  }
+
+  .title{
+    font-size:27px;
+  }
+
+  .lead{
+    font-size:16px;
+  }
+
+  .price{
+    font-size:46px;
+  }
+}
+
+@media(max-width:420px){
+  .wrap{
+    padding:0 16px;
+  }
+
+  .hero{
+    padding-bottom:46px;
+  }
+
+  .hero h1{
+    font-size:38px;
+  }
+
+  .flow{
+    grid-template-columns:1fr;
+  }
+
+  .flow .step:last-child{
+    grid-column:auto;
+  }
+
+  .navbtn{
+    font-size:11px;
+    padding:9px 11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="wrap">
+
+    <nav class="nav">
+      <div class="brand">
+        <span class="logo">🛒</span>
+        ウレナビ
+      </div>
+
+      <a class="navbtn" href="#price">料金を見る</a>
+    </nav>
+
+    <div class="heroGrid">
+
+      <div>
+        <span class="eyebrow">
+          楽天アフィリエイトの商品選びを、もっと簡単に。
+        </span>
+
+        <h1>
+          楽天アフィリエイトで<br>
+          <span class="orange">「何を売るか」</span>で<br>
+          止まってませんか？
+        </h1>
+
+        <p class="lead">
+          商品選びから投稿文作成まで、ぜんぶこれ1つ。<br>
+          検索して、比較して、今日紹介する商品と訴求まで決めるWebアプリです。
+        </p>
+
+        <a class="cta" href="/app">
+          ウレナビの本体を確認する
+        </a>
+
+        <div class="subcta">
+          スマホ対応・楽天ROOM / Threads / Instagram向け投稿文作成
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+
+          <div class="screenTop">
+            ウレナビ
+          </div>
+
+          <div class="search">
+            🔎 モバイルバッテリー ｜ 3,000円〜10,000円
+          </div>
+
+          <div class="rank">
+
+            <div class="row">
+              <span class="n">1位</span>
+              <span class="p">おすすめ商品A</span>
+              <span class="s">92点</span>
+            </div>
+
+            <div class="row">
+              <span class="n">2位</span>
+              <span class="p">おすすめ商品B</span>
+              <span class="s">87点</span>
+            </div>
+
+            <div class="row">
+              <span class="n">3位</span>
+              <span class="p">おすすめ商品C</span>
+              <span class="s">85点</span>
+            </div>
+
+          </div>
+
+          <div class="today">
+            <b>今日売るならこれ！</b>
+
+            <p>
+              ターゲットと訴求ポイントを整理し、
+              楽天ROOM・Threads・Instagram向けの投稿文まで作成。
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+
+  <div class="wrap">
+
+    <h2 class="title">
+      商品探しから投稿まで、迷う工程を1本化
+    </h2>
+
+    <p class="desc">
+      楽天の商品データをもとに、候補を探し、比較し、
+      「誰に・何を刺して紹介するか」まで整理します。
+    </p>
+
+    <div class="flow">
+
+      <div class="step">
+        <div class="ico">🔎</div>
+        <b>商品を探す</b>
+        <span>
+          キーワード・価格帯などから検索
+        </span>
+      </div>
+
+      <div class="step">
+        <div class="ico">📊</div>
+        <b>比較する</b>
+        <span>
+          売れやすさ・収益性を参考比較
+        </span>
+      </div>
+
+      <div class="step">
+        <div class="ico">👑</div>
+        <b>決める</b>
+        <span>
+          おすすめ候補をランキング化
+        </span>
+      </div>
+
+      <div class="step">
+        <div class="ico">🎯</div>
+        <b>訴求を考える</b>
+        <span>
+          狙う相手とポイントを整理
+        </span>
+      </div>
+
+      <div class="step">
+        <div class="ico">✍️</div>
+        <b>投稿文を作る</b>
+        <span>
+          各SNS向けの文章を生成
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="section why">
+
+  <div class="wrap">
+
+    <h2 class="title">
+      ウレナビでできること
+    </h2>
+
+    <p class="desc">
+      「探すだけ」で終わらず、
+      紹介するところまで進めるための機能をまとめています。
+    </p>
+
+    <div class="cards">
+
+      <div class="card">
+        <b>
+          売れやすさと収益性を分けて確認
+        </b>
+
+        <p>
+          レビュー件数・評価・価格・料率などの公開データをもとに、
+          複数の視点で比較できます。
+        </p>
+      </div>
+
+      <div class="card">
+        <b>
+          「今日売るならこれ」を提案
+        </b>
+
+        <p>
+          候補が多くても、
+          まず何を紹介するかを決めやすい形に整理します。
+        </p>
+      </div>
+
+      <div class="card">
+        <b>
+          投稿文までその場で作成
+        </b>
+
+        <p>
+          楽天ROOM、Threads、Instagram向けの投稿文を作り、
+          商品選びから発信までの手間を減らします。
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="section" id="price">
+
+  <div class="wrap">
+
+    <h2 class="title">
+      先着30名限定のスタート価格
+    </h2>
+
+    <p class="desc">
+      最初の利用者向けに、
+      月額980円（税込）で提供予定です。
+    </p>
+
+    <div class="priceBox">
+
+      <span class="limited">
+        先着30名限定
+      </span>
+
+      <div class="price">
+        <small>月額</small>
+        980円
+        <small>税込</small>
+      </div>
+
+      <div class="future">
+        30名に達し次第、
+        月額1,980円へ変更予定
+      </div>
+
+      <a class="cta" href="/app">
+        ウレナビの本体を確認する
+      </a>
+
+    </div>
+
+    <div class="notes">
+      ※スコアは公開データをもとにした参考指標で、
+      販売成果を保証するものではありません。<br>
+      ※この修復ブランチではCTAを本体確認用にしています。
+      本番反映前に正式な購入導線へ接続します。
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+  © ウレナビ｜楽天アフィリエイトの商品選び・投稿作成支援Webアプリ
+</footer>
+
+</body>
+</html>
