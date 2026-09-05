@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/","destination":"/public/landing.html"},{"source":"/app","destination":"/public/index.html"},{"source":"/((?!api/).*)","destination":"/public/$1"}]}
+{"routes":[{"src":"/","dest":"/public/landing.html"},{"src":"/app","dest":"/public/index.html"},{"handle":"filesystem"},{"src":"/(.*)","dest":"/public/$1"}]}
