@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>楽天アフィリエイトAI</title>
+<title>ウレナビ</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#171717}
@@ -63,12 +66,63 @@ input,select{width:100%;min-height:50px;border:1px solid #e5e7eb;border-radius:1
 .tab{border:1px solid #e5e7eb;background:#fff;border-radius:9px;padding:7px 3px;font-size:10px;font-weight:800}
 .tab.on{background:#111;color:#fff}
 .copy{white-space:pre-wrap;background:#fafafa;border:1px solid #e5e7eb;border-radius:11px;padding:9px;margin-top:9px;font-size:12px;line-height:1.5}
+
+/* 認証 */
+#authGate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:22px}
+.authCard{width:100%;max-width:420px;background:#fff;border-radius:24px;padding:28px 20px;box-shadow:0 12px 36px #00000012}
+.authLogo{font-size:31px;font-weight:900;text-align:center;margin-bottom:5px}
+.authCatch{text-align:center;font-weight:900;font-size:15px;margin-bottom:6px}
+.authDesc{text-align:center;color:#777;font-size:12px;line-height:1.6;margin-bottom:20px}
+.authCard label{margin-top:10px}
+.authCard input{padding-right:13px}
+.authBtn{width:100%;border:0;border-radius:14px;padding:15px;background:#111;color:#fff;font-size:16px;font-weight:900;margin-top:16px}
+.authBtn:disabled{opacity:.55}
+.authMsg{min-height:22px;margin-top:10px;font-size:12px;line-height:1.5;color:#b73727;text-align:center}
+.authNote{font-size:10px;color:#999;text-align:center;line-height:1.5;margin-top:9px}
+#appRoot{display:none}
+.appHead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.userMail{font-size:10px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logoutBtn{border:0;background:#eef1f4;color:#666;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:800;flex:none}
 </style>
 </head>
 
 <body>
+
+<div id="authGate">
+  <div class="authCard">
+    <div class="authLogo">ウレナビ</div>
+    <div class="authCatch">売れる商品選びを、もっと簡単に。</div>
+    <div class="authDesc">
+      登録済みのメールアドレスとパスワードで<br>
+      ログインしてください。
+    </div>
+
+    <label>メールアドレス</label>
+    <input id="loginEmail" type="email" autocomplete="username" inputmode="email">
+
+    <label>パスワード</label>
+    <input id="loginPassword" type="password" autocomplete="current-password">
+
+    <button id="loginBtn" class="authBtn">ログイン</button>
+
+    <div id="authMsg" class="authMsg"></div>
+
+    <div class="authNote">
+      ログイン状態はこの端末に保存されます。<br>
+      30日経過後は安全のため再ログインが必要です。
+    </div>
+  </div>
+</div>
+
+<div id="appRoot">
 <main class="w">
-<h1>楽天アフィリエイトAI</h1>
+
+<div class="appHead">
+  <div id="userMail" class="userMail"></div>
+  <button id="logoutBtn" class="logoutBtn">ログアウト</button>
+</div>
+
+<h1>ウレナビ</h1>
 
 <div class="sub">
 商品を探して、売れやすさと収益性を評価。誰にどう売るかまで決めます。<br>
@@ -130,8 +184,154 @@ input,select{width:100%;min-height:50px;border:1px solid #e5e7eb;border-radius:1
 
 <section id="res"></section>
 </main>
+</div>
 
 <script>
+const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+const SUPABASE_KEY='sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
+
+const sb=supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true,
+      storage:window.localStorage
+    }
+  }
+);
+
+const AUTH_STAMP='urenavi_auth_at';
+const REAUTH_MS=30*24*60*60*1000;
+
+const authGate=document.getElementById('authGate');
+const appRoot=document.getElementById('appRoot');
+const loginEmail=document.getElementById('loginEmail');
+const loginPassword=document.getElementById('loginPassword');
+const loginBtn=document.getElementById('loginBtn');
+const authMsg=document.getElementById('authMsg');
+const logoutBtn=document.getElementById('logoutBtn');
+const userMail=document.getElementById('userMail');
+
+function showLogin(message=''){
+  appRoot.style.display='none';
+  authGate.style.display='flex';
+  authMsg.textContent=message;
+}
+
+function showApp(session){
+  authGate.style.display='none';
+  appRoot.style.display='block';
+  userMail.textContent=session?.user?.email||'';
+}
+
+function authAgeExpired(){
+  const t=Number(localStorage.getItem(AUTH_STAMP)||0);
+  return !t || Date.now()-t>REAUTH_MS;
+}
+
+async function forceLogout(message=''){
+  try{
+    await sb.auth.signOut();
+  }catch{}
+  localStorage.removeItem(AUTH_STAMP);
+  showLogin(message);
+}
+
+async function bootAuth(){
+  authMsg.textContent='';
+
+  const {data,error}=await sb.auth.getSession();
+
+  if(error){
+    await forceLogout('ログイン情報を確認できませんでした。再度ログインしてください。');
+    return;
+  }
+
+  const session=data?.session;
+
+  if(!session){
+    showLogin();
+    return;
+  }
+
+  if(authAgeExpired()){
+    await forceLogout('安全のため再ログインしてください。');
+    return;
+  }
+
+  showApp(session);
+}
+
+loginBtn.onclick=async()=>{
+  const email=loginEmail.value.trim();
+  const password=loginPassword.value;
+
+  if(!email){
+    authMsg.textContent='メールアドレスを入力してください。';
+    return;
+  }
+
+  if(!password){
+    authMsg.textContent='パスワードを入力してください。';
+    return;
+  }
+
+  loginBtn.disabled=true;
+  loginBtn.textContent='ログイン中…';
+  authMsg.textContent='';
+
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if(error) throw error;
+
+    if(!data?.session){
+      throw new Error('ログイン情報を取得できませんでした。');
+    }
+
+    localStorage.setItem(AUTH_STAMP,String(Date.now()));
+    loginPassword.value='';
+    showApp(data.session);
+
+  }catch(e){
+    authMsg.textContent=
+      e?.message==='Invalid login credentials'
+      ?'メールアドレスまたはパスワードが違います。'
+      :'ログインできませんでした。'+(e?.message?' '+e.message:'');
+
+  }finally{
+    loginBtn.disabled=false;
+    loginBtn.textContent='ログイン';
+  }
+};
+
+loginPassword.addEventListener('keydown',e=>{
+  if(e.key==='Enter') loginBtn.click();
+});
+
+logoutBtn.onclick=async()=>{
+  await forceLogout();
+};
+
+sb.auth.onAuthStateChange((event,session)=>{
+  if(event==='SIGNED_OUT'){
+    showLogin();
+    return;
+  }
+
+  if(session && !authAgeExpired()){
+    showApp(session);
+  }
+});
+
+bootAuth();
+
 const $=s=>document.querySelector(s),
 fmt=n=>new Intl.NumberFormat('ja-JP').format(+n||0),
 esc=s=>String(s).replace(/[&<>"']/g,c=>({
@@ -614,8 +814,24 @@ if(max)
 q.set('maxPrice',max);
 
 try{
-let r=await fetch('/api/search?'+q),
+const {data:{session}}=await sb.auth.getSession();
+
+if(!session){
+  await forceLogout('ログインの有効期限が切れました。再ログインしてください。');
+  return;
+}
+
+let r=await fetch('/api/search?'+q,{
+  headers:{
+    Authorization:`Bearer ${session.access_token}`
+  }
+}),
 d=await r.json();
+
+if(r.status===401){
+  await forceLogout('ログインの有効期限が切れました。再ログインしてください。');
+  return;
+}
 
 if(!r.ok)
 throw Error(d.message||'検索失敗');
