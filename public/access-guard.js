@@ -129,6 +129,44 @@
     }
   });
 
+  function installScoreCopyFix(){
+    if(typeof pts==='function'){
+      const basePts=pts;
+      window.pts=i=>{
+        const items=basePts(i).filter(text=>!String(text).includes('収益性も確保'));
+        const profitability=Number(i?.profitability||0);
+        const estimated=Number(i?.estimatedCommission||0);
+        if(items.length<3 && estimated>0){
+          if(profitability>=65) items.push(`収益性が高く、報酬目安は約${fmt(estimated)}円/件`);
+          else if(profitability>=45) items.push(`収益性は標準的。報酬目安は約${fmt(estimated)}円/件`);
+          else items.push(`報酬目安は約${fmt(estimated)}円/件`);
+        }
+        return items.slice(0,3);
+      };
+    }
+
+    window.decision=a=>{
+      const t=(Array.isArray(a)?a:[]).slice(0,3);
+      if(!t.length) return '';
+      const sell=[...t].sort((x,y)=>(y.sellability||0)-(x.sellability||0))[0];
+      const profit=[...t].sort((x,y)=>(y.profitability||0)-(x.profitability||0))[0];
+      const overall=t[0];
+      const sellRank=t.indexOf(sell)+1;
+      const profitRank=t.indexOf(profit)+1;
+      return `
+<section class="decision">
+  <h2>AIの最終結論</h2>
+  <div class="dm">迷ったら総合1位。まずは売れやすさを取りにいく。</div>
+  <div class="dg">
+    <div class="mini"><b>総合</b><span>1位｜AI ${Number(overall.score||0)}/100</span></div>
+    <div class="mini"><b>売れやすさ</b><span>${sellRank}位｜${Number(sell.sellability||0)}/100</span></div>
+    <div class="mini"><b>利益</b><span>${profitRank}位｜収益性 ${Number(profit.profitability||0)}/100・約${fmt(Number(profit.estimatedCommission||0))}円/件</span></div>
+  </div>
+</section>`;
+    };
+  }
+
+  installScoreCopyFix();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
