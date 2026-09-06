@@ -1,15 +1,4 @@
-const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
-
-const SUPABASE_KEY=
-'sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
-
-const REAUTH_MS=
-30*24*60*60*1000;
-
-const LIVE_PAYMENT_LINK_URL=
-'https://buy.stripe.com/dRm14nd9G7r1eDK2VPgfu00';
-
-
+const {authorize} = require('../lib/billing');
 const clamp=(n,min=0,max=100)=>
 Math.max(
   min,
@@ -26,450 +15,6 @@ String(s||'')
 const compact=s=>
 norm(s)
 .replace(/\s+/g,'');
-
-
-function env(name){
-  return String(
-    process.env[name]||
-    ''
-  ).trim();
-}
-
-
-function serviceHeaders(extra={}){
-
-  const key=
-  env(
-    'SUPABASE_SERVICE_ROLE_KEY'
-  );
-
-  if(!key){
-
-    throw new Error(
-      'SUPABASE_SERVICE_ROLE_KEY is missing'
-    );
-
-  }
-
-  return{
-    apikey:key,
-    Authorization:
-    `Bearer ${key}`,
-    ...extra
-  };
-
-}
-
-
-function stripeHeaders(){
-
-  const key=
-  env(
-    'STRIPE_SECRET_KEY'
-  );
-
-  if(!key){
-
-    throw new Error(
-      'STRIPE_SECRET_KEY is missing'
-    );
-
-  }
-
-  return{
-    Authorization:
-    `Bearer ${key}`
-  };
-
-}
-
-
-async function stripeGet(path){
-
-  const r=
-  await fetch(
-    `https://api.stripe.com${path}`,
-    {
-      headers:
-      stripeHeaders()
-    }
-  );
-
-  const data=
-  await r.json()
-  .catch(
-    ()=>({})
-  );
-
-  if(!r.ok){
-
-    throw new Error(
-      data?.error?.message||
-      `Stripe error ${r.status}`
-    );
-
-  }
-
-  return data;
-
-}
-
-
-async function verifyUser(req){
-
-  const authorization=
-  String(
-    req.headers.authorization||
-    ''
-  );
-
-  if(
-    !authorization
-    .startsWith('Bearer ')
-  ){
-
-    return{
-      ok:false,
-      status:401,
-      message:
-      'Authentication required'
-    };
-
-  }
-
-
-  const token=
-  authorization
-  .slice(7)
-  .trim();
-
-
-  if(!token){
-
-    return{
-      ok:false,
-      status:401,
-      message:
-      'Authentication required'
-    };
-
-  }
-
-
-  const r=
-  await fetch(
-    `${SUPABASE_URL}/auth/v1/user`,
-    {
-      headers:{
-        Authorization:
-        `Bearer ${token}`,
-        apikey:
-        SUPABASE_KEY
-      }
-    }
-  );
-
-
-  if(!r.ok){
-
-    return{
-      ok:false,
-      status:401,
-      message:
-      'Invalid or expired session'
-    };
-
-  }
-
-
-  const user=
-  await r.json();
-
-
-  if(
-    !user?.id||
-    !user?.email
-  ){
-
-    return{
-      ok:false,
-      status:401,
-      message:
-      'Invalid user'
-    };
-
-  }
-
-
-  const lastSignIn=
-  Date.parse(
-    user.last_sign_in_at||
-    ''
-  );
-
-
-  if(
-    Number.isFinite(
-      lastSignIn
-    )&&
-    Date.now()-
-    lastSignIn>
-    REAUTH_MS
-  ){
-
-    return{
-      ok:false,
-      status:401,
-      message:
-      'Reauthentication required'
-    };
-
-  }
-
-
-  return{
-    ok:true,
-    user
-  };
-
-}
-
-
-async function getEntitlement(email){
-
-  const url=
-  new URL(
-    `${SUPABASE_URL}/rest/v1/urenavi_entitlements`
-  );
-
-  url.searchParams.set(
-    'select',
-    'email,stripe_customer_id,stripe_subscription_id,status,active,current_period_end'
-  );
-
-  url.searchParams.set(
-    'email',
-    `eq.${email.toLowerCase()}`
-  );
-
-  url.searchParams.set(
-    'limit',
-    '1'
-  );
-
-
-  const r=
-  await fetch(
-    url,
-    {
-      headers:
-      serviceHeaders()
-    }
-  );
-
-
-  if(!r.ok){
-
-    throw new Error(
-      `Entitlement read error ${r.status}`
-    );
-
-  }
-
-
-  const rows=
-  await r.json();
-
-
-  return(
-    Array.isArray(rows)
-    ?
-    rows[0]||
-    null
-    :
-    null
-  );
-
-}
-
-
-async function updateEntitlement(
-  email,
-  values
-){
-
-  const url=
-  new URL(
-    `${SUPABASE_URL}/rest/v1/urenavi_entitlements`
-  );
-
-  url.searchParams.set(
-    'email',
-    `eq.${email.toLowerCase()}`
-  );
-
-
-  const r=
-  await fetch(
-    url,
-    {
-      method:'PATCH',
-      headers:
-      serviceHeaders({
-        'Content-Type':
-        'application/json',
-        Prefer:
-        'return=minimal'
-      }),
-      body:
-      JSON.stringify({
-        ...values,
-        updated_at:
-        new Date()
-        .toISOString()
-      })
-    }
-  );
-
-
-  if(!r.ok){
-
-    throw new Error(
-      `Entitlement update error ${r.status}`
-    );
-
-  }
-
-}
-
-
-async function verifyEntitlement(user){
-
-  const email=
-  String(
-    user?.email||
-    ''
-  )
-  .trim()
-  .toLowerCase();
-
-
-  if(!email){
-
-    return{
-      ok:false,
-      status:403,
-      message:
-      'Subscription required'
-    };
-
-  }
-
-
-  const row=
-  await getEntitlement(
-    email
-  );
-
-
-  if(!row){
-
-    return{
-      ok:false,
-      status:403,
-      message:
-      'Subscription required'
-    };
-
-  }
-
-
-  if(
-    row.status===
-    'owner'&&
-    row.active===true
-  ){
-
-    return{
-      ok:true,
-      row
-    };
-
-  }
-
-
-  if(
-    !row.stripe_subscription_id
-  ){
-
-    return{
-      ok:false,
-      status:403,
-      message:
-      'Subscription required'
-    };
-
-  }
-
-
-  const sub=
-  await stripeGet(
-    `/v1/subscriptions/${encodeURIComponent(row.stripe_subscription_id)}`
-  );
-
-
-  const active=
-  [
-    'active',
-    'trialing'
-  ]
-  .includes(
-    String(
-      sub.status
-    )
-  );
-
-
-  await updateEntitlement(
-    email,
-    {
-      status:
-      String(
-        sub.status||
-        'inactive'
-      ),
-      active,
-      current_period_end:
-      sub.current_period_end
-      ?
-      new Date(
-        sub.current_period_end*
-        1000
-      ).toISOString()
-      :
-      null
-    }
-  );
-
-
-  if(!active){
-
-    return{
-      ok:false,
-      status:403,
-      message:
-      'Subscription required'
-    };
-
-  }
-
-
-  return{
-    ok:true,
-    row
-  };
-
-}
 
 
 function relevance(
@@ -887,7 +432,7 @@ async function handler(req,res){
 
 
     const auth=
-    await verifyUser(
+    await authorize(
       req
     );
 
@@ -901,29 +446,7 @@ async function handler(req,res){
       )
       .json({
         message:
-        auth.message
-      });
-
-    }
-
-
-    const entitlement=
-    await verifyEntitlement(
-      auth.user
-    );
-
-
-    if(
-      !entitlement.ok
-    ){
-
-      return res
-      .status(403)
-      .json({
-        message:
-        'subscription_required',
-        purchaseUrl:
-        LIVE_PAYMENT_LINK_URL
+        auth.status === 403 ? 'subscription_required' : 'Authentication required'
       });
 
     }
@@ -971,6 +494,8 @@ async function handler(req,res){
 
     }
 
+
+    if (keyword.length > 128 || !['standard','-reviewCount','-reviewAverage','-affiliateRate','+itemPrice'].includes(userSort) || [minPrice,maxPrice].some(x=>x!==null && (!Number.isSafeInteger(x) || x<0)) || (minPrice!==null && maxPrice!==null && minPrice>maxPrice)) return res.status(400).json({message:'検索条件を確認してください。'});
 
     const appId=
     process.env.RAKUTEN_APP_ID;
@@ -1085,14 +610,7 @@ async function handler(req,res){
         r.status
       )
       .json({
-        message:
-        data?.
-        error_description||
-        data?.
-        error||
-        'Rakuten API error',
-        detail:
-        data
+        message:'商品データを取得できませんでした。'
       });
 
     }
@@ -1329,16 +847,13 @@ async function handler(req,res){
 
   }catch(e){
 
-    console.error(
-      e
-    );
+    console.error('Search request failed');
 
     return res
     .status(500)
     .json({
       message:
-      e?.message||
-      'server error'
+      '処理を完了できませんでした。時間をおいて再度お試しください。'
     });
 
   }
