@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/app",
+      "destination": "/public/app.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/public/$1"
     }
