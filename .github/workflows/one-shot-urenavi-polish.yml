@@ -1,0 +1,53 @@
+name: One-shot Urenavi preview polish
+
+on:
+  push:
+    branches:
+      - urenavi-icon-fix
+    paths:
+      - .github/workflows/one-shot-urenavi-polish.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: urenavi-icon-fix
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Patch profitability scoring and mobile decision layout
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          search = Path('api/search.js')
+          s = search.read_text()
+          old = """  const estScore=\n  clamp(\n    Math.log10(\n      est+1\n    )/\n    3*\n    100\n  );\n\n\n  return Math.round(\n    rateScore*.70+\n    estScore*.30\n  );"""
+          new = """  const estScore=\n  clamp(\n    est/\n    1000*\n    100\n  );\n\n\n  return Math.round(\n    rateScore*.20+\n    estScore*.80\n  );"""
+          if old not in s:
+              raise SystemExit('profitability scoring target not found')
+          search.write_text(s.replace(old, new, 1))
+
+          app = Path('public/app.html')
+          a = app.read_text()
+          marker = """.mini span{\n  font-size:9px;\n  color:#666;\n  line-height:1.35\n}\n"""
+          addition = marker + """\n@media(max-width:520px){\n  .dg{\n    grid-template-columns:1fr;\n    gap:8px\n  }\n\n  .mini{\n    display:grid;\n    grid-template-columns:78px 1fr;\n    gap:8px;\n    align-items:start;\n    padding:10px\n  }\n\n  .mini b{\n    font-size:11px\n  }\n\n  .mini span{\n    font-size:11px;\n    line-height:1.45\n  }\n}\n"""
+          if marker not in a:
+              raise SystemExit('mobile decision CSS target not found')
+          app.write_text(a.replace(marker, addition, 1))
+          PY
+      - name: Verify tests
+        run: node --test
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api/search.js public/app.html
+          git commit -m "Improve profitability differentiation and mobile decision layout"
+          git push origin HEAD:urenavi-icon-fix
