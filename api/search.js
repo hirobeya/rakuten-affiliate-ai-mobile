@@ -404,17 +404,15 @@ function profitabilityScore(x){
 
   const estScore=
   clamp(
-    Math.log10(
-      est+1
-    )/
-    3*
+    est/
+    1000*
     100
   );
 
 
   return Math.round(
-    rateScore*.70+
-    estScore*.30
+    rateScore*.20+
+    estScore*.80
   );
 
 }
