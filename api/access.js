@@ -52,8 +52,6 @@ module.exports = async function handler(req,res) {
         await db('urenavi_device_handoffs?code_hash=eq.'+encodeURIComponent(codeHash),{method:'DELETE',headers:{Prefer:'return=minimal'}});
         return res.status(410).json({approved:false});
       }
-      const allowed = await authorize({headers:{cookie:''}}).catch(()=>({ok:false}));
-      void allowed;
       setDeviceCookie(res,row.email);
       await db('urenavi_device_handoffs?code_hash=eq.'+encodeURIComponent(codeHash),{method:'DELETE',headers:{Prefer:'return=minimal'}});
       return res.status(200).json({approved:true,email:row.email});
