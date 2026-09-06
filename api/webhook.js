@@ -1,7 +1,7 @@
 const {config,verifySignature,activate,syncSubscription,ensureAuthUser} = require('../lib/billing');
 module.exports = async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
-  if (req.method !== 'POST') return res.status(405).end();
+  if (req.method !== 'POST') { res.setHeader('Allow','POST'); return res.status(405).end(); }
   let event;
   try {
     const chunks=[]; let size=0;
