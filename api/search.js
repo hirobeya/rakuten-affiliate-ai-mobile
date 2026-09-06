@@ -423,6 +423,7 @@ function profitabilityScore(x){
 module.exports=
 async function handler(req,res){
 
+  if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
 
     res.setHeader(

@@ -17,7 +17,7 @@ module.exports = async function handler(req,res) {
     const obj=event.data?.object;
     if (['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type)) {
       // Ignore unrelated products and pending asynchronous payments.
-      if (obj.payment_link===config().link && obj.payment_status==='paid') await activate(obj.id);
+      if (obj.payment_link===config().link && obj.payment_status==='paid') await activate(obj.id,{requireActive:false});
     } else if (['customer.subscription.created','customer.subscription.updated','customer.subscription.deleted'].includes(event.type)) {
       const row=await syncSubscription(obj.id);
       if (row?.active) await ensureAuthUser(row.email);

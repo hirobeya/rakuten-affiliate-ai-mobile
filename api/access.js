@@ -12,7 +12,7 @@ module.exports = async function handler(req,res) {
       const c = config();
       const link = await stripeGet('/payment_links/'+encodeURIComponent(c.link));
       const items = await stripeGet('/payment_links/'+encodeURIComponent(c.link)+'/line_items?limit=10');
-      if (link.livemode !== c.live || !link.active || link.url !== c.url || !items.data?.some(x=>x.price?.id===c.price && x.price.unit_amount===980 && x.price.currency==='jpy' && x.price.recurring?.interval==='month' && x.price.recurring.interval_count===1)) throw new Error('Purchase configuration invalid');
+      if (link.livemode !== c.live || !link.active || link.url !== c.url || (items.has_more || items.data?.length!==1) || !items.data?.some(x=>x.quantity===1 && !x.adjustable_quantity?.enabled && x.price?.id===c.price && x.price.unit_amount===980 && x.price.currency==='jpy' && x.price.recurring?.interval==='month' && x.price.recurring.interval_count===1)) throw new Error('Purchase configuration invalid');
       const restriction=link.restrictions?.completed_sessions;
       if (restriction?.limit !== 30 || restriction.count >= 30) throw new Error('Offer unavailable');
       const appUrl = process.env.URENAVI_APP_URL || (c.live ? 'https://rakuten-affiliate-ai-mobile.vercel.app' : 'https://'+process.env.VERCEL_BRANCH_URL);

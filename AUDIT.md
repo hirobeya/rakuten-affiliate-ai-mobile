@@ -55,3 +55,19 @@
 6. merge→Production smoke→iPhoneホーム画面の `/app.html` 起動。現在は未実施。
 
 Supabase advisorsには既存trigger関数の公開実行権限/search_pathと漏洩パスワード保護の警告がある。新テーブルのRLS no policyはサーバー専用として意図した拒否構成。既存警告を解消済みとは扱わない。
+
+## 追記: 実サービスの確認（2026-09-06）
+
+- `b29556e` の GitHub Actions (run 34005833320) は success。Vercel `dpl_7P6h38CuX13KoTV6rNztn9vjcTA4` は READY。
+- 実Preview: `/` 200、`/app.html` 200、`/manifest.webmanifest` 200、未認証検索401、購入API503かつLocationなし。LIVEへの誤転送は止まったが、決済成功ではない。
+- 実Previewブラウザー: LP→購入済みリンク→`/app.html`のログイン画面。未入力メールへの案内を確認。取得時のconsole errorなし。
+- Production読み取り: `/` と `/app.html` は200、未認証検索401。既存mainには `/api/access` とmanifestがなく404。Production E2E合格ではない。
+- Vercelのプロジェクト変数は6件。楽天3変数はProduction/Preview、購入設定3変数はPreviewのみ。共有変数なし。STRIPE_SECRET_KEY、SUPABASE_SERVICE_ROLE_KEY、STRIPE_WEBHOOK_SECRETは未登録。
+- Stripe TEST: Price `price_1UCPJREYXoynxoEYEC0co5VE` は980JPY/月、quantity=1、税込(inclusive)。Payment Linkのafter_completionをPreview activateに変更し、上限30件を設定。戻り値で確認。
+- Stripe LIVE: Price `price_1UAfsLEYXoynxoEYlxhQcJL9` は980JPY/月、quantity=1、税込(inclusive)。既存購入リンクは上限30件・本番activate、count=0。変更していない。automatic_taxは両環境false。
+- TEST Webhook `we_1UCa13EYXoynxoEYDgaDXaFt` をPreview `/api/webhook` に登録。enabled、API version 2026-08-26.dahlia。署名secretは生成済みだがVercel未設定。実配送成功は未検証。
+- LIVEには既存 Supabase Edge Function `stripe-webhook` (version 7) があり、Stripe endpoint `we_1UBB4oEYXoynxoEY4tRkFI1s` から配送。`stripe_entitlements`を書き、今回の旧`urenavi_entitlements`/新v2とは別。現行コードはCheckout支払・Price・mode確認不足、エラー履歴でも再送を処理済み扱いする問題あり。既存本番を変更していない。新Webhookとの切替/接続はマージ前条件。
+- ローカル模擬データ: 履歴の保存・再表示・価格条件復元、ログアウト後の結果DOM消去を確認。検索データは模擬で、実楽天検索E2Eではない。
+- 新たに公開ファイル構文/秘密キー検査と、解約後に遅れて届くCheckoutイベントの回帰テストを追加。合計17件PASS。
+- 取得済みGit履歴のStripe秘密キー・Webhook秘密キー・Supabase secretキー形式の検索は0件。すべての秘密形式や外部ログまで保証する検査ではない。
+- Stripeブラウザーは既存保存情報でログインし、本人のTouch ID認証待ち。値をチャットへ貼る必要はない。
