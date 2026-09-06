@@ -1,1 +1,1 @@
-{"name":"ウレナビ","short_name":"ウレナビ","id":"/app.html","start_url":"/app.html","scope":"/","display":"standalone","background_color":"#f6f7f9","theme_color":"#172a4b","icons":[{"src":"/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png","sizes":"1254x1254","type":"image/png"}]}
+{"name":"ウレナビ","short_name":"ウレナビ","id":"/app","start_url":"/app","scope":"/","display":"standalone","background_color":"#f6f7f9","theme_color":"#172a4b","icons":[{"src":"/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png","sizes":"1254x1254","type":"image/png"}]}
