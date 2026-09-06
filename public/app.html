@@ -1,11 +1,44 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ウレナビ</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+<title>ウレナビ</title>
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="default"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="ウレナビ"
+>
+
+<meta
+  name="application-name"
+  content="ウレナビ"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -253,6 +286,30 @@ input,select{
   font-size:9px;
   color:#666;
   line-height:1.35
+}
+
+@media(max-width:520px){
+  .dg{
+    grid-template-columns:1fr;
+    gap:8px
+  }
+
+  .mini{
+    display:grid;
+    grid-template-columns:78px 1fr;
+    gap:8px;
+    align-items:start;
+    padding:10px
+  }
+
+  .mini b{
+    font-size:11px
+  }
+
+  .mini span{
+    font-size:11px;
+    line-height:1.45
+  }
 }
 
 .compare-list{
@@ -849,6 +906,8 @@ function showLogin(
   type=''
 ){
 
+  accessGeneration++;
+  document.getElementById('res').replaceChildren();
   appRoot.style.display=
   'none';
 
@@ -865,20 +924,18 @@ function showLogin(
 }
 
 
-function showApp(
-  session
-){
-
-  authGate.style.display=
-  'none';
-
-  appRoot.style.display=
-  'block';
-
-  userMail.textContent=
-  session?.user?.email||
-  '';
-
+let accessGeneration=0;
+async function showApp(session) {
+  const generation=++accessGeneration;
+  appRoot.style.display='none';
+  try {
+    const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store'});
+    if(generation!==accessGeneration) return;
+    if(!response.ok) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
+    authGate.style.display='none';
+    appRoot.style.display='block';
+    userMail.textContent=session.user.email||'';
+  } catch { if(generation===accessGeneration) showLogin('通信状態を確認し、もう一度お試しください。','err'); }
 }
 
 
@@ -1133,6 +1190,7 @@ async function logout(
 
   try{
 
+    localStorage.removeItem('raiHistory3');
     await sb.auth.signOut({
       scope:'local'
     });
@@ -1588,9 +1646,7 @@ sb.auth.onAuthStateChange(
       }
 
 
-      showApp(
-        session
-      );
+      setTimeout(()=>{void showApp(session);},0);
 
       cleanAuthUrl();
 
@@ -1674,6 +1730,10 @@ k.oninput=
 
 };
 
+
+function safeUrl(value){
+  try {const u=new URL(value); return u.protocol==='https:' ? u.href : '#';} catch{return '#';}
+}
 
 function hist(){
 
@@ -2127,9 +2187,7 @@ function post(
   p='room'
 ){
 
-  const u=
-  i.affiliateUrl||
-  i.itemUrl;
+  const u=safeUrl(i.affiliateUrl);
 
   const pr=
   fmt(
@@ -2341,7 +2399,7 @@ function today(
     </button>
 
     <a
-      href="${i.affiliateUrl||i.itemUrl}"
+      href="${esc(safeUrl(i.affiliateUrl))}"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -2629,7 +2687,7 @@ function render(
       ?`
       <img
         class="img"
-        src="${i.mediumImageUrls[0]}"
+        src="${esc(safeUrl(i.mediumImageUrls[0]))}"
         alt=""
       >
       `
@@ -2768,7 +2826,7 @@ function render(
     </button>
 
     <a
-      href="${i.affiliateUrl||i.itemUrl}"
+      href="${esc(safeUrl(i.affiliateUrl))}"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -3157,6 +3215,8 @@ async()=>{
     }
 
 
+    if(r.status===403){ showLogin('有効な契約を確認できませんでした。','err'); return; }
+
     if(
       r.status===429
     ){
@@ -3263,6 +3323,10 @@ async()=>{
 };
 
 </script>
-
+<script src="/access-guard.js"></script>
+<script>
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) setTimeout(()=>{void bootAuth();},0);});
+setInterval(()=>{if(!document.hidden) void bootAuth();},60000);
+</script>
 </body>
 </html>
