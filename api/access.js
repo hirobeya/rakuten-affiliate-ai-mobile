@@ -1,12 +1,17 @@
-const {config, stripeGet, activate, authorize} = require('../lib/billing');
+const {config, stripeGet, activate, authorize, setDeviceCookie, clearDeviceCookie} = require('../lib/billing');
 module.exports = async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Referrer-Policy','no-referrer');
   if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
   try {
+    if (req.query.action === 'logout') {
+      clearDeviceCookie(res);
+      return res.status(204).end();
+    }
     if (req.query.action === 'status') {
       const result = await authorize(req);
-      return res.status(result.ok ? 200 : result.status).json({allowed:result.ok});
+      if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
+      return res.status(result.ok ? 200 : result.status).json({allowed:result.ok,email:result.ok ? String(result.user?.email||'') : ''});
     }
     if (req.query.action === 'buy') {
       const c = config();
@@ -21,8 +26,8 @@ module.exports = async function handler(req,res) {
       return res.redirect(302,c.url);
     }
     if (req.query.action !== 'activate') return res.status(400).json({message:'Invalid action'});
-    await activate(String(req.query.session_id||''));
-    // Relative URL avoids trusting forwarded host headers or leaking the customer's email.
+    const row=await activate(String(req.query.session_id||''));
+    setDeviceCookie(res,row.email);
     return res.redirect(303,'/app.html?activated=1');
   } catch {
     return res.status(503).json({message:'利用情報を確認できませんでした。時間をおいて再度お試しください。'});
