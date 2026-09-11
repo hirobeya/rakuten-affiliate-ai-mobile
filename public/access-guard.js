@@ -317,11 +317,66 @@
     row.appendChild(maxCol);
   }
 
+  function installCompactHistory(){
+    const histEl=document.getElementById('hist');
+    if(!histEl || typeof hist!=='function' || typeof closeH!=='function') return;
+
+    Object.assign(histEl.style,{
+      position:'static',
+      left:'auto',
+      right:'auto',
+      top:'auto',
+      marginTop:'6px',
+      zIndex:'auto',
+      boxShadow:'none'
+    });
+
+    let expanded=false;
+
+    window.drawH=()=>{
+      const h=hist();
+      const visible=expanded?h:h.slice(0,3);
+
+      histEl.innerHTML=h.length
+        ?`<div class="hh"><span>最近の検索</span><button class="hc">履歴を消す</button></div>${visible.map((v,i)=>`<button class="ho" data-i="${i}">${esc(v.k)}<small>${v.min?fmt(v.min)+'円〜':'下限なし'} / ${v.max?'〜'+fmt(v.max)+'円':'上限なし'}</small></button>`).join('')}${h.length>3?`<button id="historyToggle" type="button" style="display:block;width:100%;border:0;border-top:1px solid #eee;background:#fafafa;padding:10px;font-size:12px;font-weight:800;color:#555">${expanded?'閉じる':'履歴をもっと見る'}</button>`:''}`
+        :'<div class="hh">まだ履歴はありません</div>';
+
+      histEl.querySelector('.hc')?.addEventListener('click',e=>{
+        e.stopPropagation();
+        localStorage.removeItem('raiHistory3');
+        expanded=false;
+        drawH();
+      });
+
+      histEl.querySelectorAll('.ho').forEach((b,i)=>{
+        b.onclick=e=>{
+          e.stopPropagation();
+          const v=visible[i];
+          if(!v) return;
+          k.value=v.k;
+          x.classList.add('on');
+          document.getElementById('min').value=v.min;
+          document.getElementById('max').value=v.max;
+          document.getElementById('sort').value=v.sort;
+          closeH();
+        };
+      });
+
+      histEl.querySelector('#historyToggle')?.addEventListener('click',e=>{
+        e.stopPropagation();
+        expanded=!expanded;
+        drawH();
+        histEl.classList.add('on');
+      });
+    };
+  }
+
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
   installReturnVisibilityFix();
   installPriceLayout();
+  installCompactHistory();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
