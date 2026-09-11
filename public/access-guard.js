@@ -172,7 +172,10 @@
     window.post=(item,platform='room')=>{
       const text=basePost(item,platform);
       if(platform!=='room') return text;
-      return text.replace(/\n\n気になる方はこちら👇\nhttps:\/\/[^\s]+\s*$/,'\n\n気になる方は商品画像をタップしてチェック👇');
+      return text.replace(
+        /\n\n気になる方はこちら👇\nhttps:\/\/[^\s]+\s*$/,
+        '\n\n気になる方は商品画像をタップしてチェック👇'
+      );
     };
   }
 
@@ -340,29 +343,22 @@
       baseRender(a);
       const root=document.getElementById('res');
       if(!root) return;
-      root.querySelectorAll('.item').forEach((item,index)=>{
+      root.querySelectorAll('.item').forEach(item=>{
         const actions=item.querySelector('.acts');
         const link=actions?.querySelector('a');
-        const data=a?.[index];
-        if(!actions || !link || !data) return;
-        const roomUrl=safeUrl(data.itemUrl||data.affiliateUrl);
-        link.href=roomUrl;
-        link.textContent='楽天の商品ページを開く';
+        if(!actions || !link) return;
+        link.textContent='楽天でROOM投稿へ';
         link.setAttribute('aria-label','楽天の商品ページを開いてROOMに投稿');
         if(!item.querySelector('.room-flow-note')){
           const note=document.createElement('div');
           note.className='room-flow-note';
-          note.textContent='① 投稿文をコピー → ② 楽天の商品ページを開く → ③ 共有から「ROOMに投稿」をタップ';
+          note.textContent='① 投稿文をコピー → ②「楽天でROOM投稿へ」を押す → ③ 商品ページの「ROOMに投稿」をタップ';
           Object.assign(note.style,{marginTop:'7px',fontSize:'10px',lineHeight:'1.5',color:'#777',textAlign:'center'});
           actions.insertAdjacentElement('afterend',note);
         }
       });
       const todayLink=root.querySelector('.today .btns a');
-      if(todayLink && Array.isArray(a) && a.length){
-        const top=[...a].sort((x,y)=>(y.sellability||0)-(x.sellability||0)||(y.score||0)-(x.score||0))[0];
-        todayLink.href=safeUrl(top.itemUrl||top.affiliateUrl);
-        todayLink.textContent='楽天の商品ページを開く';
-      }
+      if(todayLink) todayLink.textContent='楽天でROOM投稿へ';
     };
   }
 
