@@ -232,6 +232,62 @@
     });
   }
 
+  function installRoomReturnHotfix(){
+    const RETURN_KEY='urenavi_room_return_v2';
+
+    document.addEventListener('click',e=>{
+      const link=e.target.closest?.('a.roomLink');
+      if(!link) return;
+
+      let url;
+      try{url=new URL(link.href,window.location.href);}catch{return;}
+      if(url.hostname!=='room.rakuten.co.jp') return;
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      try{
+        sessionStorage.setItem(RETURN_KEY,JSON.stringify({
+          at:Date.now(),
+          scrollY:window.scrollY||0
+        }));
+      }catch{}
+
+      // iOS standalone/PWA can leave a white child window after target=_blank.
+      // Use the current browsing context so the original Urenavi screen survives the handoff.
+      link.removeAttribute('target');
+      window.location.assign(url.href);
+    },true);
+
+    const restore=()=>{
+      if(document.visibilityState==='hidden') return;
+
+      let state=null;
+      try{state=JSON.parse(sessionStorage.getItem(RETURN_KEY)||'null');}catch{}
+      if(!state || Date.now()-Number(state.at||0)>30*60*1000) return;
+
+      const visible=appRoot && getComputedStyle(appRoot).display!=='none';
+      if(!visible) return;
+
+      authGate.style.display='none';
+      appRoot.style.display='block';
+
+      // Force an iOS repaint after returning from the native ROOM app.
+      appRoot.style.transform='translateZ(0)';
+      requestAnimationFrame(()=>{
+        appRoot.style.transform='';
+        window.scrollTo(0,Number(state.scrollY||0));
+      });
+
+      try{sessionStorage.removeItem(RETURN_KEY);}catch{}
+    };
+
+    window.addEventListener('pageshow',restore);
+    document.addEventListener('visibilitychange',()=>{
+      if(!document.hidden) requestAnimationFrame(restore);
+    });
+  }
+
   function installReturnVisibilityFix(){
     if(typeof showApp!=='function' || typeof bootAuth!=='function') return;
 
@@ -327,6 +383,7 @@
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
+  installRoomReturnHotfix();
   installReturnVisibilityFix();
   installPriceLayout();
   installCompactHistory();
