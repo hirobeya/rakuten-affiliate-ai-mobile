@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+const guard=fs.readFileSync(path.join(__dirname,'../public/access-guard.js'),'utf8');
 const auth=html.slice(html.indexOf('let accessGeneration=0;'),html.indexOf('function sessionTooOld('));
 function setup(fetch,visible=true){
   const state={authGate:{style:{display:visible?'none':'flex'}},appRoot:{style:{display:visible?'block':'none'}},userMail:{},status:{}};
@@ -34,14 +35,14 @@ test('older access response cannot hide a newer successful screen',async()=>{
   let resolve;let count=0;const app=setup(()=>++count===1?new Promise(r=>resolve=r):Promise.resolve({ok:true,status:200}));
   const first=app.show();await app.show();resolve({ok:false,status:403});await first;assert.equal(app.state.appRoot.style.display,'block');
 });
-test('ROOM route goes to ROOM with encoded product name, independent of affiliate URL',()=>{
-  const start=html.indexOf('function roomSearchUrl(');const end=html.indexOf('function roomAction(',start);const context=vm.createContext({URLSearchParams});
-  vm.runInContext(html.slice(start,end),context);
-  const url=new URL(context.roomSearchUrl({itemName:'【楽天ブックス限定特典+特典】ゼルダの伝説 時のオカリナ(特典アイテム未定)',affiliateUrl:'https://example.test/affiliate'}));
-  assert.equal(url.origin,'https://room.rakuten.co.jp');assert.equal(url.pathname,'/search/item');assert.equal(url.searchParams.get('keyword'),'ゼルダの伝説 時のオカリナ');
-  assert.equal(new URL(context.roomSearchUrl({itemName:'A&B #1 / C'})).searchParams.get('keyword'),'A&B #1 / C');
+test('ROOM flow uses canonical product URL copy and official URL-search instructions',()=>{
+  assert.match(guard,/roomPostStart/);
+  assert.match(guard,/data-room-url/);
+  assert.match(guard,/楽天市場 商品URL検索/);
+  assert.match(guard,/https:\/\/room\.rakuten\.co\.jp\//);
+  assert.doesNotMatch(guard,/room\.rakuten\.co\.jp\/search\/item\?keyword=/);
 });
 test('all inline scripts and access guard parse',()=>{
   for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
-  new vm.Script(fs.readFileSync(path.join(__dirname,'../public/access-guard.js'),'utf8'));
+  new vm.Script(guard);
 });
