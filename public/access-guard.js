@@ -166,53 +166,7 @@
     };
   }
 
-  function installClickablePostLinks(){
-    const urlRe=/(https:\/\/[^\s<]+)/g;
-
-    function linkify(el){
-      if(!el || el.dataset.linksEnhanced==='1') return;
-      const text=el.textContent||'';
-      if(!urlRe.test(text)) return;
-      urlRe.lastIndex=0;
-      const parts=text.split(urlRe);
-      el.replaceChildren(...parts.map(part=>{
-        if(/^https:\/\//.test(part)){
-          const a=document.createElement('a');
-          a.href=part;
-          a.target='_blank';
-          a.rel='noopener noreferrer';
-          a.textContent=part;
-          Object.assign(a.style,{color:'#0a66c2',textDecoration:'underline',overflowWrap:'anywhere',fontWeight:'700'});
-          return a;
-        }
-        return document.createTextNode(part);
-      }));
-      el.dataset.linksEnhanced='1';
-    }
-
-    function enhanceAll(){
-      document.querySelectorAll('.copy').forEach(el=>{
-        delete el.dataset.linksEnhanced;
-        linkify(el);
-      });
-    }
-
-    const res=document.getElementById('res');
-    if(res){
-      const observer=new MutationObserver(()=>queueMicrotask(enhanceAll));
-      observer.observe(res,{subtree:true,childList:true,characterData:true});
-    }
-
-    document.addEventListener('click',e=>{
-      const tab=e.target.closest?.('.tab');
-      if(tab) setTimeout(enhanceAll,0);
-    });
-
-    setTimeout(enhanceAll,0);
-  }
-
   installScoreCopyFix();
-  installClickablePostLinks();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
