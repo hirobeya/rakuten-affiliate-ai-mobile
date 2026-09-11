@@ -184,82 +184,6 @@
     };
   }
 
-  function installRoomPostingFlow(){
-    if(typeof roomAction==='function'){
-      window.roomAction=item=>{
-        const roomUrl=safeUrl(item?.roomItemUrl||'');
-        if(roomUrl==='#') return '';
-        return `<button type="button" class="roomPostStart" data-room-url="${esc(roomUrl)}" style="background:#d4145a;color:#fff">ROOM投稿を始める</button>`;
-      };
-    }
-
-    function ensureModal(){
-      let modal=document.getElementById('urenaviRoomModal');
-      if(modal) return modal;
-      modal=document.createElement('div');
-      modal.id='urenaviRoomModal';
-      modal.setAttribute('aria-hidden','true');
-      Object.assign(modal.style,{display:'none',position:'fixed',inset:'0',zIndex:'9999',background:'rgba(0,0,0,.45)',padding:'18px',alignItems:'center',justifyContent:'center'});
-      modal.innerHTML=`
-        <div style="width:min(100%,430px);background:#fff;border-radius:20px;padding:20px;box-shadow:0 18px 50px #0004">
-          <div style="font-size:18px;font-weight:900;margin-bottom:8px">ROOM投稿の準備完了</div>
-          <div id="urenaviRoomCopyState" style="font-size:13px;font-weight:800;color:#216e39;margin-bottom:12px">商品URLをコピーしました。</div>
-          <div style="font-size:13px;line-height:1.75;color:#444">
-            ROOMで<br>
-            ① 下の「ROOMを開く」<br>
-            ② 「＋」→「楽天市場 商品URL検索」<br>
-            ③ 貼り付け → 商品を選択 → 投稿<br>
-            の順で進めてください。
-          </div>
-          <a href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:16px;padding:14px;border-radius:13px;text-align:center;text-decoration:none;background:#d4145a;color:#fff;font-weight:900">ROOMを開く</a>
-          <button type="button" id="urenaviRoomClose" style="width:100%;margin-top:9px;padding:12px;border:0;border-radius:12px;background:#eef1f4;font-weight:800">閉じる</button>
-        </div>`;
-      document.body.appendChild(modal);
-      modal.querySelector('#urenaviRoomClose').onclick=()=>{
-        modal.style.display='none';
-        modal.setAttribute('aria-hidden','true');
-      };
-      modal.addEventListener('click',e=>{
-        if(e.target===modal){
-          modal.style.display='none';
-          modal.setAttribute('aria-hidden','true');
-        }
-      });
-      return modal;
-    }
-
-    async function copyText(text){
-      if(navigator.clipboard?.writeText){
-        try{await navigator.clipboard.writeText(text);return true;}catch{}
-      }
-      try{
-        const ta=document.createElement('textarea');
-        ta.value=text;
-        ta.setAttribute('readonly','');
-        Object.assign(ta.style,{position:'fixed',opacity:'0',pointerEvents:'none'});
-        document.body.appendChild(ta);
-        ta.select();
-        const ok=document.execCommand('copy');
-        ta.remove();
-        return !!ok;
-      }catch{return false;}
-    }
-
-    document.addEventListener('click',async e=>{
-      const btn=e.target.closest?.('.roomPostStart');
-      if(!btn) return;
-      const roomUrl=String(btn.dataset.roomUrl||'');
-      if(!/^https:\/\/(item|books)\.rakuten\.co\.jp\//i.test(roomUrl)) return;
-      const copied=await copyText(roomUrl);
-      const modal=ensureModal();
-      const state=modal.querySelector('#urenaviRoomCopyState');
-      state.textContent=copied?'商品URLをコピーしました。':'商品URLをコピーできませんでした。長押しコピーしてからROOMへ進んでください。';
-      state.style.color=copied?'#216e39':'#b73727';
-      modal.style.display='flex';
-      modal.setAttribute('aria-hidden','false');
-    });
-  }
-
   function installSafePostPreviewLinks(){
     const urlRe=/(https:\/\/[^\s<]+)/g;
 
@@ -402,7 +326,6 @@
 
   installScoreCopyFix();
   installRoomPostCopyFix();
-  installRoomPostingFlow();
   installSafePostPreviewLinks();
   installReturnVisibilityFix();
   installPriceLayout();
