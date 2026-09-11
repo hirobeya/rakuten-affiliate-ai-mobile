@@ -289,10 +289,39 @@
     });
   }
 
+  function installPriceLayout(){
+    const minSelect=document.getElementById('min');
+    const maxSelect=document.getElementById('max');
+    if(!minSelect || !maxSelect || document.getElementById('urenaviPriceRow')) return;
+
+    const minLabel=minSelect.previousElementSibling;
+    const maxLabel=maxSelect.previousElementSibling;
+    if(!minLabel || !maxLabel || minLabel.tagName!=='LABEL' || maxLabel.tagName!=='LABEL') return;
+
+    const row=document.createElement('div');
+    row.id='urenaviPriceRow';
+    row.style.display='grid';
+    row.style.gridTemplateColumns='1fr 1fr';
+    row.style.gap='10px';
+    row.style.alignItems='end';
+
+    const minCol=document.createElement('div');
+    const maxCol=document.createElement('div');
+
+    minLabel.parentNode.insertBefore(row,minLabel);
+    minCol.appendChild(minLabel);
+    minCol.appendChild(minSelect);
+    maxCol.appendChild(maxLabel);
+    maxCol.appendChild(maxSelect);
+    row.appendChild(minCol);
+    row.appendChild(maxCol);
+  }
+
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
   installReturnVisibilityFix();
+  installPriceLayout();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
