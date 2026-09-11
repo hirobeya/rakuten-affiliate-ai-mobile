@@ -371,12 +371,45 @@
     };
   }
 
+  function roomKeyword(item){
+    return String(item?.itemName||'')
+      .replace(/[【\[].*?[】\]]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .slice(0,80);
+  }
+
+  function installRoomSearchLinks(){
+    if(typeof render!=='function') return;
+    const baseRender=render;
+    window.render=a=>{
+      baseRender(a);
+      const items=Array.isArray(a)?a:[];
+      document.querySelectorAll('.item').forEach((article,index)=>{
+        const item=items[index];
+        const acts=article.querySelector('.acts');
+        if(!item || !acts || acts.querySelector('.urenaviRoomSearch')) return;
+        const keyword=roomKeyword(item);
+        if(!keyword) return;
+        const link=document.createElement('a');
+        link.className='urenaviRoomSearch';
+        link.href='https://room.rakuten.co.jp/search/item?keyword='+encodeURIComponent(keyword);
+        link.target='_blank';
+        link.rel='noopener noreferrer';
+        link.textContent='楽天ROOMで探して投稿';
+        Object.assign(link.style,{gridColumn:'1 / -1',background:'#b73727',color:'#fff'});
+        acts.appendChild(link);
+      });
+    };
+  }
+
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
   installReturnVisibilityFix();
   installPriceLayout();
   installCompactHistory();
+  installRoomSearchLinks();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
