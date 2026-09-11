@@ -1,178 +1,860 @@
-const coreSearch = require('./search-core');
+const {authorize} = require('../lib/billing');
+const clamp=(n,min=0,max=100)=>
+Math.max(
+  min,
+  Math.min(max,n)
+);
 
-const ROOM_VERIFY_TIMEOUT_MS=1800;
-const ROOM_VERIFY_CACHE_MS=60*60*1000;
-const roomVerifyCache=new Map();
+const norm=s=>
+String(s||'')
+.normalize('NFKC')
+.toLowerCase()
+.replace(/\s+/g,' ')
+.trim();
 
-function decodeUrlCandidate(value){
-  let current=String(value||'').trim();
-  for(let i=0;i<3;i++){
-    if(!current) break;
-    try{
-      const decoded=decodeURIComponent(current);
-      if(decoded===current) break;
-      current=decoded;
-    }catch{break;}
-  }
-  return current;
-}
+const compact=s=>
+norm(s)
+.replace(/\s+/g,'');
 
-function canonicalRoomItemUrl(item){
-  const candidates=[item?.itemUrl,item?.affiliateUrl].filter(Boolean);
-  for(const raw of candidates){
-    try{
-      const u=new URL(String(raw));
-      if(u.protocol!=='https:') continue;
 
-      if(u.hostname==='item.rakuten.co.jp' || u.hostname==='books.rakuten.co.jp'){
-        u.search='';
-        u.hash='';
-        return u.href;
-      }
+function relevance(
+  item,
+  keyword
+){
 
-      for(const key of ['pc','m','url']){
-        const target=decodeUrlCandidate(u.searchParams.get(key));
-        if(!target) continue;
-        try{
-          const t=new URL(target);
-          if(t.protocol==='https:' && (t.hostname==='item.rakuten.co.jp' || t.hostname==='books.rakuten.co.jp')){
-            t.search='';
-            t.hash='';
-            return t.href;
-          }
-        }catch{}
-      }
-    }catch{}
-  }
-  return '';
-}
-
-function roomEligibility(item){
-  const affiliateUrl=String(item?.affiliateUrl||'').trim();
-  const affiliateRate=Number(item?.affiliateRate||0);
-  const itemName=String(item?.itemName||'');
-  const shopName=String(item?.shopName||'');
-  const haystack=(itemName+' '+shopName).normalize('NFKC');
-  const roomItemUrl=canonicalRoomItemUrl(item);
-
-  if(!/^https:\/\//i.test(affiliateUrl) || !(affiliateRate>0)) return {ok:false,reason:'affiliate'};
-  if(!roomItemUrl) return {ok:false,reason:'room-url'};
-
-  if(/楽天Kobo|Rakuten\s*Kobo/i.test(haystack)) return {ok:false,reason:'kobo'};
-  if(/kobo\.rakuten\.co\.jp/i.test(roomItemUrl)) return {ok:false,reason:'kobo'};
-  if(/books\.rakuten\.co\.jp\/rk\//i.test(roomItemUrl)) return {ok:false,reason:'ebook'};
-  if(/楽天ブックス/i.test(shopName) && /(ダウンロード|DL版|ダウンロード版|デジタル版|電子書籍|ebook)/i.test(itemName)) return {ok:false,reason:'download'};
-  if(/(?:指定)?第\s*[123一二三]\s*類\s*医薬品|要指導医薬品|医薬品/i.test(itemName)) return {ok:false,reason:'medicine'};
-
-  return {ok:true,roomItemUrl};
-}
-
-function hasRoomPostingSignal(html){
-  const text=String(html||'');
-  return (
-    /room\.rakuten\.co\.jp/i.test(text) ||
-    /ROOMに投稿/i.test(text) ||
-    /ROOMで投稿/i.test(text) ||
-    /ROOMアイコン/i.test(text) ||
-    /data-[^=]*room/i.test(text) ||
-    /(?:href|url)[^>]{0,220}room\.rakuten\.co\.jp/i.test(text)
+  const title=
+  norm(
+    item.itemName
   );
+
+  const titleCompact=
+  compact(
+    item.itemName
+  );
+
+  const q=
+  norm(
+    keyword
+  );
+
+  const qc=
+  compact(
+    keyword
+  );
+
+
+  if(
+    !title||
+    !q
+  ){
+    return 0;
+  }
+
+
+  let score=0;
+
+  const pos=
+  titleCompact
+  .indexOf(qc);
+
+
+  if(pos===0){
+    score=100;
+  }
+  else if(
+    pos>0&&
+    pos<=8
+  ){
+    score=96;
+  }
+  else if(
+    pos>8&&
+    pos<=20
+  ){
+    score=91;
+  }
+  else if(
+    pos>20&&
+    pos<=40
+  ){
+    score=84;
+  }
+  else if(
+    pos>40
+  ){
+    score=72;
+  }
+
+
+  const tokens=
+  q
+  .split(' ')
+  .filter(Boolean);
+
+
+  if(
+    tokens.length>1
+  ){
+
+    const hit=
+    tokens
+    .filter(
+      t=>
+      title.includes(t)
+    )
+    .length;
+
+    const cov=
+    hit/
+    tokens.length;
+
+
+    if(cov===1){
+      score=
+      Math.max(
+        score,
+        88
+      );
+    }
+    else if(cov>=.67){
+      score=
+      Math.max(
+        score,
+        76
+      );
+    }
+    else if(cov>=.5){
+      score=
+      Math.max(
+        score,
+        62
+      );
+    }
+
+  }
+  else if(
+    pos<0&&
+    title.includes(q)
+  ){
+
+    score=70;
+
+  }
+
+
+  if(pos>60){
+    score-=8;
+  }
+
+
+  return clamp(
+    Math.round(score)
+  );
+
 }
 
-async function verifyRoomPostable(roomItemUrl){
-  const key=String(roomItemUrl||'');
-  if(!key) return false;
 
-  const cached=roomVerifyCache.get(key);
-  if(cached && Date.now()-cached.at<ROOM_VERIFY_CACHE_MS) return cached.ok;
+function reviewStrength(x){
 
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),ROOM_VERIFY_TIMEOUT_MS);
-  let ok=false;
+  const c=
+  +x.reviewCount||
+  0;
+
+  const a=
+  +x.reviewAverage||
+  0;
+
+
+  const volume=
+  clamp(
+    Math.log10(
+      c+1
+    )/
+    4*
+    100
+  );
+
+
+  const confidence=
+  Math.min(
+    1,
+    Math.log10(
+      c+1
+    )/
+    3
+  );
+
+
+  const rating=
+  clamp(
+    (
+      (a-3)/
+      2*
+      100
+    )*
+    (
+      .55+
+      .45*
+      confidence
+    )
+  );
+
+
+  return Math.round(
+    volume*.55+
+    rating*.45
+  );
+
+}
+
+
+function priceAccessibility(x){
+
+  const p=
+  +x.itemPrice||
+  0;
+
+
+  if(p<=0){
+    return 0;
+  }
+
+  if(p<1000){
+    return 72;
+  }
+
+  if(p<=3000){
+    return 94;
+  }
+
+  if(p<=10000){
+    return 100;
+  }
+
+  if(p<=30000){
+    return 88;
+  }
+
+  if(p<=50000){
+    return 72;
+  }
+
+  if(p<=100000){
+    return 58;
+  }
+
+  return 42;
+
+}
+
+
+function preferenceScore(
+  x,
+  sort
+){
+
+  const c=
+  +x.reviewCount||
+  0;
+
+  const a=
+  +x.reviewAverage||
+  0;
+
+  const r=
+  +x.affiliateRate||
+  0;
+
+  const p=
+  +x.itemPrice||
+  0;
+
+
+  if(
+    sort===
+    '-reviewCount'
+  ){
+
+    return clamp(
+      Math.log10(
+        c+1
+      )/
+      4*
+      100
+    );
+
+  }
+
+
+  if(
+    sort===
+    '-reviewAverage'
+  ){
+
+    const conf=
+    Math.min(
+      1,
+      Math.log10(
+        c+1
+      )/
+      3
+    );
+
+    return clamp(
+      (
+        (a-3)/
+        2*
+        100
+      )*
+      (
+        .6+
+        .4*
+        conf
+      )
+    );
+
+  }
+
+
+  if(
+    sort===
+    '-affiliateRate'
+  ){
+
+    return clamp(
+      r/
+      10*
+      100
+    );
+
+  }
+
+
+  if(
+    sort===
+    '+itemPrice'
+  ){
+
+    return clamp(
+      100-
+      Math.log10(
+        Math.max(
+          1,
+          p
+        )
+      )/
+      6*
+      100
+    );
+
+  }
+
+
+  return 50;
+
+}
+
+
+function sellabilityScore(
+  x,
+  rel,
+  userSort
+){
+
+  return Math.round(
+    rel*.35+
+    reviewStrength(x)*.30+
+    priceAccessibility(x)*.20+
+    preferenceScore(
+      x,
+      userSort
+    )*.15
+  );
+
+}
+
+
+function profitabilityScore(x){
+
+  const rate=
+  +x.affiliateRate||
+  0;
+
+  const price=
+  +x.itemPrice||
+  0;
+
+
+  const est=
+  Math.min(
+    1000,
+    price*
+    rate/
+    100
+  );
+
+
+  const rateScore=
+  clamp(
+    rate/
+    10*
+    100
+  );
+
+
+  const estScore=
+  clamp(
+    est/
+    1000*
+    100
+  );
+
+
+  return Math.round(
+    rateScore*.20+
+    estScore*.80
+  );
+
+}
+
+
+module.exports=
+async function handler(req,res){
+
+  if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
-    const response=await fetch(key,{
-      method:'GET',
-      redirect:'follow',
-      signal:controller.signal,
-      headers:{
-        'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1',
-        'Accept':'text/html,application/xhtml+xml',
-        'Accept-Language':'ja-JP,ja;q=0.9'
-      }
+
+    res.setHeader(
+      'Cache-Control',
+      'no-store'
+    );
+
+
+    const auth=
+    await authorize(
+      req
+    );
+
+
+    if(!auth.ok){
+
+      return res
+      .status(
+        auth.status||
+        401
+      )
+      .json({
+        message:
+        auth.status === 403 ? 'subscription_required' : 'Authentication required'
+      });
+
+    }
+
+
+    const keyword=
+    String(
+      req.query.keyword||
+      ''
+    )
+    .trim();
+
+
+    const minPrice=
+    req.query.minPrice
+    ?
+    +req.query.minPrice
+    :
+    null;
+
+
+    const maxPrice=
+    req.query.maxPrice
+    ?
+    +req.query.maxPrice
+    :
+    null;
+
+
+    const userSort=
+    String(
+      req.query.sort||
+      'standard'
+    );
+
+
+    if(!keyword){
+
+      return res
+      .status(400)
+      .json({
+        message:
+        'keyword is required'
+      });
+
+    }
+
+
+    if (keyword.length > 128 || !['standard','-reviewCount','-reviewAverage','-affiliateRate','+itemPrice'].includes(userSort) || [minPrice,maxPrice].some(x=>x!==null && (!Number.isSafeInteger(x) || x<0)) || (minPrice!==null && maxPrice!==null && minPrice>maxPrice)) return res.status(400).json({message:'検索条件を確認してください。'});
+
+    const appId=
+    process.env.RAKUTEN_APP_ID;
+
+    const accessKey=
+    process.env.RAKUTEN_ACCESS_KEY;
+
+    const affiliateId=
+    process.env.RAKUTEN_AFFILIATE_ID;
+
+
+    if(
+      !appId||
+      !accessKey||
+      !affiliateId
+    ){
+
+      return res
+      .status(500)
+      .json({
+        message:
+        'Rakuten API settings are missing'
+      });
+
+    }
+
+
+    const p=
+    new URLSearchParams({
+      applicationId:
+      appId,
+      affiliateId,
+      keyword,
+      format:'json',
+      formatVersion:'2',
+      hits:'30',
+      availability:'1',
+      sort:'standard'
     });
-    if(!response.ok){
-      ok=false;
-    }else{
-      const finalUrl=new URL(response.url||key);
-      if(finalUrl.hostname!=='item.rakuten.co.jp' && finalUrl.hostname!=='books.rakuten.co.jp'){
-        ok=false;
-      }else{
-        const html=await response.text();
-        ok=hasRoomPostingSignal(html);
-      }
+
+
+    if(
+      minPrice!=null&&
+      Number.isFinite(
+        minPrice
+      )
+    ){
+
+      p.set(
+        'minPrice',
+        String(
+          minPrice
+        )
+      );
+
     }
-  }catch{
-    ok=false;
-  }finally{
-    clearTimeout(timer);
+
+
+    if(
+      maxPrice!=null&&
+      Number.isFinite(
+        maxPrice
+      )
+    ){
+
+      p.set(
+        'maxPrice',
+        String(
+          maxPrice
+        )
+      );
+
+    }
+
+
+    p.set(
+      'accessKey',
+      accessKey
+    );
+
+
+    const url=
+    'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?'+
+    p.toString();
+
+
+    const r=
+    await fetch(
+      url,
+      {
+        headers:{
+          Origin:
+          'https://rakuten-affiliate-ai-mobile.vercel.app',
+          Referer:
+          'https://rakuten-affiliate-ai-mobile.vercel.app/'
+        }
+      }
+    );
+
+
+    const data=
+    await r.json()
+    .catch(
+      ()=>({})
+    );
+
+
+    if(!r.ok){
+
+      return res
+      .status(
+        r.status
+      )
+      .json({
+        message:'商品データを取得できませんでした。'
+      });
+
+    }
+
+
+    let items=
+    (
+      Array.isArray(
+        data.items
+      )
+      ?
+      data.items
+      :
+      Array.isArray(
+        data.Items
+      )
+      ?
+      data.Items
+      :
+      []
+    )
+    .map(
+      v=>
+      v.Item||
+      v
+    );
+
+
+    const wantsFurusato=
+    /ふるさと納税|寄付/
+    .test(
+      keyword
+    );
+
+
+    if(
+      !wantsFurusato
+    ){
+
+      items=
+      items.filter(
+        x=>
+        !/ふるさと納税|寄付額|返礼品/
+        .test(
+          String(
+            x.itemName||
+            ''
+          )
+        )
+      );
+
+    }
+
+
+    let ranked=
+    items.map(
+      x=>{
+
+        const rel=
+        relevance(
+          x,
+          keyword
+        );
+
+        const sell=
+        sellabilityScore(
+          x,
+          rel,
+          userSort
+        );
+
+        const profit=
+        profitabilityScore(
+          x
+        );
+
+
+        return{
+          ...x,
+          relevance:
+          rel,
+          sellability:
+          sell,
+          profitability:
+          profit,
+          score:
+          Math.round(
+            sell*.70+
+            profit*.30
+          )
+        };
+
+      }
+    );
+
+
+    let pool=
+    ranked.filter(
+      x=>
+      x.relevance>=84
+    );
+
+
+    if(
+      pool.length<5
+    ){
+
+      pool=
+      ranked.filter(
+        x=>
+        x.relevance>=70
+      );
+
+    }
+
+
+    if(
+      pool.length<5
+    ){
+
+      pool=
+      ranked.filter(
+        x=>
+        x.relevance>=50
+      );
+
+    }
+
+
+    if(
+      pool.length<5
+    ){
+
+      pool=
+      ranked;
+
+    }
+
+
+    pool.sort(
+      (a,b)=>
+      b.score-a.score||
+      b.sellability-a.sellability||
+      b.relevance-a.relevance
+    );
+
+
+    const out=
+    pool
+    .slice(0,10)
+    .map(
+      x=>({
+
+        itemName:
+        x.itemName,
+
+        itemPrice:
+        +x.itemPrice||
+        0,
+
+        itemUrl:
+        x.itemUrl,
+
+        affiliateUrl:
+        x.affiliateUrl||
+        x.itemUrl,
+
+        reviewCount:
+        +x.reviewCount||
+        0,
+
+        reviewAverage:
+        +x.reviewAverage||
+        0,
+
+        affiliateRate:
+        +x.affiliateRate||
+        0,
+
+        smallImageUrls:
+        x.smallImageUrls||
+        [],
+
+        mediumImageUrls:
+        x.mediumImageUrls||
+        [],
+
+        shopName:
+        x.shopName||
+        '',
+
+        score:
+        x.score,
+
+        relevance:
+        x.relevance,
+
+        sellability:
+        x.sellability,
+
+        profitability:
+        x.profitability,
+
+        estimatedCommission:
+        Math.round(
+          Math.min(
+            1000,
+            (
+              +x.itemPrice||
+              0
+            )*
+            (
+              +x.affiliateRate||
+              0
+            )/
+            100
+          )
+        )
+
+      })
+    );
+
+
+    return res
+    .status(200)
+    .json({
+      items:
+      out,
+      count:
+      +data.count||
+      0
+    });
+
+
+  }catch(e){
+
+    console.error('Search request failed');
+
+    return res
+    .status(500)
+    .json({
+      message:
+      '処理を完了できませんでした。時間をおいて再度お試しください。'
+    });
+
   }
 
-  roomVerifyCache.set(key,{ok,at:Date.now()});
-  return ok;
-}
-
-async function filterVerifiedRoomItems(items){
-  const source=Array.isArray(items)?items:[];
-  const prepared=[];
-  for(const item of source){
-    const eligibility=roomEligibility(item);
-    if(!eligibility.ok) continue;
-    prepared.push({item,roomItemUrl:eligibility.roomItemUrl});
-  }
-
-  const verified=await Promise.all(prepared.map(async entry=>({
-    ...entry,
-    ok:await verifyRoomPostable(entry.roomItemUrl)
-  })));
-
-  return verified
-    .filter(entry=>entry.ok)
-    .map(entry=>({...entry.item,roomItemUrl:entry.roomItemUrl,roomEligible:true,roomVerified:true}));
-}
-
-function isRoomAffiliateEligible(item){
-  return roomEligibility(item).ok;
-}
-
-module.exports=async function handler(req,res){
-  let statusCode=200;
-
-  const proxy={
-    setHeader:(...args)=>res.setHeader(...args),
-    status(code){
-      statusCode=code;
-      return proxy;
-    },
-    async json(body){
-      if(statusCode===200 && body && Array.isArray(body.items)){
-        const items=await filterVerifiedRoomItems(body.items);
-        return res.status(200).json({
-          ...body,
-          items,
-          count:items.length,
-          roomAffiliateFiltered:true,
-          roomPostabilityVerified:true
-        });
-      }
-      return res.status(statusCode).json(body);
-    }
-  };
-
-  return coreSearch(req,proxy);
 };
-
-module.exports.isRoomAffiliateEligible=isRoomAffiliateEligible;
-module.exports.roomEligibility=roomEligibility;
-module.exports.canonicalRoomItemUrl=canonicalRoomItemUrl;
-module.exports.hasRoomPostingSignal=hasRoomPostingSignal;
-module.exports.verifyRoomPostable=verifyRoomPostable;
