@@ -1,7 +1,7 @@
 const coreSearch = require('./search-core');
 
-const ROOM_VERIFY_TIMEOUT_MS=4500;
-const ROOM_VERIFY_CACHE_MS=15*60*1000;
+const ROOM_VERIFY_TIMEOUT_MS=1800;
+const ROOM_VERIFY_CACHE_MS=60*60*1000;
 const roomVerifyCache=new Map();
 
 function decodeUrlCandidate(value){
