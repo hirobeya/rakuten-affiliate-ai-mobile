@@ -38,7 +38,6 @@
   href="/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png"
 >
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -820,6 +819,7 @@ input,select{
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
 
 const SUPABASE_URL=
@@ -925,17 +925,33 @@ function showLogin(
 
 
 let accessGeneration=0;
+function authDeadline(promise,ms){
+  let timer;
+  return Promise.race([promise,new Promise((_,reject)=>{
+    timer=setTimeout(()=>reject(new Error('認証確認が時間内に完了しませんでした。')),ms);
+  })]).finally(()=>clearTimeout(timer));
+}
+
 async function showApp(session) {
   const generation=++accessGeneration;
-  appRoot.style.display='none';
+  const wasVisible=appRoot.style.display==='block';
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),10000);
+  // Keep the current screen painted while revalidating after an external visit.
+  if(!wasVisible) authGate.style.display='flex';
   try {
-    const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store'});
+    const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
-    if(!response.ok) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
+    if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
+    if(!response.ok) throw new Error('Access check unavailable');
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
-  } catch { if(generation===accessGeneration) showLogin('通信状態を確認し、もう一度お試しください。','err'); }
+  } catch {
+    if(generation!==accessGeneration) return;
+    if(wasVisible) document.getElementById('st').textContent='通信状態を確認できませんでした。接続後にもう一度お試しください。';
+    else showLogin('通信状態を確認し、もう一度お試しください。','err');
+  } finally { clearTimeout(timeout); }
 }
 
 
@@ -1244,7 +1260,7 @@ async function bootAuth(){
       },
       error
     }=
-    await sb.auth.getSession();
+    await authDeadline(sb.auth.getSession(),20000);
 
 
     if(
@@ -1282,7 +1298,7 @@ async function bootAuth(){
     }
 
 
-    showApp(
+    await showApp(
       session
     );
 
@@ -1295,6 +1311,10 @@ async function bootAuth(){
       e
     );
 
+    if(appRoot.style.display==='block'){
+      document.getElementById('st').textContent='通信状態を確認できませんでした。接続後にもう一度お試しください。';
+      return;
+    }
     showLogin(
       'ログイン情報を確認できませんでした。通信状態を確認して、もう一度お試しください。',
       'err'
@@ -1656,7 +1676,7 @@ sb.auth.onAuthStateChange(
 );
 
 
-bootAuth();
+// Start after access-guard.js has installed device-cookie recovery.
 
 
 
@@ -1733,6 +1753,15 @@ k.oninput=
 
 function safeUrl(value){
   try {const u=new URL(value); return u.protocol==='https:' ? u.href : '#';} catch{return '#';}
+}
+
+function roomSearchUrl(item){
+  const name=String(item.itemName||'').replace(/[【\[][^】\]]*[】\]]/g,' ').replace(/[（(][^）)]*[）)]/g,' ').replace(/\s+/g,' ').trim();
+  return 'https://room.rakuten.co.jp/search/item?'+new URLSearchParams({keyword:name||String(item.itemName||'')});
+}
+
+function roomAction(item){
+  return `<a class="roomLink" href="${esc(roomSearchUrl(item))}" target="_blank" rel="noopener noreferrer">ROOMで商品を探す</a>`;
 }
 
 function hist(){
@@ -2398,6 +2427,8 @@ function today(
       投稿文をコピー
     </button>
 
+    ${roomAction(i)}
+
     <a
       href="${esc(safeUrl(i.affiliateUrl))}"
       target="_blank"
@@ -2790,7 +2821,7 @@ function render(
       data-i="${n}"
       data-p="room"
     >
-      楽天ROOM
+      ROOM用の投稿文
     </button>
 
     <button
@@ -2817,6 +2848,8 @@ function render(
 
   <div class="acts">
 
+    ${roomAction(i)}
+
     <button
       class="cb"
       data-i="${n}"
@@ -2835,6 +2868,7 @@ function render(
 
   </div>
 
+  <p class="muted">ROOMで同じ商品・ショップ・特典を確認し、「投稿」からコピーした文章を貼り付けてください。</p>
 </article>
 
     `
@@ -3134,7 +3168,7 @@ async()=>{
       },
       error:sessionError
     }=
-    await sb.auth.getSession();
+    await authDeadline(sb.auth.getSession(),20000);
 
 
     if(
@@ -3325,6 +3359,7 @@ async()=>{
 </script>
 <script src="/access-guard.js"></script>
 <script>
+void bootAuth();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden) setTimeout(()=>{void bootAuth();},0);});
 setInterval(()=>{if(!document.hidden) void bootAuth();},60000);
 </script>
