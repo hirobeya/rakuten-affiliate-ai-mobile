@@ -181,7 +181,6 @@
 
   function installSafePostPreviewLinks(){
     const urlRe=/(https:\/\/[^\s<]+)/g;
-
     function makeClickable(el){
       if(!el) return;
       const text=el.textContent||'';
@@ -206,11 +205,9 @@
       }
       el.replaceChildren(frag);
     }
-
     function enhanceVisiblePreviews(root=document){
       root.querySelectorAll?.('.copy').forEach(makeClickable);
     }
-
     if(typeof render==='function'){
       const baseRender=render;
       window.render=a=>{
@@ -218,7 +215,6 @@
         enhanceVisiblePreviews(document.getElementById('res')||document);
       };
     }
-
     document.addEventListener('click',e=>{
       const tab=e.target.closest?.('.tab');
       if(!tab) return;
@@ -229,31 +225,25 @@
 
   function installReturnVisibilityFix(){
     if(typeof showApp!=='function' || typeof bootAuth!=='function') return;
-
     showApp=async session=>{
       const generation=++accessGeneration;
       const wasVisible=getComputedStyle(appRoot).display!=='none';
       let timeoutId=null;
       let controller=null;
-
       try{
         controller=new AbortController();
         timeoutId=setTimeout(()=>controller.abort(),10000);
-
         const response=await fetch('/api/access?action=status',{
           headers:{Authorization:`Bearer ${session.access_token}`},
           cache:'no-store',
           credentials:'include',
           signal:controller.signal
         });
-
         if(generation!==accessGeneration) return;
-
         if(response.status===403){
           showLogin('有効な購入情報がありません。購入時のメールアドレスでログインしてください。','err');
           return;
         }
-
         if(!response.ok){
           if(wasVisible){
             console.warn('Access recheck failed while app is visible:',response.status);
@@ -262,30 +252,24 @@
           showLogin('ログイン情報を確認できません。再認証または再試行してください。','err');
           return;
         }
-
         authGate.style.display='none';
         appRoot.style.display='block';
         userMail.textContent=session?.user?.email||'';
       }catch(error){
         if(generation!==accessGeneration) return;
-
         if(wasVisible){
           console.warn('Access recheck skipped to keep current screen visible.',error);
           appRoot.style.display='block';
           authGate.style.display='none';
           return;
         }
-
         showLogin('通信状態を確認し、もう一度お試しください。','err');
       }finally{
         if(timeoutId) clearTimeout(timeoutId);
       }
     };
-
     window.addEventListener('pageshow',()=>{
-      if(document.visibilityState!=='hidden'){
-        setTimeout(()=>{void bootAuth();},0);
-      }
+      if(document.visibilityState!=='hidden') setTimeout(()=>{void bootAuth();},0);
     });
   }
 
@@ -293,21 +277,17 @@
     const minSelect=document.getElementById('min');
     const maxSelect=document.getElementById('max');
     if(!minSelect || !maxSelect || document.getElementById('urenaviPriceRow')) return;
-
     const minLabel=minSelect.previousElementSibling;
     const maxLabel=maxSelect.previousElementSibling;
     if(!minLabel || !maxLabel || minLabel.tagName!=='LABEL' || maxLabel.tagName!=='LABEL') return;
-
     const row=document.createElement('div');
     row.id='urenaviPriceRow';
     row.style.display='grid';
     row.style.gridTemplateColumns='1fr 1fr';
     row.style.gap='10px';
     row.style.alignItems='end';
-
     const minCol=document.createElement('div');
     const maxCol=document.createElement('div');
-
     minLabel.parentNode.insertBefore(row,minLabel);
     minCol.appendChild(minLabel);
     minCol.appendChild(minSelect);
@@ -320,34 +300,20 @@
   function installCompactHistory(){
     const histEl=document.getElementById('hist');
     if(!histEl || typeof hist!=='function' || typeof closeH!=='function') return;
-
-    Object.assign(histEl.style,{
-      position:'static',
-      left:'auto',
-      right:'auto',
-      top:'auto',
-      marginTop:'6px',
-      zIndex:'auto',
-      boxShadow:'none'
-    });
-
+    Object.assign(histEl.style,{position:'static',left:'auto',right:'auto',top:'auto',marginTop:'6px',zIndex:'auto',boxShadow:'none'});
     let expanded=false;
-
     window.drawH=()=>{
       const h=hist();
       const visible=expanded?h:h.slice(0,3);
-
       histEl.innerHTML=h.length
         ?`<div class="hh"><span>最近の検索</span><button class="hc">履歴を消す</button></div>${visible.map((v,i)=>`<button class="ho" data-i="${i}">${esc(v.k)}<small>${v.min?fmt(v.min)+'円〜':'下限なし'} / ${v.max?'〜'+fmt(v.max)+'円':'上限なし'}</small></button>`).join('')}${h.length>3?`<button id="historyToggle" type="button" style="display:block;width:100%;border:0;border-top:1px solid #eee;background:#fafafa;padding:10px;font-size:12px;font-weight:800;color:#555">${expanded?'閉じる':'履歴をもっと見る'}</button>`:''}`
         :'<div class="hh">まだ履歴はありません</div>';
-
       histEl.querySelector('.hc')?.addEventListener('click',e=>{
         e.stopPropagation();
         localStorage.removeItem('raiHistory3');
         expanded=false;
         drawH();
       });
-
       histEl.querySelectorAll('.ho').forEach((b,i)=>{
         b.onclick=e=>{
           e.stopPropagation();
@@ -361,7 +327,6 @@
           closeH();
         };
       });
-
       histEl.querySelector('#historyToggle')?.addEventListener('click',e=>{
         e.stopPropagation();
         expanded=!expanded;
@@ -371,12 +336,39 @@
     };
   }
 
+  function installRoomPostFlow(){
+    if(typeof render!=='function') return;
+    const baseRender=render;
+    window.render=a=>{
+      baseRender(a);
+      const root=document.getElementById('res');
+      if(!root) return;
+      root.querySelectorAll('.item').forEach(item=>{
+        const actions=item.querySelector('.acts');
+        const link=actions?.querySelector('a');
+        if(!actions || !link) return;
+        link.textContent='楽天でROOM投稿へ';
+        link.setAttribute('aria-label','楽天の商品ページを開いてROOMに投稿');
+        if(!item.querySelector('.room-flow-note')){
+          const note=document.createElement('div');
+          note.className='room-flow-note';
+          note.textContent='① 投稿文をコピー → ②「楽天でROOM投稿へ」を押す → ③ 商品ページの「ROOMに投稿」をタップ';
+          Object.assign(note.style,{marginTop:'7px',fontSize:'10px',lineHeight:'1.5',color:'#777',textAlign:'center'});
+          actions.insertAdjacentElement('afterend',note);
+        }
+      });
+      const todayLink=root.querySelector('.today .btns a');
+      if(todayLink) todayLink.textContent='楽天でROOM投稿へ';
+    };
+  }
+
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
   installReturnVisibilityFix();
   installPriceLayout();
   installCompactHistory();
+  installRoomPostFlow();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
