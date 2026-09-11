@@ -43,6 +43,7 @@ module.exports = async function handler(req,res) {
 
     if (req.query.action === 'handoff-status') {
       const code = String(req.query.code || '');
+      const redirectToApp = String(req.query.redirect || '') === '1';
       if (!validHandoffCode(code)) return res.status(400).json({message:'Invalid handoff'});
       const codeHash = handoffHash(code);
       const rows = await db('urenavi_device_handoffs?'+new URLSearchParams({code_hash:'eq.'+codeHash,select:'email,expires_at'}));
@@ -54,6 +55,7 @@ module.exports = async function handler(req,res) {
       }
       setDeviceCookie(res,row.email);
       await db('urenavi_device_handoffs?code_hash=eq.'+encodeURIComponent(codeHash),{method:'DELETE',headers:{Prefer:'return=minimal'}});
+      if (redirectToApp) return res.redirect(303,'/app.html');
       return res.status(200).json({approved:true,email:row.email});
     }
 
