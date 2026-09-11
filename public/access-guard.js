@@ -166,7 +166,56 @@
     };
   }
 
+  function installSafePostPreviewLinks(){
+    const urlRe=/(https:\/\/[^\s<]+)/g;
+
+    function makeClickable(el){
+      if(!el) return;
+      const text=el.textContent||'';
+      const parts=text.split(urlRe);
+      if(parts.length<2) return;
+      const frag=document.createDocumentFragment();
+      for(const part of parts){
+        if(/^https:\/\//.test(part)){
+          const a=document.createElement('a');
+          a.href=part;
+          a.target='_blank';
+          a.rel='noopener noreferrer';
+          a.textContent=part;
+          a.style.color='#0a66c2';
+          a.style.textDecoration='underline';
+          a.style.fontWeight='700';
+          a.style.overflowWrap='anywhere';
+          frag.appendChild(a);
+        }else{
+          frag.appendChild(document.createTextNode(part));
+        }
+      }
+      el.replaceChildren(frag);
+    }
+
+    function enhanceVisiblePreviews(root=document){
+      root.querySelectorAll?.('.copy').forEach(makeClickable);
+    }
+
+    if(typeof render==='function'){
+      const baseRender=render;
+      window.render=a=>{
+        baseRender(a);
+        enhanceVisiblePreviews(document.getElementById('res')||document);
+      };
+    }
+
+    document.addEventListener('click',e=>{
+      const tab=e.target.closest?.('.tab');
+      if(!tab) return;
+      const item=tab.closest('.item');
+      if(item) makeClickable(item.querySelector('.copy'));
+    });
+  }
+
   installScoreCopyFix();
+  installSafePostPreviewLinks();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
