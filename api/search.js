@@ -1,20 +1,70 @@
 const coreSearch = require('./search-core');
 
-function isRoomAffiliateEligible(item){
+function decodeUrlCandidate(value){
+  let current=String(value||'').trim();
+  for(let i=0;i<3;i++){
+    if(!current) break;
+    try{
+      const decoded=decodeURIComponent(current);
+      if(decoded===current) break;
+      current=decoded;
+    }catch{break;}
+  }
+  return current;
+}
+
+function canonicalRoomItemUrl(item){
+  const candidates=[item?.itemUrl,item?.affiliateUrl].filter(Boolean);
+  for(const raw of candidates){
+    try{
+      const u=new URL(String(raw));
+      if(u.protocol!=='https:') continue;
+
+      if(u.hostname==='item.rakuten.co.jp' || u.hostname==='books.rakuten.co.jp'){
+        u.search='';
+        u.hash='';
+        return u.href;
+      }
+
+      for(const key of ['pc','m','url']){
+        const target=decodeUrlCandidate(u.searchParams.get(key));
+        if(!target) continue;
+        try{
+          const t=new URL(target);
+          if(t.protocol==='https:' && (t.hostname==='item.rakuten.co.jp' || t.hostname==='books.rakuten.co.jp')){
+            t.search='';
+            t.hash='';
+            return t.href;
+          }
+        }catch{}
+      }
+    }catch{}
+  }
+  return '';
+}
+
+function roomEligibility(item){
   const affiliateUrl=String(item?.affiliateUrl||'').trim();
   const affiliateRate=Number(item?.affiliateRate||0);
   const itemName=String(item?.itemName||'');
   const shopName=String(item?.shopName||'');
   const haystack=(itemName+' '+shopName).normalize('NFKC');
+  const roomItemUrl=canonicalRoomItemUrl(item);
 
-  if(!/^https:\/\//i.test(affiliateUrl) || !(affiliateRate>0)) return false;
+  if(!/^https:\/\//i.test(affiliateUrl) || !(affiliateRate>0)) return {ok:false,reason:'affiliate'};
+  if(!roomItemUrl) return {ok:false,reason:'room-url'};
 
-  // Rakuten ROOM official exclusions that can surface from marketplace data.
-  if(/楽天Kobo/i.test(haystack)) return false;
-  if(/楽天ブックス/i.test(shopName) && /(ダウンロード|DL版|ダウンロード版|デジタル版)/i.test(itemName)) return false;
-  if(/(?:第[123一二三]類|指定第?[二2]類|要指導)?医薬品/i.test(itemName)) return false;
+  if(/楽天Kobo|Rakuten\s*Kobo/i.test(haystack)) return {ok:false,reason:'kobo'};
+  if(/kobo\.rakuten\.co\.jp/i.test(roomItemUrl)) return {ok:false,reason:'kobo'};
+  if(/books\.rakuten\.co\.jp\/rk\//i.test(roomItemUrl)) return {ok:false,reason:'ebook'};
+  if(/楽天ブックス/i.test(shopName) && /(ダウンロード|DL版|ダウンロード版|デジタル版|電子書籍|ebook)/i.test(itemName)) return {ok:false,reason:'download'};
+  if(/(?:指定)?第\s*[123一二三]\s*類\s*医薬品|要指導医薬品|医薬品/i.test(itemName)) return {ok:false,reason:'medicine'};
 
-  return true;
+  return {ok:true,roomItemUrl};
+}
+
+function isRoomAffiliateEligible(item){
+  return roomEligibility(item).ok;
 }
 
 module.exports=async function handler(req,res){
@@ -28,7 +78,12 @@ module.exports=async function handler(req,res){
     },
     json(body){
       if(statusCode===200 && body && Array.isArray(body.items)){
-        const items=body.items.filter(isRoomAffiliateEligible);
+        const items=[];
+        for(const item of body.items){
+          const eligibility=roomEligibility(item);
+          if(!eligibility.ok) continue;
+          items.push({...item,roomItemUrl:eligibility.roomItemUrl,roomEligible:true});
+        }
         return res.status(200).json({
           ...body,
           items,
@@ -44,3 +99,5 @@ module.exports=async function handler(req,res){
 };
 
 module.exports.isRoomAffiliateEligible=isRoomAffiliateEligible;
+module.exports.roomEligibility=roomEligibility;
+module.exports.canonicalRoomItemUrl=canonicalRoomItemUrl;
