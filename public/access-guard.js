@@ -227,9 +227,72 @@
     });
   }
 
+  function installReturnVisibilityFix(){
+    if(typeof showApp!=='function' || typeof bootAuth!=='function') return;
+
+    showApp=async session=>{
+      const generation=++accessGeneration;
+      const wasVisible=getComputedStyle(appRoot).display!=='none';
+      let timeoutId=null;
+      let controller=null;
+
+      try{
+        controller=new AbortController();
+        timeoutId=setTimeout(()=>controller.abort(),10000);
+
+        const response=await fetch('/api/access?action=status',{
+          headers:{Authorization:`Bearer ${session.access_token}`},
+          cache:'no-store',
+          credentials:'include',
+          signal:controller.signal
+        });
+
+        if(generation!==accessGeneration) return;
+
+        if(response.status===403){
+          showLogin('有効な購入情報がありません。購入時のメールアドレスでログインしてください。','err');
+          return;
+        }
+
+        if(!response.ok){
+          if(wasVisible){
+            console.warn('Access recheck failed while app is visible:',response.status);
+            return;
+          }
+          showLogin('ログイン情報を確認できません。再認証または再試行してください。','err');
+          return;
+        }
+
+        authGate.style.display='none';
+        appRoot.style.display='block';
+        userMail.textContent=session?.user?.email||'';
+      }catch(error){
+        if(generation!==accessGeneration) return;
+
+        if(wasVisible){
+          console.warn('Access recheck skipped to keep current screen visible.',error);
+          appRoot.style.display='block';
+          authGate.style.display='none';
+          return;
+        }
+
+        showLogin('通信状態を確認し、もう一度お試しください。','err');
+      }finally{
+        if(timeoutId) clearTimeout(timeoutId);
+      }
+    };
+
+    window.addEventListener('pageshow',()=>{
+      if(document.visibilityState!=='hidden'){
+        setTimeout(()=>{void bootAuth();},0);
+      }
+    });
+  }
+
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
+  installReturnVisibilityFix();
   addPurchaseLink();
   applyActivationMessage();
   startHandoffPolling();
