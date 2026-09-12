@@ -119,6 +119,8 @@
   const logoutBtn=document.getElementById('logoutBtn');
   if(logoutBtn){
     logoutBtn.onclick=async()=>{
+      accessGeneration++;
+      try{UrenaviReturnState.clear(sessionStorage);}catch{}
       try{await fetch('/api/access?action=logout',{cache:'no-store',credentials:'include'});}catch{}
       deviceAllowed=false;
       deviceEmail='';
@@ -250,48 +252,6 @@
     });
   }
 
-  function installRoomReturnHotfix(){
-    const RETURN_KEY='urenavi_room_return_v3';
-
-    document.addEventListener('click',e=>{
-      const link=e.target.closest?.('a.roomLink');
-      if(!link) return;
-
-      let url;
-      try{url=new URL(link.href,window.location.href);}catch{return;}
-      if(url.hostname!=='room.rakuten.co.jp') return;
-
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      try{
-        sessionStorage.setItem(RETURN_KEY,JSON.stringify({at:Date.now(),scrollY:window.scrollY||0}));
-      }catch{}
-
-      window.location.assign('/room-bridge.html?to='+encodeURIComponent(url.href));
-    },true);
-
-    const restore=()=>{
-      if(document.visibilityState==='hidden') return;
-      let state=null;
-      try{state=JSON.parse(sessionStorage.getItem(RETURN_KEY)||'null');}catch{}
-      if(!state || Date.now()-Number(state.at||0)>30*60*1000) return;
-      authGate.style.display='none';
-      appRoot.style.display='block';
-      requestAnimationFrame(()=>window.scrollTo(0,Number(state.scrollY||0)));
-      try{sessionStorage.removeItem(RETURN_KEY);}catch{}
-    };
-
-    window.addEventListener('pageshow',restore);
-  }
-
-  function installReturnVisibilityFix(){
-    if(typeof showApp!=='function' || typeof bootAuth!=='function') return;
-    window.addEventListener('pageshow',()=>{
-      if(document.visibilityState!=='hidden') setTimeout(()=>{void bootAuth();},0);
-    });
-  }
-
   function installPriceLayout(){
     const minSelect=document.getElementById('min');
     const maxSelect=document.getElementById('max');
@@ -338,8 +298,6 @@
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
-  installRoomReturnHotfix();
-  installReturnVisibilityFix();
   installPriceLayout();
   installCompactHistory();
   addPurchaseLink();
