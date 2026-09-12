@@ -251,7 +251,7 @@
   }
 
   function installRoomReturnHotfix(){
-    const RETURN_KEY='urenavi_room_return_v2';
+    const RETURN_KEY='urenavi_room_return_v3';
 
     document.addEventListener('click',e=>{
       const link=e.target.closest?.('a.roomLink');
@@ -265,54 +265,30 @@
       e.stopImmediatePropagation();
 
       try{
-        sessionStorage.setItem(RETURN_KEY,JSON.stringify({
-          at:Date.now(),
-          scrollY:window.scrollY||0
-        }));
+        sessionStorage.setItem(RETURN_KEY,JSON.stringify({at:Date.now(),scrollY:window.scrollY||0}));
       }catch{}
 
-      // iOS standalone/PWA can leave a white child window after target=_blank.
-      // Use the current browsing context so the original Urenavi screen survives the handoff.
-      link.removeAttribute('target');
-      window.location.assign(url.href);
+      window.location.assign('/room-bridge.html?to='+encodeURIComponent(url.href));
     },true);
 
     const restore=()=>{
       if(document.visibilityState==='hidden') return;
-
       let state=null;
       try{state=JSON.parse(sessionStorage.getItem(RETURN_KEY)||'null');}catch{}
       if(!state || Date.now()-Number(state.at||0)>30*60*1000) return;
-
-      const visible=appRoot && getComputedStyle(appRoot).display!=='none';
-      if(!visible) return;
-
       authGate.style.display='none';
       appRoot.style.display='block';
-
-      // Force an iOS repaint after returning from the native ROOM app.
-      appRoot.style.transform='translateZ(0)';
-      requestAnimationFrame(()=>{
-        appRoot.style.transform='';
-        window.scrollTo(0,Number(state.scrollY||0));
-      });
-
+      requestAnimationFrame(()=>window.scrollTo(0,Number(state.scrollY||0)));
       try{sessionStorage.removeItem(RETURN_KEY);}catch{}
     };
 
     window.addEventListener('pageshow',restore);
-    document.addEventListener('visibilitychange',()=>{
-      if(!document.hidden) requestAnimationFrame(restore);
-    });
   }
 
   function installReturnVisibilityFix(){
     if(typeof showApp!=='function' || typeof bootAuth!=='function') return;
-
     window.addEventListener('pageshow',()=>{
-      if(document.visibilityState!=='hidden'){
-        setTimeout(()=>{void bootAuth();},0);
-      }
+      if(document.visibilityState!=='hidden') setTimeout(()=>{void bootAuth();},0);
     });
   }
 
@@ -320,21 +296,17 @@
     const minSelect=document.getElementById('min');
     const maxSelect=document.getElementById('max');
     if(!minSelect || !maxSelect || document.getElementById('urenaviPriceRow')) return;
-
     const minLabel=minSelect.previousElementSibling;
     const maxLabel=maxSelect.previousElementSibling;
     if(!minLabel || !maxLabel || minLabel.tagName!=='LABEL' || maxLabel.tagName!=='LABEL') return;
-
     const row=document.createElement('div');
     row.id='urenaviPriceRow';
     row.style.display='grid';
     row.style.gridTemplateColumns='1fr 1fr';
     row.style.gap='10px';
     row.style.alignItems='end';
-
     const minCol=document.createElement('div');
     const maxCol=document.createElement('div');
-
     minLabel.parentNode.insertBefore(row,minLabel);
     minCol.appendChild(minLabel);
     minCol.appendChild(minSelect);
@@ -347,54 +319,19 @@
   function installCompactHistory(){
     const histEl=document.getElementById('hist');
     if(!histEl || typeof hist!=='function' || typeof closeH!=='function') return;
-
-    Object.assign(histEl.style,{
-      position:'static',
-      left:'auto',
-      right:'auto',
-      top:'auto',
-      marginTop:'6px',
-      zIndex:'auto',
-      boxShadow:'none'
-    });
-
+    Object.assign(histEl.style,{position:'static',left:'auto',right:'auto',top:'auto',marginTop:'6px',zIndex:'auto',boxShadow:'none'});
     let expanded=false;
-
     window.drawH=()=>{
       const h=hist();
       const visible=expanded?h:h.slice(0,3);
-
       histEl.innerHTML=h.length
         ?`<div class="hh"><span>最近の検索</span><button class="hc">履歴を消す</button></div>${visible.map((v,i)=>`<button class="ho" data-i="${i}">${esc(v.k)}<small>${v.min?fmt(v.min)+'円〜':'下限なし'} / ${v.max?'〜'+fmt(v.max)+'円':'上限なし'}</small></button>`).join('')}${h.length>3?`<button id="historyToggle" type="button" style="display:block;width:100%;border:0;border-top:1px solid #eee;background:#fafafa;padding:10px;font-size:12px;font-weight:800;color:#555">${expanded?'閉じる':'履歴をもっと見る'}</button>`:''}`
         :'<div class="hh">まだ履歴はありません</div>';
-
-      histEl.querySelector('.hc')?.addEventListener('click',e=>{
-        e.stopPropagation();
-        localStorage.removeItem('raiHistory3');
-        expanded=false;
-        drawH();
-      });
-
+      histEl.querySelector('.hc')?.addEventListener('click',e=>{e.stopPropagation();localStorage.removeItem('raiHistory3');expanded=false;drawH();});
       histEl.querySelectorAll('.ho').forEach((b,i)=>{
-        b.onclick=e=>{
-          e.stopPropagation();
-          const v=visible[i];
-          if(!v) return;
-          k.value=v.k;
-          x.classList.add('on');
-          document.getElementById('min').value=v.min;
-          document.getElementById('max').value=v.max;
-          document.getElementById('sort').value=v.sort;
-          closeH();
-        };
+        b.onclick=e=>{e.stopPropagation();const v=visible[i];if(!v)return;k.value=v.k;x.classList.add('on');document.getElementById('min').value=v.min;document.getElementById('max').value=v.max;document.getElementById('sort').value=v.sort;closeH();};
       });
-
-      histEl.querySelector('#historyToggle')?.addEventListener('click',e=>{
-        e.stopPropagation();
-        expanded=!expanded;
-        drawH();
-        histEl.classList.add('on');
-      });
+      histEl.querySelector('#historyToggle')?.addEventListener('click',e=>{e.stopPropagation();expanded=!expanded;drawH();histEl.classList.add('on');});
     };
   }
 
