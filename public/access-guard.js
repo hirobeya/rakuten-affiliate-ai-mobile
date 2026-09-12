@@ -252,6 +252,32 @@
     });
   }
 
+  function installStandaloneRoomHandoff(){
+    const standalone=window.matchMedia?.('(display-mode: standalone)')?.matches || window.navigator?.standalone===true;
+    if(!standalone) return;
+
+    document.addEventListener('click',e=>{
+      const link=e.target.closest?.('a.roomLink');
+      if(!link) return;
+
+      let url;
+      try{url=new URL(link.href,window.location.href);}catch{return;}
+      if(url.protocol!=='https:' || url.hostname!=='room.rakuten.co.jp') return;
+
+      e.preventDefault();
+      try{if(typeof saveSearchState==='function') saveSearchState();}catch{}
+
+      const opened=window.open(url.href,'_blank');
+      const status=document.getElementById('st');
+      if(opened){
+        try{opened.opener=null;}catch{}
+        if(status) status.textContent='楽天ROOMを別画面で開きました。投稿後はウレナビへ戻ってください。';
+      }else if(status){
+        status.textContent='楽天ROOMを開けませんでした。Safariでウレナビを開いて、もう一度お試しください。';
+      }
+    },true);
+  }
+
   function installPriceLayout(){
     const minSelect=document.getElementById('min');
     const maxSelect=document.getElementById('max');
@@ -298,6 +324,7 @@
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
+  installStandaloneRoomHandoff();
   installPriceLayout();
   installCompactHistory();
   addPurchaseLink();
