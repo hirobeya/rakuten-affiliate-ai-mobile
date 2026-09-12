@@ -3,26 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>楽天ROOMへ移動｜ウレナビ</title>
+<title>ウレナビに戻る</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:center;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#171717;padding:22px}
-.card{width:100%;max-width:420px;background:#fff;border-radius:22px;padding:28px 20px;text-align:center;box-shadow:0 12px 36px #00000010}
-.logo{font-size:28px;font-weight:900}
-.msg{margin-top:10px;font-size:14px;line-height:1.65;color:#555}
-.open,.back{display:block;width:100%;margin-top:18px;padding:14px;border-radius:14px;text-decoration:none;font-weight:900;border:0;font-size:16px}
-.open{background:#b73727;color:#fff}
-.back{background:#111;color:#fff}
-.sub{margin-top:10px;font-size:11px;color:#888;line-height:1.5}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:center;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#171717;padding:22px}.card{width:100%;max-width:420px;background:#fff;border-radius:22px;padding:28px 20px;text-align:center;box-shadow:0 12px 36px #00000010}.logo{font-size:28px;font-weight:900}.msg{margin-top:10px;font-size:14px;line-height:1.65;color:#555}.back{display:block;margin-top:18px;padding:14px;border-radius:14px;background:#111;color:#fff;text-decoration:none;font-weight:900}.sub{margin-top:10px;font-size:11px;color:#888;line-height:1.5}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="logo">ウレナビ</div>
-  <div class="msg">楽天ROOMは別画面で開きます。<br>投稿後に戻れば、ウレナビへ戻れます。</div>
-  <a class="open" id="openRoom" href="#">楽天ROOMを開く</a>
+  <div class="msg">投稿後は、下のボタンでウレナビへ戻れます。</div>
   <a class="back" id="back" href="/app.html">ウレナビに戻る</a>
-  <div class="sub">白画面を避けるため、ROOMはウレナビ本体とは別画面で開きます。</div>
+  <div class="sub">検索結果はログイン状態の確認後に復元します。</div>
 </div>
 <script>
 (() => {
@@ -33,42 +24,19 @@ body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:
     const u=new URL(raw);
     if(u.protocol==='https:' && u.hostname==='room.rakuten.co.jp') target=u.href;
   }catch{}
-
-  const open=document.getElementById('openRoom');
-  const back=document.getElementById('back');
-  let launched=false;
-  let hiddenAfterLaunch=false;
-
-  if(!target){
-    open.style.display='none';
-    document.querySelector('.msg').textContent='楽天ROOMへの移動情報を確認できませんでした。';
-  }else{
-    open.href=target;
-    open.target='_blank';
-    open.rel='noopener noreferrer';
-    open.addEventListener('click',()=>{ launched=true; });
-  }
-
-  back.addEventListener('click',e=>{
+  // Compatibility for already-open tabs: never relaunch ROOM on a back navigation.
+  document.getElementById('back').addEventListener('click',e=>{
     e.preventDefault();
     location.replace('/app.html');
   });
-
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden && launched){
-      hiddenAfterLaunch=true;
-      return;
-    }
-    if(!document.hidden && launched && hiddenAfterLaunch){
-      setTimeout(()=>location.replace('/app.html'),120);
-    }
-  });
-
-  window.addEventListener('pageshow',()=>{
-    if(launched && hiddenAfterLaunch && !document.hidden){
-      setTimeout(()=>location.replace('/app.html'),120);
-    }
-  });
+  if(target){
+    const link=document.createElement('a');
+    link.href=target;
+    link.className='back';
+    link.textContent='楽天ROOMを開く';
+    link.rel='noreferrer';
+    document.querySelector('.card').appendChild(link);
+  }
 })();
 </script>
 </body>
