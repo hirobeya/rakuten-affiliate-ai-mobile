@@ -200,7 +200,7 @@
       );
 
       body=body.replace(/\s*※アフィリエイト広告を利用しています\s*$/,'').trim();
-      return `PR｜${hook}\n\n${body}\n\n※アフィリエイト広告を利用しています`;
+      return `※アフィリエイト広告を利用しています\nPR｜${hook}\n\n${body}`;
     };
   }
 
