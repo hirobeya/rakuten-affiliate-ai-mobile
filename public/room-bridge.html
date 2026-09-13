@@ -36,8 +36,6 @@ body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:
 
   const open=document.getElementById('openRoom');
   const back=document.getElementById('back');
-  let launched=false;
-  let hiddenAfterLaunch=false;
 
   if(!target){
     open.style.display='none';
@@ -46,7 +44,6 @@ body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:
     open.href=target;
     open.target='_blank';
     open.rel='noopener noreferrer';
-    open.addEventListener('click',()=>{ launched=true; });
   }
 
   back.addEventListener('click',e=>{
@@ -54,21 +51,6 @@ body{margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:
     location.replace('/app.html');
   });
 
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden && launched){
-      hiddenAfterLaunch=true;
-      return;
-    }
-    if(!document.hidden && launched && hiddenAfterLaunch){
-      setTimeout(()=>location.replace('/app.html'),120);
-    }
-  });
-
-  window.addEventListener('pageshow',()=>{
-    if(launched && hiddenAfterLaunch && !document.hidden){
-      setTimeout(()=>location.replace('/app.html'),120);
-    }
-  });
 })();
 </script>
 </body>
