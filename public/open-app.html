@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>外部ブラウザでウレナビを開く</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:#f6f7f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#17223b;display:flex;align-items:center;justify-content:center;padding:20px}.card{width:100%;max-width:440px;background:#fff;border-radius:22px;padding:26px 20px;box-shadow:0 12px 36px #00000012}.logo{font-size:28px;font-weight:950;text-align:center}.lead{margin:10px 0 18px;text-align:center;font-size:14px;line-height:1.65;color:#596274}.warn{background:#fff6e9;border:1px solid #efd5aa;border-radius:13px;padding:12px;font-size:12px;line-height:1.65;color:#6f531f;margin-bottom:14px}.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px 12px;margin-top:10px;text-align:center;text-decoration:none;font-size:15px;font-weight:900;cursor:pointer}.primary{background:#172a4b;color:#fff}.secondary{background:#eef1f5;color:#26364f}.copy{background:#fff;border:1px solid #d9dee8;color:#34435c}.help{font-size:11px;line-height:1.7;color:#737d8f;margin-top:14px}.hidden{display:none!important}.url{word-break:break-all;font-size:10px;color:#8a93a1;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">ウレナビ</div>
+  <div class="lead">楽天ROOMとの往復で白画面になるのを防ぐため、<br>アプリ内ブラウザではなく通常のブラウザで開いてください。</div>
+  <div id="ios" class="hidden">
+    <div class="warn">iPhone / iPadではSafariで開くのが最も安定します。下のボタンで移動できない場合は、この画面のメニューから「Safariで開く」を選んでください。</div>
+    <a id="safariBtn" class="btn primary" href="#">Safariでウレナビを開く</a>
+  </div>
+  <div id="android" class="hidden">
+    <div class="warn">AndroidではChrome、Googleアプリ、または端末の標準ブラウザで開いてください。</div>
+    <a id="chromeBtn" class="btn primary" href="#">Chromeで開く</a>
+    <a id="browserBtn" class="btn secondary" href="#">Google / 標準ブラウザで開く</a>
+  </div>
+  <div id="other" class="hidden">
+    <a id="normalBtn" class="btn primary" href="#">ウレナビを開く</a>
+  </div>
+  <button id="copyBtn" class="btn copy" type="button">ウレナビのURLをコピー</button>
+  <div class="help" id="help"></div>
+  <div class="url" id="urlText"></div>
+</div>
+<script>
+(()=>{
+  const q=new URLSearchParams(location.search);
+  const activated=q.get('activated')==='1';
+  const target=new URL('/app.html',location.origin);
+  if(activated) target.searchParams.set('activated','1');
+  const targetUrl=target.href;
+  const ua=navigator.userAgent||'';
+  const ios=/iPhone|iPad|iPod/i.test(ua);
+  const android=/Android/i.test(ua);
+  const show=id=>document.getElementById(id).classList.remove('hidden');
+  document.getElementById('urlText').textContent=targetUrl;
+
+  if(ios){
+    show('ios');
+    const btn=document.getElementById('safariBtn');
+    btn.href=targetUrl;
+    btn.target='_blank';
+    btn.rel='noopener noreferrer';
+    document.getElementById('help').textContent='開けない場合：画面上部または「…」メニュー → Safariで開く。';
+  }else if(android){
+    show('android');
+    const encoded=encodeURIComponent(targetUrl);
+    const path=target.pathname.replace(/^\//,'')+(target.search||'');
+    document.getElementById('chromeBtn').href=`intent://${target.host}/${path}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encoded};end`;
+    document.getElementById('browserBtn').href=`intent://${target.host}/${path}#Intent;scheme=https;action=android.intent.action.VIEW;S.browser_fallback_url=${encoded};end`;
+    document.getElementById('help').textContent='Chromeが入っていない場合は「Google / 標準ブラウザで開く」を選んでください。';
+  }else{
+    show('other');
+    document.getElementById('normalBtn').href=targetUrl;
+  }
+
+  document.getElementById('copyBtn').addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(targetUrl);document.getElementById('copyBtn').textContent='コピーしました';}
+    catch{document.getElementById('help').textContent='URLを長押ししてコピーし、Safari / Chrome / Google / 標準ブラウザに貼り付けてください。';}
+  });
+})();
+</script>
+</body>
+</html>
