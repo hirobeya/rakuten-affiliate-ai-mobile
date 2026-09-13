@@ -24,3 +24,82 @@
   if(typeof module!=='undefined' && module.exports) module.exports=api;
   else root.UrenaviReturnState=api;
 })(typeof window==='undefined'?{}:window);
+
+(function(root){
+  if(!root || typeof root.fetch!=='function' || root.__urenaviIntentSearchPatched) return;
+  const baseFetch=root.fetch.bind(root);
+  root.fetch=function(resource,options){
+    if(typeof resource==='string' && resource.indexOf('/api/search?')===0){
+      resource='/api/search-v2?'+resource.substring('/api/search?'.length);
+    }
+    return baseFetch(resource,options);
+  };
+  root.__urenaviIntentSearchPatched=true;
+})(typeof window==='undefined'?null:window);
+
+(function(root){
+  if(!root || !root.document) return;
+  const script=root.document.createElement('script');
+  script.src='/pain-copy.js?v=20260913-3';
+  script.defer=true;
+  script.onload=()=>{
+    const refine=root.document.createElement('script');
+    refine.src='/pain-copy-refine.js?v=20260913-1';
+    refine.defer=true;
+    refine.onload=()=>{
+      const contextFix=root.document.createElement('script');
+      contextFix.src='/pain-copy-context-fix.js?v=20260913-2';
+      contextFix.defer=true;
+      root.document.head.appendChild(contextFix);
+    };
+    root.document.head.appendChild(refine);
+  };
+  root.document.head.appendChild(script);
+
+  function installProductLogic(){
+    if(!root.UrenaviPainCopy) return false;
+    const originalPost=root.post;
+    if(typeof originalPost==='function' && !root.__urenaviPostPatched){
+      root.post=function(item,platform='room'){
+        if(platform!=='room' || !root.UrenaviPainCopy) return originalPost(item,platform);
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.makeRoomCopy(item,keyword);
+      };
+      root.__urenaviPostPatched=true;
+    }
+    if(typeof root.aud==='function' && !root.__urenaviAudPatched){
+      root.aud=function(item){
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword).audience;
+      };
+      root.__urenaviAudPatched=true;
+    }
+    if(typeof root.pts==='function' && !root.__urenaviPtsPatched){
+      root.pts=function(item){
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.analysisPoints(item,keyword);
+      };
+      root.__urenaviPtsPatched=true;
+    }
+    return !!root.__urenaviPostPatched;
+  }
+
+  const rankingNote='総合順位は「売れやすさ70%＋収益性30%」を土台に、検索意図との一致度を加味して補正。報酬目安は商品価格×料率の概算で、1商品1個あたり上限1,000円を反映しています。';
+  function refreshRankingNote(){
+    root.document.querySelectorAll('.compare .muted').forEach(el=>{
+      if(el.textContent.includes('総合順位は') && el.textContent!==rankingNote){
+        el.textContent=rankingNote;
+      }
+    });
+  }
+
+  root.addEventListener('DOMContentLoaded',()=>{
+    if(!installProductLogic()){
+      const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
+      setTimeout(()=>clearInterval(timer),5000);
+    }
+    refreshRankingNote();
+    const observer=new MutationObserver(refreshRankingNote);
+    observer.observe(root.document.body,{childList:true,subtree:true});
+  },{once:true});
+})(typeof window==='undefined'?null:window);
