@@ -39,6 +39,41 @@
 
 (function(root){
   if(!root || !root.document) return;
+
+  let roomAway=false;
+  let suppressAuthUntil=0;
+
+  function appVisible(){
+    const app=root.document.getElementById('appRoot');
+    return !!app && app.style.display==='block';
+  }
+
+  root.document.addEventListener('click',event=>{
+    if(event.target.closest?.('a.roomLink')) roomAway=true;
+  },true);
+
+  function markRoomReturn(){
+    if(!roomAway || !appVisible()) return;
+    roomAway=false;
+    suppressAuthUntil=Date.now()+8000;
+  }
+
+  root.addEventListener('pageshow',markRoomReturn,true);
+  root.document.addEventListener('visibilitychange',()=>{
+    if(!root.document.hidden) markRoomReturn();
+  },true);
+
+  function wrapBootAuth(){
+    if(typeof root.bootAuth!=='function' || root.__urenaviRoomReturnGuardInstalled) return false;
+    const baseBootAuth=root.bootAuth;
+    root.bootAuth=function(){
+      if(appVisible() && Date.now()<suppressAuthUntil) return Promise.resolve();
+      return baseBootAuth.apply(this,arguments);
+    };
+    root.__urenaviRoomReturnGuardInstalled=true;
+    return true;
+  }
+
   const script=root.document.createElement('script');
   script.src='/pain-copy.js?v=20260913-3';
   script.defer=true;
@@ -94,6 +129,7 @@
   }
 
   root.addEventListener('DOMContentLoaded',()=>{
+    wrapBootAuth();
     if(!installProductLogic()){
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
       setTimeout(()=>clearInterval(timer),5000);
