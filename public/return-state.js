@@ -24,3 +24,26 @@
   if(typeof module!=='undefined' && module.exports) module.exports=api;
   else root.UrenaviReturnState=api;
 })(typeof window==='undefined'?{}:window);
+
+(function(root){
+  if(!root || !root.document) return;
+  const script=root.document.createElement('script');
+  script.src='/pain-copy.js?v=20260913-1';
+  script.defer=true;
+  root.document.head.appendChild(script);
+
+  root.addEventListener('DOMContentLoaded',()=>{
+    const original=root.post;
+    if(typeof original!=='function') return;
+    root.post=function(item,platform='room'){
+      if(platform!=='room' || !root.UrenaviPainCopy) return original(item,platform);
+      const keyword=root.document.getElementById('k')?.value?.trim()||'';
+      let url='#';
+      try{
+        const u=new URL(item.affiliateUrl||item.itemUrl||'');
+        if(u.protocol==='https:') url=u.href;
+      }catch{}
+      return root.UrenaviPainCopy.makeRoomCopy(item,keyword,url);
+    };
+  },{once:true});
+})(typeof window==='undefined'?null:window);
