@@ -39,19 +39,47 @@
 
   function promoTerms(title){
     const s=String(title||'');
-    const pats=[/(?:最大\s*)?\d{1,2}[％%]\s*(?:OFF|オフ)/i,/半額/,/送料無料/,
-      /(?:\d{2,5}円(?:OFF|オフ)\s*)?クーポン/i,/ポイント\s*\d{1,2}倍/,/期間限定/,/数量限定/,/公式/,/正規品/,
-      /楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位/,/(?:総合|ランキング)\s*1位/];
+    const pats=[
+      /特典(?:付|付き)?/,
+      /(?:最大\s*)?\d{1,2}[％%]\s*(?:OFF|オフ)/i,
+      /半額/,
+      /送料無料/,
+      /(?:\d{2,5}円(?:OFF|オフ)\s*)?クーポン/i,
+      /ポイント\s*\d{1,2}倍/,
+      /期間限定/,
+      /数量限定/,
+      /公式/,
+      /正規品/,
+      /楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位/,
+      /(?:総合|ランキング)\s*1位/
+    ];
     const out=[];
-    for(const re of pats){const m=s.match(re);if(m&&!out.some(v=>v===m[0])) out.push(m[0].replace(/\s+/g,''));}
-    return out.slice(0,4);
+    for(const re of pats){
+      const m=s.match(re);
+      if(m&&!out.some(v=>v===m[0])) out.push(m[0].replace(/\s+/g,''));
+    }
+    return out.slice(0,5);
   }
 
   function shortTitle(title){
     const original=String(title||'').replace(/\s+/g,' ').trim();
     const promos=promoTerms(original);
-    let base=original.replace(/【[^】]{0,50}】/g,' ').replace(/\[[^\]]{0,50}\]/g,' ').replace(/\s+/g,' ').trim();
-    if(base.length>38) base=base.slice(0,38).trim()+'…';
+    let base=original
+      .replace(/【[^】]{0,80}】/g,' ')
+      .replace(/\[[^\]]{0,80}\]/g,' ')
+      .replace(/［[^］]{0,120}］/g,' ')
+      .replace(/（[^）]{0,80}）/g,' ')
+      .replace(/\([^)]{0,80}\)/g,' ')
+      .replace(/\b(?:送料無料|公式|正規品|特典(?:付|付き)?)\b/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words=base.split(/\s+/).filter(Boolean);
+    const dedup=[];
+    for(const word of words){
+      if(!dedup.some(v=>v===word)) dedup.push(word);
+    }
+    base=dedup.join(' ');
+    if(base.length>32) base=base.slice(0,32).trim()+'…';
     return (promos.length?'【'+promos.join('・')+'】 ':'')+base;
   }
 
