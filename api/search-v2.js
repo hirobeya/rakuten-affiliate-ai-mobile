@@ -9,10 +9,10 @@ function intentScore(item,keyword){
   const penalize=(re,n)=>{if(re.test(t)) s-=n;};
 
   if(/掃除用品|掃除道具|掃除グッズ|掃除/.test(q)){
-    boost(/モップ|ブラシ|クリーナー|ダスター|ほこり取り|掃除機|スポンジ|クロス|雑巾|ちりとり|ほうき|床ブラシ|フロアワイパー/,28);
+    boost(/モップ|ブラシ|クリーナー|ダスター|ほこり取り|掃除機|スポンジ|クロス|雑巾|ちりとり|ほうき|床ブラシ|フロアワイパー/,34);
     boost(/激落ち|ハンディモップ|ワイパーシート|替えシート|掃除シート/,12);
-    penalize(/スタンド|収納|用具入れ|ホルダー|ラック|置き場/,22);
-    penalize(/室名プレート|ネームプレート|看板|サイン|標識|ステッカー|シール/,55);
+    penalize(/スタンド|収納|用具入れ|ホルダー|ラック|置き場|オーガナイザー|ケース/,42);
+    penalize(/室名プレート|ネームプレート|看板|サイン|標識|ステッカー|シール/,65);
   }
   if(/レンジ調理|電子レンジ/.test(q)){
     boost(/電子レンジ|レンジ調理器|レンジクッカー|レンジパン|レンジポット|レンジメート|ムテキレンジ|蒸し器|レンジで焼/,24);
@@ -47,9 +47,10 @@ module.exports=async function(req,res){
   const keyword=String(req.query.keyword||'');
   const items=payload.items.map(x=>{
     const intent=intentScore(x,keyword);
-    const adjusted=Math.round((+x.score||0)*0.78+intent*0.22);
-    return {...x,_intent:intent,_adjusted:adjusted};
-  }).sort((a,b)=>b._adjusted-a._adjusted||b._intent-a._intent||(+b.score||0)-(+a.score||0));
+    const baseScore=+x.score||0;
+    const adjusted=Math.round(baseScore*0.72+intent*0.28);
+    return {...x,baseScore,score:adjusted,_intent:intent,_adjusted:adjusted};
+  }).sort((a,b)=>b._adjusted-a._adjusted||b._intent-a._intent||b.baseScore-a.baseScore);
 
   const cleaned=items.map(({_intent,_adjusted,...x})=>x);
   return res.status(200).json({...payload,items:cleaned});
