@@ -84,7 +84,7 @@
     return !!root.__urenaviPostPatched;
   }
 
-  const rankingNote='総合順位は「売れやすさ70%＋収益性30%」を土台に、検索意図との一致度を加味して補正。報酬目安は商品価格×料率の概算で、1商品1個あたり上限1,000円を反映しています。';
+  const rankingNote='総合順位は、売れやすさ・収益性・検索意図との一致度・商品タイプを総合的に評価して算出しています。報酬目安は商品価格×料率の概算で、1商品1個あたり上限1,000円を反映しています。';
   function refreshRankingNote(){
     root.document.querySelectorAll('.compare .muted').forEach(el=>{
       if(el.textContent.includes('総合順位は') && el.textContent!==rankingNote){
