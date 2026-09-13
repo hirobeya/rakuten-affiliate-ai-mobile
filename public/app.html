@@ -661,14 +661,13 @@ input,select{
 
 <section class="box">
 
-<details style="margin-bottom:16px"><summary style="font-weight:800;cursor:pointer">ROOMへの投稿方法・戻り方</summary><ol style="padding-left:22px;font-size:14px;line-height:1.8"><li>商品を検索して、投稿文をコピーします。</li><li>「ROOMで商品を探す」を開き、同じ商品・ショップ・特典を確認します。</li><li>ご自身の楽天ROOMアカウントでログインし、投稿画面に文章を貼り付け、内容を確認して投稿します。</li><li>投稿後はブラウザのタブ一覧で「ウレナビ」を選ぶと検索を続けられます。白いタブが開いた場合も、元の「ウレナビ」タブへ切り替えてください。</li></ol><p class="muted">ウレナビは商品選びと投稿文作成を補助するサービスです。自動投稿・報酬の受取代行は行いません。</p></details>
-<label for="k">探したい商品</label>
+<label>探したい商品</label>
 
 <div class="f">
 
-<input id="k" autocomplete="off" maxlength="128" placeholder="例：水筒、掃除ブラシ、ゼルダの伝説">
+<input id="k" autocomplete="off">
 
-<button id="x" class="x" aria-label="検索語を消す">
+<button id="x" class="x">
 ×
 </button>
 
@@ -816,13 +815,11 @@ input,select{
 
 <section id="res"></section>
 
-<p class="muted"><a href="/contact.html">お問い合わせ</a> ｜ <a href="/refund.html">解約・返金</a></p>
 </main>
 
 </div>
 
-<script src="/request.js?v=20260913-1"></script>
-<script src="/return-state.js?v=20260913-4"></script>
+<script src="/return-state.js?v=20260912-1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
 
@@ -911,7 +908,6 @@ function showLogin(
 ){
 
   accessGeneration++;
-  accountGeneration++;
   lastSearchItems=[];
   document.getElementById('res').replaceChildren();
   appRoot.style.display=
@@ -930,12 +926,10 @@ function showLogin(
 }
 
 
-let accountGeneration=0;
 let accessGeneration=0;
 let lastSearchItems=[];
 let authBoot=null;
 function bootAuth(){
-  if(document.readyState==='loading') return Promise.resolve();
   if(!authBoot) authBoot=checkAuth().finally(()=>{authBoot=null;});
   return authBoot;
 }
@@ -963,7 +957,7 @@ function restoreSearchState(email){
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
-      if(platform==='room') el.querySelector(`[data-p="${platform}"].tab`)?.click();
+      if(['room','threads','instagram'].includes(platform)) el.querySelector(`[data-p="${platform}"].tab`)?.click();
     });
     document.getElementById('st').textContent='前回の検索結果に戻りました。価格・在庫を更新する場合は、もう一度検索してください。';
     requestAnimationFrame(()=>window.scrollTo(0,Math.max(0,Number(state.scrollY)||0)));
@@ -1806,7 +1800,7 @@ function safeUrl(value){
 }
 
 function roomSearchUrl(item){
-  const name=String(item.itemName||'').replace(/[【\[]([^】\]]*)[】\]]/g,(full,part)=>/送料無料|クーポン|ポイント|限定特典|特典/.test(part)?' ':part).replace(/[（(]([^）)]*)[）)]/g,(full,part)=>/特典/.test(part)?' ':full).replace(/\s+/g,' ').trim();
+  const name=String(item.itemName||'').replace(/[【\[][^】\]]*[】\]]/g,' ').replace(/[（(][^）)]*[）)]/g,' ').replace(/\s+/g,' ').trim();
   return 'https://room.rakuten.co.jp/search/item?'+new URLSearchParams({keyword:name||String(item.itemName||'')});
 }
 
@@ -2009,12 +2003,36 @@ e=>{
 };
 
 
-function saveH(v){
-  try{
-    const values=hist().filter(z=>JSON.stringify(z)!==JSON.stringify(v));
-    values.unshift(v);localStorage.setItem(H,JSON.stringify(values.slice(0,6)));
-  }catch{}
+function saveH(
+  v
+){
+
+  let h=
+  hist()
+  .filter(
+    z=>
+    JSON.stringify(z)!==
+    JSON.stringify(v)
+  );
+
+
+  h.unshift(
+    v
+  );
+
+
+  localStorage.setItem(
+    H,
+    JSON.stringify(
+      h.slice(
+        0,
+        6
+      )
+    )
+  );
+
 }
+
 
 function aud(
   i
@@ -2242,7 +2260,7 @@ function post(
   p='room'
 ){
 
-  const u=safeUrl(i.itemUrl);
+  const u=safeUrl(i.affiliateUrl);
 
   const pr=
   fmt(
@@ -2332,7 +2350,8 @@ ${tar}
 
 ${pts(i).map(z=>'・'+z).join('\n')}
 
-気になる方は商品画像をタップしてチェック👇`
+気になる方はこちら👇
+${u}`
   );
 
 }
@@ -2455,7 +2474,7 @@ function today(
     ${roomAction(i)}
 
     <a
-      href="${esc(safeUrl(i.itemUrl))}"
+      href="${esc(safeUrl(i.affiliateUrl))}"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -2850,9 +2869,21 @@ function render(
       ROOM用の投稿文
     </button>
 
+    <button
+      class="tab"
+      data-i="${n}"
+      data-p="threads"
+    >
+      Threads
+    </button>
 
-
-
+    <button
+      class="tab"
+      data-i="${n}"
+      data-p="instagram"
+    >
+      Instagram
+    </button>
 
   </div>
 
@@ -2873,7 +2904,7 @@ function render(
     </button>
 
     <a
-      href="${esc(safeUrl(i.itemUrl))}"
+      href="${esc(safeUrl(i.affiliateUrl))}"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -3122,7 +3153,6 @@ async()=>{
   }
 
 
-  const searchAccount=accountGeneration;
   searching=
   true;
 
@@ -3223,8 +3253,33 @@ async()=>{
     }
 
 
-    const {response:r,data:d}=await UrenaviRequest.json('/api/search?'+q.toString(),{headers:{Authorization:`Bearer ${session.access_token}`}},30000);
-    if(searchAccount!==accountGeneration) return;
+    const r=
+    await fetch(
+      '/api/search?'+
+      q.toString(),
+      {
+        headers:{
+          Authorization:
+          `Bearer ${session.access_token}`
+        }
+      }
+    );
+
+
+    let d={};
+
+
+    try{
+
+      d=
+      await r.json();
+
+    }catch{
+
+      d={};
+
+    }
+
 
     if(
       r.status===401
@@ -3276,7 +3331,6 @@ async()=>{
       d.items||
       []
     );
-    saveSearchState();
 
 
     $('#st').textContent=
@@ -3290,7 +3344,6 @@ async()=>{
 
   }catch(e){
 
-    if(searchAccount!==accountGeneration) return;
     console.error(
       e
     );
@@ -3350,11 +3403,8 @@ async()=>{
 
 </script>
 <script src="/access-guard.js?v=20260912-1"></script>
-<script src="/pain-copy.js?v=20260913-4"></script>
-<script src="/pain-copy-refine.js?v=20260913-1"></script>
-<script src="/pain-copy-context-fix.js?v=20260913-3"></script>
 <script>
-window.addEventListener('DOMContentLoaded',()=>{void bootAuth();},{once:true});
+void bootAuth();
 window.addEventListener('pagehide',saveSearchState);
 window.addEventListener('pageshow',()=>{if(!document.hidden) void bootAuth();});
 document.addEventListener('visibilitychange',()=>{
