@@ -18,8 +18,6 @@ function intentScore(item,keyword){
     penalize(/スタンド|収納|用具入れ|ホルダー|ラック|置き場|オーガナイザー|ケース/,42);
     penalize(/室名プレート|ネームプレート|看板|サイン|標識|ステッカー|シール/,65);
 
-    // 「掃除用品」では実際に掃除する道具を優先し、
-    // 道具名を含む収納スタンド等が誤って上位に来ないよう役割で補正する。
     if(isSign) s=Math.min(s,4);
     else if(isAccessory) s=Math.min(s,12);
     else if(isTool) s=Math.max(s,88);
@@ -55,10 +53,16 @@ module.exports=async function(req,res){
   if(statusCode!==200||!payload||!Array.isArray(payload.items)) return res.status(statusCode).json(payload||{});
 
   const keyword=String(req.query.keyword||'');
+  const q=norm(keyword);
+  const cleaningQuery=/掃除用品|掃除道具|掃除グッズ|掃除/.test(q);
   const items=payload.items.map(x=>{
     const intent=intentScore(x,keyword);
     const baseScore=+x.score||0;
-    const adjusted=Math.round(baseScore*0.72+intent*0.28);
+    // 掃除用品だけは「売れやすさ」より商品タイプ一致を強める。
+    // それ以外の検索は従来のバランスを維持する。
+    const adjusted=cleaningQuery
+      ? Math.round(baseScore*0.45+intent*0.55)
+      : Math.round(baseScore*0.72+intent*0.28);
     return {...x,baseScore,score:adjusted,_intent:intent,_adjusted:adjusted};
   }).sort((a,b)=>b._adjusted-a._adjusted||b._intent-a._intent||b.baseScore-a.baseScore);
 
