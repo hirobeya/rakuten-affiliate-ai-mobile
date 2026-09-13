@@ -33,6 +33,7 @@
   const q=new URLSearchParams(location.search);
   const activated=q.get('activated')==='1';
   const target=new URL('/app.html',location.origin);
+  target.searchParams.set('external','1');
   if(activated) target.searchParams.set('activated','1');
   const targetUrl=target.href;
   const ua=navigator.userAgent||'';
@@ -43,11 +44,9 @@
 
   if(ios){
     show('ios');
-    const btn=document.getElementById('safariBtn');
-    btn.href=targetUrl;
-    btn.target='_blank';
-    btn.rel='noopener noreferrer';
-    document.getElementById('help').textContent='開けない場合：画面上部または「…」メニュー → Safariで開く。';
+    const safariTarget='x-safari-https://'+target.host+target.pathname+target.search;
+    document.getElementById('safariBtn').href=safariTarget;
+    document.getElementById('help').textContent='ボタンで開けない場合：画面上部または「…」メニュー → Safariで開く。';
   }else if(android){
     show('android');
     const encoded=encodeURIComponent(targetUrl);
