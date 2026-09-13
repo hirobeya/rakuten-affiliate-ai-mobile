@@ -252,6 +252,20 @@
     });
   }
 
+  function installSameTabRoomNavigation(){
+    document.addEventListener('click',e=>{
+      const link=e.target.closest?.('a.roomLink');
+      if(!link) return;
+      let url;
+      try{url=new URL(link.href,window.location.href);}catch{return;}
+      if(url.protocol!=='https:' || url.hostname!=='room.rakuten.co.jp') return;
+      e.preventDefault();
+      e.stopPropagation();
+      try{if(typeof saveSearchState==='function') saveSearchState();}catch{}
+      window.location.assign(url.href);
+    },true);
+  }
+
   function installPriceLayout(){
     const minSelect=document.getElementById('min');
     const maxSelect=document.getElementById('max');
@@ -285,7 +299,7 @@
       const h=hist();
       const visible=expanded?h:h.slice(0,3);
       histEl.innerHTML=h.length
-        ?`<div class="hh"><span>最近の検索</span><button class="hc">履歴を消す</button></div>${visible.map((v,i)=>`<button class="ho" data-i="${i}">${esc(v.k)}<small>${v.min?fmt(v.min)+'円〜':'下限なし'} / ${v.max?'〜'+fmt(v.max)+'円':'上限なし'}</small></button>`).join('')}${h.length>3?`<button id="historyToggle" type="button" style="display:block;width:100%;border:0;border-top:1px solid #eee;background:#fafafa;padding:10px;font-size:12px;font-weight:800;color:#555">${expanded?'閉じる':'履歴をもっと見る'}</button>`:''}`
+        ?`<div class="hh"><span>最近の検索</span><button class="hc">履歴を消す</button></div>${visible.map((v,i)=>`<button class="ho" data-i="${i}">${esc(v.k)}<small>${v.min?fmt(v.min)+'円〜':'下限なし'} / ${v.max?'〜'+fmt(v.max)+'円':'上限なし'}</small></button>`).join('')}${h.length>3?`<button id="historyToggle" type="button" style="display:block;width:100%;border:0;border-top:1px solid #eee;background:#fafafa;padding:10px;fontSize:12px;font-weight:800;color:#555">${expanded?'閉じる':'履歴をもっと見る'}</button>`:''}`
         :'<div class="hh">まだ履歴はありません</div>';
       histEl.querySelector('.hc')?.addEventListener('click',e=>{e.stopPropagation();localStorage.removeItem('raiHistory3');expanded=false;drawH();});
       histEl.querySelectorAll('.ho').forEach((b,i)=>{
@@ -298,6 +312,7 @@
   installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
+  installSameTabRoomNavigation();
   installPriceLayout();
   installCompactHistory();
   addPurchaseLink();
