@@ -4,6 +4,15 @@
   const api=root.UrenaviPainCopy;
   const originalPainContext=api.painContext;
 
+  function loadResilience(){
+    if(!root.document || root.__urenaviReturnResilienceLoaded) return;
+    root.__urenaviReturnResilienceLoaded=true;
+    const helper=root.document.createElement('script');
+    helper.src='/return-state-resilience.js?v=20260913-1';
+    helper.defer=true;
+    root.document.head.appendChild(helper);
+  }
+
   function install(){
     api.painContext=function(name,keyword){
       const engine=root.UrenaviProductRole;
@@ -13,6 +22,7 @@
       }
       return originalPainContext(name,keyword);
     };
+    loadResilience();
   }
 
   if(root.UrenaviProductRole){
