@@ -36,7 +36,7 @@
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260913-1';
+      contextFix.src='/pain-copy-context-fix.js?v=20260913-2';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
