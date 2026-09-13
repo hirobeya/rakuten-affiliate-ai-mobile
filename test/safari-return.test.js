@@ -27,7 +27,8 @@ test('logout clears remembered results',()=>{
 const html=fs.readFileSync(path.join(__dirname,'../public/room-bridge.html'),'utf8');
 function bridge(){
   const actions=[];const handlers={};const links=[];
-  const nodes={back:{addEventListener:(name,cb)=>handlers[name]=cb},'.msg':{},'.card':{appendChild:el=>links.push(el)}};
+  const open={style:{}};links.push(open);
+  const nodes={openRoom:open,back:{addEventListener:(name,cb)=>handlers[name]=cb},'.msg':{},'.card':{appendChild:el=>links.push(el)}};
   const context=vm.createContext({URL,URLSearchParams,location:{search:'?to='+encodeURIComponent('https://room.rakuten.co.jp/search/item?keyword=ゼルダ'),replace:url=>actions.push(url)},document:{getElementById:id=>nodes[id],querySelector:s=>nodes[s],createElement:()=>({})},window:{addEventListener(){}},setTimeout:cb=>cb(),history:{length:3,back:()=>actions.push('back')}});
   vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1],context);
   return {actions,handlers,links};
@@ -36,6 +37,20 @@ test('return bridge cannot relaunch ROOM on a cold history return or reload',()=
   for(let i=0;i<3;i++){
     const page=bridge();assert.deepEqual(page.actions,[]);
     assert.equal(new URL(page.links[0].href).searchParams.get('keyword'),'ゼルダ');
+    assert.equal(page.links[0].target,'_blank');
+    assert.equal(page.links[0].rel,'noopener noreferrer');
     page.handlers.click({preventDefault(){}});assert.deepEqual(page.actions,['/app.html']);
   }
+});
+
+test('both rendered ROOM actions preserve the Urenavi browsing context',()=>{
+  const app=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  const functions=app.slice(app.indexOf('function roomSearchUrl('),app.indexOf('function hist('));
+  const context=vm.createContext({URLSearchParams,esc:s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')});
+  vm.runInContext(functions,context);
+  const link=context.roomAction({itemName:'ゼルダの伝説'});
+  assert.match(link,/target="_blank"/);
+  assert.match(link,/rel="noopener noreferrer"/);
+  assert.match(link,/href="https:\/\/room\.rakuten\.co\.jp\/search\/item\?/);
+  assert.equal((app.match(/\$\{roomAction\(i\)\}/g)||[]).length,2);
 });
