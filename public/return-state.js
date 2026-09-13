@@ -28,8 +28,14 @@
 (function(root){
   if(!root || !root.document) return;
   const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260913-2';
+  script.src='/pain-copy.js?v=20260913-3';
   script.defer=true;
+  script.onload=()=>{
+    const refine=root.document.createElement('script');
+    refine.src='/pain-copy-refine.js?v=20260913-1';
+    refine.defer=true;
+    root.document.head.appendChild(refine);
+  };
   root.document.head.appendChild(script);
 
   function installProductLogic(){
