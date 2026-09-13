@@ -28,22 +28,41 @@
 (function(root){
   if(!root || !root.document) return;
   const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260913-1';
+  script.src='/pain-copy.js?v=20260913-2';
   script.defer=true;
   root.document.head.appendChild(script);
 
+  function installProductLogic(){
+    if(!root.UrenaviPainCopy) return false;
+    const originalPost=root.post;
+    if(typeof originalPost==='function' && !root.__urenaviPostPatched){
+      root.post=function(item,platform='room'){
+        if(platform!=='room' || !root.UrenaviPainCopy) return originalPost(item,platform);
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.makeRoomCopy(item,keyword);
+      };
+      root.__urenaviPostPatched=true;
+    }
+    if(typeof root.aud==='function' && !root.__urenaviAudPatched){
+      root.aud=function(item){
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword).audience;
+      };
+      root.__urenaviAudPatched=true;
+    }
+    if(typeof root.pts==='function' && !root.__urenaviPtsPatched){
+      root.pts=function(item){
+        const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        return root.UrenaviPainCopy.analysisPoints(item,keyword);
+      };
+      root.__urenaviPtsPatched=true;
+    }
+    return !!root.__urenaviPostPatched;
+  }
+
   root.addEventListener('DOMContentLoaded',()=>{
-    const original=root.post;
-    if(typeof original!=='function') return;
-    root.post=function(item,platform='room'){
-      if(platform!=='room' || !root.UrenaviPainCopy) return original(item,platform);
-      const keyword=root.document.getElementById('k')?.value?.trim()||'';
-      let url='#';
-      try{
-        const u=new URL(item.affiliateUrl||item.itemUrl||'');
-        if(u.protocol==='https:') url=u.href;
-      }catch{}
-      return root.UrenaviPainCopy.makeRoomCopy(item,keyword,url);
-    };
+    if(installProductLogic()) return;
+    const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
+    setTimeout(()=>clearInterval(timer),5000);
   },{once:true});
 })(typeof window==='undefined'?null:window);
