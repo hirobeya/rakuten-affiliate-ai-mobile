@@ -49,7 +49,13 @@
   }
 
   root.document.addEventListener('click',event=>{
-    if(event.target.closest?.('a.roomLink')) roomAway=true;
+    const link=event.target.closest?.('a.roomLink');
+    if(!link) return;
+    roomAway=true;
+    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    root.location.assign(link.href);
   },true);
 
   function markRoomReturn(){
