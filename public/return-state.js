@@ -26,6 +26,18 @@
 })(typeof window==='undefined'?{}:window);
 
 (function(root){
+  if(!root || typeof root.fetch!=='function' || root.__urenaviIntentSearchPatched) return;
+  const baseFetch=root.fetch.bind(root);
+  root.fetch=function(resource,options){
+    if(typeof resource==='string' && resource.indexOf('/api/search?')===0){
+      resource='/api/search-v2?'+resource.substring('/api/search?'.length);
+    }
+    return baseFetch(resource,options);
+  };
+  root.__urenaviIntentSearchPatched=true;
+})(typeof window==='undefined'?null:window);
+
+(function(root){
   if(!root || !root.document) return;
   const script=root.document.createElement('script');
   script.src='/pain-copy.js?v=20260913-3';
