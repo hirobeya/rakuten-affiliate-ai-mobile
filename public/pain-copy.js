@@ -69,7 +69,7 @@
     const ctx=painContext(item.itemName,keyword),pr=fmt(item.itemPrice),av=(+item.reviewAverage||0).toFixed(1),rv=fmt(item.reviewCount),list=benefits(item),title=shortTitle(item.itemName);
     const bullets=(list.length?list:['手間を減らしやすい','取り入れやすい']).map(v=>'✔ '+v).join('\n');
     const recommend=ctx.points.map(v=>'・'+v).join('\n');
-    return `${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
+    return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
   }
 
   root.UrenaviPainCopy={painContext,benefits,promoTerms,shortTitle,makeRoomCopy};
