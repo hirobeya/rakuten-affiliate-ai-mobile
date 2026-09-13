@@ -585,6 +585,7 @@ async function handler(req,res){
     await fetch(
       url,
       {
+        signal:AbortSignal.timeout(12000),
         headers:{
           Origin:
           'https://rakuten-affiliate-ai-mobile.vercel.app',
@@ -606,7 +607,7 @@ async function handler(req,res){
 
       return res
       .status(
-        r.status
+        r.status===429?429:502
       )
       .json({
         message:'商品データを取得できませんでした。'
@@ -846,7 +847,8 @@ async function handler(req,res){
 
   }catch(e){
 
-    console.error('Search request failed');
+    console.error('Search request failed',e?.name==='TimeoutError'?'upstream_timeout':'upstream_error');
+    if(e?.name==='TimeoutError' || e?.name==='AbortError') return res.status(504).json({message:'商品検索が時間内に完了しませんでした。もう一度お試しください。'});
 
     return res
     .status(500)

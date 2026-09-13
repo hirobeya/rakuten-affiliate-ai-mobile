@@ -39,23 +39,6 @@
 
 (function(root){
   if(!root || !root.document) return;
-  const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260913-3';
-  script.defer=true;
-  script.onload=()=>{
-    const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260913-1';
-    refine.defer=true;
-    refine.onload=()=>{
-      const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260913-2';
-      contextFix.defer=true;
-      root.document.head.appendChild(contextFix);
-    };
-    root.document.head.appendChild(refine);
-  };
-  root.document.head.appendChild(script);
-
   function installProductLogic(){
     if(!root.UrenaviPainCopy) return false;
     const originalPost=root.post;

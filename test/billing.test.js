@@ -8,6 +8,18 @@ const access=require('../api/access');
 const search=require('../api/search');
 const originalFetch=global.fetch;
 const originalEnv={...process.env};
+test('upstream authentication failure does not sign the customer out',async()=>{
+  process.env.RAKUTEN_APP_ID='fixture';process.env.RAKUTEN_ACCESS_KEY='fixture';process.env.RAKUTEN_AFFILIATE_ID='fixture';
+  global.fetch=async url=>{
+    url=String(url);
+    if(url.includes('/auth/v1/user'))return response({id:'user_fixture',email:'a@example.com'});
+    if(url.includes('urenavi_session_valid'))return response(true);
+    if(url.includes('urenavi_entitlements?'))return response([{status:'owner',active:true}]);
+    return {ok:false,status:401,json:async()=>({error:'invalid application key'})};
+  };
+  const r=res();await search({headers:{authorization:'Bearer '+authToken()},query:{keyword:'商品'}},r);
+  assert.equal(r.code,502);assert.doesNotMatch(JSON.stringify(r.body),/application key/);
+});
 beforeEach(()=>{Object.assign(process.env,{VERCEL_ENV:'preview',STRIPE_SECRET_KEY:'sk_test_fixture',URENAVI_PRICE_ID:'price_test',URENAVI_PAYMENT_LINK_ID:'plink_test',URENAVI_PAYMENT_LINK_URL:'https://buy.stripe.com/test_fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',STRIPE_WEBHOOK_SECRET:'fixture'});});
 afterEach(()=>{global.fetch=originalFetch; for(const key of Object.keys(process.env)) if(!(key in originalEnv)) delete process.env[key];Object.assign(process.env,originalEnv);});
 const response=data=>({ok:true,status:200,json:async()=>data});
