@@ -55,7 +55,7 @@ module.exports = async function handler(req,res) {
       }
       setDeviceCookie(res,row.email);
       await db('urenavi_device_handoffs?code_hash=eq.'+encodeURIComponent(codeHash),{method:'DELETE',headers:{Prefer:'return=minimal'}});
-      if (redirectToApp) return res.redirect(303,'/app.html');
+      if (redirectToApp) return res.redirect(303,'/open-app.html');
       return res.status(200).json({approved:true,email:row.email});
     }
 
@@ -75,7 +75,7 @@ module.exports = async function handler(req,res) {
     if (req.query.action !== 'activate') return res.status(400).json({message:'Invalid action'});
     const row=await activate(String(req.query.session_id||''));
     setDeviceCookie(res,row.email);
-    return res.redirect(303,'/app.html?activated=1');
+    return res.redirect(303,'/open-app.html?activated=1');
   } catch (e) {
     console.error('access failed', e?.message || 'unknown');
     return res.status(503).json({message:'利用情報を確認できませんでした。時間をおいて再度お試しください。'});
