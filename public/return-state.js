@@ -84,9 +84,21 @@
     return !!root.__urenaviPostPatched;
   }
 
+  function refreshRankingNote(){
+    root.document.querySelectorAll('.compare .muted').forEach(el=>{
+      if(el.textContent.includes('総合順位は')){
+        el.textContent='総合順位は「売れやすさ70%＋収益性30%」を土台に、検索意図との一致度を加味して補正。報酬目安は商品価格×料率の概算で、1商品1個あたり上限1,000円を反映しています。';
+      }
+    });
+  }
+
   root.addEventListener('DOMContentLoaded',()=>{
-    if(installProductLogic()) return;
-    const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
-    setTimeout(()=>clearInterval(timer),5000);
+    if(!installProductLogic()){
+      const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
+      setTimeout(()=>clearInterval(timer),5000);
+    }
+    refreshRankingNote();
+    const observer=new MutationObserver(refreshRankingNote);
+    observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
