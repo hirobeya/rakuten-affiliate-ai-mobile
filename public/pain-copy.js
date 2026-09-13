@@ -57,16 +57,17 @@
     return (promos.length?'【'+promos.join('・')+'】 ':'')+base;
   }
 
-  function benefits(item){
-    const out=[],r=+item.reviewCount||0,v=+item.reviewAverage||0,p=+item.itemPrice||0;
-    if(r>=300) out.push(`レビュー${fmt(r)}件で比較材料が多い`); else if(r>=50) out.push(`レビュー${fmt(r)}件で実績を確認しやすい`);
+  function benefits(item,ctx){
+    const out=[],r=+item.reviewCount||0,v=+item.reviewAverage||0;
+    if(r>=300) out.push(`レビュー${fmt(r)}件の人気商品`);
+    else if(r>=50) out.push(`レビュー${fmt(r)}件で選ばれている商品`);
     if(v>=4.5&&r>=20) out.push(`★${v.toFixed(1)}の高評価`);
-    if(p>0&&p<=3000) out.push(`${fmt(p)}円で試しやすい価格帯`); else if(p<=10000&&p>0) out.push(`${fmt(p)}円で比較しやすい価格帯`);
+    if(ctx&&ctx.points&&ctx.points[0]) out.push(`${ctx.points[0]}人にぴったり`);
     return out.slice(0,3);
   }
 
   function makeRoomCopy(item,keyword){
-    const ctx=painContext(item.itemName,keyword),pr=fmt(item.itemPrice),av=(+item.reviewAverage||0).toFixed(1),rv=fmt(item.reviewCount),list=benefits(item),title=shortTitle(item.itemName);
+    const ctx=painContext(item.itemName,keyword),pr=fmt(item.itemPrice),av=(+item.reviewAverage||0).toFixed(1),rv=fmt(item.reviewCount),list=benefits(item,ctx),title=shortTitle(item.itemName);
     const bullets=(list.length?list:['手間を減らしやすい','取り入れやすい']).map(v=>'✔ '+v).join('\n');
     const recommend=ctx.points.map(v=>'・'+v).join('\n');
     return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
