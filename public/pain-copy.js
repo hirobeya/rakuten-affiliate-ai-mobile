@@ -34,7 +34,7 @@
     if(/水筒|ボトル|タンブラー/.test(item)||(/水筒|ボトル|タンブラー/.test(q)&&/水筒|ボトル|タンブラー/.test(item))) return waterContext(item);
     for(const [re,value] of baseRules) if(re.test(item)) return value;
     for(const [re,value] of baseRules) if(re.test(q)) return value;
-    return {hook:'毎日の「これ、ちょっと面倒…」を少しでもラクにしたい。',bridge:'そんな日々の小さなストレスを減らしたい人にチェックしてほしいアイテム。',points:['面倒な作業を減らしたい','できるだけ簡単に使いたい','価格とレビューも見て選びたい'],benefit:'毎日の小さな手間を減らしたい人にぴったり',audience:'使いやすさとレビューを見ながら選びたい人'};
+    return {hook:'気になる商品、価格だけで決めずに内容も確かめたい。',bridge:'商品情報やレビュー、ショップごとの条件を比べて選びたい人に。',points:['商品内容を確認して選びたい','価格やレビューを比較したい','ショップや特典の違いも確認したい'],benefit:'商品情報を比較して選びたい人の候補に',audience:'商品情報やレビューを比較して選びたい人'};
   }
 
   function promoTerms(title){

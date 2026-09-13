@@ -59,6 +59,21 @@
     const item=String(name||'');
     const q=String(keyword||'');
 
+    if(/攻略本|書籍|絵本|図鑑|コミック|文庫|お金の大学/.test(item)) return {
+      hook:'次に読みたい一冊、内容やレビューを見比べて選びたい。',
+      bridge:'テーマや目次、版の違いを確認して、自分に合う一冊を探している人に。',
+      points:['読みたいテーマに合うか確認したい','内容やレビューを比べて選びたい','版や付属特典も確認したい'],
+      benefit:'内容を確かめて本を選びたい人の候補に',
+      audience:'内容やレビューを確認して本を選びたい人'
+    };
+    if(/ゼルダ|ポケットモンスター|ゲームソフト|Nintendo|ニンテンドー|PlayStation|PS5|Switch/i.test(item)) return {
+      hook:'次に遊ぶゲーム、作品や対応機種を確かめて選びたい。',
+      bridge:'気になる作品の内容や対応機種、通常版と特典版の違いを確認したい人に。',
+      points:['遊びたい作品を探している','対応機種を確かめたい','通常版と特典版を比較したい'],
+      benefit:'作品・対応機種・特典を比べて選びたい人の候補に',
+      audience:'作品や対応機種を確認してゲームを選びたい人'
+    };
+
     const microwaveItem=/電子レンジ|レンジ調理器|レンジクッカー|レンジパン|レンジポット|レンジメート|ムテキレンジ|レンジで|蒸し器/.test(item);
     const microwaveQuery=/レンジ調理|電子レンジ|レンジクッカー/.test(q);
     if(microwaveItem || (microwaveQuery && /レンジ|電子レンジ/.test(item))) return microwaveContext(item);
