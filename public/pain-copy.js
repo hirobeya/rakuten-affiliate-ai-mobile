@@ -42,14 +42,14 @@
     return out.slice(0,3);
   }
 
-  function makeRoomCopy(item,keyword,url){
+  function makeRoomCopy(item,keyword){
     const ctx=painContext(item.itemName,keyword);
     const pr=fmt(item.itemPrice);
     const av=(+item.reviewAverage||0).toFixed(1);
     const rv=fmt(item.reviewCount);
     const list=benefits(item);
     const bullets=(list.length?list:['毎日の手間を減らしやすい','使い方がシンプルで取り入れやすい']).map(v=>'✔ '+v).join('\n');
-    return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.solution}\n\n${item.itemName}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n・面倒な作業を減らしたい\n・できるだけ簡単に使いたい\n・価格とレビューも見て失敗しにくく選びたい\n\n気になる方はこちら👇\n${url}`;
+    return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.solution}\n\n${item.itemName}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n・面倒な作業を減らしたい\n・できるだけ簡単に使いたい\n・価格とレビューも見て失敗しにくく選びたい`;
   }
 
   root.UrenaviPainCopy={painContext,benefits,makeRoomCopy};
