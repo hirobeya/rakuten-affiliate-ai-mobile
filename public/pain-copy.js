@@ -24,17 +24,36 @@
 
   function promoTerms(title){
     const s=String(title||'');
-    const pats=[/\d{1,2}[％%](?:OFF|オフ)/i,/半額/,/送料無料/,/クーポン/,/ポイント\d{1,2}倍/,/期間限定/,/数量限定/,/公式/,/正規品/,/ランキング1位/,/楽天1位/];
+    const pats=[
+      /(?:最大\s*)?\d{1,2}[％%]\s*(?:OFF|オフ)/i,
+      /半額/,
+      /送料無料/,
+      /(?:\d{2,5}円(?:OFF|オフ)\s*)?クーポン/i,
+      /ポイント\s*\d{1,2}倍/,
+      /期間限定/,
+      /数量限定/,
+      /公式/,
+      /正規品/,
+      /楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位/,
+      /(?:総合|ランキング)\s*1位/
+    ];
     const out=[];
-    for(const re of pats){const m=s.match(re);if(m&&!out.includes(m[0])) out.push(m[0]);}
-    return out.slice(0,3);
+    for(const re of pats){
+      const m=s.match(re);
+      if(m&&!out.some(v=>v===m[0])) out.push(m[0].replace(/\s+/g,''));
+    }
+    return out.slice(0,4);
   }
 
   function shortTitle(title){
     const original=String(title||'').replace(/\s+/g,' ').trim();
     const promos=promoTerms(original);
-    let base=original.replace(/【[^】]{0,40}】/g,' ').replace(/\[[^\]]{0,40}\]/g,' ').replace(/\s+/g,' ').trim();
-    if(base.length>46) base=base.slice(0,46).trim()+'…';
+    let base=original
+      .replace(/【[^】]{0,50}】/g,' ')
+      .replace(/\[[^\]]{0,50}\]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(base.length>42) base=base.slice(0,42).trim()+'…';
     return (promos.length?'【'+promos.join('・')+'】 ':'')+base;
   }
 
@@ -50,7 +69,7 @@
     const ctx=painContext(item.itemName,keyword),pr=fmt(item.itemPrice),av=(+item.reviewAverage||0).toFixed(1),rv=fmt(item.reviewCount),list=benefits(item),title=shortTitle(item.itemName);
     const bullets=(list.length?list:['手間を減らしやすい','取り入れやすい']).map(v=>'✔ '+v).join('\n');
     const recommend=ctx.points.map(v=>'・'+v).join('\n');
-    return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
+    return `${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円\nレビュー：★${av}（${rv}件）\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
   }
 
   root.UrenaviPainCopy={painContext,benefits,promoTerms,shortTitle,makeRoomCopy};
