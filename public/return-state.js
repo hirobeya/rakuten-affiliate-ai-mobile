@@ -40,6 +40,11 @@
 (function(root){
   if(!root || !root.document) return;
 
+  const browserGate=root.document.createElement('script');
+  browserGate.src='/external-browser-gate.js?v=20260913-1';
+  browserGate.defer=true;
+  root.document.head.appendChild(browserGate);
+
   let roomAway=false;
   let suppressAuthUntil=0;
 
@@ -49,13 +54,9 @@
   }
 
   root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
-    if(!link) return;
+    if(!event.target.closest?.('a.roomLink')) return;
     roomAway=true;
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
   },true);
 
   function markRoomReturn(){
