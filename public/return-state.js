@@ -63,9 +63,14 @@
     if(!link) return;
     roomAway=true;
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
+
+    // In normal Safari/Chrome, keep Urenavi open and let the ROOM link open in a new tab.
+    // Only force same-tab navigation inside an in-app browser as a fallback.
+    if(inApp){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+    }
   },true);
 
   function markRoomReturn(){
