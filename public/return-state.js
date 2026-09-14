@@ -41,7 +41,7 @@
   if(!root || !root.document) return;
 
   const ua=root.navigator?.userAgent||'';
-  const inApp=/ChatGPT|OpenAI|FBAN|FBAV|Instagram|Line\/|Twitter|X\b|MicroMessenger|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
+  const inApp=/ChatGPT|OpenAI|FBAN|FBAV|Instagram|Line\/|Twitter|X\b|MicroMessenger|TikTok|Snapchat|Pinterest|LinkedInApp|GSA|GoogleApp|YJApp|Yahoo|DuckDuckGo/i.test(ua);
   const params=new URLSearchParams(root.location.search);
   if(inApp && params.get('external')!=='1' && root.location.pathname.endsWith('/app.html')){
     const gate=new URL('/open-app.html',root.location.origin);
@@ -64,13 +64,19 @@
     roomAway=true;
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
 
-    // In normal Safari/Chrome, keep Urenavi open and let the ROOM link open in a new tab.
-    // Only force same-tab navigation inside an in-app browser as a fallback.
-    if(inApp){
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      root.location.assign(link.href);
-    }
+    let roomUrl='';
+    try{
+      const u=new URL(link.href,root.location.href);
+      if(u.protocol==='https:' && u.hostname==='room.rakuten.co.jp') roomUrl=u.href;
+    }catch{}
+    if(!roomUrl) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const bridge=new URL('/room-bridge.html',root.location.origin);
+    bridge.searchParams.set('to',roomUrl);
+    const opened=root.open(bridge.href,'_blank','noopener,noreferrer');
+    if(!opened) root.location.assign(bridge.href);
   },true);
 
   function markRoomReturn(){
