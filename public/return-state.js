@@ -40,16 +40,6 @@
 (function(root){
   if(!root || !root.document) return;
 
-  const ua=root.navigator?.userAgent||'';
-  const inApp=/ChatGPT|OpenAI|FBAN|FBAV|Instagram|Line\/|Twitter|X\b|MicroMessenger|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
-  const params=new URLSearchParams(root.location.search);
-  if(inApp && params.get('external')!=='1' && root.location.pathname.endsWith('/app.html')){
-    const gate=new URL('/open-app.html',root.location.origin);
-    if(params.get('activated')==='1') gate.searchParams.set('activated','1');
-    root.location.replace(gate.href);
-    return;
-  }
-
   let roomAway=false;
   let suppressAuthUntil=0;
 
