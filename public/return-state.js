@@ -40,7 +40,10 @@
 (function(root){
   if(!root || !root.document) return;
 
+  const EXTERNAL_KEY='urenavi_external_tab_away_v1';
+  const EXTERNAL_MAX_AGE=30*60*1000;
   let roomAway=false;
+  let externalAway=false;
   let suppressAuthUntil=0;
 
   function appVisible(){
@@ -48,32 +51,79 @@
     return !!app && app.style.display==='block';
   }
 
-  root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
-    if(!link) return;
-    roomAway=true;
+  function rememberExternalAway(){
+    externalAway=true;
+    try{root.sessionStorage.setItem(EXTERNAL_KEY,String(Date.now()));}catch{}
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
-  },true);
-
-  function markRoomReturn(){
-    if(!roomAway || !appVisible()) return;
-    roomAway=false;
-    suppressAuthUntil=Date.now()+8000;
   }
 
-  root.addEventListener('pageshow',markRoomReturn,true);
-  root.document.addEventListener('visibilitychange',()=>{
-    if(!root.document.hidden) markRoomReturn();
+  function hasFreshExternalAway(){
+    try{
+      const at=Number(root.sessionStorage.getItem(EXTERNAL_KEY)||0);
+      return Number.isFinite(at) && at>0 && Date.now()-at>=0 && Date.now()-at<EXTERNAL_MAX_AGE;
+    }catch{return externalAway;}
+  }
+
+  function clearExternalAway(){
+    externalAway=false;
+    try{root.sessionStorage.removeItem(EXTERNAL_KEY);}catch{}
+  }
+
+  function forceRepaint(){
+    const app=root.document.getElementById('appRoot');
+    if(!app || app.style.display!=='block') return;
+    try{
+      app.style.display='block';
+      app.style.visibility='visible';
+      app.style.opacity='1';
+      void app.offsetHeight;
+      app.style.transform='translateZ(0)';
+      root.requestAnimationFrame(()=>{app.style.transform='';});
+    }catch{}
+  }
+
+  root.document.addEventListener('click',event=>{
+    const link=event.target.closest?.('a');
+    if(!link) return;
+
+    if(link.classList?.contains('roomLink')){
+      roomAway=true;
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+      return;
+    }
+
+    if(link.target==='_blank' && /^https:/i.test(link.href||'')){
+      rememberExternalAway();
+    }
   },true);
+
+  function markReturn(){
+    const returningFromRoom=roomAway;
+    const returningFromExternal=externalAway || hasFreshExternalAway();
+    if((!returningFromRoom && !returningFromExternal) || !appVisible()) return;
+    roomAway=false;
+    clearExternalAway();
+    suppressAuthUntil=Date.now()+15000;
+    forceRepaint();
+  }
+
+  root.addEventListener('pageshow',markReturn,true);
+  root.document.addEventListener('visibilitychange',()=>{
+    if(!root.document.hidden) markReturn();
+  },true);
+  root.addEventListener('focus',markReturn,true);
 
   function wrapBootAuth(){
     if(typeof root.bootAuth!=='function' || root.__urenaviRoomReturnGuardInstalled) return false;
     const baseBootAuth=root.bootAuth;
     root.bootAuth=function(){
-      if(appVisible() && Date.now()<suppressAuthUntil) return Promise.resolve();
+      if(appVisible() && Date.now()<suppressAuthUntil){
+        forceRepaint();
+        return Promise.resolve();
+      }
       return baseBootAuth.apply(this,arguments);
     };
     root.__urenaviRoomReturnGuardInstalled=true;
