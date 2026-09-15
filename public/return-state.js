@@ -48,14 +48,46 @@
     return !!app && app.style.display==='block';
   }
 
+  function isRakutenViewLink(link){
+    return !!link && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'');
+  }
+
+  function normalizeRakutenLinks(scope=root.document){
+    try{
+      scope.querySelectorAll?.('a[target="_blank"]').forEach(link=>{
+        if(!isRakutenViewLink(link)) return;
+        link.removeAttribute('target');
+        link.removeAttribute('rel');
+      });
+    }catch{}
+  }
+
+  function restoreSavedSearchOnReturn(){
+    if(typeof root.restoreSearchState!=='function') return;
+    const email=root.document.getElementById('userMail')?.textContent||'';
+    if(!email) return;
+    try{root.restoreSearchState(email);}catch{}
+  }
+
   root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
+    const link=event.target.closest?.('a');
     if(!link) return;
-    roomAway=true;
-    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
+
+    if(link.classList?.contains('roomLink')){
+      roomAway=true;
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+      return;
+    }
+
+    if(isRakutenViewLink(link)){
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+    }
   },true);
 
   function markRoomReturn(){
@@ -64,9 +96,17 @@
     suppressAuthUntil=Date.now()+8000;
   }
 
-  root.addEventListener('pageshow',markRoomReturn,true);
+  root.addEventListener('pageshow',()=>{
+    markRoomReturn();
+    restoreSavedSearchOnReturn();
+    normalizeRakutenLinks();
+  },true);
   root.document.addEventListener('visibilitychange',()=>{
-    if(!root.document.hidden) markRoomReturn();
+    if(!root.document.hidden){
+      markRoomReturn();
+      restoreSavedSearchOnReturn();
+      normalizeRakutenLinks();
+    }
   },true);
 
   function wrapBootAuth(){
@@ -140,8 +180,12 @@
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
       setTimeout(()=>clearInterval(timer),5000);
     }
+    normalizeRakutenLinks();
     refreshRankingNote();
-    const observer=new MutationObserver(refreshRankingNote);
+    const observer=new MutationObserver(()=>{
+      normalizeRakutenLinks();
+      refreshRankingNote();
+    });
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
