@@ -144,4 +144,16 @@
     const observer=new MutationObserver(refreshRankingNote);
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
+
+  root.document.addEventListener('click',event=>{
+    const link=event.target?.closest?.('a.roomLink');
+    if(!link) return;
+    let target;
+    try{target=new URL(link.href,root.location.href);}catch{return;}
+    if(target.protocol!=='https:' || target.hostname!=='room.rakuten.co.jp') return;
+    event.preventDefault();
+    event.stopPropagation();
+    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+    root.location.assign(target.href);
+  },true);
 })(typeof window==='undefined'?null:window);
