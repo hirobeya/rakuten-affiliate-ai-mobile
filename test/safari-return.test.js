@@ -37,20 +37,40 @@ test('return bridge cannot relaunch ROOM on a cold history return or reload',()=
   for(let i=0;i<3;i++){
     const page=bridge();assert.deepEqual(page.actions,[]);
     assert.equal(new URL(page.links[0].href).searchParams.get('keyword'),'ゼルダ');
-    assert.equal(page.links[0].target,'_blank');
+    assert.equal(page.links[0].target,'_self');
     assert.equal(page.links[0].rel,'noopener noreferrer');
-    page.handlers.click({preventDefault(){}});assert.deepEqual(page.actions,['/app.html']);
+    assert.deepEqual(page.handlers,{});
+    assert.match(html,/id="back" href="\/app.html"/);
   }
 });
 
-test('both rendered ROOM actions preserve the Urenavi browsing context',()=>{
+test('both rendered ROOM actions use native same-tab history without a script interceptor',()=>{
   const app=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   const functions=app.slice(app.indexOf('function roomSearchUrl('),app.indexOf('function hist('));
   const context=vm.createContext({URLSearchParams,esc:s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')});
   vm.runInContext(functions,context);
   const link=context.roomAction({itemName:'ゼルダの伝説'});
-  assert.match(link,/target="_blank"/);
+  assert.match(link,/target="_self"/);
   assert.match(link,/rel="noopener noreferrer"/);
   assert.match(link,/href="https:\/\/room\.rakuten\.co\.jp\/search\/item\?/);
   assert.equal((app.match(/\$\{roomAction\(i\)\}/g)||[]).length,2);
 });
+
+for(const browser of ['iPhone Safari','iPhone Chrome','ChatGPT iPhone','PC Chrome']){
+  test(`${browser}: entry and lifecycle never force another browser or programmatic navigation`,()=>{
+    const actions=[];const events={};const nodes={normalBtn:{}};
+    const window={document:{createElement:()=>({}),head:{appendChild(){}},addEventListener:(name,fn)=>{events[name]=fn;}},navigator:{userAgent:browser},location:{origin:'https://preview.example',search:'?activated=1',assign:u=>actions.push(u),replace:u=>actions.push(u)},addEventListener:(name,fn)=>{events[name]=fn;},bootAuth:()=>{}};
+    const originalAuth=window.bootAuth;
+    const context=vm.createContext({window,URL,URLSearchParams,document:{getElementById:id=>nodes[id]},location:window.location,navigator:window.navigator});
+    vm.runInContext(fs.readFileSync(path.join(__dirname,'../public/return-state.js'),'utf8'),context);
+    assert.equal(window.bootAuth,originalAuth);
+    assert.equal(events.click,undefined);
+    assert.equal(events.pageshow,undefined);
+    assert.equal(events.visibilitychange,undefined);
+    const entry=fs.readFileSync(path.join(__dirname,'../public/open-app.html'),'utf8');
+    vm.runInContext(entry.match(/<script>([\s\S]*?)<\/script>/)[1],context);
+    assert.equal(nodes.normalBtn.href,'https://preview.example/app.html?activated=1');
+    assert.deepEqual(actions,[]);
+    assert.doesNotMatch(entry,/userAgent|x-safari|intent:|_blank|location\.(replace|assign)/);
+  });
+}
