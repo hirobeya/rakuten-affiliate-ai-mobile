@@ -42,6 +42,7 @@
 
   let roomAway=false;
   let suppressAuthUntil=0;
+  const RAKUTEN_TAB_NAME='urenavi_rakuten_market';
 
   function appVisible(){
     const app=root.document.getElementById('appRoot');
@@ -49,13 +50,30 @@
   }
 
   root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
+    const link=event.target.closest?.('a');
     if(!link) return;
-    roomAway=true;
-    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
+
+    if(link.classList?.contains('roomLink')){
+      roomAway=true;
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+      return;
+    }
+
+    if(link.target==='_blank' && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'')){
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      const child=root.open(link.href,RAKUTEN_TAB_NAME);
+      if(!child){
+        root.location.assign(link.href);
+        return;
+      }
+      try{child.focus();}catch{}
+    }
   },true);
 
   function markRoomReturn(){
