@@ -116,17 +116,35 @@
   },true);
   root.addEventListener('focus',markReturn,true);
 
+  function authSuppressed(){
+    return appVisible() && Date.now()<suppressAuthUntil;
+  }
+
   function wrapBootAuth(){
     if(typeof root.bootAuth!=='function' || root.__urenaviRoomReturnGuardInstalled) return false;
     const baseBootAuth=root.bootAuth;
     root.bootAuth=function(){
-      if(appVisible() && Date.now()<suppressAuthUntil){
+      if(authSuppressed()){
         forceRepaint();
         return Promise.resolve();
       }
       return baseBootAuth.apply(this,arguments);
     };
     root.__urenaviRoomReturnGuardInstalled=true;
+    return true;
+  }
+
+  function wrapShowApp(){
+    if(typeof root.showApp!=='function' || root.__urenaviReturnShowAppGuardInstalled) return false;
+    const baseShowApp=root.showApp;
+    root.showApp=function(){
+      if(authSuppressed()){
+        forceRepaint();
+        return Promise.resolve();
+      }
+      return baseShowApp.apply(this,arguments);
+    };
+    root.__urenaviReturnShowAppGuardInstalled=true;
     return true;
   }
 
@@ -186,6 +204,7 @@
 
   root.addEventListener('DOMContentLoaded',()=>{
     wrapBootAuth();
+    wrapShowApp();
     if(!installProductLogic()){
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
       setTimeout(()=>clearInterval(timer),5000);
