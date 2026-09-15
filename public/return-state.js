@@ -42,20 +42,77 @@
 
   let roomAway=false;
   let suppressAuthUntil=0;
+  let rakutenChild=null;
+  let rakutenWatchTimer=null;
+  let rakutenChildLeftBlank=false;
 
   function appVisible(){
     const app=root.document.getElementById('appRoot');
     return !!app && app.style.display==='block';
   }
 
+  function stopRakutenWatcher(){
+    if(rakutenWatchTimer){
+      root.clearInterval(rakutenWatchTimer);
+      rakutenWatchTimer=null;
+    }
+  }
+
+  function watchRakutenChild(child){
+    stopRakutenWatcher();
+    rakutenChild=child;
+    rakutenChildLeftBlank=false;
+    const started=Date.now();
+    rakutenWatchTimer=root.setInterval(()=>{
+      if(!rakutenChild || rakutenChild.closed){
+        stopRakutenWatcher();
+        rakutenChild=null;
+        return;
+      }
+      if(Date.now()-started>15*60*1000){
+        stopRakutenWatcher();
+        return;
+      }
+      try{
+        const href=String(rakutenChild.location.href||'');
+        if(href && href!=='about:blank') rakutenChildLeftBlank=true;
+        if(rakutenChildLeftBlank && href==='about:blank'){
+          try{rakutenChild.close();}catch{}
+          stopRakutenWatcher();
+          rakutenChild=null;
+          try{root.focus();}catch{}
+        }
+      }catch{
+        rakutenChildLeftBlank=true;
+      }
+    },500);
+  }
+
   root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
+    const link=event.target.closest?.('a');
     if(!link) return;
-    roomAway=true;
-    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
+
+    if(link.classList?.contains('roomLink')){
+      roomAway=true;
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+      return;
+    }
+
+    if(link.target==='_blank' && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'')){
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const child=root.open('about:blank','_blank');
+      if(!child){
+        root.location.assign(link.href);
+        return;
+      }
+      watchRakutenChild(child);
+      try{child.location.href=link.href;}catch{root.location.assign(link.href);}
+    }
   },true);
 
   function markRoomReturn(){
