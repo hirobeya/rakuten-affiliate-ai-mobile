@@ -52,16 +52,6 @@
     return !!link && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'');
   }
 
-  function normalizeRakutenLinks(scope=root.document){
-    try{
-      scope.querySelectorAll?.('a[target="_blank"]').forEach(link=>{
-        if(!isRakutenViewLink(link)) return;
-        link.removeAttribute('target');
-        link.removeAttribute('rel');
-      });
-    }catch{}
-  }
-
   function restoreSavedSearchOnReturn(){
     if(typeof root.restoreSearchState!=='function') return;
     const email=root.document.getElementById('userMail')?.textContent||'';
@@ -99,13 +89,11 @@
   root.addEventListener('pageshow',()=>{
     markRoomReturn();
     restoreSavedSearchOnReturn();
-    normalizeRakutenLinks();
   },true);
   root.document.addEventListener('visibilitychange',()=>{
     if(!root.document.hidden){
       markRoomReturn();
       restoreSavedSearchOnReturn();
-      normalizeRakutenLinks();
     }
   },true);
 
@@ -180,12 +168,8 @@
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
       setTimeout(()=>clearInterval(timer),5000);
     }
-    normalizeRakutenLinks();
     refreshRankingNote();
-    const observer=new MutationObserver(()=>{
-      normalizeRakutenLinks();
-      refreshRankingNote();
-    });
+    const observer=new MutationObserver(refreshRankingNote);
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
