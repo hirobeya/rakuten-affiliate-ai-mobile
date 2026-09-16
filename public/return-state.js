@@ -44,6 +44,37 @@
   let suppressAuthUntil=0;
   const RETURN_GUIDE_KEY='urenavi_room_return_guide_hidden_v1';
 
+  function ensurePwaHead(){
+    try{
+      let manifest=root.document.querySelector('link[rel="manifest"]');
+      if(!manifest){
+        manifest=root.document.createElement('link');
+        manifest.rel='manifest';
+        root.document.head.appendChild(manifest);
+      }
+      manifest.href='/manifest.json';
+
+      let apple=root.document.querySelector('link[rel="apple-touch-icon"]');
+      if(!apple){
+        apple=root.document.createElement('link');
+        apple.rel='apple-touch-icon';
+        root.document.head.appendChild(apple);
+      }
+      apple.href='/apple-touch-icon.png';
+      apple.setAttribute('sizes','180x180');
+
+      let theme=root.document.querySelector('meta[name="theme-color"]');
+      if(!theme){
+        theme=root.document.createElement('meta');
+        theme.name='theme-color';
+        root.document.head.appendChild(theme);
+      }
+      theme.content='#172a4b';
+    }catch{}
+  }
+
+  ensurePwaHead();
+
   function appVisible(){
     const app=root.document.getElementById('appRoot');
     return !!app && app.style.display==='block';
@@ -196,6 +227,7 @@
   }
 
   root.addEventListener('DOMContentLoaded',()=>{
+    ensurePwaHead();
     wrapBootAuth();
     if(!installProductLogic()){
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
