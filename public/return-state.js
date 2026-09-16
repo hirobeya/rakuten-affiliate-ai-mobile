@@ -60,8 +60,8 @@
         apple.rel='apple-touch-icon';
         root.document.head.appendChild(apple);
       }
-      apple.href='/apple-touch-icon.png';
-      apple.setAttribute('sizes','180x180');
+      apple.href='/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png';
+      apple.removeAttribute('sizes');
 
       let theme=root.document.querySelector('meta[name="theme-color"]');
       if(!theme){
