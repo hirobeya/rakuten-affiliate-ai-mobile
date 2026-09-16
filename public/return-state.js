@@ -42,20 +42,109 @@
 
   let roomAway=false;
   let suppressAuthUntil=0;
+  const RETURN_GUIDE_KEY='urenavi_room_return_guide_hidden_v1';
+
+  function ensurePwaHead(){
+    try{
+      let manifest=root.document.querySelector('link[rel="manifest"]');
+      if(!manifest){
+        manifest=root.document.createElement('link');
+        manifest.rel='manifest';
+        root.document.head.appendChild(manifest);
+      }
+      manifest.href='/manifest.json';
+
+      let apple=root.document.querySelector('link[rel="apple-touch-icon"]');
+      if(!apple){
+        apple=root.document.createElement('link');
+        apple.rel='apple-touch-icon';
+        root.document.head.appendChild(apple);
+      }
+      apple.href='/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png';
+      apple.removeAttribute('sizes');
+
+      let theme=root.document.querySelector('meta[name="theme-color"]');
+      if(!theme){
+        theme=root.document.createElement('meta');
+        theme.name='theme-color';
+        root.document.head.appendChild(theme);
+      }
+      theme.content='#172a4b';
+    }catch{}
+  }
+
+  ensurePwaHead();
+
+  const durableScript=root.document.createElement('script');
+  durableScript.src='/durable-session.js?v=20260916-1';
+  durableScript.defer=true;
+  root.document.head.appendChild(durableScript);
 
   function appVisible(){
     const app=root.document.getElementById('appRoot');
     return !!app && app.style.display==='block';
   }
 
+  function isRakutenViewLink(link){
+    return !!link && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'');
+  }
+
+  function restoreSavedSearchOnReturn(){
+    if(typeof root.restoreSearchState!=='function') return;
+    const email=root.document.getElementById('userMail')?.textContent||'';
+    if(!email) return;
+    try{root.restoreSearchState(email);}catch{}
+  }
+
+  function returnGuideHidden(){
+    try{return root.localStorage.getItem(RETURN_GUIDE_KEY)==='1';}catch{return false;}
+  }
+
+  function ensureReturnGuide(){
+    if(returnGuideHidden() || root.document.getElementById('roomReturnGuide')) return;
+    const rakutenLink=Array.from(root.document.querySelectorAll('a')).find(isRakutenViewLink);
+    if(!rakutenLink) return;
+    const host=rakutenLink.closest('.btns,.acts') || rakutenLink.parentElement;
+    if(!host || !host.parentNode) return;
+
+    const guide=root.document.createElement('div');
+    guide.id='roomReturnGuide';
+    guide.setAttribute('role','note');
+    guide.style.cssText='margin-top:8px;padding:10px 34px 10px 10px;border:1px solid #f0dfb5;border-radius:11px;background:#fff9eb;color:#725718;font-size:11px;line-height:1.55;position:relative;';
+    guide.textContent='ROOM投稿後に白い画面が出ても、ウレナビを開き直すと「続きから再開」が表示されます。';
+
+    const close=root.document.createElement('button');
+    close.type='button';
+    close.setAttribute('aria-label','この案内を閉じる');
+    close.textContent='×';
+    close.style.cssText='position:absolute;right:7px;top:6px;border:0;background:transparent;color:#725718;font-size:18px;line-height:1;padding:4px 6px;';
+    close.addEventListener('click',()=>{
+      try{root.localStorage.setItem(RETURN_GUIDE_KEY,'1');}catch{}
+      guide.remove();
+    });
+    guide.appendChild(close);
+    host.insertAdjacentElement('afterend',guide);
+  }
+
   root.document.addEventListener('click',event=>{
-    const link=event.target.closest?.('a.roomLink');
+    const link=event.target.closest?.('a');
     if(!link) return;
-    roomAway=true;
-    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    root.location.assign(link.href);
+
+    if(link.classList?.contains('roomLink')){
+      roomAway=true;
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+      return;
+    }
+
+    if(isRakutenViewLink(link)){
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      root.location.assign(link.href);
+    }
   },true);
 
   function markRoomReturn(){
@@ -64,9 +153,17 @@
     suppressAuthUntil=Date.now()+8000;
   }
 
-  root.addEventListener('pageshow',markRoomReturn,true);
+  root.addEventListener('pageshow',()=>{
+    markRoomReturn();
+    restoreSavedSearchOnReturn();
+    ensureReturnGuide();
+  },true);
   root.document.addEventListener('visibilitychange',()=>{
-    if(!root.document.hidden) markRoomReturn();
+    if(!root.document.hidden){
+      markRoomReturn();
+      restoreSavedSearchOnReturn();
+      ensureReturnGuide();
+    }
   },true);
 
   function wrapBootAuth(){
@@ -135,13 +232,18 @@
   }
 
   root.addEventListener('DOMContentLoaded',()=>{
+    ensurePwaHead();
     wrapBootAuth();
     if(!installProductLogic()){
       const timer=setInterval(()=>{if(installProductLogic()) clearInterval(timer);},50);
       setTimeout(()=>clearInterval(timer),5000);
     }
     refreshRankingNote();
-    const observer=new MutationObserver(refreshRankingNote);
+    ensureReturnGuide();
+    const observer=new MutationObserver(()=>{
+      refreshRankingNote();
+      ensureReturnGuide();
+    });
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
