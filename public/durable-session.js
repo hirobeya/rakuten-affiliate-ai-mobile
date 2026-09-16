@@ -2,20 +2,17 @@
   if(!root || !root.document || root.__urenaviDurableInstalled) return;
   root.__urenaviDurableInstalled=true;
 
-  const TABLE='urenavi_search_sessions';
-  const STATUS_PENDING='pending';
-  const STATUS_PROCESSING='processing';
-  const STATUS_POSTED='posted';
-  const DB_TIMEOUT_MS=2200;
+  const PENDING='pending';
+  const PROCESSING='processing';
+  const POSTED='posted';
+  const API='/api/resume';
+  const DB_TIMEOUT_MS=2600;
 
   let currentSession=null;
   let restoring=false;
   let syncPromise=Promise.resolve();
   let wrapped=false;
-
-  function client(){
-    try{return typeof sb!=='undefined' ? sb : null;}catch{return null;}
-  }
+  let restoringNow=false;
 
   function itemKey(item){
     return String(item?.itemCode || item?.affiliateUrl || item?.itemUrl || `${item?.itemName||''}|${item?.itemPrice||''}`);
@@ -35,108 +32,67 @@
     return Array.from(root.document.querySelectorAll('.item')).map(el=>el.querySelector('.tab.on')?.dataset?.p||'room');
   }
 
-  function statusMapFor(items,existing={}){
-    const next={};
+  function statuses(items,existing={}){
+    const out={};
     for(const item of items||[]){
       const key=itemKey(item);
-      const status=existing?.[key];
-      next[key]=[STATUS_PENDING,STATUS_PROCESSING,STATUS_POSTED].includes(status)?status:STATUS_PENDING;
+      const value=existing?.[key];
+      out[key]=[PENDING,PROCESSING,POSTED].includes(value)?value:PENDING;
     }
-    return next;
+    return out;
   }
 
-  function signature(items,searchFields){
-    return JSON.stringify({
-      k:String(searchFields?.k||''),
-      min:String(searchFields?.min||''),
-      max:String(searchFields?.max||''),
-      sort:String(searchFields?.sort||''),
-      keys:(items||[]).map(itemKey)
-    });
-  }
-
-  function withTimeout(promise,ms=DB_TIMEOUT_MS){
+  function timeout(promise,ms=DB_TIMEOUT_MS){
     let timer;
     return Promise.race([
       promise,
-      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('durable session timeout')),ms);})
+      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('resume timeout')),ms);})
     ]).finally(()=>clearTimeout(timer));
   }
 
-  async function authSession(){
-    const c=client();
-    if(!c) return null;
+  async function authHeader(){
     try{
-      const {data,error}=await c.auth.getSession();
-      if(error) return null;
-      return data?.session||null;
-    }catch{return null;}
+      if(typeof sb==='undefined') return {};
+      const {data}=await sb.auth.getSession();
+      const token=data?.session?.access_token||'';
+      return token?{Authorization:`Bearer ${token}`}:{ };
+    }catch{return {};}
+  }
+
+  async function api(body=null){
+    const headers={Accept:'application/json',...(await authHeader())};
+    const options={method:body?'POST':'GET',headers,credentials:'include',cache:'no-store'};
+    if(body){
+      headers['Content-Type']='application/json';
+      options.body=JSON.stringify(body);
+    }
+    const response=await fetch(API,options);
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok) throw Object.assign(new Error(data.message||'resume request failed'),{status:response.status});
+    return data;
   }
 
   async function loadActive(){
-    const c=client();
-    const auth=await authSession();
-    if(!c || !auth?.user?.id) return null;
     try{
-      const {data,error}=await c.from(TABLE)
-        .select('*')
-        .eq('user_id',auth.user.id)
-        .eq('status','active')
-        .order('updated_at',{ascending:false})
-        .limit(1)
-        .maybeSingle();
-      if(error) throw error;
-      currentSession=data||null;
+      const data=await timeout(api());
+      currentSession=data?.session||null;
       return currentSession;
     }catch(e){
-      console.warn('Urenavi durable load failed',e);
+      if(![401,403].includes(Number(e?.status))) console.warn('Urenavi durable load failed',e);
       return null;
     }
   }
 
-  async function persistRendered(items){
+  async function saveRendered(items){
     if(restoring || !Array.isArray(items) || !items.length) return currentSession;
-    const c=client();
-    const auth=await authSession();
-    if(!c || !auth?.user?.id) return null;
-
-    const searchFields=fields();
-    let active=currentSession;
-    if(!active) active=await loadActive();
-
-    const same=active && signature(active.items,active.search_fields)===signature(items,searchFields);
-    const now=new Date().toISOString();
-
     try{
-      if(same){
-        const payload={
-          items,
-          search_fields:searchFields,
-          item_statuses:statusMapFor(items,active.item_statuses||{}),
-          platforms:platforms(),
-          updated_at:now
-        };
-        const {data,error}=await c.from(TABLE).update(payload).eq('id',active.id).select('*').single();
-        if(error) throw error;
-        currentSession=data;
-      }else{
-        if(active?.id){
-          await c.from(TABLE).update({status:'completed',updated_at:now}).eq('id',active.id);
-        }
-        const payload={
-          user_id:auth.user.id,
-          status:'active',
-          search_fields:searchFields,
-          items,
-          item_statuses:statusMapFor(items,{}),
-          platforms:platforms(),
-          current_index:0,
-          updated_at:now
-        };
-        const {data,error}=await c.from(TABLE).insert(payload).select('*').single();
-        if(error) throw error;
-        currentSession=data;
-      }
+      const data=await timeout(api({
+        action:'save-search',
+        search_fields:fields(),
+        items,
+        platforms:platforms()
+      }));
+      currentSession=data?.session||null;
       applyResumeUI();
       return currentSession;
     }catch(e){
@@ -145,86 +101,72 @@
     }
   }
 
-  function findItemIndexByLink(link){
-    if(!currentSession?.items?.length) return -1;
-    const href=safeUrl(link?.href||'');
-    if(!href) return -1;
-    return currentSession.items.findIndex(item=>safeUrl(item?.affiliateUrl||item?.itemUrl||'')===href);
-  }
-
-  async function updateSession(patch){
-    if(!currentSession?.id) return false;
-    const c=client();
-    if(!c) return false;
+  async function markProcessing(index){
+    if(!currentSession?.id || !currentSession?.items?.[index]) return false;
     try{
-      const payload={...patch,updated_at:new Date().toISOString()};
-      const {data,error}=await c.from(TABLE).update(payload).eq('id',currentSession.id).select('*').single();
-      if(error) throw error;
-      currentSession=data;
+      const data=await timeout(api({
+        action:'mark-processing',
+        session_id:currentSession.id,
+        index,
+        platforms:platforms()
+      }));
+      currentSession=data?.session||currentSession;
       applyResumeUI();
       return true;
     }catch(e){
-      console.warn('Urenavi durable update failed',e);
+      console.warn('Urenavi durable processing update failed',e);
       return false;
     }
   }
 
-  async function markProcessing(index){
-    if(!currentSession?.items?.[index]) return false;
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
-    const key=itemKey(currentSession.items[index]);
-    statuses[key]=STATUS_PROCESSING;
-    return updateSession({item_statuses:statuses,current_index:index,platforms:platforms()});
-  }
-
-  async function markPosted(index){
-    if(!currentSession?.items?.[index]) return false;
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
-    statuses[itemKey(currentSession.items[index])]=STATUS_POSTED;
-    return updateSession({item_statuses:statuses,current_index:index,platforms:platforms()});
-  }
-
-  function firstIndex(status){
-    if(!currentSession?.items?.length) return -1;
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
-    return currentSession.items.findIndex(item=>statuses[itemKey(item)]===status);
-  }
-
-  function nextPendingIndex(after=-1){
-    if(!currentSession?.items?.length) return -1;
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
-    for(let i=Math.max(0,after+1);i<currentSession.items.length;i++){
-      if(statuses[itemKey(currentSession.items[i])]===STATUS_PENDING) return i;
+  async function savePlatforms(){
+    if(!currentSession?.id) return;
+    try{
+      const data=await api({
+        action:'save-platforms',
+        session_id:currentSession.id,
+        platforms:platforms()
+      });
+      currentSession=data?.session||currentSession;
+    }catch(e){
+      console.warn('Urenavi durable platform save failed',e);
     }
-    for(let i=0;i<=after && i<currentSession.items.length;i++){
-      if(statuses[itemKey(currentSession.items[i])]===STATUS_PENDING) return i;
-    }
-    return -1;
   }
 
-  async function finishCurrentAndOpenNext(){
-    if(!currentSession?.items?.length) return;
-    let processing=firstIndex(STATUS_PROCESSING);
-    if(processing>=0) await markPosted(processing);
-    const next=nextPendingIndex(processing);
-    if(next<0){
-      await updateSession({status:'completed'});
+  function linkIndex(link){
+    if(!currentSession?.items?.length) return -1;
+    const href=safeUrl(link?.href||'');
+    return currentSession.items.findIndex(item=>safeUrl(item?.affiliateUrl||item?.itemUrl||'')===href);
+  }
+
+  async function postedNext(){
+    if(!currentSession?.id) return;
+    try{
+      const data=await timeout(api({action:'posted-next',session_id:currentSession.id}),4000);
+      currentSession=data?.session||currentSession;
+      applyResumeUI();
+      const next=data?.next?.item;
+      if(!next){
+        const st=root.document.getElementById('st');
+        if(st) st.textContent='この検索セッションの商品はすべて投稿済みです。';
+        return;
+      }
+      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
+      const url=safeUrl(next.affiliateUrl||next.itemUrl||'');
+      if(url) root.location.assign(url);
+    }catch(e){
+      console.warn('Urenavi durable next failed',e);
       const st=root.document.getElementById('st');
-      if(st) st.textContent='この検索セッションの商品はすべて投稿済みです。';
-      return;
+      if(st) st.textContent='続き情報を更新できませんでした。通信状態を確認してもう一度お試しください。';
     }
-    await markProcessing(next);
-    try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    const url=safeUrl(currentSession.items[next]?.affiliateUrl||currentSession.items[next]?.itemUrl||'');
-    if(url) root.location.assign(url);
   }
 
   function makeBadge(status){
     const badge=root.document.createElement('span');
     badge.className='durableStatus';
-    const cfg=status===STATUS_POSTED
+    const cfg=status===POSTED
       ?['✓ 投稿済み','#eaf7ee','#216e39']
-      :status===STATUS_PROCESSING
+      :status===PROCESSING
       ?['処理中','#fff4df','#8a5b00']
       :['未処理','#eef1f4','#666'];
     badge.textContent=cfg[0];
@@ -234,22 +176,21 @@
 
   function applyItemStatuses(){
     if(!currentSession?.items?.length) return;
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
+    const map=statuses(currentSession.items,currentSession.item_statuses||{});
     root.document.querySelectorAll('.item').forEach((card,index)=>{
       card.querySelector('.durableStatus')?.remove();
       card.querySelector('.durableFinishNext')?.remove();
       const item=currentSession.items[index];
       if(!item) return;
-      const status=statuses[itemKey(item)];
-      const rank=card.querySelector('.rank');
-      if(rank) rank.appendChild(makeBadge(status));
-      if(status===STATUS_PROCESSING){
+      const state=map[itemKey(item)];
+      card.querySelector('.rank')?.appendChild(makeBadge(state));
+      if(state===PROCESSING){
         const button=root.document.createElement('button');
         button.type='button';
         button.className='durableFinishNext';
         button.textContent='投稿済みにして次の商品へ';
-        button.style.cssText='width:100%;margin-top:9px;padding:11px;border:0;border-radius:10px;background:#172a4b;color:white;font-size:12px;font-weight:900;';
-        button.addEventListener('click',()=>{void finishCurrentAndOpenNext();});
+        button.style.cssText='width:100%;margin-top:9px;padding:11px;border:0;border-radius:10px;background:#172a4b;color:#fff;font-size:12px;font-weight:900;';
+        button.addEventListener('click',()=>{void postedNext();});
         (card.querySelector('.acts')||card).insertAdjacentElement('afterend',button);
       }
     });
@@ -260,11 +201,11 @@
     const res=root.document.getElementById('res');
     if(!res) return;
     root.document.getElementById('durableResumeBox')?.remove();
-    const statuses=statusMapFor(currentSession.items,currentSession.item_statuses||{});
-    const values=currentSession.items.map(item=>statuses[itemKey(item)]);
-    const posted=values.filter(v=>v===STATUS_POSTED).length;
-    const processing=values.filter(v=>v===STATUS_PROCESSING).length;
-    const remaining=values.filter(v=>v===STATUS_PENDING).length;
+    const map=statuses(currentSession.items,currentSession.item_statuses||{});
+    const values=currentSession.items.map(item=>map[itemKey(item)]);
+    const posted=values.filter(v=>v===POSTED).length;
+    const processing=values.filter(v=>v===PROCESSING).length;
+    const pending=values.filter(v=>v===PENDING).length;
 
     const box=root.document.createElement('section');
     box.id='durableResumeBox';
@@ -273,41 +214,45 @@
     title.textContent='続きから再開';
     title.style.cssText='font-size:15px;font-weight:900;color:#172a4b;';
     const meta=root.document.createElement('div');
-    meta.textContent=`投稿済み ${posted}件 / 処理中 ${processing}件 / 未処理 ${remaining}件`;
+    meta.textContent=`投稿済み ${posted}件 / 処理中 ${processing}件 / 未処理 ${pending}件`;
     meta.style.cssText='margin-top:4px;font-size:11px;color:#52606d;';
     const button=root.document.createElement('button');
     button.type='button';
-    button.textContent=processing>0?'投稿済みにして次の商品へ':remaining>0?'次の商品へ':'この検索は完了しています';
-    button.disabled=remaining===0 && processing===0;
-    button.style.cssText='width:100%;margin-top:10px;padding:12px;border:0;border-radius:11px;background:#172a4b;color:white;font-size:13px;font-weight:900;';
-    button.addEventListener('click',()=>{void finishCurrentAndOpenNext();});
+    button.textContent=processing>0?'投稿済みにして次の商品へ':pending>0?'次の商品へ':'この検索は完了しています';
+    button.disabled=pending===0 && processing===0;
+    button.style.cssText='width:100%;margin-top:10px;padding:12px;border:0;border-radius:11px;background:#172a4b;color:#fff;font-size:13px;font-weight:900;';
+    button.addEventListener('click',()=>{void postedNext();});
     box.append(title,meta,button);
     res.insertAdjacentElement('afterbegin',box);
     applyItemStatuses();
   }
 
   async function restoreActive(){
+    if(restoringNow) return false;
     const app=root.document.getElementById('appRoot');
     if(!app || app.style.display!=='block' || typeof root.render!=='function') return false;
-    const active=await loadActive();
-    if(!active?.items?.length) return false;
-
-    for(const id of ['k','min','max','sort']){
-      const el=root.document.getElementById(id);
-      if(el) el.value=String(active.search_fields?.[id]||'');
+    restoringNow=true;
+    try{
+      const active=await loadActive();
+      if(!active?.items?.length) return false;
+      for(const id of ['k','min','max','sort']){
+        const el=root.document.getElementById(id);
+        if(el) el.value=String(active.search_fields?.[id]||'');
+      }
+      restoring=true;
+      try{root.render(active.items);}finally{restoring=false;}
+      root.document.querySelectorAll('.item').forEach((el,i)=>{
+        const p=active.platforms?.[i];
+        if(['room','threads','instagram'].includes(p)) el.querySelector(`.tab[data-p="${p}"]`)?.click();
+      });
+      root.document.getElementById('x')?.classList.toggle('on',!!root.document.getElementById('k')?.value);
+      const st=root.document.getElementById('st');
+      if(st) st.textContent='保存済みの検索セッションを復元しました。続きから投稿できます。';
+      applyResumeUI();
+      return true;
+    }finally{
+      restoringNow=false;
     }
-    restoring=true;
-    try{root.render(active.items);}finally{restoring=false;}
-    root.document.querySelectorAll('.item').forEach((el,i)=>{
-      const p=active.platforms?.[i];
-      if(['room','threads','instagram'].includes(p)) el.querySelector(`.tab[data-p="${p}"]`)?.click();
-    });
-    const x=root.document.getElementById('x');
-    if(x) x.classList.toggle('on',!!root.document.getElementById('k')?.value);
-    const st=root.document.getElementById('st');
-    if(st) st.textContent='保存済みの検索セッションを復元しました。続きから投稿できます。';
-    applyResumeUI();
-    return true;
   }
 
   function wrapRender(){
@@ -315,17 +260,15 @@
     const base=root.render;
     root.render=function(items){
       const result=base.apply(this,arguments);
-      if(!restoring && Array.isArray(items) && items.length){
-        syncPromise=persistRendered(items);
-      }
+      if(!restoring && Array.isArray(items) && items.length) syncPromise=saveRendered(items);
       return result;
     };
     wrapped=true;
     return true;
   }
 
-  async function waitForAppAndRestore(){
-    for(let i=0;i<40;i++){
+  async function waitForApp(){
+    for(let i=0;i<50;i++){
       wrapRender();
       const app=root.document.getElementById('appRoot');
       if(app?.style.display==='block'){
@@ -345,30 +288,25 @@
     event.stopImmediatePropagation();
     try{await syncPromise;}catch{}
     if(!currentSession) await loadActive();
-    const index=findItemIndexByLink(link);
+    const index=linkIndex(link);
     if(index>=0){
-      try{await withTimeout(markProcessing(index));}catch{}
+      try{await markProcessing(index);}catch{}
     }
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
     root.location.assign(href);
   },true);
 
   root.document.addEventListener('click',event=>{
-    const tab=event.target.closest?.('.tab[data-p]');
-    if(!tab || !currentSession?.id) return;
-    setTimeout(()=>{
-      void updateSession({platforms:platforms()});
-    },0);
+    if(!event.target.closest?.('.tab[data-p]')) return;
+    setTimeout(()=>{void savePlatforms();},0);
   },true);
 
-  root.addEventListener('pageshow',()=>{void waitForAppAndRestore();},true);
-  root.document.addEventListener('visibilitychange',()=>{
-    if(!root.document.hidden) void waitForAppAndRestore();
-  },true);
+  root.addEventListener('pageshow',()=>{void waitForApp();},true);
+  root.document.addEventListener('visibilitychange',()=>{if(!root.document.hidden) void waitForApp();},true);
   root.addEventListener('DOMContentLoaded',()=>{
     wrapRender();
-    void waitForAppAndRestore();
+    void waitForApp();
   },{once:true});
 
-  root.UrenaviDurable={restoreActive,loadActive,finishCurrentAndOpenNext};
+  root.UrenaviDurable={restoreActive,loadActive,postedNext};
 })(typeof window==='undefined'?null:window);
