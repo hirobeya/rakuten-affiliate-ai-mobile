@@ -60,8 +60,8 @@
         apple.rel='apple-touch-icon';
         root.document.head.appendChild(apple);
       }
-      apple.href='/apple-touch-icon.png';
-      apple.setAttribute('sizes','180x180');
+      apple.href='/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png';
+      apple.removeAttribute('sizes');
 
       let theme=root.document.querySelector('meta[name="theme-color"]');
       if(!theme){
@@ -74,6 +74,11 @@
   }
 
   ensurePwaHead();
+
+  const durableScript=root.document.createElement('script');
+  durableScript.src='/durable-session.js?v=20260916-1';
+  durableScript.defer=true;
+  root.document.head.appendChild(durableScript);
 
   function appVisible(){
     const app=root.document.getElementById('appRoot');
@@ -106,7 +111,7 @@
     guide.id='roomReturnGuide';
     guide.setAttribute('role','note');
     guide.style.cssText='margin-top:8px;padding:10px 34px 10px 10px;border:1px solid #f0dfb5;border-radius:11px;background:#fff9eb;color:#725718;font-size:11px;line-height:1.55;position:relative;';
-    guide.textContent='ROOM投稿後に白い画面が出た場合は、そのままホーム画面の「ウレナビ」アイコンから戻ってください';
+    guide.textContent='ROOM投稿後に白い画面が出ても、ウレナビを開き直すと「続きから再開」が表示されます。';
 
     const close=root.document.createElement('button');
     close.type='button';
