@@ -42,6 +42,7 @@
 
   let roomAway=false;
   let suppressAuthUntil=0;
+  const RETURN_GUIDE_KEY='urenavi_room_return_guide_hidden_v1';
 
   function appVisible(){
     const app=root.document.getElementById('appRoot');
@@ -57,6 +58,36 @@
     const email=root.document.getElementById('userMail')?.textContent||'';
     if(!email) return;
     try{root.restoreSearchState(email);}catch{}
+  }
+
+  function returnGuideHidden(){
+    try{return root.localStorage.getItem(RETURN_GUIDE_KEY)==='1';}catch{return false;}
+  }
+
+  function ensureReturnGuide(){
+    if(returnGuideHidden() || root.document.getElementById('roomReturnGuide')) return;
+    const rakutenLink=Array.from(root.document.querySelectorAll('a')).find(isRakutenViewLink);
+    if(!rakutenLink) return;
+    const host=rakutenLink.closest('.btns,.acts') || rakutenLink.parentElement;
+    if(!host || !host.parentNode) return;
+
+    const guide=root.document.createElement('div');
+    guide.id='roomReturnGuide';
+    guide.setAttribute('role','note');
+    guide.style.cssText='margin-top:8px;padding:10px 34px 10px 10px;border:1px solid #f0dfb5;border-radius:11px;background:#fff9eb;color:#725718;font-size:11px;line-height:1.55;position:relative;';
+    guide.textContent='ROOM投稿後に白い画面が出た場合は、そのままホーム画面の「ウレナビ」アイコンから戻ってください';
+
+    const close=root.document.createElement('button');
+    close.type='button';
+    close.setAttribute('aria-label','この案内を閉じる');
+    close.textContent='×';
+    close.style.cssText='position:absolute;right:7px;top:6px;border:0;background:transparent;color:#725718;font-size:18px;line-height:1;padding:4px 6px;';
+    close.addEventListener('click',()=>{
+      try{root.localStorage.setItem(RETURN_GUIDE_KEY,'1');}catch{}
+      guide.remove();
+    });
+    guide.appendChild(close);
+    host.insertAdjacentElement('afterend',guide);
   }
 
   root.document.addEventListener('click',event=>{
@@ -89,11 +120,13 @@
   root.addEventListener('pageshow',()=>{
     markRoomReturn();
     restoreSavedSearchOnReturn();
+    ensureReturnGuide();
   },true);
   root.document.addEventListener('visibilitychange',()=>{
     if(!root.document.hidden){
       markRoomReturn();
       restoreSavedSearchOnReturn();
+      ensureReturnGuide();
     }
   },true);
 
@@ -169,7 +202,11 @@
       setTimeout(()=>clearInterval(timer),5000);
     }
     refreshRankingNote();
-    const observer=new MutationObserver(refreshRankingNote);
+    ensureReturnGuide();
+    const observer=new MutationObserver(()=>{
+      refreshRankingNote();
+      ensureReturnGuide();
+    });
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
