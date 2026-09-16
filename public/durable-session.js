@@ -279,6 +279,11 @@
     }
   }
 
+  function start(){
+    wrapRender();
+    void waitForApp();
+  }
+
   root.addEventListener('click',async event=>{
     const link=event.target.closest?.('a');
     if(!link || String(link.textContent||'').trim()!=='楽天で見る') return;
@@ -303,10 +308,11 @@
 
   root.addEventListener('pageshow',()=>{void waitForApp();},true);
   root.document.addEventListener('visibilitychange',()=>{if(!root.document.hidden) void waitForApp();},true);
-  root.addEventListener('DOMContentLoaded',()=>{
-    wrapRender();
-    void waitForApp();
-  },{once:true});
+  if(root.document.readyState==='loading'){
+    root.addEventListener('DOMContentLoaded',start,{once:true});
+  }else{
+    start();
+  }
 
-  root.UrenaviDurable={restoreActive,loadActive,postedNext};
+  root.UrenaviDurable={restoreActive,loadActive,postedNext,start};
 })(typeof window==='undefined'?null:window);
