@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app.html
+Disallow: /open-app.html
+Disallow: /api/
+Sitemap: https://rakuten-affiliate-ai-mobile.vercel.app/sitemap.xml
