@@ -178,8 +178,6 @@
     const basePost=post;
     window.post=(item,platform='room')=>{
       const text=basePost(item,platform);
-      if(platform!=='room') return text;
-
       const reviews=Number(item?.reviewCount||0);
       const rating=Number(item?.reviewAverage||0);
       const price=Number(item?.itemPrice||0);
@@ -194,13 +192,17 @@
       }
 
       let body=text.replace(/^※アフィリエイト広告を利用しています\n\n/,'');
-      body=body.replace(
-        /\n\n気になる方はこちら👇\nhttps:\/\/[^\s]+\s*$/,
-        '\n\n気になる方は商品画像をタップしてチェック👇'
-      );
+      body=body.replace(/^PR｜[^\n]+\n\n/,'');
+
+      if(platform==='room'){
+        body=body.replace(
+          /\n\n気になる方はこちら👇\nhttps:\/\/[^\s]+\s*$/,
+          '\n\n気になる方は商品画像をタップしてチェック👇'
+        );
+      }
 
       body=body.replace(/\s*※アフィリエイト広告を利用しています\s*$/,'').trim();
-      return `※アフィリエイト広告を利用しています\nPR｜${hook}\n\n${body}`;
+      return `${hook}\n\n${body}\n\n※アフィリエイト広告を利用しています`;
     };
   }
 
