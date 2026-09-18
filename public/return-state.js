@@ -182,11 +182,11 @@
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-3';
+    refine.src='/pain-copy-refine.js?v=20260918-4';
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-3';
+      contextFix.src='/pain-copy-context-fix.js?v=20260918-4';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
@@ -210,7 +210,7 @@
     if(typeof root.aud==='function' && !root.__urenaviAudPatched){
       root.aud=function(item){
         const keyword=root.document.getElementById('k')?.value?.trim()||'';
-        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'').audience;
+        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' ')).audience;
       };
       root.__urenaviAudPatched=true;
     }
