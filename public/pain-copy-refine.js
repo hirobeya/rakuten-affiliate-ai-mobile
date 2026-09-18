@@ -138,6 +138,33 @@
     return out.slice(0,3);
   }
 
+  function stableVariant(text,offset=0){
+    const s=String(text||'');
+    let h=0;
+    for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
+    return (h+offset)%5;
+  }
+
+  function openingText(item,ctx,offset=0){
+    const point=(ctx?.points||[])[0]||'';
+    const benefit=String(ctx?.benefit||'').replace(/[。！!]+$/,'');
+    const audience=String(ctx?.audience||'').replace(/[。！!]+$/,'');
+    const bridge=String(ctx?.bridge||'').trim();
+    const hook=String(ctx?.hook||'').trim();
+    const fact=factualBenefit(item);
+    switch(stableVariant(item?.itemName||'',offset)){
+      case 0:
+        return [hook,bridge].filter(Boolean).join('\n\n');
+      case 1:
+        return [benefit?`これ、${benefit}。`:'',bridge].filter(Boolean).join('\n\n');
+      case 2:
+        return [point?`「${point}」なら、ここが使いどころ。`:'',bridge].filter(Boolean).join('\n\n');
+      case 3:
+        return [audience?`${audience}へ。`:'',hook].filter(Boolean).join('\n\n');
+      default:
+        return [fact?`${fact}。`:'',hook||bridge].filter(Boolean).join('\n\n');
+    }
+  }
   function makeRoomCopy(item,keyword){
     const ctx=api.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'');
     const pr=fmt(item?.itemPrice);
@@ -152,7 +179,8 @@
     const bullets=ordered.slice(0,3).map(x=>'✔ '+x).join('\n');
     const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
     const reviewLine=r>=10?`\nレビュー：★${v.toFixed(1)}（${fmt(r)}件）`:'';
-    return `${ctx.hook}\n\n${ctx.bridge}\n\n${bullets}\n\n${title}\n価格：${pr}円${reviewLine}\n\nこんな人におすすめ👇\n${recommend}`;
+    const intro=openingText(item,ctx,0);
+    return `${intro}\n\n${bullets}\n\n${title}\n価格：${pr}円${reviewLine}\n\nこんな人におすすめ👇\n${recommend}`;
   }
 
 
@@ -162,14 +190,8 @@
     const title=shortTitle(item?.itemName||'');
     const fact=factualBenefit(item);
     const point=(ctx?.points||[])[0]||ctx?.benefit||'';
-    return `${ctx.hook}
-
-${ctx.bridge}
-
-${fact?`✔ ${fact}\n`:``}✔ ${point}
-
-${title}
-${pr}円`;
+    const intro=openingText(item,ctx,1);
+    return `${intro}\n\n${fact?`✔ ${fact}\n`:``}✔ ${point}\n\n${title}\n${pr}円`;
   }
 
   function makeInstagramCopy(item,keyword){
@@ -177,14 +199,8 @@ ${pr}円`;
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
     const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
-    return `${ctx.hook}
-
-${ctx.bridge}
-
-${points}
-
-${title}
-価格：${pr}円`;
+    const intro=openingText(item,ctx,2);
+    return `${intro}\n\n${points}\n\n${title}\n価格：${pr}円`;
   }
 
   api.promoTerms=promoTerms;
