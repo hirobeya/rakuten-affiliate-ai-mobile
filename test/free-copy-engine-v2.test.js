@@ -57,7 +57,7 @@ test('unknown metadata still avoids inventing a concrete use',()=>{
     itemCaption:'素材やデザインにこだわったモデル',
     itemPrice:5000
   },'便利グッズ');
-  assert.match(copy,/使い方に合う|使う場面|用途に合う/);
+  assert.match(copy,/用途を十分に特定できません|自動投稿文の生成を止めています/);
   assert.doesNotMatch(copy,/充電|揚げ物|掃除|収納/);
 });
 
