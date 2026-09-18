@@ -74,3 +74,39 @@ test('microfiber cleaning cloth gets cleaning copy, not storage copy',()=>{
   assert.doesNotMatch(ctx.audience,/片付け|収納|定位置/);
   assert.doesNotMatch(copy,/散らか|定位置|出し入れ/);
 });
+
+
+test('cleaning evidence beats incidental storage language',()=>{
+  const api=load();
+  const item={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 収納にも便利',itemPrice:544,reviewCount:0,reviewAverage:0,itemCaption:'小物と一緒に収納しやすい掃除クロス'};
+  const ctx=api.painContext(item.itemName,'掃除便利グッズ',item.itemCaption);
+  assert.match(ctx.audience,/掃除|ホコリ|拭/);
+  assert.doesNotMatch(ctx.audience,/散らか|定位置/);
+});
+
+test('cleaning-tool storage is classified as storage when storage is the actual job',()=>{
+  const api=load();
+  const name='掃除道具 収納スタンド フロアワイパー モップ ホルダー 置き場';
+  const ctx=api.painContext(name,'掃除用品','掃除用具をまとめて収納するスタンド');
+  assert.match(ctx.audience,/収納|まとめ/);
+});
+
+test('plain mesh word never creates a cooking-strainer role',()=>{
+  const api=load();
+  const name='網戸 掃除 モップ ハンディ ほこり取り';
+  const ctx=api.painContext(name,'掃除用品','網目のほこりを掃除する');
+  assert.doesNotMatch(ctx.audience,/鍋|揚げ物|すくう/);
+});
+
+test('actual skimmer still gets cooking-strainer intent',()=>{
+  const api=load();
+  const name='ステンレス かす揚げ すくい網 揚げ物 あく取り';
+  const ctx=api.painContext(name,'調理器具','揚げ物のカスやアクをすくう');
+  assert.match(ctx.audience,/揚げ物|鍋|すく/);
+});
+
+test('ambiguous weak marketing words do not invent a product role',()=>{
+  const api=load();
+  const ctx=api.painContext('限定モデル ABC-123 手軽 簡単','便利グッズ','人気商品です');
+  assert.doesNotMatch(ctx.audience,/掃除|収納|鍋|充電|切る/);
+});
