@@ -194,6 +194,123 @@
     return '';
   }
 
+  function sourceText(item){
+    return [item?.itemName,item?.catchcopy,item?.itemCaption,item?.itemDescription]
+      .filter(Boolean).join(' ').normalize('NFKC');
+  }
+
+  function concreteFacts(item,ctx){
+    const t=sourceText(item);
+    const out=[];
+    const add=x=>{if(x && !out.includes(x)) out.push(x);};
+
+    const exact=[
+      [/(\d+)\s*組\s*(\d+)\s*枚/,(m)=>m[1]+'組'+m[2]+'枚セット'],
+      [/(\d+)\s*枚(?:セット|入り)?/,(m)=>m[1]+'枚セット'],
+      [/(\d+)\s*個(?:セット|入り)?/,(m)=>m[1]+'個セット'],
+      [/マイクロファイバー/,()=> 'マイクロファイバー素材'],
+      [/ほこり吸着|ホコリ吸着/,()=> 'ホコリを吸着しやすい仕様'],
+      [/吸水|水分吸水/,()=> '水分を拭き取りやすい吸水タイプ'],
+      [/速乾/,()=> '乾きやすい速乾タイプ'],
+      [/もこもこ|ふわふわ/,()=> 'やわらかな起毛タイプ'],
+      [/ミニ|コンパクト/,()=> '小回りの利くコンパクトサイズ'],
+      [/手にはめ|手袋|グローブ|ミトン/,()=> '手にはめて使うタイプ'],
+      [/網戸|あみ戸|アミ戸/,()=> '網戸掃除向け'],
+      [/伸縮/,()=> '伸縮して長さを調整できるタイプ'],
+      [/柄付き|ハンドル/,()=> '持ち手付き'],
+      [/省スペース|スリム/,()=> '省スペース設計'],
+      [/折りたたみ|折畳/,()=> '折りたたみ対応'],
+      [/急速充電/,()=> '急速充電対応'],
+      [/10000\s*mAh/i,()=> '10000mAh容量'],
+      [/20000\s*mAh/i,()=> '20000mAh容量'],
+      [/Type-?C|USB-?C/i,()=> 'USB-C対応'],
+      [/防水|撥水/,()=> '水ぬれに配慮した仕様'],
+      [/保温|保冷/,()=> '保温・保冷用途に対応'],
+      [/ステンレス/,()=> 'ステンレス素材'],
+      [/日本製/,()=> '日本製表記あり']
+    ];
+    for(const [re,fn] of exact){
+      const m=t.match(re);
+      if(m) add(fn(m));
+      if(out.length>=4) break;
+    }
+
+    if(out.length<3){
+      const specs=t.match(/\b\d+(?:\.\d+)?\s?(?:cm|mm|ml|mL|L|W|g|kg)\b/gi)||[];
+      for(const s of specs){add(s.replace(/\s+/g,'')); if(out.length>=4) break;}
+    }
+
+    if(out.length<2 && ctx?.benefit) add(ctx.benefit.replace(/[。！!]+$/,''));
+    return out.slice(0,4);
+  }
+
+  function specificUse(item,ctx){
+    const t=sourceText(item);
+    const role=String(ctx?._role||'');
+    if(role==='cleaning-glove'){
+      if(/家具|棚/.test(t)) return '家具や棚など、指先でなぞれる場所のホコリ取りに使いやすい。';
+      return '手でなぞるように、細かい場所のホコリを取りたいときに使いやすい。';
+    }
+    if(/網戸|あみ戸|アミ戸/.test(t)) return '網戸の目に沿って、ホコリや汚れを取りたいときに使いやすい。';
+    if(role==='cleaning-mop'){
+      if(/ハンディ/.test(t)) return '棚上や家具まわりなど、手元でサッと掃除したい場所に使いやすい。';
+      return '床や広い面をまとめて掃除したいときに使いやすい。';
+    }
+    if(role==='cleaning-brush') return /すき間|隙間|溝/.test(t)
+      ?'すき間や溝に入り込んだ汚れを狙って落としたいときに使いやすい。'
+      :'細かい凹凸の汚れをブラシでかき出したいときに使いやすい。';
+    if(/クロス|マイクロファイバー|ダスター/.test(t) && /掃除|お掃除|ほこり|ホコリ|吸水|拭/.test(t)){
+      const count=(t.match(/(\d+)\s*枚/)||[])[1];
+      if(count && +count>=5 && /速乾/.test(t)) return count+'枚セットで、洗い替えしながら日常の拭き掃除に回しやすい。';
+      if(/吸水|水分吸水/.test(t) && /ミニ|コンパクト/.test(t)) return '小さな場所のホコリ取りと、水滴・水分の拭き取りを1枚で済ませやすい。';
+      if(/吸水|水分吸水/.test(t)) return 'ホコリ取りだけでなく、水滴や水分の拭き取りにも使いやすい。';
+      if(/速乾/.test(t)) return '洗って乾かしながら、繰り返し拭き掃除に使いやすい。';
+      if(/ミニ|コンパクト/.test(t)) return '机まわりや小さな場所の、ちょこっと拭き掃除に使いやすい。';
+      return '日常のホコリ取りや拭き掃除に使いやすい。';
+    }
+    if(role==='cleaning'){
+      return '日常のホコリ取りや拭き掃除に使いやすい。';
+    }
+    if(role==='storage') return /スリム|隙間|すき間/.test(t)
+      ?'限られたすき間を使って、物の定位置を作りたいときに向く。'
+      :'散らかりやすい物をまとめて、戻す場所を決めたいときに向く。';
+    if(role==='charging') return /モバイルバッテリー/.test(t)
+      ?'外出先でスマホの充電を補いたいときに使うアイテム。'
+      :'充電時間や配線の手間を減らしたいときに使うアイテム。';
+    if(role==='cutting') return '下ごしらえの切る・むく・刻む作業を短くしたいときに使いやすい。';
+    if(role==='strainer') return '鍋の中の細かい具やアク、揚げカスをすくいたいときに使いやすい。';
+    return ctx?.bridge||'商品名と仕様を確認しながら、使う場面に合うか判断したい商品。';
+  }
+
+  function specificAudience(item,ctx){
+    const t=sourceText(item);
+    const role=String(ctx?._role||'');
+    if(role==='cleaning-glove') return /家具|棚/.test(t)
+      ?'家具や棚の細かい部分を、手早くホコリ取りしたい人'
+      :'手にはめて細かい場所を掃除したい人';
+    if(/網戸|あみ戸|アミ戸/.test(t)) return '網戸掃除を手早く済ませたい人';
+    if(/クロス|マイクロファイバー|ダスター/.test(t) && /掃除|お掃除|ほこり|ホコリ|吸水|拭/.test(t)){
+      const count=(t.match(/(\d+)\s*枚/)||[])[1];
+      if(count && +count>=5 && /速乾/.test(t)) return '洗い替え用のクロスを複数枚そろえて、こまめに掃除したい人';
+      if(/吸水|水分吸水/.test(t) && /ミニ|コンパクト/.test(t)) return '小さな場所のホコリと水分を、1枚でサッと拭き取りたい人';
+      if(/吸水|水分吸水/.test(t)) return 'ホコリ取りと水分の拭き取りを1枚で済ませたい人';
+      if(/速乾/.test(t)) return '洗って繰り返し使いやすいクロスを探している人';
+      if(/ミニ|コンパクト/.test(t)) return '小さな場所をこまめに拭き掃除したい人';
+    }
+    if(role==='cleaning-mop' && /ハンディ/.test(t)) return '家具や棚上をサッと掃除したい人';
+    if(role==='cleaning-brush' && /すき間|隙間|溝/.test(t)) return 'すき間や溝の汚れを狙って落としたい人';
+    return ctx?.audience||'商品の用途を確認して選びたい人';
+  }
+
+  function productSpecificSections(item,ctx){
+    return {
+      lead:featureLead(item,ctx),
+      use:specificUse(item,ctx),
+      facts:concreteFacts(item,ctx),
+      audience:specificAudience(item,ctx)
+    };
+  }
+
   function analysisPoints(item,keyword){
     const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
     const out=[];
@@ -242,12 +359,10 @@
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
     const title=shortTitle(item?.itemName||'');
-    const bullets=benefits(item,ctx).map(x=>'✔ '+x).join('\n');
-    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
+    const s=productSpecificSections(item,ctx);
+    const facts=s.facts.map(x=>'✔ '+x).join('\n');
     const reviewLine=r>=10?'\nレビュー：★'+v.toFixed(1)+'（'+fmt(r)+'件）':'';
-    const lead=featureLead(item,ctx);
-    const intro=[lead,ctx?.hook,ctx?.bridge].filter(Boolean).join('\n\n');
-    return intro+'\n\n'+bullets+'\n\n'+title+'\n価格：'+pr+'円'+reviewLine+'\n\n使いたい場面👇\n'+recommend;
+    return s.lead+'\n\n'+s.use+'\n\n商品の特徴👇\n'+facts+'\n\n向いている人👇\n・'+s.audience+'\n\n'+title+'\n価格：'+pr+'円'+reviewLine;
   }
 
   function makeThreadsCopy(item,keyword){
@@ -256,9 +371,9 @@
 
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
-    const point=(ctx?.points||[])[0]||ctx?.benefit||'';
-    const lead=featureLead(item,ctx)||openingText(item,ctx,1);
-    return lead+'\n\n'+(ctx?.benefit||'')+'\n✔ '+point+'\n\n'+title+'\n'+pr+'円';
+    const s=productSpecificSections(item,ctx);
+    const fact=s.facts[0]||ctx?.benefit||'';
+    return s.lead+'\n\n'+s.use+'\n✔ '+fact+'\n\n'+title+'\n'+pr+'円';
   }
 
   function makeInstagramCopy(item,keyword){
@@ -267,9 +382,9 @@
 
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
-    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
-    const lead=featureLead(item,ctx)||openingText(item,ctx,2);
-    return lead+'\n\n'+(ctx?.bridge||'')+'\n\n'+points+'\n\n'+title+'\n価格：'+pr+'円';
+    const s=productSpecificSections(item,ctx);
+    const facts=s.facts.map(x=>'✔ '+x).join('\n');
+    return s.lead+'\n\n'+s.use+'\n\n'+facts+'\n\nおすすめしたい人👇\n'+s.audience+'\n\n'+title+'\n価格：'+pr+'円';
   }
 
   api.promoTerms=promoTerms;
