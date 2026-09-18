@@ -182,7 +182,7 @@
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-6';
+    refine.src='/pain-copy-refine.js?v=20260918-7';
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
