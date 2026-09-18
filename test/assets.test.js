@@ -43,8 +43,15 @@ test('app has a single source of truth for product copy',()=>{
 
 
 test('public copy engine contains no generic price-first sales hook',()=>{
-  for(const file of ['public/pain-copy.js','public/pain-copy-refine.js','public/app.html','public/return-state.js']){
+  for(const file of ['public/pain-copy.js','public/pain-copy-refine.js','public/app.html','public/return-state.js','public/access-guard.js']){
     const source=fs.readFileSync(file,'utf8');
     assert.doesNotMatch(source,/試しやすい価格帯|この価格なら試しやすい|比較しやすい価格帯/);
   }
+});
+
+
+test('access guard cannot override the product-specific first line',()=>{
+  const guard=fs.readFileSync('public/access-guard.js','utf8');
+  assert.doesNotMatch(guard,/let hook=|この価格なら試しやすい|これ、見つけたらチェックしたい|選ばれている理由が気になる/);
+  assert.doesNotMatch(guard,/return \`\$\{hook\}/);
 });
