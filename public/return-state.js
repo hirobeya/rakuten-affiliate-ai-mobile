@@ -177,23 +177,6 @@
     return true;
   }
 
-  const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260918-3';
-  script.defer=true;
-  script.onload=()=>{
-    const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-7';
-    refine.defer=true;
-    refine.onload=()=>{
-      const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-8';
-      contextFix.defer=true;
-      root.document.head.appendChild(contextFix);
-    };
-    root.document.head.appendChild(refine);
-  };
-  root.document.head.appendChild(script);
-
   function installProductLogic(){
     if(!root.UrenaviPainCopy) return false;
     const originalPost=root.post;
@@ -223,6 +206,8 @@
     }
     return !!root.__urenaviPostPatched;
   }
+
+  installProductLogic();
 
   const rankingNote='総合順位は、売れやすさ・収益性・検索意図との一致度・商品タイプを総合的に評価して算出しています。報酬目安は商品価格×料率の概算で、1商品1個あたり上限1,000円を反映しています。';
   function refreshRankingNote(){
