@@ -95,13 +95,11 @@
   }
 
   function benefits(item,ctx){
-    const out=[],r=+item.reviewCount||0,v=+item.reviewAverage||0,p=+item.itemPrice||0;
+    const out=[],r=+item.reviewCount||0,v=+item.reviewAverage||0;
     const social=reviewBenefit(item);
     if(social) out.push(social);
     if(v>=4.5&&r>=30&&!social.includes('高評価')) out.push(`★${v.toFixed(1)}の高評価`);
     if(ctx&&ctx.benefit) out.push(ctx.benefit);
-    if(out.length<3&&p>0&&p<=3000) out.push(`${fmt(p)}円で試しやすい価格帯`);
-    if(out.length<3&&p>3000&&p<=10000&&r<30) out.push(`${fmt(p)}円で比較しやすい価格帯`);
     return out.slice(0,3);
   }
 
