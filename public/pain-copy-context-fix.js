@@ -4,6 +4,25 @@
   const api=root.UrenaviPainCopy;
   const originalPainContext=api.painContext;
 
+
+  function eggContext(name){
+    const t=String(name||'');
+    const quail=/うずら|ウズラ|鶉/.test(t);
+    const cracker=/卵割り|たまご割り|玉子割り|卵カッター|エッグカッター|エッグシェル/.test(t);
+    if(!quail && !cracker) return null;
+    return {
+      hook:quail?'うずら卵、小さいから殻をきれいに割るのが意外と手間…':'卵をできるだけ手早く、きれいに割りたい。',
+      bridge:quail?'うずら卵の殻をサッと割って、調理の手間を減らしたい人向けのアイテム。':'卵を割る作業を手早く済ませたい人向けの調理アイテム。',
+      points:[
+        quail?'うずら卵をきれいに割りたい':'卵をきれいに割りたい',
+        '調理の下ごしらえを手早く済ませたい',
+        '小さな調理の手間を減らしたい'
+      ],
+      benefit:quail?'うずら卵を手早くきれいに割りたい人にぴったり':'卵を手早くきれいに割りたい人にぴったり',
+      audience:quail?'うずら卵を手早くきれいに割りたい人':'卵を手早くきれいに割りたい人'
+    };
+  }
+
   function microwaveContext(name){
     const t=String(name||'');
     const steam=/蒸し|蒸す|蒸し器/.test(t);
@@ -74,15 +93,20 @@
       audience:'作品や対応機種を確認してゲームを選びたい人'
     };
 
-    const microwaveItem=/電子レンジ|レンジ調理器|レンジクッカー|レンジパン|レンジポット|レンジメート|ムテキレンジ|レンジで|蒸し器/.test(item);
+    const microwaveStorage=/レンジ台|レンジラック|レンジボード|収納棚|キッチン棚|キッチンラック/.test(item);
+    const microwaveItem=!microwaveStorage && /電子レンジ調理|レンジ調理器|レンジクッカー|レンジパン|レンジポット|レンジメート|ムテキレンジ|レンジで(?:調理|蒸|焼)|蒸し器/.test(item);
     const microwaveQuery=/レンジ調理|電子レンジ|レンジクッカー/.test(q);
-    if(microwaveItem || (microwaveQuery && /レンジ|電子レンジ/.test(item))) return microwaveContext(item);
+    const egg=eggContext(item);
+    if(egg) return egg;
+    if(microwaveItem || (microwaveQuery && !microwaveStorage && /レンジ(?:調理|クッカー|パン|ポット|メート)|電子レンジ調理/.test(item))) return microwaveContext(item);
 
     const cleaningQuery=/掃除|掃除用品|掃除用具|クリーナー|モップ|ワイパー|ホコリ|ほこり|ダスター/.test(q);
     const cleaningItem=/掃除|掃除用品|掃除用具|クリーナー|モップ|ワイパー|ホコリ|ほこり|ダスター/.test(item);
     if(cleaningItem || (cleaningQuery && cleaningItem)) return cleaningContext(item);
 
-    return originalPainContext(name,keyword);
+    // Use the product title as the source of truth. Search terms are hints only and
+    // must not assign a use that is absent from the actual product name.
+    return originalPainContext(name,'');
   };
 
   // Direct ROOM search is redundant. Keep the verified posting route:
