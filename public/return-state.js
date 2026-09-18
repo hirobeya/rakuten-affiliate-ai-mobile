@@ -210,7 +210,7 @@
     if(typeof root.aud==='function' && !root.__urenaviAudPatched){
       root.aud=function(item){
         const keyword=root.document.getElementById('k')?.value?.trim()||'';
-        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' ')).audience;
+        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'').audience;
       };
       root.__urenaviAudPatched=true;
     }
