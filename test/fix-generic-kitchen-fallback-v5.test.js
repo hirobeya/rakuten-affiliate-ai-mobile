@@ -36,3 +36,22 @@ test('generic kitchen/category words alone never define product role',()=>{
   const ctx=api.painContext('ABC123 キッチン用品 調理器具 便利グッズ','便利グッズ','簡単 時短 便利');
   assert.doesNotMatch(ctx.audience,/料理や後片付け|日常のちょっとした面倒/);
 });
+
+
+test('screen-mesh cleaning mop is never classified as a cooking strainer',()=>{
+  const api=load();
+  const item={
+    itemName:'取替式あみ戸びっクリーン ハンディ ハンディモップ 取替式 網戸 掃除 ネット 掃除 便利グッズ',
+    itemPrice:1490,
+    reviewCount:9,
+    reviewAverage:4.7,
+    catchcopy:'網戸の汚れを手軽に掃除',
+    itemCaption:'網戸掃除用の取替式ハンディモップ。細かい網目の汚れを落としやすい。'
+  };
+  const ctx=api.painContext(item.itemName,'便利グッズ',item.catchcopy+' '+item.itemCaption);
+  const copy=api.makeRoomCopy(item,'便利グッズ');
+  assert.match(ctx.audience,/網戸.*掃除/);
+  assert.match(copy,/網戸/);
+  assert.doesNotMatch(ctx.audience,/鍋|揚げ物|すくう/);
+  assert.doesNotMatch(copy,/鍋や揚げ物|汁や油を切り|細かいものだけすく/);
+});
