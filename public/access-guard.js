@@ -177,21 +177,8 @@
     if(typeof post!=='function') return;
     const basePost=post;
     window.post=(item,platform='room')=>{
-      const text=basePost(item,platform);
-      const reviews=Number(item?.reviewCount||0);
-      const rating=Number(item?.reviewAverage||0);
-      const price=Number(item?.itemPrice||0);
-      let hook='これ、見つけたらチェックしたい。';
-
-      if(reviews>=1000){
-        hook=`レビュー${fmt(reviews)}件。選ばれている理由が気になる。`;
-      }else if(rating>=4.5 && reviews>=100){
-        hook=`★${rating.toFixed(1)}の高評価。これはチェックしたい。`;
-      }else if(price>0 && price<=3000){
-        hook='この価格なら試しやすい。';
-      }
-
-      let body=text.replace(/^※アフィリエイト広告を利用しています\n\n/,'');
+      let body=basePost(item,platform);
+      body=body.replace(/^※アフィリエイト広告を利用しています\n\n/,'');
       body=body.replace(/^PR｜[^\n]+\n\n/,'');
 
       if(platform==='room'){
@@ -202,7 +189,7 @@
       }
 
       body=body.replace(/\s*※アフィリエイト広告を利用しています\s*$/,'').trim();
-      return `${hook}\n\n${body}\n\n※アフィリエイト広告を利用しています`;
+      return body+'\n\n※アフィリエイト広告を利用しています';
     };
   }
 
