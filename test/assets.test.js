@@ -27,3 +27,16 @@ test('product engine is loaded before interactive app logic and is not injected 
   assert.doesNotMatch(bridge,/createElement\('script'\)[\s\S]{0,300}pain-copy/);
   assert.match(bridge,/installProductLogic\(\);/);
 });
+
+
+test('app has a single source of truth for product copy',()=>{
+  const app=fs.readFileSync('public/app.html','utf8');
+  assert.match(app,/function productContext\(i\)/);
+  assert.match(app,/UrenaviPainCopy\.makeRoomCopy/);
+  assert.match(app,/UrenaviPainCopy\.makeThreadsCopy/);
+  assert.match(app,/UrenaviPainCopy\.makeInstagramCopy/);
+  assert.doesNotMatch(app,/楽天で見つけた注目アイテム/);
+  assert.doesNotMatch(app,/レビューを見ながら失敗しにくく選びたい人/);
+  const bridge=fs.readFileSync('public/return-state.js','utf8');
+  assert.doesNotMatch(bridge,/__urenaviPostPatched|root\.post=function|root\.aud=function|root\.pts=function/);
+});
