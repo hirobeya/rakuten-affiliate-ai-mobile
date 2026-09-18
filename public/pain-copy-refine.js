@@ -126,7 +126,7 @@
   }
 
   function analysisPoints(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword);
+    const ctx=api.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'');
     const out=[];
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
@@ -139,16 +139,52 @@
   }
 
   function makeRoomCopy(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword);
+    const ctx=api.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'');
     const pr=fmt(item?.itemPrice);
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
     const title=shortTitle(item?.itemName||'');
     const list=benefits(item,ctx);
-    const bullets=list.map(x=>'✔ '+x).join('\n');
-    const recommend=(ctx?.points||[]).map(x=>'・'+x).join('\n');
+    const ordered=[];
+    pushUnique(ordered,ctx?.benefit||'');
+    pushUnique(ordered,factualBenefit(item));
+    for(const x of list) pushUnique(ordered,x);
+    const bullets=ordered.slice(0,3).map(x=>'✔ '+x).join('\n');
+    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
     const reviewLine=r>=10?`\nレビュー：★${v.toFixed(1)}（${fmt(r)}件）`:'';
-    return `${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円${reviewLine}\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
+    return `${ctx.hook}\n\n${ctx.bridge}\n\n${bullets}\n\n${title}\n価格：${pr}円${reviewLine}\n\nこんな人におすすめ👇\n${recommend}`;
+  }
+
+
+  function makeThreadsCopy(item,keyword){
+    const ctx=api.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'');
+    const pr=fmt(item?.itemPrice);
+    const title=shortTitle(item?.itemName||'');
+    const fact=factualBenefit(item);
+    const point=(ctx?.points||[])[0]||ctx?.benefit||'';
+    return `${ctx.hook}
+
+${ctx.bridge}
+
+${fact?`✔ ${fact}\n`:``}✔ ${point}
+
+${title}
+${pr}円`;
+  }
+
+  function makeInstagramCopy(item,keyword){
+    const ctx=api.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'');
+    const pr=fmt(item?.itemPrice);
+    const title=shortTitle(item?.itemName||'');
+    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
+    return `${ctx.hook}
+
+${ctx.bridge}
+
+${points}
+
+${title}
+価格：${pr}円`;
   }
 
   api.promoTerms=promoTerms;
@@ -157,4 +193,6 @@
   api.benefits=benefits;
   api.analysisPoints=analysisPoints;
   api.makeRoomCopy=makeRoomCopy;
+  api.makeThreadsCopy=makeThreadsCopy;
+  api.makeInstagramCopy=makeInstagramCopy;
 })(typeof window==='undefined'?null:window);
