@@ -113,16 +113,42 @@
     const out=[];
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
-    const p=+item?.itemPrice||0;
     const social=reviewBenefit(item);
-    pushUnique(out,social);
-    if(v>=4.5&&r>=30&&!social.includes('高評価')) pushUnique(out,`★${v.toFixed(1)}の高評価`);
     pushUnique(out,ctx?.benefit||'');
+    for(const p of (ctx?.points||[])) pushUnique(out,p);
+    pushUnique(out,social);
+    if(v>=4.5&&r>=30&&!social.includes('高評価')) pushUnique(out,\`★\${v.toFixed(1)}の高評価\`);
     pushUnique(out,factualBenefit(item));
-    if(out.length<3&&p>0&&p<=3000) pushUnique(out,`${fmt(p)}円で試しやすい価格帯`);
-    if(out.length<3&&p>3000&&p<=10000) pushUnique(out,`${fmt(p)}円で比較しやすい価格帯`);
-    if(out.length<3) pushUnique(out,'商品特徴を見比べながら選びやすい');
     return out.slice(0,3);
+  }
+
+  function unsafeToPromote(ctx){
+    const role=String(ctx?._role||'');
+    const audience=String(ctx?.audience||'');
+    return role==='safe-fallback' ||
+      /商品の用途を確認|用途に合うものをきちんと選びたい|商品情報やレビューを比較/.test(audience);
+  }
+
+  function safeHoldCopy(item){
+    const title=shortTitle(item?.itemName||'');
+    const pr=fmt(item?.itemPrice);
+    return 'この商品は、取得できた商品情報だけでは用途を十分に特定できませんでした。\\n\\n'
+      +'誤った紹介文を出さないため、自動投稿文の生成を止めています。\\n\\n'
+      +title+'\\n価格：'+pr+'円\\n\\n'
+      +'楽天の商品ページで用途・仕様を確認してから紹介してください。';
+  }
+
+  function roleLead(ctx){
+    const role=String(ctx?._role||'');
+    if(role==='cleaning-glove') return '手にはめて使えるから、クロスでは拭きにくい細かい場所の掃除に。';
+    if(role==='cleaning-mop') return '広い面や手が届きにくい場所を、まとめて掃除したいときに。';
+    if(role==='cleaning-brush') return 'クロスでは届きにくい溝やすき間の汚れを、狙って落としたいときに。';
+    if(role==='cleaning') return 'ホコリや水分をサッと拭き取りたい、日常のちょこっと掃除に。';
+    if(role==='storage') return '物の定位置を作って、出しっぱなしを減らしたいときに。';
+    if(role==='charging') return '外出先の充電切れを避けたいときに。';
+    if(role==='cutting') return '切る・むく・刻む作業を手早く済ませたいときに。';
+    if(role==='strainer') return '細かいものをすくいながら、汁や油を切りたいときに。';
+    return '';
   }
 
   function analysisPoints(item,keyword){
@@ -167,40 +193,40 @@
   }
   function makeRoomCopy(item,keyword){
     const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
+    if(unsafeToPromote(ctx)) return safeHoldCopy(item);
+
     const pr=fmt(item?.itemPrice);
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
     const title=shortTitle(item?.itemName||'');
-    const list=benefits(item,ctx);
-    const ordered=[];
-    pushUnique(ordered,ctx?.benefit||'');
-    pushUnique(ordered,factualBenefit(item));
-    for(const x of list) pushUnique(ordered,x);
-    const bullets=ordered.slice(0,3).map(x=>'✔ '+x).join('\n');
-    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
-    const reviewLine=r>=10?`\nレビュー：★${v.toFixed(1)}（${fmt(r)}件）`:'';
-    const intro=openingText(item,ctx,0);
-    return `${intro}\n\n${bullets}\n\n${title}\n価格：${pr}円${reviewLine}\n\nこんな人におすすめ👇\n${recommend}`;
+    const bullets=benefits(item,ctx).map(x=>'✔ '+x).join('\\n');
+    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\\n');
+    const reviewLine=r>=10?'\\nレビュー：★'+v.toFixed(1)+'（'+fmt(r)+'件）':'';
+    const lead=roleLead(ctx);
+    const intro=[lead,ctx?.hook,ctx?.bridge].filter(Boolean).join('\\n\\n');
+    return intro+'\\n\\n'+bullets+'\\n\\n'+title+'\\n価格：'+pr+'円'+reviewLine+'\\n\\n使いたい場面👇\\n'+recommend;
   }
-
 
   function makeThreadsCopy(item,keyword){
     const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
+    if(unsafeToPromote(ctx)) return safeHoldCopy(item);
+
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
-    const fact=factualBenefit(item);
     const point=(ctx?.points||[])[0]||ctx?.benefit||'';
-    const intro=openingText(item,ctx,1);
-    return `${intro}\n\n${fact?`✔ ${fact}\n`:``}✔ ${point}\n\n${title}\n${pr}円`;
+    const lead=roleLead(ctx)||openingText(item,ctx,1);
+    return lead+'\\n\\n'+(ctx?.benefit||'')+'\\n✔ '+point+'\\n\\n'+title+'\\n'+pr+'円';
   }
 
   function makeInstagramCopy(item,keyword){
     const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
+    if(unsafeToPromote(ctx)) return safeHoldCopy(item);
+
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
-    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
-    const intro=openingText(item,ctx,2);
-    return `${intro}\n\n${points}\n\n${title}\n価格：${pr}円`;
+    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\\n');
+    const lead=roleLead(ctx)||openingText(item,ctx,2);
+    return lead+'\\n\\n'+(ctx?.bridge||'')+'\\n\\n'+points+'\\n\\n'+title+'\\n価格：'+pr+'円';
   }
 
   api.promoTerms=promoTerms;
