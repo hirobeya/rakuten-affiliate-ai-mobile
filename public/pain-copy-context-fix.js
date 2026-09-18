@@ -233,8 +233,14 @@
       [/消臭|防臭|臭い|ニオイ|におい|脱臭/,'見た目は片付いていても、ニオイが残るとそれだけで気になる。','毎回大がかりに対策せず、普段の流れの中でニオイを抑えたい人向け。',['気になるニオイを減らしたい','手軽に対策を続けたい','生活臭のストレスを減らしたい'],'ニオイ対策を日常に取り入れやすい','生活の中の気になるニオイを減らしたい人'],
       [/時短|簡単|手軽|ラク|らく|ワンタッチ|自動|一発|すぐ/,'数分で済む作業でも、毎日繰り返すと意外と大きな手間になる。','工程をひとつ減らせる道具は、派手じゃなくても日常では効いてくる。',['毎日の作業を時短したい','面倒な手順を減らしたい','簡単に使い続けたい'],'毎日の小さな手間を積み重ねて減らしやすい','日常のちょっとした面倒を減らしたい人']
     ];
+    // Title is the source of truth. Description can only fill gaps after the title
+    // did not establish a clear role. This prevents incidental words in long copy
+    // from overriding what the product actually is.
     for(const [re,hook,bridge,points,benefit,audience] of rules){
-      if(re.test(s)) return {hook,bridge,points,benefit,audience};
+      if(re.test(t)) return {hook,bridge,points,benefit,audience};
+    }
+    for(const [re,hook,bridge,points,benefit,audience] of rules){
+      if(re.test(d)) return {hook,bridge,points,benefit,audience};
     }
 
     const core=t.replace(/【[^】]*】|\[[^\]]*\]|［[^］]*］/g,' ').replace(/送料無料|公式|正規品|ランキング|クーポン|ポイント|SALE|セール/gi,' ').replace(/\s+/g,' ').trim().slice(0,28);
