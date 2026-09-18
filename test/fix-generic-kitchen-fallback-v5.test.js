@@ -55,3 +55,22 @@ test('screen-mesh cleaning mop is never classified as a cooking strainer',()=>{
   assert.doesNotMatch(ctx.audience,/鍋|揚げ物|すくう/);
   assert.doesNotMatch(copy,/鍋や揚げ物|汁や油を切り|細かいものだけすく/);
 });
+
+
+test('microfiber cleaning cloth gets cleaning copy, not storage copy',()=>{
+  const api=load();
+  const item={
+    itemName:'丸辰(Marutatsu) 掃除便利グッズ お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ グレー/ブラック',
+    itemPrice:544,
+    reviewCount:0,
+    reviewAverage:0,
+    catchcopy:'ほこり吸着 水分吸水',
+    itemCaption:'マイクロファイバーのお掃除クロス'
+  };
+  const ctx=api.painContext(item.itemName,'掃除便利グッズ',item.catchcopy+' '+item.itemCaption);
+  const copy=api.makeRoomCopy(item,'掃除便利グッズ');
+  assert.match(ctx.audience,/ホコリ|水分|拭き/);
+  assert.match(copy,/ホコリ|拭き|掃除/);
+  assert.doesNotMatch(ctx.audience,/片付け|収納|定位置/);
+  assert.doesNotMatch(copy,/散らか|定位置|出し入れ/);
+});
