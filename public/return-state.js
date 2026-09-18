@@ -182,11 +182,11 @@
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-1';
+    refine.src='/pain-copy-refine.js?v=20260918-2';
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-1';
+      contextFix.src='/pain-copy-context-fix.js?v=20260918-2';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
@@ -199,8 +199,10 @@
     const originalPost=root.post;
     if(typeof originalPost==='function' && !root.__urenaviPostPatched){
       root.post=function(item,platform='room'){
-        if(platform!=='room' || !root.UrenaviPainCopy) return originalPost(item,platform);
+        if(!root.UrenaviPainCopy) return originalPost(item,platform);
         const keyword=root.document.getElementById('k')?.value?.trim()||'';
+        if(platform==='threads' && root.UrenaviPainCopy.makeThreadsCopy) return root.UrenaviPainCopy.makeThreadsCopy(item,keyword);
+        if(platform==='instagram' && root.UrenaviPainCopy.makeInstagramCopy) return root.UrenaviPainCopy.makeInstagramCopy(item,keyword);
         return root.UrenaviPainCopy.makeRoomCopy(item,keyword);
       };
       root.__urenaviPostPatched=true;
@@ -208,7 +210,7 @@
     if(typeof root.aud==='function' && !root.__urenaviAudPatched){
       root.aud=function(item){
         const keyword=root.document.getElementById('k')?.value?.trim()||'';
-        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword).audience;
+        return root.UrenaviPainCopy.painContext(item?.itemName||'',keyword,item?.itemCaption||item?.itemDescription||'').audience;
       };
       root.__urenaviAudPatched=true;
     }
