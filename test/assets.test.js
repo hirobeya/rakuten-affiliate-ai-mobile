@@ -13,3 +13,17 @@ test('Inline scripts compile and public assets contain no private keys',()=>{
  assert.equal(manifest.start_url,'/app.html');
  assert.ok(fs.existsSync('public'+manifest.icons[0].src));
 });
+
+
+test('product engine is loaded before interactive app logic and is not injected late',()=>{
+  const app=fs.readFileSync('public/app.html','utf8');
+  const pain=app.indexOf('<script src="/pain-copy.js');
+  const refine=app.indexOf('<script src="/pain-copy-refine.js');
+  const context=app.indexOf('<script src="/pain-copy-context-fix.js');
+  const state=app.indexOf('<script src="/return-state.js');
+  const supabase=app.indexOf('<script src="https://cdn.jsdelivr.net/npm/@supabase');
+  assert.ok(pain>=0 && refine>pain && context>refine && state>context && supabase>state);
+  const bridge=fs.readFileSync('public/return-state.js','utf8');
+  assert.doesNotMatch(bridge,/createElement\('script'\)[\s\S]{0,300}pain-copy/);
+  assert.match(bridge,/installProductLogic\(\);/);
+});
