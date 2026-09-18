@@ -43,5 +43,25 @@ test('unknown item stays safe instead of inventing a product use',()=>{
   const api=load();
   const item={itemName:'限定モデル ABC-123',itemPrice:5000,reviewCount:1,reviewAverage:5};
   const copy=api.makeRoomCopy(item,'便利グッズ');
-  assert.match(copy,/商品情報やレビュー/);
+  assert.match(copy,/用途を十分に特定できません|自動投稿文の生成を止めています/);
+});
+
+
+test('low-confidence product never gets a fabricated sales pitch',()=>{
+  const api=load();
+  const item={itemName:'限定モデル QZ-999',itemPrice:3980,catchcopy:'人気',itemCaption:'こだわり仕様'};
+  const copy=api.makeRoomCopy(item,'便利グッズ');
+  assert.match(copy,/自動投稿文の生成を止めています/);
+  assert.doesNotMatch(copy,/掃除|収納|揚げ物|充電切れ|切る作業/);
+});
+
+test('cleaning glove and cloth have visibly different ROOM copy',()=>{
+  const api=load();
+  const glove={itemName:'6枚セット お掃除 手袋 マイクロファイバー ほこり取り',itemPrice:2480,catchcopy:'手にはめて使う掃除手袋',itemCaption:'家具や棚の細かい部分に'};
+  const cloth={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'拭き掃除用クロス'};
+  const g=api.makeRoomCopy(glove,'掃除便利グッズ');
+  const c=api.makeRoomCopy(cloth,'掃除便利グッズ');
+  assert.match(g,/手にはめ|家具|棚|細かい/);
+  assert.match(c,/ホコリ|水分|拭き取り|ちょこっと掃除/);
+  assert.notEqual(g,c);
 });
