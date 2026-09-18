@@ -178,7 +178,7 @@
   }
 
   const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260918-2';
+  script.src='/pain-copy.js?v=20260918-3';
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
@@ -186,7 +186,7 @@
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-6';
+      contextFix.src='/pain-copy-context-fix.js?v=20260918-7';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
