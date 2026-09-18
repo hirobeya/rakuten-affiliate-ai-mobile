@@ -119,7 +119,7 @@
     const list=benefits(item,ctx),bullets=(list.length?list:[ctx.benefit,'取り入れやすい便利アイテム']).map(x=>'✔ '+x).join('\n');
     const recommend=ctx.points.map(x=>'・'+x).join('\n');
     const reviewLine=r>=10?`\nレビュー：★${v.toFixed(1)}（${fmt(r)}件）`:'';
-    return `※アフィリエイト広告を利用しています\n\n${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円${reviewLine}\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
+    return `${ctx.hook}\n\n${ctx.bridge}\n\n${title}\n価格：${pr}円${reviewLine}\n\n${bullets}\n\nこんな人におすすめ👇\n${recommend}`;
   }
 
   root.UrenaviPainCopy={painContext,benefits,promoTerms,shortTitle,reviewBenefit,analysisPoints,makeRoomCopy};
