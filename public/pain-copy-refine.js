@@ -117,7 +117,7 @@
     pushUnique(out,ctx?.benefit||'');
     for(const p of (ctx?.points||[])) pushUnique(out,p);
     pushUnique(out,social);
-    if(v>=4.5&&r>=30&&!social.includes('高評価')) pushUnique(out,\`★\${v.toFixed(1)}の高評価\`);
+    if(v>=4.5&&r>=30&&!social.includes('高評価')) pushUnique(out,`★${v.toFixed(1)}の高評価`);
     pushUnique(out,factualBenefit(item));
     return out.slice(0,3);
   }
@@ -132,9 +132,9 @@
   function safeHoldCopy(item){
     const title=shortTitle(item?.itemName||'');
     const pr=fmt(item?.itemPrice);
-    return 'この商品は、取得できた商品情報だけでは用途を十分に特定できませんでした。\\n\\n'
-      +'誤った紹介文を出さないため、自動投稿文の生成を止めています。\\n\\n'
-      +title+'\\n価格：'+pr+'円\\n\\n'
+    return 'この商品は、取得できた商品情報だけでは用途を十分に特定できませんでした。\n\n'
+      +'誤った紹介文を出さないため、自動投稿文の生成を止めています。\n\n'
+      +title+'\n価格：'+pr+'円\n\n'
       +'楽天の商品ページで用途・仕様を確認してから紹介してください。';
   }
 
@@ -199,12 +199,12 @@
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
     const title=shortTitle(item?.itemName||'');
-    const bullets=benefits(item,ctx).map(x=>'✔ '+x).join('\\n');
-    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\\n');
-    const reviewLine=r>=10?'\\nレビュー：★'+v.toFixed(1)+'（'+fmt(r)+'件）':'';
+    const bullets=benefits(item,ctx).map(x=>'✔ '+x).join('\n');
+    const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
+    const reviewLine=r>=10?'\nレビュー：★'+v.toFixed(1)+'（'+fmt(r)+'件）':'';
     const lead=roleLead(ctx);
-    const intro=[lead,ctx?.hook,ctx?.bridge].filter(Boolean).join('\\n\\n');
-    return intro+'\\n\\n'+bullets+'\\n\\n'+title+'\\n価格：'+pr+'円'+reviewLine+'\\n\\n使いたい場面👇\\n'+recommend;
+    const intro=[lead,ctx?.hook,ctx?.bridge].filter(Boolean).join('\n\n');
+    return intro+'\n\n'+bullets+'\n\n'+title+'\n価格：'+pr+'円'+reviewLine+'\n\n使いたい場面👇\n'+recommend;
   }
 
   function makeThreadsCopy(item,keyword){
@@ -215,7 +215,7 @@
     const title=shortTitle(item?.itemName||'');
     const point=(ctx?.points||[])[0]||ctx?.benefit||'';
     const lead=roleLead(ctx)||openingText(item,ctx,1);
-    return lead+'\\n\\n'+(ctx?.benefit||'')+'\\n✔ '+point+'\\n\\n'+title+'\\n'+pr+'円';
+    return lead+'\n\n'+(ctx?.benefit||'')+'\n✔ '+point+'\n\n'+title+'\n'+pr+'円';
   }
 
   function makeInstagramCopy(item,keyword){
@@ -224,9 +224,9 @@
 
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
-    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\\n');
+    const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
     const lead=roleLead(ctx)||openingText(item,ctx,2);
-    return lead+'\\n\\n'+(ctx?.bridge||'')+'\\n\\n'+points+'\\n\\n'+title+'\\n価格：'+pr+'円';
+    return lead+'\n\n'+(ctx?.bridge||'')+'\n\n'+points+'\n\n'+title+'\n価格：'+pr+'円';
   }
 
   api.promoTerms=promoTerms;
