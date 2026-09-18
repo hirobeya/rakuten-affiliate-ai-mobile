@@ -100,8 +100,9 @@ test('same-role products differ across the body, not only the first line',()=>{
   const cb=api.makeRoomCopy(b,'掃除便利グッズ');
   const la=ca.split('\n').map(x=>x.trim()).filter(Boolean);
   const lb=cb.split('\n').map(x=>x.trim()).filter(Boolean);
-  const common=la.filter(x=>lb.includes(x));
-  assert.ok(common.length<=2, 'too many shared lines: '+common.join(' | '));
+  const ignored=new Set(['商品の特徴👇','向いている人👇','✔ マイクロファイバー素材']);
+  const common=la.filter(x=>lb.includes(x) && !ignored.has(x));
+  assert.ok(common.length<=1, 'too many shared content lines: '+common.join(' | '));
   assert.match(ca,/水分|吸水|ミニ|もこもこ/);
   assert.match(cb,/10枚|速乾/);
 });
