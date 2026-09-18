@@ -145,6 +145,66 @@
     return null;
   }
 
+  function titleRoleContext(name){
+    const t=String(name||'').normalize('NFKC');
+
+    const replacement=/交換用|替え|交換フィルター|交換用フィルター|リフィル|詰め替え|カートリッジ|スペア|替刃|替えブラシ|替えシート/.test(t);
+    if(replacement){
+      if(/オイルポット|油こし|油処理|揚げ油|油.*フィルター|フィルター.*油/.test(t)){
+        return {
+          hook:'揚げ物のあとの油、まだ使えそうやのに揚げカスやニオイが気になる。',
+          bridge:'オイルポットの交換フィルターで、使った油をこして次に使いやすい状態へ整えたい人向け。',
+          points:['揚げ油の細かい汚れをこしたい','油をできるだけきれいに保って再利用したい','オイルポットのフィルターを定期的に交換したい'],
+          benefit:'使った油をこして再利用しやすくするための交換消耗品',
+          audience:'揚げ物の油を捨てずにできるだけきれいに再利用したい人'
+        };
+      }
+      if(/浄水|水道|蛇口|浄水器/.test(t)){
+        return {
+          hook:'浄水器、本体はそのままでもカートリッジはずっと同じでは使えない。',
+          bridge:'交換時期に合わせてフィルターを替え、いつもの浄水環境を維持したい人向け。',
+          points:['浄水器の交換時期に備えたい','対応する交換品を選びたい','本体を買い替えず使い続けたい'],
+          benefit:'本体を使い続けるための交換消耗品を補充しやすい',
+          audience:'浄水器の交換フィルターを探している人'
+        };
+      }
+      if(/空気清浄|エアコン|換気扇|レンジフード/.test(t)){
+        return {
+          hook:'フィルターが汚れたままだと、掃除してもスッキリした感じがしにくい。',
+          bridge:'本体を買い替えず、消耗したフィルターだけ交換して使い続けたい人向け。',
+          points:['汚れたフィルターを交換したい','対応機種を確認して選びたい','本体を長く使いたい'],
+          benefit:'消耗部分だけ交換して本体を使い続けやすい',
+          audience:'空調・換気機器の交換フィルターを探している人'
+        };
+      }
+      return {
+        hook:'本体はまだ使えるのに、消耗した部分だけが気になる。',
+        bridge:'買い替えではなく、交換パーツだけ替えて使い続けたい人向け。',
+        points:['消耗した部品だけ交換したい','本体をできるだけ長く使いたい','対応する交換品を選びたい'],
+        benefit:'必要な消耗部分だけ交換して使い続けやすい',
+        audience:'本体を買い替えず交換パーツで使い続けたい人'
+      };
+    }
+
+    if(/フィルター/.test(t)){
+      if(/オイルポット|油こし|揚げ油|油処理/.test(t)) return {
+        hook:'揚げ物のあとの油、細かいカスが残ると次に使うのがちょっと気になる。',
+        bridge:'オイルポットで油をこして、次回も使いやすい状態に整えたい人向け。',
+        points:['揚げカスをこしたい','油をできるだけきれいに保ちたい','揚げ物後の油処理をラクにしたい'],
+        benefit:'揚げ油をこして再利用しやすくする',
+        audience:'揚げ物後の油をきれいにこしたい人'
+      };
+      return {
+        hook:'フィルター類は、何に使うかより「対応しているか」がまず大事。',
+        bridge:'本体や用途に合うかを確認して、必要な交換・ろ過機能を補いたい人向け。',
+        points:['対応機種や用途を確認したい','消耗したフィルターを交換したい','本体をそのまま使い続けたい'],
+        benefit:'用途に合うフィルターを選びやすい',
+        audience:'交換・ろ過用のフィルターを探している人'
+      };
+    }
+
+    return null;
+  }
   function cleanFeatureText(text){
     return String(text||'')
       .replace(/<[^>]*>/g,' ')
@@ -265,6 +325,8 @@
     const microwaveQuery=/レンジ調理|電子レンジ|レンジクッカー/.test(q);
     const egg=eggContext(item);
     if(egg) return egg;
+    const titleRole=titleRoleContext(item);
+    if(titleRole) return titleRole;
     const sharp=sharpCategoryContext(item,desc);
     if(sharp) return sharp;
     const generic=genericMetadataContext(item,desc);
