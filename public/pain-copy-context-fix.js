@@ -186,6 +186,21 @@
       };
     }
 
+    if(/とうもろこし(?:ピーラー|カッター)|コーン(?:ピーラー|カッター)|コーンカッター/.test(t)) return {
+      hook:'とうもろこしの実、包丁で削ぐと飛び散るし、芯ぎりぎりを切るのも意外と難しい。',
+      bridge:'専用ピーラーで実をまとめて外して、サラダやスープの下ごしらえを手早く済ませたい人向け。',
+      points:['とうもろこしの実を芯から外したい','包丁で削ぐ手間や飛び散りを減らしたい','コーン料理の下ごしらえを手早くしたい'],
+      benefit:'とうもろこしの実を芯から外す作業をラクにしやすい',
+      audience:'とうもろこしの実を手早く外したい人'
+    };
+
+    if(/瓶オープナー|びんオープナー|ビンオープナー|瓶蓋開け|瓶ふた開け|蓋オープナー|フタオープナー|ふたオープナー|缶オープナー|缶切り|栓抜き/.test(t)) return {
+      hook:'固いフタや栓、開かないとそれだけで手が止まる。',
+      bridge:'力を入れにくい瓶や缶を開ける作業を助けて、キッチンでの小さなストレスを減らしたい人向け。',
+      points:['固いフタを開けやすくしたい','力を入れにくい時の補助が欲しい','瓶や缶を開ける手間を減らしたい'],
+      benefit:'固いフタや栓を開ける作業を助けやすい',
+      audience:'瓶や缶のフタ開けで力を入れにくい人'
+    };
     const roleRules=[
       [/みそ容器|味噌容器|漬物容器|漬け物容器|ぬか漬け容器|梅干し容器|保存壺|保存つぼ/,{
         hook:'味噌や漬物、袋のままだと出し入れしにくいし、冷蔵庫の中でも扱いづらい。',
@@ -438,9 +453,21 @@
     const cleaningItem=/掃除|掃除用品|掃除用具|クリーナー|モップ|ワイパー|ホコリ|ほこり|ダスター/.test(item);
     if(cleaningItem || (cleaningQuery && cleaningItem)) return cleaningContext(item);
 
-    // Use the product title as the source of truth. Search terms are hints only and
-    // must not assign a use that is absent from the actual product name.
-    return originalPainContext(name,'');
+    // Do not fall back to broad legacy category templates (e.g. "キッチン用品" or
+    // "便利グッズ"). Those words describe a shelf, not the product's actual job.
+    const core=item
+      .replace(/【[^】]*】|\[[^\]]*\]|［[^］]*］/g,' ')
+      .replace(/ランキング\s*1位|送料無料|公式|正規品|便利グッズ|キッチン用品|調理器具|家庭用品/gi,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .slice(0,36);
+    return {
+      hook:core?`「${core}」、まずは何に使う道具かを見て選びたい。`:'用途がはっきりしない商品は、無理に便利さを決めつけずに選びたい。',
+      bridge:'商品名と説明から確認できる用途を中心に、使う場面を想像して選びたい人向け。',
+      points:['実際の用途を確認して選びたい','自分の使う場面に合うか確かめたい','商品名だけで分からない特徴も確認したい'],
+      benefit:'用途を確かめながら選びやすい',
+      audience:'商品の用途を確認してから選びたい人'
+    };
   };
 
   // Direct ROOM search is redundant. Keep the verified posting route:
