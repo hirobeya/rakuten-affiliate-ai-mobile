@@ -22,7 +22,7 @@ test('upstream authentication failure does not sign the customer out',async()=>{
 });
 beforeEach(()=>{Object.assign(process.env,{VERCEL_ENV:'preview',STRIPE_SECRET_KEY:'sk_test_fixture',URENAVI_PRICE_ID:'price_test',URENAVI_PAYMENT_LINK_ID:'plink_test',URENAVI_PAYMENT_LINK_URL:'https://buy.stripe.com/test_fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',STRIPE_WEBHOOK_SECRET:'fixture'});});
 afterEach(()=>{global.fetch=originalFetch; for(const key of Object.keys(process.env)) if(!(key in originalEnv)) delete process.env[key];Object.assign(process.env,originalEnv);});
-const response=data=>({ok:true,status:200,json:async()=>data});
+const response=data=>({ok:true,status:200,json:async()=>data,text:async()=>JSON.stringify(data)});
 const sub=(extra={})=>({id:'sub_test',customer:'cus_test',livemode:false,status:'active',items:{data:[{price:{id:'price_test'},current_period_end:Math.floor(Date.now()/1000)+3600}]},...extra});
 function res(){return {code:200,headers:{},setHeader(k,v){this.headers[k]=v;},status(n){this.code=n;return this;},json(body){this.body=body;return this;},end(){return this;},redirect(n,url){this.code=n;this.url=url;return this;}};}
 function signed(event,secret='fixture'){const body=Buffer.from(JSON.stringify(event));const t=Math.floor(Date.now()/1000);const sig=crypto.createHmac('sha256',secret).update(t+'.').update(body).digest('hex');const req=Readable.from([body]);req.method='POST';req.headers={'stripe-signature':`t=${t},v1=${sig}`};return req;}
