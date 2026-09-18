@@ -110,3 +110,42 @@ test('ambiguous weak marketing words do not invent a product role',()=>{
   const ctx=api.painContext('限定モデル ABC-123 手軽 簡単','便利グッズ','人気商品です');
   assert.doesNotMatch(ctx.audience,/掃除|収納|鍋|充電|切る/);
 });
+
+
+test('Rakuten genre path resolves ambiguous cleaning product identity',()=>{
+  const api=load();
+  const name='生活便利グッズ クロス 収納にも便利';
+  const ctx=api.painContext(
+    name,
+    '便利グッズ',
+    '吸水性のあるクロス。使わない時は収納しやすい。',
+    '日用品雑貨・文房具・手芸 > 掃除用品 > 雑巾・テーブルダスター'
+  );
+  assert.match(ctx.audience,/掃除|ホコリ|拭/);
+  assert.doesNotMatch(ctx.audience,/散らか|定位置/);
+});
+
+test('Rakuten genre path can identify storage when title has cleaning noise',()=>{
+  const api=load();
+  const name='掃除まわり 便利 スタンド';
+  const ctx=api.painContext(
+    name,
+    '便利グッズ',
+    'ワイパーなどを置けるスタンド',
+    'インテリア・寝具・収納 > 収納家具 > ラック・棚'
+  );
+  assert.match(ctx.audience,/片付け|収納|散らか/);
+});
+
+test('genre evidence does not override an explicit product role in the title',()=>{
+  const api=load();
+  const name='マイクロファイバー お掃除クロス ほこり吸着';
+  const ctx=api.painContext(
+    name,
+    '掃除用品',
+    '水分吸水にも使える',
+    '日用品雑貨・文房具・手芸 > 収納用品'
+  );
+  assert.match(ctx.audience,/ホコリ|水分|拭|掃除/);
+  assert.doesNotMatch(ctx.audience,/散らか|定位置/);
+});
