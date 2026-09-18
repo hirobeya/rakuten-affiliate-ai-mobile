@@ -138,16 +138,59 @@
       +'楽天の商品ページで用途・仕様を確認してから紹介してください。';
   }
 
+  function productLabel(item,ctx){
+    const t=String(item?.itemName||'').normalize('NFKC');
+    const role=String(ctx?._role||'');
+    if(role==='cleaning-glove' || /(?:掃除|お掃除).*(?:手袋|グローブ|ミトン)|(?:手袋|グローブ|ミトン).*(?:掃除|お掃除)/.test(t)) return 'お掃除手袋';
+    if(/網戸|あみ戸|アミ戸/.test(t)) return '網戸用お掃除アイテム';
+    if(role==='cleaning-mop' || /モップ|ワイパー/.test(t)) return /ハンディ/.test(t)?'ハンディモップ':'お掃除モップ';
+    if(role==='cleaning-brush' || /掃除ブラシ|清掃ブラシ/.test(t)) return '掃除ブラシ';
+    if(/マイクロファイバー/.test(t) && /クロス|ダスター/.test(t)) return 'マイクロファイバークロス';
+    if(role==='cleaning') return 'お掃除アイテム';
+    if(role==='storage') return '収納アイテム';
+    if(role==='charging') return /モバイルバッテリー/.test(t)?'モバイルバッテリー':'充電アイテム';
+    if(role==='cutting') return /ピーラー/.test(t)?'ピーラー':/チョッパー/.test(t)?'チョッパー':'調理カッター';
+    if(role==='strainer') return /かす揚げ/.test(t)?'かす揚げ':/あく取り|アク取り/.test(t)?'あく取り':'すくい網';
+    return shortTitle(t);
+  }
+
+  function featureLead(item,ctx){
+    const t=[item?.itemName,item?.catchcopy,item?.itemCaption,item?.itemDescription].filter(Boolean).join(' ').normalize('NFKC');
+    const label=productLabel(item,ctx);
+    const features=[];
+    const add=x=>{if(x && !features.includes(x)) features.push(x);};
+
+    if(/手にはめ|手袋|グローブ|ミトン/.test(t)) add('手にはめて使える');
+    if(/ほこり吸着|ホコリ吸着|ほこり取り|ホコリ取り/.test(t)) add('ホコリを取りやすい');
+    if(/吸水|水分吸水|速乾/.test(t)) add('水分を拭き取りやすい');
+    if(/もこもこ|ふわふわ/.test(t)) add('やわらかな素材感');
+    if(/ミニ|コンパクト/.test(t)) add('小回りの利くサイズ');
+    if(/網戸|あみ戸|アミ戸/.test(t)) add('網戸掃除向け');
+    if(/すき間|隙間|溝/.test(t)) add('すき間や溝に届きやすい');
+    if(/省スペース|スリム/.test(t)) add('省スペース');
+    if(/急速充電/.test(t)) add('急速充電対応');
+    if(/10000mAh|10000mah/i.test(t)) add('10000mAh');
+    if(/折りたたみ|折畳/.test(t)) add('折りたたみ対応');
+    if(/防水|撥水/.test(t)) add('水ぬれに配慮');
+    const count=t.match(/(\d+)\s*(?:枚|個|本|セット)/);
+    if(count) add(count[1]+'点構成');
+
+    const base=roleLead(ctx);
+    if(features.length>=2) return label+'。'+features.slice(0,2).join('・')+'のが特徴。';
+    if(features.length===1) return label+'。'+features[0]+'タイプ。';
+    return label && base ? label+'。'+base : (base||label);
+  }
+
   function roleLead(ctx){
     const role=String(ctx?._role||'');
-    if(role==='cleaning-glove') return '手にはめて使えるから、クロスでは拭きにくい細かい場所の掃除に。';
-    if(role==='cleaning-mop') return '広い面や手が届きにくい場所を、まとめて掃除したいときに。';
-    if(role==='cleaning-brush') return 'クロスでは届きにくい溝やすき間の汚れを、狙って落としたいときに。';
-    if(role==='cleaning') return 'ホコリや水分をサッと拭き取りたい、日常のちょこっと掃除に。';
-    if(role==='storage') return '物の定位置を作って、出しっぱなしを減らしたいときに。';
-    if(role==='charging') return '外出先の充電切れを避けたいときに。';
-    if(role==='cutting') return '切る・むく・刻む作業を手早く済ませたいときに。';
-    if(role==='strainer') return '細かいものをすくいながら、汁や油を切りたいときに。';
+    if(role==='cleaning-glove') return 'クロスでは拭きにくい細かい場所を、手にはめたまま掃除しやすい。';
+    if(role==='cleaning-mop') return '広い面や手が届きにくい場所を、まとめて掃除しやすい。';
+    if(role==='cleaning-brush') return '溝やすき間の汚れを、狙って落としやすい。';
+    if(role==='cleaning') return '日常の拭き掃除をサッと済ませやすい。';
+    if(role==='storage') return '物の定位置を作って、出しっぱなしを減らしやすい。';
+    if(role==='charging') return '外出先の充電切れを避けやすい。';
+    if(role==='cutting') return '切る・むく・刻む作業を手早く済ませやすい。';
+    if(role==='strainer') return '細かいものをすくいながら、汁や油を切りやすい。';
     return '';
   }
 
@@ -202,7 +245,7 @@
     const bullets=benefits(item,ctx).map(x=>'✔ '+x).join('\n');
     const recommend=(ctx?.points||[]).slice(0,3).map(x=>'・'+x).join('\n');
     const reviewLine=r>=10?'\nレビュー：★'+v.toFixed(1)+'（'+fmt(r)+'件）':'';
-    const lead=roleLead(ctx);
+    const lead=featureLead(item,ctx);
     const intro=[lead,ctx?.hook,ctx?.bridge].filter(Boolean).join('\n\n');
     return intro+'\n\n'+bullets+'\n\n'+title+'\n価格：'+pr+'円'+reviewLine+'\n\n使いたい場面👇\n'+recommend;
   }
@@ -214,7 +257,7 @@
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
     const point=(ctx?.points||[])[0]||ctx?.benefit||'';
-    const lead=roleLead(ctx)||openingText(item,ctx,1);
+    const lead=featureLead(item,ctx)||openingText(item,ctx,1);
     return lead+'\n\n'+(ctx?.benefit||'')+'\n✔ '+point+'\n\n'+title+'\n'+pr+'円';
   }
 
@@ -225,7 +268,7 @@
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
     const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');
-    const lead=roleLead(ctx)||openingText(item,ctx,2);
+    const lead=featureLead(item,ctx)||openingText(item,ctx,2);
     return lead+'\n\n'+(ctx?.bridge||'')+'\n\n'+points+'\n\n'+title+'\n価格：'+pr+'円';
   }
 
