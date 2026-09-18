@@ -90,3 +90,29 @@ test('cleaning glove first line is not reused for cloth',()=>{
   assert.match(g,/手袋|手にはめ/);
   assert.match(c,/クロス|ホコリ|水分/);
 });
+
+
+test('same-role products differ across the body, not only the first line',()=>{
+  const api=load();
+  const a={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'もこもこミニクロス'};
+  const b={itemName:'マイクロファイバー お掃除クロス 10枚セット 速乾',itemPrice:980,catchcopy:'速乾クロス',itemCaption:'10枚セット'};
+  const ca=api.makeRoomCopy(a,'掃除便利グッズ');
+  const cb=api.makeRoomCopy(b,'掃除便利グッズ');
+  const la=ca.split('\n').map(x=>x.trim()).filter(Boolean);
+  const lb=cb.split('\n').map(x=>x.trim()).filter(Boolean);
+  const common=la.filter(x=>lb.includes(x));
+  assert.ok(common.length<=2, 'too many shared lines: '+common.join(' | '));
+  assert.match(ca,/水分|吸水|ミニ|もこもこ/);
+  assert.match(cb,/10枚|速乾/);
+});
+
+test('glove and cloth have different use, facts and audience sections',()=>{
+  const api=load();
+  const glove={itemName:'6枚セット お掃除 手袋 マイクロファイバー ほこり取り',itemPrice:2480,catchcopy:'手にはめて使う掃除手袋',itemCaption:'家具や棚の細かい部分に'};
+  const cloth={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'拭き掃除用クロス'};
+  const g=api.makeRoomCopy(glove,'掃除便利グッズ');
+  const c=api.makeRoomCopy(cloth,'掃除便利グッズ');
+  assert.match(g,/手にはめ|家具や棚|細かい部分/);
+  assert.match(c,/水分|拭き取り|1枚で/);
+  assert.notEqual(g.split('向いている人👇')[1],c.split('向いている人👇')[1]);
+});
