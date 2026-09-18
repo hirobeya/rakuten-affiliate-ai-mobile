@@ -149,3 +149,38 @@ test('genre evidence does not override an explicit product role in the title',()
   assert.match(ctx.audience,/ホコリ|水分|拭|掃除/);
   assert.doesNotMatch(ctx.audience,/散らか|定位置/);
 });
+
+
+test('cleaning glove and cleaning cloth generate different product-specific copy',()=>{
+  const api=load();
+  const glove={
+    itemName:'6枚セット お掃除 手袋 マイクロファイバー クロス 掃除グッズ 大掃除便利グッズ ほこり取り ピンク 3組6枚',
+    itemPrice:2480,reviewCount:0,reviewAverage:0,
+    catchcopy:'手にはめて使うマイクロファイバー掃除手袋',
+    itemCaption:'家具や棚などのほこり取りに'
+  };
+  const cloth={
+    itemName:'丸辰(Marutatsu) 掃除便利グッズ お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ',
+    itemPrice:544,reviewCount:0,reviewAverage:0,
+    catchcopy:'ほこり吸着 水分吸水',
+    itemCaption:'マイクロファイバーのお掃除クロス'
+  };
+  const gctx=api.painContext(glove.itemName,'掃除便利グッズ',glove.catchcopy+' '+glove.itemCaption,'掃除用品');
+  const cctx=api.painContext(cloth.itemName,'掃除便利グッズ',cloth.catchcopy+' '+cloth.itemCaption,'掃除用品');
+  const gcopy=api.makeRoomCopy(glove,'掃除便利グッズ');
+  const ccopy=api.makeRoomCopy(cloth,'掃除便利グッズ');
+  assert.match(gctx.audience,/家具|棚|細かい/);
+  assert.match(gcopy,/手にはめ|グローブ|手袋|細かい/);
+  assert.match(cctx.audience,/ホコリ|水分|拭/);
+  assert.match(ccopy,/ホコリ|水分|拭/);
+  assert.notEqual(gcopy,ccopy);
+});
+
+test('cleaning mop and brush keep distinct roles',()=>{
+  const api=load();
+  const mop=api.painContext('ハンディモップ お掃除 ワイパー ほこり取り','掃除用品','','掃除用品');
+  const brush=api.painContext('掃除ブラシ すき間 清掃ブラシ','掃除用品','','掃除用品');
+  assert.match(mop.audience,/床|広い面/);
+  assert.match(brush.audience,/すき間|溝/);
+  assert.notEqual(mop.audience,brush.audience);
+});
