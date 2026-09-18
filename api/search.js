@@ -771,6 +771,18 @@ async function handler(req,res){
         +x.itemPrice||
         0,
 
+        catchcopy:
+        String(x.catchcopy||'').slice(0,500),
+
+        itemCaption:
+        String(x.itemCaption||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,1200),
+
+        genreId:
+        String(x.genreId||''),
+
+        itemCode:
+        String(x.itemCode||''),
+
         itemUrl:
         x.itemUrl,
 
