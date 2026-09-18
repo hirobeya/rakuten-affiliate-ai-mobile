@@ -155,6 +155,14 @@
       benefit:'ホコリ取りや拭き掃除を手軽に続けやすい',
       audience:'ホコリや水分を手軽に拭き取りたい人'
     };
+    if(/(?:掃除用具|掃除道具).*(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場)|(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場).*(?:掃除用具|掃除道具)/.test(t)) return {
+      hook:'掃除道具が出しっぱなしだと、使うたびに探したり戻したりするのが面倒。',
+      bridge:'ワイパーやモップなどの掃除道具をひとまとめにして、必要なときに取り出しやすくしたい人向け。',
+      points:['掃除道具をひとまとめに収納したい','必要なときにサッと取り出したい','置き場所を決めて散らかりにくくしたい'],
+      benefit:'掃除道具の置き場所をまとめやすい',
+      audience:'掃除道具をまとめて収納したい人'
+    };
+
 
     if(/網戸|あみ戸|アミ戸/.test(t) && /掃除|清掃|クリーナー|ブラシ|ワイパー|モップ|スポンジ|びっクリーン/.test(t)) return {
       hook:'網戸の汚れ、外して洗うのは大がかり。できればそのままサッと掃除したい。',
@@ -406,8 +414,8 @@
       const titleHits=countHits(t,rule.tokens||[]);
       const descHits=countHits(d,rule.tokens||[]);
       const strongHits=countHits(t,rule.strong||[]);
-      let score=titleHits*5+descHits+strongHits*4;
-      if(rule.weak) score=Math.min(score,4);
+      let score=titleHits*5+descHits*2+strongHits*4;
+      if(rule.weak) score=Math.min(score,3);
       if(id==='storage' && /掃除|清掃|クリーナー|モップ|ワイパー|クロス|マイクロファイバー/.test(t) && !/(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場)/.test(t)) score-=6;
       if(id==='cleaning' && /(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場)/.test(t) && /掃除(?:用具|道具).*(?:収納|ラック|ケース|ホルダー|スタンド|置き場)|(?:収納|ラック|ケース|ホルダー|スタンド).*(?:掃除用具|掃除道具)/.test(t)) score-=5;
       return {id,score,titleHits,descHits,ctx:rule.ctx};
@@ -415,7 +423,7 @@
 
     const best=ranked[0];
     const second=ranked[1];
-    if(best && best.score>=5){
+    if(best && best.score>=4){
       const ambiguous=second && best.score-second.score<2 && best.id!==second.id;
       if(!ambiguous){
         return {...best.ctx,_role:best.id,_confidence:best.score};
