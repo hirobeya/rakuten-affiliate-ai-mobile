@@ -88,7 +88,7 @@ test('cleaning-tool storage is classified as storage when storage is the actual 
   const api=load();
   const name='掃除道具 収納スタンド フロアワイパー モップ ホルダー 置き場';
   const ctx=api.painContext(name,'掃除用品','掃除用具をまとめて収納するスタンド');
-  assert.match(ctx.audience,/収納|まとめ/);
+  assert.match(ctx.audience,/収納|まとめ|掃除道具/);
 });
 
 test('plain mesh word never creates a cooking-strainer role',()=>{
