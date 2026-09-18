@@ -154,15 +154,28 @@
     return shortTitle(t);
   }
 
+  function distinctiveProductName(item){
+    const original=String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+    let s=stripPromos(original)
+      .replace(/【[^】]{0,80}】|\[[^\]]{0,80}\]|［[^］]{0,120}］/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!s) s=original;
+    if(s.length<=54) return s;
+    return s.slice(0,40).trim()+'…'+s.slice(-12).trim();
+  }
+
   function featureLead(item,ctx){
     const t=[item?.itemName,item?.catchcopy,item?.itemCaption,item?.itemDescription].filter(Boolean).join(' ').normalize('NFKC');
+    const name=distinctiveProductName(item);
     const label=productLabel(item,ctx);
     const features=[];
     const add=x=>{if(x && !features.includes(x)) features.push(x);};
 
     if(/手にはめ|手袋|グローブ|ミトン/.test(t)) add('手にはめて使える');
     if(/ほこり吸着|ホコリ吸着|ほこり取り|ホコリ取り/.test(t)) add('ホコリを取りやすい');
-    if(/吸水|水分吸水|速乾/.test(t)) add('水分を拭き取りやすい');
+    if(/吸水|水分吸水/.test(t)) add('水分を拭き取りやすい');
+    if(/速乾/.test(t)) add('乾きやすい');
     if(/もこもこ|ふわふわ/.test(t)) add('やわらかな素材感');
     if(/ミニ|コンパクト/.test(t)) add('小回りの利くサイズ');
     if(/網戸|あみ戸|アミ戸/.test(t)) add('網戸掃除向け');
@@ -176,9 +189,10 @@
     if(count) add(count[1]+'点構成');
 
     const base=roleLead(ctx);
-    if(features.length>=2) return label+'。'+features.slice(0,2).join('・')+'のが特徴。';
-    if(features.length===1) return label+'。'+features[0]+'タイプ。';
-    return label && base ? label+'。'+base : (base||label);
+    if(features.length>=2) return name+'。'+features.slice(0,2).join('・')+'のが特徴。';
+    if(features.length===1) return name+'。'+features[0]+'タイプ。';
+    if(base) return name+'。'+base;
+    return name||label;
   }
 
   function roleLead(ctx){

@@ -117,3 +117,29 @@ test('glove and cloth have different use, facts and audience sections',()=>{
   assert.match(c,/水分|拭き取り|1枚で/);
   assert.notEqual(g.split('向いている人👇')[1],c.split('向いている人👇')[1]);
 });
+
+
+test('first line includes the actual product identity and differs across products',()=>{
+  const api=load();
+  const products=[
+    {itemName:'6枚セット お掃除 手袋 マイクロファイバー ほこり取り ピンク 3組6枚',itemPrice:2480,catchcopy:'手にはめて使う掃除手袋',itemCaption:'家具や棚の細かい部分に'},
+    {itemName:'丸辰 Marutatsu お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ グレー',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'もこもこミニクロス'},
+    {itemName:'マイクロファイバー お掃除クロス 10枚セット 速乾 ブルー',itemPrice:980,catchcopy:'速乾クロス',itemCaption:'10枚セット'}
+  ];
+  const first=products.map(p=>api.makeRoomCopy(p,'掃除便利グッズ').split('\n')[0]);
+  assert.equal(new Set(first).size,first.length,'first lines must all differ');
+  assert.match(first[0],/手袋|6枚/);
+  assert.match(first[1],/丸辰|Marutatsu|もこもこ|ミニ/);
+  assert.match(first[2],/10枚|速乾/);
+});
+
+test('same category and same generic features still cannot collapse to the same first line',()=>{
+  const api=load();
+  const a={itemName:'ブランドA マイクロファイバー お掃除クロス 吸水',itemPrice:700,catchcopy:'吸水クロス'};
+  const b={itemName:'ブランドB マイクロファイバー お掃除クロス 吸水',itemPrice:800,catchcopy:'吸水クロス'};
+  const fa=api.makeRoomCopy(a,'掃除便利グッズ').split('\n')[0];
+  const fb=api.makeRoomCopy(b,'掃除便利グッズ').split('\n')[0];
+  assert.notEqual(fa,fb);
+  assert.match(fa,/ブランドA/);
+  assert.match(fb,/ブランドB/);
+});
