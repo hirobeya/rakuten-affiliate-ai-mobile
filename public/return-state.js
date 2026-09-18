@@ -178,15 +178,15 @@
   }
 
   const script=root.document.createElement('script');
-  script.src='/pain-copy.js?v=20260918-1';
+  script.src='/pain-copy.js?v=20260918-2';
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-4';
+    refine.src='/pain-copy-refine.js?v=20260918-5';
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-4';
+      contextFix.src='/pain-copy-context-fix.js?v=20260918-5';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
