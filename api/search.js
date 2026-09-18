@@ -17,6 +17,46 @@ norm(s)
 .replace(/\s+/g,'');
 
 
+const genreCache=new Map();
+
+async function fetchGenreMeta(genreId,appId,accessKey){
+  const id=String(genreId||'').trim();
+  if(!id) return {genreName:'',genrePath:''};
+  if(genreCache.has(id)) return genreCache.get(id);
+
+  const task=(async()=>{
+    try{
+      const p=new URLSearchParams({
+        applicationId:appId,
+        accessKey,
+        genreId:id,
+        format:'json',
+        formatVersion:'2'
+      });
+      const r=await fetch(
+        'https://openapi.rakuten.co.jp/ichibagt/api/IchibaGenre/Search/20260701?'+p.toString(),
+        {signal:AbortSignal.timeout(4500)}
+      );
+      if(!r.ok) return {genreName:'',genrePath:''};
+      const data=await r.json().catch(()=>({}));
+      const current=data.genre||data.currentGenre||data.current||{};
+      const ancestors=Array.isArray(data.ancestors)?data.ancestors:[];
+      const names=ancestors
+        .map(x=>String(x?.nameJa||x?.genreName||'').trim())
+        .filter(Boolean);
+      const genreName=String(current?.nameJa||current?.genreName||'').trim();
+      if(genreName && names[names.length-1]!==genreName) names.push(genreName);
+      return {genreName,genrePath:names.join(' > ')};
+    }catch{
+      return {genreName:'',genrePath:''};
+    }
+  })();
+
+  genreCache.set(id,task);
+  return task;
+}
+
+
 function relevance(
   item,
   keyword
@@ -758,11 +798,21 @@ async function handler(req,res){
     );
 
 
-    const out=
+    const selected=
     pool
-    .slice(0,10)
+    .slice(0,10);
+
+    const uniqueGenreIds=[...new Set(selected.map(x=>String(x.genreId||'')).filter(Boolean))];
+    const genrePairs=await Promise.all(
+      uniqueGenreIds.map(async id=>[id,await fetchGenreMeta(id,appId,accessKey)])
+    );
+    const genreById=new Map(genrePairs);
+
+    const out=
+    selected
     .map(
       x=>({
+        ...genreById.get(String(x.genreId||'')),
 
         itemName:
         x.itemName,

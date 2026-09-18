@@ -126,7 +126,7 @@
   }
 
   function analysisPoints(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '));
+    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
     const out=[];
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
@@ -166,7 +166,7 @@
     }
   }
   function makeRoomCopy(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '));
+    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
     const pr=fmt(item?.itemPrice);
     const r=+item?.reviewCount||0;
     const v=+item?.reviewAverage||0;
@@ -185,7 +185,7 @@
 
 
   function makeThreadsCopy(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '));
+    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
     const fact=factualBenefit(item);
@@ -195,7 +195,7 @@
   }
 
   function makeInstagramCopy(item,keyword){
-    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '));
+    const ctx=api.painContext(item?.itemName||'',keyword,[(item?.catchcopy||''),(item?.itemCaption||''),(item?.itemDescription||'')].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'');
     const pr=fmt(item?.itemPrice);
     const title=shortTitle(item?.itemName||'');
     const points=(ctx?.points||[]).slice(0,3).map(x=>'✔ '+x).join('\n');

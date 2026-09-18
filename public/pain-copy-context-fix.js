@@ -347,9 +347,10 @@
       .trim();
   }
 
-  function genericMetadataContext(name,description){
+  function genericMetadataContext(name,description,genrePath){
     const t=String(name||'').normalize('NFKC');
     const d=cleanFeatureText(description).normalize('NFKC');
+    const g=cleanFeatureText(genrePath).normalize('NFKC');
 
     const contexts={
       measure:{
@@ -413,13 +414,14 @@
     const ranked=Object.entries(contexts).map(([id,rule])=>{
       const titleHits=countHits(t,rule.tokens||[]);
       const descHits=countHits(d,rule.tokens||[]);
+      const genreHits=countHits(g,rule.tokens||[]);
       const strongHits=countHits(t,rule.strong||[]);
-      let score=titleHits*5+descHits*2+strongHits*4;
+      let score=titleHits*5+descHits*2+genreHits*4+strongHits*4;
       if(rule.weak) score=Math.min(score,3);
       if(id==='storage' && /掃除|清掃|クリーナー|モップ|ワイパー|クロス|マイクロファイバー/.test(t) && !/(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場)/.test(t)) score-=6;
       if(id==='cleaning' && /(?:収納|ラック|ケース|ボックス|ホルダー|スタンド|置き場)/.test(t) && /掃除(?:用具|道具).*(?:収納|ラック|ケース|ホルダー|スタンド|置き場)|(?:収納|ラック|ケース|ホルダー|スタンド).*(?:掃除用具|掃除道具)/.test(t)) score-=5;
-      return {id,score,titleHits,descHits,ctx:rule.ctx};
-    }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||b.titleHits-a.titleHits||b.descHits-a.descHits);
+      return {id,score,titleHits,descHits,genreHits,ctx:rule.ctx};
+    }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||b.genreHits-a.genreHits||b.titleHits-a.titleHits||b.descHits-a.descHits);
 
     const best=ranked[0];
     const second=ranked[1];
@@ -502,7 +504,7 @@
     };
   }
 
-  api.painContext=function(name,keyword,description){
+  api.painContext=function(name,keyword,description,genrePath){
     const item=String(name||'');
     const q=String(keyword||'');
     const desc=String(description||'');
@@ -531,7 +533,7 @@
     if(titleRole) return titleRole;
     const sharp=sharpCategoryContext(item,desc);
     if(sharp) return sharp;
-    const generic=genericMetadataContext(item,desc);
+    const generic=genericMetadataContext(item,desc,genrePath);
     if(generic) return generic;
     if(microwaveItem || (microwaveQuery && !microwaveStorage && /レンジ(?:調理|クッカー|パン|ポット|メート)|電子レンジ調理/.test(item))) return microwaveContext(item);
 
