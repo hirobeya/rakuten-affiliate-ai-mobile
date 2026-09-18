@@ -65,3 +65,28 @@ test('cleaning glove and cloth have visibly different ROOM copy',()=>{
   assert.match(c,/ホコリ|水分|拭き取り|ちょこっと掃除/);
   assert.notEqual(g,c);
 });
+
+
+test('same-category products get different first lines',()=>{
+  const api=load();
+  const a={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'もこもこミニクロス'};
+  const b={itemName:'マイクロファイバー お掃除クロス 10枚セット 速乾',itemPrice:980,catchcopy:'速乾クロス',itemCaption:'10枚セット'};
+  const ca=api.makeRoomCopy(a,'掃除便利グッズ');
+  const cb=api.makeRoomCopy(b,'掃除便利グッズ');
+  const firstA=ca.split('\n')[0];
+  const firstB=cb.split('\n')[0];
+  assert.notEqual(firstA,firstB);
+  assert.match(firstA,/ホコリ|水分|ミニ|もこもこ|マイクロファイバー/);
+  assert.match(firstB,/速乾|10点|マイクロファイバー/);
+});
+
+test('cleaning glove first line is not reused for cloth',()=>{
+  const api=load();
+  const glove={itemName:'6枚セット お掃除 手袋 マイクロファイバー ほこり取り',itemPrice:2480,catchcopy:'手にはめて使う掃除手袋',itemCaption:'家具や棚の細かい部分に'};
+  const cloth={itemName:'お掃除 クロス マイクロファイバー ほこり吸着 水分吸水',itemPrice:544,catchcopy:'ほこり吸着 水分吸水',itemCaption:'拭き掃除用クロス'};
+  const g=api.makeRoomCopy(glove,'掃除便利グッズ').split('\n')[0];
+  const c=api.makeRoomCopy(cloth,'掃除便利グッズ').split('\n')[0];
+  assert.notEqual(g,c);
+  assert.match(g,/手袋|手にはめ/);
+  assert.match(c,/クロス|ホコリ|水分/);
+});
