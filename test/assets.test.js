@@ -40,3 +40,11 @@ test('app has a single source of truth for product copy',()=>{
   const bridge=fs.readFileSync('public/return-state.js','utf8');
   assert.doesNotMatch(bridge,/__urenaviPostPatched|root\.post=function|root\.aud=function|root\.pts=function/);
 });
+
+
+test('public copy engine contains no generic price-first sales hook',()=>{
+  for(const file of ['public/pain-copy.js','public/pain-copy-refine.js','public/app.html','public/return-state.js']){
+    const source=fs.readFileSync(file,'utf8');
+    assert.doesNotMatch(source,/試しやすい価格帯|この価格なら試しやすい|比較しやすい価格帯/);
+  }
+});
