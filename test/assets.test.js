@@ -25,7 +25,7 @@ test('product engine is loaded before interactive app logic and is not injected 
   assert.ok(pain>=0 && refine>pain && context>refine && state>context && supabase>state);
   const bridge=fs.readFileSync('public/return-state.js','utf8');
   assert.doesNotMatch(bridge,/createElement\('script'\)[\s\S]{0,300}pain-copy/);
-  assert.match(bridge,/installProductLogic\(\);/);
+  assert.doesNotMatch(bridge,/installProductLogic|__urenaviPostPatched|root\.post=function/);
 });
 
 
