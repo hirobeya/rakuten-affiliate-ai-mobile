@@ -182,11 +182,11 @@
   script.defer=true;
   script.onload=()=>{
     const refine=root.document.createElement('script');
-    refine.src='/pain-copy-refine.js?v=20260918-5';
+    refine.src='/pain-copy-refine.js?v=20260918-6';
     refine.defer=true;
     refine.onload=()=>{
       const contextFix=root.document.createElement('script');
-      contextFix.src='/pain-copy-context-fix.js?v=20260918-7';
+      contextFix.src='/pain-copy-context-fix.js?v=20260918-8';
       contextFix.defer=true;
       root.document.head.appendChild(contextFix);
     };
