@@ -129,13 +129,10 @@
       /商品の用途を確認|用途に合うものをきちんと選びたい|商品情報やレビューを比較/.test(audience);
   }
 
-  function safeHoldCopy(item){
-    const title=shortTitle(item?.itemName||'');
-    const pr=fmt(item?.itemPrice);
-    return 'この商品は、取得できた商品情報だけでは用途を十分に特定できませんでした。\n\n'
-      +'誤った紹介文を出さないため、自動投稿文の生成を止めています。\n\n'
-      +title+'\n価格：'+pr+'円\n\n'
-      +'楽天の商品ページで用途・仕様を確認してから紹介してください。';
+  function safeHoldCopy(){
+    // Never expose internal diagnostic text as social post copy.
+    // Empty copy lets the UI disable copying instead of risking an accidental post.
+    return '';
   }
 
   function productLabel(item,ctx){
