@@ -73,3 +73,31 @@ test('different products get different openings even under same search',()=>{
   const first=items.map(x=>api.makeRoomCopy(x,'便利グッズ').split('\n')[0]);
   assert.ok(new Set(first).size>=4);
 });
+
+
+test('sales totals and unlabeled dimensions are not misread as product features',()=>{
+  const api=load();
+  const copy=api.makeRoomCopy({
+    itemName:'圧縮袋一体型 布団収納BOX',
+    catchcopy:'収納スペースをすっきり使いやすい圧縮収納',
+    itemCaption:'【40%OFF・クーポン】9/15〜9/27 累計販売数100,000枚突破。すき間1cmにも。衣替えや布団収納に便利。',
+    itemPrice:5880,
+    reviewAverage:4.6,
+    reviewCount:1922
+  },'収納');
+  assert.doesNotMatch(copy,/000枚セット/);
+  assert.doesNotMatch(copy,/100,?000枚セット/);
+  assert.doesNotMatch(copy,/(?:^|\n)✔?\s*1cm(?:\n|$)/);
+  assert.match(copy,/収納|布団/);
+});
+
+test('explicit pack sizes still appear as facts',()=>{
+  const api=load();
+  const copy=api.makeRoomCopy({
+    itemName:'マイクロファイバークロス 8枚セット',
+    catchcopy:'吸水 速乾',
+    itemCaption:'洗い替えに便利な8枚セット',
+    itemPrice:1200
+  },'掃除');
+  assert.match(copy,/8枚セット/);
+});
