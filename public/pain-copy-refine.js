@@ -182,8 +182,10 @@
     if(/10000mAh|10000mah/i.test(t)) add('10000mAh');
     if(/折りたたみ|折畳/.test(t)) add('折りたたみ対応');
     if(/防水|撥水/.test(t)) add('水ぬれに配慮');
-    const count=t.match(/(\d+)\s*(?:枚|個|本|セット)/);
-    if(count) add(count[1]+'点構成');
+    // Quantity facts must be explicit pack sizes. Do not turn sales totals such as
+    // "累計販売数100,000枚突破" into a fake "000枚セット" feature.
+    const count=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本)\s*(?:セット|入り)(?!\s*(?:突破|達成))/);
+    if(count) add(count[1]+count[2]+'セット');
 
     const base=roleLead(ctx);
     if(features.length>=2) return name+'。'+features.slice(0,2).join('・')+'のが特徴。';
@@ -216,9 +218,9 @@
     const add=x=>{if(x && !out.includes(x)) out.push(x);};
 
     const exact=[
-      [/(\d+)\s*組\s*(\d+)\s*枚/,(m)=>m[1]+'組'+m[2]+'枚セット'],
-      [/(\d+)\s*枚(?:セット|入り)?/,(m)=>m[1]+'枚セット'],
-      [/(\d+)\s*個(?:セット|入り)?/,(m)=>m[1]+'個セット'],
+      [/(?:^|[^\d,])(\d{1,3})\s*組\s*(\d{1,3})\s*枚(?!\s*(?:突破|達成))/,(m)=>m[1]+'組'+m[2]+'枚セット'],
+      [/(?:^|[^\d,])(\d{1,3})\s*枚\s*(?:セット|入り)(?!\s*(?:突破|達成))/,(m)=>m[1]+'枚セット'],
+      [/(?:^|[^\d,])(\d{1,3})\s*個\s*(?:セット|入り)(?!\s*(?:突破|達成))/,(m)=>m[1]+'個セット'],
       [/マイクロファイバー/,()=> 'マイクロファイバー素材'],
       [/ほこり吸着|ホコリ吸着/,()=> 'ホコリを吸着しやすい仕様'],
       [/吸水|水分吸水/,()=> '水分を拭き取りやすい吸水タイプ'],
@@ -247,8 +249,14 @@
     }
 
     if(out.length<3){
-      const specs=t.match(/\b\d+(?:\.\d+)?\s?(?:cm|mm|ml|mL|L|W|g|kg)\b/gi)||[];
-      for(const s of specs){add(s.replace(/\s+/g,'')); if(out.length>=4) break;}
+      // Bare numbers such as "1cm" are not useful product facts on their own.
+      // Only expose dimensions/capacity when the surrounding label explains
+      // what the number means.
+      const labeledSpecs=[];
+      const specRe=/(?:幅|横幅|高さ|奥行(?:き)?|長さ|直径|厚さ|容量|重さ|重量)\s*[:：約]?\s*\d+(?:\.\d+)?\s*(?:cm|mm|ml|mL|L|W|g|kg)\b/gi;
+      let sm;
+      while((sm=specRe.exec(t)) && labeledSpecs.length<4) labeledSpecs.push(sm[0]);
+      for(const s of labeledSpecs){add(s.replace(/\s+/g,'')); if(out.length>=4) break;}
     }
 
     if(out.length<2 && ctx?.benefit) add(ctx.benefit.replace(/[。！!]+$/,''));
@@ -271,7 +279,8 @@
       ?'すき間や溝に入り込んだ汚れを狙って落としたいときに使いやすい。'
       :'細かい凹凸の汚れをブラシでかき出したいときに使いやすい。';
     if(/クロス|マイクロファイバー|ダスター/.test(t) && /掃除|お掃除|ほこり|ホコリ|吸水|拭/.test(t)){
-      const count=(t.match(/(\d+)\s*枚/)||[])[1];
+      const pack=(t.match(/(?:^|[^\d,])(\d{1,3})\s*枚\s*(?:セット|入り)(?!\s*(?:突破|達成))/)||[]);
+      const count=pack[1];
       if(count && +count>=5 && /速乾/.test(t)) return count+'枚セットで、洗い替えしながら日常の拭き掃除に回しやすい。';
       if(/吸水|水分吸水/.test(t) && /ミニ|コンパクト/.test(t)) return '小さな場所のホコリ取りと、水滴・水分の拭き取りを1枚で済ませやすい。';
       if(/吸水|水分吸水/.test(t)) return 'ホコリ取りだけでなく、水滴や水分の拭き取りにも使いやすい。';
