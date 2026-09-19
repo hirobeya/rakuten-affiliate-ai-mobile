@@ -52,3 +52,12 @@ test('microwave rack is not classified as a microwave cooking tool',()=>{
   const ctx=api.painContext('電子レンジ台 レンジラック キッチン収納棚','電子レンジ');
   assert.doesNotMatch(ctx.bridge,/電子レンジで手軽に調理/);
 });
+
+
+test('back medicine applicator is recognized from product title',()=>{
+  const api=load();
+  const ctx=api.painContext('背中に薬を塗る道具 薬塗り 軟膏 日焼け止め クリーム 痒み止め 湿布 一人で塗れる','便利グッズ');
+  assert.equal(ctx._role,'back-applicator');
+  assert.match(ctx.audience,/背中.*薬|薬.*背中/);
+  assert.doesNotMatch(ctx.audience,/用途に合うものをきちんと選びたい/);
+});
