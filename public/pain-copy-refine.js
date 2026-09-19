@@ -313,12 +313,50 @@
     return ctx?.audience||'商品の用途を確認して選びたい人';
   }
 
-  function productSpecificSections(item,ctx){
+  function lifestyleImpact(item,ctx){
+    const t=sourceText(item);
+    const role=String(ctx?._role||'');
+    if(role==='cleaning-glove') return '気づいたホコリをその場で拭きやすくなり、掃除を大仕事にせずこまめに整えやすくなる。';
+    if(role==='cleaning-mop') return '広い面をまとめて掃除しやすくなり、日々の掃除にかける手間を減らしやすい。';
+    if(role==='cleaning-brush') return 'クロスでは届きにくい汚れを狙いやすくなり、細かい場所の掃除を後回しにしにくくなる。';
+    if(role==='storage') return '物の戻し場所が決まりやすくなり、探す・片付け直す時間を減らして部屋を整えやすくなる。';
+    if(role==='charging') return '外出先で残量を気にする場面を減らし、スマホを使いたいときに使える安心につながる。';
+    if(role==='cutting') return '下ごしらえの反復作業を減らしやすくなり、忙しい日の料理に取りかかる負担を軽くしやすい。';
+    if(role==='strainer') return '鍋仕事の細かな作業をその場で済ませやすくなり、調理の流れを止めにくくなる。';
+    if(/水切りラック|水切りかご|シンクラック/.test(t)) return '洗い物の置き場が決まり、シンクまわりの作業スペースを保ちやすくなる。';
+    if(/洗濯ネット|ランドリーネット/.test(t)) return '洗う前の仕分けがしやすくなり、衣類を扱うときの気遣いや洗濯後の手間を減らしやすい。';
+    if(/モバイルバッテリー/.test(t)) return '外出中の充電切れへの不安を減らし、連絡・決済・地図を必要なときに使いやすくなる。';
+    if(/弁当箱|ランチボックス|保存容器|タッパー|フードコンテナ/.test(t)) return '保存から持ち運びまでの流れをまとめやすくなり、作り置きやお弁当準備を続けやすくなる。';
+    if(/バッグ|ショルダーバッグ|ボディバッグ|ウエストバッグ|ポーチ|サコッシュ/.test(t)) return '必要な小物の置き場所がまとまり、出先で探す手間を減らして身軽に動きやすくなる。';
+    if(/ピーラー|皮むき|千切り|スライサー|みじん切り|チョッパー|おろし器|おろし金/.test(t)) return '下ごしらえを短く済ませやすくなり、料理そのものに使える時間を増やしやすい。';
+    const benefit=String(ctx?.benefit||'').replace(/[。！!]+$/,'');
+    return benefit ? benefit+'ことで、毎日の小さな手間や迷いを減らしやすい。' : '';
+  }
+
+  function benefitLead(item,ctx){
+    const s=productSpecificSectionsRaw(item,ctx);
+    const impact=lifestyleImpact(item,ctx);
+    const fact=s.facts[0]||'';
+    if(impact && fact) return impact+' '+fact+'のが、この商品のポイント。';
+    if(impact) return impact;
+    return featureLead(item,ctx);
+  }
+
+  function productSpecificSectionsRaw(item,ctx){
     return {
       lead:featureLead(item,ctx),
       use:specificUse(item,ctx),
       facts:concreteFacts(item,ctx),
       audience:specificAudience(item,ctx)
+    };
+  }
+
+  function productSpecificSections(item,ctx){
+    const raw=productSpecificSectionsRaw(item,ctx);
+    return {
+      ...raw,
+      lead:benefitLead(item,ctx),
+      impact:lifestyleImpact(item,ctx)
     };
   }
 
