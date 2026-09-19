@@ -2062,6 +2062,15 @@ function post(i,p='room'){
   return UrenaviPainCopy.makeRoomCopy(i,keyword);
 }
 
+function postReady(i,p='room'){
+  return Boolean(String(post(i,p)||'').trim());
+}
+
+function postDisplay(i,p='room'){
+  const text=String(post(i,p)||'').trim();
+  return text || 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
+}
+
 
 function short(
   i
@@ -2592,7 +2601,7 @@ function render(
   </div>
 
   <div class="copy">
-    ${esc(post(i))}
+    ${esc(postDisplay(i))}
   </div>
 
   <div class="acts">
@@ -2603,8 +2612,9 @@ function render(
       class="cb"
       data-i="${n}"
       data-p="room"
+      ${postReady(i)?'':'disabled'}
     >
-      投稿文をコピー
+      ${postReady(i)?'投稿文をコピー':'コピー不可'}
     </button>
 
     <a
@@ -2666,18 +2676,35 @@ function render(
           '.copy'
         )
         .textContent=
-        post(
+        postDisplay(
           a[i],
           p
         );
 
 
-        ar
-        .querySelector(
+        const copyButton=
+        ar.querySelector(
           '.cb'
-        )
-        .dataset.p=
+        );
+
+        copyButton.dataset.p=
         p;
+
+        const ready=
+        postReady(
+          a[i],
+          p
+        );
+
+        copyButton.disabled=
+        !ready;
+
+        copyButton.textContent=
+        ready
+        ?
+        '投稿文をコピー'
+        :
+        'コピー不可';
 
       };
 
@@ -2695,16 +2722,30 @@ function render(
       b.onclick=
       async()=>{
 
+        const copy=
+        post(
+          a[
+            +b.dataset.i
+          ],
+          b.dataset.p
+        );
+
+        if(
+          !String(
+            copy||
+            ''
+          ).trim()
+        ){
+          b.disabled=true;
+          b.textContent='コピー不可';
+          return;
+        }
+
         try{
 
           await navigator.clipboard
           .writeText(
-            post(
-              a[
-                +b.dataset.i
-              ],
-              b.dataset.p
-            )
+            copy
           );
 
 
