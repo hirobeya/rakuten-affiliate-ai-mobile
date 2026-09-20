@@ -153,7 +153,8 @@
     let filtered=facts.filter(x=>{
       if(usage==='網戸' && /網戸掃除向け/.test(x)) return false;
       if(usage==='抜け毛' && /抜け毛・毛取り用途/.test(x)) return false;
-      if((/手袋|グローブ|ミトン/.test(t)) && /クロスタイプ/.test(x)) return false;
+      if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
+      if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
       return true;
     });
     return filtered.slice(0,4);
