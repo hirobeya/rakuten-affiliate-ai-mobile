@@ -149,7 +149,15 @@
     for(const [re,label] of (byKind[kind]||[])) if(re.test(t)) add(label);
     const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(?:セット|入り)?(?!\s*(?:突破|達成))/);
     if(pack && +pack[1]>1) add(pack[1]+pack[2]+'セット');
-    return facts.slice(0,4);
+    const usage=primaryUsageWord(item);
+    let filtered=facts.filter(x=>{
+      if(usage==='網戸' && /網戸掃除向け/.test(x)) return false;
+      if(usage==='抜け毛' && /抜け毛・毛取り用途/.test(x)) return false;
+      if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
+      if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
+      return true;
+    });
+    return filtered.slice(0,4);
   }
 
   function primaryUsageWord(item){
@@ -176,6 +184,25 @@
     return raw||'この商品の使用';
   }
 
+  function audienceFor(item,kind){
+    const t=titleOnly(item);
+    if(kind==='pet' && /抜け毛|毛取り|毛とり/.test(t)) return '犬や猫の抜け毛を手軽に取りたい人';
+    if(kind==='cleaning' && /網戸|あみ戸|アミ戸/.test(t)) return '網戸の掃除を手早く済ませたい人';
+    if(kind==='cleaning' && /手袋|グローブ|ミトン/.test(t)) return '手にはめて細かい場所を拭きたい人';
+    if(kind==='cleaning' && /クロス/.test(t)) return 'クロスでホコリや水分を手早く拭き取りたい人';
+    if(kind==='cleaning' && /モップ/.test(t)) return 'モップで気になる場所を手早く掃除したい人';
+    if(kind==='cleaning' && /ブラシ/.test(t)) return 'ブラシで細かい汚れを落としたい人';
+    if(kind==='storage') return '収納場所を整えて、出し入れの手間を減らしたい人';
+    if(kind==='laundry') return '洗濯まわりの作業を手早く済ませたい人';
+    if(kind==='cooking') return '調理の下ごしらえを手早く進めたい人';
+    if(kind==='charging') return '外出中の充電切れを避けたい人';
+    if(kind==='drinkware') return '飲み物を持ち歩きやすくしたい人';
+    if(kind==='carry') return '持ち物をまとめて探す手間を減らしたい人';
+    if(kind==='bedding') return '寝具まわりの扱いやすさを見直したい人';
+    if(kind==='kids') return '子どもまわりの準備を手早く進めたい人';
+    return '';
+  }
+
   function openingFor(a,item,variant=0){
     const impact=a.impact.replace(/[。！!]+$/,'');
     const lead=usagePhrase(item,a.kind);
@@ -192,24 +219,24 @@
       `${lead}をシンプルにしたい人が検討しやすい商品です。`
     ];
     const tails=[
-      `${lead}を日常の流れに取り入れやすく、${impact}。`,
-      `${lead}をこまめに行いやすく、${impact}。`,
-      `${lead}を必要な場所で始めやすく、${impact}。`,
-      `${lead}の動作を増やしすぎず、${impact}。`,
-      `${lead}を目的に合わせて行いやすく、${impact}。`,
-      `${lead}を普段の流れに取り入れやすく、${impact}。`,
-      `${lead}の工程をシンプルにしやすく、${impact}。`,
-      `${lead}を必要なときに始めやすく、${impact}。`,
-      `${lead}を行う場面を絞りやすく、${impact}。`,
-      `${lead}を用途に合わせて進めやすく、${impact}。`
+      `${lead}を普段の掃除や手入れに取り入れやすく、作業を始めるまでの手間を抑えやすそうです。`,
+      `${lead}をこまめに行いやすく、後回しにしにくくなりそうです。`,
+      `${lead}を必要な場所ですぐ始めやすく、短時間で済ませる助けになりそうです。`,
+      `${lead}の動作を増やしすぎず、日々の負担を軽くする選択肢になりそうです。`,
+      `${lead}を気づいたときに行いやすく、汚れや手間をため込みにくくなりそうです。`,
+      `${lead}を普段の流れに組み込みやすく、作業のハードルを下げやすそうです。`,
+      `${lead}の工程をシンプルにしやすく、取りかかるまでの時間を短くできそうです。`,
+      `${lead}を必要なときに始めやすく、日常の小さな負担を減らす助けになりそうです。`,
+      `${lead}を手早く進めやすく、別の家事に時間を回しやすくなりそうです。`,
+      `${lead}を用途に合わせて進めやすく、日々の作業を軽くするきっかけになりそうです。`
     ];
     const idx=((variant%templates.length)+templates.length)%templates.length;
     return `${templates[idx]}\n${tails[idx]}`;
   }
 
-  function shortFallback(item){
+  function shortFallback(item,withDisclosure=false){
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
-    return `${title}\n価格：${fmt(item?.itemPrice||0)}円`;
+    return `${title}\n価格：${fmt(item?.itemPrice||0)}円`+(withDisclosure?'\n\n※アフィリエイト広告を利用しています':'');
   }
 
   function hasCategoryConflict(kind,facts){
@@ -256,7 +283,7 @@
       problem:sanitizeOutput(cls.problem),
       use:sanitizeOutput(cls.use),
       impact:sanitizeOutput(cls.impact),
-      audience:sanitizeOutput(cls.audience),
+      audience:sanitizeOutput(audienceFor(item,cls.kind) || cls.audience),
       facts,
       sensitive
     };
@@ -270,17 +297,17 @@
 
   function makeRoomCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.confidence==='ambiguous') return shortFallback(item);
+    if(a.confidence==='ambiguous') return shortFallback(item,true);
 
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     const opening=openingFor(a,item,variant);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
     const audience='\n\nこんな人に向いていそう👇\n・'+a.audience;
-    const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円';
+    const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
     out=finalScan(out);
-    if(!validateBody(item,a,out)) return shortFallback(item);
+    if(!validateBody(item,a,out)) return shortFallback(item,true);
     return out;
   }
 
