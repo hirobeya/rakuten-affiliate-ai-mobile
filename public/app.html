@@ -196,6 +196,34 @@ input,select{
   line-height:1.4
 }
 
+.debugExport{
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border:1px dashed #94a3b8;
+  border-radius:12px;
+  background:#f8fafc
+}
+.debugExport.on{display:block}
+.debugExport button{
+  width:100%;
+  border:0;
+  border-radius:10px;
+  padding:11px;
+  font-weight:800
+}
+.debugExport textarea{
+  width:100%;
+  min-height:180px;
+  margin-top:9px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:9px;
+  font-size:11px;
+  line-height:1.45;
+  background:#fff
+}
+
 .legal-warn{
   margin-top:9px;
   padding:9px 10px;
@@ -813,7 +841,7 @@ input,select{
 商品を探して評価する
 </button>
 
-<div id="st" class="muted"></div>
+<div id="st" class="muted"></div>\n\n<div id="debugExport" class="debugExport">\n  <strong>検証データ出力（プレビュー・owner限定）</strong>\n  <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>\n  <button id="debugCopyBtn" type="button">検証JSONを作成してコピー</button>\n  <textarea id="debugJson" readonly placeholder="検索後、ここにJSONを表示します"></textarea>\n</div>
 
 </section>
 
@@ -940,7 +968,7 @@ let sendingLogin=false;
 let searching=false;
 let currentAppSession=null;
 let currentAccessPlan='base';
-let proAvailable=false;
+let proAvailable=false;\nlet debugExportAllowed=false;
 
 
 function setAuthMessage(
@@ -1044,7 +1072,7 @@ async function showApp(session) {
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
-    currentAccessPlan=String(access.plan||'base');
+    currentAccessPlan=String(access.plan||'base');\n    updateDebugExportAccess();
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
@@ -2114,6 +2142,70 @@ function groundedAnalysis(i){
   return {audience:ctx.audience||'',impact:ctx.benefit||''};
 }
 
+function isPreviewHost(){
+  const h=String(location.hostname||'').toLowerCase();
+  return h.endsWith('.vercel.app') && h!=='rakuten-affiliate-ai-mobile.vercel.app';
+}
+
+function updateDebugExportAccess(){
+  debugExportAllowed=isPreviewHost() && currentAccessPlan==='owner';
+  const box=document.getElementById('debugExport');
+  if(box) box.classList.toggle('on',debugExportAllowed);
+  if(!debugExportAllowed){
+    const ta=document.getElementById('debugJson');
+    if(ta) ta.value='';
+  }
+}
+
+function debugFallbackReason(a){
+  if(a?.ambiguous) return 'ambiguous';
+  if(Array.isArray(a?.conflicts) && a.conflicts.length) return 'conflict';
+  if(!a?.supported) return 'unsupported_usage';
+  if(a?.legalRisk) return 'legalRisk';
+  return null;
+}
+
+function buildDebugValidationRows(){
+  if(!debugExportAllowed) return [];
+  return lastSearchItems.map((item,index)=>{
+    const a=groundedAnalysis(item);
+    return {
+      rank:index+1,
+      itemName:String(item?.itemName||''),
+      category:String(a?.category||'unknown'),
+      usage:String(a?.usage||'unknown'),
+      ambiguous:Boolean(a?.ambiguous),
+      legalRisk:Boolean(a?.legalRisk),
+      supported:Boolean(a?.supported),
+      conflicts:Array.isArray(a?.conflicts)?a.conflicts:[],
+      outputMode:String(a?.outputMode||'fallback'),
+      fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
+      generatedCopy:post(item,'room')
+    };
+  });
+}
+
+async function copyDebugValidation(){
+  if(!debugExportAllowed) return;
+  const payload={
+    searchKeyword:k.value.trim(),
+    count:lastSearchItems.length,
+    generatedAt:new Date().toISOString(),
+    items:buildDebugValidationRows()
+  };
+  const json=JSON.stringify(payload,null,2);
+  const ta=document.getElementById('debugJson');
+  if(ta) ta.value=json;
+  const btn=document.getElementById('debugCopyBtn');
+  try{
+    await navigator.clipboard.writeText(json);
+    if(btn) btn.textContent='コピーしました';
+  }catch{
+    if(btn) btn.textContent='JSONを表示しました';
+  }
+  setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},1800);
+}
+
 function legalWarning(i){
   const a=groundedAnalysis(i);
   if(!a?.legalRisk) return '';
@@ -2477,7 +2569,7 @@ function render(
   a
 ){
 
-  lastSearchItems=Array.isArray(a)?a:[];
+  lastSearchItems=Array.isArray(a)?a:[];\n  const debugJson=document.getElementById('debugJson');\n  if(debugJson) debugJson.value='';
   $('#res').innerHTML=
 
   today(
