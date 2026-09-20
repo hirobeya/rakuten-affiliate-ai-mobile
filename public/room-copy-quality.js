@@ -157,12 +157,21 @@
     return s.find(x=>!['マイクロファイバー','ペット'].includes(x)) || s[0] || '';
   }
 
+  function usagePhrase(item,kind){
+    const t=titleOnly(item);
+    if(kind==='pet' && /抜け毛|毛取り|毛とり/.test(t)) return '抜け毛のお手入れ';
+    if(kind==='cleaning' && /網戸|あみ戸|アミ戸/.test(t)) return '網戸掃除';
+    if(kind==='cleaning' && /手袋|グローブ|ミトン/.test(t)) return '手袋タイプの掃除';
+    if(kind==='cleaning' && /クロス/.test(t)) return 'クロスでの拭き掃除';
+    if(kind==='cleaning' && /モップ/.test(t)) return 'モップでの掃除';
+    if(kind==='cleaning' && /ブラシ/.test(t)) return 'ブラシでの掃除';
+    const raw=primaryUsageWord(item);
+    return raw||'この商品の使用';
+  }
+
   function openingFor(a,item,variant=0){
-    const u=primaryUsageWord(item);
-    const problem=a.problem.replace(/[。！!]+$/,'');
-    const use=a.use.replace(/[。！!]+$/,'');
     const impact=a.impact.replace(/[。！!]+$/,'');
-    const lead=u||'この商品';
+    const lead=usagePhrase(item,a.kind);
     const templates=[
       `${lead}の手入れを、できるだけ手早く済ませたいときに。`,
       `${lead}まわりの小さな手間を減らしたい人に。`,
