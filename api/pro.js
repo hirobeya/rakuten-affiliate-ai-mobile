@@ -106,6 +106,13 @@ module.exports=async function handler(req,res){
       return res.status(200).json({saved:true,settings:row});
     }
 
+    if(req.method==='POST' && action==='preview'){
+      const settings=sanitize(req.body||{});
+      const excludeCodes=settings.avoid_duplicates?await getRecentCodes(email):[];
+      const items=await searchProducts(settings,{excludeCodes});
+      return res.status(200).json({preview:true,items});
+    }
+
     if(req.method==='POST' && action==='generate'){
       const settings=await getSettings(email);
       const excludeCodes=settings.avoid_duplicates?await getRecentCodes(email):[];
