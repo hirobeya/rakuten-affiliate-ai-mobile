@@ -26,9 +26,12 @@
 <select id="genrePicker"><option value="">楽天市場のカテゴリーを読み込み中…</option></select>
 <button type="button" id="genreBack" class="smallBtn" style="display:none;margin-top:8px">← 1つ上のカテゴリーへ</button>
 <div id="genreSelected" class="status">カテゴリーを選択してください。</div>
+<label>商品名・車種・型番（任意）</label>
+<input id="productKeyword" type="text" placeholder="例：ダックス125、iPhone 17、型番ABC-123">
+<div class="muted">楽天カテゴリーに独立項目がなくても、ここに商品名・車種・型番を入れると、そのカテゴリー内で絞り込めます。</div>
 <label>テーマ・悩み（任意）</label>
-<input id="theme" type="text" placeholder="例：押し入れをスッキリ、梅雨対策、時短">
-<div class="muted">カテゴリーは楽天市場の正式ジャンル。テーマは、その中から何を狙うかを絞るために使います。</div>
+<input id="theme" type="text" placeholder="例：快適、時短、省スペース">
+<div class="muted">テーマは検索必須条件ではなく、候補の並び替え・評価に使います。</div>
 </div>
 <div><label>最低価格</label><select id="min">
 <option value="">指定なし</option>
@@ -177,6 +180,7 @@ async function restoreGenre(s={}){
   renderGenrePath();
 }
 async function applySettings(s={}){
+  $('productKeyword').value=s.product_keyword||'';
   $('theme').value=s.theme||'';
   $('min').value=s.min_price??'';
   $('max').value=s.max_price??'';
@@ -193,6 +197,7 @@ function settingsPayload(){
     genre:'',
     genre_id:selectedGenreId||null,
     genre_name:selectedGenreName||null,
+    product_keyword:($('productKeyword').value||'').trim(),
     theme:($('theme').value||'').trim(),
     min_price:$('min').value===''?null:Number($('min').value),
     max_price:$('max').value===''?null:Number($('max').value),
