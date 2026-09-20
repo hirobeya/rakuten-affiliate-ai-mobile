@@ -20,7 +20,59 @@
 <section class="box">
 <h2>① 自動選定の設定</h2><div class="muted">通常版の検索機能はそのまま残し、Pro専用設定として保存します。</div>
 <div class="grid">
-<div class="full"><label>ジャンル／テーマ</label><select id="genre"><option>毎日がちょっと楽になる便利グッズ</option><option>キッチン便利グッズ</option><option>収納・整理</option><option>掃除・洗濯</option><option>家事時短</option><option>季節の便利グッズ</option></select></div>
+<div class="full">
+<label>ジャンル／テーマ</label>
+<select id="genre">
+  <optgroup label="暮らし・家事">
+    <option>毎日がちょっと楽になる便利グッズ</option>
+    <option>キッチン便利グッズ</option>
+    <option>収納・整理</option>
+    <option>掃除</option>
+    <option>洗濯</option>
+    <option>家事時短</option>
+    <option>バス・洗面</option>
+    <option>トイレ用品</option>
+    <option>寝具・布団</option>
+    <option>インテリア・家具</option>
+    <option>日用品・消耗品</option>
+  </optgroup>
+  <optgroup label="お出かけ・趣味">
+    <option>旅行便利グッズ</option>
+    <option>アウトドア・キャンプ</option>
+    <option>車用品</option>
+    <option>バイク用品</option>
+    <option>スポーツ・フィットネス</option>
+  </optgroup>
+  <optgroup label="デジタル・仕事">
+    <option>スマホアクセサリー</option>
+    <option>PC・ガジェット</option>
+    <option>デスク周り・仕事効率化</option>
+  </optgroup>
+  <optgroup label="家族・ペット">
+    <option>ベビー・キッズ</option>
+    <option>ペット用品</option>
+    <option>介護・高齢者向け便利グッズ</option>
+  </optgroup>
+  <optgroup label="美容・ファッション">
+    <option>美容・コスメ</option>
+    <option>ヘアケア・ボディケア</option>
+    <option>健康グッズ</option>
+    <option>ファッション小物</option>
+  </optgroup>
+  <optgroup label="食品・季節・ギフト">
+    <option>食品・グルメ</option>
+    <option>飲料・コーヒー・お茶</option>
+    <option>お菓子・スイーツ</option>
+    <option>防災・備蓄</option>
+    <option>季節の便利グッズ</option>
+    <option>ギフト・プレゼント</option>
+    <option>節約・コスパ用品</option>
+  </optgroup>
+</select>
+<label>自由入力（任意）</label>
+<input id="genreCustom" type="text" placeholder="例：梅雨対策、花粉対策、冷え対策">
+<div class="muted">選択肢にないテーマはここへ入力。入力した場合はこちらを優先します。</div>
+</div>
 <div><label>最低価格</label><select id="min"><option value="">指定なし</option><option value="500">500円〜</option><option value="1000">1,000円〜</option><option value="2000">2,000円〜</option><option value="3000">3,000円〜</option></select></div>
 <div><label>最高価格</label><select id="max"><option value="">指定なし</option><option value="3000">〜3,000円</option><option value="5000">〜5,000円</option><option value="10000">〜10,000円</option><option value="30000">〜30,000円</option></select></div>
 <div class="full"><label>選定基準</label><select id="sort"><option value="standard">総合バランス</option><option value="-reviewCount">レビュー数を重視</option><option value="-reviewAverage">評価を重視</option><option value="-affiliateRate">料率を重視</option></select></div>
@@ -64,7 +116,10 @@ function authHeaders(){
   return h;
 }
 function applySettings(s={}){
-  $('genre').value=s.genre||'毎日がちょっと楽になる便利グッズ';
+  const known=[...$('genre').options].map(o=>o.value);
+  const g=s.genre||'毎日がちょっと楽になる便利グッズ';
+  if(known.includes(g)){ $('genre').value=g; $('genreCustom').value=''; }
+  else { $('genre').value='毎日がちょっと楽になる便利グッズ'; $('genreCustom').value=g; }
   $('min').value=s.min_price??'';
   $('max').value=s.max_price??'';
   $('sort').value=s.sort||'standard';
@@ -76,7 +131,7 @@ function applySettings(s={}){
 function settingsPayload(){
   return {
     enabled:true,
-    genre:$('genre').value,
+    genre:($('genreCustom').value||'').trim() || $('genre').value,
     min_price:$('min').value===''?null:Number($('min').value),
     max_price:$('max').value===''?null:Number($('max').value),
     sort:$('sort').value,
@@ -110,7 +165,8 @@ function roomUrl(i){
   return 'https://room.rakuten.co.jp/search/item?'+new URLSearchParams({keyword:name||String(i.itemName||'')});
 }
 function copyText(i){
-  try{return String(UrenaviPainCopy.makeRoomCopy(i,$('genre').value)||'').trim()}catch{return ''}
+  const theme=(($('genreCustom')?.value||'').trim() || $('genre').value);
+  try{return String(UrenaviPainCopy.makeRoomCopy(i,theme)||'').trim()}catch{return ''}
 }
 function renderQueue(queue=[]){
   currentQueue=Array.isArray(queue)?queue:[];
