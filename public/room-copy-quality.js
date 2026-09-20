@@ -202,9 +202,18 @@
 
   function finalScan(text){
     let s=String(text||'');
-    for(const re of bannedOutput) re.lastIndex=0;
-    s=sanitizeOutput(s);
-    return s;
+    for(const re of bannedOutput){
+      re.lastIndex=0;
+      s=s.replace(re,'');
+    }
+    s=s
+      .replace(/治る|治します|治療する/g,'ケアをサポートする')
+      .replace(/若返る|若返り/g,'年齢に応じたケアを意識しやすい')
+      .replace(/痩せる|痩身効果/g,'健康的な生活を意識するきっかけになりそう')
+      .replace(/病気を防ぐ|予防する/g,'日常のケアに取り入れやすそう')
+      .replace(/改善する|改善します/g,'整える助けになりそう')
+      .replace(/解消する|解消します/g,'負担を減らす助けになりそう');
+    return s.split('\n').map(x=>x.replace(/[ \t]+/g,' ').trimEnd()).join('\n').trim();
   }
 
   function analyze(item){
