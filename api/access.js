@@ -15,6 +15,10 @@ module.exports = async function handler(req,res) {
       return res.status(204).end();
     }
 
+    if (req.query.action === 'pro-billing-status') {
+      return res.status(200).json({configured:!!proConfig()});
+    }
+
     if (req.query.action === 'status' || req.query.action === 'pro-status') {
       const pro=req.query.action==='pro-status';
       const result = pro ? await authorizePro(req) : await authorize(req);
