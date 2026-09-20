@@ -617,6 +617,13 @@ input,select{
 .proTask{display:flex;gap:8px;padding:9px 0;border-top:1px solid #edf1f5;font-size:11px;font-weight:800}
 .proTask input{width:auto;min-height:0}
 .proLocked{display:none}
+.appModeNav{display:none;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.appModeNav.on{display:grid}
+.modeBtn{border:1px solid #d9dee7;background:#fff;color:#536174;border-radius:13px;padding:11px;font-size:13px;font-weight:900}
+.modeBtn.on{background:#172a4b;color:#fff;border-color:#172a4b}
+.appScreen{display:block}
+.appScreen.off{display:none}
+#proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
 </style>
 </head>
@@ -684,6 +691,11 @@ input,select{
 
 </div>
 
+<div id="appModeNav" class="appModeNav" aria-label="ウレナビ画面切替">
+  <button id="normalModeBtn" class="modeBtn on" type="button">通常</button>
+  <button id="proModeBtn" class="modeBtn" type="button">Pro</button>
+</div>
+
 <h1>ウレナビ</h1>
 
 <div class="sub">
@@ -691,6 +703,7 @@ input,select{
 ※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
 </div>
 
+<div id="normalScreen" class="appScreen">
 <section class="box">
 
 <label>探したい商品</label>
@@ -796,11 +809,12 @@ input,select{
 
 
 <section id="res"></section>
-<section id="proPanel" class="box proIntegrated">
+</div>
+<section id="proPanel" class="box proIntegrated appScreen">
   <div class="proHead">
     <div><span class="proBadge">PRO</span> <strong>ROOM運用アシスト</strong></div>
   </div>
-  <div class="proHint">通常版の検索・AI評価・投稿文生成はそのまま使えます。Proでは、上の価格帯・並び順をそのまま使って商品候補を自動準備します。</div>
+  <div class="proHint">通常版の機能はそのまま使えます。Proでは、楽天カテゴリー・商品条件・自動選定などROOM運用向けの機能を使えます。価格帯と並び順は通常画面の設定を共通で使います。</div>
 
   <label>楽天市場カテゴリー</label>
   <div id="proGenrePath" class="proPath">楽天市場</div>
@@ -914,6 +928,7 @@ let sendingLogin=false;
 let searching=false;
 let currentAppSession=null;
 let currentAccessPlan='base';
+let proAvailable=false;
 
 
 function setAuthMessage(
@@ -3299,11 +3314,28 @@ function proSaveTasks(){
   const s={};document.querySelectorAll('[data-pro-task]').forEach(x=>s[x.dataset.proTask]=x.checked);
   localStorage.setItem(PRO_TASK_KEY,JSON.stringify(s));
 }
+function setAppScreen(mode='normal'){
+  const canPro=proAvailable;
+  const target=(mode==='pro'&&canPro)?'pro':'normal';
+  proEl('normalScreen').classList.toggle('off',target!=='normal');
+  proEl('proPanel').classList.toggle('on',target==='pro'&&canPro);
+  proEl('normalModeBtn').classList.toggle('on',target==='normal');
+  proEl('proModeBtn').classList.toggle('on',target==='pro');
+  if(target==='pro') location.hash='pro';
+  else if(location.hash==='#pro') history.replaceState({},document.title,location.pathname+location.search);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
+proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
+
 function updateUpgradeUi(access={}){
   const btn=proEl('upgradeProBtn');
   const isBase=String(access.plan||'')==='base' && !access.pro;
+  proAvailable=!!access.pro;
   btn.style.display=isBase?'inline-block':'none';
   proEl('planBadge').style.display=access.pro?'inline-block':'none';
+  proEl('appModeNav').classList.toggle('on',proAvailable);
+  if(!proAvailable) setAppScreen('normal');
 }
 async function upgradeToPro(){
   const ok=window.confirm(
@@ -3328,13 +3360,14 @@ async function upgradeToPro(){
     const d=await r.json().catch(()=>({}));
     if(!r.ok) throw new Error(d.message||'アップグレードできませんでした。');
     currentAccessPlan='pro';
+    proAvailable=true;
     btn.style.display='none';
     proEl('planBadge').style.display='inline-block';
+    proEl('appModeNav').classList.add('on');
     await configureIntegratedPro(true);
     const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
     proEl('proMsg').textContent=(d.alreadyPro?'すでにPro契約です。':'Proへアップグレードしました。')+' '+renewal+'から月額1,480円です。';
-    location.hash='pro';
-    proEl('proPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    setAppScreen('pro');
   }catch(e){
     alert(e.message||'アップグレードできませんでした。');
     btn.disabled=false;btn.textContent='Proへアップグレード';
@@ -3343,16 +3376,23 @@ async function upgradeToPro(){
 proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
+  proAvailable=!!enabled;
   proEl('planBadge').style.display=enabled?'inline-block':'none';
-  proEl('proPanel').classList.toggle('on',enabled);
-  if(!enabled||proBooted)return;
-  proBooted=true;
-  try{
-    const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
-    await proApply(d.settings||{});proLoadTasks();proRenderQueue(d.queue||[]);
-  }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
+  proEl('appModeNav').classList.toggle('on',enabled);
+  if(!enabled){
+    setAppScreen('normal');
+    return;
+  }
+  if(!proBooted){
+    proBooted=true;
+    try{
+      const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
+      await proApply(d.settings||{});proLoadTasks();proRenderQueue(d.queue||[]);
+    }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
+  }
+  setAppScreen(location.hash==='#pro'?'pro':'normal');
 }
 proEl('proGenrePicker').addEventListener('change',async e=>{
   const opt=e.target.selectedOptions?.[0];if(!opt?.value)return;
