@@ -153,6 +153,13 @@
   }
 
   function primaryUsageWord(item){
+    const t=titleOnly(item);
+    if(/抜け毛|毛取り|毛とり/.test(t)) return '抜け毛';
+    if(/網戸|あみ戸|アミ戸/.test(t)) return '網戸';
+    if(/手袋|グローブ|ミトン/.test(t)) return '手袋';
+    if(/クロス/.test(t)) return 'クロス';
+    if(/モップ/.test(t)) return 'モップ';
+    if(/ブラシ/.test(t)) return 'ブラシ';
     const s=titleSignals(item);
     return s.find(x=>!['マイクロファイバー','ペット'].includes(x)) || s[0] || '';
   }
