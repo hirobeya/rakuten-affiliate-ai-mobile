@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ウレナビ Pro</title>
+<meta name="referrer" content="no-referrer">
+<link rel="apple-touch-icon" href="/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#17223b;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.w{max-width:720px;margin:auto;padding:14px 12px 64px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{display:flex;align-items:center;gap:9px;font-weight:950}.brand img{width:38px;height:38px;border-radius:11px}.back{font-size:12px;font-weight:850;color:#53627a;text-decoration:none}.hero{margin-top:12px;background:linear-gradient(135deg,#172a4b,#274f84);color:#fff;border-radius:22px;padding:20px}.pill{display:inline-block;background:#ffb25e;color:#172a4b;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:950}.hero h1{font-size:27px;margin:10px 0 6px}.hero p{font-size:13px;line-height:1.65;color:#e9eef6;margin:0}.price{margin-top:10px;font-size:12px;font-weight:800}.price strong{font-size:26px;color:#ffcf8f}.box{background:#fff;border-radius:18px;padding:15px;margin-top:12px;box-shadow:0 6px 22px #0000000a}.box h2{font-size:17px;margin:0 0 5px}.muted{font-size:11px;color:#728096;line-height:1.55}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:900;margin:10px 0 5px}input,select{width:100%;min-height:48px;border:1px solid #dfe5ee;border-radius:13px;background:#fff;padding:10px 12px;font-size:15px}.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.check{display:flex;gap:8px;align-items:center;padding:10px;border:1px solid #e5eaf1;border-radius:12px;font-size:12px;font-weight:800}.check input{width:auto;min-height:0}.times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.btn{width:100%;border:0;border-radius:14px;padding:14px 16px;font-weight:950;font-size:15px;margin-top:12px;background:#ef642b;color:#fff}.btn.secondary{background:#172a4b}.btn.ghost{background:#eef3f8;color:#34445d}.status{font-size:12px;line-height:1.6;margin-top:10px;color:#5b687b}.item{border:1px solid #e5eaf1;border-radius:16px;padding:12px;margin-top:10px}.rank{font-size:11px;font-weight:900;color:#1e5a9a}.name{font-size:14px;font-weight:900;line-height:1.45;margin:4px 0}.meta{font-size:11px;color:#68758a}.copy{white-space:pre-wrap;background:#f7f9fc;border-radius:12px;padding:11px;margin-top:9px;font-size:12px;line-height:1.65}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.smallBtn{border:0;border-radius:11px;padding:10px;font-weight:900;background:#eef3f8;color:#34445d}.smallBtn.primary{background:#ef642b;color:#fff}.task{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-bottom:1px solid #eef1f5}.task:last-child{border-bottom:0}.task input{width:auto;min-height:0;margin-top:3px}.task b{font-size:13px}.task span{display:block;font-size:11px;color:#778399;margin-top:2px}.warn{background:#fff8e8;border:1px solid #f1dfb5;border-radius:13px;padding:10px;font-size:11px;line-height:1.6;color:#725718;margin-top:10px}.login{padding:60px 16px;text-align:center}.login a{display:inline-block;margin-top:14px;background:#172a4b;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:900}@media(max-width:520px){.grid,.checks{grid-template-columns:1fr}.times{grid-template-columns:1fr 1fr 1fr}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top"><div class="brand"><img src="/04A5818A-1E27-4129-B4CC-7DA3C10A8F19.png" alt=""><span>ウレナビ Pro</span></div><a class="back" href="/app.html">← 通常版へ</a></div>
+<div id="gate" class="box login">ログイン状態を確認しています…</div>
+<div id="root" style="display:none">
+<section class="hero"><span class="pill">PRO β</span><h1>今日のROOM運用を、ここでまとめる。</h1><p>ジャンル・価格帯・投稿時刻を決めて、商品候補と投稿文を自動準備。フォロー返し・いいね回りは候補管理まで行い、最後の操作は本人が行います。</p><div class="price">正式版予定 <strong>月額1,480円</strong>（税込）</div></section>
+
+<section class="box">
+<h2>① 自動選定の設定</h2><div class="muted">通常版の検索機能はそのまま残し、Pro専用設定として保存します。</div>
+<div class="grid">
+<div class="full"><label>ジャンル／テーマ</label><select id="genre"><option>毎日がちょっと楽になる便利グッズ</option><option>キッチン便利グッズ</option><option>収納・整理</option><option>掃除・洗濯</option><option>家事時短</option><option>季節の便利グッズ</option></select></div>
+<div><label>最低価格</label><select id="min"><option value="">指定なし</option><option value="500">500円〜</option><option value="1000">1,000円〜</option><option value="2000">2,000円〜</option><option value="3000">3,000円〜</option></select></div>
+<div><label>最高価格</label><select id="max"><option value="">指定なし</option><option value="3000">〜3,000円</option><option value="5000">〜5,000円</option><option value="10000">〜10,000円</option><option value="30000">〜30,000円</option></select></div>
+<div class="full"><label>選定基準</label><select id="sort"><option value="standard">総合バランス</option><option value="-reviewCount">レビュー数を重視</option><option value="-reviewAverage">評価を重視</option><option value="-affiliateRate">料率を重視</option></select></div>
+</div>
+<div class="checks"><label class="check"><input id="sale" type="checkbox" checked>セール・クーポン商品を優先</label><label class="check"><input id="dup" type="checkbox" checked>投稿済み商品の重複を避ける</label></div>
+<label>投稿予定時刻</label><div class="times"><input id="t1" type="time" value="08:00"><input id="t2" type="time" value="12:30"><input id="t3" type="time" value="20:00"></div>
+<button class="btn ghost" id="save">設定を保存</button>
+<div id="saveMsg" class="status"></div>
+</section>
+
+<section class="box">
+<h2>② 今日の商品候補を作る</h2><div class="muted">設定したジャンルから候補を取得し、ウレナビのスコア順で上位3商品を準備します。</div>
+<button class="btn secondary" id="generate">今日の3商品を自動選定</button>
+<div id="genStatus" class="status"></div><div id="results"></div>
+<div class="warn">β版では、指定時刻になってもブラウザを閉じている間の自動処理はまだ行いません。まず「商品選定→投稿文完成→ROOMへ進む」までをPro枠として分離しています。バックグラウンド予約は次の実装段階で追加します。</div>
+</section>
+
+<section class="box">
+<h2>③ 今日のROOM活動</h2><div class="muted">自動いいね・自動フォローは行いません。アカウント操作は本人が行い、ウレナビは「今日やる候補」と進捗だけ管理します。</div>
+<div class="task"><input type="checkbox" data-task="follow"><div><b>フォロー返し候補を確認</b><span>新しくフォローされた人を確認して、必要な人だけフォローを返す。</span></div></div>
+<div class="task"><input type="checkbox" data-task="like"><div><b>フォロワーの最新投稿を確認</b><span>最新の商品を見て、良いと思った投稿に本人がいいねする。</span></div></div>
+<div class="task"><input type="checkbox" data-task="post"><div><b>今日の投稿3件を進める</b><span>Proで準備した候補と投稿文からROOM投稿へ進む。</span></div></div>
+</section>
+</div>
+</div>
+<script src="/pain-copy.js?v=20260918-4"></script>
+<script src="/pain-copy-refine.js?v=20260920-2"></script>
+<script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script>
+const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+const SUPABASE_KEY='sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:localStorage}});
+const $=id=>document.getElementById(id);
+const KEY='urenavi_pro_settings_v1', TASKKEY='urenavi_pro_tasks_v1';
+let session=null;
+
+function loadSettings(){
+  try{
+    const s=JSON.parse(localStorage.getItem(KEY)||'{}');
+    for(const id of ['genre','min','max','sort','t1','t2','t3']) if(s[id]!=null && $(id)) $(id).value=s[id];
+    for(const id of ['sale','dup']) if(typeof s[id]==='boolean') $(id).checked=s[id];
+  }catch{}
+}
+function saveSettings(){
+  const s={};
+  for(const id of ['genre','min','max','sort','t1','t2','t3']) s[id]=$(id).value;
+  for(const id of ['sale','dup']) s[id]=$(id).checked;
+  localStorage.setItem(KEY,JSON.stringify(s));
+  $('saveMsg').textContent='Pro設定を保存しました。通常版の設定には影響しません。';
+}
+function loadTasks(){
+  let s={};try{s=JSON.parse(localStorage.getItem(TASKKEY)||'{}')}catch{}
+  document.querySelectorAll('[data-task]').forEach(x=>x.checked=!!s[x.dataset.task]);
+}
+function saveTasks(){
+  const s={};document.querySelectorAll('[data-task]').forEach(x=>s[x.dataset.task]=x.checked);
+  localStorage.setItem(TASKKEY,JSON.stringify(s));
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function roomUrl(i){
+  const name=String(i.itemName||'').replace(/【[^】]*】|\[[^\]]*\]/g,' ').replace(/\s+/g,' ').trim();
+  return 'https://room.rakuten.co.jp/search/item?'+new URLSearchParams({keyword:name||String(i.itemName||'')});
+}
+function copyText(i){
+  try{return String(UrenaviPainCopy.makeRoomCopy(i,$('genre').value)||'').trim()}catch{return ''}
+}
+async function generate(){
+  if(!session) return;
+  $('generate').disabled=true;$('genStatus').textContent='候補を選定しています…';$('results').innerHTML='';
+  const p=new URLSearchParams({keyword:$('genre').value,sort:$('sort').value||'standard'});
+  if($('min').value)p.set('minPrice',$('min').value);if($('max').value)p.set('maxPrice',$('max').value);
+  try{
+    const r=await fetch('/api/search?'+p,{headers:{Authorization:'Bearer '+session.access_token},cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.message||'候補を取得できませんでした');
+    const items=(d.items||[]).slice(0,3);
+    if(!items.length) throw new Error('条件に合う候補がありません');
+    $('genStatus').textContent='今日の候補を3件準備しました。商品ページの価格・在庫・セール条件は投稿前に確認してください。';
+    $('results').innerHTML=items.map((i,n)=>{
+      const cp=copyText(i);
+      return '<article class="item"><div class="rank">候補 '+(n+1)+' ｜ AI '+esc(i.score)+'/100</div><div class="name">'+esc(i.itemName)+'</div><div class="meta">'+esc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ レビュー '+esc(i.reviewCount||0)+'件 ｜ 評価 '+esc(i.reviewAverage||'-')+'</div><div class="copy">'+esc(cp||'安全に投稿文を生成できませんでした。商品情報を確認してください。')+'</div><div class="actions"><button class="smallBtn" data-copy="'+n+'">投稿文をコピー</button><a class="smallBtn primary" href="'+esc(roomUrl(i))+'" target="_blank" rel="noopener noreferrer" style="text-align:center;text-decoration:none">ROOMで探す</a></div></article>';
+    }).join('');
+    document.querySelectorAll('[data-copy]').forEach((b,n)=>b.onclick=async()=>{const cp=copyText(items[n]);if(!cp)return;await navigator.clipboard.writeText(cp);b.textContent='コピーしました';});
+  }catch(e){$('genStatus').textContent=e.message||'候補を取得できませんでした。';}
+  finally{$('generate').disabled=false}
+}
+async function boot(){
+  const {data:{session:s}}=await sb.auth.getSession();session=s;
+  if(!s){$('gate').innerHTML='Proを使うにはウレナビへログインしてください。<br><a href="/app.html">ウレナビでログイン</a>';return;}
+  try{
+    const r=await fetch('/api/access?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});
+    if(!r.ok) throw new Error();
+    $('gate').style.display='none';$('root').style.display='block';loadSettings();loadTasks();
+  }catch{$('gate').innerHTML='有効なウレナビ利用情報を確認できませんでした。<br><a href="/app.html">通常版へ戻る</a>'}
+}
+$('save').addEventListener('click',saveSettings);$('generate').addEventListener('click',generate);
+document.querySelectorAll('[data-task]').forEach(x=>x.addEventListener('change',saveTasks));
+boot();
+</script>
+</body>
+</html>
