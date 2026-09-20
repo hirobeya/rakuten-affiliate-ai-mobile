@@ -6,15 +6,16 @@
   const fmt=n=>new Intl.NumberFormat('ja-JP').format(+n||0);
   const norm=s=>String(s||'').normalize('NFKC').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 
+  function titleText(item){
+    return [item?.itemName,item?.catchcopy].filter(Boolean).map(norm).join(' ');
+  }
+
+  function detailText(item){
+    return [item?.itemCaption,item?.genrePath,item?.genreName].filter(Boolean).map(norm).join(' ');
+  }
+
   function sourceText(item){
-    return [
-      item?.itemName,
-      item?.catchcopy,
-      item?.itemCaption,
-      item?.itemDescription,
-      item?.genrePath,
-      item?.genreName
-    ].filter(Boolean).map(norm).join(' ');
+    return [titleText(item),detailText(item)].filter(Boolean).join(' ');
   }
 
   function stableVariant(text,mod=5){
@@ -49,60 +50,87 @@
     return s.replace(/\s+/g,' ').trim();
   }
 
-  function extractFacts(item){
-    const t=sourceText(item);
+  function extractFacts(item,kind){
+    // Product facts are intentionally grounded in title/catch copy first.
+    // Rakuten captions can contain SEO text and related-product copy, so never
+    // lift arbitrary materials/specs from the full caption.
+    const primary=titleText(item);
     const facts=[];
-    const rules=[
+    const add=x=>uniquePush(facts,x);
+
+    const common=[
       [/日本製/, '日本製表記あり'],
-      [/ステンレス/, 'ステンレス素材'],
-      [/マイクロファイバー/, 'マイクロファイバー素材'],
-      [/防水|撥水/, '水ぬれに配慮した仕様'],
-      [/折りたたみ|折畳/, '折りたたみ対応'],
-      [/省スペース|スリム/, '省スペース設計'],
-      [/速乾/, '速乾タイプ'],
-      [/吸水/, '吸水タイプ'],
-      [/保温|保冷/, '保温・保冷用途に対応'],
-      [/急速充電/, '急速充電対応'],
-      [/Type-?C|USB-?C/i, 'USB-C対応'],
-      [/ワイヤレス充電/, 'ワイヤレス充電対応'],
-      [/食洗機対応|食器洗い乾燥機対応/, '食洗機対応表記あり'],
-      [/電子レンジ対応|レンジ対応/, '電子レンジ対応表記あり'],
-      [/冷凍対応/, '冷凍対応表記あり'],
-      [/洗濯機(?:で)?洗える|洗濯機対応/, '洗濯機で洗える表記あり'],
-      [/抗菌/, '抗菌表記あり'],
+      [/送料無料/, '送料無料表記あり'],
       [/公式/, '公式ショップ表記あり'],
-      [/正規品/, '正規品表記あり'],
-      [/送料無料/, '送料無料表記あり']
+      [/正規品/, '正規品表記あり']
     ];
-    for(const [re,label] of rules){
-      if(re.test(t)) uniquePush(facts,label);
-      if(facts.length>=4) break;
-    }
+    for(const [re,label] of common) if(re.test(primary)) add(label);
 
-    const capacity=t.match(/(?:容量|内容量)\s*[:：約]?\s*(\d+(?:\.\d+)?)\s*(mL|ml|L|リットル)/i);
-    if(capacity) uniquePush(facts,(capacity[1]+capacity[2]).replace('ml','mL'));
+    const byKind={
+      cleaning:[
+        [/マイクロファイバー/, 'マイクロファイバー素材'],
+        [/吸水/, '吸水タイプ'],
+        [/速乾/, '速乾タイプ'],
+        [/網戸/, '網戸掃除向け'],
+        [/手袋|グローブ|ミトン/, '手にはめて使うタイプ']
+      ],
+      pet:[
+        [/両面/, '両面タイプ'],
+        [/グローブ|手袋/, '手にはめて使うタイプ'],
+        [/抜け毛|毛取り|毛とり/, '抜け毛・毛取り用途'],
+        [/猫犬兼用|犬猫兼用|猫.*犬|犬.*猫/, '犬・猫向け表記あり']
+      ],
+      storage:[
+        [/折りたたみ|折畳/, '折りたたみ対応'],
+        [/省スペース|スリム/, '省スペース設計'],
+        [/ステンレス/, 'ステンレス素材']
+      ],
+      charging:[
+        [/急速充電/, '急速充電対応'],
+        [/Type-?C|USB-?C/i, 'USB-C対応'],
+        [/ワイヤレス充電/, 'ワイヤレス充電対応']
+      ],
+      drinkware:[
+        [/保温/, '保温用途に対応'],
+        [/保冷/, '保冷用途に対応'],
+        [/炭酸/, '炭酸対応表記あり'],
+        [/ステンレス/, 'ステンレス素材']
+      ],
+      cooking:[
+        [/食洗機対応|食器洗い乾燥機対応/, '食洗機対応表記あり'],
+        [/電子レンジ対応|レンジ対応/, '電子レンジ対応表記あり'],
+        [/冷凍対応/, '冷凍対応表記あり'],
+        [/ステンレス/, 'ステンレス素材']
+      ],
+      laundry:[
+        [/洗濯機(?:で)?洗える|洗濯機対応/, '洗濯機で洗える表記あり'],
+        [/速乾/, '速乾タイプ']
+      ]
+    };
+    for(const [re,label] of (byKind[kind]||[])) if(re.test(primary)) add(label);
 
-    const battery=t.match(/(\d{4,6})\s*mAh/i);
-    if(battery) uniquePush(facts,battery[1]+'mAh容量');
+    const pack=primary.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(?:セット|入り)?(?!\s*(?:突破|達成))/);
+    if(pack && +pack[1] > 1) add(pack[1]+pack[2]+'セット');
 
-    const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋)\s*(?:セット|入り)(?!\s*(?:突破|達成))/);
-    if(pack) uniquePush(facts,pack[1]+pack[2]+'セット');
+    const capacity=primary.match(/(?:容量|内容量)?\s*(\d+(?:\.\d+)?)\s*(mL|ml|L|リットル)\b/i);
+    if(capacity && ['drinkware','cooking'].includes(kind)) add((capacity[1]+capacity[2]).replace('ml','mL'));
 
-    const labeled=[];
-    const re=/(?:幅|横幅|高さ|奥行(?:き)?|長さ|直径|厚さ|重量|重さ)\s*[:：約]?\s*\d+(?:\.\d+)?\s*(?:cm|mm|m|g|kg)\b/gi;
-    let m;
-    while((m=re.exec(t)) && labeled.length<2) labeled.push(m[0].replace(/\s+/g,''));
-    for(const x of labeled) uniquePush(facts,x);
+    const battery=primary.match(/(\d{4,6})\s*mAh/i);
+    if(battery && kind==='charging') add(battery[1]+'mAh容量');
 
     return facts.slice(0,4);
   }
 
   function classify(item,keyword){
-    const t=sourceText(item);
+    const title=titleText(item);
+    const detail=detailText(item);
     const q=norm(keyword);
+
+    // Title wins. A word buried in a merchant caption must never redefine the product.
     const rules=[
-      {re:/収納|ラック|ケース|ボックス|クローゼット|ワゴン|整理/,kind:'storage',problem:'物の置き場所が決まらず、片づけてもまた散らかる',use:'物の定位置を作って、出し入れしやすくする',impact:'探す・片づけ直す手間を減らし、空間を整えやすくなりそう',audience:'収納場所を整えて、片づけの手間を減らしたい人'},
-      {re:/掃除|清掃|クリーナー|モップ|ワイパー|ブラシ|クロス|ダスター|ほこり|ホコリ/,kind:'cleaning',problem:'汚れに気づいても、道具を出すのが面倒で掃除を後回しにしがち',use:'気になる場所を日常的に手入れしやすくする',impact:'汚れをため込む前に対処しやすくなり、掃除の負担を軽くする助けになりそう',audience:'掃除を大仕事にせず、こまめに済ませたい人'},
+      {re:/ペット|猫|犬|グルーミング|抜け毛|毛取り|毛とり/,kind:'pet',problem:'服やソファに付くペットの抜け毛を、毎回細かく取るのは手間がかかる',use:'手にはめて毛を集めたり、お手入れしやすくする',impact:'抜け毛のお手入れを日常の流れで済ませやすくなりそう',audience:'犬や猫の抜け毛ケアを手軽にしたい人'},
+      {re:/掃除|清掃|クリーナー|モップ|ワイパー|ブラシ|クロス|ダスター|ほこり|ホコリ|網戸/,kind:'cleaning',problem:'気になる汚れを見つけても、掃除道具を準備するのが面倒で後回しになりがち',use:'気になる場所をその場で手入れしやすくする',impact:'汚れをため込む前に対処しやすくなり、掃除の負担を軽くする助けになりそう',audience:'掃除を大仕事にせず、こまめに済ませたい人'},
+      {re:/収納|ラック|ケース|ボックス|クローゼット|ワゴン|整理|圧縮袋/,kind:'storage',problem:'物の置き場所が決まらず、片づけてもまた散らかる',use:'物の定位置を作って、出し入れしやすくする',impact:'探す・片づけ直す手間を減らし、空間を整えやすくなりそう',audience:'収納場所を整えて、片づけの手間を減らしたい人'},
       {re:/洗濯|ランドリー|物干し|ハンガー|洗濯ネット/,kind:'laundry',problem:'洗う・干す・しまうまでの細かな作業が積み重なって時間を取られる',use:'洗濯まわりの作業を整理しやすくする',impact:'毎日の洗濯動線を短くし、家事時間を減らす助けになりそう',audience:'洗濯の手間を少しでも減らしたい人'},
       {re:/ピーラー|スライサー|包丁|チョッパー|みじん切り|調理器|フライパン|鍋|キッチン/,kind:'cooking',problem:'下ごしらえや調理の細かな作業に意外と時間がかかる',use:'調理工程の一部を手早く進めやすくする',impact:'料理の準備や後片づけにかかる手間を減らし、忙しい日でも取りかかりやすくなりそう',audience:'毎日の調理を少しでも手早く進めたい人'},
       {re:/モバイルバッテリー|充電器|充電|USB|Type-?C|Lightning/i,kind:'charging',problem:'使いたいときにスマホや機器の電池残量が足りないと困る',use:'必要な場所で充電しやすくする',impact:'充電切れを気にする場面を減らし、外出先でも機器を使いやすくする助けになりそう',audience:'外出中の充電切れが気になる人'},
@@ -111,9 +139,12 @@
       {re:/寝具|布団|枕|マットレス|シーツ/,kind:'bedding',problem:'毎日使う寝具だからこそ、扱いやすさや寝る環境を整えたい',use:'寝室や就寝まわりの環境を整えやすくする',impact:'就寝前後の小さな手間を減らし、休む時間を整える助けになりそう',audience:'寝具まわりの使い勝手を見直したい人'},
       {re:/ベビー|赤ちゃん|キッズ|子供|子ども/,kind:'kids',problem:'子どもまわりの準備や片づけは、毎日のことだと負担になりやすい',use:'育児まわりの準備や管理をしやすくする',impact:'日々の細かな手間を減らし、準備を進めやすくする助けになりそう',audience:'育児や子どもの準備を少しでもラクにしたい人'}
     ];
-    for(const r of rules) if(r.re.test(t)) return r;
+    for(const r of rules) if(r.re.test(title)) return r;
 
-    const ctx=api.painContext?.(item?.itemName||'',q,[item?.catchcopy,item?.itemCaption,item?.itemDescription].filter(Boolean).join(' '),item?.genrePath||item?.genreName||'')||{};
+    // Only if the title is truly ambiguous may genre/caption help.
+    for(const r of rules) if(r.re.test(detail)) return r;
+
+    const ctx=api.painContext?.(item?.itemName||'',q,item?.itemCaption||'',item?.genrePath||item?.genreName||'')||{};
     return {
       kind:'general',
       problem:norm(ctx.hook||'商品を選ぶとき、買ったあとに自分の生活で本当に使うか迷う'),
@@ -144,7 +175,7 @@
   function analyze(item,keyword){
     const source=sourceText(item);
     const cls=classify(item,keyword);
-    const facts=extractFacts(item);
+    const facts=extractFacts(item,cls.kind);
     const sensitive=isSensitiveCategory(source);
 
     let problem=cleanSentence(cls.problem);
@@ -189,6 +220,22 @@
     return trimCopy(opening+facts+audience+ending,500);
   }
 
+  function makeThreadsCopy(item,keyword){
+    const a=analyze(item,keyword);
+    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : norm(item?.itemName||'').slice(0,40);
+    const fact=a.facts[0] ? '\n✔ '+a.facts[0] : '';
+    return trimCopy(makeOpening(a,item)+fact+'\n\n'+title+'\n'+fmt(item?.itemPrice||0)+'円',360);
+  }
+
+  function makeInstagramCopy(item,keyword){
+    const a=analyze(item,keyword);
+    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : norm(item?.itemName||'').slice(0,40);
+    const facts=a.facts.slice(0,3).map(x=>'✔ '+x).join('\n');
+    return trimCopy(makeOpening(a,item)+(facts?'\n\n'+facts:'')+'\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円',500);
+  }
+
   api.analyzeRoomProduct=analyze;
   api.makeRoomCopy=makeRoomCopy;
+  api.makeThreadsCopy=makeThreadsCopy;
+  api.makeInstagramCopy=makeInstagramCopy;
 })(typeof window==='undefined'?null:window);
