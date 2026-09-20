@@ -58,7 +58,11 @@ const $=id=>document.getElementById(id);
 const TASKKEY='urenavi_pro_tasks_v1';
 let session=null,currentQueue=[];
 
-function authHeaders(){return {Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'};}
+function authHeaders(){
+  const h={'Content-Type':'application/json'};
+  if(session?.access_token) h.Authorization='Bearer '+session.access_token;
+  return h;
+}
 function applySettings(s={}){
   $('genre').value=s.genre||'毎日がちょっと楽になる便利グッズ';
   $('min').value=s.min_price??'';
@@ -85,7 +89,7 @@ async function saveSettings(){
   if(!session)return;
   $('save').disabled=true;$('saveMsg').textContent='保存しています…';
   try{
-    const r=await fetch('/api/pro?action=settings',{method:'POST',headers:authHeaders(),body:JSON.stringify(settingsPayload())});
+    const r=await fetch('/api/pro?action=settings',{method:'POST',headers:authHeaders(),credentials:'include',body:JSON.stringify(settingsPayload())});
     const d=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(d.message||'保存できませんでした。');
     applySettings(d.settings);$('saveMsg').textContent='Pro設定を保存しました。指定時刻の自動準備に使われます。';
@@ -131,7 +135,7 @@ async function generate(){
   $('generate').disabled=true;$('genStatus').textContent='今日の候補を選定しています…';
   try{
     await saveSettings();
-    const r=await fetch('/api/pro?action=generate',{method:'POST',headers:authHeaders(),body:'{}'});
+    const r=await fetch('/api/pro?action=generate',{method:'POST',headers:authHeaders(),credentials:'include',body:'{}'});
     const d=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(d.message||'候補を取得できませんでした。');
     $('genStatus').textContent='新しい候補を3件準備しました。価格・在庫・セール条件は投稿前に商品ページで確認してください。';
@@ -140,15 +144,22 @@ async function generate(){
   finally{$('generate').disabled=false}
 }
 async function boot(){
-  const {data:{session:s}}=await sb.auth.getSession();session=s;
-  if(!s){$('gate').innerHTML='Proを使うにはウレナビへログインしてください。<br><a href="/app.html">ウレナビでログイン</a>';return;}
   try{
-    const r=await fetch('/api/pro?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});
+    const {data:{session:s}}=await sb.auth.getSession();session=s||null;
+  }catch{session=null;}
+  try{
+    const headers={};
+    if(session?.access_token) headers.Authorization='Bearer '+session.access_token;
+    const r=await fetch('/api/pro?action=status',{headers,cache:'no-store',credentials:'include'});
     const d=await r.json().catch(()=>({}));
+    if(r.status===401){
+      $('gate').innerHTML='Proを使うにはウレナビへログインしてください。<br><a href="/app.html">ウレナビでログイン</a>';
+      return;
+    }
     if(r.status===403){
       let billing=false;
       try{
-        const br=await fetch('/api/access?action=pro-billing-status',{cache:'no-store'});
+        const br=await fetch('/api/access?action=pro-billing-status',{cache:'no-store',credentials:'include'});
         const bd=await br.json().catch(()=>({}));
         billing=!!bd.configured;
       }catch{}
