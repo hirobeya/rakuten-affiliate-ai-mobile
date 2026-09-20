@@ -4,7 +4,10 @@ const {searchProducts}=require('../lib/pro-search');
 const ALLOWED_SORTS=new Set(['standard','-reviewCount','-reviewAverage','-affiliateRate','+itemPrice']);
 const DEFAULTS={
   enabled:true,
-  genre:'毎日がちょっと楽になる便利グッズ',
+  genre:'',
+  genre_id:null,
+  genre_name:null,
+  theme:'',
   min_price:null,
   max_price:null,
   sort:'standard',
@@ -32,11 +35,17 @@ function sanitize(input={}){
   if(min!=null&&max!=null&&min>max) throw new Error('価格帯を確認してください。');
   const sort=String(input.sort||DEFAULTS.sort);
   if(!ALLOWED_SORTS.has(sort)) throw new Error('並び順を確認してください。');
-  const genre=String(input.genre||DEFAULTS.genre).trim().slice(0,128);
-  if(!genre) throw new Error('ジャンルを選んでください。');
+  const genreId=input.genre_id==null||input.genre_id===''?null:String(input.genre_id).trim();
+  if(genreId && !/^\d+$/.test(genreId)) throw new Error('楽天ジャンルを選び直してください。');
+  const genreName=String(input.genre_name||'').trim().slice(0,128)||null;
+  const theme=String(input.theme||'').trim().slice(0,128);
+  if(!genreId) throw new Error('楽天市場カテゴリーを選んでください。');
   return {
     enabled:input.enabled!==false,
-    genre,
+    genre:'',
+    genre_id:genreId,
+    genre_name:genreName,
+    theme,
     min_price:min,
     max_price:max,
     sort,
