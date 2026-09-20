@@ -2178,6 +2178,7 @@ async function updateDebugExportAccess(){
 }
 
 function debugFallbackReason(a){
+  if(a?.ambiguityReason==='no_match' || (a?.category==='unknown' && a?.usage==='unknown')) return 'no_match';
   if(a?.ambiguous) return 'ambiguous';
   if(Array.isArray(a?.conflicts) && a.conflicts.length) return 'conflict';
   if(!a?.supported) return 'unsupported_usage';
@@ -2198,6 +2199,7 @@ function buildDebugValidationRows(){
       legalRisk:Boolean(a?.legalRisk),
       supported:Boolean(a?.supported),
       conflicts:Array.isArray(a?.conflicts)?a.conflicts:[],
+      topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[],
       outputMode:String(a?.outputMode||'fallback'),
       fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
       generatedCopy:post(item,'room')

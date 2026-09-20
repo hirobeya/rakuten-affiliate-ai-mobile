@@ -143,7 +143,7 @@
 
   function resolveCategoryAndUsage(itemName){
     const candidates=collectClassificationCandidates(itemName);
-    if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates:[],reason:'no_candidate'};
+    if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'unknown',confidence:'none',ambiguous:false,candidates:[],reason:'no_match'};
     const top=candidates[0];
     const second=candidates.find(x=>x.category!==top.category || x.usage!==top.usage);
     if(second && (top.score-second.score)<20){
@@ -157,6 +157,16 @@
   function detectConflictingSignals(itemName,chosenCategory,chosenUsage){
     const title=norm(itemName);
     const conflicts=[];
+
+    if(chosenCategory==='cleaning' && ['mop','brush'].includes(chosenUsage)){
+      const holder=title.match(/ハンガー|ホルダー|スタンド|(?:掃除用具|掃除道具|モップ|ブラシ)?入れ|収納/);
+      if(holder) conflicts.push({category:'storage',usage:'holder_or_storage',phrase:holder[0]});
+    }
+
+    if(chosenCategory==='charging' && chosenUsage==='mobile_battery'){
+      const special=title.match(/空調服|作業服|ファン付き(?:作業)?服|電熱(?:ベスト|ウェア)|ヒーターベスト/);
+      if(special) conflicts.push({category:'charging',usage:'special_battery',phrase:special[0]});
+    }
     for(const rule of STRONG_CONFLICT_RULES){
       const signature=rule.category+'.'+rule.usage;
       if(signature===chosenCategory+'.'+chosenUsage) continue;
@@ -331,25 +341,45 @@
   }
 
   function isPromoText(text){
-    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|楽天\s*1位|楽天1位|ランキング\s*1位|ランキング1位|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+  }
+
+  function tidyDisplayTitle(text){
+    let s=String(text||'');
+    s=s
+      .replace(/「\s*」|『\s*』|【\s*】|〖\s*〗|\(\s*\)|（\s*）/g,' ')
+      .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?/g,' ')
+      .replace(/年間ランキング受賞|年間ランキング\s*受賞/g,' ')
+      .replace(/ランキング\s*受賞/g,' ')
+      .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
+      .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
+      .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
+      .replace(/^[\s!！★☆\\＼\/／"'「」『』【】〖〗・|｜]+/g,' ')
+      .replace(/[\s!！★☆\\＼\/／"'「」『』【】〖〗・|｜]+$/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    return s;
   }
 
   function stripPromotionalText(itemName){
     let s=titleOnly({itemName});
     s=s
-      .replace(/【([^】]{0,100})】/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/〖([^〗]{0,100})〗/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/\[([^\]]{0,100})\]/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/［([^］]{0,100})］/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/＼([^＼／]{0,140})／/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/〖([^〗]{0,140})〗/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/\[([^\]]{0,140})\]/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/［([^］]{0,140})］/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/＼?当日発送／?/g,' ')
-      .replace(/楽天(?:市場)?(?:ランキング)?\s*1位(?:\d+冠)?/g,' ')
-      .replace(/楽天1位(?:\d+冠)?/g,' ')
-      .replace(/ランキング\s*1位/g,' ')
+      .replace(/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位(?:\s*\d+冠)?/g,' ')
+      .replace(/楽天1位(?:\s*\d+冠)?/g,' ')
+      .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?/g,' ')
+      .replace(/年間ランキング受賞|ランキング\s*受賞/g,' ')
       .replace(/\d+冠/g,' ')
       .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi,' ')
-      .replace(/\s+/g,' ')
-      .trim();
-    return s;
+      .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
+      .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
+      .replace(/配布中[!！\\/／＼]*/g,' ');
+    return tidyDisplayTitle(s);
   }
 
   function safeUsageName(category,usage){
@@ -488,6 +518,7 @@
       ambiguous:!!cls.ambiguous,
       ambiguityReason:cls.reason||'',
       candidates:cls.candidates||[],
+      topCandidates:(cls.candidates||[]).slice(0,2).map(x=>({key:x.category+'.'+x.usage,score:x.score})),
       conflicts,
       supported,
       outputMode:supported?'full':'fallback',

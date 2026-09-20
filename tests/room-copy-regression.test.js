@@ -72,6 +72,23 @@ for(const tc of fixture.cases){
   }));
 }
 
+// A5 live validation extra regression: promotional fragments must be removed and risky special-use items must fall back.
+for(const tc of fixture.cases.filter(x=>x.group==='live-validation-extra')){
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  if(a.outputMode!==tc.expect.outputMode) fail(tc.id,`A5 outputMode expected ${tc.expect.outputMode}, got ${a.outputMode}`);
+  for(const word of tc.expect.forbiddenWords||[]){
+    if(word && copy.includes(word)) fail(tc.id,`A5 forbidden fragment in copy: ${word}`);
+  }
+  const safe=api.buildSafeDisplayName(item,a);
+  for(const bad of ['限定!','限定！','総合1位','1位6冠','年間ランキング受賞','配布中/','配布中／','＼','★']){
+    if(safe.includes(bad)) fail(tc.id,`A5 unsafe display fragment: ${bad} in ${safe}`);
+  }
+  if(/(?:^|\s)(?:!|！|★|\\|＼|\/|／)+(?:\s|$)/.test(safe)) fail(tc.id,'A5 orphan punctuation remains in safe display name: '+safe);
+  if(/「\s*」|『\s*』|【\s*】|〖\s*〗/.test(safe)) fail(tc.id,'A5 empty brackets remain in safe display name: '+safe);
+}
+
 // Same-search regression: opening line and second line must not repeat.
 const sameSearchIds=['clean-window','clean-glove','clean-cloth','pet-grooming'];
 const sameSearchVariants=[0,1,4,5];
@@ -161,6 +178,14 @@ if(!appHtml.includes("debugCopyBtn')?.addEventListener('click',copyDebugValidati
 if(!appHtml.includes('長押しで選択・コピーできます')) fail('preview-export','manual copy guidance missing');
 if(appHtml.includes('<textarea id="debugJson" readonly')) fail('preview-export','debug textarea must allow manual selection/copy');
 if(!appHtml.includes("if(ta){\n      ta.value=json;")) fail('preview-export','JSON must be rendered before clipboard attempt');
+{
+  const a=api.analyzeRoomProduct({itemName:'ペット用品 便利グッズ',itemPrice:1000},'');
+  if(a.ambiguous) fail('no-match','no_match must not be reported as ambiguous');
+  if(a.ambiguityReason!=='no_match') fail('no-match','expected ambiguityReason=no_match, got '+a.ambiguityReason);
+}
+if(!appHtml.includes("return 'no_match'")) fail('preview-export','fallbackReason no_match missing');
+if(!appHtml.includes('topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[]')) fail('preview-export','topCandidates missing from validation JSON');
+
 
 
 const runtimeEnv=fs.readFileSync(path.join(__dirname,'..','api','runtime-env.js'),'utf8');
