@@ -19,10 +19,18 @@ function ok(id,msg){
   console.log('PASS',id,'-',msg);
 }
 
+const rankVariantById={
+  'clean-window':0,
+  'clean-glove':1,
+  'clean-cloth':4,
+  'pet-grooming':5
+};
+
 for(const tc of fixture.cases){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
   const a=api.analyzeRoomProduct(item,'');
-  const copy=api.makeRoomCopy(item,'',{variant:0});
+  const variant=Object.prototype.hasOwnProperty.call(rankVariantById,tc.id)?rankVariantById[tc.id]:0;
+  const copy=api.makeRoomCopy(item,'',{variant});
   const features=a.facts||[];
   const e=tc.expect||{};
 
@@ -45,6 +53,11 @@ for(const tc of fixture.cases){
   if(copy.length>500) fail(tc.id,`copy exceeds 500 chars: ${copy.length}`);
   if(!copy.includes('※アフィリエイト広告を利用しています')) fail(tc.id,'ROOM disclosure missing');
 
+  const riskyInCopy=['楽天1位','ランキング1位','26冠','No.1','ナンバーワン','リフトアップ','小顔効果','痩せる','若返る','治る','改善','必ず','絶対'];
+  for(const word of riskyInCopy){
+    if(copy.includes(word)) fail(tc.id,'risk word in copy: '+word);
+  }
+
   console.log('RESULT',JSON.stringify({
     id:tc.id,
     itemName:tc.itemName,
@@ -58,6 +71,23 @@ for(const tc of fixture.cases){
     copy
   }));
 }
+
+// Same-search regression: opening line and second line must not repeat.
+const sameSearchIds=['clean-window','clean-glove','clean-cloth','pet-grooming'];
+const sameSearchVariants=[0,1,4,5];
+const openings=[];
+const seconds=[];
+for(let i=0;i<sameSearchIds.length;i++){
+  const tc=fixture.cases.find(x=>x.id===sameSearchIds[i]);
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const copy=api.makeRoomCopy(item,'',{variant:sameSearchVariants[i]});
+  const lines=copy.split('\n').filter(Boolean);
+  if(lines[0]) openings.push(lines[0]);
+  if(lines[1]) seconds.push(lines[1]);
+  if(copy.includes('お手入れを普段の掃除や手入れに')) fail(tc.id,'duplicate wording: お手入れを普段の掃除や手入れに');
+}
+if(new Set(openings).size!==openings.length) fail('same-search','duplicate opening line detected: '+JSON.stringify(openings));
+if(new Set(seconds).size!==seconds.length) fail('same-search','duplicate second line detected: '+JSON.stringify(seconds));
 
 // Explicit quantity regression cases.
 const quantityCases=[
@@ -73,6 +103,16 @@ for(const [idx,q] of quantityCases.entries()){
   const f=a.facts||[];
   if(q.must && !f.includes(q.must)) fail('quantity-'+idx,`missing ${q.must}: ${JSON.stringify(f)}`);
   if(q.mustNot && f.includes(q.mustNot)) fail('quantity-'+idx,`unexpected ${q.mustNot}: ${JSON.stringify(f)}`);
+}
+
+// Legal-safe display names must not contain promo/risk claims.
+for(const tc of fixture.cases){
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const safe=api.buildSafeDisplayName(item,a);
+  for(const bad of ['楽天1位','ランキング1位','26冠','半額','SALE','クーポン','リフトアップ','小顔効果','改善']){
+    if(safe.includes(bad)) fail(tc.id,'unsafe safeDisplayName: '+bad+' in '+safe);
+  }
 }
 
 // Smoke-check non-ROOM surfaces do not throw after classification engine change.
