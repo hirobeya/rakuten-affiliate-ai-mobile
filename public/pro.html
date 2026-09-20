@@ -36,6 +36,9 @@
 </div>
 <div class="checks"><label class="check"><input id="sale" type="checkbox" checked>セール・クーポン商品を優先</label><label class="check"><input id="dup" type="checkbox" checked>投稿済み商品の重複を避ける</label></div>
 <label>投稿予定時刻</label><div class="times"><input id="t1" type="time" value="08:00"><input id="t2" type="time" value="12:30"><input id="t3" type="time" value="20:00"></div>
+<button class="btn secondary" id="preview">この条件で商品プレビュー</button>
+<div id="previewStatus" class="status"></div>
+<div id="previewResults"></div>
 <button class="btn ghost" id="save">設定を保存</button>
 <div id="saveMsg" class="status"></div>
 </section>
@@ -168,6 +171,42 @@ function copyText(i){
   const theme=(($('theme')?.value||'').trim() || selectedGenreName || '商品');
   try{return String(UrenaviPainCopy.makeRoomCopy(i,theme)||'').trim()}catch{return ''}
 }
+function previewCard(i,n){
+  return '<article class="item"><div class="rank">プレビュー候補 '+(n+1)+' ｜ AI '+esc(i.score)+'/100</div>'
+    +'<div class="name">'+esc(i.itemName)+'</div>'
+    +'<div class="meta">'+esc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ レビュー '+esc(i.reviewCount||0)+'件 ｜ 評価 '+esc(i.reviewAverage||'-')+'</div>'
+    +'<div class="copy">'+esc(copyText(i)||'投稿文を安全に生成できませんでした。')+'</div></article>';
+}
+async function previewProducts(){
+  if(!selectedGenreId){
+    $('previewStatus').textContent='先に楽天市場カテゴリーを選んでください。';
+    return;
+  }
+  $('preview').disabled=true;
+  $('previewStatus').textContent='この条件で実際の商品候補を確認しています…';
+  $('previewResults').innerHTML='';
+  try{
+    const r=await fetch('/api/pro?action=preview',{
+      method:'POST',
+      headers:authHeaders(),
+      credentials:'include',
+      body:JSON.stringify(settingsPayload())
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.message||'プレビューできませんでした。');
+    const items=Array.isArray(d.items)?d.items:[];
+    if(!items.length){
+      $('previewStatus').textContent='この条件では候補が見つかりませんでした。価格帯やテーマを少し広げてください。';
+      return;
+    }
+    $('previewStatus').textContent='この条件なら、こんな商品が候補になります。気に入らなければ条件を変えて再プレビューできます。';
+    $('previewResults').innerHTML=items.map(previewCard).join('');
+  }catch(e){
+    $('previewStatus').textContent=e.message||'プレビューできませんでした。';
+  }finally{
+    $('preview').disabled=false;
+  }
+}
 function renderQueue(queue=[]){
   currentQueue=Array.isArray(queue)?queue:[];
   const rows=[];
@@ -246,6 +285,7 @@ $('genreBack').addEventListener('click',async()=>{
   renderGenrePath();
   try{await loadGenreChildren(selectedGenreId||'0')}catch(err){$('genreSelected').textContent=err.message}
 });
+$('preview').addEventListener('click',previewProducts);
 $('save').addEventListener('click',saveSettings);$('generate').addEventListener('click',generate);
 document.querySelectorAll('[data-task]').forEach(x=>x.addEventListener('change',saveTasks));
 boot();
