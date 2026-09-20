@@ -922,3 +922,10 @@ async function handler(req,res){
   }
 
 };
+
+
+module.exports._measurementInternals={
+  relevance,
+  sellabilityScore,
+  profitabilityScore
+};
