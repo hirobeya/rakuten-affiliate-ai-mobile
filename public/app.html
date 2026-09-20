@@ -214,14 +214,21 @@ input,select{
 }
 .debugExport textarea{
   width:100%;
-  min-height:180px;
+  min-height:220px;
+  max-height:52vh;
   margin-top:9px;
   border:1px solid #cbd5e1;
   border-radius:10px;
   padding:9px;
   font-size:11px;
   line-height:1.45;
-  background:#fff
+  background:#fff;
+  color:#111827;
+  resize:vertical;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  white-space:pre;
+  overflow-wrap:normal
 }
 
 .legal-warn{
@@ -841,7 +848,15 @@ input,select{
 商品を探して評価する
 </button>
 
-<div id="st" class="muted"></div>\n\n<div id="debugExport" class="debugExport">\n  <strong>検証データ出力（プレビュー・owner限定）</strong>\n  <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>\n  <button id="debugCopyBtn" type="button">検証JSONを作成してコピー</button>\n  <textarea id="debugJson" readonly placeholder="検索後、ここにJSONを表示します"></textarea>\n</div>
+<div id="st" class="muted"></div>
+
+<div id="debugExport" class="debugExport">
+  <strong>検証データ出力（プレビュー・owner限定）</strong>
+  <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>
+  <button id="debugCopyBtn" type="button">検証JSONを作成してコピー</button>
+  <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
+  <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
+</div>
 
 </section>
 
@@ -2191,25 +2206,64 @@ function buildDebugValidationRows(){
 }
 
 async function copyDebugValidation(){
-  if(!debugExportAllowed) return;
-  const payload={
-    searchKeyword:k.value.trim(),
-    count:lastSearchItems.length,
-    generatedAt:new Date().toISOString(),
-    items:buildDebugValidationRows()
-  };
-  const json=JSON.stringify(payload,null,2);
-  const ta=document.getElementById('debugJson');
-  if(ta) ta.value=json;
   const btn=document.getElementById('debugCopyBtn');
-  try{
-    await navigator.clipboard.writeText(json);
-    if(btn) btn.textContent='コピーしました';
-  }catch{
-    if(btn) btn.textContent='JSONを表示しました';
+  const ta=document.getElementById('debugJson');
+  const meta=document.getElementById('debugJsonMeta');
+
+  if(!debugExportAllowed){
+    if(meta) meta.textContent='この機能はPreview環境のownerだけ利用できます。';
+    return;
   }
-  setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},1800);
+
+  let json='';
+  try{
+    const payload={
+      searchKeyword:k.value.trim(),
+      count:lastSearchItems.length,
+      generatedAt:new Date().toISOString(),
+      items:buildDebugValidationRows()
+    };
+    json=JSON.stringify(payload,null,2);
+    if(ta){
+      ta.value=json;
+      ta.scrollTop=0;
+    }
+    if(meta){
+      meta.textContent=lastSearchItems.length
+        ?`10件までの検証JSONを表示しました（${json.length.toLocaleString()}文字）。長押しでも選択・コピーできます。`
+        :'検索結果がまだありません。空の検証JSONを表示しました。';
+    }
+  }catch(error){
+    console.error('debug validation export failed',error);
+    if(ta) ta.value='';
+    if(meta) meta.textContent='JSONの作成中にエラーが発生しました。検索をやり直して再度お試しください。';
+    if(btn) btn.textContent='JSON作成エラー';
+    setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
+    return;
+  }
+
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(json);
+      if(btn) btn.textContent='コピーしました';
+    }else{
+      throw new Error('Clipboard API unavailable');
+    }
+  }catch(error){
+    console.warn('clipboard copy failed; JSON remains visible',error);
+    if(btn) btn.textContent='JSONを表示しました';
+    if(meta) meta.textContent+=' 自動コピーできない場合は、枠内を長押しして手動コピーしてください。';
+  }
+
+  setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
 }
+
+document.getElementById('debugCopyBtn')?.addEventListener('click',copyDebugValidation);
+
+document.getElementById('debugJson')?.addEventListener('focus',e=>{
+  // Keep native iOS selection behavior; do not auto-select the full payload.
+  e.currentTarget.setSelectionRange?.(0,0);
+});
 
 function legalWarning(i){
   const a=groundedAnalysis(i);
@@ -2604,6 +2658,8 @@ function render(
   lastSearchItems=Array.isArray(a)?a:[];
   const debugJson=document.getElementById('debugJson');
   if(debugJson) debugJson.value='';
+  const debugJsonMeta=document.getElementById('debugJsonMeta');
+  if(debugJsonMeta) debugJsonMeta.textContent='';
   $('#res').innerHTML=
 
   today(

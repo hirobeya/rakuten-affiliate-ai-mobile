@@ -156,6 +156,12 @@ if(!appHtml.includes("fetch('/api/runtime-env'")) fail('preview-export','runtime
 if(!appHtml.includes("preview && currentAccessPlan==='owner'")) fail('preview-export','owner+preview guard missing');
 if(!appHtml.includes('この商品は自動判定の対象外のため、商品名と価格のみ表示しています。')) fail('fallback-ui','fallback guidance message missing');
 if(!appHtml.includes("groundedAnalysis(i).outputMode==='full'")) fail('today-ui','full-output filter missing');
+if(appHtml.includes('<div id="st" class="muted"></div>\\n')) fail('preview-export','literal \\n in static debug markup');
+if(!appHtml.includes("debugCopyBtn')?.addEventListener('click',copyDebugValidation)")) fail('preview-export','debug export click handler missing');
+if(!appHtml.includes('長押しで選択・コピーできます')) fail('preview-export','manual copy guidance missing');
+if(appHtml.includes('<textarea id="debugJson" readonly')) fail('preview-export','debug textarea must allow manual selection/copy');
+if(!appHtml.includes("if(ta){\n      ta.value=json;")) fail('preview-export','JSON must be rendered before clipboard attempt');
+
 
 const runtimeEnv=fs.readFileSync(path.join(__dirname,'..','api','runtime-env.js'),'utf8');
 if(!runtimeEnv.includes("process.env.VERCEL_ENV === 'preview'")) fail('preview-export','VERCEL_ENV preview check missing');
