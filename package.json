@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "test:copy": "node tests/room-copy-regression.test.js",
-    "vercel-build": "npm run test:copy"
+    "test:copy": "node tests/room-copy-regression.test.js"
   }
 }
