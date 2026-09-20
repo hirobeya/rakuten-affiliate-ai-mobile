@@ -146,7 +146,15 @@ async function boot(){
     const r=await fetch('/api/pro?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});
     const d=await r.json().catch(()=>({}));
     if(r.status===403){
-      $('gate').innerHTML='ウレナビ Proは月額1,480円の上位プランです。<br><a href="/api/access?action=buy-pro">Proへアップグレード</a><br><a href="/app.html" style="background:#eef3f8;color:#34445d">通常版へ戻る</a>';
+      let billing=false;
+      try{
+        const br=await fetch('/api/access?action=pro-billing-status',{cache:'no-store'});
+        const bd=await br.json().catch(()=>({}));
+        billing=!!bd.configured;
+      }catch{}
+      $('gate').innerHTML=billing
+        ? 'ウレナビ Proは月額1,480円の上位プランです。<br><a href="/api/access?action=buy-pro">Proへアップグレード</a><br><a href="/app.html" style="background:#eef3f8;color:#34445d">通常版へ戻る</a>'
+        : 'ウレナビ Proは現在、正式申込の準備中です。通常版はこれまで通り利用できます。<br><a href="/app.html">通常版へ戻る</a>';
       return;
     }
     if(!r.ok)throw new Error();
