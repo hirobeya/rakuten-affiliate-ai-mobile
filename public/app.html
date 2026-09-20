@@ -683,8 +683,7 @@ input,select{
 
   <div class="headActions">
     <button id="upgradeProBtn" class="proBtn" type="button" style="display:none;border:0">Proへアップグレード</button>
-    <span id="planBadge" class="proBtn" style="display:none">Pro</span>
-    <button id="logoutBtn" class="logoutBtn">
+<button id="logoutBtn" class="logoutBtn">
       ログアウト
     </button>
   </div>
@@ -3333,7 +3332,6 @@ function updateUpgradeUi(access={}){
   const isBase=String(access.plan||'')==='base' && !access.pro;
   proAvailable=!!access.pro;
   btn.style.display=isBase?'inline-block':'none';
-  proEl('planBadge').style.display=access.pro?'inline-block':'none';
   proEl('appModeNav').classList.toggle('on',proAvailable);
   if(!proAvailable) setAppScreen('normal');
 }
@@ -3362,7 +3360,6 @@ async function upgradeToPro(){
     currentAccessPlan='pro';
     proAvailable=true;
     btn.style.display='none';
-    proEl('planBadge').style.display='inline-block';
     proEl('appModeNav').classList.add('on');
     await configureIntegratedPro(true);
     const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
@@ -3377,7 +3374,6 @@ proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
   proAvailable=!!enabled;
-  proEl('planBadge').style.display=enabled?'inline-block':'none';
   proEl('appModeNav').classList.toggle('on',enabled);
   if(!enabled){
     setAppScreen('normal');
