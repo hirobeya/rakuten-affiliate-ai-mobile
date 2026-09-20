@@ -181,7 +181,7 @@
     const lead=usagePhrase(item,a.kind);
     const templates=[
       `${lead}を、できるだけ手早く済ませたいときに。`,
-      `${lead}の小さな手間を減らしたい人に。`,
+      `${lead}にかかる小さな手間を減らしたい人に。`,
       `${lead}の準備や作業を少しでも簡単にしたいときに。`,
       `${lead}を後回しにせず、こまめに済ませたい人向け。`,
       `${lead}にかかる手間が気になるなら、候補に入れやすい商品です。`,
@@ -192,16 +192,16 @@
       `${lead}をシンプルにしたい人が検討しやすい商品です。`
     ];
     const tails=[
-      `${lead}を使う場面に合わせて取り入れやすく、${impact}。`,
-      `${lead}を日常の作業に取り入れることで、${impact}。`,
-      `${lead}を必要な場所で使いやすく、${impact}。`,
-      `${lead}を使う動作を増やしすぎず、${impact}。`,
-      `${lead}を目的に合わせて使うことで、${impact}。`,
+      `${lead}を日常の流れに取り入れやすく、${impact}。`,
+      `${lead}をこまめに行いやすく、${impact}。`,
+      `${lead}を必要な場所で始めやすく、${impact}。`,
+      `${lead}の動作を増やしすぎず、${impact}。`,
+      `${lead}を目的に合わせて行いやすく、${impact}。`,
       `${lead}を普段の流れに取り入れやすく、${impact}。`,
-      `${lead}を使う工程をシンプルにしやすく、${impact}。`,
-      `${lead}を必要なときに使いやすく、${impact}。`,
-      `${lead}を使う場面を絞りやすく、${impact}。`,
-      `${lead}を用途に合わせて使いやすく、${impact}。`
+      `${lead}の工程をシンプルにしやすく、${impact}。`,
+      `${lead}を必要なときに始めやすく、${impact}。`,
+      `${lead}を行う場面を絞りやすく、${impact}。`,
+      `${lead}を用途に合わせて進めやすく、${impact}。`
     ];
     const idx=((variant%templates.length)+templates.length)%templates.length;
     return `${templates[idx]}\n${tails[idx]}`;
