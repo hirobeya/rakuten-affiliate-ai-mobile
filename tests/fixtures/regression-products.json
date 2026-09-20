@@ -1,0 +1,364 @@
+{
+  "generatedAt": "2026-09-20",
+  "note": "Public product titles captured from Rakuten search/item pages. No API keys or personal data.",
+  "cases": [
+    {
+      "id": "clean-window",
+      "group": "cleaning",
+      "itemName": "〖SS10%オフ〗取替式あみ戸びっクリーン ハンディ ハンディモップ 取替式 網戸 掃除 ネット 掃除 便利 グッズ〖10〗",
+      "itemPrice": 1341,
+      "expect": {
+        "category": "cleaning",
+        "usage": "window_screen",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "急速充電",
+          "収納",
+          "抜け毛"
+        ],
+        "expectedFeatures": [
+          "取替式"
+        ],
+        "forbiddenFeatures": [
+          "10枚セット",
+          "10個セット"
+        ]
+      }
+    },
+    {
+      "id": "clean-glove",
+      "group": "cleaning",
+      "itemName": "6枚セット お掃除 手袋 マイクロファイバー クロス 掃除グッズ 大掃除便利グッズ ほこり取り イエロー 3組6枚 (イエロー(3組6枚))",
+      "itemPrice": 2480,
+      "expect": {
+        "category": "cleaning",
+        "usage": "glove",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "急速充電",
+          "収納"
+        ],
+        "expectedFeatures": [
+          "マイクロファイバー",
+          "6枚セット"
+        ],
+        "forbiddenFeatures": [
+          "クロスタイプ"
+        ]
+      }
+    },
+    {
+      "id": "clean-cloth",
+      "group": "cleaning",
+      "itemName": "丸辰(Marutatsu) 掃除便利グッズ お掃除 クロス マイクロファイバー ほこり吸着 水分吸水 もこもこ ミニ グレー/ブラック どちらかお届け 34673",
+      "itemPrice": 599,
+      "expect": {
+        "category": "cleaning",
+        "usage": "cloth",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "急速充電",
+          "収納",
+          "抜け毛"
+        ],
+        "expectedFeatures": [
+          "マイクロファイバー",
+          "吸水タイプ"
+        ],
+        "forbiddenFeatures": [
+          "クロスタイプ"
+        ]
+      }
+    },
+    {
+      "id": "pet-grooming",
+      "group": "cleaning",
+      "itemName": "ペット用毛取りグローブ 両面タイプ グルーミング手袋 猫犬兼用 抜け毛・静電気・フケ対策 掃除便利グッズ",
+      "itemPrice": 990,
+      "expect": {
+        "category": "pet",
+        "usage": "grooming",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "急速充電",
+          "収納"
+        ],
+        "expectedFeatures": [
+          "両面タイプ",
+          "手にはめて使うタイプ",
+          "犬・猫向け表記あり"
+        ],
+        "forbiddenFeatures": [
+          "クロスタイプ"
+        ]
+      }
+    },
+    {
+      "id": "beauty-roller",
+      "group": "previous-error",
+      "itemName": "美顔ローラー 美顔器 リフトアップ 〖微弱電流〗〖防水仕様〗〖充電不要〗 小顔ローラー メンズ マイクロカレント 美顔器 ローラー 全身用 ローラー 美容グッズ 美容 グッズ 女性 男性 誕生日 レディース メンズ プレゼント ギフト",
+      "itemPrice": 3980,
+      "expect": {
+        "category": "beauty",
+        "usage": "face_roller",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "外出中の充電切れ",
+          "モバイルバッテリー"
+        ],
+        "expectedFeatures": [
+          "防水表記あり"
+        ],
+        "forbiddenFeatures": [
+          "急速充電対応"
+        ]
+      }
+    },
+    {
+      "id": "beauty-peeling",
+      "group": "previous-error",
+      "itemName": "〖半額★スーパーSALE〗 ウォーターピーリング 美顔器 〖楽天5冠★プロ美容家監修〗 RELX リラクス 超軽量 70g 超音波 美顔器 美容グッズ ウォーターピーラー 洗顔ピーラー 毛穴ケア ピーリング 家庭用 超音波ピーリング 目元ケア 超音波 ems イオン 美容家電",
+      "itemPrice": 3490,
+      "expect": {
+        "category": "beauty",
+        "usage": "face_peeling",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "調理",
+          "下ごしらえ"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "食洗機対応表記あり"
+        ]
+      }
+    },
+    {
+      "id": "beauty-kassa",
+      "group": "previous-error",
+      "itemName": "＼当日発送／〖楽天スーパーSALE更に5％OFFcp〗4in1美顔 かっさ プレート 小顔ケア 収納袋付き 美容グッズ 美顔器 フェイスケア 頭皮ケア 顔マッサージ 全身マッサージ 小顔効果 健康グッズ ツボ押し フェイスライン リフトアップ 肩こり改善 頭皮マッサージ",
+      "itemPrice": 780,
+      "expect": {
+        "category": "beauty",
+        "usage": "kassa",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "収納場所を整えて",
+          "収納ケース"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "折りたたみ対応"
+        ]
+      }
+    },
+    {
+      "id": "pet-water",
+      "group": "previous-error",
+      "itemName": "〖1点5%OFF,2点10%OFF〗〖楽天1位〗ペットウォーターボトル 犬グッズ ペット用品 ペット 水 水飲み ボトル 犬 ペットボトル ペット給水器 犬 グッズ 散歩 外出 ドライブ 旅行 漏れ防止 ワンタッチ 贈り物",
+      "itemPrice": 1880,
+      "expect": {
+        "category": "pet",
+        "usage": "water",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "抜け毛ケア",
+          "毛取り"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "抜け毛・毛取り用途"
+        ]
+      }
+    },
+    {
+      "id": "pet-toilet",
+      "group": "previous-error",
+      "itemName": "ユニ・チャーム デオシート しっかり超吸収 無香消臭タイプ ワイド 54枚 〖公式ショップ〗トイレタリー ペットシーツ 愛犬 室内ペット用 トイレシート 無香消臭タイプ オシッコ5回分 ワイドサイズ ペットシーツ",
+      "itemPrice": 2090,
+      "expect": {
+        "category": "pet",
+        "usage": "toilet",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "抜け毛ケア",
+          "54枚セット"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "54枚セット"
+        ]
+      }
+    },
+    {
+      "id": "pet-bed",
+      "group": "previous-error",
+      "itemName": "犬用 猫用 ふわふわ ペットベッド sippo 楽天1位 S/M/L/XL もふもふ ベット ペット用 ベッド 犬 猫 暖かい クッション 秋 冬 春 夏 オールシーズン もこもこ 全猫種 小型犬 中型犬 大型犬 パピー シニア かわいい 洗える 犬ベッド 猫ベッド 丸形",
+      "itemPrice": 1650,
+      "expect": {
+        "category": "pet",
+        "usage": "bed",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "抜け毛ケア",
+          "毛取り"
+        ],
+        "expectedFeatures": [
+          "犬・猫向け表記あり"
+        ],
+        "forbiddenFeatures": [
+          "急速充電対応"
+        ]
+      }
+    },
+    {
+      "id": "battery-cable",
+      "group": "previous-error",
+      "itemName": "〖クーポン利用で最安2380円〗楽天1位26冠！モバイルバッテリー 大容量 23600mAh PD22.5W 急速充電 Type-C出入力 4本ケーブル内蔵 軽量 iphone スマホ充電器 携帯充電器 タイプc対応 残量表示 LEDライト 防災グッズ PSE認証済 Lightning iPhone/Android全機種対応",
+      "itemPrice": 2980,
+      "expect": {
+        "category": "charging",
+        "usage": "mobile_battery",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "4本セット",
+          "掃除や手入れ"
+        ],
+        "expectedFeatures": [
+          "急速充電対応",
+          "USB-C対応"
+        ],
+        "forbiddenFeatures": [
+          "4本セット"
+        ]
+      }
+    },
+    {
+      "id": "counter-pet-bottle",
+      "group": "counterexample",
+      "itemName": "ペットボトル用 コップセット/〖コンパクト便〗/キャラクター グッズ ペットボトル キャップ コップ プラコップ プラスチック プラ カップ パッキン付き 口を付けない 直接飲まない 日本製 オーエスケー OSK",
+      "itemPrice": 928,
+      "expect": {
+        "category": "unknown",
+        "usage": "unknown",
+        "ambiguous": true,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "犬や猫",
+          "抜け毛ケア"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "counter-nekoze",
+      "group": "counterexample",
+      "itemName": "〖9/15限定★クーポンで7％OFF〗〖楽天1位〗≪公式≫Dr.マグザム 柔道整復師監修姿勢サポーター 姿勢サポーター 猫背ベルト 巻き肩 矯正 猫背 姿勢ベルト 背筋ベルト 男性 女性 子供 猫背矯正ベルト 姿勢矯正 姿勢矯正サポーター",
+      "itemPrice": 2980,
+      "expect": {
+        "category": "unknown",
+        "usage": "unknown",
+        "ambiguous": true,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "ペット",
+          "犬",
+          "猫の抜け毛"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "counter-battery-case",
+      "group": "counterexample",
+      "itemName": "GOPPA　モバイルバッテリー用燃えにくいケース グリーン　GP-FR18S/GR",
+      "itemPrice": 2379,
+      "expect": {
+        "category": "accessory",
+        "usage": "mobile_battery_case",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "充電切れに備えたい"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "急速充電対応"
+        ]
+      }
+    },
+    {
+      "id": "counter-rechargeable-vacuum",
+      "group": "counterexample",
+      "itemName": "〖限定300円OFF〗ハンディクリーナー 掃除機 コードレス 軽量 540g コンパクト ハンディ掃除機 ハンディークリーナー コードレス掃除機 ハンディ ミニ掃除機 卓上クリーナー ハンドクリーナー 車 髪 猫砂 USB 充電式 小型 おしゃれ 保証 ヒーローグリーン キーアーツ HV-22",
+      "itemPrice": 4680,
+      "expect": {
+        "category": "cleaning",
+        "usage": "vacuum",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "モバイルバッテリー",
+          "外出中の充電切れ"
+        ],
+        "expectedFeatures": [
+          "コードレスタイプ",
+          "コンパクト表記あり"
+        ],
+        "forbiddenFeatures": [
+          "急速充電対応"
+        ]
+      }
+    },
+    {
+      "id": "counter-storage-bed",
+      "group": "counterexample",
+      "itemName": "〖本日5%引クーポン〗 ベッド 収納付き USB 2コンセント 宮付き シングル セミダブル ダブル クイーン キング すのこベッド ベッドフレーム ベット シングルベッド セミダブルベッド ダブルベッド 引き出し付き 収納ベッド 収納付きベッド",
+      "itemPrice": 19999,
+      "expect": {
+        "category": "furniture",
+        "usage": "storage_bed",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "収納ボックスで物をまとめたい"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "省スペース設計"
+        ]
+      }
+    },
+    {
+      "id": "counter-pet-hair-brush",
+      "group": "counterexample",
+      "itemName": "抜け毛取りブラシ 犬 猫 ペット毛 掃除ブラシ ベット カーペット クリーナー 布団 掃除",
+      "itemPrice": 1199,
+      "expect": {
+        "category": "ambiguous",
+        "usage": "ambiguous",
+        "ambiguous": true,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "給水",
+          "ペットベッド"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    }
+  ]
+}
