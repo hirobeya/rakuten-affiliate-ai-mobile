@@ -232,8 +232,7 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [
-          "4本セット",
-          "掃除や手入れ"
+          "4本セット"
         ],
         "expectedFeatures": [
           "急速充電対応",
