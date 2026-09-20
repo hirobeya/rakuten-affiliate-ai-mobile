@@ -29,7 +29,9 @@ async function recentCodes(email){
 module.exports=async function handler(req,res){
   if(req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   const secret=String(process.env.CRON_SECRET||'');
-  if(!secret || req.headers.authorization!==`Bearer ${secret}`) return res.status(401).json({message:'Unauthorized'});
+  const schedule=String(req.headers['x-vercel-cron-schedule']||'');
+  const authorized=secret ? req.headers.authorization===`Bearer ${secret}` : schedule==='0 21 * * *';
+  if(!authorized) return res.status(401).json({message:'Unauthorized'});
   try{
     const settings=await db('urenavi_pro_settings?enabled=eq.true&select=*');
     const local=jstParts(new Date());
