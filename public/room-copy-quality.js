@@ -432,6 +432,7 @@
   }
 
 
+  api.extractSafeFeatures=extractFacts;
   api.buildClassificationTitle=buildClassificationTitle;
   api.collectClassificationCandidates=collectClassificationCandidates;
   api.resolveCategoryAndUsage=resolveCategoryAndUsage;
