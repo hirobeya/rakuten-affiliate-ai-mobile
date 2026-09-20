@@ -291,10 +291,84 @@
     return r.audience||'';
   }
 
+  const LEGAL_RISK_RULES=[
+    /小顔(?:効果)?/g,/リフトアップ/g,/痩せる|痩身/g,/若返る|若返り/g,/改善/g,/治る|治療/g,/美白/g,
+    /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/予防/g,/効果/g,/効能/g,
+    /No\.?\s*1/gi,/ナンバーワン/g,/楽天(?:市場)?(?:ランキング)?\s*1位/g,/楽天1位/g,/ランキング\s*1位/g,
+    /\d+冠/g,/一番/g,/最高/g,/最強/g,/絶対/g,/必ず/g
+  ];
+
+  function detectLegalRisk(itemName){
+    const title=titleOnly({itemName});
+    const matches=[];
+    for(const re of LEGAL_RISK_RULES){
+      re.lastIndex=0;
+      const m=title.match(re);
+      if(m) for(const x of m) uniquePush(matches,x);
+    }
+    return {legalRisk:matches.length>0,riskTerms:matches};
+  }
+
+  function isPromoText(text){
+    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|楽天\s*1位|楽天1位|ランキング\s*1位|ランキング1位|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+  }
+
+  function stripPromotionalText(itemName){
+    let s=titleOnly({itemName});
+    s=s
+      .replace(/【([^】]{0,100})】/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/〖([^〗]{0,100})〗/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/\[([^\]]{0,100})\]/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/［([^］]{0,100})］/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/＼?当日発送／?/g,' ')
+      .replace(/楽天(?:市場)?(?:ランキング)?\s*1位(?:\d+冠)?/g,' ')
+      .replace(/楽天1位(?:\d+冠)?/g,' ')
+      .replace(/ランキング\s*1位/g,' ')
+      .replace(/\d+冠/g,' ')
+      .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?[%％]OFF|\d+(?:\.\d+)?[%％]オフ/gi,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    return s;
+  }
+
+  function safeUsageName(category,usage){
+    const map={
+      'beauty.face_roller':'美顔ローラー',
+      'beauty.face_peeling':'ウォーターピーリング美顔器',
+      'beauty.kassa':'かっさプレート',
+      'pet.water':'ペット用給水用品',
+      'pet.toilet':'ペットシート',
+      'pet.bed':'ペットベッド',
+      'pet.grooming':'ペット用毛取りグローブ',
+      'charging.mobile_battery':'モバイルバッテリー',
+      'cleaning.window_screen':'網戸掃除用品',
+      'cleaning.glove':'掃除用手袋',
+      'cleaning.cloth':'掃除用クロス',
+      'cleaning.mop':'掃除用モップ',
+      'cleaning.brush':'掃除用ブラシ',
+      'storage.storage_box':'収納ボックス',
+      'storage.storage_case':'収納ケース',
+      'accessory.mobile_battery_case':'モバイルバッテリー用ケース',
+      'cleaning.vacuum':'ハンディクリーナー',
+      'furniture.storage_bed':'収納付きベッド'
+    };
+    return map[category+'.'+usage]||'商品';
+  }
+
+  function buildSafeDisplayName(item,analysis){
+    const a=analysis||analyze(item);
+    if(a.legalRisk) return safeUsageName(a.category,a.usage);
+    let s=stripPromotionalText(item?.itemName||'');
+    s=finalScan(s);
+    if(!s) s=safeUsageName(a.category,a.usage);
+    if(s.length>48) s=s.slice(0,48).trim()+'…';
+    return s;
+  }
+
   function openingFor(a,item,variant=0){
-    const impact=a.impact.replace(/[。！!]+$/,'');
     const lead=usagePhrase(item,a.kind);
-    const templates=[
+    const idx=((Number(variant)||0)%10+10)%10;
+    const first=[
       `${lead}を、できるだけ手早く済ませたいときに。`,
       `${lead}にかかる小さな手間を減らしたい人に。`,
       `${lead}の準備や作業を少しでも簡単にしたいときに。`,
@@ -305,25 +379,39 @@
       `${lead}の動作を少し軽くしたい人に。`,
       `${lead}を手早く済ませたいときの選択肢になりそうです。`,
       `${lead}をシンプルにしたい人が検討しやすい商品です。`
+    ][idx];
+
+    const charging=[
+      '必要なときに充電できる備えがあると、電池残量を気にする場面を減らしやすそうです。',
+      '持ち歩ける電源を用意しておくと、充電できる場所を探す手間を減らせそうです。',
+      '充電手段を手元に用意しておくことで、電池切れへの備えをしやすくなりそうです。',
+      '必要な場面で充電しやすくなり、外出時の電池残量への不安を減らす助けになりそうです。',
+      'コンセントがすぐ見つからない場面でも、充電手段を確保しやすくなりそうです。',
+      'スマホなどの電池残量が少ないときの備えとして使いやすそうです。',
+      '充電できる選択肢を増やしておくことで、移動中の電池切れ対策になりそうです。',
+      '必要なときに電源を補えるようにしておくと、充電切れを避けやすくなりそうです。',
+      '予備の充電手段を用意しておけば、外出先でも機器を使い続けやすくなりそうです。',
+      '充電の選択肢を増やすことで、電池残量を気にする時間を減らせそうです。'
     ];
-    const tails=[
-      `${lead}を普段の掃除や手入れに取り入れやすく、作業を始めるまでの手間を抑えやすそうです。`,
+    const generic=[
+      `${lead}を日常の流れに取り入れやすく、作業を始めるまでの手間を抑えやすそうです。`,
       `${lead}をこまめに行いやすく、後回しにしにくくなりそうです。`,
       `${lead}を必要な場所ですぐ始めやすく、短時間で済ませる助けになりそうです。`,
       `${lead}の動作を増やしすぎず、日々の負担を軽くする選択肢になりそうです。`,
-      `${lead}を気づいたときに行いやすく、汚れや手間をため込みにくくなりそうです。`,
+      `${lead}を気づいたときに行いやすく、手間をため込みにくくなりそうです。`,
       `${lead}を普段の流れに組み込みやすく、作業のハードルを下げやすそうです。`,
       `${lead}の工程をシンプルにしやすく、取りかかるまでの時間を短くできそうです。`,
       `${lead}を必要なときに始めやすく、日常の小さな負担を減らす助けになりそうです。`,
-      `${lead}を手早く進めやすく、別の家事に時間を回しやすくなりそうです。`,
-      `${lead}を用途に合わせて進めやすく、日々の作業を軽くするきっかけになりそうです。`
+      `${lead}を手早く進めやすく、別の作業に時間を回しやすくなりそうです。`,
+      `${lead}を進めやすくし、日々の作業を軽くするきっかけになりそうです。`
     ];
-    const idx=((variant%templates.length)+templates.length)%templates.length;
-    return `${templates[idx]}\n${tails[idx]}`;
+    const second=a.category==='charging'&&a.usage==='mobile_battery'?charging[idx]:generic[idx];
+    return first+'\n'+second;
   }
 
-  function shortFallback(item,withDisclosure=false){
-    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
+  function shortFallback(item,withDisclosure=false,analysis=null){
+    const a=analysis||analyze(item);
+    const title=buildSafeDisplayName(item,a);
     return `${title}\n価格：${fmt(item?.itemPrice||0)}円`+(withDisclosure?'\n\n※アフィリエイト広告を利用しています':'');
   }
 
@@ -366,6 +454,7 @@
     const facts=extractFacts(item,cls.kind);
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
+    const legal=detectLegalRisk(titleOnly(item));
     const conflicts=cls.ambiguous?[]:detectConflictingSignals(titleOnly(item),cls.category,cls.usage);
     const supported=!!cls.supported && !cls.ambiguous && conflicts.length===0;
     return {
@@ -385,7 +474,9 @@
       impact:sanitizeOutput(cls.impact),
       audience:sanitizeOutput(cls.audience),
       facts,
-      sensitive
+      sensitive,
+      legalRisk:legal.legalRisk,
+      riskTerms:legal.riskTerms
     };
   }
 
@@ -397,9 +488,9 @@
 
   function makeRoomCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.ambiguous || !a.supported) return shortFallback(item,true);
+    if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
 
-    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
+    const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     const opening=openingFor(a,item,variant);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
@@ -407,14 +498,14 @@
     const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
     out=finalScan(out);
-    if(!validateBody(item,a,out)) return shortFallback(item,true);
+    if(!validateBody(item,a,out)) return shortFallback(item,true,a);
     return out;
   }
 
   function makeThreadsCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.ambiguous || !a.supported) return shortFallback(item);
-    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
+    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
+    const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant);
     if(a.facts[0]) out+='\n✔ '+a.facts[0];
@@ -425,8 +516,8 @@
 
   function makeInstagramCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.ambiguous || !a.supported) return shortFallback(item);
-    const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
+    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
+    const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant);
     if(a.facts.length) out+='\n\n'+a.facts.map(x=>'✔ '+x).join('\n');
@@ -436,6 +527,9 @@
   }
 
 
+  api.detectLegalRisk=detectLegalRisk;
+  api.buildSafeDisplayName=buildSafeDisplayName;
+  api.stripPromotionalText=stripPromotionalText;
   api.extractSafeFeatures=extractFacts;
   api.buildClassificationTitle=buildClassificationTitle;
   api.collectClassificationCandidates=collectClassificationCandidates;
