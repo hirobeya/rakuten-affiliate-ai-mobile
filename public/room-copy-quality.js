@@ -233,9 +233,9 @@
     return `${templates[idx]}\n${tails[idx]}`;
   }
 
-  function shortFallback(item){
+  function shortFallback(item,withDisclosure=false){
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
-    return `${title}\n価格：${fmt(item?.itemPrice||0)}円\n\n※アフィリエイト広告を利用しています`;
+    return `${title}\n価格：${fmt(item?.itemPrice||0)}円`+(withDisclosure?'\n\n※アフィリエイト広告を利用しています':'');
   }
 
   function hasCategoryConflict(kind,facts){
@@ -296,7 +296,7 @@
 
   function makeRoomCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.confidence==='ambiguous') return shortFallback(item);
+    if(a.confidence==='ambiguous') return shortFallback(item,true);
 
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
@@ -306,7 +306,7 @@
     const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
     out=finalScan(out);
-    if(!validateBody(item,a,out)) return shortFallback(item);
+    if(!validateBody(item,a,out)) return shortFallback(item,true);
     return out;
   }
 
