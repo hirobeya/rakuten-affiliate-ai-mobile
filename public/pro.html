@@ -124,9 +124,17 @@ function renderGenrePath(){
 async function loadGenreChildren(parentId='0'){
   const d=await fetchGenres(parentId);
   const children=Array.isArray(d.children)?d.children:[];
-  $('genrePicker').innerHTML='<option value="">'+(children.length?'次のカテゴリーを選択':'これ以上の下位カテゴリーはありません')+'</option>'
-    +children.map(x=>'<option value="'+esc(x.genreId)+'" data-name="'+esc(x.nameJa)+'">'+esc(x.nameJa)+'</option>').join('');
-  $('genrePicker').disabled=!children.length;
+  if(children.length){
+    $('genrePicker').innerHTML='<option value="">次のカテゴリーを選択</option>'
+      +children.map(x=>'<option value="'+esc(x.genreId)+'" data-name="'+esc(x.nameJa)+'">'+esc(x.nameJa)+'</option>').join('');
+    $('genrePicker').disabled=false;
+  }else{
+    const leafName=String(d.genre?.nameJa||selectedGenreName||'選択中のカテゴリー');
+    const leafId=String(d.genre?.genreId||selectedGenreId||parentId||'');
+    $('genrePicker').innerHTML='<option value="'+esc(leafId)+'" data-name="'+esc(leafName)+'">'+esc(leafName)+'（最下層）</option>';
+    $('genrePicker').value=leafId;
+    $('genrePicker').disabled=true;
+  }
 }
 async function restoreGenre(s={}){
   selectedGenreId=String(s.genre_id||'');
