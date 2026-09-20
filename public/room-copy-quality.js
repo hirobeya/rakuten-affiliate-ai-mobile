@@ -86,8 +86,8 @@
     {phrases:['モバイルバッテリー'],category:'charging',usage:'mobile_battery',priority:125},
     {phrases:['収納ボックス'],category:'storage',usage:'storage_box',priority:125},
     {phrases:['収納ケース','衣装ケース'],category:'storage',usage:'storage_case',priority:120},
-    {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:120},
-    {phrases:['お掃除手袋','掃除手袋'],category:'cleaning',usage:'glove',priority:118},
+    {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:135},
+    {phrases:['お掃除 手袋','掃除 手袋','お掃除手袋','掃除手袋'],category:'cleaning',usage:'glove',priority:135},
     {phrases:['お掃除クロス','掃除クロス'],category:'cleaning',usage:'cloth',priority:116},
     {phrases:['ハンディモップ','モップ'],category:'cleaning',usage:'mop',priority:100},
     {phrases:['掃除ブラシ'],category:'cleaning',usage:'brush',priority:100},
@@ -121,6 +121,10 @@
   function collectClassificationCandidates(itemName){
     const title=buildClassificationTitle(itemName);
     const out=[];
+    const accessoryMatch=title.match(/モバイルバッテリー用.{0,20}(?:ケース|ポーチ)/i);
+    if(accessoryMatch){
+      out.push({category:'accessory',usage:'mobile_battery_case',phrase:accessoryMatch[0],priority:145,score:145+Math.min(18,accessoryMatch[0].length),pos:accessoryMatch.index||0});
+    }
     for(const rule of CLASSIFICATION_RULES){
       for(const phrase of rule.phrases){
         const pos=title.toLowerCase().indexOf(String(phrase).toLowerCase());
