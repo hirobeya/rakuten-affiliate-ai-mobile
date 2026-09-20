@@ -863,7 +863,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/room-copy-quality.js?v=20260920-1"></script>
+<script src="/room-copy-quality.js?v=20260920-2"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
@@ -2096,12 +2096,22 @@ function productContext(i){
   );
 }
 
+function groundedAnalysis(i){
+  if(UrenaviPainCopy.analyzeRoomProduct) return UrenaviPainCopy.analyzeRoomProduct(i,k.value.trim());
+  const ctx=productContext(i);
+  return {audience:ctx.audience||'',impact:ctx.benefit||''};
+}
+
 function aud(i){
-  return productContext(i).audience;
+  return groundedAnalysis(i).audience;
 }
 
 function pts(i){
-  return UrenaviPainCopy.analysisPoints(i,k.value.trim());
+  const a=groundedAnalysis(i);
+  const out=[];
+  if(a.impact) out.push(a.impact);
+  if(Number.isFinite(+i.estimatedCommission)) out.push('報酬目安は約'+fmt(i.estimatedCommission)+'円/件');
+  return out.slice(0,2);
 }
 
 function post(i,p='room'){
