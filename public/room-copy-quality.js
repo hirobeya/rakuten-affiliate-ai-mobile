@@ -175,8 +175,20 @@
       `${lead}まわりを手早く整えたいときの選択肢になりそうです。`,
       `${lead}の作業をシンプルにしたい人が検討しやすい商品です。`
     ];
-    const first=templates[((variant%templates.length)+templates.length)%templates.length];
-    return `${first}\n${use}ため、${impact}。`;
+    const tails=[
+      `${lead}を使う場面に合わせて取り入れやすく、${impact}。`,
+      `${lead}を日常の作業に取り入れることで、${impact}。`,
+      `${lead}を必要な場所で使いやすく、${impact}。`,
+      `${lead}を使う動作を増やしすぎず、${impact}。`,
+      `${lead}を目的に合わせて使うことで、${impact}。`,
+      `${lead}を普段の流れに取り入れやすく、${impact}。`,
+      `${lead}を使う工程をシンプルにしやすく、${impact}。`,
+      `${lead}を必要なときに使いやすく、${impact}。`,
+      `${lead}を使う場面を絞りやすく、${impact}。`,
+      `${lead}を用途に合わせて使いやすく、${impact}。`
+    ];
+    const idx=((variant%templates.length)+templates.length)%templates.length;
+    return `${templates[idx]}\n${tails[idx]}`;
   }
 
   function shortFallback(item){
