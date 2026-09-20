@@ -382,6 +382,41 @@ for(const tc of fixture.cases.slice(0,11)){
   }
 }
 
+
+// Product-specific ROOM copy: the opening must identify the actual product,
+// and the value statement may only expand a verified title-derived feature conservatively.
+{
+  const tc=fixture.cases.find(x=>x.id==='S1');
+  const item={itemName:tc.itemName,itemPrice:5780};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0,usedOpenings:new Set(),usedSeconds:new Set()});
+  const first=copy.split('\n')[0];
+  if(!first.includes(api.buildSafeDisplayName(item,a)) && !first.includes('収納ボックス')) fail('grounded-room-S1','opening must carry product identity: '+first);
+  for(const fact of a.facts||[]){
+    if(!item.itemName.includes('折') && fact==='折りたたみ対応') fail('grounded-room-S1','feature was not grounded in title');
+  }
+  if(/絶対|必ず|保証|改善|治る|快眠|安眠/.test(copy)) fail('grounded-room-S1','unsupported strong claim in grounded copy: '+copy);
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='live-battery-rank5-anker-zolo');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:2,usedOpenings:new Set(),usedSeconds:new Set()});
+  const first=copy.split('\n')[0];
+  if(!/モバイルバッテリー|Power Bank/i.test(first)) fail('grounded-room-battery','battery identity missing from opening: '+first);
+  for(const fact of a.facts||[]){
+    if(!copy.includes(fact)) fail('grounded-room-battery','verified fact missing from copy: '+fact);
+  }
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='P1');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  if(a.outputMode!=='fallback') fail('grounded-room-P1','known drive-bed conflict must stay fallback');
+  if(/使いやすく|暮らし|快適|安心/.test(copy)) fail('grounded-room-P1','fallback must not add inferred benefit: '+copy);
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);

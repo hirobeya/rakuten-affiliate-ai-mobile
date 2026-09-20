@@ -588,6 +588,64 @@
     '必要なときに電源を補えるようにしておくと、充電切れに備えやすくなりそうです。'
   ];
 
+  function groundedFeatureSentence(fact){
+    const f=String(fact||'').trim();
+    if(!f) return '';
+    if(/折りたたみ/.test(f)) return '使わないときの置き方まで考えて選びたいときに、確認しやすい特徴です。';
+    if(/省スペース|スリム|薄型/.test(f)) return '置き場所を取りすぎたくないときに、確認しておきたい特徴です。';
+    if(/伸縮/.test(f)) return '長さを調整できるタイプを探しているときに、確認しやすい特徴です。';
+    if(/使い捨て/.test(f)) return '交換しながら使うタイプを探しているときに、確認しやすい特徴です。';
+    if(/取替式/.test(f)) return '取り替えながら使えるタイプを探しているときに、確認しやすい特徴です。';
+    if(/両面/.test(f)) return '両面タイプを条件に選びたいときに、確認しやすい特徴です。';
+    if(/USB-C/.test(f)) return 'USB-C対応を条件に選びたいときに、比較しやすいポイントです。';
+    if(/急速充電/.test(f)) return '急速充電対応を条件に選びたいときに、比較しやすいポイントです。';
+    if(/ワイヤレス充電/.test(f)) return 'ワイヤレス充電対応を条件に選びたいときに、比較しやすいポイントです。';
+    if(/マイクロファイバー|吸水|速乾|防水|撥水|コードレス|コンパクト/.test(f)) return f+'という表記を重視して選びたいときに、確認しやすいポイントです。';
+    if(/枚(?:セット|入り)|個(?:セット|入り)|本(?:セット|入り)|袋(?:セット|入り)|組(?:セット|入り)/.test(f)) return f+'という数量表記を確認しながら選びたいときに、比較しやすいポイントです。';
+    return f+'という特徴を条件に商品を比べたいときに、確認しやすいポイントです。';
+  }
+
+  function groundedAudience(a,item){
+    const fact=(a.facts||[])[0];
+    const usage=primaryUsageWord(item);
+    if(fact && usage) return fact+'を条件に'+usage+'を探している人';
+    if(fact) return fact+'という特徴を重視して選びたい人';
+    return a.audience||'商品名と用途を確認しながら選びたい人';
+  }
+
+  function groundedOpening(a,item,variant=0,options={}){
+    const title=buildSafeDisplayName(item,a);
+    const fact=(a.facts||[])[0];
+    const usage=primaryUsageWord(item);
+    const identity=usage||title;
+    const openings=[
+      title+'を探しているなら、まず確認したいポイントを絞って見ておきたい商品です。',
+      title+'が候補なら、商品名に書かれた特徴を見ながら比べたいところです。',
+      identity+'を選ぶときに、条件をひとつずつ確認したい人向けの候補です。',
+      title+'を比較するときに、商品名から確認できる特徴を見て選びたい商品です。',
+      identity+'を探していて、仕様を見落とさず選びたいときに確認したい商品です。',
+      title+'が気になったら、商品名にある特徴を条件に比較しやすい商品です。',
+      identity+'を選ぶ候補として、商品名に書かれたポイントを確認しながら見たい商品です。',
+      title+'を検討するなら、用途と特徴を確認してから選びたい商品です。',
+      identity+'を探すときに、商品名の特徴を手がかりに比較したい候補です。',
+      title+'を選ぶ前に、商品名に書かれた特徴を確認しておきたい商品です。'
+    ];
+    const seconds=[
+      groundedFeatureSentence(fact)||a.impact||'用途を確認しながら選ぶときの候補になりそうです。',
+      groundedFeatureSentence(fact)||a.impact||'商品名と用途を見比べながら検討しやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'自分が必要とする条件に合うか確認しながら選びやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'用途が合うかを確認しながら候補に入れやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'商品名の特徴を見ながら比較したいときに確認しやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'条件を絞って商品を探すときに見比べやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'必要な用途に合うかを確認しながら選ぶ助けになりそうです。',
+      groundedFeatureSentence(fact)||a.impact||'特徴を見ながら候補を比べるときに確認しやすそうです。',
+      groundedFeatureSentence(fact)||a.impact||'商品ごとの違いを見ながら検討するときの候補になりそうです。',
+      groundedFeatureSentence(fact)||a.impact||'用途と条件を確認して選びたいときに見やすい候補です。'
+    ];
+    const idx=((Number(variant)||0)%10+10)%10;
+    return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
+  }
+
   function openingFor(a,item,variant=0,options={}){
     const idx=((Number(variant)||0)%10+10)%10;
     let openings,seconds;
@@ -709,9 +767,9 @@
 
     const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    const opening=openingFor(a,item,variant,options);
+    const opening=groundedOpening(a,item,variant,options);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
-    const audience='\n\nこんな人に向いていそう👇\n・'+a.audience;
+    const audience='\n\nこんな人に向いていそう👇\n・'+groundedAudience(a,item);
     const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
     out=finalScan(out);
@@ -753,6 +811,9 @@
   api.resolveCategoryAndUsage=resolveCategoryAndUsage;
   api.detectConflictingSignals=detectConflictingSignals;
   api.analyzeRoomProduct=analyze;
+  api.groundedFeatureSentence=groundedFeatureSentence;
+  api.groundedAudience=groundedAudience;
+  api.groundedOpening=groundedOpening;
   api.makeRoomCopy=makeRoomCopy;
   api.makeThreadsCopy=makeThreadsCopy;
   api.makeInstagramCopy=makeInstagramCopy;
