@@ -16,3 +16,5 @@ jobs:
           node-version: '24.x'
       - name: Run ROOM copy regression tests
         run: npm run test:copy
+      - name: Run ROOM AI phase1 regression tests
+        run: npm run test:ai

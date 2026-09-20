@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test:copy": "node tests/room-copy-regression.test.js",
-    "vercel-build": "npm run test:copy"
+    "vercel-build": "npm run test:copy && npm run test:ai",
+    "test:ai": "node tests/room-ai-phase1.test.js"
   },
   "engines": {
     "node": "24.x"
