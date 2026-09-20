@@ -494,7 +494,7 @@
     if(!s || visibleLength<4) s=usageName||deriveSafeUnknownName(item?.itemName||'');
     if(!s) s='商品名を確認してください';
     if(s.length>48) s=s.slice(0,48).trim()+'…';
-    return s;
+    return cleanupPairedSymbols(s);
   }
 
   function pickUnusedPattern(patterns,start,used){
