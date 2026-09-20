@@ -15,7 +15,9 @@
         "forbiddenWords": [
           "急速充電",
           "収納",
-          "抜け毛"
+          "抜け毛",
+          "10%オフ",
+          "SS10%オフ"
         ],
         "expectedFeatures": [
           "取替式"
@@ -109,7 +111,10 @@
         "outputMode": "fallback",
         "forbiddenWords": [
           "外出中の充電切れ",
-          "モバイルバッテリー"
+          "モバイルバッテリー",
+          "リフトアップ",
+          "小顔",
+          "充電不要"
         ],
         "expectedFeatures": [
           "防水表記あり"
@@ -131,7 +136,10 @@
         "outputMode": "fallback",
         "forbiddenWords": [
           "調理",
-          "下ごしらえ"
+          "下ごしらえ",
+          "半額",
+          "SALE",
+          "楽天5冠"
         ],
         "expectedFeatures": [],
         "forbiddenFeatures": [
@@ -151,7 +159,12 @@
         "outputMode": "fallback",
         "forbiddenWords": [
           "収納場所を整えて",
-          "収納ケース"
+          "収納ケース",
+          "小顔",
+          "リフトアップ",
+          "改善",
+          "楽天",
+          "OFF"
         ],
         "expectedFeatures": [],
         "forbiddenFeatures": [
@@ -171,7 +184,9 @@
         "outputMode": "fallback",
         "forbiddenWords": [
           "抜け毛ケア",
-          "毛取り"
+          "毛取り",
+          "楽天1位",
+          "OFF"
         ],
         "expectedFeatures": [],
         "forbiddenFeatures": [
@@ -211,7 +226,8 @@
         "outputMode": "fallback",
         "forbiddenWords": [
           "抜け毛ケア",
-          "毛取り"
+          "毛取り",
+          "楽天1位"
         ],
         "expectedFeatures": [
           "犬・猫向け表記あり"
@@ -232,7 +248,13 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [
-          "4本セット"
+          "4本セット",
+          "掃除",
+          "手入れ",
+          "楽天1位",
+          "26冠",
+          "クーポン",
+          "最安"
         ],
         "expectedFeatures": [
           "急速充電対応",
