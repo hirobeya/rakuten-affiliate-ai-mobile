@@ -134,9 +134,10 @@ async function loadGenreChildren(parentId='0'){
     }else{
       const leafName=String(d.genre?.nameJa||selectedGenreName||'選択中のカテゴリー');
       const leafId=String(d.genre?.genreId||selectedGenreId||parentId||'');
-      $('genrePicker').innerHTML='<option value="'+esc(leafId)+'" data-name="'+esc(leafName)+'">'+esc(leafName)+'（最下層）</option>';
+      $('genrePicker').innerHTML='<option value="'+esc(leafId)+'" data-name="'+esc(leafName)+'">'+esc(leafName)+'（最下層）</option>'
+        +'<option value="__reset__">← カテゴリーを選び直す</option>';
       $('genrePicker').value=leafId;
-      $('genrePicker').disabled=true;
+      $('genrePicker').disabled=false;
     }
   }catch(e){
     if(previousHtml){
@@ -319,9 +320,16 @@ async function boot(){
 $('genrePicker').addEventListener('change',async e=>{
   const opt=e.target.selectedOptions?.[0];
   if(!opt?.value)return;
+  if(opt.value==='__reset__'){
+    selectedGenreId='';selectedGenreName='';genrePath=[];
+    renderGenrePath();
+    $('genreSelected').textContent='カテゴリーを選び直してください。';
+    try{await loadGenreChildren('0')}catch(err){$('genreSelected').textContent=err.message}
+    return;
+  }
   selectedGenreId=String(opt.value);
   selectedGenreName=String(opt.dataset.name||opt.textContent||'');
-  genrePath.push({genreId:selectedGenreId,nameJa:selectedGenreName});
+  if(!genrePath.some(x=>String(x.genreId)===selectedGenreId)) genrePath.push({genreId:selectedGenreId,nameJa:selectedGenreName});
   renderGenrePath();
   try{await loadGenreChildren(selectedGenreId)}catch(err){$('genreSelected').textContent=err.message}
 });
