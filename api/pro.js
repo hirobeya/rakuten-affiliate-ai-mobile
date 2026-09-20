@@ -101,6 +101,7 @@ module.exports=async function handler(req,res){
       const settings=await getSettings(email);
       const excludeCodes=settings.avoid_duplicates?await getRecentCodes(email):[];
       const items=await searchProducts(settings,{excludeCodes});
+      if(!items.length) return res.status(404).json({message:'条件に合う新しい商品候補が見つかりませんでした。条件を少し広げてください。'});
       const now=new Date();
       const localDate=jstDate();
       const slot='manual-'+now.toISOString().replace(/\D/g,'').slice(8,14);
