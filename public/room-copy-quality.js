@@ -56,47 +56,141 @@
     return s.replace(/\s+/g,' ').replace(/。。+/g,'。').trim();
   }
 
-  function titleSignals(item){
-    const t=titleOnly(item);
-    const signals=[];
-    const rules=[
-      [/網戸|あみ戸|アミ戸/,'網戸'],
-      [/手袋|グローブ|ミトン/,'手袋'],
-      [/抜け毛|毛取り|毛とり/,'抜け毛'],
-      [/クロス/,'クロス'],
-      [/モップ/,'モップ'],
-      [/ブラシ/,'ブラシ'],
-      [/マイクロファイバー/,'マイクロファイバー'],
-      [/収納|ラック|ケース|ボックス|圧縮袋/,'収納'],
-      [/充電|バッテリー|USB|Type-?C|Lightning/i,'充電'],
-      [/水筒|タンブラー|ボトル|マグ/,'ボトル'],
-      [/洗濯|ランドリー|ハンガー|洗濯ネット/,'洗濯'],
-      [/ピーラー|スライサー|包丁|チョッパー|調理器|フライパン|鍋/,'調理'],
-      [/ペット|猫|犬|グルーミング/,'ペット']
-    ];
-    for(const [re,label] of rules) if(re.test(t)) uniquePush(signals,label);
-    return signals;
+  const CLASSIFICATION_IGNORE_PHRASES=[
+    'ペットボトル用',
+    'ペットボトル',
+    '猫背矯正',
+    '猫背'
+  ];
+
+  const GENERIC_USAGE_WORDS=[
+    'ペット用品','掃除便利グッズ','便利グッズ','生活雑貨','日用品','おすすめ','人気','ランキング','楽天','公式'
+  ];
+
+  const SUFFIX_EXCLUSION_TERMS=[
+    'モバイルバッテリー','充電','収納','ケース','バッグ','ブラシ','ローラー'
+  ];
+
+  const CLASSIFICATION_RULES=[
+    {phrases:['モバイルバッテリー用ケース','モバイルバッテリーケース'],category:'accessory',usage:'mobile_battery_case',priority:140},
+    {phrases:['収納付きベッド','収納付ベッド','収納ベッド'],category:'furniture',usage:'storage_bed',priority:140},
+    {phrases:['ペット用毛取りグローブ','毛取りグローブ','グルーミング手袋'],category:'pet',usage:'grooming',priority:140},
+    {phrases:['ペットウォーターボトル','ペット用ウォーターボトル','ペット給水器','給水ボトル','水飲みボトル'],category:'pet',usage:'water',priority:135},
+    {phrases:['ペットシート','トイレシート','デオシート'],category:'pet',usage:'toilet',priority:135},
+    {phrases:['ペットベッド','犬用ベッド','猫用ベッド','猫ベッド','犬ベッド'],category:'pet',usage:'bed',priority:135},
+    {phrases:['ペットの毛 掃除ブラシ','ペットの毛用掃除ブラシ','抜け毛掃除ブラシ'],category:'cleaning',usage:'pet_hair',priority:130},
+    {phrases:['充電式ハンディクリーナー','ハンディクリーナー','コードレス掃除機','ハンディ掃除機'],category:'cleaning',usage:'vacuum',priority:130},
+    {phrases:['ウォーターピーリング','ウォーターピーラー','洗顔ピーラー'],category:'beauty',usage:'face_peeling',priority:130},
+    {phrases:['美顔ローラー','小顔ローラー','フェイスローラー'],category:'beauty',usage:'face_roller',priority:130},
+    {phrases:['4in1美顔','かっさプレート','美顔かっさ','カッサプレート'],category:'beauty',usage:'kassa',priority:130},
+    {phrases:['モバイルバッテリー'],category:'charging',usage:'mobile_battery',priority:125},
+    {phrases:['収納ボックス'],category:'storage',usage:'storage_box',priority:125},
+    {phrases:['収納ケース','衣装ケース'],category:'storage',usage:'storage_case',priority:120},
+    {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:120},
+    {phrases:['お掃除手袋','掃除手袋'],category:'cleaning',usage:'glove',priority:118},
+    {phrases:['お掃除クロス','掃除クロス'],category:'cleaning',usage:'cloth',priority:116},
+    {phrases:['ハンディモップ','モップ'],category:'cleaning',usage:'mop',priority:100},
+    {phrases:['掃除ブラシ'],category:'cleaning',usage:'brush',priority:100},
+    {phrases:['抜け毛','毛取り','毛とり','グルーミング'],category:'pet',usage:'grooming',priority:100},
+    {phrases:['給水器','水飲み'],category:'pet',usage:'water',priority:95},
+    {phrases:['ピーラー'],category:'cooking',usage:'peeler',priority:50},
+    {phrases:['充電器'],category:'charging',usage:'charger',priority:50},
+    {phrases:['収納'],category:'storage',usage:'generic_storage',priority:40},
+    {phrases:['ブラシ'],category:'cleaning',usage:'brush',priority:40},
+    {phrases:['クロス'],category:'cleaning',usage:'cloth',priority:40},
+    {phrases:['手袋','グローブ'],category:'cleaning',usage:'glove',priority:40}
+  ];
+
+  const SUPPORTED_USAGES=new Set([
+    'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush',
+    'storage.storage_box','storage.storage_case','charging.mobile_battery','pet.grooming'
+  ]);
+
+  function buildClassificationTitle(itemName){
+    let s=norm(itemName);
+    for(const phrase of CLASSIFICATION_IGNORE_PHRASES) s=s.split(phrase).join(' ');
+    const terms=[...SUFFIX_EXCLUSION_TERMS].sort((a,b)=>b.length-a.length);
+    for(const term of terms){
+      const escaped=term.replace(/[.*+?^$()|[\]\\]/g,'\\$&');
+      s=s.replace(new RegExp(escaped+'(?:不要|なし|無し|付属|付き|付)','gi'),' ');
+    }
+    for(const word of GENERIC_USAGE_WORDS) s=s.split(word).join(' ');
+    return norm(s);
+  }
+
+  function collectClassificationCandidates(itemName){
+    const title=buildClassificationTitle(itemName);
+    const out=[];
+    for(const rule of CLASSIFICATION_RULES){
+      for(const phrase of rule.phrases){
+        const pos=title.toLowerCase().indexOf(String(phrase).toLowerCase());
+        if(pos<0) continue;
+        out.push({category:rule.category,usage:rule.usage,phrase,priority:rule.priority,score:rule.priority+Math.min(18,phrase.length),pos});
+      }
+    }
+    const best=new Map();
+    for(const x of out){
+      const key=x.category+'.'+x.usage;
+      const prev=best.get(key);
+      if(!prev || x.score>prev.score || (x.score===prev.score && x.phrase.length>prev.phrase.length)) best.set(key,x);
+    }
+    return [...best.values()].sort((a,b)=>b.score-a.score||b.phrase.length-a.phrase.length||a.pos-b.pos);
+  }
+
+  function resolveCategoryAndUsage(itemName){
+    const candidates=collectClassificationCandidates(itemName);
+    if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates:[],reason:'no_candidate'};
+    const top=candidates[0];
+    const second=candidates.find(x=>x.category!==top.category || x.usage!==top.usage);
+    if(second && (top.score-second.score)<20){
+      return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'close_candidates'};
+    }
+    return {category:top.category,usage:top.usage,kind:top.category,confidence:'title',ambiguous:false,candidates,reason:'resolved',matchedPhrase:top.phrase,score:top.score};
+  }
+
+  const STRONG_CONFLICT_RULES=CLASSIFICATION_RULES.filter(x=>x.priority>=120);
+
+  function detectConflictingSignals(itemName,chosenCategory,chosenUsage){
+    const title=norm(itemName);
+    const conflicts=[];
+    for(const rule of STRONG_CONFLICT_RULES){
+      const signature=rule.category+'.'+rule.usage;
+      if(signature===chosenCategory+'.'+chosenUsage) continue;
+      for(const phrase of rule.phrases){
+        if(title.toLowerCase().includes(String(phrase).toLowerCase())){
+          conflicts.push({category:rule.category,usage:rule.usage,phrase});
+          break;
+        }
+      }
+    }
+    return conflicts;
+  }
+
+  function classificationCopyFields(cls){
+    const key=cls.category+'.'+cls.usage;
+    const map={
+      'pet.grooming':{problem:'ペットの抜け毛を手早く集めたい',use:'抜け毛のお手入れに使う',impact:'日々の毛取りを手軽に続ける助けになりそう',audience:'犬や猫の抜け毛ケアを手軽にしたい人'},
+      'cleaning.window_screen':{problem:'網戸の汚れを手早く掃除したい',use:'網戸掃除に使う',impact:'網戸掃除のひと手間を減らす助けになりそう',audience:'網戸の掃除を手早く済ませたい人'},
+      'cleaning.glove':{problem:'細かい場所を手早く拭きたい',use:'手にはめて掃除に使う',impact:'細かな場所の拭き掃除を進めやすくなりそう',audience:'手にはめて細かい場所を拭きたい人'},
+      'cleaning.cloth':{problem:'ホコリや水分を手早く拭き取りたい',use:'クロスで拭き掃除に使う',impact:'日々の拭き掃除を進めやすくなりそう',audience:'クロスでホコリや水分を手早く拭き取りたい人'},
+      'cleaning.mop':{problem:'気になる場所を手早く掃除したい',use:'モップで掃除に使う',impact:'掃除へ取りかかる手間を減らす助けになりそう',audience:'モップで気になる場所を手早く掃除したい人'},
+      'cleaning.brush':{problem:'細かい汚れをブラシで掃除したい',use:'ブラシで掃除に使う',impact:'細かな場所の掃除を進めやすくなりそう',audience:'ブラシで細かい汚れを掃除したい人'},
+      'storage.storage_box':{problem:'物の置き場所を整えたい',use:'収納ボックスとして使う',impact:'物をまとめて片づける助けになりそう',audience:'収納ボックスで物をまとめたい人'},
+      'storage.storage_case':{problem:'物をケースにまとめて整理したい',use:'収納ケースとして使う',impact:'出し入れや整理をしやすくする助けになりそう',audience:'収納ケースで物を整理したい人'},
+      'charging.mobile_battery':{problem:'スマホなどの充電切れに備えたい',use:'モバイルバッテリーとして充電に使う',impact:'必要なときに充電できる備えになりそう',audience:'外出時などの充電切れに備えたい人'}
+    };
+    return map[key]||{problem:'',use:'',impact:'',audience:''};
   }
 
   function classify(item){
-    const title=titleOnly(item);
-    const detail=detailText(item);
-    const rules=[
-      {re:/ペット|猫|犬|グルーミング|抜け毛|毛取り|毛とり/,kind:'pet',problem:'ペットの抜け毛を手早く集めたい',use:'抜け毛のお手入れに使う',impact:'日々の毛取りを手軽に続ける助けになりそう',audience:'犬や猫の抜け毛ケアを手軽にしたい人'},
-      {re:/網戸|あみ戸|アミ戸|掃除|清掃|クリーナー|モップ|ワイパー|ブラシ|クロス|ダスター|ほこり|ホコリ/,kind:'cleaning',problem:'気になる汚れを手早く掃除したい',use:'掃除したい場所に合わせて使う',impact:'掃除のひと手間を減らす助けになりそう',audience:'掃除をこまめに済ませたい人'},
-      {re:/収納|ラック|ケース|ボックス|クローゼット|ワゴン|整理|圧縮袋/,kind:'storage',problem:'物の置き場所を整えたい',use:'物をまとめたり定位置を作る',impact:'片づけの手間を減らす助けになりそう',audience:'収納場所を整えたい人'},
-      {re:/洗濯|ランドリー|物干し|ハンガー|洗濯ネット/,kind:'laundry',problem:'洗濯まわりの手間を減らしたい',use:'洗濯や物干しに使う',impact:'毎日の洗濯作業を進めやすくなりそう',audience:'洗濯の手間を少しでも減らしたい人'},
-      {re:/ピーラー|スライサー|包丁|チョッパー|みじん切り|調理器|フライパン|鍋|キッチン/,kind:'cooking',problem:'調理の細かな作業を手早く済ませたい',use:'下ごしらえや調理に使う',impact:'料理の準備を進めやすくする助けになりそう',audience:'毎日の調理を少しでも手早く進めたい人'},
-      {re:/モバイルバッテリー|充電器|充電|USB|Type-?C|Lightning/i,kind:'charging',problem:'外出先で充電切れを避けたい',use:'スマホや機器の充電に使う',impact:'電池残量を気にする場面を減らす助けになりそう',audience:'外出中の充電切れが気になる人'},
-      {re:/水筒|タンブラー|ボトル|マグ/,kind:'drinkware',problem:'飲み物を持ち歩きやすくしたい',use:'飲み物の持ち運びに使う',impact:'外出先でも飲み物を用意しやすくなりそう',audience:'通勤・通学や外出用に飲み物を持ち歩きたい人'},
-      {re:/バッグ|ポーチ|サコッシュ|リュック|ショルダー|財布/,kind:'carry',problem:'出先で必要な物をまとめたい',use:'持ち物をまとめて持ち歩く',impact:'必要な物を探す手間を減らす助けになりそう',audience:'持ち物を整理して持ち歩きたい人'},
-      {re:/寝具|布団|枕|マットレス|シーツ/,kind:'bedding',problem:'寝具まわりを扱いやすくしたい',use:'就寝まわりで使う',impact:'寝具まわりの小さな手間を減らす助けになりそう',audience:'寝具まわりの使い勝手を見直したい人'},
-      {re:/ベビー|赤ちゃん|キッズ|子供|子ども/,kind:'kids',problem:'子どもまわりの準備をしやすくしたい',use:'育児や子どもの準備に使う',impact:'日々の準備を進めやすくする助けになりそう',audience:'育児や子どもの準備を少しでもラクにしたい人'}
-    ];
-    for(const r of rules) if(r.re.test(title)) return {...r,confidence:'title'};
-    const detailHits=rules.filter(r=>r.re.test(detail));
-    if(detailHits.length===1) return {...detailHits[0],confidence:'detail'};
-    return {kind:'ambiguous',confidence:'ambiguous',problem:'',use:'',impact:'',audience:''};
+    const base=resolveCategoryAndUsage(titleOnly(item));
+    const fields=classificationCopyFields(base);
+    return {...base,...fields,supported:SUPPORTED_USAGES.has(base.category+'.'+base.usage)};
+  }
+
+  function titleSignals(item){
+    const result=resolveCategoryAndUsage(titleOnly(item));
+    return result.ambiguous?[]:[result.usage,result.category].filter(Boolean);
   }
 
   function extractFacts(item,kind){
@@ -163,8 +257,8 @@
     ];
     for(const [re,label] of distinctTitleFacts) if(re.test(t)) add(label);
     for(const [re,label] of (byKind[kind]||[])) if(re.test(t)) add(label);
-    const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(?:セット|入り)?(?!\s*(?:突破|達成))/);
-    if(pack && +pack[1]>1) add(pack[1]+pack[2]+'セット');
+    const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(セット|入り)(?!\s*(?:突破|達成))/);
+    if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
     const usage=primaryUsageWord(item);
     let filtered=facts.filter(x=>{
       if(usage==='網戸' && /網戸掃除向け/.test(x)) return false;
@@ -177,46 +271,20 @@
   }
 
   function primaryUsageWord(item){
-    const t=titleOnly(item);
-    if(/抜け毛|毛取り|毛とり/.test(t)) return '抜け毛';
-    if(/網戸|あみ戸|アミ戸/.test(t)) return '網戸';
-    if(/手袋|グローブ|ミトン/.test(t)) return '手袋';
-    if(/クロス/.test(t)) return 'クロス';
-    if(/モップ/.test(t)) return 'モップ';
-    if(/ブラシ/.test(t)) return 'ブラシ';
-    const s=titleSignals(item);
-    return s.find(x=>!['マイクロファイバー','ペット'].includes(x)) || s[0] || '';
+    const r=resolveCategoryAndUsage(titleOnly(item));
+    const map={grooming:'抜け毛',window_screen:'網戸',glove:'手袋',cloth:'クロス',mop:'モップ',brush:'ブラシ',storage_box:'収納ボックス',storage_case:'収納ケース',mobile_battery:'モバイルバッテリー'};
+    return map[r.usage]||'';
   }
 
   function usagePhrase(item,kind){
-    const t=titleOnly(item);
-    if(kind==='pet' && /抜け毛|毛取り|毛とり/.test(t)) return '抜け毛のお手入れ';
-    if(kind==='cleaning' && /網戸|あみ戸|アミ戸/.test(t)) return '網戸掃除';
-    if(kind==='cleaning' && /手袋|グローブ|ミトン/.test(t)) return '手袋タイプの掃除';
-    if(kind==='cleaning' && /クロス/.test(t)) return 'クロスでの拭き掃除';
-    if(kind==='cleaning' && /モップ/.test(t)) return 'モップでの掃除';
-    if(kind==='cleaning' && /ブラシ/.test(t)) return 'ブラシでの掃除';
-    const raw=primaryUsageWord(item);
-    return raw||'この商品の使用';
+    const r=resolveCategoryAndUsage(titleOnly(item));
+    const map={grooming:'抜け毛のお手入れ',window_screen:'網戸掃除',glove:'手袋タイプの掃除',cloth:'クロスでの拭き掃除',mop:'モップでの掃除',brush:'ブラシでの掃除',storage_box:'収納ボックスでの整理',storage_case:'収納ケースでの整理',mobile_battery:'モバイルバッテリーでの充電'};
+    return map[r.usage]||'この商品の使用';
   }
 
   function audienceFor(item,kind){
-    const t=titleOnly(item);
-    if(kind==='pet' && /抜け毛|毛取り|毛とり/.test(t)) return '犬や猫の抜け毛を手軽に取りたい人';
-    if(kind==='cleaning' && /網戸|あみ戸|アミ戸/.test(t)) return '網戸の掃除を手早く済ませたい人';
-    if(kind==='cleaning' && /手袋|グローブ|ミトン/.test(t)) return '手にはめて細かい場所を拭きたい人';
-    if(kind==='cleaning' && /クロス/.test(t)) return 'クロスでホコリや水分を手早く拭き取りたい人';
-    if(kind==='cleaning' && /モップ/.test(t)) return 'モップで気になる場所を手早く掃除したい人';
-    if(kind==='cleaning' && /ブラシ/.test(t)) return 'ブラシで細かい汚れを落としたい人';
-    if(kind==='storage') return '収納場所を整えて、出し入れの手間を減らしたい人';
-    if(kind==='laundry') return '洗濯まわりの作業を手早く済ませたい人';
-    if(kind==='cooking') return '調理の下ごしらえを手早く進めたい人';
-    if(kind==='charging') return '外出中の充電切れを避けたい人';
-    if(kind==='drinkware') return '飲み物を持ち歩きやすくしたい人';
-    if(kind==='carry') return '持ち物をまとめて探す手間を減らしたい人';
-    if(kind==='bedding') return '寝具まわりの扱いやすさを見直したい人';
-    if(kind==='kids') return '子どもまわりの準備を手早く進めたい人';
-    return '';
+    const r=classify(item);
+    return r.audience||'';
   }
 
   function openingFor(a,item,variant=0){
@@ -264,8 +332,10 @@
   }
 
   function validateBody(item,a,text){
-    if(a.confidence==='ambiguous') return false;
+    if(a.ambiguous || a.confidence==='ambiguous' || !a.supported) return false;
     if(hasCategoryConflict(a.kind,a.facts)) return false;
+    const conflicts=detectConflictingSignals(titleOnly(item),a.category,a.usage);
+    if(conflicts.length) return false;
     const usage=primaryUsageWord(item);
     if(usage && !String(text).includes(usage)) return false;
     return true;
@@ -292,14 +362,24 @@
     const facts=extractFacts(item,cls.kind);
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
+    const conflicts=cls.ambiguous?[]:detectConflictingSignals(titleOnly(item),cls.category,cls.usage);
+    const supported=!!cls.supported && !cls.ambiguous && conflicts.length===0;
     return {
       source,
       kind:cls.kind,
+      category:cls.category,
+      usage:cls.usage,
       confidence:cls.confidence,
+      ambiguous:!!cls.ambiguous,
+      ambiguityReason:cls.reason||'',
+      candidates:cls.candidates||[],
+      conflicts,
+      supported,
+      outputMode:supported?'full':'fallback',
       problem:sanitizeOutput(cls.problem),
       use:sanitizeOutput(cls.use),
       impact:sanitizeOutput(cls.impact),
-      audience:sanitizeOutput(audienceFor(item,cls.kind) || cls.audience),
+      audience:sanitizeOutput(cls.audience),
       facts,
       sensitive
     };
@@ -313,7 +393,7 @@
 
   function makeRoomCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.confidence==='ambiguous') return shortFallback(item,true);
+    if(a.ambiguous || !a.supported) return shortFallback(item,true);
 
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
@@ -329,7 +409,7 @@
 
   function makeThreadsCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.confidence==='ambiguous') return shortFallback(item);
+    if(a.ambiguous || !a.supported) return shortFallback(item);
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant);
@@ -341,7 +421,7 @@
 
   function makeInstagramCopy(item,keyword,options={}){
     const a=analyze(item);
-    if(a.confidence==='ambiguous') return shortFallback(item);
+    if(a.ambiguous || !a.supported) return shortFallback(item);
     const title=api.shortTitle ? api.shortTitle(item?.itemName||'') : titleOnly(item).slice(0,40);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant);
@@ -352,6 +432,10 @@
   }
 
 
+  api.buildClassificationTitle=buildClassificationTitle;
+  api.collectClassificationCandidates=collectClassificationCandidates;
+  api.resolveCategoryAndUsage=resolveCategoryAndUsage;
+  api.detectConflictingSignals=detectConflictingSignals;
   api.analyzeRoomProduct=analyze;
   api.makeRoomCopy=makeRoomCopy;
   api.makeThreadsCopy=makeThreadsCopy;
