@@ -796,6 +796,141 @@
         "expectedFeatures": [],
         "forbiddenFeatures": []
       }
+    },
+    {
+      "id": "P4",
+      "group": "validation-json-2",
+      "itemName": "【CAT&DOG】キルティングお散歩バッグM GELATO PIQUE CAT&DOG ジェラートピケ ペット用品 その他のペット用品 ピンク ブルー ホワイト【送料無料】[Rakuten Fashion]",
+      "itemPrice": 0,
+      "expect": {
+        "category": "unknown",
+        "usage": "unknown",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "C4",
+      "group": "validation-json-2",
+      "itemName": "【P5倍9/20 13-15時&最大1万円クーポン9/19-24】 【搬入設置無料】掃除用具入れ ロッカー 掃除道具入れ スイッパー 日本製 ホワイトグレー スチールロッカー 掃除用具ロッカー 保管庫 オフィス 会社 学校 SY-45",
+      "itemPrice": 0,
+      "expect": {
+        "category": "unknown",
+        "usage": "unknown",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "S5",
+      "group": "validation-json-2",
+      "itemName": "【最大67%オフクーポン】★即納★ 5面開閉 折りたたみ 収納ボックス 収納 折りたたみ キャスター付き 衣類ケース コンテナケース ふた付き 可愛い 透明 プラスチック 大きい 重なる 押し入れ 組立簡単 コンテナ クロゼット",
+      "itemPrice": 0,
+      "expect": {
+        "category": "storage",
+        "usage": "storage_box",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "★"
+        ],
+        "expectedFeatures": [
+          "折りたたみ対応"
+        ],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "B-M3",
+      "group": "validation-json-2",
+      "itemName": "【クーポンで最安2086円】「年間ランキング受賞」「楽天1位」モバイルバッテリー 半固体電池 大容量 20800mAh 4本ケーブル内蔵 燃えにくい 準固体電池 超軽量 小型 ワイヤレス充電 6台同時充電 3way蓄電 MFi認証 持ち運び便利 残量表示 iPhone/iPad/Android対応",
+      "itemPrice": 0,
+      "expect": {
+        "category": "charging",
+        "usage": "mobile_battery",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "燃えにくい",
+          "4本セット"
+        ],
+        "expectedFeatures": [
+          "ワイヤレス充電対応"
+        ],
+        "forbiddenFeatures": [
+          "4本セット"
+        ]
+      }
+    },
+    {
+      "id": "S1",
+      "group": "storage-family",
+      "itemName": "収納ボックス 収納ケース RISUスタックシステムケース ワイド【2段セット】 カラーボックス チェスト おしゃれ 送料無料 北欧 引き出し クローゼット プラスチック 押し入れ収納 衣類 奥行50 50cm 日本製 天板 リス",
+      "itemPrice": 0,
+      "expect": {
+        "category": "storage",
+        "usage": "storage_box",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "ペット",
+          "モバイルバッテリー",
+          "モップ"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "S6",
+      "group": "storage-family",
+      "itemName": "中が透けない 収納ケース 引き出し 奥行74 2個組/3個組/4個組 収納ボックス 幅39 高さ18/22/30 cm 衣装ケース 押入れ収納 押入れ クローゼット収納 クローゼット WIC ポリプロピレン プラスチック 日本製 【送料無料】",
+      "itemPrice": 0,
+      "expect": {
+        "category": "storage",
+        "usage": "storage_box",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "ペット",
+          "モバイルバッテリー",
+          "モップ",
+          "2個組セット",
+          "3個組セット",
+          "4個組セット"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
+          "2個組",
+          "3個組",
+          "4個組"
+        ]
+      }
+    },
+    {
+      "id": "S8",
+      "group": "storage-family",
+      "itemName": "収納ボックス フタ プラスチック製 頑丈【タッグボックス】大容量 衣装ケース 衣類 押入 収納ケース カラーボックス アウトドア キャンプ 飼育 収納箱 丈夫 クリアケース 積み重ね タグボックス 伸和 01 02 03 04 05 06 07 08 09",
+      "itemPrice": 0,
+      "expect": {
+        "category": "storage",
+        "usage": "storage_box",
+        "ambiguous": false,
+        "outputMode": "full",
+        "forbiddenWords": [
+          "ペット",
+          "モバイルバッテリー",
+          "モップ"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
     }
   ]
 }

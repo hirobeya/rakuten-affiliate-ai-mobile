@@ -19,6 +19,20 @@ function ok(id,msg){
   console.log('PASS',id,'-',msg);
 }
 
+function assertBalancedSymbols(id,text){
+  const pairs=[['【','】'],['〖','〗'],['（','）'],['(',')'],['「','」'],['『','』'],['[',']'],['［','］']];
+  for(const [open,close] of pairs){
+    let depth=0;
+    for(const ch of String(text||'')){
+      if(ch===open) depth++;
+      else if(ch===close){ depth--; if(depth<0){ fail(id,`unmatched closing bracket ${close}: ${text}`); break; } }
+    }
+    if(depth!==0) fail(id,`unmatched bracket pair ${open}${close}: ${text}`);
+  }
+  const stars=(String(text||'').match(/★/g)||[]).length;
+  if(stars%2!==0) fail(id,'isolated ★ remains: '+text);
+}
+
 const rankVariantById={
   'clean-window':0,
   'clean-glove':1,
@@ -52,6 +66,7 @@ for(const tc of fixture.cases){
   }
   if(copy.length>500) fail(tc.id,`copy exceeds 500 chars: ${copy.length}`);
   if(!copy.includes('※アフィリエイト広告を利用しています')) fail(tc.id,'ROOM disclosure missing');
+  assertBalancedSymbols(tc.id,copy);
 
   const riskyInCopy=['楽天1位','ランキング1位','26冠','No.1','ナンバーワン','リフトアップ','小顔効果','痩せる','若返る','治る','改善','必ず','絶対'];
   for(const word of riskyInCopy){
@@ -110,6 +125,34 @@ for(const id of ['counter-power-bank-case','counter-powerbank-pouch']){
   const tc=fixture.cases.find(x=>x.id==='pet-hygiene-wipe-conflict');
   const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:0},'');
   if(!a.ambiguous || a.ambiguityReason!=='pet_toilet_hygiene_conflict') fail(tc.id,'pet.toilet / pet.hygiene_wipe conflict not detected');
+}
+
+// Second validation batch regression: exact real itemName cases.
+for(const id of ['P4','C4','S5','B-M3']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const item={itemName:tc.itemName,itemPrice:0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  assertBalancedSymbols(id,copy);
+  if(a.outputMode!==tc.expect.outputMode) fail(id,`outputMode expected ${tc.expect.outputMode}, got ${a.outputMode}`);
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='B-M3');
+  const item={itemName:tc.itemName,itemPrice:0};
+  const a=api.analyzeRoomProduct(item,'');
+  if(!a.claimRisk || !(a.claimRiskTerms||[]).includes('燃えにくい')) fail('B-M3','燃えにくい must be claimRisk');
+  if(api.buildSafeDisplayName(item,a)!=='モバイルバッテリー') fail('B-M3','claimRisk battery must use モバイルバッテリー safe title');
+}
+for(const id of ['S1','S6','S8']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const item={itemName:tc.itemName,itemPrice:0};
+  const a=api.analyzeRoomProduct(item,'');
+  if(a.category!=='storage' || a.usage!=='storage_box' || a.outputMode!=='full' || a.ambiguous) fail(id,`storage family resolution failed: ${a.category}.${a.usage} mode=${a.outputMode} ambiguous=${a.ambiguous}`);
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='S6');
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:0},'');
+  for(const bad of ['2個組','3個組','4個組']) if((a.facts||[]).includes(bad)) fail('S6','quantity feature must not include '+bad);
 }
 
 // Same-search regression: opening line and second line must not repeat.
@@ -208,6 +251,11 @@ if(!appHtml.includes("if(ta){\n      ta.value=json;")) fail('preview-export','JS
 }
 if(!appHtml.includes("return 'no_match'")) fail('preview-export','fallbackReason no_match missing');
 if(!appHtml.includes('topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[]')) fail('preview-export','topCandidates missing from validation JSON');
+if(!appHtml.includes('promoRisk:Boolean(a?.promoRisk)')) fail('preview-export','promoRisk missing from validation JSON');
+if(!appHtml.includes('claimRisk:Boolean(a?.claimRisk)')) fail('preview-export','claimRisk missing from validation JSON');
+if(!appHtml.includes('warningRisk:Boolean(a?.warningRisk)')) fail('preview-export','warningRisk missing from validation JSON');
+if(!appHtml.includes('promoRiskTerms:Array.isArray(a?.promoRiskTerms)?a.promoRiskTerms:[]')) fail('preview-export','promoRiskTerms missing from validation JSON');
+if(!appHtml.includes('claimRiskTerms:Array.isArray(a?.claimRiskTerms)?a.claimRiskTerms:[]')) fail('preview-export','claimRiskTerms missing from validation JSON');
 
 
 

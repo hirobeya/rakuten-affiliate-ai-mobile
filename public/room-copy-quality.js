@@ -143,11 +143,26 @@
     return [...best.values()].sort((a,b)=>b.score-a.score||b.phrase.length-a.phrase.length||a.pos-b.pos);
   }
 
+  function classificationFamily(candidate){
+    if(!candidate) return '';
+    if(candidate.category==='storage' && ['storage_box','storage_case','generic_storage'].includes(candidate.usage)) return 'storage.container';
+    return candidate.category+'.'+candidate.usage;
+  }
+
+  function chooseMostSpecificSameFamily(candidates,family){
+    const same=(candidates||[]).filter(x=>classificationFamily(x)===family);
+    if(!same.length) return null;
+    return [...same].sort((a,b)=>b.phrase.length-a.phrase.length||b.priority-a.priority||a.pos-b.pos)[0];
+  }
+
   function resolveCategoryAndUsage(itemName){
     const candidates=collectClassificationCandidates(itemName);
     if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'unknown',confidence:'none',ambiguous:false,candidates:[],reason:'no_match'};
-    const top=candidates[0];
-    const second=candidates.find(x=>x.category!==top.category || x.usage!==top.usage);
+    let top=candidates[0];
+    const topFamily=classificationFamily(top);
+    const sameFamilyBest=chooseMostSpecificSameFamily(candidates,topFamily);
+    if(sameFamilyBest) top=sameFamilyBest;
+    const second=candidates.find(x=>classificationFamily(x)!==classificationFamily(top));
     if(second){
       const pair=new Set([top.category+'.'+top.usage,second.category+'.'+second.usage]);
       if(pair.has('pet.toilet') && pair.has('pet.hygiene_wipe')){
@@ -178,6 +193,7 @@
     for(const rule of STRONG_CONFLICT_RULES){
       const signature=rule.category+'.'+rule.usage;
       if(signature===chosenCategory+'.'+chosenUsage) continue;
+      if(classificationFamily(rule)===classificationFamily({category:chosenCategory,usage:chosenUsage})) continue;
       for(const phrase of rule.phrases){
         if(title.toLowerCase().includes(String(phrase).toLowerCase())){
           conflicts.push({category:rule.category,usage:rule.usage,phrase});
@@ -311,7 +327,7 @@
 
   const CLAIM_RISK_RULES=[
     /小顔(?:効果)?/g,/リフトアップ/g,/痩せる|痩身/g,/若返る|若返り/g,/改善/g,/治る|治療/g,/美白/g,
-    /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/臭わない/g,/匂わない/g,/臭くない/g,/予防/g,/効果/g,/効能/g,
+    /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/臭わない/g,/匂わない/g,/臭くない/g,/燃えにくい/g,/難燃/g,/発火防止/g,/予防/g,/効果/g,/効能/g,
     /No\.?\s*1/gi,/ナンバーワン/g,/一番/g,/最高/g,/最強/g,/絶対/g,/必ず/g
   ];
 
@@ -349,7 +365,29 @@
   }
 
   function isPromoText(text){
-    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|即納|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+  }
+
+  function cleanupPairedSymbols(text){
+    const pairs=[['【','】'],['〖','〗'],['（','）'],['(',')'],['「','」'],['『','』'],['[',']'],['［','］']];
+    const cleanLine=line=>{
+      let chars=[...String(line||'')];
+      const remove=new Set();
+      for(const [open,close] of pairs){
+        const stack=[];
+        for(let i=0;i<chars.length;i++){
+          if(remove.has(i)) continue;
+          if(chars[i]===open) stack.push(i);
+          else if(chars[i]===close){ if(stack.length) stack.pop(); else remove.add(i); }
+        }
+        for(const i of stack) remove.add(i);
+      }
+      chars=chars.filter((_,i)=>!remove.has(i));
+      const stars=chars.reduce((n,ch)=>n+(ch==='★'?1:0),0);
+      if(stars%2===1) chars=chars.filter(ch=>ch!=='★');
+      return chars.join('');
+    };
+    return String(text||'').split('\n').map(cleanLine).join('\n');
   }
 
   function tidyDisplayTitle(text){
@@ -367,12 +405,13 @@
       .replace(/[\s!！★☆\\＼\/／"'「」『』【】〖〗・|｜]+$/g,' ')
       .replace(/\s+/g,' ')
       .trim();
-    return s;
+    return cleanupPairedSymbols(s);
   }
 
   function stripPromotionalText(itemName){
     let s=titleOnly({itemName});
     s=s
+      .replace(/★([^★]{0,80})★/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/[＼\\]([^＼／\\/]{0,140})[／/]/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/〖([^〗]{0,140})〗/g,(m,x)=>isPromoText(x)?' ':m)
@@ -537,7 +576,8 @@
       .replace(/病気を防ぐ|予防する/g,'日常のケアに取り入れやすそう')
       .replace(/改善する|改善します/g,'整える助けになりそう')
       .replace(/解消する|解消します/g,'負担を減らす助けになりそう');
-    return s.split('\n').map(x=>x.replace(/[ \t]+/g,' ').trimEnd()).join('\n').trim();
+    s=s.split('\n').map(x=>x.replace(/[ \t]+/g,' ').trimEnd()).join('\n').trim();
+    return cleanupPairedSymbols(s);
   }
 
   function analyze(item){
