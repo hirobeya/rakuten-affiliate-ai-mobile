@@ -8,6 +8,7 @@ const DEFAULTS={
   genre_id:null,
   genre_name:null,
   theme:'',
+  product_keyword:'',
   min_price:null,
   max_price:null,
   sort:'standard',
@@ -39,6 +40,7 @@ function sanitize(input={}){
   if(genreId && !/^\d+$/.test(genreId)) throw new Error('楽天ジャンルを選び直してください。');
   const genreName=String(input.genre_name||'').trim().slice(0,128)||null;
   const theme=String(input.theme||'').trim().slice(0,128);
+  const productKeyword=String(input.product_keyword||'').trim().slice(0,128);
   if(!genreId) throw new Error('楽天市場カテゴリーを選んでください。');
   return {
     enabled:input.enabled!==false,
@@ -46,6 +48,7 @@ function sanitize(input={}){
     genre_id:genreId,
     genre_name:genreName,
     theme,
+    product_keyword:productKeyword,
     min_price:min,
     max_price:max,
     sort,
