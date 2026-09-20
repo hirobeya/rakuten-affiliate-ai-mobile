@@ -105,7 +105,7 @@
 
   const SUPPORTED_USAGES=new Set([
     'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush',
-    'storage.storage_box','storage.storage_case','charging.mobile_battery','pet.grooming'
+    'storage.storage_box','storage.storage_case','charging.mobile_battery','pet.grooming','pet.bed'
   ]);
 
   function buildClassificationTitle(itemName){
@@ -208,6 +208,7 @@
     const key=cls.category+'.'+cls.usage;
     const map={
       'pet.grooming':{problem:'ペットの抜け毛を手早く集めたい',use:'抜け毛のお手入れに使う',impact:'日々の毛取りを手軽に続ける助けになりそう',audience:'犬や猫の抜け毛ケアを手軽にしたい人'},
+      'pet.bed':{problem:'ペットが休む場所を用意したい',use:'ペット用ベッドとして使う',impact:'ペットが休む場所を整える助けになりそう',audience:'ペット用の寝床を探している人'},
       'cleaning.window_screen':{problem:'網戸の汚れを手早く掃除したい',use:'網戸掃除に使う',impact:'網戸掃除のひと手間を減らす助けになりそう',audience:'網戸の掃除を手早く済ませたい人'},
       'cleaning.glove':{problem:'細かい場所を手早く拭きたい',use:'手にはめて掃除に使う',impact:'細かな場所の拭き掃除を進めやすくなりそう',audience:'手にはめて細かい場所を拭きたい人'},
       'cleaning.cloth':{problem:'ホコリや水分を手早く拭き取りたい',use:'クロスで拭き掃除に使う',impact:'日々の拭き掃除を進めやすくなりそう',audience:'クロスでホコリや水分を手早く拭き取りたい人'},
@@ -259,7 +260,7 @@
       ],
       storage:[
         [/圧縮袋/,'圧縮袋タイプ'],
-        [/折りたたみ|折畳/,'折りたたみ対応'],
+        [/折りたたみ|折畳|折り畳み/,'折りたたみ対応'],
         [/省スペース|スリム/,'省スペース設計']
       ],
       charging:[
@@ -310,7 +311,7 @@
 
   function primaryUsageWord(item){
     const r=resolveCategoryAndUsage(titleOnly(item));
-    const map={grooming:'抜け毛',window_screen:'網戸',glove:'手袋',cloth:'クロス',mop:'モップ',brush:'ブラシ',storage_box:'収納ボックス',storage_case:'収納ケース',mobile_battery:'モバイルバッテリー'};
+    const map={grooming:'抜け毛',window_screen:'網戸',glove:'手袋',cloth:'クロス',mop:'モップ',brush:'ブラシ',storage_box:'収納ボックス',storage_case:'収納ケース',mobile_battery:'モバイルバッテリー',bed:'ベッド'};
     return map[r.usage]||'';
   }
 
@@ -365,7 +366,7 @@
   }
 
   function isPromoText(text){
-    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|即納|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|即納|搬入設置無料|設置無料|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
   }
 
   function cleanupPairedSymbols(text){
@@ -413,10 +414,10 @@
     s=s
       .replace(/★([^★]{0,80})★/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/[＼\\]([^＼／\\/]{0,140})[／/]/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/〖([^〗]{0,140})〗/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/\[([^\]]{0,140})\]/g,(m,x)=>isPromoText(x)?' ':m)
-      .replace(/［([^］]{0,140})］/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
+      .replace(/〖([^〗]{0,140})〗/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
+      .replace(/\[([^\]]{0,140})\]/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
+      .replace(/［([^］]{0,140})］/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
       .replace(/＼?当日発送／?/g,' ')
       .replace(/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位(?:\s*\d+冠)?/g,' ')
       .replace(/楽天1位(?:\s*\d+冠)?/g,' ')
@@ -427,7 +428,8 @@
       .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
-      .replace(/配布中[!！\\/／＼]*/g,' ');
+      .replace(/配布中[!！\\/／＼]*/g,' ')
+      .replace(/搬入設置無料|設置無料|即納/g,' ');
     return tidyDisplayTitle(s);
   }
 
@@ -495,48 +497,113 @@
     return s;
   }
 
-  function openingFor(a,item,variant=0){
-    const lead=usagePhrase(item,a.kind);
-    const idx=((Number(variant)||0)%10+10)%10;
-    const first=[
-      `${lead}を、できるだけ手早く済ませたいときに。`,
-      `${lead}にかかる小さな手間を減らしたい人に。`,
-      `${lead}の準備や作業を少しでも簡単にしたいときに。`,
-      `${lead}を後回しにせず、こまめに済ませたい人向け。`,
-      `${lead}にかかる手間が気になるなら、候補に入れやすい商品です。`,
-      `${lead}をもっと手軽にしたいときにチェックしたい商品です。`,
-      `${lead}を短く済ませたい場面に向いていそうです。`,
-      `${lead}の動作を少し軽くしたい人に。`,
-      `${lead}を手早く済ませたいときの選択肢になりそうです。`,
-      `${lead}をシンプルにしたい人が検討しやすい商品です。`
-    ][idx];
+  function pickUnusedPattern(patterns,start,used){
+    if(!Array.isArray(patterns)||!patterns.length)return '';
+    const taken=used instanceof Set?used:new Set(Array.isArray(used)?used:[]);
+    for(let step=0;step<patterns.length;step++){
+      const candidate=patterns[(start+step)%patterns.length];
+      if(!taken.has(candidate)){
+        if(used instanceof Set)used.add(candidate); else if(Array.isArray(used))used.push(candidate);
+        return candidate;
+      }
+    }
+    return patterns[start%patterns.length];
+  }
 
-    const charging=[
-      '必要なときに充電できる備えがあると、電池残量を気にする場面を減らしやすそうです。',
-      '持ち歩ける電源を用意しておくと、充電できる場所を探す手間を減らせそうです。',
-      '充電手段を手元に用意しておくことで、電池切れへの備えをしやすくなりそうです。',
-      '必要な場面で充電しやすくなり、外出時の電池残量への不安を減らす助けになりそうです。',
-      'コンセントがすぐ見つからない場面でも、充電手段を確保しやすくなりそうです。',
-      'スマホなどの電池残量が少ないときの備えとして使いやすそうです。',
-      '充電できる選択肢を増やしておくことで、移動中の電池切れ対策になりそうです。',
-      '必要なときに電源を補えるようにしておくと、充電切れを避けやすくなりそうです。',
-      '予備の充電手段を用意しておけば、外出先でも機器を使い続けやすくなりそうです。',
-      '充電の選択肢を増やすことで、電池残量を気にする時間を減らせそうです。'
-    ];
-    const generic=[
-      `${lead}を日常の流れに取り入れやすく、作業を始めるまでの手間を抑えやすそうです。`,
-      `${lead}をこまめに行いやすく、後回しにしにくくなりそうです。`,
-      `${lead}を必要な場所ですぐ始めやすく、短時間で済ませる助けになりそうです。`,
-      `${lead}の動作を増やしすぎず、日々の負担を軽くする選択肢になりそうです。`,
-      `${lead}を気づいたときに行いやすく、手間をため込みにくくなりそうです。`,
-      `${lead}を普段の流れに組み込みやすく、作業のハードルを下げやすそうです。`,
-      `${lead}の工程をシンプルにしやすく、取りかかるまでの時間を短くできそうです。`,
-      `${lead}を必要なときに始めやすく、日常の小さな負担を減らす助けになりそうです。`,
-      `${lead}を手早く進めやすく、別の作業に時間を回しやすくなりそうです。`,
-      `${lead}を進めやすくし、日々の作業を軽くするきっかけになりそうです。`
-    ];
-    const second=a.category==='charging'&&a.usage==='mobile_battery'?charging[idx]:generic[idx];
-    return first+'\n'+second;
+  const STORAGE_OPENINGS=[
+    '収納ボックスで、物をひとまとめにしておきたいときに。',
+    '収納場所を整えて、物の置き場所を決めやすくしたいときに。',
+    '身の回りの物をまとめて、収納を整えたいときに。',
+    '収納する物をまとめて、部屋の中を整えたいときに。',
+    '散らばりやすい物を、収納ボックスにまとめたいときに。',
+    '物の置き場所をまとめて、収納しやすくしたいときに。',
+    '収納ボックスを使って、物の定位置を決めたいときに。',
+    '増えた物をひとまとめにして、置き場所を整えたいときに。',
+    '収納する場所を決めて、物をまとめておきたいときに。',
+    '物をまとめる収納先を用意しておきたいときに。'
+  ];
+  const STORAGE_SECONDS=[
+    '物をまとめて収納できると、必要なものを探す手間を減らしやすそうです。',
+    '置き場所をまとめることで、普段の片づけを続けやすくなりそうです。',
+    '収納する場所を決めやすくなれば、使った後も戻しやすくなりそうです。',
+    '物ごとに置き場所をまとめることで、整った状態を保ちやすくなりそうです。',
+    '収納先が決まっていると、物が散らばる場面を減らしやすそうです。',
+    'まとめて置ける場所があると、必要な物の場所を把握しやすくなりそうです。',
+    '物を同じ場所にまとめることで、収納の場所を決めやすくなりそうです。',
+    '収納先をひとつ決めておくと、物の置き場所に迷いにくくなりそうです。',
+    'しまう場所をまとめることで、使わない物を置いておきやすくなりそうです。',
+    '物の置き場所をまとめておくと、普段の片づけを進めやすくなりそうです。'
+  ];
+  const PET_BED_OPENINGS=[
+    'ペットが休むための場所を用意したいときに。',
+    'ペット用の寝床を探しているときに。',
+    'ペットが休める場所を、ひとつ用意しておきたいときに。',
+    'ペットの寝床を用意して、休む場所を決めたいときに。',
+    'ペットが普段休む場所を整えておきたいときに。',
+    'ペット用ベッドを置いて、休む場所を用意したいときに。'
+  ];
+  const PET_BED_SECONDS=[
+    '休むための場所を決めておくことで、普段の居場所を整えやすくなりそうです。',
+    '専用の寝床を用意することで、ペットが過ごす場所を決めやすくなりそうです。',
+    '休む場所をひとつ決めておくと、普段の居場所を用意しやすくなりそうです。',
+    '寝床を用意しておくことで、ペットが休む場所を分けやすくなりそうです。',
+    'ペット用の寝床があると、休むための場所を整えやすくなりそうです。',
+    '休む場所を用意しておくと、ペットの居場所を決めやすくなりそうです。'
+  ];
+  const BATTERY_OPENINGS=[
+    '外出中の充電切れに備えておきたいときに。',
+    'スマホなどの電池残量が気になる場面に備えたい人に。',
+    '必要なときに充電できる手段を持っておきたいときに。',
+    'コンセントが近くにない場面でも、充電手段を用意しておきたいときに。',
+    '移動中でも充電できる備えを持っておきたいときに。',
+    '電池残量が少なくなったときの充電手段を用意したい人に。',
+    '外出先でも充電できる選択肢を持っておきたいときに。',
+    'スマホなどを充電できる予備の電源を用意したいときに。',
+    '充電できる場所が限られる場面に備えておきたい人に。',
+    '必要な場面で電源を補えるようにしておきたいときに。'
+  ];
+  const BATTERY_SECONDS=[
+    '必要なときに充電できる備えがあると、電池残量を気にする場面を減らしやすそうです。',
+    '持ち歩ける充電手段があると、充電できる場所を探す手間を減らせそうです。',
+    '予備の電源を用意しておくことで、電池切れへの備えをしやすくなりそうです。',
+    '充電手段を持っておくと、外出先でも電池残量に対応しやすくなりそうです。',
+    '必要な場面で充電できる選択肢があると、電池切れを避けやすくなりそうです。',
+    '電源を補える手段があることで、移動中の充電にも備えやすくなりそうです。',
+    '予備の充電手段を持っておくと、外出先でも機器を使い続けやすくなりそうです。',
+    '充電できる手段を増やしておくことで、電池残量への不安を減らしやすそうです。',
+    'コンセントが使えない場面でも、充電の選択肢を確保しやすくなりそうです。',
+    '必要なときに電源を補えるようにしておくと、充電切れに備えやすくなりそうです。'
+  ];
+
+  function openingFor(a,item,variant=0,options={}){
+    const idx=((Number(variant)||0)%10+10)%10;
+    let openings,seconds;
+    if(a.category==='storage'&&['storage_box','storage_case'].includes(a.usage)){openings=STORAGE_OPENINGS;seconds=STORAGE_SECONDS;}
+    else if(a.category==='pet'&&a.usage==='bed'){openings=PET_BED_OPENINGS;seconds=PET_BED_SECONDS;}
+    else if(a.category==='charging'&&a.usage==='mobile_battery'){openings=BATTERY_OPENINGS;seconds=BATTERY_SECONDS;}
+    else{
+      const lead=usagePhrase(item,a.kind);
+      openings=[
+        `${lead}を、できるだけ手早く済ませたいときに。`,`${lead}にかかる小さな手間を減らしたい人に。`,
+        `${lead}の準備や動きを少しでも簡単にしたいときに。`,`${lead}を後回しにせず、こまめに済ませたい人向け。`,
+        `${lead}にかかる手間が気になるなら、候補に入れやすい商品です。`,`${lead}をもっと手軽にしたいときにチェックしたい商品です。`,
+        `${lead}を短く済ませたい場面に向いていそうです。`,`${lead}の動きを少し軽くしたい人に。`,
+        `${lead}を手早く済ませたいときの選択肢になりそうです。`,`${lead}をシンプルにしたい人が検討しやすい商品です。`
+      ];
+      seconds=[
+        `${lead}を日常の流れに取り入れやすく、始めるまでの手間を抑えやすそうです。`,
+        `${lead}をこまめに行いやすく、後回しにしにくくなりそうです。`,
+        `${lead}を必要な場所ですぐ始めやすく、短時間で済ませる助けになりそうです。`,
+        `${lead}の動きを増やしすぎず、日々の負担を軽くする選択肢になりそうです。`,
+        `${lead}を気づいたときに行いやすく、手間をため込みにくくなりそうです。`,
+        `${lead}を普段の流れに組み込みやすく、始めるハードルを下げやすそうです。`,
+        `${lead}の流れをシンプルにしやすく、取りかかるまでの時間を短くできそうです。`,
+        `${lead}を必要なときに始めやすく、日常の小さな負担を減らす助けになりそうです。`,
+        `${lead}を手早く進めやすく、ほかのことに時間を回しやすくなりそうです。`,
+        `${lead}を進めやすくし、日々の負担を軽くするきっかけになりそうです。`
+      ];
+    }
+    return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
   }
 
   function shortFallback(item,withDisclosure=false,analysis=null){
@@ -629,7 +696,7 @@
 
     const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    const opening=openingFor(a,item,variant);
+    const opening=openingFor(a,item,variant,options);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
     const audience='\n\nこんな人に向いていそう👇\n・'+a.audience;
     const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
@@ -644,7 +711,7 @@
     if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
     const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    let out=openingFor(a,item,variant);
+    let out=openingFor(a,item,variant,options);
     if(a.facts[0]) out+='\n✔ '+a.facts[0];
     out+='\n\n'+title+'\n'+fmt(item?.itemPrice||0)+'円';
     out=finalScan(trimCopy(out,360));
@@ -676,4 +743,5 @@
   api.makeRoomCopy=makeRoomCopy;
   api.makeThreadsCopy=makeThreadsCopy;
   api.makeInstagramCopy=makeInstagramCopy;
+  api.templateSets={storage:{openings:STORAGE_OPENINGS,seconds:STORAGE_SECONDS},petBed:{openings:PET_BED_OPENINGS,seconds:PET_BED_SECONDS},battery:{openings:BATTERY_OPENINGS,seconds:BATTERY_SECONDS}};
 })(typeof window==='undefined'?null:window);

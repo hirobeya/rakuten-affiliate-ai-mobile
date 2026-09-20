@@ -104,6 +104,14 @@ for(const tc of fixture.cases.filter(x=>x.group==='validation-json')){
   if(/「\s*」|『\s*』|【\s*】|〖\s*〗/.test(safe)) fail(tc.id,'A5 empty brackets remain in safe display name: '+safe);
 }
 
+// Promo removal preserves word boundaries.
+{
+  const cleaned=api.stripPromotionalText('【搬入設置無料】掃除用具入れ ロッカー');
+  if(cleaned!=='掃除用具入れ ロッカー') fail('spacing','搬入設置無料 removal failed: '+cleaned);
+  const kept=api.stripPromotionalText('【CAT&DOG】キルティングお散歩バッグM');
+  if(kept!=='CAT&DOG キルティングお散歩バッグM') fail('spacing','kept bracket content must preserve a word boundary: '+kept);
+}
+
 // Power Bank synonym and accessory priority regression.
 for(const id of ['live-battery-rank5-anker-zolo']){
   const tc=fixture.cases.find(x=>x.id===id);
@@ -155,6 +163,52 @@ for(const id of ['S1','S6','S8']){
   for(const bad of ['2個組','3個組','4個組']) if((a.facts||[]).includes(bad)) fail('S6','quantity feature must not include '+bad);
 }
 
+// Category-specific prose must not leak unrelated vocabulary.
+for(const id of ['S1','P1','M3']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  const firstTwo=copy.split('\n').slice(0,2).join('\n');
+  if(id==='S1' && /掃除|手入れ|作業|整理を気づいたときに/.test(firstTwo)) fail(id,'storage prose leaked unrelated wording: '+firstTwo);
+  if(id==='P1' && /掃除|手入れ|作業/.test(firstTwo)) fail(id,'pet.bed prose leaked unrelated wording: '+firstTwo);
+  if(id==='M3' && /掃除|手入れ|作業/.test(firstTwo)) fail(id,'battery prose leaked unrelated wording: '+firstTwo);
+}
+
+{
+  const ids=['S1','S2','S3','S4','S5','S6','S8','S9','S10'];
+  const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
+  for(let i=0;i<ids.length;i++){
+    const tc=fixture.cases.find(x=>x.id===ids[i]);
+    const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'',{variant:i,usedOpenings,usedSeconds});
+    const lines=copy.split('\n');
+    openings.push(lines[0]); seconds.push(lines[1]);
+  }
+  if(new Set(openings).size!==openings.length) fail('storage-search','duplicate storage opening: '+JSON.stringify(openings));
+  if(new Set(seconds).size!==seconds.length) fail('storage-search','duplicate storage second line: '+JSON.stringify(seconds));
+}
+
+{
+  const ids=['P1','P9','P10'];
+  const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
+  for(let i=0;i<ids.length;i++){
+    const tc=fixture.cases.find(x=>x.id===ids[i]);
+    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+    const a=api.analyzeRoomProduct(item,'');
+    const copy=api.makeRoomCopy(item,'',{variant:i,usedOpenings,usedSeconds});
+    if(a.category!=='pet'||a.usage!=='bed'||a.outputMode!=='full') fail(ids[i],`expected pet.bed full, got ${a.category}.${a.usage} ${a.outputMode}`);
+    for(const bad of ['快眠','安眠','体圧分散']) if(copy.includes(bad)) fail(ids[i],'unsupported pet-bed claim: '+bad);
+    openings.push(copy.split('\n')[0]); seconds.push(copy.split('\n')[1]);
+  }
+  if(new Set(openings).size!==openings.length) fail('pet-bed-search','duplicate pet bed opening');
+  if(new Set(seconds).size!==seconds.length) fail('pet-bed-search','duplicate pet bed second');
+}
+
+{
+  const tc=fixture.cases.find(x=>x.id==='S1');
+  const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:5780},'',{variant:0});
+  if(!copy.includes('価格：5,780円')) fail('S1','price formatting expected 価格：5,780円');
+}
+
 // Same-search regression: opening line and second line must not repeat.
 const sameSearchIds=['clean-window','clean-glove','clean-cloth','pet-grooming'];
 const sameSearchVariants=[0,1,4,5];
@@ -171,6 +225,20 @@ for(let i=0;i<sameSearchIds.length;i++){
 }
 if(new Set(openings).size!==openings.length) fail('same-search','duplicate opening line detected: '+JSON.stringify(openings));
 if(new Set(seconds).size!==seconds.length) fail('same-search','duplicate second line detected: '+JSON.stringify(seconds));
+
+// Template cardinality regression.
+{
+  const sets=api.templateSets;
+  if((sets.storage?.openings||[]).length<10 || (sets.storage?.seconds||[]).length<10) fail('templates','storage needs >=10 opening/second patterns');
+  if((sets.petBed?.openings||[]).length<6 || (sets.petBed?.seconds||[]).length<6) fail('templates','pet bed needs >=6 opening/second patterns');
+  if((sets.battery?.openings||[]).length<10 || (sets.battery?.seconds||[]).length<10) fail('templates','battery needs >=10 opening/second patterns');
+  for(const sentence of [...sets.storage.openings,...sets.storage.seconds]){
+    if(/作業|手入れ|掃除|整理を気づいたときに/.test(sentence)) fail('templates','storage forbidden wording: '+sentence);
+  }
+  for(const sentence of [...sets.petBed.openings,...sets.petBed.seconds,...sets.battery.openings,...sets.battery.seconds]){
+    if(/掃除|手入れ|作業/.test(sentence)) fail('templates','cross-category wording: '+sentence);
+  }
+}
 
 // Explicit quantity regression cases.
 const quantityCases=[

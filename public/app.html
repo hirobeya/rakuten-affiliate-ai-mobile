@@ -1032,6 +1032,8 @@ function showLogin(
 
 let accessGeneration=0;
 let lastSearchItems=[];
+let postCache=new Map();
+let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
 function bootAuth(){
   if(!authBoot) authBoot=checkAuth().finally(()=>{authBoot=null;});
@@ -2314,10 +2316,19 @@ function pts(i){
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
+  const key=p+':'+variant;
+  if(postCache.has(key)) return postCache.get(key);
   const options={variant};
-  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(i,keyword,options);
-  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(i,keyword,options);
-  return UrenaviPainCopy.makeRoomCopy(i,keyword,options);
+  if(p==='room'){
+    options.usedOpenings=roomSentenceContext.openings;
+    options.usedSeconds=roomSentenceContext.seconds;
+  }
+  let value;
+  if(p==='threads') value=UrenaviPainCopy.makeThreadsCopy(i,keyword,options);
+  else if(p==='instagram') value=UrenaviPainCopy.makeInstagramCopy(i,keyword,options);
+  else value=UrenaviPainCopy.makeRoomCopy(i,keyword,options);
+  postCache.set(key,value);
+  return value;
 }
 
 function postReady(i,p='room'){
@@ -2664,6 +2675,8 @@ function render(
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
+  postCache=new Map();
+  roomSentenceContext={openings:new Set(),seconds:new Set()};
   const debugJson=document.getElementById('debugJson');
   if(debugJson) debugJson.value='';
   const debugJsonMeta=document.getElementById('debugJsonMeta');
