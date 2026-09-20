@@ -592,6 +592,32 @@ input,select{
   font-weight:800;
   flex:none
 }
+
+/* Pro integrated panel */
+.proIntegrated{display:none;border:2px solid #d7e3f3;background:linear-gradient(#fff,#f8fbff)}
+.proIntegrated.on{display:block}
+.proHead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.proBadge{display:inline-block;background:#172a4b;color:#fff;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900}
+.proHint{font-size:11px;color:#66758a;line-height:1.55;margin-top:6px}
+.proPath{font-size:11px;color:#617189;line-height:1.5;margin:5px 0}
+.proActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.proActions button{border:0;border-radius:12px;padding:12px;font-weight:900}
+.proPrimary{background:#172a4b;color:#fff}.proGhost{background:#eef3f8;color:#34445d}
+.proChecks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.proCheck{display:flex;gap:7px;align-items:center;padding:9px;border:1px solid #e4eaf2;border-radius:11px;font-size:11px;font-weight:800}
+.proCheck input{width:auto;min-height:0;padding:0}
+.proTimes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.proTimes input{padding:8px;font-size:14px}
+.proMsg{font-size:11px;color:#637188;line-height:1.55;margin-top:8px}
+.proPreview{margin-top:9px;display:grid;gap:8px}
+.proCard{border:1px solid #e2e8f0;border-radius:13px;padding:10px;background:#fff}
+.proCard b{font-size:12px;line-height:1.4;display:block}
+.proMeta{font-size:10px;color:#6d7888;margin-top:4px}
+.proTasks{margin-top:10px}
+.proTask{display:flex;gap:8px;padding:9px 0;border-top:1px solid #edf1f5;font-size:11px;font-weight:800}
+.proTask input{width:auto;min-height:0}
+.proLocked{display:none}
+@media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -649,7 +675,7 @@ input,select{
   <div id="userMail" class="userMail"></div>
 
   <div class="headActions">
-    <a class="proBtn" href="/pro.html">Pro β</a>
+    <span id="planBadge" class="proBtn" style="display:none">Pro</span>
     <button id="logoutBtn" class="logoutBtn">
       ログアウト
     </button>
@@ -683,101 +709,49 @@ input,select{
 <label>最低価格</label>
 
 <select id="min">
-
-<option value="">
-選択してください
-</option>
-
-<option value="0">
-0円〜
-</option>
-
-<option value="500">
-500円〜
-</option>
-
-<option value="1000">
-1,000円〜
-</option>
-
-<option value="3000">
-3,000円〜
-</option>
-
-<option value="5000">
-5,000円〜
-</option>
-
-<option value="10000">
-10,000円〜
-</option>
-
-<option value="30000">
-30,000円〜
-</option>
-
-<option value="50000">
-50,000円〜
-</option>
-
-<option value="100000">
-100,000円〜
-</option>
-
+<option value="">選択してください</option>
+<option value="0">0円〜</option>
+<option value="300">300円〜</option>
+<option value="500">500円〜</option>
+<option value="800">800円〜</option>
+<option value="1000">1,000円〜</option>
+<option value="1500">1,500円〜</option>
+<option value="2000">2,000円〜</option>
+<option value="3000">3,000円〜</option>
+<option value="5000">5,000円〜</option>
+<option value="10000">10,000円〜</option>
+<option value="15000">15,000円〜</option>
+<option value="20000">20,000円〜</option>
+<option value="30000">30,000円〜</option>
+<option value="50000">50,000円〜</option>
+<option value="100000">100,000円〜</option>
+<option value="200000">200,000円〜</option>
+<option value="300000">300,000円〜</option>
+<option value="500000">500,000円〜</option>
 </select>
 
 <label>最高価格</label>
 
 <select id="max">
-
-<option value="">
-選択してください
-</option>
-
-<option value="500">
-〜500円
-</option>
-
-<option value="1000">
-〜1,000円
-</option>
-
-<option value="3000">
-〜3,000円
-</option>
-
-<option value="5000">
-〜5,000円
-</option>
-
-<option value="10000">
-〜10,000円
-</option>
-
-<option value="30000">
-〜30,000円
-</option>
-
-<option value="50000">
-〜50,000円
-</option>
-
-<option value="100000">
-〜100,000円
-</option>
-
-<option value="300000">
-〜300,000円
-</option>
-
-<option value="1000000">
-〜1,000,000円
-</option>
-
-<option value="999999998">
-上限まで
-</option>
-
+<option value="">選択してください</option>
+<option value="500">〜500円</option>
+<option value="1000">〜1,000円</option>
+<option value="1500">〜1,500円</option>
+<option value="2000">〜2,000円</option>
+<option value="3000">〜3,000円</option>
+<option value="5000">〜5,000円</option>
+<option value="8000">〜8,000円</option>
+<option value="10000">〜10,000円</option>
+<option value="15000">〜15,000円</option>
+<option value="20000">〜20,000円</option>
+<option value="30000">〜30,000円</option>
+<option value="50000">〜50,000円</option>
+<option value="100000">〜100,000円</option>
+<option value="200000">〜200,000円</option>
+<option value="300000">〜300,000円</option>
+<option value="500000">〜500,000円</option>
+<option value="1000000">〜1,000,000円</option>
+<option value="999999998">上限まで</option>
 </select>
 
 <label>優先する並び</label>
@@ -818,6 +792,53 @@ input,select{
 
 </section>
 
+
+<section id="proPanel" class="box proIntegrated">
+  <div class="proHead">
+    <div><span class="proBadge">PRO</span> <strong>ROOM運用アシスト</strong></div>
+  </div>
+  <div class="proHint">通常版の検索・AI評価・投稿文生成はそのまま使えます。Proでは、上の価格帯・並び順をそのまま使って商品候補を自動準備します。</div>
+
+  <label>楽天市場カテゴリー</label>
+  <div id="proGenrePath" class="proPath">楽天市場</div>
+  <select id="proGenrePicker"><option value="">カテゴリーを読み込み中…</option></select>
+  <button type="button" id="proGenreBack" class="proGhost" style="border:0;border-radius:10px;padding:9px 11px;margin-top:7px;display:none">← 1つ上のカテゴリーへ</button>
+  <div id="proGenreSelected" class="proMsg">カテゴリーを選択してください。</div>
+
+  <label>商品名・車種・型番（任意）</label>
+  <input id="proProductKeyword" type="text" placeholder="例：ダックス125、iPhone 17、ABC-123">
+
+  <label>テーマ・悩み（任意）</label>
+  <input id="proTheme" type="text" placeholder="例：快適、時短、省スペース">
+  <div class="proHint">テーマは検索必須条件ではなく、候補の評価・並び替えに使います。</div>
+
+  <div class="proChecks">
+    <label class="proCheck"><input id="proSale" type="checkbox" checked>セール・クーポン商品を優先</label>
+    <label class="proCheck"><input id="proDup" type="checkbox" checked>投稿済み商品の重複を避ける</label>
+  </div>
+
+  <label>投稿予定時刻</label>
+  <div class="proTimes">
+    <input id="proT1" type="time" value="08:00">
+    <input id="proT2" type="time" value="12:30">
+    <input id="proT3" type="time" value="20:00">
+  </div>
+
+  <div class="proActions">
+    <button id="proPreviewBtn" class="proPrimary" type="button">この条件で商品プレビュー</button>
+    <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
+  </div>
+  <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を自動選定</button>
+  <div id="proMsg" class="proMsg"></div>
+  <div id="proPreviewResults" class="proPreview"></div>
+
+  <div class="proTasks">
+    <strong style="font-size:13px">今日のROOM活動</strong>
+    <label class="proTask"><input type="checkbox" data-pro-task="follow">フォロー返し候補を確認</label>
+    <label class="proTask"><input type="checkbox" data-pro-task="like">フォロワーの最新投稿を確認</label>
+    <label class="proTask"><input type="checkbox" data-pro-task="post">今日の投稿3件を進める</label>
+  </div>
+</section>
 <section id="res"></section>
 
 </main>
@@ -889,6 +910,8 @@ let sendTimer=null;
 let sendingLogin=false;
 
 let searching=false;
+let currentAppSession=null;
+let currentAccessPlan='base';
 
 
 function setAuthMessage(
@@ -984,17 +1007,20 @@ async function showApp(session) {
   const wasVisible=appRoot.style.display==='block';
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),10000);
-  // Keep the current screen painted while revalidating after an external visit.
   if(!wasVisible) authGate.style.display='flex';
   try {
     const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
+    const access=await response.json().catch(()=>({}));
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
     if(!response.ok) throw new Error('Access check unavailable');
+    currentAppSession=session;
+    currentAccessPlan=String(access.plan||'base');
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
     restoreSearchState(session.user.email||'');
+    await configureIntegratedPro(!!access.pro);
   } catch {
     if(generation!==accessGeneration) return;
     if(wasVisible) document.getElementById('st').textContent='通信状態を確認できませんでした。接続後にもう一度お試しください。';
@@ -3148,6 +3174,156 @@ async()=>{
   }
 
 };
+
+
+const PRO_TASK_KEY='urenavi_pro_tasks_v2';
+let proBooted=false,proGenrePath=[],proGenreId='',proGenreName='',proQueue=[];
+
+function proEl(id){return document.getElementById(id)}
+function proHeaders(){
+  const h={'Content-Type':'application/json'};
+  if(currentAppSession?.access_token) h.Authorization='Bearer '+currentAppSession.access_token;
+  return h;
+}
+function proEsc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function proFetchGenres(genreId='0'){
+  const r=await fetch('/api/pro-genres?'+new URLSearchParams({genreId}),{headers:proHeaders(),credentials:'include',cache:'no-store'});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.message||'楽天市場カテゴリーを取得できませんでした。');
+  return d;
+}
+function proRenderPath(){
+  proEl('proGenrePath').textContent='楽天市場'+(proGenrePath.length?' ＞ '+proGenrePath.map(x=>x.nameJa).join(' ＞ '):'');
+  proEl('proGenreSelected').textContent=proGenreId?'選択中：'+proGenreName:'カテゴリーを選択してください。';
+  proEl('proGenreBack').style.display=proGenrePath.length?'inline-block':'none';
+}
+async function proLoadChildren(parentId='0'){
+  const d=await proFetchGenres(parentId);
+  const children=Array.isArray(d.children)?d.children:[];
+  if(children.length){
+    proEl('proGenrePicker').innerHTML='<option value="">次のカテゴリーを選択</option>'+children.map(x=>'<option value="'+proEsc(x.genreId)+'" data-name="'+proEsc(x.nameJa)+'">'+proEsc(x.nameJa)+'</option>').join('');
+    proEl('proGenrePicker').disabled=false;
+  }else{
+    const name=String(d.genre?.nameJa||proGenreName||'選択中のカテゴリー');
+    const id=String(d.genre?.genreId||proGenreId||parentId||'');
+    proEl('proGenrePicker').innerHTML='<option value="'+proEsc(id)+'" data-name="'+proEsc(name)+'">'+proEsc(name)+'（最下層）</option><option value="__reset__">← カテゴリーを選び直す</option>';
+    proEl('proGenrePicker').value=id;
+    proEl('proGenrePicker').disabled=false;
+  }
+}
+async function proRestoreGenre(s={}){
+  proGenreId=String(s.genre_id||'');proGenreName=String(s.genre_name||'');proGenrePath=[];
+  if(proGenreId){
+    try{
+      const d=await proFetchGenres(proGenreId);
+      proGenrePath=[...(Array.isArray(d.ancestors)?d.ancestors:[]),...(d.genre?[d.genre]:[])].filter(x=>String(x.genreId)!=='0');
+      proGenreName=String(d.genre?.nameJa||proGenreName);
+      await proLoadChildren(proGenreId);
+    }catch{proGenreId='';proGenreName='';proGenrePath=[];await proLoadChildren('0')}
+  }else await proLoadChildren('0');
+  proRenderPath();
+}
+function proSortValue(){
+  const v=document.getElementById('sort').value;
+  return v||'standard';
+}
+function proPayload(){
+  return {
+    enabled:true,genre:'',genre_id:proGenreId||null,genre_name:proGenreName||null,
+    product_keyword:(proEl('proProductKeyword').value||'').trim(),
+    theme:(proEl('proTheme').value||'').trim(),
+    min_price:document.getElementById('min').value===''?null:Number(document.getElementById('min').value),
+    max_price:document.getElementById('max').value===''?null:Number(document.getElementById('max').value),
+    sort:proSortValue(),sale_priority:proEl('proSale').checked,avoid_duplicates:proEl('proDup').checked,
+    posting_times:[proEl('proT1').value,proEl('proT2').value,proEl('proT3').value].filter(Boolean)
+  };
+}
+async function proApply(s={}){
+  proEl('proProductKeyword').value=s.product_keyword||'';
+  proEl('proTheme').value=s.theme||'';
+  proEl('proSale').checked=s.sale_priority!==false;proEl('proDup').checked=s.avoid_duplicates!==false;
+  const t=Array.isArray(s.posting_times)?s.posting_times:[];
+  proEl('proT1').value=t[0]||'08:00';proEl('proT2').value=t[1]||'12:30';proEl('proT3').value=t[2]||'20:00';
+  if(s.min_price!=null) document.getElementById('min').value=String(s.min_price);
+  if(s.max_price!=null) document.getElementById('max').value=String(s.max_price);
+  if(s.sort) document.getElementById('sort').value=String(s.sort);
+  await proRestoreGenre(s);
+}
+function proRenderItems(items=[],label='候補'){
+  proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>'<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b><div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ AI '+proEsc(i.score??'-')+' ｜ レビュー '+proEsc(i.reviewCount||0)+'件</div></div>').join('');
+}
+function proRenderQueue(queue=[]){
+  proQueue=Array.isArray(queue)?queue:[];
+  const items=[];proQueue.forEach(q=>(Array.isArray(q.items)?q.items:[]).forEach(i=>items.push(i)));
+  if(items.length) proRenderItems(items.slice(0,6),'今日の候補');
+}
+async function proSave(){
+  if(!proGenreId){proEl('proMsg').textContent='楽天市場カテゴリーを選んでください。';return false}
+  const r=await fetch('/api/pro?action=settings',{method:'POST',headers:proHeaders(),credentials:'include',body:JSON.stringify(proPayload())});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.message||'Pro設定を保存できませんでした。');
+  proEl('proMsg').textContent='Pro設定を保存しました。上の通常検索条件も自動選定に使います。';
+  return true;
+}
+async function proPreview(){
+  if(!proGenreId){proEl('proMsg').textContent='先に楽天市場カテゴリーを選んでください。';return}
+  proEl('proMsg').textContent='この条件で商品候補を確認しています…';
+  try{
+    const r=await fetch('/api/pro?action=preview',{method:'POST',headers:proHeaders(),credentials:'include',body:JSON.stringify(proPayload())});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.message||'プレビューできませんでした。');
+    const items=Array.isArray(d.items)?d.items:[];
+    proEl('proMsg').textContent=items.length?'この条件で候補になる商品です。':'この条件では候補が見つかりませんでした。';
+    proRenderItems(items,'プレビュー');
+  }catch(e){proEl('proMsg').textContent=e.message||'プレビューできませんでした。'}
+}
+async function proGenerate(){
+  proEl('proMsg').textContent='今日の候補を選定しています…';
+  try{
+    if(!await proSave()) return;
+    const r=await fetch('/api/pro?action=generate',{method:'POST',headers:proHeaders(),credentials:'include',body:'{}'});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.message||'候補を取得できませんでした。');
+    proEl('proMsg').textContent='今日の候補を準備しました。';
+    proRenderQueue(d.queue||[]);
+  }catch(e){proEl('proMsg').textContent=e.message||'候補を取得できませんでした。'}
+}
+function proLoadTasks(){
+  let s={};try{s=JSON.parse(localStorage.getItem(PRO_TASK_KEY)||'{}')}catch{}
+  document.querySelectorAll('[data-pro-task]').forEach(x=>x.checked=!!s[x.dataset.proTask]);
+}
+function proSaveTasks(){
+  const s={};document.querySelectorAll('[data-pro-task]').forEach(x=>s[x.dataset.proTask]=x.checked);
+  localStorage.setItem(PRO_TASK_KEY,JSON.stringify(s));
+}
+async function configureIntegratedPro(enabled){
+  proEl('planBadge').style.display=enabled?'inline-block':'none';
+  proEl('proPanel').classList.toggle('on',enabled);
+  if(!enabled||proBooted)return;
+  proBooted=true;
+  try{
+    const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
+    await proApply(d.settings||{});proLoadTasks();proRenderQueue(d.queue||[]);
+  }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
+}
+proEl('proGenrePicker').addEventListener('change',async e=>{
+  const opt=e.target.selectedOptions?.[0];if(!opt?.value)return;
+  if(opt.value==='__reset__'){proGenreId='';proGenreName='';proGenrePath=[];proRenderPath();await proLoadChildren('0');return}
+  proGenreId=String(opt.value);proGenreName=String(opt.dataset.name||opt.textContent||'');
+  if(!proGenrePath.some(x=>String(x.genreId)===proGenreId)) proGenrePath.push({genreId:proGenreId,nameJa:proGenreName});
+  proRenderPath();try{await proLoadChildren(proGenreId)}catch(e){proEl('proMsg').textContent=e.message}
+});
+proEl('proGenreBack').addEventListener('click',async()=>{
+  if(!proGenrePath.length)return;proGenrePath.pop();
+  const p=proGenrePath[proGenrePath.length-1];proGenreId=p?String(p.genreId):'';proGenreName=p?String(p.nameJa):'';
+  proRenderPath();try{await proLoadChildren(proGenreId||'0')}catch(e){proEl('proMsg').textContent=e.message}
+});
+proEl('proPreviewBtn').addEventListener('click',proPreview);
+proEl('proSaveBtn').addEventListener('click',()=>proSave().catch(e=>proEl('proMsg').textContent=e.message));
+proEl('proGenerateBtn').addEventListener('click',proGenerate);
+document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
 
 </script>
 <script src="/access-guard.js?v=20260919-2"></script>

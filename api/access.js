@@ -97,7 +97,7 @@ module.exports = async function handler(req,res) {
     const isPro=req.query.action==='activate-pro';
     const row=await activate(String(req.query.session_id||''),{plan:isPro?'pro':'base'});
     setDeviceCookie(res,row.email);
-    return res.redirect(303,isPro?'/pro.html?activated=1':'/open-app.html?activated=1');
+    return res.redirect(303,isPro?'/app.html?activated=pro#pro':'/open-app.html?activated=1');
   } catch (e) {
     console.error('access failed', e?.message || 'unknown');
     return res.status(503).json({message:'利用情報を確認できませんでした。時間をおいて再度お試しください。'});
