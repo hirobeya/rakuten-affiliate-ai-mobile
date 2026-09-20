@@ -35,7 +35,7 @@
 <h2>② 今日の商品候補を作る</h2><div class="muted">設定したジャンルから候補を取得し、ウレナビのスコア順で上位3商品を準備します。</div>
 <button class="btn secondary" id="generate">今日の3商品を自動選定</button>
 <div id="genStatus" class="status"></div><div id="results"></div>
-<div class="warn">β版では、指定時刻になってもブラウザを閉じている間の自動処理はまだ行いません。まず「商品選定→投稿文完成→ROOMへ進む」までをPro枠として分離しています。バックグラウンド予約は次の実装段階で追加します。</div>
+<div class="warn">設定した投稿時刻に、バックグラウンドで商品候補を準備します。候補と投稿文はPro画面を開くと確認できます。楽天ROOMへの最終投稿・いいね・フォロー操作は本人が行います。</div>
 </section>
 
 <section class="box">
@@ -55,22 +55,42 @@ const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
 const SUPABASE_KEY='sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:localStorage}});
 const $=id=>document.getElementById(id);
-const KEY='urenavi_pro_settings_v1', TASKKEY='urenavi_pro_tasks_v1';
-let session=null;
+const TASKKEY='urenavi_pro_tasks_v1';
+let session=null,currentQueue=[];
 
-function loadSettings(){
-  try{
-    const s=JSON.parse(localStorage.getItem(KEY)||'{}');
-    for(const id of ['genre','min','max','sort','t1','t2','t3']) if(s[id]!=null && $(id)) $(id).value=s[id];
-    for(const id of ['sale','dup']) if(typeof s[id]==='boolean') $(id).checked=s[id];
-  }catch{}
+function authHeaders(){return {Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'};}
+function applySettings(s={}){
+  $('genre').value=s.genre||'毎日がちょっと楽になる便利グッズ';
+  $('min').value=s.min_price??'';
+  $('max').value=s.max_price??'';
+  $('sort').value=s.sort||'standard';
+  $('sale').checked=s.sale_priority!==false;
+  $('dup').checked=s.avoid_duplicates!==false;
+  const times=Array.isArray(s.posting_times)?s.posting_times:[];
+  $('t1').value=times[0]||'08:00';$('t2').value=times[1]||'12:30';$('t3').value=times[2]||'20:00';
 }
-function saveSettings(){
-  const s={};
-  for(const id of ['genre','min','max','sort','t1','t2','t3']) s[id]=$(id).value;
-  for(const id of ['sale','dup']) s[id]=$(id).checked;
-  localStorage.setItem(KEY,JSON.stringify(s));
-  $('saveMsg').textContent='Pro設定を保存しました。通常版の設定には影響しません。';
+function settingsPayload(){
+  return {
+    enabled:true,
+    genre:$('genre').value,
+    min_price:$('min').value===''?null:Number($('min').value),
+    max_price:$('max').value===''?null:Number($('max').value),
+    sort:$('sort').value,
+    sale_priority:$('sale').checked,
+    avoid_duplicates:$('dup').checked,
+    posting_times:[$('t1').value,$('t2').value,$('t3').value].filter(Boolean)
+  };
+}
+async function saveSettings(){
+  if(!session)return;
+  $('save').disabled=true;$('saveMsg').textContent='保存しています…';
+  try{
+    const r=await fetch('/api/pro?action=settings',{method:'POST',headers:authHeaders(),body:JSON.stringify(settingsPayload())});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.message||'保存できませんでした。');
+    applySettings(d.settings);$('saveMsg').textContent='Pro設定を保存しました。指定時刻の自動準備に使われます。';
+  }catch(e){$('saveMsg').textContent=e.message||'保存できませんでした。'}
+  finally{$('save').disabled=false}
 }
 function loadTasks(){
   let s={};try{s=JSON.parse(localStorage.getItem(TASKKEY)||'{}')}catch{}
@@ -88,34 +108,50 @@ function roomUrl(i){
 function copyText(i){
   try{return String(UrenaviPainCopy.makeRoomCopy(i,$('genre').value)||'').trim()}catch{return ''}
 }
+function renderQueue(queue=[]){
+  currentQueue=Array.isArray(queue)?queue:[];
+  const rows=[];
+  currentQueue.forEach(q=>{
+    const slot=q.slot?.startsWith('manual-')?'今すぐ選定':q.slot;
+    (Array.isArray(q.items)?q.items:[]).forEach((i,n)=>rows.push({q,i,n,slot}));
+  });
+  if(!rows.length){$('results').innerHTML='<div class="status">今日の候補はまだありません。「今日の3商品を自動選定」を押すか、設定した投稿時刻まで待ってください。</div>';return;}
+  $('results').innerHTML=rows.map((x,idx)=>{
+    const cp=copyText(x.i);
+    return '<article class="item"><div class="rank">'+esc(x.slot)+' ｜ 候補 '+(x.n+1)+' ｜ AI '+esc(x.i.score)+'/100</div><div class="name">'+esc(x.i.itemName)+'</div><div class="meta">'+esc(Number(x.i.itemPrice||0).toLocaleString())+'円 ｜ レビュー '+esc(x.i.reviewCount||0)+'件 ｜ 評価 '+esc(x.i.reviewAverage||'-')+'</div><div class="copy">'+esc(cp||'安全に投稿文を生成できませんでした。商品情報を確認してください。')+'</div><div class="actions"><button class="smallBtn" data-copy="'+idx+'">投稿文をコピー</button><a class="smallBtn primary" href="'+esc(roomUrl(x.i))+'" target="_blank" rel="noopener noreferrer" style="text-align:center;text-decoration:none">ROOMで探す</a></div></article>';
+  }).join('');
+  const flat=rows;
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+    const x=flat[Number(b.dataset.copy)];const cp=copyText(x.i);if(!cp)return;
+    await navigator.clipboard.writeText(cp);b.textContent='コピーしました';
+  });
+}
 async function generate(){
-  if(!session) return;
-  $('generate').disabled=true;$('genStatus').textContent='候補を選定しています…';$('results').innerHTML='';
-  const p=new URLSearchParams({keyword:$('genre').value,sort:$('sort').value||'standard'});
-  if($('min').value)p.set('minPrice',$('min').value);if($('max').value)p.set('maxPrice',$('max').value);
+  if(!session)return;
+  $('generate').disabled=true;$('genStatus').textContent='今日の候補を選定しています…';
   try{
-    const r=await fetch('/api/search?'+p,{headers:{Authorization:'Bearer '+session.access_token},cache:'no-store'});
+    await saveSettings();
+    const r=await fetch('/api/pro?action=generate',{method:'POST',headers:authHeaders(),body:'{}'});
     const d=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(d.message||'候補を取得できませんでした');
-    const items=(d.items||[]).slice(0,3);
-    if(!items.length) throw new Error('条件に合う候補がありません');
-    $('genStatus').textContent='今日の候補を3件準備しました。商品ページの価格・在庫・セール条件は投稿前に確認してください。';
-    $('results').innerHTML=items.map((i,n)=>{
-      const cp=copyText(i);
-      return '<article class="item"><div class="rank">候補 '+(n+1)+' ｜ AI '+esc(i.score)+'/100</div><div class="name">'+esc(i.itemName)+'</div><div class="meta">'+esc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ レビュー '+esc(i.reviewCount||0)+'件 ｜ 評価 '+esc(i.reviewAverage||'-')+'</div><div class="copy">'+esc(cp||'安全に投稿文を生成できませんでした。商品情報を確認してください。')+'</div><div class="actions"><button class="smallBtn" data-copy="'+n+'">投稿文をコピー</button><a class="smallBtn primary" href="'+esc(roomUrl(i))+'" target="_blank" rel="noopener noreferrer" style="text-align:center;text-decoration:none">ROOMで探す</a></div></article>';
-    }).join('');
-    document.querySelectorAll('[data-copy]').forEach((b,n)=>b.onclick=async()=>{const cp=copyText(items[n]);if(!cp)return;await navigator.clipboard.writeText(cp);b.textContent='コピーしました';});
-  }catch(e){$('genStatus').textContent=e.message||'候補を取得できませんでした。';}
+    if(!r.ok)throw new Error(d.message||'候補を取得できませんでした。');
+    $('genStatus').textContent='新しい候補を3件準備しました。価格・在庫・セール条件は投稿前に商品ページで確認してください。';
+    renderQueue(d.queue||[]);
+  }catch(e){$('genStatus').textContent=e.message||'候補を取得できませんでした。'}
   finally{$('generate').disabled=false}
 }
 async function boot(){
   const {data:{session:s}}=await sb.auth.getSession();session=s;
   if(!s){$('gate').innerHTML='Proを使うにはウレナビへログインしてください。<br><a href="/app.html">ウレナビでログイン</a>';return;}
   try{
-    const r=await fetch('/api/access?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});
-    if(!r.ok) throw new Error();
-    $('gate').style.display='none';$('root').style.display='block';loadSettings();loadTasks();
-  }catch{$('gate').innerHTML='有効なウレナビ利用情報を確認できませんでした。<br><a href="/app.html">通常版へ戻る</a>'}
+    const r=await fetch('/api/pro?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===403){
+      $('gate').innerHTML='ウレナビ Proは月額1,480円の上位プランです。<br><a href="/api/access?action=buy-pro">Proへアップグレード</a><br><a href="/app.html" style="background:#eef3f8;color:#34445d">通常版へ戻る</a>';
+      return;
+    }
+    if(!r.ok)throw new Error();
+    $('gate').style.display='none';$('root').style.display='block';applySettings(d.settings||{});loadTasks();renderQueue(d.queue||[]);
+  }catch{$('gate').innerHTML='Proの利用情報を確認できませんでした。<br><a href="/app.html">通常版へ戻る</a>'}
 }
 $('save').addEventListener('click',saveSettings);$('generate').addEventListener('click',generate);
 document.querySelectorAll('[data-task]').forEach(x=>x.addEventListener('change',saveTasks));
