@@ -630,17 +630,18 @@
       identity+'を探すときに、商品名の特徴を手がかりに比較したい候補です。',
       title+'を選ぶ前に、商品名に書かれた特徴を確認しておきたい商品です。'
     ];
+    const grounded=groundedFeatureSentence(fact)||a.impact||'用途を確認しながら選ぶときの候補になりそうです。';
     const seconds=[
-      groundedFeatureSentence(fact)||a.impact||'用途を確認しながら選ぶときの候補になりそうです。',
-      groundedFeatureSentence(fact)||a.impact||'商品名と用途を見比べながら検討しやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'自分が必要とする条件に合うか確認しながら選びやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'用途が合うかを確認しながら候補に入れやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'商品名の特徴を見ながら比較したいときに確認しやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'条件を絞って商品を探すときに見比べやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'必要な用途に合うかを確認しながら選ぶ助けになりそうです。',
-      groundedFeatureSentence(fact)||a.impact||'特徴を見ながら候補を比べるときに確認しやすそうです。',
-      groundedFeatureSentence(fact)||a.impact||'商品ごとの違いを見ながら検討するときの候補になりそうです。',
-      groundedFeatureSentence(fact)||a.impact||'用途と条件を確認して選びたいときに見やすい候補です。'
+      title+'では、'+grounded,
+      title+'を比べるなら、'+grounded,
+      title+'の特徴を見ると、'+grounded,
+      title+'を候補にするなら、'+grounded,
+      title+'を選ぶ前に、'+grounded,
+      title+'を検討するときは、'+grounded,
+      title+'の商品名から確認できる点として、'+grounded,
+      title+'を見比べるポイントとして、'+grounded,
+      title+'について確認できる特徴として、'+grounded,
+      title+'を選択肢に入れるなら、'+grounded
     ];
     const idx=((Number(variant)||0)%10+10)%10;
     return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
