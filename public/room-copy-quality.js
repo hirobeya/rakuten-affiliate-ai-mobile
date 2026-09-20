@@ -291,22 +291,43 @@
     return r.audience||'';
   }
 
-  const LEGAL_RISK_RULES=[
+  const CLAIM_RISK_RULES=[
     /小顔(?:効果)?/g,/リフトアップ/g,/痩せる|痩身/g,/若返る|若返り/g,/改善/g,/治る|治療/g,/美白/g,
     /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/予防/g,/効果/g,/効能/g,
-    /No\.?\s*1/gi,/ナンバーワン/g,/楽天(?:市場)?(?:ランキング)?\s*1位/g,/楽天1位/g,/ランキング\s*1位/g,
-    /\d+冠/g,/一番/g,/最高/g,/最強/g,/絶対/g,/必ず/g
+    /No\.?\s*1/gi,/ナンバーワン/g,/一番/g,/最高/g,/最強/g,/絶対/g,/必ず/g
   ];
 
-  function detectLegalRisk(itemName){
-    const title=titleOnly({itemName});
+  const PROMO_RISK_RULES=[
+    /楽天(?:市場)?(?:ランキング)?\s*1位/g,/楽天1位/g,/ランキング\s*1位/g,/\d+冠/g,
+    /半額/g,/(?:スーパー)?SALE/gi,/セール/g,/クーポン(?:利用)?/g,
+    /最安\d*円?/g,/\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi
+  ];
+
+  function collectRiskTerms(title,rules){
     const matches=[];
-    for(const re of LEGAL_RISK_RULES){
+    for(const re of rules){
       re.lastIndex=0;
       const m=title.match(re);
       if(m) for(const x of m) uniquePush(matches,x);
     }
-    return {legalRisk:matches.length>0,riskTerms:matches};
+    return matches;
+  }
+
+  function detectLegalRisk(itemName){
+    const title=titleOnly({itemName});
+    const claimRiskTerms=collectRiskTerms(title,CLAIM_RISK_RULES);
+    const promoRiskTerms=collectRiskTerms(title,PROMO_RISK_RULES);
+    const claimRisk=claimRiskTerms.length>0;
+    const promoRisk=promoRiskTerms.length>0;
+    return {
+      legalRisk:claimRisk||promoRisk,
+      claimRisk,
+      promoRisk,
+      warningRisk:claimRisk,
+      claimRiskTerms,
+      promoRiskTerms,
+      riskTerms:[...claimRiskTerms,...promoRiskTerms]
+    };
   }
 
   function isPromoText(text){
@@ -325,7 +346,7 @@
       .replace(/楽天1位(?:\d+冠)?/g,' ')
       .replace(/ランキング\s*1位/g,' ')
       .replace(/\d+冠/g,' ')
-      .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?[%％]OFF|\d+(?:\.\d+)?[%％]オフ/gi,' ')
+      .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi,' ')
       .replace(/\s+/g,' ')
       .trim();
     return s;
@@ -357,10 +378,11 @@
 
   function buildSafeDisplayName(item,analysis){
     const a=analysis||analyze(item);
-    if(a.legalRisk) return safeUsageName(a.category,a.usage);
+    if(a.claimRisk) return safeUsageName(a.category,a.usage);
     let s=stripPromotionalText(item?.itemName||'');
     s=finalScan(s);
-    if(!s) s=safeUsageName(a.category,a.usage);
+    const visibleLength=s.replace(/[^\p{L}\p{N}]/gu,'').length;
+    if(!s || visibleLength<4) s=safeUsageName(a.category,a.usage);
     if(s.length>48) s=s.slice(0,48).trim()+'…';
     return s;
   }
@@ -476,6 +498,11 @@
       facts,
       sensitive,
       legalRisk:legal.legalRisk,
+      claimRisk:legal.claimRisk,
+      promoRisk:legal.promoRisk,
+      warningRisk:legal.warningRisk,
+      claimRiskTerms:legal.claimRiskTerms,
+      promoRiskTerms:legal.promoRiskTerms,
       riskTerms:legal.riskTerms
     };
   }

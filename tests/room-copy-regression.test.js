@@ -115,6 +115,54 @@ for(const tc of fixture.cases){
   }
 }
 
+// claimRisk/promoRisk regression: both kinds must be absent from ROOM copy.
+for(const tc of fixture.cases){
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:rankVariantById[tc.id]||0});
+  for(const term of [...(a.claimRiskTerms||[]),...(a.promoRiskTerms||[])]){
+    if(term && copy.toLowerCase().includes(String(term).toLowerCase())) fail(tc.id,'risk term leaked into copy: '+term);
+  }
+}
+
+const byId=id=>fixture.cases.find(x=>x.id===id);
+for(const id of ['beauty-roller','beauty-kassa','pet-toilet']){
+  const tc=byId(id);
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+  if(!a.claimRisk) fail(id,'expected claimRisk=true');
+}
+for(const id of ['clean-window','pet-water','pet-bed','battery-cable']){
+  const tc=byId(id);
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+  if(!a.promoRisk) fail(id,'expected promoRisk=true');
+}
+{
+  const tc=byId('battery-cable');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  if(a.claimRisk) fail(tc.id,'promo-only battery unexpectedly claimRisk');
+  if(api.buildSafeDisplayName(item,a)==='モバイルバッテリー' && !/モバイルバッテリー/.test(tc.itemName)) fail(tc.id,'safe display fallback mismatch');
+}
+{
+  const tc=byId('beauty-roller');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  if(api.buildSafeDisplayName(item,a)!=='美顔ローラー') fail(tc.id,'claimRisk must use safe usage name');
+}
+
+// Preview export and fallback UI are static-code guarded as well.
+const appHtml=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
+if(!appHtml.includes("fetch('/api/runtime-env'")) fail('preview-export','runtime env endpoint guard missing');
+if(!appHtml.includes("preview && currentAccessPlan==='owner'")) fail('preview-export','owner+preview guard missing');
+if(!appHtml.includes('この商品は自動判定の対象外のため、商品名と価格のみ表示しています。')) fail('fallback-ui','fallback guidance message missing');
+if(!appHtml.includes("groundedAnalysis(i).outputMode==='full'")) fail('today-ui','full-output filter missing');
+
+const runtimeEnv=fs.readFileSync(path.join(__dirname,'..','api','runtime-env.js'),'utf8');
+if(!runtimeEnv.includes("process.env.VERCEL_ENV === 'preview'")) fail('preview-export','VERCEL_ENV preview check missing');
+for(const forbidden of ['RAKUTEN_ACCESS_KEY','SUPABASE_SERVICE_ROLE_KEY','STRIPE_SECRET_KEY']){
+  if(runtimeEnv.includes(forbidden)) fail('preview-export','secret reference in runtime-env endpoint: '+forbidden);
+}
+
 // Smoke-check non-ROOM surfaces do not throw after classification engine change.
 for(const tc of fixture.cases.slice(0,11)){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};

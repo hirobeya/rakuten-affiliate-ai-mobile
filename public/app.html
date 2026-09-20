@@ -968,7 +968,8 @@ let sendingLogin=false;
 let searching=false;
 let currentAppSession=null;
 let currentAccessPlan='base';
-let proAvailable=false;\nlet debugExportAllowed=false;
+let proAvailable=false;
+let debugExportAllowed=false;
 
 
 function setAuthMessage(
@@ -1072,7 +1073,8 @@ async function showApp(session) {
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
-    currentAccessPlan=String(access.plan||'base');\n    updateDebugExportAccess();
+    currentAccessPlan=String(access.plan||'base');
+    await updateDebugExportAccess();
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
@@ -2142,13 +2144,16 @@ function groundedAnalysis(i){
   return {audience:ctx.audience||'',impact:ctx.benefit||''};
 }
 
-function isPreviewHost(){
-  const h=String(location.hostname||'').toLowerCase();
-  return h.endsWith('.vercel.app') && h!=='rakuten-affiliate-ai-mobile.vercel.app';
-}
-
-function updateDebugExportAccess(){
-  debugExportAllowed=isPreviewHost() && currentAccessPlan==='owner';
+async function updateDebugExportAccess(){
+  let preview=false;
+  try{
+    const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    preview=r.ok && d.preview===true;
+  }catch{
+    preview=false;
+  }
+  debugExportAllowed=preview && currentAccessPlan==='owner';
   const box=document.getElementById('debugExport');
   if(box) box.classList.toggle('on',debugExportAllowed);
   if(!debugExportAllowed){
@@ -2208,12 +2213,32 @@ async function copyDebugValidation(){
 
 function legalWarning(i){
   const a=groundedAnalysis(i);
-  if(!a?.legalRisk) return '';
-  return '<div class="legal-warn">商品名に広告表現上の注意が必要な語句が含まれています。投稿前に商品ページをご確認ください。</div>';
+  if(!a?.claimRisk) return '';
+  return '<div class="legal-warn">商品名に効能・健康・美容・衛生表現として注意が必要な語句が含まれています。投稿前に商品ページをご確認ください。</div>';
 }
 
 function aud(i){
   return groundedAnalysis(i).audience;
+}
+
+function isFullOutput(i){
+  return groundedAnalysis(i).outputMode==='full';
+}
+
+function fullOutputItems(items){
+  return (Array.isArray(items)?items:[]).filter(isFullOutput);
+}
+
+function analysisGuide(i){
+  const a=groundedAnalysis(i);
+  if(a.outputMode!=='full'){
+    return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と価格のみ表示しています。</div></div>';
+  }
+  return `<div class="guide">
+    <div class="gt">この商品は誰に・何を刺す？</div>
+    <div class="target">${esc(aud(i))}</div>
+    <ul class="pts">${pts(i).map(z=>`<li>${esc(z)}</li>`).join('')}</ul>
+  </div>`;
 }
 
 function pts(i){
@@ -2269,17 +2294,24 @@ function today(
   a
 ){
 
+  const eligible=fullOutputItems(a);
+
   if(
-    !a.length
+    !eligible.length
   ){
 
-    return'';
+    return`
+<section class="today">
+  <h2>今日売るならこれ</h2>
+  <div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div>
+</section>
+`;
 
   }
 
 
   const i=
-  [...a]
+  [...eligible]
   .sort(
     (
       a,
@@ -2569,7 +2601,9 @@ function render(
   a
 ){
 
-  lastSearchItems=Array.isArray(a)?a:[];\n  const debugJson=document.getElementById('debugJson');\n  if(debugJson) debugJson.value='';
+  lastSearchItems=Array.isArray(a)?a:[];
+  const debugJson=document.getElementById('debugJson');
+  if(debugJson) debugJson.value='';
   $('#res').innerHTML=
 
   today(
@@ -2720,30 +2754,7 @@ function render(
 
   </div>
 
-  <div class="guide">
-
-    <div class="gt">
-      この商品は誰に・何を刺す？
-    </div>
-
-    <div class="target">
-      ${esc(aud(i))}
-    </div>
-
-    <ul class="pts">
-
-      ${
-        pts(i)
-        .map(
-          z=>
-          `<li>${esc(z)}</li>`
-        )
-        .join('')
-      }
-
-    </ul>
-
-  </div>
+  ${analysisGuide(i)}
 
   <div class="tabs">
 
@@ -2948,7 +2959,7 @@ function render(
   ){
 
     const i=
-    [...a]
+    fullOutputItems(a)
     .sort(
       (
         a,
@@ -2956,6 +2967,9 @@ function render(
       )=>
       b.sellability-
       a.sellability
+      ||
+      b.score-
+      a.score
     )[0];
 
 
