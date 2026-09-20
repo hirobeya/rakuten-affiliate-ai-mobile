@@ -72,10 +72,11 @@
   ];
 
   const CLASSIFICATION_RULES=[
-    {phrases:['モバイルバッテリー用ケース','モバイルバッテリーケース'],category:'accessory',usage:'mobile_battery_case',priority:140},
+    {phrases:['モバイルバッテリー用ケース','モバイルバッテリーケース','Power Bank Case','PowerBank Case','Power Bank ケース','PowerBank ケース','Power Bank ポーチ','PowerBank ポーチ','Power Bank カバー','PowerBank カバー','パワーバンクケース','パワーバンク ケース','パワーバンク ポーチ','パワーバンク カバー'],category:'accessory',usage:'mobile_battery_case',priority:145},
     {phrases:['収納付きベッド','収納付ベッド','収納ベッド'],category:'furniture',usage:'storage_bed',priority:140},
     {phrases:['ペット用毛取りグローブ','毛取りグローブ','グルーミング手袋'],category:'pet',usage:'grooming',priority:140},
     {phrases:['ペットウォーターボトル','ペット用ウォーターボトル','ペット給水器','給水ボトル','水飲みボトル'],category:'pet',usage:'water',priority:135},
+    {phrases:['ウェットティッシュ','ウェットシート','おしりふき','からだふき','体ふき','手足ふき'],category:'pet',usage:'hygiene_wipe',priority:138},
     {phrases:['ペットシート','トイレシート','デオシート'],category:'pet',usage:'toilet',priority:135},
     {phrases:['ペットベッド','犬用ベッド','猫用ベッド','猫ベッド','犬ベッド'],category:'pet',usage:'bed',priority:135},
     {phrases:['ペットの毛 掃除ブラシ','ペットの毛用掃除ブラシ','抜け毛掃除ブラシ'],category:'cleaning',usage:'pet_hair',priority:130},
@@ -84,6 +85,7 @@
     {phrases:['美顔ローラー','小顔ローラー','フェイスローラー'],category:'beauty',usage:'face_roller',priority:130},
     {phrases:['4in1美顔','かっさプレート','美顔かっさ','カッサプレート'],category:'beauty',usage:'kassa',priority:130},
     {phrases:['モバイルバッテリー'],category:'charging',usage:'mobile_battery',priority:125},
+    {phrases:['Power Bank','PowerBank','パワーバンク'],category:'charging',usage:'mobile_battery',priority:112},
     {phrases:['収納ボックス'],category:'storage',usage:'storage_box',priority:125},
     {phrases:['収納ケース','衣装ケース'],category:'storage',usage:'storage_case',priority:120},
     {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:135},
@@ -121,7 +123,7 @@
   function collectClassificationCandidates(itemName){
     const title=buildClassificationTitle(itemName);
     const out=[];
-    const accessoryMatch=title.match(/モバイルバッテリー用.{0,20}(?:ケース|ポーチ)/i);
+    const accessoryMatch=title.match(/(?:モバイルバッテリー|Power\s*Bank|PowerBank|パワーバンク)(?:用)?[^\n]{0,20}(?:ケース|ポーチ|カバー|保護)/i);
     if(accessoryMatch){
       out.push({category:'accessory',usage:'mobile_battery_case',phrase:accessoryMatch[0],priority:145,score:145+Math.min(18,accessoryMatch[0].length),pos:accessoryMatch.index||0});
     }
@@ -146,6 +148,12 @@
     if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'unknown',confidence:'none',ambiguous:false,candidates:[],reason:'no_match'};
     const top=candidates[0];
     const second=candidates.find(x=>x.category!==top.category || x.usage!==top.usage);
+    if(second){
+      const pair=new Set([top.category+'.'+top.usage,second.category+'.'+second.usage]);
+      if(pair.has('pet.toilet') && pair.has('pet.hygiene_wipe')){
+        return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'pet_toilet_hygiene_conflict'};
+      }
+    }
     if(second && (top.score-second.score)<20){
       return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'close_candidates'};
     }
@@ -303,7 +311,7 @@
 
   const CLAIM_RISK_RULES=[
     /小顔(?:効果)?/g,/リフトアップ/g,/痩せる|痩身/g,/若返る|若返り/g,/改善/g,/治る|治療/g,/美白/g,
-    /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/予防/g,/効果/g,/効能/g,
+    /除菌/g,/殺菌/g,/抗菌/g,/消臭/g,/防臭/g,/臭わない/g,/匂わない/g,/臭くない/g,/予防/g,/効果/g,/効能/g,
     /No\.?\s*1/gi,/ナンバーワン/g,/一番/g,/最高/g,/最強/g,/絶対/g,/必ず/g
   ];
 
@@ -351,6 +359,7 @@
       .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?/g,' ')
       .replace(/年間ランキング受賞|年間ランキング\s*受賞/g,' ')
       .replace(/ランキング\s*受賞/g,' ')
+      .replace(/(?:クーポン)?で\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
@@ -364,7 +373,7 @@
   function stripPromotionalText(itemName){
     let s=titleOnly({itemName});
     s=s
-      .replace(/＼([^＼／]{0,140})／/g,(m,x)=>isPromoText(x)?' ':m)
+      .replace(/[＼\\]([^＼／\\/]{0,140})[／/]/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/〖([^〗]{0,140})〗/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/\[([^\]]{0,140})\]/g,(m,x)=>isPromoText(x)?' ':m)
@@ -376,6 +385,7 @@
       .replace(/年間ランキング受賞|ランキング\s*受賞/g,' ')
       .replace(/\d+冠/g,' ')
       .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi,' ')
+      .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/配布中[!！\\/／＼]*/g,' ');
@@ -391,6 +401,7 @@
       'pet.toilet':'ペットシート',
       'pet.bed':'ペットベッド',
       'pet.grooming':'ペット用毛取りグローブ',
+      'pet.hygiene_wipe':'ウェットティッシュ',
       'charging.mobile_battery':'モバイルバッテリー',
       'cleaning.window_screen':'網戸掃除用品',
       'cleaning.glove':'掃除用手袋',
@@ -403,16 +414,44 @@
       'cleaning.vacuum':'ハンディクリーナー',
       'furniture.storage_bed':'収納付きベッド'
     };
-    return map[category+'.'+usage]||'商品';
+    return map[category+'.'+usage]||'';
+  }
+
+  function stripClaimText(text){
+    let s=String(text||'');
+    for(const re of CLAIM_RISK_RULES){
+      re.lastIndex=0;
+      s=s.replace(re,' ');
+    }
+    return tidyDisplayTitle(s);
+  }
+
+  function deriveSafeUnknownName(itemName){
+    const t=titleOnly({itemName});
+    const exactNouns=[
+      'うんち袋','ウンチ袋','マナー袋','ウェットティッシュ','ウェットシート',
+      'ペットシート','ペットベッド','キャリーバッグ','ペットバッグ','ペットマット',
+      'フードボウル','ペット食器','給餌器','モバイルバッテリー','パワーバンク'
+    ];
+    for(const noun of exactNouns){
+      if(t.includes(noun)) return noun;
+    }
+    const cleaned=stripClaimText(stripPromotionalText(t));
+    return cleaned.slice(0,48).trim();
   }
 
   function buildSafeDisplayName(item,analysis){
     const a=analysis||analyze(item);
-    if(a.claimRisk) return safeUsageName(a.category,a.usage);
+    const usageName=safeUsageName(a.category,a.usage);
+    if(a.claimRisk){
+      const claimSafe=usageName||deriveSafeUnknownName(item?.itemName||'');
+      return claimSafe||stripClaimText(stripPromotionalText(item?.itemName||'')).slice(0,48).trim();
+    }
     let s=stripPromotionalText(item?.itemName||'');
     s=finalScan(s);
     const visibleLength=s.replace(/[^\p{L}\p{N}]/gu,'').length;
-    if(!s || visibleLength<4) s=safeUsageName(a.category,a.usage);
+    if(!s || visibleLength<4) s=usageName||deriveSafeUnknownName(item?.itemName||'');
+    if(!s) s='商品名を確認してください';
     if(s.length>48) s=s.slice(0,48).trim()+'…';
     return s;
   }

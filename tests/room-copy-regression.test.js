@@ -72,8 +72,8 @@ for(const tc of fixture.cases){
   }));
 }
 
-// A5 live validation extra regression: promotional fragments must be removed and risky special-use items must fall back.
-for(const tc of fixture.cases.filter(x=>x.group==='live-validation-extra')){
+// A5 validation JSON regression: exact user-provided itemName values must keep promo fragments out and stop risky special-use items.
+for(const tc of fixture.cases.filter(x=>x.group==='validation-json')){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
   const a=api.analyzeRoomProduct(item,'');
   const copy=api.makeRoomCopy(item,'',{variant:0});
@@ -87,6 +87,29 @@ for(const tc of fixture.cases.filter(x=>x.group==='live-validation-extra')){
   }
   if(/(?:^|\s)(?:!|！|★|\\|＼|\/|／)+(?:\s|$)/.test(safe)) fail(tc.id,'A5 orphan punctuation remains in safe display name: '+safe);
   if(/「\s*」|『\s*』|【\s*】|〖\s*〗/.test(safe)) fail(tc.id,'A5 empty brackets remain in safe display name: '+safe);
+}
+
+// Power Bank synonym and accessory priority regression.
+for(const id of ['live-battery-rank5-anker-zolo']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+  if(a.category!=='charging' || a.usage!=='mobile_battery' || a.outputMode!=='full') fail(id,'Power Bank synonym did not resolve to charging.mobile_battery');
+}
+for(const id of ['counter-power-bank-case','counter-powerbank-pouch']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+  if(a.category!=='accessory' || a.usage!=='mobile_battery_case') fail(id,'Power Bank accessory did not take priority');
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='P2');
+  const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:0},'',{variant:0});
+  if(copy.split('\n')[0].trim()==='商品') fail('P2','one-word 商品 fallback is forbidden');
+  if(!/うんち袋|マナー袋/.test(copy.split('\n')[0])) fail('P2','expected an exact noun from itemName in safe fallback');
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='pet-hygiene-wipe-conflict');
+  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:0},'');
+  if(!a.ambiguous || a.ambiguityReason!=='pet_toilet_hygiene_conflict') fail(tc.id,'pet.toilet / pet.hygiene_wipe conflict not detected');
 }
 
 // Same-search regression: opening line and second line must not repeat.
