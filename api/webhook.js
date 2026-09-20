@@ -1,4 +1,4 @@
-const {config,verifySignature,activate,syncSubscription,ensureAuthUser} = require('../lib/billing');
+const {config,proConfig,verifySignature,activate,syncSubscription,ensureAuthUser} = require('../lib/billing');
 module.exports = async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   if (req.method !== 'POST') return res.status(405).end();
@@ -17,7 +17,9 @@ module.exports = async function handler(req,res) {
     const obj=event.data?.object;
     if (['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type)) {
       // Ignore unrelated products and pending asynchronous payments.
-      if (obj.payment_link===config().link && obj.payment_status==='paid') await activate(obj.id,{requireActive:false});
+      const pc=proConfig();
+      if (obj.payment_status==='paid' && obj.payment_link===config().link) await activate(obj.id,{requireActive:false,plan:'base'});
+      else if (obj.payment_status==='paid' && pc && obj.payment_link===pc.link) await activate(obj.id,{requireActive:false,plan:'pro'});
     } else if (['customer.subscription.created','customer.subscription.updated','customer.subscription.deleted'].includes(event.type)) {
       const row=await syncSubscription(obj.id);
       if (row?.active) await ensureAuthUser(row.email);
