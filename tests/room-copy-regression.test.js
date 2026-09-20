@@ -151,7 +151,7 @@ for(const id of ['P4','C4','S5','B-M3']){
   if(!a.claimRisk || !(a.claimRiskTerms||[]).includes('燃えにくい')) fail('B-M3','燃えにくい must be claimRisk');
   if(api.buildSafeDisplayName(item,a)!=='モバイルバッテリー') fail('B-M3','claimRisk battery must use モバイルバッテリー safe title');
 }
-for(const id of ['S1','S6','S8']){
+for(const id of ['S1','S6']){
   const tc=fixture.cases.find(x=>x.id===id);
   const item={itemName:tc.itemName,itemPrice:0};
   const a=api.analyzeRoomProduct(item,'');
@@ -188,7 +188,15 @@ for(const id of ['S1','P1','M3']){
 }
 
 {
-  const ids=['P1','P9','P10'];
+  const p1=fixture.cases.find(x=>x.id==='P1');
+  const p1Item={itemName:p1.itemName,itemPrice:p1.itemPrice||0};
+  const p1a=api.analyzeRoomProduct(p1Item,'');
+  const p1copy=api.makeRoomCopy(p1Item,'',{variant:0});
+  if(p1a.category!=='pet'||p1a.usage!=='bed'||p1a.outputMode!=='fallback') fail('P1',`expected pet.bed fallback for drive/car bed, got ${p1a.category}.${p1a.usage} ${p1a.outputMode}`);
+  if(!(p1a.conflicts||[]).some(x=>x.usage==='drive_bed')) fail('P1','drive_bed conflict missing');
+  for(const bad of ['快眠','安眠','体圧分散']) if(p1copy.includes(bad)) fail('P1','unsupported pet-bed claim: '+bad);
+
+  const ids=['P9','P10'];
   const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
   for(let i=0;i<ids.length;i++){
     const tc=fixture.cases.find(x=>x.id===ids[i]);
@@ -207,6 +215,36 @@ for(const id of ['S1','P1','M3']){
   const tc=fixture.cases.find(x=>x.id==='S1');
   const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:5780},'',{variant:0});
   if(!copy.includes('価格：5,780円')) fail('S1','price formatting expected 価格：5,780円');
+}
+
+// Storage furniture / pet drive bed / praise promo / special battery regressions.
+{
+  const tc=fixture.cases.find(x=>x.id==='S8');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  if(a.category!=='storage'||a.usage!=='storage_box'||a.outputMode!=='fallback') fail('S8',`expected storage.storage_box fallback, got ${a.category}.${a.usage} ${a.outputMode}`);
+  if(!(a.conflicts||[]).some(x=>x.usage==='seating_storage')) fail('S8','seating_storage conflict missing');
+  if(/^受賞/.test(copy)||copy.includes('楽天1位受賞')) fail('S8','award promo remains: '+copy);
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='P8');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  if(a.outputMode!=='fallback') fail('P8','expected fallback');
+  if(copy.includes('ご好評です')) fail('P8','ご好評です remains in copy');
+}
+for(const raw of ['楽天1位受賞 商品A','8冠受賞 商品B','受賞 商品C','ご好評です 商品D','大好評 商品E','当店人気 商品F','大人気 商品G']){
+  const cleaned=api.stripPromotionalText(raw);
+  if(/楽天1位受賞|\d+冠受賞|^受賞(?:\s|$)|ご好評です|大好評|当店人気|大人気/.test(cleaned)) fail('promo-cleanup','promo remains: '+raw+' => '+cleaned);
+}
+{
+  const tc=fixture.cases.find(x=>x.id==='special-battery-electric-blanket');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  if(a.outputMode!=='fallback') fail(tc.id,'電気毛布 battery must fallback');
+  if(!(a.conflicts||[]).some(x=>x.usage==='special_battery'&&x.phrase==='電気毛布')) fail(tc.id,'電気毛布 special_battery conflict missing');
 }
 
 // Same-search regression: opening line and second line must not repeat.

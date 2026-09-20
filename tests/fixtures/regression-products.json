@@ -916,19 +916,20 @@
     {
       "id": "S8",
       "group": "storage-search",
-      "itemName": "収納ボックス フタ プラスチック製 頑丈【タッグボックス】大容量 衣装ケース 衣類 押入 収納ケース カラーボックス アウトドア キャンプ 飼育 収納箱 丈夫 クリアケース 積み重ね タグボックス 伸和 01 02 03 04 05 06 07 08 09",
+      "itemName": "楽天1位受賞 選べる素材20カラー 収納ベンチ 収納スツール 室内 収納ボックス ふた付き ベンチ 長方形 正方形 木製 フタ付き 頑丈 布 おしゃれ 折りたたみ 椅子 収納ケース 立方体 レザー調 座れる オットマン PVCレザー ファブリック 椅子 スツール ヌック ブークレ調",
       "itemPrice": 0,
       "expect": {
         "category": "storage",
         "usage": "storage_box",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [
-          "ペット",
-          "モバイルバッテリー",
-          "モップ"
+          "楽天1位",
+          "受賞"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "折りたたみ対応"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1039,7 +1040,7 @@
         "category": "pet",
         "usage": "bed",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [
           "楽天1位",
           "★",
@@ -1089,6 +1090,43 @@
         ],
         "expectedFeatures": [
           "犬・猫向け表記あり"
+        ],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "P8",
+      "group": "pet-validation",
+      "itemName": "ご好評です【5段階調整 ペットフードスタンド】ごはん入れ 犬 餌入れ おしゃれ 猫 えさ 台 木製 餌やり エサ入れ ペット用品 犬 ペット 餌 ネコ 食器スタンド ペットフード 犬 入れ ペットフードボウル 滑り止め ステンレスボール付 直送w【送料無料】",
+      "itemPrice": 0,
+      "expect": {
+        "category": "unknown",
+        "usage": "unknown",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "ご好評です"
+        ],
+        "expectedFeatures": [],
+        "forbiddenFeatures": []
+      }
+    },
+    {
+      "id": "special-battery-electric-blanket",
+      "group": "counterexample",
+      "itemName": "モバイルバッテリー 30000mAh 電気毛布用 USB-C 急速充電",
+      "itemPrice": 0,
+      "expect": {
+        "category": "charging",
+        "usage": "mobile_battery",
+        "ambiguous": false,
+        "outputMode": "fallback",
+        "forbiddenWords": [
+          "外出時などの充電切れに備えたい人"
+        ],
+        "expectedFeatures": [
+          "急速充電対応",
+          "USB-C対応"
         ],
         "forbiddenFeatures": []
       }

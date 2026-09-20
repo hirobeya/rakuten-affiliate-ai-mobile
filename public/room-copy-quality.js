@@ -181,13 +181,23 @@
     const title=norm(itemName);
     const conflicts=[];
 
+    if(chosenCategory==='storage' && ['storage_box','storage_case'].includes(chosenUsage)){
+      const furniture=title.match(/ベンチ|スツール|椅子|オットマン|座れる/);
+      if(furniture) conflicts.push({category:'furniture',usage:'seating_storage',phrase:furniture[0]});
+    }
+
     if(chosenCategory==='cleaning' && ['mop','brush'].includes(chosenUsage)){
       const holder=title.match(/ハンガー|ホルダー|スタンド|(?:掃除用具|掃除道具|モップ|ブラシ)?入れ|収納/);
       if(holder) conflicts.push({category:'storage',usage:'holder_or_storage',phrase:holder[0]});
     }
 
+    if(chosenCategory==='pet' && chosenUsage==='bed'){
+      const drive=title.match(/車用|ドライブ|カーベッド/);
+      if(drive) conflicts.push({category:'pet',usage:'drive_bed',phrase:drive[0]});
+    }
+
     if(chosenCategory==='charging' && chosenUsage==='mobile_battery'){
-      const special=title.match(/空調服|作業服|ファン付き(?:作業)?服|電熱(?:ベスト|ウェア)|ヒーターベスト/);
+      const special=title.match(/空調服|作業服|ファン付き(?:作業)?服|電熱(?:ベスト|ウェア)|ヒーターベスト|電気毛布/);
       if(special) conflicts.push({category:'charging',usage:'special_battery',phrase:special[0]});
     }
     for(const rule of STRONG_CONFLICT_RULES){
@@ -333,8 +343,8 @@
   ];
 
   const PROMO_RISK_RULES=[
-    /楽天(?:市場)?(?:ランキング)?\s*1位/g,/楽天1位/g,/ランキング\s*1位/g,/\d+冠/g,
-    /半額/g,/(?:スーパー)?SALE/gi,/セール/g,/クーポン(?:利用)?/g,
+    /楽天(?:市場)?(?:ランキング)?\s*1位(?:受賞)?/g,/楽天1位(?:受賞)?/g,/ランキング\s*1位(?:受賞)?/g,/\d+冠(?:受賞)?/g,/受賞/g,
+    /半額/g,/(?:スーパー)?SALE/gi,/セール/g,/クーポン(?:利用)?/g,/ご好評です/g,/大好評/g,/当店人気/g,/大人気/g,
     /最安\d*円?/g,/\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi
   ];
 
@@ -366,7 +376,7 @@
   }
 
   function isPromoText(text){
-    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|即納|搬入設置無料|設置無料|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
+    return /OFF|オフ|半額|SALE|セール|クーポン|最安|限定|ポイント|配布|即納|搬入設置無料|設置無料|ご好評です|大好評|当店人気|大人気|円(?:~|〜|～)?|(?:総合)?\s*1位|楽天\s*1位|楽天1位|ランキング|受賞|\d+冠|送料無料|公式ショップ|公式|正規品/i.test(String(text||''));
   }
 
   function cleanupPairedSymbols(text){
@@ -398,6 +408,8 @@
       .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?/g,' ')
       .replace(/年間ランキング受賞|年間ランキング\s*受賞/g,' ')
       .replace(/ランキング\s*受賞/g,' ')
+      .replace(/\d+冠(?:受賞)?|受賞/g,' ')
+      .replace(/ご好評です|大好評|当店人気|大人気/g,' ')
       .replace(/(?:クーポン)?で\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
@@ -419,12 +431,13 @@
       .replace(/\[([^\]]{0,140})\]/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
       .replace(/［([^］]{0,140})］/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
       .replace(/＼?当日発送／?/g,' ')
-      .replace(/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位(?:\s*\d+冠)?/g,' ')
-      .replace(/楽天1位(?:\s*\d+冠)?/g,' ')
-      .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?/g,' ')
+      .replace(/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位(?:\s*\d+冠)?(?:受賞)?/g,' ')
+      .replace(/楽天1位(?:\s*\d+冠)?(?:受賞)?/g,' ')
+      .replace(/(?:総合\s*)?1位(?:\s*\d+冠)?(?:受賞)?/g,' ')
       .replace(/年間ランキング受賞|ランキング\s*受賞/g,' ')
-      .replace(/\d+冠/g,' ')
-      .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi,' ')
+      .replace(/\d+冠(?:受賞)?/g,' ')
+      .replace(/受賞/g,' ')
+      .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)|ご好評です|大好評|当店人気|大人気/gi,' ')
       .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
