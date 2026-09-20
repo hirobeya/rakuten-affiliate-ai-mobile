@@ -122,18 +122,29 @@ function renderGenrePath(){
   $('genreBack').style.display=genrePath.length?'inline-block':'none';
 }
 async function loadGenreChildren(parentId='0'){
-  const d=await fetchGenres(parentId);
-  const children=Array.isArray(d.children)?d.children:[];
-  if(children.length){
-    $('genrePicker').innerHTML='<option value="">次のカテゴリーを選択</option>'
-      +children.map(x=>'<option value="'+esc(x.genreId)+'" data-name="'+esc(x.nameJa)+'">'+esc(x.nameJa)+'</option>').join('');
-    $('genrePicker').disabled=false;
-  }else{
-    const leafName=String(d.genre?.nameJa||selectedGenreName||'選択中のカテゴリー');
-    const leafId=String(d.genre?.genreId||selectedGenreId||parentId||'');
-    $('genrePicker').innerHTML='<option value="'+esc(leafId)+'" data-name="'+esc(leafName)+'">'+esc(leafName)+'（最下層）</option>';
-    $('genrePicker').value=leafId;
-    $('genrePicker').disabled=true;
+  const previousHtml=$('genrePicker').innerHTML;
+  const previousDisabled=$('genrePicker').disabled;
+  try{
+    const d=await fetchGenres(parentId);
+    const children=Array.isArray(d.children)?d.children:[];
+    if(children.length){
+      $('genrePicker').innerHTML='<option value="">次のカテゴリーを選択</option>'
+        +children.map(x=>'<option value="'+esc(x.genreId)+'" data-name="'+esc(x.nameJa)+'">'+esc(x.nameJa)+'</option>').join('');
+      $('genrePicker').disabled=false;
+    }else{
+      const leafName=String(d.genre?.nameJa||selectedGenreName||'選択中のカテゴリー');
+      const leafId=String(d.genre?.genreId||selectedGenreId||parentId||'');
+      $('genrePicker').innerHTML='<option value="'+esc(leafId)+'" data-name="'+esc(leafName)+'">'+esc(leafName)+'（最下層）</option>';
+      $('genrePicker').value=leafId;
+      $('genrePicker').disabled=true;
+    }
+  }catch(e){
+    if(previousHtml){
+      $('genrePicker').innerHTML=previousHtml;
+      $('genrePicker').disabled=previousDisabled;
+    }
+    $('genreSelected').textContent=(selectedGenreName?'選択中：'+selectedGenreName+' ｜ ':'')+(e.message||'カテゴリーを取得できませんでした。')+' 一覧はそのまま残しています。';
+    throw e;
   }
 }
 async function restoreGenre(s={}){
