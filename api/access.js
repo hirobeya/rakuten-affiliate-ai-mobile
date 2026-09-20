@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {config, proConfig, stripeGet, activate, authorize, authorizePro, setDeviceCookie, clearDeviceCookie, db} = require('../lib/billing');
+const {config, proConfig, stripeGet, activate, authorize, authorizePro, upgradeBaseToPro, setDeviceCookie, clearDeviceCookie, db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
@@ -8,8 +8,19 @@ const validHandoffCode = code => /^[a-f0-9]{64}$/i.test(String(code || ''));
 module.exports = async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Referrer-Policy','no-referrer');
-  if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
   try {
+    if (req.method === 'POST' && req.query.action === 'upgrade-pro') {
+      const result=await upgradeBaseToPro(req);
+      if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
+      return res.status(result.ok?200:(result.status||409)).json({
+        upgraded:!!result.upgraded,
+        alreadyPro:!!result.alreadyPro,
+        plan:result.plan||'',
+        current_period_end:result.current_period_end||null,
+        message:result.message||''
+      });
+    }
+    if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
     if (req.query.action === 'logout') {
       clearDeviceCookie(res);
       return res.status(204).end();
