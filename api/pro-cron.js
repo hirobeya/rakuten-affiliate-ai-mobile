@@ -32,9 +32,7 @@ module.exports=async function handler(req,res){
   if(!secret || req.headers.authorization!==`Bearer ${secret}`) return res.status(401).json({message:'Unauthorized'});
   try{
     const settings=await db('urenavi_pro_settings?enabled=eq.true&select=*');
-    const now=new Date();
-    const local=jstParts(now);
-    const current=minutes(local.hour,local.minute);
+    const local=jstParts(new Date());
     let generated=0,skipped=0,failed=0;
 
     for(const s of settings||[]){
@@ -42,14 +40,9 @@ module.exports=async function handler(req,res){
         const auth=await authorizeProEmail(s.email);
         if(!auth.ok){skipped++;continue;}
         const times=(Array.isArray(s.posting_times)?s.posting_times:[]).map(String);
+        const usedCodes=s.avoid_duplicates?await recentCodes(s.email):[];
         for(const slot of times){
-          const t=parseTime(slot);
-          if(!t) continue;
-          const target=minutes(t.h,t.m);
-          let diff=current-target;
-          if(diff<0) diff+=24*60;
-          if(diff>29) continue;
-
+          if(!parseTime(slot)) continue;
           const exists=await db('urenavi_pro_queue?'+new URLSearchParams({
             email:'eq.'+s.email,
             local_date:'eq.'+local.date,
@@ -59,9 +52,10 @@ module.exports=async function handler(req,res){
           }));
           if(exists?.length){skipped++;continue;}
 
-          const excludeCodes=s.avoid_duplicates?await recentCodes(s.email):[];
-          const items=await searchProducts(s,{excludeCodes});
-          if(!items.length){failed++;continue;}
+          const candidates=await searchProducts(s,{excludeCodes:usedCodes});
+          const item=candidates[0];
+          if(!item){failed++;continue;}
+          if(item.itemCode) usedCodes.push(String(item.itemCode));
           await db('urenavi_pro_queue',{
             method:'POST',
             headers:{Prefer:'return=minimal'},
@@ -71,7 +65,7 @@ module.exports=async function handler(req,res){
               slot,
               scheduled_for:scheduledUtc(local.date,slot),
               status:'ready',
-              items,
+              items:[item],
               updated_at:new Date().toISOString()
             })
           });
