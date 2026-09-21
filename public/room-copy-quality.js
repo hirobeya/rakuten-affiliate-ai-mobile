@@ -1265,10 +1265,10 @@
     const intent=genericIntent(identity,analysis);
     const idx=((Number(variant)||0)%4+4)%4;
     const first=[
-      identity+'を使って、'+intent.benefit+'商品です。',
-      identity+'を探しているなら、'+intent.use+'ときに確認したい商品です。',
-      intent.use+'ための'+identity+'。'+intent.benefit+'選択肢です。',
-      '必要な場面で'+identity+'を使いたい人に。'+intent.benefit+'商品です。'
+      identity+'。'+intent.use+'ときに使いやすい商品です。',
+      identity+'を探しているなら、'+intent.use+'場面で確認したい商品です。',
+      intent.use+'ために選びやすい'+identity+'です。',
+      '必要な場面で使える'+identity+'を探している人に確認したい商品です。'
     ][idx];
     const second=facts[0]?naturalFactLine(facts[0],identity,idx):'';
     return [first,second].filter(Boolean).join('\n');
@@ -1281,11 +1281,11 @@
 
   function analyze(item,keyword=''){
     const cls=classify(item,keyword);
-    const genericIdentity=groundedQueryIdentity(item,keyword);
-    const genericEligible=!!genericIdentity && !cls.ambiguous && (cls.category==='unknown' || !cls.supported);
-    const facts=genericEligible?extractGenericGroundedFacts(item,genericIdentity):extractFacts(item,cls.kind);
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
+    const genericIdentity=groundedQueryIdentity(item,keyword);
+    const genericEligible=!!genericIdentity && !sensitive && !cls.ambiguous && (cls.category==='unknown' || !cls.supported);
+    const facts=genericEligible?extractGenericGroundedFacts(item,genericIdentity):extractFacts(item,cls.kind);
     const legal=detectLegalRisk(titleOnly(item));
     const conflicts=cls.ambiguous?[]:detectConflictingSignals(titleOnly(item),cls.category,cls.usage);
     const supported=((!!cls.supported)||genericEligible) && !cls.ambiguous && conflicts.length===0;
