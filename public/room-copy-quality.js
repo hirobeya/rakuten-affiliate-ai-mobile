@@ -578,6 +578,8 @@
       .replace(/\d+冠(?:受賞)?/g,' ')
       .replace(/受賞/g,' ')
       .replace(/(?:スーパー)?SALE|セール|半額|クーポン(?:利用)?|最安\d*円?|\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)|ご好評です|大好評|当店人気|大人気/gi,' ')
+      .replace(/(?:値上げ前に|今だけ|期間限定|数量限定|早割|レビュー特典(?:あり)?|ポイント超UP)/gi,' ')
+      .replace(/(?:POINT|ポイント|P)\s*最大?\s*\d+倍/gi,' ')
       .replace(/(?:P倍倍|P\d+倍|ポイント\d+倍)/gi,' ')
       .replace(/(?:限定[!！★\s]*)?\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
@@ -1110,7 +1112,7 @@
       .replace(/^(?:\d{1,2}[\/\-]\d{1,2}|\d{1,2}:\d{2}|迄|まで|価格|の|で|に|を|が)\s*/,'')
       .trim();
     const tokens=s.split(/\s+/).filter(Boolean);
-    const noise=/^(?:おしゃれ|オシャレ|かわいい|可愛い|人気|プレゼント|ギフト|父の日|珍しい)$/;
+    const noise=/^(?:おしゃれ|オシャレ|かわいい|可愛い|人気|プレゼント|ギフト|父の日|珍しい|メガ盛り|ごちそう)$/;
     const factish=/^(?:\d|SS$|S$|M$|L$|LL$|XL$|XXL$|折りたたみ|折り畳み|折畳|キャスター付き|コードレス|高さ調節|高さ調整|天板付き|引き出し|扉付き|充電式|自立|水拭き|LEDライト付|交換パッド付き|取っ手付き|持ち手付き|メッシュ|スリム|コンパクト)/i;
     const chosen=[];
     for(const token of tokens){if(noise.test(token))continue;if(chosen.length&&factish.test(token))break;chosen.push(token);if(chosen.join(' ').length>=28||chosen.length>=3)break;}
