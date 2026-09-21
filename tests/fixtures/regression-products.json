@@ -330,7 +330,7 @@
         "category": "cleaning",
         "usage": "vacuum",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [
           "モバイルバッテリー",
           "外出中の充電切れ"
@@ -1044,9 +1044,9 @@
       "itemPrice": 0,
       "expect": {
         "category": "pet",
-        "usage": "bed",
+        "usage": "drive_bed",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [
           "楽天1位",
           "★",
