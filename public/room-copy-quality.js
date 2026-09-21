@@ -741,8 +741,8 @@
     const a=analysis||analyze(item);
     const original=titleOnly(item);
     const exact=deriveSafeUnknownName(original);
-    if(/\bBOS\b/i.test(original)&&/うんち袋|ウンチ袋|マナー袋/.test(original)){
-      const noun=(original.match(/うんち袋|ウンチ袋|マナー袋/)||[])[0]||exact;
+    if(/\bBOS\b/i.test(original)&&/(?:うんち袋|ウンチ袋|マナー袋|うんちが(?:臭わない|匂わない|臭くない)袋)/.test(original)){
+      const noun=(original.match(/うんち袋|ウンチ袋|マナー袋/)||[])[0]||'うんち袋';
       return ('BOS '+noun).trim();
     }
     let s=stripClaimText(stripPromotionalText(original));
@@ -763,7 +763,8 @@
 
   function shortFallback(item,withDisclosure=false,analysis=null){
     const a=analysis||analyze(item);
-    const title=fallbackProductName(item,a);
+    const usageName=safeUsageName(a.category,a.usage);
+    const title=(a.claimRisk&&usageName)?buildSafeDisplayName(item,a):fallbackProductName(item,a);
     const facts=extractFallbackTitleFacts(item).filter(x=>!a.claimRiskTerms?.some(t=>x.includes(t)));
     const lines=[title];
     if(facts.length)lines.push(facts.join('、'));

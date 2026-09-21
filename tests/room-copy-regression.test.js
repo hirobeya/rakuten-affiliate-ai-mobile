@@ -498,6 +498,23 @@ for(const tc of fixture.cases){
   }
 }
 
+
+{
+  const item={itemName:'●送料無料●〖公式BOS-SHOP★驚異の 防臭袋 BOS (ボス)〗 うんちが臭わない袋 BOS ペット用 Lサイズ 90枚入り（袋カラー：水色） ペット いぬ 大人 オムツ ウンチ トイレ 生ゴミ 処分 匂い 対策 エチケット 非常 防災',itemPrice:0};
+  const copy=api.makeRoomCopy(item,'うんち袋',{variant:0});
+  if(/うんちが\s+袋/.test(copy)) fail('fallback-bos-live','broken BOS noun remains: '+copy);
+  if(!/^BOS うんち袋/m.test(copy)||!/ペット用/.test(copy)||!/Lサイズ/.test(copy)||!/90枚入り/.test(copy)) fail('fallback-bos-live','safe BOS facts missing: '+copy);
+}
+{
+  const item={itemName:'美顔ローラー 美顔器 リフトアップ 〖微弱電流〗〖防水仕様〗〖充電不要〗 小顔ローラー メンズ マイクロカレント 美顔器 ローラー 全身用 ローラー 美容グッズ 美容 グッズ 女性 男性 誕生日 レディース メンズ プレゼント ギフト',itemPrice:3980};
+  const a=api.analyzeRoomProduct(item,'');
+  const display=api.buildSafeDisplayName(item,a);
+  const copy=api.makeRoomCopy(item,'',{variant:0});
+  if(display!=='美顔ローラー') fail('beauty-roller-claim-safe','buildSafeDisplayName must keep safe usage name: '+display);
+  if(!/^美顔ローラー\n/m.test(copy)) fail('beauty-roller-room-safe','ROOM fallback must start with safe usage name: '+copy);
+  if(/リフトアップ|小顔/.test(copy)) fail('beauty-roller-room-safe','claim terms leaked: '+copy);
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
