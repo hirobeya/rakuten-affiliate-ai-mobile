@@ -83,6 +83,33 @@ function analyze(id,query,itemName){
   ok(!a.facts.some(x=>x.text==='000mAh'),'comma-spec','partial numeric span captured');
 }
 
+
+{
+  const tuningCases=[
+    ['tune-humidifier','加湿器','超音波 加湿器 4L 上から給水 静音 LEDライト','加湿器'],
+    ['tune-kettle','電気ケトル','電気ケトル 1.0L 温度調節 保温 コンパクト','電気ケトル'],
+    ['tune-usb-hub','USBハブ','USBハブ Type-C 7in1 HDMI PD対応 SDカード','USBハブ'],
+    ['tune-umbrella','折りたたみ傘','折りたたみ傘 軽量 晴雨兼用 自動開閉 コンパクト','折りたたみ傘'],
+    ['tune-pet-water','ペット給水器','ペット給水器 犬 猫 自動給水器 2L USB給電','ペット給水器'],
+    ['tune-storage-wagon','収納ワゴン','収納ワゴン 3段 キャスター付き スリム キッチン','収納ワゴン'],
+    ['tune-pan','フライパン','フライパン 26cm IH ガス火対応 食洗機対応','フライパン'],
+    ['tune-bottle','水筒','水筒 500ml 保温 保冷 ステンレス ボトル','水筒'],
+    ['tune-pillow','枕','枕 洗える 高さ調整 横向き 寝返り','枕'],
+    ['tune-board','まな板','まな板 食洗機対応 軽量 日本製','まな板'],
+    ['tune-laundry-basket','ランドリーバスケット','ランドリーバスケット 洗濯かご 折りたたみ メッシュ','ランドリーバスケット'],
+    ['tune-kitchen-wagon','キッチンワゴン','キッチンワゴン 3段 キャスター付き スリム','キッチンワゴン'],
+    ['tune-mobile-battery','モバイルバッテリー','モバイルバッテリー 10000mAh 30W USB-C ケーブル内蔵','モバイルバッテリー'],
+    ['tune-portable-power','ポータブル電源','ポータブル電源 1024Wh 1500W ソーラーパネルセット','ポータブル電源'],
+    ['tune-dog-bed','犬用ベッド','犬用ベッド 洗える 防水 Lサイズ 滑り止め','犬用ベッド']
+  ];
+  for(const [id,query,itemName,primary] of tuningCases){
+    const a=analyze(id,query,itemName);
+    ok(a.primaryProduct?.text===primary,id,'primary mismatch: '+JSON.stringify(a.primaryProduct));
+    ok(a.query.status==='aligned',id,'query must align');
+    ok(a.recommendation.shadowDecision==='fact_only_shadow',id,'must stay fact-only shadow');
+  }
+}
+
 if(failures){
   console.error('Shadow V2 failures:',failures);
   process.exit(1);
