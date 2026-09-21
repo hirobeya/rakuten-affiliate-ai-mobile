@@ -1033,6 +1033,7 @@ function showLogin(
 
   accessGeneration++;
   lastSearchItems=[];
+  lastSearchKeyword='';
   aiRoomResults=new Map();
   aiRoomReviews=new Map();
   aiRunGeneration++;
@@ -1055,6 +1056,7 @@ function showLogin(
 
 let accessGeneration=0;
 let lastSearchItems=[];
+let lastSearchKeyword='';
 let postCache=new Map();
 let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
@@ -1082,6 +1084,7 @@ function restoreSearchState(email){
     const state=UrenaviReturnState.load(sessionStorage,email);
     if(!state) return;
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
+    lastSearchKeyword=String(state.fields?.k||'').trim();
     render(state.items);
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
@@ -2253,7 +2256,7 @@ function buildDebugValidationRowsFor(items,keyword){
 }
 
 function buildDebugValidationRows(){
-  return buildDebugValidationRowsFor(lastSearchItems,k.value.trim()).map((row,index)=>({
+  return buildDebugValidationRowsFor(lastSearchItems,lastSearchKeyword).map((row,index)=>({
     ...row,
     aiPhase1:aiRoomResults.get(index)?.data||null,
     aiState:aiRoomResults.get(index)?.state||'not_run',
@@ -2380,8 +2383,15 @@ async function copyDebugValidation(){
 
   let json='';
   try{
+    const currentKeyword=k.value.trim();
+    if(currentKeyword!==lastSearchKeyword){
+      if(meta) meta.textContent='検索キーワードが前回の検索結果と一致していません。もう一度「商品を探して評価する」を押してからJSONを作成してください。';
+      if(btn) btn.textContent='再検索してください';
+      setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
+      return;
+    }
     const payload={
-      searchKeyword:k.value.trim(),
+      searchKeyword:lastSearchKeyword,
       count:lastSearchItems.length,
       generatedAt:new Date().toISOString(),
       items:buildDebugValidationRows()
@@ -3600,6 +3610,7 @@ async()=>{
     });
 
 
+    lastSearchKeyword=keyword;
     render(
       d.items||
       []
