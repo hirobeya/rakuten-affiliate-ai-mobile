@@ -768,6 +768,7 @@
   }
 
   function naturalProductIdentity(item,a){
+    if(a?.genericEligible && a?.genericIdentity) return a.genericIdentity;
     const exact=exactProductTypeName(item?.itemName||'');
     if(exact) return exact;
     const usage=safeUsageName(a.category,a.usage)||primaryUsageWord(item);
@@ -778,6 +779,7 @@
     const identity=naturalProductIdentity(item,a);
     const facts=(a.facts||[]).filter(Boolean);
     if(!identity) return '';
+    if(a.genericEligible) return genericGroundedAudience(identity);
     if(a.category==='pet' && a.usage==='drive_bed') return '犬との車移動に使える'+identity+'を探している人';
     if(facts.some(x=>/カバーを外して洗える|洗える/.test(x))) return 'お手入れしやすい'+identity+'を探している人';
     if(facts.some(x=>/防水|撥水/.test(x))) return '防水・撥水表記のある'+identity+'を探している人';
@@ -992,6 +994,7 @@
     const identity=naturalProductIdentity(item,a);
     if(!identity) return '';
     const facts=(a.facts||[]).filter(Boolean);
+    if(a.genericEligible) return genericGroundedOpening(identity,facts,variant);
     if(a.category==='pet' && a.usage==='bed'){
       return petNaturalLines(identity,facts,variant).join('\n');
     }
@@ -1141,6 +1144,7 @@
 
   function validateBody(item,a,text){
     if(a.ambiguous || a.confidence==='ambiguous' || !a.supported) return false;
+    if(a.genericEligible && (!a.genericIdentity || !String(text).includes(a.genericIdentity))) return false;
     if(hasCategoryConflict(a.kind,a.facts)) return false;
     const conflicts=detectConflictingSignals(titleOnly(item),a.category,a.usage);
     if(conflicts.length) return false;
@@ -1166,14 +1170,109 @@
     return cleanupPairedSymbols(s);
   }
 
+  const GENERIC_QUERY_BLOCKLIST=new Set([
+    '商品','おすすめ','人気','便利グッズ','生活雑貨','日用品','家電','雑貨','収納','掃除','ペット','犬','猫','キッチン','美容','健康'
+  ]);
+
+  function groundedQueryIdentity(item,keyword=''){
+    const raw=norm(keyword);
+    if(!raw) return '';
+    const compact=raw.replace(/\s+/g,'');
+    if(compact.length<2 || compact.length>32 || GENERIC_QUERY_BLOCKLIST.has(raw) || GENERIC_QUERY_BLOCKLIST.has(compact)) return '';
+    const title=buildClassificationTitle(titleOnly(item));
+    const titleCompact=title.replace(/\s+/g,'').toLowerCase();
+    const tokens=raw.split(/\s+/).filter(Boolean);
+    const grounded=tokens.length>1
+      ? tokens.every(t=>title.toLowerCase().includes(t.toLowerCase()))
+      : titleCompact.includes(compact.toLowerCase());
+    if(!grounded) return '';
+    const firstPos=tokens.length>1
+      ? Math.min(...tokens.map(t=>title.toLowerCase().indexOf(t.toLowerCase())).filter(x=>x>=0))
+      : titleCompact.indexOf(compact.toLowerCase());
+    const early=firstPos>=0 && firstPos<=Math.max(40,Math.ceil(title.length*0.45));
+    if(!early) return '';
+    return raw;
+  }
+
+  function extractGenericGroundedFacts(item,identity=''){
+    const title=titleOnly(item);
+    const facts=[];
+    const add=x=>uniquePush(facts,x);
+    const patterns=[
+      [/コードレス/,'コードレス'],
+      [/充電式/,'充電式'],
+      [/折りたたみ|折り畳み|折畳/,'折りたたみ'],
+      [/防水/,'防水表記あり'],
+      [/撥水/,'撥水表記あり'],
+      [/食洗機対応|食器洗い乾燥機対応/,'食洗機対応'],
+      [/電子レンジ対応|レンジ対応/,'電子レンジ対応'],
+      [/冷凍対応/,'冷凍対応'],
+      [/Type-?C|USB\s*Type-?C|USB-?C/i,'USB-C対応'],
+      [/LED(?:ライト)?(?:付き|付)/i,'LEDライト付き'],
+      [/丸洗い|洗える/,'洗える表記あり'],
+      [/メッシュ/,'メッシュ表記あり'],
+      [/スリム|薄型/,'スリム・薄型表記あり'],
+      [/コンパクト/,'コンパクト表記あり']
+    ];
+    for(const [re,label] of patterns){
+      const m=title.match(re);
+      if(!m) continue;
+      const idx=m.index??title.indexOf(m[0]);
+      const idPos=identity?title.toLowerCase().indexOf(identity.toLowerCase()):-1;
+      const close=idPos<0 || Math.abs(idx-idPos)<=48;
+      if(close) add(label);
+    }
+    const size=title.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)\s*サイズ(?:\s|$)/i);
+    if(size) add(size[1].toUpperCase()+'サイズ');
+    const pack=title.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組|点)\s*(セット|入り)(?!\s*(?:突破|達成))/);
+    if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
+    return facts.slice(0,4);
+  }
+
+  function genericIntent(identity=''){
+    const x=String(identity||'');
+    if(/クリーナー|掃除機|モップ|ブラシ|ワイパー|クロス/.test(x)) return {use:'掃除に使う',benefit:'気になる場所の掃除へ取りかかりやすくする'};
+    if(/収納|ボックス|ケース|ワゴン|ラック|棚/.test(x)) return {use:'物の整理や収納に使う',benefit:'物の置き場所を決めやすくする'};
+    if(/洗濯|ランドリー/.test(x)) return {use:'洗濯まわりで使う',benefit:'洗濯物を分けたり扱いやすくする'};
+    if(/ケトル|鍋|フライパン|包丁|まな板|ピーラー|調理/.test(x)) return {use:'調理に使う',benefit:'食事の準備を進めやすくする'};
+    if(/水筒|ボトル|タンブラー|マグ/.test(x)) return {use:'飲み物を入れて使う',benefit:'飲み物を持ち運びやすくする'};
+    if(/傘|レイン/.test(x)) return {use:'雨の日に使う',benefit:'雨の日の移動に備えやすくする'};
+    if(/USB|ハブ|充電器|ケーブル|アダプタ|電源/.test(x)) return {use:'機器の接続や給電に使う',benefit:'必要な接続や電源をまとめやすくする'};
+    if(/加湿器/.test(x)) return {use:'室内の加湿に使う',benefit:'乾燥が気になる部屋で使いやすくする'};
+    if(/扇風機|サーキュレーター/.test(x)) return {use:'室内の送風に使う',benefit:'空気を動かしたい場面で使いやすくする'};
+    if(/ベッド|枕|クッション|マットレス/.test(x)) return {use:'休む場所や寝具として使う',benefit:'休む場所を整えやすくする'};
+    if(/給水器|フードボウル|食器/.test(x)) return {use:'ペットの水や食事まわりで使う',benefit:'水や食事の場所を用意しやすくする'};
+    return {use:'日常で使う',benefit:'必要な場面で使えるように備えやすくする'};
+  }
+
+  function genericGroundedOpening(identity,facts,variant=0){
+    const intent=genericIntent(identity);
+    const idx=((Number(variant)||0)%4+4)%4;
+    const first=[
+      identity+'を使って、'+intent.benefit+'商品です。',
+      identity+'を探しているなら、'+intent.use+'ときに確認したい商品です。',
+      intent.use+'ための'+identity+'。'+intent.benefit+'選択肢です。',
+      '必要な場面で'+identity+'を使いたい人に。'+intent.benefit+'商品です。'
+    ][idx];
+    const second=facts[0]?naturalFactLine(facts[0],identity,idx):'';
+    return [first,second].filter(Boolean).join('\n');
+  }
+
+  function genericGroundedAudience(identity){
+    const intent=genericIntent(identity);
+    return intent.use+'ための'+identity+'を探している人';
+  }
+
   function analyze(item,keyword=''){
     const cls=classify(item,keyword);
-    const facts=extractFacts(item,cls.kind);
+    const genericIdentity=groundedQueryIdentity(item,keyword);
+    const genericEligible=!!genericIdentity && !cls.ambiguous && (cls.category==='unknown' || !cls.supported);
+    const facts=genericEligible?extractGenericGroundedFacts(item,genericIdentity):extractFacts(item,cls.kind);
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
     const legal=detectLegalRisk(titleOnly(item));
     const conflicts=cls.ambiguous?[]:detectConflictingSignals(titleOnly(item),cls.category,cls.usage);
-    const supported=!!cls.supported && !cls.ambiguous && conflicts.length===0;
+    const supported=((!!cls.supported)||genericEligible) && !cls.ambiguous && conflicts.length===0;
     return {
       source,
       kind:cls.kind,
@@ -1186,6 +1285,8 @@
       topCandidates:(cls.candidates||[]).slice(0,2).map(x=>({key:x.category+'.'+x.usage,score:x.score})),
       conflicts,
       supported,
+      genericEligible,
+      genericIdentity,
       outputMode:supported?'full':'fallback',
       problem:sanitizeOutput(cls.problem),
       use:sanitizeOutput(cls.use),
@@ -1267,6 +1368,9 @@
   api.collectClassificationCandidates=collectClassificationCandidates;
   api.resolveCategoryAndUsage=resolveCategoryAndUsage;
   api.detectConflictingSignals=detectConflictingSignals;
+  api.groundedQueryIdentity=groundedQueryIdentity;
+  api.extractGenericGroundedFacts=extractGenericGroundedFacts;
+  api.genericIntent=genericIntent;
   api.analyzeRoomProduct=analyze;
   api.groundedFeatureSentence=groundedFeatureSentence;
   api.naturalProductIdentity=naturalProductIdentity;
