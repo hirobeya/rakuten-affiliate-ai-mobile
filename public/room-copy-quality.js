@@ -381,7 +381,7 @@
   const PROMO_RISK_RULES=[
     /楽天(?:市場)?(?:ランキング)?\s*1位(?:受賞)?/g,/楽天1位(?:受賞)?/g,/ランキング\s*1位(?:受賞)?/g,/\d+冠(?:受賞)?/g,/受賞/g,
     /半額/g,/(?:スーパー)?SALE/gi,/セール/g,/クーポン(?:利用)?/g,/ご好評です/g,/大好評/g,/当店人気/g,/大人気/g,
-    /最安\d*円?/g,/\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi
+    /最安\d*円?/g,/\d+(?:\.\d+)?\s*%\s*(?:OFF|オフ)/gi,/(?:P\d+倍|ポイント\d+倍)/gi
   ];
 
   function collectRiskTerms(title,rules){
@@ -460,6 +460,10 @@
   function stripPromotionalText(itemName){
     let s=titleOnly({itemName});
     s=s
+      .replace(/(?:P\d+倍|ポイント\d+倍)\s*\d{1,2}\/\d{1,2}\s*\d{1,2}:\d{2}\s*(?:迄|まで)?/gi,' ')
+      .replace(/(?:SALE|セール)価格/gi,' ')
+      .replace(/クーポン[^】〗\]\s]{0,60}(?:\d{1,2}\/\d{1,2}|\d{1,2}日)?[^】〗\]\s]{0,30}(?:\d{1,2}:\d{2}|\d{1,2}時)?\s*(?:迄|まで)?/gi,' ')
+      
       .replace(/★([^★]{0,80})★/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/[＼\\]([^＼／\\/]{0,140})[／/]/g,(m,x)=>isPromoText(x)?' ':m)
       .replace(/【([^】]{0,140})】/g,(m,x)=>isPromoText(x)?' ':(` ${x} `))
@@ -479,6 +483,8 @@
       .replace(/(?:で|→)\s*\d{1,3}(?:,\d{3})*\s*円(?:[~〜～])?[!！\\/／＼]*/g,' ')
       .replace(/配布中[!！\\/／＼]*/g,' ')
       .replace(/搬入設置無料|設置無料|即納/g,' ');
+    s=tidyDisplayTitle(s);
+    s=s.replace(/^\s*(?:\d{1,2}\/\d{1,2}(?:\s+\d{1,2}:\d{2})?\s*(?:迄|まで)?|\d{1,2}:\d{2}\s*(?:迄|まで)?|迄|まで|価格|の|で|に|を|が)\s*/,'').trim();
     return tidyDisplayTitle(s);
   }
 
@@ -537,6 +543,7 @@
       const claimSafe=usageName||deriveSafeUnknownName(item?.itemName||'');
       return claimSafe||stripClaimText(stripPromotionalText(item?.itemName||'')).slice(0,48).trim();
     }
+    if(a.ambiguous || !a.supported) return fallbackProductName(item,a);
     let s=stripPromotionalText(item?.itemName||'');
     s=finalScan(s);
     const visibleLength=s.replace(/[^\p{L}\p{N}]/gu,'').length;
@@ -714,10 +721,56 @@
     return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
   }
 
+  function extractFallbackTitleFacts(item){
+    const title=titleOnly(item);
+    const out=[],seen=new Set();
+    const add=(value,index)=>{const v=String(value||'').trim();if(!v||seen.has(v))return;seen.add(v);out.push({value:v,index:Number.isFinite(index)?index:title.indexOf(v)});};
+    const patterns=[
+      /(?:幅|奥行|高さ)\s*\d+(?:\.\d+)?\s*(?:cm|mm|m)?/gi,
+      /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
+      /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
+      /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
+    ];
+    for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
+    const words=['犬用','猫用','ネコ用','ペット用','折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
+    for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
+    return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
+  }
+
+  function fallbackProductName(item,analysis){
+    const a=analysis||analyze(item);
+    const original=titleOnly(item);
+    const exact=deriveSafeUnknownName(original);
+    if(/\bBOS\b/i.test(original)&&/うんち袋|ウンチ袋|マナー袋/.test(original)){
+      const noun=(original.match(/うんち袋|ウンチ袋|マナー袋/)||[])[0]||exact;
+      return ('BOS '+noun).trim();
+    }
+    let s=stripClaimText(stripPromotionalText(original));
+    s=s.replace(/^(?:\d{1,2}[\/\-]\d{1,2}|\d{1,2}:\d{2}|迄|まで|価格|の|で|に|を|が)\s*/,'').trim();
+    const tokens=s.split(/\s+/).filter(Boolean);
+    const noise=/^(?:おしゃれ|オシャレ|かわいい|可愛い|人気|プレゼント|ギフト|父の日|珍しい)$/;
+    const factish=/^(?:\d|SS$|S$|M$|L$|LL$|XL$|XXL$|折りたたみ|折り畳み|折畳|キャスター付き|コードレス|高さ調節|高さ調整|天板付き|引き出し|扉付き|充電式|自立|水拭き|LEDライト付|交換パッド付き|取っ手付き|持ち手付き|メッシュ|スリム|コンパクト)/i;
+    const chosen=[];
+    for(const token of tokens){if(noise.test(token))continue;if(chosen.length&&factish.test(token))break;chosen.push(token);if(chosen.join(' ').length>=28||chosen.length>=3)break;}
+    let name=chosen.join(' ').trim();
+    if(a.claimRisk&&exact&&exact.length<=32)name=exact;
+    if(!name)name=exact||'商品名を確認してください';
+    return cleanupPairedSymbols(name.slice(0,48).trim());
+  }
+
+  function validPrice(item){const n=Number(item?.itemPrice);return Number.isFinite(n)&&n>0?n:null;}
+  function priceLine(item,prefix='価格：'){const n=validPrice(item);return n===null?'':prefix+fmt(n)+'円';}
+
   function shortFallback(item,withDisclosure=false,analysis=null){
     const a=analysis||analyze(item);
-    const title=buildSafeDisplayName(item,a);
-    return `${title}\n価格：${fmt(item?.itemPrice||0)}円`+(withDisclosure?'\n\n※アフィリエイト広告を利用しています':'');
+    const title=fallbackProductName(item,a);
+    const facts=extractFallbackTitleFacts(item).filter(x=>!a.claimRiskTerms?.some(t=>x.includes(t)));
+    const lines=[title];
+    if(facts.length)lines.push(facts.join('、'));
+    const p=priceLine(item);if(p)lines.push(p);
+    let out=lines.join('\n');
+    if(withDisclosure)out+='\n\n※アフィリエイト広告を利用しています';
+    return out;
   }
 
   function hasCategoryConflict(kind,facts){
@@ -807,7 +860,8 @@
     const opening=groundedOpening(a,item,variant,options);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
     const audience='\n\nこんな人に向いていそう👇\n・'+groundedAudience(a,item);
-    const ending='\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
+    const price=priceLine(item);
+    const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
     out=finalScan(out);
     if(!validateBody(item,a,out)) return shortFallback(item,true,a);
@@ -821,7 +875,8 @@
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant,options);
     if(a.facts[0]) out+='\n✔ '+a.facts[0];
-    out+='\n\n'+title+'\n'+fmt(item?.itemPrice||0)+'円';
+    const price=priceLine(item,'');
+    out+='\n\n'+title+(price?'\n'+price:'');
     out=finalScan(trimCopy(out,360));
     return validateBody(item,a,out)?out:shortFallback(item);
   }
@@ -833,7 +888,8 @@
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     let out=openingFor(a,item,variant);
     if(a.facts.length) out+='\n\n'+a.facts.map(x=>'✔ '+x).join('\n');
-    out+='\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+'\n価格：'+fmt(item?.itemPrice||0)+'円';
+    const price=priceLine(item);
+    out+='\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+(price?'\n'+price:'');
     out=finalScan(trimCopy(out,500));
     return validateBody(item,a,out)?out:shortFallback(item);
   }
@@ -841,6 +897,8 @@
 
   api.detectLegalRisk=detectLegalRisk;
   api.buildSafeDisplayName=buildSafeDisplayName;
+  api.extractFallbackTitleFacts=extractFallbackTitleFacts;
+  api.fallbackProductName=fallbackProductName;
   api.stripPromotionalText=stripPromotionalText;
   api.extractSafeFeatures=extractFacts;
   api.buildClassificationTitle=buildClassificationTitle;

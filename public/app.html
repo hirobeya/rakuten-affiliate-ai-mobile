@@ -1107,8 +1107,8 @@ async function showApp(session) {
   try {
     const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
-    const access=await response.json().catch(()=>({}));
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
+    const access=typeof response.json==='function'?await response.json().catch(()=>({})):{};
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
@@ -2234,6 +2234,8 @@ function buildDebugValidationRows(){
       generatedCopy:post(item,'room'),
       aiPhase1:aiRoomResults.get(index)?.data||null,
       aiState:aiRoomResults.get(index)?.state||'not_run',
+      aiHttpStatus:aiRoomResults.get(index)?.status??null,
+      aiMessage:aiRoomResults.get(index)?.message||null,
       humanReview:aiRoomReviews.get(index)||null,
       itemCaptionPreview:String(item?.itemCaption||'').slice(0,300),
       imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
@@ -2321,11 +2323,14 @@ function aiSafeTitle(item){
 function aiPhase1Post(item,result){
   const v=result?.validation;
   const title=(v?.mode==='simple'&&v?.productType?.valid)?String(v.productType.value||''):aiSafeTitle(item);
-  if(v?.mode!=='simple') return title+'\n価格：'+fmt(item?.itemPrice||0)+'円\n\n※アフィリエイト広告を利用しています';
+  const price=Number(item?.itemPrice);
+  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
+  if(v?.mode!=='simple') return title+(priceLine?'\n'+priceLine:'')+'\n\n※アフィリエイト広告を利用しています';
   const features=(v?.features||[]).filter(x=>x?.eligibleForPost);
   const lines=[title];
   if(features.length) lines.push('','商品の特徴👇',...features.slice(0,5).map(x=>'✔ '+x.text));
-  lines.push('','価格：'+fmt(item?.itemPrice||0)+'円','','※アフィリエイト広告を利用しています');
+  if(priceLine) lines.push('',priceLine);
+  lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
 }
 
@@ -2382,12 +2387,12 @@ async function requestAiRoom(item,index,generation){
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
-      const message=r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
+      const message=r.status===503&&String(d.message||'').includes('OPENAI_API_KEY')?'PreviewのOPENAI_API_KEYが設定されていません':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
     }else aiRoomResults.set(index,{state:'done',data:d});
   }catch(e){
     if(generation!==aiRunGeneration) return;
-    aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。'});
+    aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
   }finally{clearTimeout(timer);if(generation===aiRunGeneration) updateAiPanel(index);}
 }
 
@@ -2424,7 +2429,7 @@ function fullOutputItems(items){
 function analysisGuide(i){
   const a=groundedAnalysis(i);
   if(a.outputMode!=='full'){
-    return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と価格のみ表示しています。</div></div>';
+    return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。</div></div>';
   }
   return `<div class="guide">
     <div class="gt">この商品は誰に・何を刺す？</div>

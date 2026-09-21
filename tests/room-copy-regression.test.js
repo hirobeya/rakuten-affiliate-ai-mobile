@@ -343,7 +343,7 @@ for(const id of ['clean-window','pet-water','pet-bed','battery-cable']){
 const appHtml=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
 if(!appHtml.includes("fetch('/api/runtime-env'")) fail('preview-export','runtime env endpoint guard missing');
 if(!appHtml.includes("preview && currentAccessPlan==='owner'")) fail('preview-export','owner+preview guard missing');
-if(!appHtml.includes('この商品は自動判定の対象外のため、商品名と価格のみ表示しています。')) fail('fallback-ui','fallback guidance message missing');
+if(!appHtml.includes('この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。')) fail('fallback-ui','fallback guidance message missing');
 if(!appHtml.includes("groundedAnalysis(i).outputMode==='full'")) fail('today-ui','full-output filter missing');
 if(appHtml.includes('<div id="st" class="muted"></div>\\n')) fail('preview-export','literal \\n in static debug markup');
 if(!appHtml.includes("debugCopyBtn')?.addEventListener('click',copyDebugValidation)")) fail('preview-export','debug export click handler missing');
@@ -447,6 +447,55 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
   if((a.conflicts||[]).length) fail(id,'mop holder must not have cleaning/storage conflict');
   if((a.facts||[]).includes('モップタイプ')) fail(id,'mop holder must not expose モップタイプ');
   if(/モップを探して|モップでの掃除|コードレスタイプを条件にモップ/.test(copy)) fail(id,'mop holder copy must not describe the holder as a mop: '+copy);
+}
+
+
+// Step 3-6: fallback is title-only, allowlisted, claim-safe, promo-clean and hides invalid price.
+{
+  const samples=[
+    {id:'fallback-bench',itemName:'収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ クッション付き',itemPrice:0,keyword:'収納ベンチ'},
+    {id:'fallback-holder',itemName:'モップハンガー RC型 コンパクト 6本掛【tmcp2212】',itemPrice:null,keyword:'モップハンガー'},
+    {id:'fallback-kitchen',itemName:'キッチンワゴン キャスター付き 3段 天板付き スリム',itemPrice:NaN,keyword:'キッチンワゴン'}
+  ];
+  for(const s of samples){
+    const copy=api.makeRoomCopy(s,s.keyword,{variant:0});
+    if(/価格：0円/.test(copy)) fail(s.id,'zero/invalid price must be hidden: '+copy);
+    if(/暮らし|快適|助けになりそう|向いていそう|探している人/.test(copy)) fail(s.id,'fallback must not add lifestyle/use explanation: '+copy);
+    if(s.id==='fallback-bench'&&!/2人掛け、幅120、奥行37、高さ40cm/.test(copy)) fail(s.id,'labeled dimensions must stay intact: '+copy);
+  }
+}
+{
+  const item={itemName:'【20箱セット】 クリロン化成 うんちが臭わない袋 BOS ネコ用 箱型 SSサイズ 200枚入 ボス うんち袋',itemPrice:26980};
+  const copy=api.makeRoomCopy(item,'うんち袋',{variant:0});
+  if(/防臭|臭わない|匂わない|臭くない/.test(copy)) fail('fallback-bos','claim terms leaked: '+copy);
+  if(!/BOS/.test(copy)||!/うんち袋/.test(copy)||!/ネコ用/.test(copy)||!/SSサイズ/.test(copy)||!/200枚入/.test(copy)) fail('fallback-bos','safe BOS facts missing: '+copy);
+  if(/うんちが\s+袋/.test(copy)) fail('fallback-bos','broken claim removal remains: '+copy);
+}
+{
+  const cleaned=api.stripPromotionalText('P10倍 9/24 9:59迄 セール価格 テラモト モップハンガー');
+  if(/^\s*(?:9\/24|9:59|迄|価格)/.test(cleaned)) fail('promo-block','orphan promo prefix remains: '+cleaned);
+  const risk=api.detectLegalRisk('P10倍 9/24 9:59迄 商品');
+  if(!risk.promoRisk) fail('promo-block','P10倍 must set promoRisk');
+}
+{
+  const item={itemName:'モバイルバッテリー 4本ケーブル内蔵 10000mAh',itemPrice:0};
+  const copy=api.makeRoomCopy(item,'モバイルバッテリー',{variant:0});
+  if(/(?:^|[、\n])4本(?:[、\n]|$)/.test(copy)) fail('fallback-cable','4本ケーブル内蔵 must not be reduced to 4本: '+copy);
+}
+if(!appHtml.includes('aiHttpStatus:aiRoomResults.get(index)?.status??null')) fail('preview-export','aiHttpStatus missing from validation JSON');
+if(!appHtml.includes("aiMessage:aiRoomResults.get(index)?.message||null")) fail('preview-export','aiMessage missing from validation JSON');
+if(!appHtml.includes('PreviewのOPENAI_API_KEYが設定されていません')) fail('preview-export','missing Preview key UI message');
+
+
+// Misleading catchcopy/itemCaption must never change title-derived classification or promote fallback to full.
+for(const tc of fixture.cases){
+  const base={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
+  const bait={...base,catchcopy:'急速充電 防臭 網戸 収納',itemCaption:'急速充電 防臭 網戸 収納 ペット用品 掃除用具',genrePath:'収納>ペット>掃除',genreName:'防臭 急速充電'};
+  const a0=api.analyzeRoomProduct(base,tc.searchKeyword||'');
+  const a1=api.analyzeRoomProduct(bait,tc.searchKeyword||'');
+  if(a0.category!==a1.category||a0.usage!==a1.usage||a0.outputMode!==a1.outputMode){
+    fail(tc.id+'-misleading-meta',`metadata changed title-derived result from ${a0.category}.${a0.usage}/${a0.outputMode} to ${a1.category}.${a1.usage}/${a1.outputMode}`);
+  }
 }
 
 if(failures){
