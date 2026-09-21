@@ -442,8 +442,13 @@
       if(usage==='抜け毛' && /抜け毛・毛取り用途/.test(x)) return false;
       if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
       if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
+      if(usage==='ハンディクリーナー' && x==='ブラシタイプ' && /ブラシレス/.test(t)) return false;
       return true;
     });
+    if(kind==='charging'){
+      const priority=x=>/^\d+Wh$/.test(x)?0:/^定格\d+W$/.test(x)?1:/リン酸鉄/.test(x)?2:/UPS/.test(x)?3:/ソーラーパネル/.test(x)?4:/急速充電/.test(x)?5:/USB-C/.test(x)?6:9;
+      filtered=filtered.map((x,i)=>({x,i,p:priority(x)})).sort((a,b)=>a.p-b.p||a.i-b.i).map(v=>v.x);
+    }
     return filtered.slice(0,4);
   }
 
@@ -772,6 +777,7 @@
     const identity=naturalProductIdentity(item,a);
     const facts=(a.facts||[]).filter(Boolean);
     if(!identity) return '';
+    if(a.category==='pet' && a.usage==='drive_bed') return '犬との車移動に使える'+identity+'を探している人';
     if(facts.some(x=>/カバーを外して洗える|洗える/.test(x))) return 'お手入れしやすい'+identity+'を探している人';
     if(facts.some(x=>/防水|撥水/.test(x))) return '防水・撥水表記のある'+identity+'を探している人';
     if(facts.some(x=>/犬・猫向け/.test(x))) return /犬用|猫用/.test(identity)?'犬や猫向けのベッドを探している人':'犬や猫用の'+identity+'を探している人';
