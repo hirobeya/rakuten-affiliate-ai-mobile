@@ -868,7 +868,9 @@ input,select{
 <div id="debugExport" class="debugExport">
   <strong>検証データ出力（プレビュー・owner限定）</strong>
   <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>
-  <button id="debugCopyBtn" type="button">検証JSONを作成してコピー</button>
+  <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
+  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
+  <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
   <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
   <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
 </div>
@@ -2209,10 +2211,16 @@ function debugFallbackReason(a){
   return null;
 }
 
-function buildDebugValidationRows(){
+function buildDebugValidationRowsFor(items,keyword){
   if(!debugExportAllowed) return [];
-  return lastSearchItems.map((item,index)=>{
-    const a=groundedAnalysis(item);
+  return (Array.isArray(items)?items:[]).map((item,index)=>{
+    const a=UrenaviPainCopy.analyzeRoomProduct
+      ?UrenaviPainCopy.analyzeRoomProduct(item,String(keyword||'').trim())
+      :groundedAnalysis(item);
+    const options={variant:index};
+    const generatedCopy=UrenaviPainCopy.makeRoomCopy
+      ?UrenaviPainCopy.makeRoomCopy(item,String(keyword||'').trim(),options)
+      :'';
     return {
       rank:index+1,
       itemName:String(item?.itemName||''),
@@ -2231,17 +2239,126 @@ function buildDebugValidationRows(){
       topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[],
       outputMode:String(a?.outputMode||'fallback'),
       fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
-      generatedCopy:post(item,'room'),
-      aiPhase1:aiRoomResults.get(index)?.data||null,
-      aiState:aiRoomResults.get(index)?.state||'not_run',
-      aiHttpStatus:aiRoomResults.get(index)?.status??null,
-      aiMessage:aiRoomResults.get(index)?.message||null,
-      humanReview:aiRoomReviews.get(index)||null,
+      generatedCopy,
+      aiPhase1:null,
+      aiState:'not_run',
+      aiHttpStatus:null,
+      aiMessage:null,
+      humanReview:null,
       itemCaptionPreview:String(item?.itemCaption||'').slice(0,300),
       imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
       itemUrl:String(item?.itemUrl||'')
     };
   });
+}
+
+function buildDebugValidationRows(){
+  return buildDebugValidationRowsFor(lastSearchItems,k.value.trim());
+}
+
+const DEBUG_BATCH_KEYWORDS=[
+  'ハンディクリーナー',
+  '洗濯ネット',
+  'ポータブル電源',
+  '犬 ベッド',
+  'ドライブベッド 犬'
+];
+
+async function debugSearchOne(keyword,session,sort){
+  const q=new URLSearchParams({keyword,sort:sort||'standard'});
+  const r=await fetch('/api/search?'+q.toString(),{
+    headers:{Authorization:`Bearer ${session.access_token}`},
+    credentials:'same-origin',
+    cache:'no-store'
+  });
+  const d=await r.json().catch(()=>({}));
+  if(r.status===401) throw new Error('ログインの有効期限が切れました。');
+  if(r.status===403) throw new Error('有効な契約を確認できませんでした。');
+  if(r.status===429) throw new Error('アクセスが集中しています。');
+  if(!r.ok) throw new Error(d.message||'検索に失敗しました。');
+  return Array.isArray(d.items)?d.items:[];
+}
+
+async function copyBatchDebugValidation(){
+  const btn=document.getElementById('debugBatchBtn');
+  const ta=document.getElementById('debugJson');
+  const meta=document.getElementById('debugJsonMeta');
+  if(!debugExportAllowed){
+    if(meta) meta.textContent='この機能はPreview環境のownerだけ利用できます。';
+    return;
+  }
+  if(btn?.disabled) return;
+
+  btn.disabled=true;
+  btn.textContent='5件を検証中…';
+  if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
+
+  let session=null;
+  try{
+    const result=await authDeadline(sb.auth.getSession(),20000);
+    if(result?.error) throw result.error;
+    session=result?.data?.session||null;
+    if(!session) throw new Error('ログインの有効期限が切れました。');
+    if(sessionTooOld(session)) throw new Error('安全のため再認証が必要です。');
+
+    const selectedSort=String($('#sort')?.value||'').trim()||'standard';
+    const searches=[];
+
+    for(let index=0;index<DEBUG_BATCH_KEYWORDS.length;index++){
+      const keyword=DEBUG_BATCH_KEYWORDS[index];
+      btn.textContent=`${index+1}/${DEBUG_BATCH_KEYWORDS.length} 検証中…`;
+      if(meta) meta.textContent=`「${keyword}」を検索しています。`;
+      try{
+        const items=await debugSearchOne(keyword,session,selectedSort);
+        searches.push({
+          searchKeyword:keyword,
+          sort:selectedSort,
+          count:items.length,
+          error:null,
+          items:buildDebugValidationRowsFor(items,keyword)
+        });
+      }catch(error){
+        searches.push({
+          searchKeyword:keyword,
+          sort:selectedSort,
+          count:0,
+          error:String(error?.message||'検索に失敗しました。'),
+          items:[]
+        });
+      }
+      if(index<DEBUG_BATCH_KEYWORDS.length-1) await new Promise(resolve=>setTimeout(resolve,350));
+    }
+
+    const payload={
+      batch:true,
+      searchCount:DEBUG_BATCH_KEYWORDS.length,
+      generatedAt:new Date().toISOString(),
+      searches
+    };
+    const json=JSON.stringify(payload,null,2);
+    if(ta){ta.value=json;ta.scrollTop=0;}
+    const okCount=searches.filter(x=>!x.error).length;
+    const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
+    if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
+
+    try{
+      if(navigator.clipboard?.writeText){
+        await navigator.clipboard.writeText(json);
+        btn.textContent='全部コピーしました';
+      }else throw new Error('Clipboard API unavailable');
+    }catch(error){
+      console.warn('batch clipboard copy failed',error);
+      btn.textContent='JSONを表示しました';
+      if(meta) meta.textContent+=' 自動コピーできない場合は下の枠を長押ししてコピーしてください。';
+    }
+  }catch(error){
+    console.error('batch validation failed',error);
+    if(meta) meta.textContent='一括検証を開始できませんでした：'+String(error?.message||'不明なエラー');
+    btn.textContent='一括検証エラー';
+  }finally{
+    btn.disabled=false;
+    setTimeout(()=>{if(btn) btn.textContent='5件まとめて検証 → JSONをコピー';},2600);
+  }
 }
 
 async function copyDebugValidation(){
@@ -2298,6 +2415,7 @@ async function copyDebugValidation(){
 }
 
 document.getElementById('debugCopyBtn')?.addEventListener('click',copyDebugValidation);
+document.getElementById('debugBatchBtn')?.addEventListener('click',copyBatchDebugValidation);
 
 document.getElementById('debugJson')?.addEventListener('focus',e=>{
   // Keep native iOS selection behavior; do not auto-select the full payload.

@@ -550,6 +550,15 @@ for(const tc of fixture.cases){
   if(structural(12,0.41)!==true) fail('strong-lead-pos41','41% must qualify');
 }
 
+
+if(!appHtml.includes('id="debugBatchBtn"')) fail('batch-debug-ui','batch validation button missing');
+for(const keyword of ['ハンディクリーナー','洗濯ネット','ポータブル電源','犬 ベッド','ドライブベッド 犬']){
+  if(!appHtml.includes("'"+keyword+"'")) fail('batch-debug-keywords','missing fixed batch keyword: '+keyword);
+}
+if(!appHtml.includes('async function copyBatchDebugValidation()')) fail('batch-debug-ui','batch validation handler missing');
+if(!appHtml.includes("searchCount:DEBUG_BATCH_KEYWORDS.length")) fail('batch-debug-json','batch JSON searchCount missing');
+if(!appHtml.includes('items:buildDebugValidationRowsFor(items,keyword)')) fail('batch-debug-json','batch results must use per-keyword validation rows');
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
