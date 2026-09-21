@@ -192,9 +192,9 @@ for(const id of ['S1','P1','M3']){
   const p1Item={itemName:p1.itemName,itemPrice:p1.itemPrice||0};
   const p1a=api.analyzeRoomProduct(p1Item,'');
   const p1copy=api.makeRoomCopy(p1Item,'',{variant:0});
-  if(p1a.category!=='pet'||p1a.usage!=='bed'||p1a.outputMode!=='fallback') fail('P1',`expected pet.bed fallback for drive/car bed, got ${p1a.category}.${p1a.usage} ${p1a.outputMode}`);
-  if(!(p1a.conflicts||[]).some(x=>x.usage==='drive_bed')) fail('P1','drive_bed conflict missing');
-  for(const bad of ['快眠','安眠','体圧分散']) if(p1copy.includes(bad)) fail('P1','unsupported pet-bed claim: '+bad);
+  if(p1a.category!=='pet'||p1a.usage!=='drive_bed'||p1a.outputMode!=='full') fail('P1',`expected pet.drive_bed full for explicit drive-bed title, got ${p1a.category}.${p1a.usage} ${p1a.outputMode}`);
+  if((p1a.conflicts||[]).length) fail('P1','explicit drive-bed must not carry a false conflict');
+  for(const bad of ['快眠','安眠','体圧分散']) if(p1copy.includes(bad)) fail('P1','unsupported drive-bed claim: '+bad);
 
   const ids=['P9','P10'];
   const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
@@ -413,8 +413,9 @@ for(const tc of fixture.cases.slice(0,11)){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
   const a=api.analyzeRoomProduct(item,'');
   const copy=api.makeRoomCopy(item,'',{variant:0});
-  if(a.outputMode!=='fallback') fail('grounded-room-P1','known drive-bed conflict must stay fallback');
-  if(/使いやすく|暮らし|快適|安心/.test(copy)) fail('grounded-room-P1','fallback must not add inferred benefit: '+copy);
+  if(a.category!=='pet'||a.usage!=='drive_bed'||a.outputMode!=='full') fail('grounded-room-P1','explicit drive-bed must be supported as pet.drive_bed');
+  if(/快眠|安眠|体圧分散/.test(copy)) fail('grounded-room-P1','unsupported drive-bed benefit leaked: '+copy);
+  if(!/車|ドライブ/.test(copy)) fail('grounded-room-P1','drive-bed copy must stay grounded in vehicle use: '+copy);
 }
 
 
