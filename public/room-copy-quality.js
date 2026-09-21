@@ -696,46 +696,96 @@
     return f+'という特徴を条件に商品を比べたいときに、確認しやすいポイントです。';
   }
 
+  function naturalProductIdentity(item,a){
+    const exact=exactProductTypeName(item?.itemName||'');
+    if(exact) return exact;
+    const usage=safeUsageName(a.category,a.usage)||primaryUsageWord(item);
+    return usage||deriveSafeUnknownName(item?.itemName||'');
+  }
+
   function groundedAudience(a,item){
+    const identity=naturalProductIdentity(item,a);
     const fact=(a.facts||[])[0];
-    const usage=primaryUsageWord(item);
-    if(fact && usage) return fact+'を条件に'+usage+'を探している人';
-    if(fact) return fact+'という特徴を重視して選びたい人';
-    return a.audience||'商品名と用途を確認しながら選びたい人';
+    if(!identity) return '';
+    if(/犬・猫向け/.test(fact||'')) return identity+'を犬や猫用として探している人';
+    if(/防水|撥水/.test(fact||'')) return '防水・撥水表記のある'+identity+'を探している人';
+    if(/折りたたみ/.test(fact||'')) return '折りたためる'+identity+'を探している人';
+    if(/コードレス/.test(fact||'')) return 'コードレスの'+identity+'を探している人';
+    if(fact) return fact+'の'+identity+'を探している人';
+    return identity+'を探している人';
+  }
+
+  function naturalFactLine(fact,identity,variant=0){
+    const f=String(fact||'').trim();
+    let core='';
+    if(!f) core=identity;
+    else if(/折りたたみ/.test(f)) core='折りたたみ対応';
+    else if(/省スペース/.test(f)) core='省スペース表記あり';
+    else if(/スリム|薄型/.test(f)) core='スリム・薄型表記あり';
+    else if(/撥水/.test(f)) core='撥水表記あり';
+    else if(/防水/.test(f)) core='防水表記あり';
+    else if(/犬・猫向け/.test(f)) core='犬・猫向け表記あり';
+    else if(/コードレス/.test(f)) core='コードレス表記あり';
+    else if(/USB-C/.test(f)) core='USB-C対応表記あり';
+    else if(/急速充電/.test(f)) core='急速充電対応表記あり';
+    else if(/ワイヤレス充電/.test(f)) core='ワイヤレス充電対応表記あり';
+    else if(/取替式/.test(f)) core='取替式';
+    else if(/両面/.test(f)) core='両面タイプ';
+    else core=f;
+
+    const patterns=f ? [
+      core+'です。', core+'。', '確認できる特徴は、'+core+'です。', 'ポイントは、'+core+'です。',
+      '特徴のひとつが、'+core+'です。', core+'という仕様です。', core+'が確認できます。',
+      core+'を備えています。', core+'がひとつの特徴です。', core+'という点が目に留まります。'
+    ] : [
+      identity+'です。', identity+'として掲載されている商品です。', identity+'のカテゴリで見ておきたい商品です。',
+      identity+'を探す中で確認しておきたい商品です。', identity+'の候補として見ておきたい商品です。',
+      identity+'を選ぶ際に確認しておきたい商品です。', identity+'の比較候補に入れやすい商品です。',
+      identity+'を探しているときに見ておきたい商品です。', identity+'の選択肢として確認したい商品です。',
+      identity+'を候補にするなら見ておきたい商品です。'
+    ];
+    const idx=((Number(variant)||0)%patterns.length+patterns.length)%patterns.length;
+    return patterns[idx];
   }
 
   function groundedOpening(a,item,variant=0,options={}){
-    const title=buildSafeDisplayName(item,a);
-    const fact=(a.facts||[])[0];
-    const usage=primaryUsageWord(item);
-    const identity=usage||title;
+    const identity=naturalProductIdentity(item,a);
+    if(!identity) return '';
+    const facts=(a.facts||[]).filter(Boolean);
+
     const openings=[
-      title+'を探しているなら、まず確認したいポイントを絞って見ておきたい商品です。',
-      title+'が候補なら、商品名に書かれた特徴を見ながら比べたいところです。',
-      identity+'を選ぶときに、条件をひとつずつ確認したい人向けの候補です。',
-      title+'を比較するときに、商品名から確認できる特徴を見て選びたい商品です。',
-      identity+'を探していて、仕様を見落とさず選びたいときに確認したい商品です。',
-      title+'が気になったら、商品名にある特徴を条件に比較しやすい商品です。',
-      identity+'を選ぶ候補として、商品名に書かれたポイントを確認しながら見たい商品です。',
-      title+'を検討するなら、用途と特徴を確認してから選びたい商品です。',
-      identity+'を探すときに、商品名の特徴を手がかりに比較したい候補です。',
-      title+'を選ぶ前に、商品名に書かれた特徴を確認しておきたい商品です。'
+      identity+'を探しているなら、候補に入れたい商品です。',
+      identity+'を比べるときに、チェックしておきたい商品です。',
+      identity+'を探している人に、まず見てほしい商品です。',
+      identity+'を選ぶなら、候補のひとつに入れたい商品です。',
+      identity+'を検討しているなら、比較候補に入れやすい商品です。',
+      identity+'を探しているときに、見ておきたい商品です。',
+      identity+'を選ぶ前に、確認しておきたい商品です。',
+      identity+'を比較するなら、見逃したくない商品です。',
+      identity+'を探す中で、一度チェックしておきたい商品です。',
+      identity+'を候補にするなら、あわせて見ておきたい商品です。'
     ];
-    const grounded=groundedFeatureSentence(fact)||a.impact||'用途を確認しながら選ぶときの候補になりそうです。';
-    const seconds=[
-      title+'では、'+grounded,
-      title+'を比べるなら、'+grounded,
-      title+'の特徴を見ると、'+grounded,
-      title+'を候補にするなら、'+grounded,
-      title+'を選ぶ前に、'+grounded,
-      title+'を検討するときは、'+grounded,
-      title+'の商品名から確認できる点として、'+grounded,
-      title+'を見比べるポイントとして、'+grounded,
-      title+'について確認できる特徴として、'+grounded,
-      title+'を選択肢に入れるなら、'+grounded
-    ];
-    const idx=((Number(variant)||0)%10+10)%10;
-    return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
+    const idx=((Number(variant)||0)%openings.length+openings.length)%openings.length;
+    const first=pickUnusedPattern(openings,idx,options.usedOpenings);
+    let second=naturalFactLine(facts[0],identity,idx);
+    if(options.usedSeconds instanceof Set){
+      if(options.usedSeconds.has(second)){
+        for(let step=1;step<10;step++){
+          const candidate=naturalFactLine(facts[0],identity,idx+step);
+          if(!options.usedSeconds.has(candidate)){second=candidate;break;}
+        }
+      }
+      options.usedSeconds.add(second);
+    } else if(Array.isArray(options.usedSeconds)){
+      if(options.usedSeconds.includes(second)){
+        for(let step=1;step<10;step++){
+          const candidate=naturalFactLine(facts[0],identity,idx+step);
+          if(!options.usedSeconds.includes(candidate)){second=candidate;break;}
+        }
+      }
+      options.usedSeconds.push(second);
+    }
+    return first+'\n'+second;
   }
 
   function openingFor(a,item,variant=0,options={}){
@@ -916,11 +966,13 @@
     const a=analyze(item,keyword);
     if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
 
-    const title=buildSafeDisplayName(item,a);
+    const title=naturalProductIdentity(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
     const opening=groundedOpening(a,item,variant,options);
+    if(!opening) return shortFallback(item,true,a);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
-    const audience='\n\nこんな人に向いていそう👇\n・'+groundedAudience(a,item);
+    const audienceText=groundedAudience(a,item);
+    const audience=audienceText?'\n\nこんな人に向いていそう👇\n・'+audienceText:'';
     const price=priceLine(item);
     const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
     let out=trimCopy(opening+facts+audience+ending,500);
@@ -970,6 +1022,7 @@
   api.detectConflictingSignals=detectConflictingSignals;
   api.analyzeRoomProduct=analyze;
   api.groundedFeatureSentence=groundedFeatureSentence;
+  api.naturalProductIdentity=naturalProductIdentity;
   api.groundedAudience=groundedAudience;
   api.groundedOpening=groundedOpening;
   api.makeRoomCopy=makeRoomCopy;

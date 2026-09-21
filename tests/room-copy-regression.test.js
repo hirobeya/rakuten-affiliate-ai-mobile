@@ -586,6 +586,28 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
   }
 }
 
+
+{
+  const batch=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','batch-validation-20260921.json'),'utf8'));
+  const forbidden=/商品名に書かれた|商品名から確認できる|商品名にある特徴|という表記を重視|用途と特徴を確認|商品名の特徴を手がかり|ペットが休む場所を整える助け|商品名と用途を確認/;
+  const dog=batch.searches.find(x=>x.searchKeyword==='犬 ベッド');
+  for(let i=0;i<dog.items.length;i++){
+    const item={itemName:dog.items[i],itemPrice:1000};
+    const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:i});
+    if(forbidden.test(copy)) fail('natural-dog-'+(i+1),'internal/mechanical phrasing leaked: '+copy);
+    const first=copy.split('\n')[0];
+    if(first.includes('…')) fail('natural-dog-'+(i+1),'opening must not use truncated long title: '+first);
+    if(/お買い物マラソン|P\d+倍|楽天1位/.test(copy.split('\n').slice(0,2).join(' '))) fail('natural-dog-'+(i+1),'promo residue in opening: '+copy);
+  }
+  for(const id of ['S1','S5','S6','live-battery-rank5-anker-zolo']){
+    const tc=fixture.cases.find(x=>x.id===id);
+    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||1000};
+    const copy=api.makeRoomCopy(item,'',{variant:0});
+    if(forbidden.test(copy)) fail('natural-'+id,'internal/mechanical phrasing leaked: '+copy);
+    if(copy.split('\n')[0].includes('…')) fail('natural-'+id,'opening must not use truncated long title: '+copy);
+  }
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
