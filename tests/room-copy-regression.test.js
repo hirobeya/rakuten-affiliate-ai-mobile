@@ -444,7 +444,7 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
   const a=api.analyzeRoomProduct(item,'モップハンガー');
   const copy=api.makeRoomCopy(item,'モップハンガー',{variant:0});
-  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='fallback'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder fallback');
+  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='full'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder generic full');
   if((a.conflicts||[]).length) fail(id,'mop holder must not have cleaning/storage conflict');
   if((a.facts||[]).includes('モップタイプ')) fail(id,'mop holder must not expose モップタイプ');
   if(/モップを探して|モップでの掃除|コードレスタイプを条件にモップ/.test(copy)) fail(id,'mop holder copy must not describe the holder as a mop: '+copy);
@@ -459,9 +459,10 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
     {id:'fallback-kitchen',itemName:'キッチンワゴン キャスター付き 3段 天板付き スリム',itemPrice:NaN,keyword:'キッチンワゴン'}
   ];
   for(const s of samples){
+    const a=api.analyzeRoomProduct(s,s.keyword);
     const copy=api.makeRoomCopy(s,s.keyword,{variant:0});
     if(/価格：0円/.test(copy)) fail(s.id,'zero/invalid price must be hidden: '+copy);
-    if(/暮らし|快適|助けになりそう|向いていそう|探している人/.test(copy)) fail(s.id,'fallback must not add lifestyle/use explanation: '+copy);
+    if(a.outputMode==='fallback' && /暮らし|快適|助けになりそう|向いていそう|探している人/.test(copy)) fail(s.id,'fallback must not add lifestyle/use explanation: '+copy);
     if(s.id==='fallback-bench'&&!/2人掛け、幅120、奥行37、高さ40cm/.test(copy)) fail(s.id,'labeled dimensions must stay intact: '+copy);
   }
 }
@@ -656,6 +657,39 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
   if(a.facts.includes('両面タイプ')) fail('portable-power-bundled-panel','bundled solar-panel sidedness must not be attributed to portable power');
   const copy=api.makeRoomCopy(item,'ポータブル電源',{variant:2});
   if(/両面タイプのポータブル電源|両面タイプです|両面タイプ。/.test(copy)) fail('portable-power-bundled-panel-copy','portable-power copy misattributes bundled solar-panel sidedness: '+copy);
+}
+
+{
+  const genericCases=[
+    {name:'humidifier',keyword:'加湿器',itemName:'超音波 加湿器 4L 上から給水 静音 LEDライト'},
+    {name:'electric-kettle',keyword:'電気ケトル',itemName:'電気ケトル 1.0L 温度調節 保温 コンパクト'},
+    {name:'usb-hub',keyword:'USBハブ',itemName:'USBハブ Type-C 7in1 HDMI PD対応 SDカード'},
+    {name:'umbrella',keyword:'折りたたみ傘',itemName:'折りたたみ傘 軽量 晴雨兼用 自動開閉 コンパクト'},
+    {name:'pet-water',keyword:'ペット給水器',itemName:'ペット給水器 犬 猫 自動給水器 2L USB給電'},
+    {name:'storage-wagon',keyword:'収納ワゴン',itemName:'収納ワゴン 3段 キャスター付き スリム キッチン'},
+    {name:'frying-pan',keyword:'フライパン',itemName:'フライパン 26cm IH ガス火対応 食洗機対応'},
+    {name:'bottle',keyword:'水筒',itemName:'水筒 500ml 保温 保冷 ステンレス ボトル'},
+    {name:'pillow',keyword:'枕',itemName:'枕 洗える 高さ調整 横向き 寝返り'},
+    {name:'cutting-board',keyword:'まな板',itemName:'まな板 食洗機対応 軽量 日本製'}
+  ];
+  for(const c of genericCases){
+    const item={itemName:c.itemName,itemPrice:2000};
+    const a=api.analyzeRoomProduct(item,c.keyword);
+    const copy=api.makeRoomCopy(item,c.keyword,{variant:1});
+    if(!a.genericEligible||a.outputMode!=='full') fail('generic-'+c.name,'grounded unseen product must use generic full: '+JSON.stringify(a));
+    if(!copy.includes(c.keyword)) fail('generic-'+c.name,'copy lost grounded product identity: '+copy);
+    if(copy.split('\n').length<5) fail('generic-'+c.name,'generic full still looks like fallback: '+copy);
+  }
+
+  const scoped={itemName:'スマートフォン 防水ケース付き 充電ケーブル付属 128GB',itemPrice:50000};
+  const sa=api.analyzeRoomProduct(scoped,'スマートフォン');
+  const sc=api.makeRoomCopy(scoped,'スマートフォン',{variant:0});
+  if(!sa.genericEligible||sa.outputMode!=='full') fail('generic-accessory-scope','smartphone should use generic full');
+  if(sa.facts.some(x=>/防水/.test(x))||/✔ 防水/.test(sc)) fail('generic-accessory-scope','accessory waterproofing leaked onto smartphone: '+sc);
+
+  const sensitive={itemName:'美容 美顔ローラー リフトアップ 小顔 防水',itemPrice:3980};
+  const ha=api.analyzeRoomProduct(sensitive,'美顔ローラー');
+  if(ha.genericEligible||ha.outputMode!=='fallback') fail('generic-sensitive-guard','sensitive product must not be promoted by generic mode: '+JSON.stringify(ha));
 }
 
 if(failures){
