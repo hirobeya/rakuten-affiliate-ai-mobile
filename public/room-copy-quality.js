@@ -221,7 +221,7 @@
     const topFamily=classificationFamily(top);
     const sameFamilyBest=chooseMostSpecificSameFamily(candidates,topFamily);
     if(sameFamilyBest) top=sameFamilyBest;
-    const second=candidates.find(x=>classificationFamily(x)!==classificationFamily(top));
+    const second=candidates.find(x=>classificationFamily(x)!==classificationFamily(top) && !isContextualUseSignal(title,top.category,top.usage,x,x.phrase));
     if(second){
       const pair=new Set([top.category+'.'+top.usage,second.category+'.'+second.usage]);
       if(pair.has('pet.toilet') && pair.has('pet.hygiene_wipe')){
