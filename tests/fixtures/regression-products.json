@@ -1163,7 +1163,7 @@
         "category": "storage",
         "usage": "cleaning_tool_holder",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1179,7 +1179,7 @@
         "category": "storage",
         "usage": "generic_storage",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1195,7 +1195,7 @@
         "category": "storage",
         "usage": "generic_storage",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1211,7 +1211,7 @@
         "category": "unknown",
         "usage": "unknown",
         "ambiguous": false,
-        "outputMode": "full",
+        "outputMode": "fallback",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
