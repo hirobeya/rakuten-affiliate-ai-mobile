@@ -247,34 +247,26 @@ for(const raw of ['楽天1位受賞 商品A','8冠受賞 商品B','受賞 商品
   if(!(a.conflicts||[]).some(x=>x.usage==='special_battery'&&x.phrase==='電気毛布')) fail(tc.id,'電気毛布 special_battery conflict missing');
 }
 
-// Same-search regression: opening line and second line must not repeat.
-const sameSearchIds=['clean-window','clean-glove','clean-cloth','pet-grooming'];
-const sameSearchVariants=[0,1,4,5];
-const openings=[];
-const seconds=[];
-for(let i=0;i<sameSearchIds.length;i++){
-  const tc=fixture.cases.find(x=>x.id===sameSearchIds[i]);
-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
-  const copy=api.makeRoomCopy(item,'',{variant:sameSearchVariants[i]});
-  const lines=copy.split('\n').filter(Boolean);
-  if(lines[0]) openings.push(lines[0]);
-  if(lines[1]) seconds.push(lines[1]);
-  if(copy.includes('お手入れを普段の掃除や手入れに')) fail(tc.id,'duplicate wording: お手入れを普段の掃除や手入れに');
-}
-if(new Set(openings).size!==openings.length) fail('same-search','duplicate opening line detected: '+JSON.stringify(openings));
-if(new Set(seconds).size!==seconds.length) fail('same-search','duplicate second line detected: '+JSON.stringify(seconds));
-
-// Template cardinality regression.
+// Factual-only regression: known full generation must not depend on prose variety.
 {
-  const sets=api.templateSets;
-  if((sets.storage?.openings||[]).length<10 || (sets.storage?.seconds||[]).length<10) fail('templates','storage needs >=10 opening/second patterns');
-  if((sets.petBed?.openings||[]).length<6 || (sets.petBed?.seconds||[]).length<6) fail('templates','pet bed needs >=6 opening/second patterns');
-  if((sets.battery?.openings||[]).length<10 || (sets.battery?.seconds||[]).length<10) fail('templates','battery needs >=10 opening/second patterns');
-  for(const sentence of [...sets.storage.openings,...sets.storage.seconds]){
-    if(/作業|手入れ|掃除|整理を気づいたときに/.test(sentence)) fail('templates','storage forbidden wording: '+sentence);
+  const ids=['clean-window','clean-glove','clean-cloth','pet-grooming'];
+  const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす|お手入れしやす/;
+  for(const id of ids){
+    const tc=fixture.cases.find(x=>x.id===id);
+    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+    const copy=api.makeRoomCopy(item,'',{variant:0});
+    if(inference.test(copy)) fail(id,'known full inference wording leaked: '+copy);
   }
-  for(const sentence of [...sets.petBed.openings,...sets.petBed.seconds,...sets.battery.openings,...sets.battery.seconds]){
-    if(/掃除|手入れ|作業/.test(sentence)) fail('templates','cross-category wording: '+sentence);
+}
+
+// Legacy template arrays may remain for compatibility, but generation must be factual.
+{
+  const tc=fixture.cases.find(x=>x.id==='S1');
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'');
+  const opening=api.groundedOpening(a,item,7,{});
+  if(/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう/.test(opening)){
+    fail('factual-grounded-opening','groundedOpening must stay factual: '+opening);
   }
 }
 
