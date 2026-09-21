@@ -91,7 +91,7 @@
     {phrases:['Power Bank','PowerBank','パワーバンク'],category:'charging',usage:'mobile_battery',priority:112},
     {phrases:['収納ボックス'],category:'storage',usage:'storage_box',priority:125},
     {phrases:['収納ケース','衣装ケース'],category:'storage',usage:'storage_case',priority:120},
-    {phrases:['電動モップ','回転モップクリーナー','電動フロアワイパー','回転モップ','フロアモップ'],category:'cleaning',usage:'mop',priority:138},
+    {phrases:['電動モップ','回転モップクリーナー','電動フロアワイパー','フロアモップ'],category:'cleaning',usage:'mop',priority:138},
     {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:135},
     {phrases:['お掃除 手袋','掃除 手袋','お掃除手袋','掃除手袋'],category:'cleaning',usage:'glove',priority:135},
     {phrases:['お掃除クロス','掃除クロス'],category:'cleaning',usage:'cloth',priority:116},
