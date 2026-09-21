@@ -998,79 +998,13 @@
     const identity=naturalProductIdentity(item,a);
     if(!identity) return '';
     const facts=(a.facts||[]).filter(Boolean);
-    if(a.genericEligible) return genericGroundedOpening(identity,facts,variant,a);
-    if(a.category==='pet' && a.usage==='bed'){
-      return petNaturalLines(identity,facts,variant).join('\n');
-    }
-    if(a.category==='pet' && a.usage==='drive_bed') return driveBedNaturalLines(identity,facts,item,variant).join('\n');
-    if(a.category==='cleaning' && a.usage==='vacuum') return vacuumNaturalLines(identity,facts,variant).join('\n');
-    if(a.category==='cleaning' && a.usage==='mop') return mopNaturalLines(identity,facts,variant).join('\n');
-    if(a.category==='laundry' && a.usage==='washing_net') return washingNetNaturalLines(identity,facts,variant).join('\n');
-    if(a.category==='charging' && a.usage==='portable_power') return portablePowerNaturalLines(identity,facts,item,variant).join('\n');
-    const openings=[
-      identity+'を探しているなら、候補に入れたい商品です。',
-      identity+'を比べるときに、チェックしておきたい商品です。',
-      identity+'を探している人に、まず見てほしい商品です。',
-      identity+'を選ぶなら、候補のひとつに入れたい商品です。',
-      identity+'を検討しているなら、比較候補に入れやすい商品です。',
-      identity+'を探しているときに、見ておきたい商品です。',
-      identity+'を選ぶ前に、確認しておきたい商品です。',
-      identity+'を比較するなら、見逃したくない商品です。',
-      identity+'を探す中で、一度チェックしておきたい商品です。',
-      identity+'を候補にするなら、あわせて見ておきたい商品です。'
-    ];
-    const idx=((Number(variant)||0)%openings.length+openings.length)%openings.length;
-    const first=pickUnusedPattern(openings,idx,options.usedOpenings);
-    let second=naturalFactLine(facts[0],identity,idx);
-    if(options.usedSeconds instanceof Set){
-      if(options.usedSeconds.has(second)){
-        for(let step=1;step<10;step++){
-          const candidate=naturalFactLine(facts[0],identity,idx+step);
-          if(!options.usedSeconds.has(candidate)){second=candidate;break;}
-        }
-      }
-      options.usedSeconds.add(second);
-    } else if(Array.isArray(options.usedSeconds)){
-      if(options.usedSeconds.includes(second)){
-        for(let step=1;step<10;step++){
-          const candidate=naturalFactLine(facts[0],identity,idx+step);
-          if(!options.usedSeconds.includes(candidate)){second=candidate;break;}
-        }
-      }
-      options.usedSeconds.push(second);
-    }
-    return first+'\n'+second;
+    const lines=[identity+'です。'];
+    if(facts[0]) lines.push(naturalFactLine(facts[0],identity,0));
+    return lines.join('\n');
   }
 
   function openingFor(a,item,variant=0,options={}){
-    const idx=((Number(variant)||0)%10+10)%10;
-    let openings,seconds;
-    if(a.category==='storage'&&['storage_box','storage_case'].includes(a.usage)){openings=STORAGE_OPENINGS;seconds=STORAGE_SECONDS;}
-    else if(a.category==='pet'&&a.usage==='bed'){openings=PET_BED_OPENINGS;seconds=PET_BED_SECONDS;}
-    else if(a.category==='charging'&&a.usage==='mobile_battery'){openings=BATTERY_OPENINGS;seconds=BATTERY_SECONDS;}
-    else{
-      const lead=usagePhrase(item,a.kind);
-      openings=[
-        `${lead}を、できるだけ手早く済ませたいときに。`,`${lead}にかかる小さな手間を減らしたい人に。`,
-        `${lead}の準備や動きを少しでも簡単にしたいときに。`,`${lead}を後回しにせず、こまめに済ませたい人向け。`,
-        `${lead}にかかる手間が気になるなら、候補に入れやすい商品です。`,`${lead}をもっと手軽にしたいときにチェックしたい商品です。`,
-        `${lead}を短く済ませたい場面に向いていそうです。`,`${lead}の動きを少し軽くしたい人に。`,
-        `${lead}を手早く済ませたいときの選択肢になりそうです。`,`${lead}をシンプルにしたい人が検討しやすい商品です。`
-      ];
-      seconds=[
-        `${lead}を日常の流れに取り入れやすく、始めるまでの手間を抑えやすそうです。`,
-        `${lead}をこまめに行いやすく、後回しにしにくくなりそうです。`,
-        `${lead}を必要な場所ですぐ始めやすく、短時間で済ませる助けになりそうです。`,
-        `${lead}の動きを増やしすぎず、日々の負担を軽くする選択肢になりそうです。`,
-        `${lead}を気づいたときに行いやすく、手間をため込みにくくなりそうです。`,
-        `${lead}を普段の流れに組み込みやすく、始めるハードルを下げやすそうです。`,
-        `${lead}の流れをシンプルにしやすく、取りかかるまでの時間を短くできそうです。`,
-        `${lead}を必要なときに始めやすく、日常の小さな負担を減らす助けになりそうです。`,
-        `${lead}を手早く進めやすく、ほかのことに時間を回しやすくなりそうです。`,
-        `${lead}を進めやすくし、日々の負担を軽くするきっかけになりそうです。`
-      ];
-    }
-    return pickUnusedPattern(openings,idx,options.usedOpenings)+'\n'+pickUnusedPattern(seconds,idx,options.usedSeconds);
+    return groundedOpening(a,item,variant,options);
   }
 
   function extractFallbackTitleFacts(item){
@@ -1345,11 +1279,9 @@
     const opening=groundedOpening(a,item,variant,options);
     if(!opening) return shortFallback(item,true,a);
     const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
-    const audienceText=groundedAudience(a,item);
-    const audience=audienceText?'\n\nこんな人に向いていそう👇\n・'+audienceText:'';
     const price=priceLine(item);
     const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
-    let out=trimCopy(opening+facts+audience+ending,500);
+    let out=trimCopy(opening+facts+ending,500);
     out=finalScan(out);
     if(!validateBody(item,a,out)) return shortFallback(item,true,a);
     return out;
