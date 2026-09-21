@@ -79,9 +79,12 @@
     {phrases:['ペットウォーターボトル','ペット用ウォーターボトル','ペット給水器','給水ボトル','水飲みボトル'],category:'pet',usage:'water',priority:135},
     {phrases:['ウェットティッシュ','ウェットシート','おしりふき','からだふき','体ふき','手足ふき'],category:'pet',usage:'hygiene_wipe',priority:138},
     {phrases:['ペットシート','トイレシート','デオシート'],category:'pet',usage:'toilet',priority:135},
+    {phrases:['ドライブベッドキャリー','コーデュラドライブベッド','ドライブベッド','ドライブボックス','車用ベッド'],category:'pet',usage:'drive_bed',priority:150},
     {phrases:['ペットベッド','犬用ベッド','猫用ベッド','猫ベッド','犬ベッド'],category:'pet',usage:'bed',priority:135},
     {phrases:['ペットの毛 掃除ブラシ','ペットの毛用掃除ブラシ','抜け毛掃除ブラシ'],category:'cleaning',usage:'pet_hair',priority:130},
-    {phrases:['充電式ハンディクリーナー','ハンディクリーナー','コードレス掃除機','ハンディ掃除機'],category:'cleaning',usage:'vacuum',priority:130},
+    {phrases:['充電式ハンディクリーナー','ハンディクリーナー','ハンディークリーナー','コードレス掃除機','ハンディ掃除機','小型掃除機'],category:'cleaning',usage:'vacuum',priority:130},
+    {phrases:['ブラジャー用洗濯ネット','シャツ用洗濯ネット','洗濯ネット','ランドリーネット'],category:'laundry',usage:'washing_net',priority:132},
+    {phrases:['ポータブル電源'],category:'charging',usage:'portable_power',priority:136},
     {phrases:['ウォーターピーリング','ウォーターピーラー','洗顔ピーラー'],category:'beauty',usage:'face_peeling',priority:130},
     {phrases:['美顔ローラー','小顔ローラー','フェイスローラー'],category:'beauty',usage:'face_roller',priority:130},
     {phrases:['4in1美顔','かっさプレート','美顔かっさ','カッサプレート'],category:'beauty',usage:'kassa',priority:130},
@@ -105,8 +108,9 @@
   ];
 
   const SUPPORTED_USAGES=new Set([
-    'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush',
-    'storage.storage_box','storage.storage_case','charging.mobile_battery','pet.grooming','pet.bed'
+    'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush','cleaning.vacuum',
+    'storage.storage_box','storage.storage_case','charging.mobile_battery','charging.portable_power',
+    'laundry.washing_net','pet.grooming','pet.bed','pet.drive_bed'
   ]);
 
   function buildClassificationTitle(itemName){
@@ -172,6 +176,7 @@
   function classificationFamily(candidate){
     if(!candidate) return '';
     if(candidate.category==='storage' && ['storage_box','storage_case','generic_storage'].includes(candidate.usage)) return 'storage.container';
+    if(candidate.category==='pet' && ['bed','drive_bed'].includes(candidate.usage)) return 'pet.bed';
     return candidate.category+'.'+candidate.usage;
   }
 
@@ -286,6 +291,10 @@
     const map={
       'pet.grooming':{problem:'ペットの抜け毛を手早く集めたい',use:'抜け毛のお手入れに使う',impact:'日々の毛取りを手軽に続ける助けになりそう',audience:'犬や猫の抜け毛ケアを手軽にしたい人'},
       'pet.bed':{problem:'ペットが休む場所を用意したい',use:'ペット用ベッドとして使う',impact:'ペットが休む場所を整える助けになりそう',audience:'ペット用の寝床を探している人'},
+      'pet.drive_bed':{problem:'犬との車移動で使うベッドを用意したい',use:'車内用のドライブベッドとして使う',impact:'車移動用の犬の居場所を用意しやすくなりそう',audience:'犬との車移動用ベッドを探している人'},
+      'cleaning.vacuum':{problem:'気になるゴミを手早く吸い取りたい',use:'ハンディクリーナーとして掃除に使う',impact:'必要な場所をすぐ掃除しやすくなりそう',audience:'手軽に使えるハンディクリーナーを探している人'},
+      'laundry.washing_net':{problem:'洗濯時に衣類をネットへ分けたい',use:'洗濯ネットとして使う',impact:'衣類を分けて洗う準備をしやすくなりそう',audience:'用途に合う洗濯ネットを探している人'},
+      'charging.portable_power':{problem:'持ち運べる電源を用意したい',use:'ポータブル電源として使う',impact:'電源を確保したい場面への備えになりそう',audience:'持ち運べる電源を探している人'},
       'cleaning.window_screen':{problem:'網戸の汚れを手早く掃除したい',use:'網戸掃除に使う',impact:'網戸掃除のひと手間を減らす助けになりそう',audience:'網戸の掃除を手早く済ませたい人'},
       'cleaning.glove':{problem:'細かい場所を手早く拭きたい',use:'手にはめて掃除に使う',impact:'細かな場所の拭き掃除を進めやすくなりそう',audience:'手にはめて細かい場所を拭きたい人'},
       'cleaning.cloth':{problem:'ホコリや水分を手早く拭き取りたい',use:'クロスで拭き掃除に使う',impact:'日々の拭き掃除を進めやすくなりそう',audience:'クロスでホコリや水分を手早く拭き取りたい人'},
@@ -327,7 +336,11 @@
         [/速乾/,'速乾タイプ'],
         [/モップ/,'モップタイプ'],
         [/ブラシ/,'ブラシタイプ'],
-        [/クロス/,'クロスタイプ']
+        [/クロス/,'クロスタイプ'],
+        [/充電式/,'充電式'],
+        [/Type-?C|USB\s*Type-?C|USB-?C/i,'USB-C対応表記あり'],
+        [/乾湿両用/,'乾湿両用表記あり'],
+        [/HEPA/,'HEPAフィルター表記あり']
       ],
       pet:[
         [/カバーを外して\s*洗える|カバー.*(?:外して|取り外して).*洗える/,'カバーを外して洗える'],
@@ -349,7 +362,10 @@
       charging:[
         [/急速充電/,'急速充電対応'],
         [/Type-?C|USB-?C/i,'USB-C対応'],
-        [/ワイヤレス充電/,'ワイヤレス充電対応']
+        [/ワイヤレス充電/,'ワイヤレス充電対応'],
+        [/リン酸鉄/,'リン酸鉄バッテリー表記あり'],
+        [/UPS機能/,'UPS機能表記あり'],
+        [/ソーラーパネル\s*セット/,'ソーラーパネルセット表記あり']
       ],
       drinkware:[
         [/保温/,'保温表記あり'],
@@ -363,6 +379,10 @@
       ],
       laundry:[
         [/洗濯機(?:で)?洗える|洗濯機対応/,'洗濯機対応表記あり'],
+        [/ドラム式/,'ドラム式対応表記あり'],
+        [/乾燥機対応/,'乾燥機対応表記あり'],
+        [/メッシュ/,'メッシュ表記あり'],
+        [/特大サイズ/,'特大サイズ表記あり'],
         [/速乾/,'速乾タイプ']
       ]
     };
@@ -383,6 +403,12 @@
       const size=t.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)サイズ(?:\s|$)/i);
       if(size) add(size[1].toUpperCase()+'サイズ');
     }
+    if(kind==='charging'){
+      const wh=t.match(/(?:^|\s)(\d{2,5})\s*Wh(?:\s|$)/i);
+      if(wh) add(wh[1]+'Wh');
+      const rated=t.match(/定格\s*(\d{2,5})\s*W/i);
+      if(rated) add('定格'+rated[1]+'W');
+    }
     const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(セット|入り)(?!\s*(?:突破|達成))/);
     if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
     const usage=primaryUsageWord(item);
@@ -398,7 +424,7 @@
 
   function primaryUsageWord(item){
     const r=resolveCategoryAndUsage(titleOnly(item));
-    const map={grooming:'抜け毛',window_screen:'網戸',glove:'手袋',cloth:'クロス',mop:'モップ',brush:'ブラシ',storage_box:'収納ボックス',storage_case:'収納ケース',mobile_battery:'モバイルバッテリー',bed:'ベッド'};
+    const map={grooming:'抜け毛',window_screen:'網戸',glove:'手袋',cloth:'クロス',mop:'モップ',brush:'ブラシ',vacuum:'ハンディクリーナー',washing_net:'洗濯ネット',portable_power:'ポータブル電源',drive_bed:'ドライブベッド',storage_box:'収納ボックス',storage_case:'収納ケース',mobile_battery:'モバイルバッテリー',bed:'ベッド'};
     return map[r.usage]||'';
   }
 
@@ -537,6 +563,9 @@
       'pet.water':'ペット用給水用品',
       'pet.toilet':'ペットシート',
       'pet.bed':'ペットベッド',
+      'pet.drive_bed':'ドライブベッド',
+      'laundry.washing_net':'洗濯ネット',
+      'charging.portable_power':'ポータブル電源',
       'pet.grooming':'ペット用毛取りグローブ',
       'pet.hygiene_wipe':'ウェットティッシュ',
       'charging.mobile_battery':'モバイルバッテリー',
@@ -809,6 +838,12 @@
     else if(/ワイヤレス充電/.test(f)) core='ワイヤレス充電対応表記あり';
     else if(/取替式/.test(f)) core='取替式';
     else if(/両面/.test(f)) core='両面タイプ';
+    else if(/リン酸鉄/.test(f)) core='リン酸鉄バッテリー表記あり';
+    else if(/^\d+Wh$/.test(f)) core=f+'容量表記';
+    else if(/^定格\d+W$/.test(f)) core=f+'表記';
+    else if(/ドラム式/.test(f)) core='ドラム式対応表記あり';
+    else if(/乾燥機対応/.test(f)) core='乾燥機対応表記あり';
+    else if(/乾湿両用/.test(f)) core='乾湿両用表記あり';
     else core=f;
     const patterns=f ? [
       core+'です。', core+'。', '確認できる特徴は、'+core+'です。', 'ポイントは、'+core+'です。',

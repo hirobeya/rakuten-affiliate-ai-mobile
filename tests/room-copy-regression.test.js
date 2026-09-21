@@ -629,6 +629,24 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
   }
 }
 
+
+{
+  const cases=[
+    {name:'vacuum',keyword:'ハンディクリーナー',itemName:'ハンディクリーナー コードレス USB Type-C 充電式 HEPAフィルター',expect:'cleaning.vacuum'},
+    {name:'washing-net',keyword:'洗濯ネット',itemName:'洗濯ネット ドラム式 乾燥機対応 メッシュ 3枚セット',expect:'laundry.washing_net'},
+    {name:'portable-power',keyword:'ポータブル電源',itemName:'Jackery ポータブル電源 512Wh リン酸鉄 定格500W コンパクト UPS機能',expect:'charging.portable_power'},
+    {name:'drive-bed',keyword:'ドライブベッド 犬',itemName:'犬用 ドライブベッド 車用 洗える 撥水 小型犬',expect:'pet.drive_bed'}
+  ];
+  for(const c of cases){
+    const item={itemName:c.itemName,itemPrice:5980};
+    const a=api.analyzeRoomProduct(item,c.keyword);
+    const key=a.category+'.'+a.usage;
+    if(key!==c.expect || a.outputMode!=='full') fail('new-supported-'+c.name,JSON.stringify({key,mode:a.outputMode,reason:a.ambiguityReason,conflicts:a.conflicts}));
+    const copy=api.makeRoomCopy(item,c.keyword,{variant:2});
+    if(copy.split('\n').length<6) fail('new-supported-'+c.name,'still looks like short fallback: '+copy);
+  }
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
