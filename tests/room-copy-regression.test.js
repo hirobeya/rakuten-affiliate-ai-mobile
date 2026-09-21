@@ -677,20 +677,15 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
     const item={itemName:c.itemName,itemPrice:2000};
     const a=api.analyzeRoomProduct(item,c.keyword);
     const copy=api.makeRoomCopy(item,c.keyword,{variant:1});
-    if(!a.genericEligible||a.outputMode!=='full') fail('generic-'+c.name,'grounded unseen product must use generic full: '+JSON.stringify(a));
-    if(!copy.includes(c.keyword)) fail('generic-'+c.name,'copy lost grounded product identity: '+copy);
-    if(copy.split('\n').length<5) fail('generic-'+c.name,'generic full still looks like fallback: '+copy);
+    if(a.genericEligible||a.outputMode!=='fallback') fail('generic-off-'+c.name,'generic full must stay disabled: '+JSON.stringify(a));
+    if(/日常で使う|選びやすい|向いていそう/.test(copy)) fail('generic-off-'+c.name,'fallback must not emit generic lifestyle copy: '+copy);
   }
 
-  const scoped={itemName:'スマートフォン 防水ケース付き 充電ケーブル付属 128GB',itemPrice:50000};
-  const sa=api.analyzeRoomProduct(scoped,'スマートフォン');
-  const sc=api.makeRoomCopy(scoped,'スマートフォン',{variant:0});
-  if(!sa.genericEligible||sa.outputMode!=='full') fail('generic-accessory-scope','smartphone should use generic full');
-  if(sa.facts.some(x=>/防水/.test(x))||/✔ 防水/.test(sc)) fail('generic-accessory-scope','accessory waterproofing leaked onto smartphone: '+sc);
-
-  const sensitive={itemName:'美容 美顔ローラー リフトアップ 小顔 防水',itemPrice:3980};
-  const ha=api.analyzeRoomProduct(sensitive,'美顔ローラー');
-  if(ha.genericEligible||ha.outputMode!=='fallback') fail('generic-sensitive-guard','sensitive product must not be promoted by generic mode: '+JSON.stringify(ha));
+  const food={itemName:'甲州ワインビーフ【上カルビ焼肉用】500g',itemPrice:6500};
+  const fa=api.analyzeRoomProduct(food,'上カルビ焼肉用');
+  const fc=api.makeRoomCopy(food,'上カルビ焼肉用',{variant:0});
+  if(fa.genericEligible||fa.outputMode!=='fallback') fail('generic-off-food','food search term must not promote unknown item to full');
+  if(/日常で使う|選びやすい|向いていそう/.test(fc)) fail('generic-off-food-copy','unsafe generic lifestyle copy leaked into food fallback: '+fc);
 }
 
 if(failures){
