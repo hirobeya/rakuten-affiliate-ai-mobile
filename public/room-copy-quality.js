@@ -1290,8 +1290,8 @@
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
     const genericIdentity=groundedQueryIdentity(item,keyword);
-    const genericEligible=!!genericIdentity && !sensitive && !cls.ambiguous && (cls.category==='unknown' || !cls.supported);
-    const facts=genericEligible?extractGenericGroundedFacts(item,genericIdentity):extractFacts(item,cls.kind);
+    const genericEligible=false;
+    const facts=extractFacts(item,cls.kind);
     const legal=detectLegalRisk(titleOnly(item));
     const conflicts=cls.ambiguous?[]:detectConflictingSignals(titleOnly(item),cls.category,cls.usage);
     const supported=((!!cls.supported)||genericEligible) && !cls.ambiguous && conflicts.length===0;
