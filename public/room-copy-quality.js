@@ -181,9 +181,37 @@
     return [...same].sort((a,b)=>b.phrase.length-a.phrase.length||b.priority-a.priority||a.pos-b.pos)[0];
   }
 
+  const EARLY_PRODUCT_NOUN_RULES=[
+    {phrases:['収納ボックス','収納ケース'],family:'storage.container'},
+    {phrases:['ランドリーバスケット','洗濯かご','ランドリーボックス'],family:'laundry.basket'},
+    {phrases:['ごみ箱','ゴミ箱','ダストボックス'],family:'trash.bin'}
+  ];
+  function earlyProductNounSignals(itemName){
+    const title=buildClassificationTitle(itemName);
+    const cutoff=Math.max(36,Math.ceil(title.length*0.40));
+    const signals=[];
+    for(const rule of EARLY_PRODUCT_NOUN_RULES){
+      for(const phrase of rule.phrases){
+        const pos=title.indexOf(phrase);
+        if(pos<0||pos>=cutoff) continue;
+        signals.push({phrase,family:rule.family,pos});
+      }
+    }
+    const bestByFamily=new Map();
+    for(const x of signals){
+      const prev=bestByFamily.get(x.family);
+      if(!prev||x.pos<prev.pos||(x.pos===prev.pos&&x.phrase.length>prev.phrase.length)) bestByFamily.set(x.family,x);
+    }
+    return [...bestByFamily.values()].sort((a,b)=>a.pos-b.pos||b.phrase.length-a.phrase.length);
+  }
+
   function resolveCategoryAndUsage(itemName,keyword=''){
     const title=buildClassificationTitle(itemName);
     const candidates=collectClassificationCandidates(itemName,keyword);
+    const earlyNouns=earlyProductNounSignals(itemName);
+    if(earlyNouns.length>1){
+      return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'multiple_early_product_nouns',earlyProductNouns:earlyNouns};
+    }
     if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'unknown',confidence:'none',ambiguous:false,candidates:[],reason:'no_match'};
     let top=candidates[0];
     const topFamily=classificationFamily(top);
@@ -202,6 +230,9 @@
       const rankGap=topRank-secondRank;
       const len=Math.max(1,title.length);
       const topEarly=(top.pos||0)<=24 || (top.pos||0)/len<=0.20;
+      // TEMPORARY / UNCALIBRATED: 10-point gap and 40% late-position threshold.
+      // These thresholds are regression guards, not tuned quality parameters. Do not retune
+      // them to fit individual products without a separate calibration dataset.
       const secondLate=(second.pos||0)/len>=0.40;
       const strongStructuralLead=topEarly&&secondLate&&rankGap>=10;
       if(rankGap<20 && !strongStructuralLead){
@@ -732,7 +763,13 @@
       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
     ];
     for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
-    const words=['犬用','猫用','ネコ用','ペット用','折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
+    const targetTerms=['犬用','猫用','ネコ用','ペット用'];
+    for(const word of targetTerms){
+      const re=new RegExp(word+'(?!品|具)','g');
+      const m=re.exec(title);
+      if(m) add(m[0],m.index);
+    }
+    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
     for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
     return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
   }
@@ -900,6 +937,7 @@
   api.buildSafeDisplayName=buildSafeDisplayName;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
   api.fallbackProductName=fallbackProductName;
+  api.earlyProductNounSignals=earlyProductNounSignals;
   api.stripPromotionalText=stripPromotionalText;
   api.extractSafeFeatures=extractFacts;
   api.buildClassificationTitle=buildClassificationTitle;

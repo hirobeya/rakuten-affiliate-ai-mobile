@@ -1224,10 +1224,10 @@
       "itemName": "はっ水 マルチ収納ボックス 折りたたみ ランドリーバスケット ごみ箱 ダストボックス ランドリーバッグ ランドリー収納 大容量 スリム マルチ 収納ボックス ランドリーボックス リビング収納 おしゃれ かわいい 北欧 カフェ風 ケース 防水 洗える 薄型 オシャレ モダン",
       "itemPrice": 0,
       "expect": {
-        "category": "storage",
-        "usage": "storage_box",
-        "ambiguous": false,
-        "outputMode": "full",
+        "category": "ambiguous",
+        "usage": "ambiguous",
+        "ambiguous": true,
+        "outputMode": "fallback",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []

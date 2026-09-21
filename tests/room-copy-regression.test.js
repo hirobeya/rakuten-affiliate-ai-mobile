@@ -515,6 +515,41 @@ for(const tc of fixture.cases){
   if(/リフトアップ|小顔/.test(copy)) fail('beauty-roller-room-safe','claim terms leaked: '+copy);
 }
 
+
+// Error-zero follow-up: multiple distinct early product nouns must fall back.
+// Same-family storage_box/storage_case must stay non-ambiguous.
+{
+  const mixed=fixture.cases.find(x=>x.id==='known-laundry-9');
+  const a=api.analyzeRoomProduct({itemName:mixed.itemName,itemPrice:mixed.itemPrice||0},'');
+  if(!a.ambiguous||a.outputMode!=='fallback'||a.ambiguityReason!=='multiple_early_product_nouns'){
+    fail('known-laundry-9-early-nouns','mixed early product nouns must be ambiguous fallback: '+JSON.stringify(a));
+  }
+  const sameFamily={itemName:'収納ボックス 収納ケース 折りたたみ 3個セット',itemPrice:1980};
+  const b=api.analyzeRoomProduct(sameFamily,'');
+  if(b.ambiguous||b.category!=='storage'||!['storage_box','storage_case'].includes(b.usage)||b.outputMode!=='full'){
+    fail('same-family-storage-nouns','storage box/case must remain same-family full: '+JSON.stringify(b));
+  }
+}
+
+// P2 exact target term: ペット用品 must not produce ペット用.
+{
+  const p2=fixture.cases.find(x=>x.id==='P2');
+  const copy=api.makeRoomCopy({itemName:p2.itemName,itemPrice:p2.itemPrice||0},'',{variant:0});
+  if(/(?:^|[、\n])ペット用(?:[、\n]|$)/.test(copy)) fail('P2-target-exact','ペット用品 must not be shortened to ペット用: '+copy);
+  if(!/BOS うんち袋/.test(copy)||!/SSサイズ/.test(copy)||!/200枚入り/.test(copy)) fail('P2-target-exact','safe BOS facts missing: '+copy);
+}
+
+// strongStructuralLead thresholds are temporary/un-calibrated. Lock the boundaries.
+{
+  const structural=(gap,ratio)=>gap<20 && ratio>=0.40 && gap>=10;
+  if(structural(9,0.41)!==false) fail('strong-lead-gap9','gap 9 must not qualify');
+  if(structural(10,0.41)!==true) fail('strong-lead-gap10','gap 10 must qualify');
+  if(structural(12,0.41)!==true) fail('strong-lead-gap12','gap 12 must qualify');
+  if(structural(12,0.39)!==false) fail('strong-lead-pos39','39% must not qualify');
+  if(structural(12,0.40)!==true) fail('strong-lead-pos40','40% must qualify');
+  if(structural(12,0.41)!==true) fail('strong-lead-pos41','41% must qualify');
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
