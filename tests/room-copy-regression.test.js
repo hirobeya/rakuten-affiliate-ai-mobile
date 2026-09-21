@@ -463,7 +463,8 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
     const copy=api.makeRoomCopy(s,s.keyword,{variant:0});
     if(/価格：0円/.test(copy)) fail(s.id,'zero/invalid price must be hidden: '+copy);
     if(a.outputMode==='fallback' && /暮らし|快適|助けになりそう|向いていそう|探している人/.test(copy)) fail(s.id,'fallback must not add lifestyle/use explanation: '+copy);
-    if(s.id==='fallback-bench'&&!/2人掛け、幅120、奥行37、高さ40cm/.test(copy)) fail(s.id,'labeled dimensions must stay intact: '+copy);
+    if(s.id==='fallback-bench'&&a.outputMode==='fallback'&&!/2人掛け、幅120、奥行37、高さ40cm/.test(copy)) fail(s.id,'fallback labeled dimensions must stay intact: '+copy);
+    if(s.id==='fallback-bench'&&a.outputMode==='full'&&!['2人掛け','幅120','奥行37','高さ40cm'].every(x=>copy.includes(x))) fail(s.id,'generic full must preserve grounded dimensions: '+copy);
   }
 }
 {
