@@ -648,9 +648,9 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
     itemPrice:160300
   };
   const a=api.analyzeRoomProduct(item,'ポータブル電源');
-  if(a.facts.includes('両面タイプ')) fail('portable-power-bundled-panel','bundled solar-panel sidedness must not be attributed to portable power');
+  if((a.facts||[]).some(x=>/両面/.test(x))) fail('portable-power-bundled-panel','bundled solar-panel sidedness must not be attributed to portable power');
   const copy=api.makeRoomCopy(item,'ポータブル電源',{variant:2});
-  if(/両面タイプのポータブル電源|両面タイプです|両面タイプ。/.test(copy)) fail('portable-power-bundled-panel-copy','portable-power copy misattributes bundled solar-panel sidedness: '+copy);
+  if(/両面/.test(copy)) fail('portable-power-bundled-panel-copy','portable-power copy misattributes bundled solar-panel sidedness: '+copy);
 }
 
 {

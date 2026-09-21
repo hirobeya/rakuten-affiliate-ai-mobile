@@ -43,8 +43,8 @@
           "収納"
         ],
         "expectedFeatures": [
-          "マイクロファイバー",
-          "6枚セット"
+          "6枚セット",
+          "マイクロファイバー"
         ],
         "forbiddenFeatures": [
           "クロスタイプ"
@@ -68,7 +68,7 @@
         ],
         "expectedFeatures": [
           "マイクロファイバー",
-          "吸水タイプ"
+          "吸水"
         ],
         "forbiddenFeatures": [
           "クロスタイプ"
@@ -90,9 +90,8 @@
           "収納"
         ],
         "expectedFeatures": [
-          "両面タイプ",
-          "手にはめて使うタイプ",
-          "犬・猫向け表記あり"
+          "ペット用",
+          "両面"
         ],
         "forbiddenFeatures": [
           "クロスタイプ"
@@ -117,7 +116,7 @@
           "充電不要"
         ],
         "expectedFeatures": [
-          "防水表記あり"
+          "防水"
         ],
         "forbiddenFeatures": [
           "急速充電対応"
@@ -141,7 +140,10 @@
           "SALE",
           "楽天5冠"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "70g",
+          "家庭用"
+        ],
         "forbiddenFeatures": [
           "食洗機対応表記あり"
         ]
@@ -188,7 +190,9 @@
           "楽天1位",
           "OFF"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用"
+        ],
         "forbiddenFeatures": [
           "抜け毛・毛取り用途"
         ]
@@ -208,7 +212,9 @@
           "抜け毛ケア",
           "54枚セット"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用"
+        ],
         "forbiddenFeatures": [
           "54枚セット"
         ]
@@ -230,7 +236,10 @@
           "楽天1位"
         ],
         "expectedFeatures": [
-          "犬・猫向け表記あり"
+          "犬用",
+          "猫用",
+          "ペット用",
+          "洗える"
         ],
         "forbiddenFeatures": [
           "急速充電対応"
@@ -257,8 +266,10 @@
           "最安"
         ],
         "expectedFeatures": [
-          "急速充電対応",
-          "USB-C対応"
+          "23600mAh",
+          "22.5W",
+          "急速充電",
+          "Type-C"
         ],
         "forbiddenFeatures": [
           "4本セット"
@@ -279,7 +290,10 @@
           "犬や猫",
           "抜け毛ケア"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コンパクト",
+          "日本製"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -336,8 +350,10 @@
           "外出中の充電切れ"
         ],
         "expectedFeatures": [
-          "コードレスタイプ",
-          "コンパクト表記あり"
+          "コードレス",
+          "540g",
+          "コンパクト",
+          "充電式"
         ],
         "forbiddenFeatures": [
           "急速充電対応"
@@ -399,7 +415,10 @@
           "＼"
         ],
         "expectedFeatures": [
-          "USB-C対応"
+          "12W",
+          "22.5W",
+          "USB-C",
+          "5000mAh"
         ],
         "forbiddenFeatures": [
           "コンパクト表記あり"
@@ -422,7 +441,8 @@
           "8/11まで"
         ],
         "expectedFeatures": [
-          "USB-C対応"
+          "10000mAh",
+          "22.5W"
         ],
         "forbiddenFeatures": []
       }
@@ -444,8 +464,10 @@
           "8/11"
         ],
         "expectedFeatures": [
-          "急速充電対応",
-          "USB-C対応"
+          "薄型",
+          "10000mAh",
+          "35W",
+          "Type-C"
         ],
         "forbiddenFeatures": []
       }
@@ -465,7 +487,8 @@
           "特別価格"
         ],
         "expectedFeatures": [
-          "USB-C対応"
+          "10,000mAh",
+          "30W"
         ],
         "forbiddenFeatures": []
       }
@@ -499,7 +522,9 @@
         "outputMode": "full",
         "forbiddenWords": [],
         "expectedFeatures": [
-          "USB-C対応"
+          "10000mAh",
+          "USB-C",
+          "30W"
         ],
         "forbiddenFeatures": []
       }
@@ -540,7 +565,11 @@
           "抜け毛ケア",
           "給水"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用",
+          "Lサイズ",
+          "90枚入り"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -560,7 +589,12 @@
           "楽天1位",
           "外出時などの充電切れに備えたい人"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "27w",
+          "急速充電",
+          "60000mAh",
+          "22.5W"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -583,8 +617,9 @@
           "★"
         ],
         "expectedFeatures": [
-          "急速充電対応",
-          "USB-C対応"
+          "急速充電",
+          "Type-c",
+          "10000mAh"
         ],
         "forbiddenFeatures": []
       }
@@ -608,7 +643,8 @@
           "4本セット"
         ],
         "expectedFeatures": [
-          "ワイヤレス充電対応"
+          "20800mAh",
+          "ワイヤレス充電"
         ],
         "forbiddenFeatures": [
           "4本セット"
@@ -633,8 +669,10 @@
           "！モバイル"
         ],
         "expectedFeatures": [
-          "急速充電対応",
-          "USB-C対応"
+          "23600mAh",
+          "22.5W",
+          "急速充電",
+          "Type-C"
         ],
         "forbiddenFeatures": [
           "4本セット"
@@ -658,7 +696,9 @@
           "1,876円"
         ],
         "expectedFeatures": [
-          "急速充電対応"
+          "40000mAh",
+          "22.5W",
+          "急速充電"
         ],
         "forbiddenFeatures": []
       }
@@ -677,7 +717,9 @@
           "外出時などの充電切れに備えたい人"
         ],
         "expectedFeatures": [
-          "急速充電対応"
+          "40000mAh",
+          "22.5W",
+          "急速充電"
         ],
         "forbiddenFeatures": []
       }
@@ -699,7 +741,9 @@
           "クーポン",
           "4本セット"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "30000mAh"
+        ],
         "forbiddenFeatures": [
           "4本セット"
         ]
@@ -747,7 +791,9 @@
           "マラソン"
         ],
         "expectedFeatures": [
-          "200枚入り"
+          "SSサイズ",
+          "200枚入り",
+          "ペット用"
         ],
         "forbiddenFeatures": []
       }
@@ -765,7 +811,9 @@
         "forbiddenWords": [
           "トイレシートとして使う"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -814,7 +862,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -829,7 +879,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "日本製"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -847,7 +899,7 @@
           "★"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "折りたたみ"
         ],
         "forbiddenFeatures": []
       }
@@ -867,7 +919,8 @@
           "4本セット"
         ],
         "expectedFeatures": [
-          "ワイヤレス充電対応"
+          "20800mAh",
+          "ワイヤレス充電"
         ],
         "forbiddenFeatures": [
           "4本セット"
@@ -889,7 +942,10 @@
           "モバイルバッテリー",
           "モップ"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "50cm",
+          "日本製"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -911,7 +967,10 @@
           "3個組セット",
           "4個組セット"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "30 cm",
+          "日本製"
+        ],
         "forbiddenFeatures": [
           "2個組",
           "3個組",
@@ -934,7 +993,7 @@
           "受賞"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "折りたたみ"
         ],
         "forbiddenFeatures": []
       }
@@ -954,7 +1013,10 @@
           "総合1位"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "折りたたみ",
+          "コンパクト",
+          "27L",
+          "40L"
         ],
         "forbiddenFeatures": []
       }
@@ -975,7 +1037,10 @@
           "即納"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "折りたたみ",
+          "27L",
+          "40L",
+          "53L"
         ],
         "forbiddenFeatures": []
       }
@@ -996,7 +1061,7 @@
           "楽天1位"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "折り畳み"
         ],
         "forbiddenFeatures": []
       }
@@ -1017,7 +1082,10 @@
           "配布中"
         ],
         "expectedFeatures": [
-          "折りたたみ対応"
+          "27L",
+          "40L",
+          "53L",
+          "82L"
         ],
         "forbiddenFeatures": []
       }
@@ -1033,7 +1101,9 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "日本製"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1054,7 +1124,12 @@
           "安眠",
           "体圧分散"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "車用",
+          "ペット用",
+          "48cm",
+          "47cm"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1075,7 +1150,9 @@
           "安眠",
           "体圧分散"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1095,7 +1172,10 @@
           "体圧分散"
         ],
         "expectedFeatures": [
-          "犬・猫向け表記あり"
+          "犬用",
+          "猫用",
+          "ペット用",
+          "洗える"
         ],
         "forbiddenFeatures": []
       }
@@ -1113,7 +1193,10 @@
         "forbiddenWords": [
           "ご好評です"
         ],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "ペット用",
+          "滑り止め"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1131,8 +1214,9 @@
           "外出時などの充電切れに備えたい人"
         ],
         "expectedFeatures": [
-          "急速充電対応",
-          "USB-C対応"
+          "30000mAh",
+          "USB-C",
+          "急速充電"
         ],
         "forbiddenFeatures": []
       }
@@ -1149,7 +1233,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "40cm"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1165,7 +1251,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コンパクト"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1181,7 +1269,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "スリム"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1197,7 +1287,10 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "85.5cm",
+          "60kg"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1213,7 +1306,9 @@
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "折りたたみ"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1229,7 +1324,12 @@
         "ambiguous": true,
         "outputMode": "fallback",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "折りたたみ",
+          "スリム",
+          "防水",
+          "洗える"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1245,7 +1345,10 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コードレス",
+          "充電式"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1261,7 +1364,10 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コードレス",
+          "充電式"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1277,7 +1383,10 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コードレス",
+          "LEDライト付"
+        ],
         "forbiddenFeatures": []
       }
     },
@@ -1293,7 +1402,11 @@
         "ambiguous": false,
         "outputMode": "full",
         "forbiddenWords": [],
-        "expectedFeatures": [],
+        "expectedFeatures": [
+          "コードレス",
+          "充電式",
+          "160ml"
+        ],
         "forbiddenFeatures": []
       }
     }
