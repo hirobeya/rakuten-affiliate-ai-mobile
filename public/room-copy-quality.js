@@ -79,6 +79,7 @@
     {phrases:['ペットウォーターボトル','ペット用ウォーターボトル','ペット給水器','給水ボトル','水飲みボトル'],category:'pet',usage:'water',priority:135},
     {phrases:['ウェットティッシュ','ウェットシート','おしりふき','からだふき','体ふき','手足ふき'],category:'pet',usage:'hygiene_wipe',priority:138},
     {phrases:['ペットシート','トイレシート','デオシート'],category:'pet',usage:'toilet',priority:135},
+    {phrases:['ドライブベッドキャリー','コーデュラドライブベッド','ドライブベッド','ドライブボックス','車用ベッド'],category:'pet',usage:'drive_bed',priority:146},
     {phrases:['ペットベッド','犬用ベッド','猫用ベッド','猫ベッド','犬ベッド'],category:'pet',usage:'bed',priority:135},
     {phrases:['ペットの毛 掃除ブラシ','ペットの毛用掃除ブラシ','抜け毛掃除ブラシ'],category:'cleaning',usage:'pet_hair',priority:130},
     {phrases:['充電式ハンディクリーナー','ハンディクリーナー','ハンディークリーナー','コードレス掃除機','ハンディ掃除機','小型掃除機'],category:'cleaning',usage:'vacuum',priority:130},
@@ -110,7 +111,7 @@
   const SUPPORTED_USAGES=new Set([
     'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush',
     'storage.storage_box','storage.storage_case','charging.mobile_battery','charging.portable_power',
-    'laundry.washing_net','pet.grooming','pet.bed'
+    'laundry.washing_net','pet.grooming','pet.bed','pet.drive_bed','cleaning.vacuum'
   ]);
 
   function buildClassificationTitle(itemName){
@@ -176,6 +177,7 @@
   function classificationFamily(candidate){
     if(!candidate) return '';
     if(candidate.category==='storage' && ['storage_box','storage_case','generic_storage'].includes(candidate.usage)) return 'storage.container';
+    if(candidate.category==='pet' && ['bed','drive_bed'].includes(candidate.usage)) return 'pet.sleep';
     return candidate.category+'.'+candidate.usage;
   }
 
@@ -772,7 +774,7 @@
     if(!identity) return '';
     if(facts.some(x=>/カバーを外して洗える|洗える/.test(x))) return 'お手入れしやすい'+identity+'を探している人';
     if(facts.some(x=>/防水|撥水/.test(x))) return '防水・撥水表記のある'+identity+'を探している人';
-    if(facts.some(x=>/犬・猫向け/.test(x))) return '犬や猫用の'+identity+'を探している人';
+    if(facts.some(x=>/犬・猫向け/.test(x))) return /犬用|猫用/.test(identity)?'犬や猫向けのベッドを探している人':'犬や猫用の'+identity+'を探している人';
     if(facts.some(x=>/折りたたみ/.test(x))) return '折りたためる'+identity+'を探している人';
     if(facts.some(x=>/コードレス/.test(x))) return 'コードレスの'+identity+'を探している人';
     const fact=facts[0];
@@ -884,6 +886,98 @@
     return patterns[idx];
   }
 
+  function vacuumNaturalLines(identity,facts,variant=0){
+    const has=re=>facts.some(x=>re.test(x));
+    const idx=((Number(variant)||0)%4+4)%4;
+    const first=[
+      '気づいたゴミをすぐ吸いたいときに使いやすい'+identity+'です。',
+      '大きな掃除機を出すほどでもない場所を、サッと掃除したいときに便利な'+identity+'です。',
+      '机まわりや車内など、気になる場所を手早く掃除したいときに使いやすい'+identity+'です。',
+      '必要なときに手に取りやすい'+identity+'を探している人に。'
+    ][idx];
+    let second='';
+    if(has(/コードレス/)) second='コードレス表記があるので、コンセント位置を気にせず使いたい場面にも合わせやすい仕様です。';
+    else if(has(/乾湿両用/)) second='乾湿両用の表記があり、対応する掃除シーンを広げたい人に確認したい仕様です。';
+    else if(has(/USB-C/)) second='USB-C対応の表記があります。';
+    else if(has(/HEPA/)) second='HEPAフィルターの表記があります。';
+    else if(has(/コンパクト/)) second='コンパクト表記があり、置き場所を取りすぎたくない人にも確認しやすい仕様です。';
+    return [first,second].filter(Boolean);
+  }
+
+  function washingNetNaturalLines(identity,facts,variant=0){
+    const has=re=>facts.some(x=>re.test(x));
+    const qty=facts.find(x=>/(?:枚|個|点)(?:セット|入り)$/.test(x));
+    const idx=((Number(variant)||0)%4+4)%4;
+    const first=[
+      identity+'。洗う衣類に合わせて使い分けたいときに選びやすいタイプです。',
+      '衣類を分けて洗いたいときに使える'+identity+'です。',
+      'デリケートな衣類や小物を分けて洗いたいときに使いやすい'+identity+'です。',
+      '普段の洗濯で衣類を分けたいときに用意しておきたい'+identity+'です。'
+    ][idx];
+    let second='';
+    if(has(/ドラム式/) && has(/乾燥機対応/)) second='ドラム式・乾燥機対応の表記があり、使っている洗濯環境に合わせて選べます。';
+    else if(has(/ドラム式/)) second='ドラム式対応の表記があります。';
+    else if(has(/乾燥機対応/)) second='乾燥機対応の表記があります。';
+    else if(has(/特大サイズ/)) second='特大サイズの表記があり、布団や毛布など大きめの洗濯物用を探している人に確認しやすい商品です。';
+    else if(qty) second=qty+'の表記があり、洗濯物ごとに使い分けたいときに便利です。';
+    else if(has(/メッシュ/)) second='メッシュ仕様の表記があります。';
+    return [first,second].filter(Boolean);
+  }
+
+  function portablePowerNaturalLines(identity,facts,item,variant=0){
+    const title=titleOnly(item);
+    const wh=facts.find(x=>/^\d+Wh$/.test(x));
+    const watt=facts.find(x=>/^定格\d+W$/.test(x));
+    const idx=((Number(variant)||0)%4+4)%4;
+    const use=[];
+    if(/防災|停電/.test(title)) use.push('停電や防災');
+    if(/キャンプ|アウトドア/.test(title)) use.push('キャンプ');
+    if(/車中泊/.test(title)) use.push('車中泊');
+    const useText=[...new Set(use)].slice(0,2).join('・');
+    const first=useText
+      ? useText+'で使う電源を用意したいときに検討しやすい'+identity+'です。'
+      : ['持ち運べる電源を備えておきたいときに使える'+identity+'です。','コンセントが使えない場面に備えておきたい人に確認したい'+identity+'です。','家庭用の予備電源や屋外用電源を探している人に。','必要な場所へ持ち運べる電源を探しているときに確認したい'+identity+'です。'][idx];
+    const specs=[wh,watt].filter(Boolean);
+    let second='';
+    if(specs.length) second=specs.join('・')+'の表記があり、容量や出力を見比べて選べます。';
+    else if(facts.some(x=>/ソーラーパネルセット/.test(x))) second='ソーラーパネルセットの表記があります。';
+    else if(facts.some(x=>/リン酸鉄/.test(x))) second='リン酸鉄バッテリーの表記があります。';
+    else if(facts.some(x=>/UPS/.test(x))) second='UPS機能の表記があります。';
+    return [first,second].filter(Boolean);
+  }
+
+  function mopNaturalLines(identity,facts,variant=0){
+    const idx=((Number(variant)||0)%4+4)%4;
+    const first=[
+      '床の水拭きを、手で雑巾がけするより手軽に済ませたいときに使いやすい'+identity+'です。',
+      '立ったまま床の拭き掃除を進めたいときに使える'+identity+'です。',
+      'フローリングの拭き掃除をこまめにしたい人に使いやすい'+identity+'です。',
+      '床のベタつきや汚れが気になったときに、拭き掃除へ取りかかりやすい'+identity+'です。'
+    ][idx];
+    let second='';
+    if(facts.some(x=>/コードレス/.test(x))) second='コードレス表記があるので、部屋を移動しながら使いたい場面にも合わせやすい仕様です。';
+    else if(facts.some(x=>/網戸/.test(x))) second='網戸掃除向けの表記もあり、床以外の掃除用途も確認できます。';
+    else if(facts.some(x=>/充電式/.test(x))) second='充電式の表記があります。';
+    return [first,second].filter(Boolean);
+  }
+
+  function driveBedNaturalLines(identity,facts,item,variant=0){
+    const title=titleOnly(item);
+    const idx=((Number(variant)||0)%4+4)%4;
+    const first=[
+      '犬との車移動で、座席に落ち着ける場所を用意したいときに使える'+identity+'です。',
+      '愛犬とのドライブで、車内に専用の居場所を作りたい人に向いた'+identity+'です。',
+      '車で一緒に出かけるとき、犬の居場所を座席に用意したい人に。'+identity+'です。',
+      '通院や旅行など、犬との車移動に使うベッドを探している人に確認したい'+identity+'です。'
+    ][idx];
+    let second='';
+    if(/洗える|手洗い/.test(title)) second='洗える表記があるので、車内で使った後のお手入れ方法も確認しやすい商品です。';
+    else if(/飛び出し防止/.test(title)) second='飛び出し防止用フックの表記があります。';
+    else if(/助手席|後部座席/.test(title)) second='助手席・後部座席での使用表記があります。';
+    else if(/撥水/.test(title)) second='撥水表記があります。';
+    return [first,second].filter(Boolean);
+  }
+
   function groundedOpening(a,item,variant=0,options={}){
     const identity=naturalProductIdentity(item,a);
     if(!identity) return '';
@@ -891,6 +985,11 @@
     if(a.category==='pet' && a.usage==='bed'){
       return petNaturalLines(identity,facts,variant).join('\n');
     }
+    if(a.category==='pet' && a.usage==='drive_bed') return driveBedNaturalLines(identity,facts,item,variant).join('\n');
+    if(a.category==='cleaning' && a.usage==='vacuum') return vacuumNaturalLines(identity,facts,variant).join('\n');
+    if(a.category==='cleaning' && a.usage==='mop') return mopNaturalLines(identity,facts,variant).join('\n');
+    if(a.category==='laundry' && a.usage==='washing_net') return washingNetNaturalLines(identity,facts,variant).join('\n');
+    if(a.category==='charging' && a.usage==='portable_power') return portablePowerNaturalLines(identity,facts,item,variant).join('\n');
     const openings=[
       identity+'を探しているなら、候補に入れたい商品です。',
       identity+'を比べるときに、チェックしておきたい商品です。',
