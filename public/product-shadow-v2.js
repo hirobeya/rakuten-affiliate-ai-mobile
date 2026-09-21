@@ -108,7 +108,7 @@
     };
   }
 
-  function touchesOrOverlaps(a,b,maxGap=2){
+  function touchesOrOverlaps(a,b,maxGap=0){
     if(Math.max(a.start,b.start)<Math.min(a.end,b.end)) return true;
     const gap=Math.max(b.start-a.end,a.start-b.end,0);
     return gap<=maxGap;
@@ -121,7 +121,7 @@
     const accessories=spans.filter(s=>s.role==='accessory');
     for(const attribute of attrs){
       for(const accessory of accessories){
-        if(touchesOrOverlaps(attribute,accessory,2)){
+        if(touchesOrOverlaps(attribute,accessory,0)){
           scopeIssues.push({type:'attribute_accessory_scope',attribute,accessory});
         }
       }
@@ -131,7 +131,7 @@
       allSpansGrounded:invalid.length===0,
       invalidSpans:invalid,
       scopeIssues,
-      queryMismatch:q.status==='mismatch',
+      queryMismatch:q.status!=='absent' && q.status!=='aligned',
       query:q,
       primaryGrounded:!!primary?.grounded,
       eligibleForGenericFull:false,
