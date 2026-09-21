@@ -936,6 +936,7 @@ input,select{
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
 <script src="/room-copy-quality.js?v=20260920-7"></script>
+<script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
@@ -2224,6 +2225,9 @@ function buildDebugValidationRowsFor(items,keyword){
     const generatedCopy=UrenaviPainCopy.makeRoomCopy
       ?UrenaviPainCopy.makeRoomCopy(item,String(keyword||'').trim(),options)
       :'';
+    const shadowV2=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
+      ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
+      :null;
     return {
       rank:index+1,
       itemName:String(item?.itemName||''),
@@ -2243,6 +2247,7 @@ function buildDebugValidationRowsFor(items,keyword){
       outputMode:String(a?.outputMode||'fallback'),
       fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
       generatedCopy,
+      shadowV2,
       aiPhase1:null,
       aiState:'not_run',
       aiHttpStatus:null,
