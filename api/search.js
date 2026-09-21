@@ -16,6 +16,17 @@ const compact=s=>
 norm(s)
 .replace(/\s+/g,'');
 
+function normalizeSearchKeyword(keyword){
+  const raw=String(keyword||'').normalize('NFKC').trim();
+  const compactRaw=raw.replace(/\s+/g,'');
+  const aliases=new Map([
+    ['ハンディークリーナー','ハンディクリーナー'],
+    ['ハンディー掃除機','ハンディ掃除機'],
+    ['ハンディークリーナ','ハンディクリーナー']
+  ]);
+  return aliases.get(compactRaw)||raw;
+}
+
 
 const genreCache=new Map();
 
@@ -492,11 +503,10 @@ async function handler(req,res){
 
 
     const keyword=
-    String(
+    normalizeSearchKeyword(
       req.query.keyword||
       ''
-    )
-    .trim();
+    );
 
 
     const minPrice=
@@ -927,5 +937,6 @@ async function handler(req,res){
 module.exports._measurementInternals={
   relevance,
   sellabilityScore,
-  profitabilityScore
+  profitabilityScore,
+  normalizeSearchKeyword
 };
