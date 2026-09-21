@@ -40,6 +40,7 @@
   ];
 
   const PRODUCT_FAMILY_RULES=[
+    {family:'accessory.powerbank_case',re:/モバイルバッテリー用[^\s]{0,16}(?:ケース|ポーチ|カバー)|Power\s*Bank\s*(?:Case|ケース|ポーチ|カバー)|PowerBank\s*(?:Case|ケース|ポーチ|カバー)/i},
     {family:'cleaning.mop',re:/電動モップ|回転モップクリーナー|電動フロアワイパー|モップクリーナー|回転モップ/},
     {family:'cleaning.vacuum',re:/ハンディー?クリーナー|ハンディ掃除機|小型掃除機|コードレス掃除機/},
     {family:'charging.mobile_battery',re:/モバイルバッテリー|Power\s*Bank|PowerBank/i},
@@ -50,7 +51,6 @@
     {family:'laundry.basket',re:/ランドリーバスケット|洗濯かご|ランドリーボックス/},
     {family:'storage.wagon',re:/キッチンワゴン|収納ワゴン|ワゴン収納/},
     {family:'laundry.net',re:/洗濯ネット|ランドリーネット/},
-    {family:'accessory.powerbank_case',re:/モバイルバッテリー用[^\s]{0,16}(?:ケース|ポーチ|カバー)|Power\s*Bank\s*(?:Case|ケース|ポーチ|カバー)|PowerBank\s*(?:Case|ケース|ポーチ|カバー)/i}
   ];
 
   function productFamily(text){
