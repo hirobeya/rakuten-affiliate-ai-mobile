@@ -411,6 +411,8 @@
     if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
     const usage=primaryUsageWord(item);
     let filtered=facts.filter(x=>{
+      // "両面" can describe a bundled solar panel, not the portable power station itself.
+      if(kind==='charging' && x==='両面タイプ' && /(?:両面[^\n]{0,20}ソーラーパネル|ソーラーパネル[^\n]{0,20}両面)/.test(t)) return false;
       if(usage==='網戸' && /網戸掃除向け/.test(x)) return false;
       if(usage==='抜け毛' && /抜け毛・毛取り用途/.test(x)) return false;
       if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
