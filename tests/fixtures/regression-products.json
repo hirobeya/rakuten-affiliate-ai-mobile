@@ -1243,7 +1243,7 @@
         "category": "cleaning",
         "usage": "mop",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1259,7 +1259,7 @@
         "category": "cleaning",
         "usage": "mop",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1275,7 +1275,7 @@
         "category": "cleaning",
         "usage": "mop",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
@@ -1291,7 +1291,7 @@
         "category": "cleaning",
         "usage": "mop",
         "ambiguous": false,
-        "outputMode": "fallback",
+        "outputMode": "full",
         "forbiddenWords": [],
         "expectedFeatures": [],
         "forbiddenFeatures": []
