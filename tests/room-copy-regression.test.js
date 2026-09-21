@@ -558,6 +558,7 @@ for(const keyword of ['ハンディクリーナー','洗濯ネット','ポータ
 if(!appHtml.includes('async function copyBatchDebugValidation()')) fail('batch-debug-ui','batch validation handler missing');
 if(!appHtml.includes("searchCount:DEBUG_BATCH_KEYWORDS.length")) fail('batch-debug-json','batch JSON searchCount missing');
 if(!appHtml.includes('items:buildDebugValidationRowsFor(items,keyword)')) fail('batch-debug-json','batch results must use per-keyword validation rows');
+if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batch-debug-error-handler','batch error handler must reference error variable');
 
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);

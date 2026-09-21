@@ -2253,7 +2253,14 @@ function buildDebugValidationRowsFor(items,keyword){
 }
 
 function buildDebugValidationRows(){
-  return buildDebugValidationRowsFor(lastSearchItems,k.value.trim());
+  return buildDebugValidationRowsFor(lastSearchItems,k.value.trim()).map((row,index)=>({
+    ...row,
+    aiPhase1:aiRoomResults.get(index)?.data||null,
+    aiState:aiRoomResults.get(index)?.state||'not_run',
+    aiHttpStatus:aiRoomResults.get(index)?.status??null,
+    aiMessage:aiRoomResults.get(index)?.message||null,
+    humanReview:aiRoomReviews.get(index)||null
+  }));
 }
 
 const DEBUG_BATCH_KEYWORDS=[
