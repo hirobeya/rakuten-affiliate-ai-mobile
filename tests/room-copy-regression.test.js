@@ -710,6 +710,40 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
   }
 }
 
+
+{
+  const spanKnown=[
+    ['cleaning.window_screen','網戸掃除','網戸クリーナー 網戸掃除 取替式'],
+    ['cleaning.glove','掃除手袋','お掃除手袋 マイクロファイバー'],
+    ['cleaning.cloth','掃除クロス','お掃除クロス マイクロファイバー 吸水'],
+    ['cleaning.mop','電動モップ','電動モップ コードレス 充電式 網戸'],
+    ['cleaning.brush','掃除ブラシ','掃除ブラシ 取替式'],
+    ['storage.storage_box','収納ボックス','収納ボックス 折りたたみ'],
+    ['storage.storage_case','収納ケース','収納ケース スリム'],
+    ['charging.mobile_battery','モバイルバッテリー','モバイルバッテリー 10000mAh USB-C'],
+    ['charging.portable_power','ポータブル電源','ポータブル電源 512Wh リン酸鉄 定格500W'],
+    ['laundry.washing_net','洗濯ネット','洗濯ネット ドラム式 乾燥機対応 3枚セット'],
+    ['pet.grooming','毛取りグローブ','ペット用毛取りグローブ 両面タイプ グルーミング手袋 猫犬兼用'],
+    ['pet.bed','犬用ベッド','犬用ベッド 洗える 滑り止め'],
+    ['pet.drive_bed','ドライブベッド','ドライブベッド 犬 車 洗える 後部座席'],
+    ['cleaning.vacuum','ハンディクリーナー','ハンディクリーナー コードレス HEPA']
+  ];
+  for(const [expected,keyword,itemName] of spanKnown){
+    const item={itemName,itemPrice:4980};
+    const a=api.analyzeRoomProduct(item,keyword);
+    const key=a.category+'.'+a.usage;
+    if(key!==expected||a.outputMode!=='full') fail('span-'+expected,'expected '+expected+' full, got '+key+' '+a.outputMode);
+    for(const fact of (a.facts||[])){
+      if(!itemName.includes(fact)) fail('span-'+expected,'generated fact is not an exact itemName span: '+JSON.stringify(fact)+' in '+JSON.stringify(itemName));
+    }
+    const copy=api.makeRoomCopy(item,keyword,{variant:0});
+    const featureLines=copy.split('\n').filter(x=>x.startsWith('✔ ')).map(x=>x.slice(2).trim());
+    for(const feature of featureLines){
+      if(!itemName.includes(feature)) fail('span-copy-'+expected,'feature line is not an exact itemName span: '+JSON.stringify(feature)+' in '+JSON.stringify(itemName));
+    }
+  }
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
