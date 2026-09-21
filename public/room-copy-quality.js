@@ -553,16 +553,33 @@
     return tidyDisplayTitle(s);
   }
 
-  function deriveSafeUnknownName(itemName){
+  const EXACT_PRODUCT_TYPE_NOUNS=[
+    'ドライブベッドキャリー','コーデュラドライブベッド','ドライブベッド',
+    'ドライブボックス','車用ベッド',
+    'ブラジャー用洗濯ネット','シャツ用洗濯ネット','洗濯ネット','ランドリーネット',
+    'ハンディクリーナー','ハンディークリーナー','ハンディ掃除機','小型掃除機',
+    'ポータブル電源',
+    '犬用ベッド','ペットベッド','ドッグベッド',
+    '収納ボックス','収納ケース',
+    'うんち袋','ウンチ袋','マナー袋','ウェットティッシュ','ウェットシート',
+    'ペットシート','キャリーバッグ','ペットバッグ','ペットマット',
+    'フードボウル','ペット食器','給餌器','モバイルバッテリー','パワーバンク'
+  ];
+
+  function exactProductTypeName(itemName){
     const t=titleOnly({itemName});
-    const exactNouns=[
-      'うんち袋','ウンチ袋','マナー袋','ウェットティッシュ','ウェットシート',
-      'ペットシート','ペットベッド','キャリーバッグ','ペットバッグ','ペットマット',
-      'フードボウル','ペット食器','給餌器','モバイルバッテリー','パワーバンク'
-    ];
-    for(const noun of exactNouns){
+    // Ordered from specific product types to broader ones.
+    // Prefer specificity over title position.
+    for(const noun of EXACT_PRODUCT_TYPE_NOUNS){
       if(t.includes(noun)) return noun;
     }
+    return '';
+  }
+
+  function deriveSafeUnknownName(itemName){
+    const t=titleOnly({itemName});
+    const exact=exactProductTypeName(t);
+    if(exact) return exact;
     const cleaned=stripClaimText(stripPromotionalText(t));
     return cleaned.slice(0,48).trim();
   }
@@ -782,8 +799,14 @@
       const noun=(original.match(/うんち袋|ウンチ袋|マナー袋/)||[])[0]||'うんち袋';
       return ('BOS '+noun).trim();
     }
+    const productType=exactProductTypeName(original);
+    if(productType) return productType;
     let s=stripClaimText(stripPromotionalText(original));
-    s=s.replace(/^(?:\d{1,2}[\/\-]\d{1,2}|\d{1,2}:\d{2}|迄|まで|価格|の|で|に|を|が)\s*/,'').trim();
+    s=s
+      .replace(/^[~〜～◆★!！\/\\|・:：;；,，.。\-–—_\s]+/,'')
+      .replace(/^(?:お買い物マラソン|楽天マラソン|マラソン限定|期間限定|限定価格|最短即日出荷|予約\d{1,2}月\d{1,2}日順次発送|まとめ買い対象|新色追加)\s*/,'')
+      .replace(/^(?:\d{1,2}[\/\-]\d{1,2}|\d{1,2}:\d{2}|迄|まで|価格|の|で|に|を|が)\s*/,'')
+      .trim();
     const tokens=s.split(/\s+/).filter(Boolean);
     const noise=/^(?:おしゃれ|オシャレ|かわいい|可愛い|人気|プレゼント|ギフト|父の日|珍しい)$/;
     const factish=/^(?:\d|SS$|S$|M$|L$|LL$|XL$|XXL$|折りたたみ|折り畳み|折畳|キャスター付き|コードレス|高さ調節|高さ調整|天板付き|引き出し|扉付き|充電式|自立|水拭き|LEDライト付|交換パッド付き|取っ手付き|持ち手付き|メッシュ|スリム|コンパクト)/i;
@@ -937,6 +960,7 @@
   api.buildSafeDisplayName=buildSafeDisplayName;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
   api.fallbackProductName=fallbackProductName;
+  api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;
   api.stripPromotionalText=stripPromotionalText;
   api.extractSafeFeatures=extractFacts;

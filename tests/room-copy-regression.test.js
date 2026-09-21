@@ -560,6 +560,32 @@ if(!appHtml.includes("searchCount:DEBUG_BATCH_KEYWORDS.length")) fail('batch-deb
 if(!appHtml.includes('items:buildDebugValidationRowsFor(items,keyword)')) fail('batch-debug-json','batch results must use per-keyword validation rows');
 if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batch-debug-error-handler','batch error handler must reference error variable');
 
+
+{
+  const batch=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','batch-validation-20260921.json'),'utf8'));
+  const all=batch.searches.flatMap(s=>s.items.map((itemName,idx)=>({keyword:s.searchKeyword,itemName,rank:idx+1})));
+  if(all.length!==50) fail('batch-fixture-count','expected 50 actual-search items, got '+all.length);
+  const targetByKeyword={
+    'ハンディクリーナー':/ハンディクリーナー|ハンディークリーナー|ハンディ掃除機|小型掃除機/,
+    '洗濯ネット':/洗濯ネット|ランドリーネット|ブラジャー用洗濯ネット|シャツ用洗濯ネット/,
+    'ポータブル電源':/ポータブル電源/,
+    '犬 ベッド':/ドライブベッドキャリー|コーデュラドライブベッド|ドライブベッド|犬用ベッド|ペットベッド|ドッグベッド/,
+    'ドライブベッド 犬':/ドライブベッドキャリー|コーデュラドライブベッド|ドライブベッド|ドライブボックス/
+  };
+  for(const tc of all){
+    const item={itemName:tc.itemName,itemPrice:1000};
+    const a=api.analyzeRoomProduct(item,tc.keyword);
+    const copy=api.makeRoomCopy(item,tc.keyword,{variant:0});
+    const first=copy.split('\n')[0].trim();
+    if(a.outputMode==='fallback' && targetByKeyword[tc.keyword].test(tc.itemName) && !targetByKeyword[tc.keyword].test(first)){
+      fail('batch-'+tc.keyword+'-'+tc.rank,'fallback lost product type: '+first+' <- '+tc.itemName);
+    }
+    if(/(?:OFFで\d|^~|^お買い物マラソン$|^楽天1位|^ランキング1位|^P\d+倍$)/.test(first)){
+      fail('batch-'+tc.keyword+'-'+tc.rank,'promo residue in fallback first line: '+first);
+    }
+  }
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);
