@@ -444,7 +444,7 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
   const a=api.analyzeRoomProduct(item,'モップハンガー');
   const copy=api.makeRoomCopy(item,'モップハンガー',{variant:0});
-  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='full'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder generic full');
+  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='fallback'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder fallback while generic full is disabled');
   if((a.conflicts||[]).length) fail(id,'mop holder must not have cleaning/storage conflict');
   if((a.facts||[]).includes('モップタイプ')) fail(id,'mop holder must not expose モップタイプ');
   if(/モップを探して|モップでの掃除|コードレスタイプを条件にモップ/.test(copy)) fail(id,'mop holder copy must not describe the holder as a mop: '+copy);
