@@ -32,10 +32,32 @@
   const PRODUCT_NOUN_PATTERNS=[
     /ドライブベッドキャリー|ドライブベッド|ドライブボックス|ペットベッド|犬用ベッド|猫用ベッド/g,
     /ハンディー?クリーナー|ハンディ掃除機|小型掃除機|電動モップ|回転モップクリーナー|電動フロアワイパー|モップハンガー/g,
-    /ポータブル電源|モバイルバッテリー|洗濯ネット|ランドリーネット/g,
-    /加湿器|電気ケトル|USBハブ|折りたたみ傘|ペット給水器|収納ワゴン|フライパン|水筒|枕|まな板/g,
+    /ポータブル電源|モバイルバッテリー|Power\s*Bank|PowerBank|洗濯ネット|ランドリーネット/g,
+    /収納ベンチ|ベンチボックス|ランドリーバスケット|洗濯かご|ランドリーボックス|キッチンワゴン|収納ワゴン/g,
+    /モバイルバッテリー用[^\s]{0,16}(?:ケース|ポーチ|カバー)|Power\s*Bank\s*(?:Case|ケース|ポーチ|カバー)|PowerBank\s*(?:Case|ケース|ポーチ|カバー)/gi,
+    /加湿器|電気ケトル|USBハブ|折りたたみ傘|ペット給水器|フライパン|水筒|枕|まな板/g,
     /[ァ-ヶーA-Za-z0-9一-龯]{2,20}(?:クリーナー|ベッド|ボックス|ケース|ネット|ワゴン|ケトル|加湿器|給水器|ハブ|傘|水筒|枕|まな板|フライパン)/g
   ];
+
+  const PRODUCT_FAMILY_RULES=[
+    {family:'cleaning.mop',re:/電動モップ|回転モップクリーナー|電動フロアワイパー|モップクリーナー|回転モップ/},
+    {family:'cleaning.vacuum',re:/ハンディー?クリーナー|ハンディ掃除機|小型掃除機|コードレス掃除機/},
+    {family:'charging.mobile_battery',re:/モバイルバッテリー|Power\s*Bank|PowerBank/i},
+    {family:'charging.portable_power',re:/ポータブル電源/},
+    {family:'pet.drive_bed',re:/ドライブベッドキャリー|ドライブベッド|ドライブボックス|車用ベッド/},
+    {family:'pet.bed',re:/ペットベッド|犬用ベッド|猫用ベッド|犬ベッド|猫ベッド/},
+    {family:'storage.bench',re:/収納ベンチ|ベンチボックス|収納スツール/},
+    {family:'laundry.basket',re:/ランドリーバスケット|洗濯かご|ランドリーボックス/},
+    {family:'storage.wagon',re:/キッチンワゴン|収納ワゴン|ワゴン収納/},
+    {family:'laundry.net',re:/洗濯ネット|ランドリーネット/},
+    {family:'accessory.powerbank_case',re:/モバイルバッテリー用[^\s]{0,16}(?:ケース|ポーチ|カバー)|Power\s*Bank\s*(?:Case|ケース|ポーチ|カバー)|PowerBank\s*(?:Case|ケース|ポーチ|カバー)/i}
+  ];
+
+  function productFamily(text){
+    const t=norm(text);
+    const hit=PRODUCT_FAMILY_RULES.find(x=>x.re.test(t));
+    return hit?hit.family:'';
+  }
 
   function dedupeSpans(spans){
     const seen=new Set(),out=[];
@@ -78,10 +100,13 @@
     const accessories=spans.filter(s=>s.role==='accessory');
     const scored=candidates.map(c=>{
       const accessoryOverlap=accessories.some(a=>Math.max(a.start,c.start)<Math.min(a.end,c.end));
+      const family=productFamily(c.text);
+      const isAccessoryProduct=family.startsWith('accessory.');
+      const nestedAccessoryProduct=candidates.some(other=>other!==c && productFamily(other.text).startsWith('accessory.') && other.start<=c.start && other.end>=c.end);
       const earlyBonus=c.start<=24?30:Math.max(0,20-Math.floor(c.start/5));
-      const specificity=Math.min(24,c.text.length*2);
-      const score=earlyBonus+specificity-(accessoryOverlap?35:0);
-      return {...c,score,accessoryOverlap};
+      const specificity=Math.min(30,c.text.length*2);
+      const score=earlyBonus+specificity+(isAccessoryProduct?18:0)-(accessoryOverlap&&!isAccessoryProduct?35:0)-(nestedAccessoryProduct?50:0);
+      return {...c,score,accessoryOverlap,family,nestedAccessoryProduct};
     }).sort((a,b)=>b.score-a.score || a.start-b.start || b.text.length-a.text.length);
     const best=scored[0];
     return {
@@ -97,13 +122,20 @@
     const compact=s=>norm(s).replace(/\s+/g,'').toLowerCase();
     const titleText=compact(title),qText=compact(q),primaryText=compact(primary?.text||'');
     const inTitle=titleText.includes(qText);
-    const aligned=!!primary && (primaryText.includes(qText)||qText.includes(primaryText));
+    const directAligned=!!primary && (primaryText.includes(qText)||qText.includes(primaryText));
+    const queryFamily=productFamily(q);
+    const primaryFamily=productFamily(primary?.text||'');
+    const familyAligned=!!primary && !!queryFamily && queryFamily===primaryFamily;
+    const aligned=directAligned||familyAligned;
     return {
       value:q,
       role:'constraint_only',
       status:aligned?'aligned':inTitle?'present_not_primary':'mismatch',
       inTitle,
       alignedWithPrimary:aligned,
+      familyAligned,
+      queryFamily,
+      primaryFamily,
       canPromote:false
     };
   }
