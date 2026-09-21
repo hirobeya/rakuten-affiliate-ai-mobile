@@ -779,7 +779,7 @@
     const identity=naturalProductIdentity(item,a);
     const facts=(a.facts||[]).filter(Boolean);
     if(!identity) return '';
-    if(a.genericEligible) return genericGroundedAudience(identity);
+    if(a.genericEligible) return genericGroundedAudience(identity,a);
     if(a.category==='pet' && a.usage==='drive_bed') return '犬との車移動に使える'+identity+'を探している人';
     if(facts.some(x=>/カバーを外して洗える|洗える/.test(x))) return 'お手入れしやすい'+identity+'を探している人';
     if(facts.some(x=>/防水|撥水/.test(x))) return '防水・撥水表記のある'+identity+'を探している人';
@@ -994,7 +994,7 @@
     const identity=naturalProductIdentity(item,a);
     if(!identity) return '';
     const facts=(a.facts||[]).filter(Boolean);
-    if(a.genericEligible) return genericGroundedOpening(identity,facts,variant);
+    if(a.genericEligible) return genericGroundedOpening(identity,facts,variant,a);
     if(a.category==='pet' && a.usage==='bed'){
       return petNaturalLines(identity,facts,variant).join('\n');
     }
@@ -1178,7 +1178,8 @@
     const raw=norm(keyword);
     if(!raw) return '';
     const compact=raw.replace(/\s+/g,'');
-    if(compact.length<2 || compact.length>32 || GENERIC_QUERY_BLOCKLIST.has(raw) || GENERIC_QUERY_BLOCKLIST.has(compact)) return '';
+    if(compact.length>32 || GENERIC_QUERY_BLOCKLIST.has(raw) || GENERIC_QUERY_BLOCKLIST.has(compact)) return '';
+    if(compact.length===1 && !/[\p{Script=Han}\p{Script=Katakana}]/u.test(compact)) return '';
     const title=buildClassificationTitle(titleOnly(item));
     const titleCompact=title.replace(/\s+/g,'').toLowerCase();
     const tokens=raw.split(/\s+/).filter(Boolean);
@@ -1189,7 +1190,8 @@
     const firstPos=tokens.length>1
       ? Math.min(...tokens.map(t=>title.toLowerCase().indexOf(t.toLowerCase())).filter(x=>x>=0))
       : titleCompact.indexOf(compact.toLowerCase());
-    const early=firstPos>=0 && firstPos<=Math.max(40,Math.ceil(title.length*0.45));
+    const limit=compact.length===1?12:Math.max(40,Math.ceil(title.length*0.45));
+    const early=firstPos>=0 && firstPos<=limit;
     if(!early) return '';
     return raw;
   }
@@ -1197,6 +1199,13 @@
   function extractGenericGroundedFacts(item,identity=''){
     const title=titleOnly(item);
     const facts=[];
+    const accessoryTerms=['ケース','カバー','ポーチ','バッグ','リード','ベルト','ストラップ','ケーブル','パネル','フック','アダプター','ホルダー','スタンド'];
+    const scopedToAccessory=(index,matchText)=>{
+      const after=title.slice(index+String(matchText||'').length,index+String(matchText||'').length+14);
+      const before=title.slice(Math.max(0,index-14),index);
+      const accessory=accessoryTerms.find(term=>after.includes(term)||before.endsWith(term));
+      return !!(accessory && !String(identity||'').includes(accessory));
+    };
     const add=x=>uniquePush(facts,x);
     const patterns=[
       [/コードレス/,'コードレス'],
@@ -1220,7 +1229,7 @@
       const idx=m.index??title.indexOf(m[0]);
       const idPos=identity?title.toLowerCase().indexOf(identity.toLowerCase()):-1;
       const close=idPos<0 || Math.abs(idx-idPos)<=48;
-      if(close) add(label);
+      if(close && !scopedToAccessory(idx,m[0])) add(label);
     }
     const size=title.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)\s*サイズ(?:\s|$)/i);
     if(size) add(size[1].toUpperCase()+'サイズ');
@@ -1229,8 +1238,15 @@
     return facts.slice(0,4);
   }
 
-  function genericIntent(identity=''){
+  function genericIntent(identity='',analysis=null){
     const x=String(identity||'');
+    const category=String(analysis?.category||'');
+    const usage=String(analysis?.usage||'');
+    if(category==='storage' || /storage|holder/.test(usage)) return {use:'物の整理や収納に使う',benefit:'物の置き場所を決めやすくする'};
+    if(category==='laundry') return {use:'洗濯まわりで使う',benefit:'洗濯物を分けたり扱いやすくする'};
+    if(category==='charging') return {use:'機器の接続や給電に使う',benefit:'必要な電源を用意しやすくする'};
+    if(category==='cleaning') return {use:'掃除に使う',benefit:'気になる場所の掃除へ取りかかりやすくする'};
+    if(category==='pet') return {use:'ペットまわりで使う',benefit:'ペット用の環境を整えやすくする'};
     if(/クリーナー|掃除機|モップ|ブラシ|ワイパー|クロス/.test(x)) return {use:'掃除に使う',benefit:'気になる場所の掃除へ取りかかりやすくする'};
     if(/収納|ボックス|ケース|ワゴン|ラック|棚/.test(x)) return {use:'物の整理や収納に使う',benefit:'物の置き場所を決めやすくする'};
     if(/洗濯|ランドリー/.test(x)) return {use:'洗濯まわりで使う',benefit:'洗濯物を分けたり扱いやすくする'};
@@ -1245,8 +1261,8 @@
     return {use:'日常で使う',benefit:'必要な場面で使えるように備えやすくする'};
   }
 
-  function genericGroundedOpening(identity,facts,variant=0){
-    const intent=genericIntent(identity);
+  function genericGroundedOpening(identity,facts,variant=0,analysis=null){
+    const intent=genericIntent(identity,analysis);
     const idx=((Number(variant)||0)%4+4)%4;
     const first=[
       identity+'を使って、'+intent.benefit+'商品です。',
@@ -1258,8 +1274,8 @@
     return [first,second].filter(Boolean).join('\n');
   }
 
-  function genericGroundedAudience(identity){
-    const intent=genericIntent(identity);
+  function genericGroundedAudience(identity,analysis=null){
+    const intent=genericIntent(identity,analysis);
     return intent.use+'ための'+identity+'を探している人';
   }
 
