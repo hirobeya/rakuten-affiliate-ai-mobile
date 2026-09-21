@@ -79,7 +79,6 @@
     {phrases:['ペットウォーターボトル','ペット用ウォーターボトル','ペット給水器','給水ボトル','水飲みボトル'],category:'pet',usage:'water',priority:135},
     {phrases:['ウェットティッシュ','ウェットシート','おしりふき','からだふき','体ふき','手足ふき'],category:'pet',usage:'hygiene_wipe',priority:138},
     {phrases:['ペットシート','トイレシート','デオシート'],category:'pet',usage:'toilet',priority:135},
-    {phrases:['ドライブベッドキャリー','コーデュラドライブベッド','ドライブベッド','ドライブボックス','車用ベッド'],category:'pet',usage:'drive_bed',priority:150},
     {phrases:['ペットベッド','犬用ベッド','猫用ベッド','猫ベッド','犬ベッド'],category:'pet',usage:'bed',priority:135},
     {phrases:['ペットの毛 掃除ブラシ','ペットの毛用掃除ブラシ','抜け毛掃除ブラシ'],category:'cleaning',usage:'pet_hair',priority:130},
     {phrases:['充電式ハンディクリーナー','ハンディクリーナー','ハンディークリーナー','コードレス掃除機','ハンディ掃除機','小型掃除機'],category:'cleaning',usage:'vacuum',priority:130},
@@ -108,9 +107,9 @@
   ];
 
   const SUPPORTED_USAGES=new Set([
-    'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush','cleaning.vacuum',
+    'cleaning.window_screen','cleaning.glove','cleaning.cloth','cleaning.mop','cleaning.brush',
     'storage.storage_box','storage.storage_case','charging.mobile_battery','charging.portable_power',
-    'laundry.washing_net','pet.grooming','pet.bed','pet.drive_bed'
+    'laundry.washing_net','pet.grooming','pet.bed'
   ]);
 
   function buildClassificationTitle(itemName){
@@ -176,7 +175,6 @@
   function classificationFamily(candidate){
     if(!candidate) return '';
     if(candidate.category==='storage' && ['storage_box','storage_case','generic_storage'].includes(candidate.usage)) return 'storage.container';
-    if(candidate.category==='pet' && ['bed','drive_bed'].includes(candidate.usage)) return 'pet.bed';
     return candidate.category+'.'+candidate.usage;
   }
 
