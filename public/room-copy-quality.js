@@ -443,6 +443,8 @@
       if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
       if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
       if(usage==='ハンディクリーナー' && x==='ブラシタイプ' && /ブラシレス/.test(t)) return false;
+      if(kind==='cleaning' && x==='ブラシタイプ' && usage!=='ブラシ') return false;
+      if(kind==='cleaning' && x==='モップタイプ' && usage!=='モップ') return false;
       if(usage==='ドライブベッド' && x==='伸縮タイプ' && /伸縮(?:リード|ベルト|ストラップ)/.test(t)) return false;
       return true;
     });
