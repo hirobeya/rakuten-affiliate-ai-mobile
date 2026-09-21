@@ -91,6 +91,7 @@
     {phrases:['Power Bank','PowerBank','パワーバンク'],category:'charging',usage:'mobile_battery',priority:112},
     {phrases:['収納ボックス'],category:'storage',usage:'storage_box',priority:125},
     {phrases:['収納ケース','衣装ケース'],category:'storage',usage:'storage_case',priority:120},
+    {phrases:['電動モップ','回転モップクリーナー','電動フロアワイパー','回転モップ','フロアモップ'],category:'cleaning',usage:'mop',priority:138},
     {phrases:['網戸','あみ戸','アミ戸'],category:'cleaning',usage:'window_screen',priority:135},
     {phrases:['お掃除 手袋','掃除 手袋','お掃除手袋','掃除手袋'],category:'cleaning',usage:'glove',priority:135},
     {phrases:['お掃除クロス','掃除クロス'],category:'cleaning',usage:'cloth',priority:116},
@@ -247,6 +248,27 @@
 
   const STRONG_CONFLICT_RULES=CLASSIFICATION_RULES.filter(x=>x.priority>=120);
 
+  // Some strong keywords describe a place/target of use rather than a second product.
+  // Treat them as context when a concrete product identity is already established earlier.
+  function isContextualUseSignal(title,chosenCategory,chosenUsage,rule,phrase){
+    const chosenKey=chosenCategory+'.'+chosenUsage;
+    const ruleKey=rule.category+'.'+rule.usage;
+    if(ruleKey==='cleaning.window_screen' && ['cleaning.mop','cleaning.vacuum','cleaning.brush','cleaning.cloth','cleaning.glove'].includes(chosenKey)){
+      const primaryPatterns={
+        'cleaning.mop':/(?:電動モップ|回転モップクリーナー|電動フロアワイパー|回転モップ|フロアモップ|モップクリーナー)/,
+        'cleaning.vacuum':/(?:ハンディクリーナー|ハンディークリーナー|ハンディ掃除機|小型掃除機|コードレス掃除機)/,
+        'cleaning.brush':/(?:掃除ブラシ|電動ブラシ)/,
+        'cleaning.cloth':/(?:掃除クロス|お掃除クロス)/,
+        'cleaning.glove':/(?:掃除手袋|お掃除手袋)/
+      };
+      const re=primaryPatterns[chosenKey];
+      const m=re&&title.match(re);
+      const contextPos=title.indexOf(phrase);
+      if(m && contextPos>=0 && m.index>=0 && m.index<contextPos) return true;
+    }
+    return false;
+  }
+
   function detectConflictingSignals(itemName,chosenCategory,chosenUsage){
     const title=norm(itemName);
     const conflicts=[];
@@ -276,6 +298,7 @@
       if(classificationFamily(rule)===classificationFamily({category:chosenCategory,usage:chosenUsage})) continue;
       for(const phrase of rule.phrases){
         if(title.toLowerCase().includes(String(phrase).toLowerCase())){
+          if(isContextualUseSignal(title,chosenCategory,chosenUsage,rule,phrase)) continue;
           conflicts.push({category:rule.category,usage:rule.usage,phrase});
           break;
         }
@@ -593,6 +616,7 @@
   }
 
   const EXACT_PRODUCT_TYPE_NOUNS=[
+    '回転モップクリーナー','電動フロアワイパー','電動モップ','モップクリーナー',
     'ドライブベッドキャリー','コーデュラドライブベッド','ドライブベッド',
     'ドライブボックス','車用ベッド',
     'ブラジャー用洗濯ネット','シャツ用洗濯ネット','洗濯ネット','ランドリーネット',
