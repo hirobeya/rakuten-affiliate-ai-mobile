@@ -72,6 +72,7 @@
   ];
 
   const CLASSIFICATION_RULES=[
+    {phrases:['モップハンガー','モップホルダー','モップスタンド','モップ掛け','モップラック'],category:'storage',usage:'cleaning_tool_holder',priority:150},
     {phrases:['モバイルバッテリー用ケース','モバイルバッテリーケース','Power Bank Case','PowerBank Case','Power Bank ケース','PowerBank ケース','Power Bank ポーチ','PowerBank ポーチ','Power Bank カバー','PowerBank カバー','パワーバンクケース','パワーバンク ケース','パワーバンク ポーチ','パワーバンク カバー'],category:'accessory',usage:'mobile_battery_case',priority:145},
     {phrases:['収納付きベッド','収納付ベッド','収納ベッド'],category:'furniture',usage:'storage_bed',priority:140},
     {phrases:['ペット用毛取りグローブ','毛取りグローブ','グルーミング手袋'],category:'pet',usage:'grooming',priority:140},
@@ -120,8 +121,25 @@
     return norm(s);
   }
 
-  function collectClassificationCandidates(itemName){
+  const GENERIC_SEARCH_HINTS=new Set(['掃除用具','掃除用品','ペット用品','便利グッズ','生活雑貨','日用品','収納','掃除','ペット']);
+  function normalizedSearchHint(keyword){
+    const hint=norm(keyword);
+    if(!hint) return '';
+    const compact=hint.replace(/\s+/g,'');
+    if(GENERIC_SEARCH_HINTS.has(hint)||GENERIC_SEARCH_HINTS.has(compact)) return '';
+    return hint;
+  }
+  function candidateRankScore(candidate,title){
+    const len=Math.max(1,String(title||'').length);
+    const ratio=(candidate.pos||0)/len;
+    let adjustment=0;
+    if((candidate.pos||0)<=24 || ratio<=0.20) adjustment+=26;
+    else if(ratio>=0.45) adjustment-=20;
+    return candidate.score+adjustment;
+  }
+  function collectClassificationCandidates(itemName,keyword=''){
     const title=buildClassificationTitle(itemName);
+    const hint=normalizedSearchHint(keyword);
     const out=[];
     const accessoryMatch=title.match(/(?:モバイルバッテリー|Power\s*Bank|PowerBank|パワーバンク)(?:用)?[^\n]{0,20}(?:ケース|ポーチ|カバー|保護)/i);
     if(accessoryMatch){
@@ -140,7 +158,15 @@
       const prev=best.get(key);
       if(!prev || x.score>prev.score || (x.score===prev.score && x.phrase.length>prev.phrase.length)) best.set(key,x);
     }
-    return [...best.values()].sort((a,b)=>b.score-a.score||b.phrase.length-a.phrase.length||a.pos-b.pos);
+    const ranked=[...best.values()].map(x=>({...x,rankScore:candidateRankScore(x,title),searchHintMatch:!!(hint&&hint.toLowerCase().includes(String(x.phrase).toLowerCase()))}));
+    ranked.sort((a,b)=>b.rankScore-a.rankScore||b.score-a.score||b.phrase.length-a.phrase.length||a.pos-b.pos);
+    if(ranked.length>1 && hint){
+      const a=ranked[0],b=ranked[1];
+      if(Math.abs(a.rankScore-b.rankScore)<=4 && a.searchHintMatch!==b.searchHintMatch){
+        ranked.sort((x,y)=>(Number(y.searchHintMatch)-Number(x.searchHintMatch))||y.rankScore-x.rankScore||y.score-x.score||x.pos-y.pos);
+      }
+    }
+    return ranked;
   }
 
   function classificationFamily(candidate){
@@ -155,8 +181,9 @@
     return [...same].sort((a,b)=>b.phrase.length-a.phrase.length||b.priority-a.priority||a.pos-b.pos)[0];
   }
 
-  function resolveCategoryAndUsage(itemName){
-    const candidates=collectClassificationCandidates(itemName);
+  function resolveCategoryAndUsage(itemName,keyword=''){
+    const title=buildClassificationTitle(itemName);
+    const candidates=collectClassificationCandidates(itemName,keyword);
     if(!candidates.length) return {category:'unknown',usage:'unknown',kind:'unknown',confidence:'none',ambiguous:false,candidates:[],reason:'no_match'};
     let top=candidates[0];
     const topFamily=classificationFamily(top);
@@ -169,8 +196,17 @@
         return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'pet_toilet_hygiene_conflict'};
       }
     }
-    if(second && (top.score-second.score)<20){
-      return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'close_candidates'};
+    if(second){
+      const topRank=Number(top.rankScore??top.score);
+      const secondRank=Number(second.rankScore??second.score);
+      const rankGap=topRank-secondRank;
+      const len=Math.max(1,title.length);
+      const topEarly=(top.pos||0)<=24 || (top.pos||0)/len<=0.20;
+      const secondLate=(second.pos||0)/len>=0.40;
+      const strongStructuralLead=topEarly&&secondLate&&rankGap>=10;
+      if(rankGap<20 && !strongStructuralLead){
+        return {category:'ambiguous',usage:'ambiguous',kind:'ambiguous',confidence:'ambiguous',ambiguous:true,candidates,reason:'close_candidates'};
+      }
     }
     return {category:top.category,usage:top.usage,kind:top.category,confidence:'title',ambiguous:false,candidates,reason:'resolved',matchedPhrase:top.phrase,score:top.score};
   }
@@ -231,8 +267,8 @@
     return map[key]||{problem:'',use:'',impact:'',audience:''};
   }
 
-  function classify(item){
-    const base=resolveCategoryAndUsage(titleOnly(item));
+  function classify(item,keyword=''){
+    const base=resolveCategoryAndUsage(titleOnly(item),keyword);
     const fields=classificationCopyFields(base);
     return {...base,...fields,supported:SUPPORTED_USAGES.has(base.category+'.'+base.usage)};
   }
@@ -719,8 +755,8 @@
     return cleanupPairedSymbols(s);
   }
 
-  function analyze(item){
-    const cls=classify(item);
+  function analyze(item,keyword=''){
+    const cls=classify(item,keyword);
     const facts=extractFacts(item,cls.kind);
     const source=sourceText(item);
     const sensitive=isSensitiveCategory(source);
@@ -763,7 +799,7 @@
   }
 
   function makeRoomCopy(item,keyword,options={}){
-    const a=analyze(item);
+    const a=analyze(item,keyword);
     if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
 
     const title=buildSafeDisplayName(item,a);
@@ -779,7 +815,7 @@
   }
 
   function makeThreadsCopy(item,keyword,options={}){
-    const a=analyze(item);
+    const a=analyze(item,keyword);
     if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
     const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
@@ -791,7 +827,7 @@
   }
 
   function makeInstagramCopy(item,keyword,options={}){
-    const a=analyze(item);
+    const a=analyze(item,keyword);
     if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
     const title=buildSafeDisplayName(item,a);
     const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);

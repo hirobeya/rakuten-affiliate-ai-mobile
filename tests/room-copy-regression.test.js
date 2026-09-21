@@ -417,6 +417,38 @@ for(const tc of fixture.cases.slice(0,11)){
   if(/使いやすく|暮らし|快適|安心/.test(copy)) fail('grounded-room-P1','fallback must not add inferred benefit: '+copy);
 }
 
+
+// Step 1: position-aware primary use must keep a main product noun ahead of a later usage scene.
+{
+  const cases=[
+    ['electric-mop-r1','【クーポンで400円オフ】回転モップクリーナー 電動モップ Orage M200 S 軽量 自立 自走式 回転モップ 水拭き コードレス 床拭き 掃除機 網戸 モップ 高速回転 充電式 ジェネリック家電 Orage M200S【1年保証】 ギフトにも','電動モップ','mop'],
+    ['electric-mop-r3','【クーポンで400円オフ】2026新モデル 回転モップクリーナー 電動モップ Orage M300 軽量 自立 自走式 回転モップ 水拭き コードレス 床拭き 掃除機 網戸 モップ 高速回転 充電式 1人暮らし ジェネリック家電【1年保証】 プレゼント','電動モップ','mop'],
+    ['electric-mop-r4','電動モップ コードレス 床掃除 油汚れ クレヨン 足跡 フロアモップ フローリングワイパー 軽量 高速振動 掃除 網戸 壁 玄関 水拭きシート対応 パッド不要 LEDライト付 電動フロアワイパー SWD-1 アイリスオーヤマ * [2609SI]','電動モップ','mop'],
+    ['electric-mop-r6','電動モップ 回転 モップクリーナー コードレス 床掃除 電動 モップ 回転モップ 回転モップクリーナー 回転式 掃除 網戸 水拭き 電動 充電式 交換用 パッド付き 交換パッド 自走式 水噴射 充電式 フローリング 160ml 父の日 プレゼント 珍しい','電動モップ','mop'],
+    ['window-cleaner-pair','網戸クリーナー モップタイプ 網戸掃除','網戸掃除','window_screen'],
+    ['window-mop-pair','網戸用モップ 網戸掃除 取替式','網戸掃除','window_screen']
+  ];
+  for(const [id,itemName,keyword,usage] of cases){
+    const a=api.analyzeRoomProduct({itemName,itemPrice:1000},keyword);
+    if(a.category!=='cleaning'||a.usage!==usage||a.ambiguous) fail(id,`expected cleaning.${usage}, got ${a.category}.${a.usage} ambiguous=${a.ambiguous}`);
+  }
+  const fixed=fixture.cases.find(x=>x.id==='clean-window');
+  const a=api.analyzeRoomProduct({itemName:fixed.itemName,itemPrice:fixed.itemPrice||0},'網戸掃除');
+  if(a.category!=='cleaning'||a.usage!=='window_screen'||a.ambiguous) fail('clean-window-pair','existing 網戸掃除 fixture must stay window_screen');
+}
+
+// Step 2: mop holders are holders, not mop bodies.
+for(const id of ['live-cleaning-rank7-mop-holder','C7']){
+  const tc=fixture.cases.find(x=>x.id===id);
+  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+  const a=api.analyzeRoomProduct(item,'モップハンガー');
+  const copy=api.makeRoomCopy(item,'モップハンガー',{variant:0});
+  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='fallback'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder fallback');
+  if((a.conflicts||[]).length) fail(id,'mop holder must not have cleaning/storage conflict');
+  if((a.facts||[]).includes('モップタイプ')) fail(id,'mop holder must not expose モップタイプ');
+  if(/モップを探して|モップでの掃除|コードレスタイプを条件にモップ/.test(copy)) fail(id,'mop holder copy must not describe the holder as a mop: '+copy);
+}
+
 if(failures){
   console.error(`ROOM copy regression failures: ${failures}`);
   process.exit(1);

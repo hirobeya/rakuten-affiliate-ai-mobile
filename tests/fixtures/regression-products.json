@@ -510,17 +510,20 @@
       "itemName": "〖25％OFF券★10～11日限定〗 モップハンガー モップホルダー モップ 収納 掃除用具入れ 掃除用具収納 掃除 清掃 掃除用品 掃除用具 掃除道具 保管 大容量 バケツ 回転モップ キャスター付き キャスター付 キャスター ちりとり 雑巾 高さ調節可能 ガーデニング用品ガーデニン",
       "itemPrice": 12980,
       "expect": {
-        "category": "cleaning",
-        "usage": "mop",
+        "category": "storage",
+        "usage": "cleaning_tool_holder",
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [
-          "モップで気になる場所を手早く掃除したい人"
+          "モップで気になる場所を手早く掃除したい人",
+          "モップを探して",
+          "モップでの掃除",
+          "コードレスタイプを条件にモップ"
         ],
-        "expectedFeatures": [
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
           "モップタイプ"
-        ],
-        "forbiddenFeatures": []
+        ]
       }
     },
     {
@@ -708,17 +711,20 @@
       "itemName": "【20％OFF券★先着5名】 モップハンガー モップホルダー モップ 収納 掃除用具入れ 掃除用具収納 掃除 清掃 掃除用品 掃除用具 掃除道具 保管 大容量 バケツ 回転モップ キャスター付き キャスター付 キャスター ちりとり 雑巾 高さ調節可能 ガーデニング用品ガーデニンググ",
       "itemPrice": 0,
       "expect": {
-        "category": "cleaning",
-        "usage": "mop",
+        "category": "storage",
+        "usage": "cleaning_tool_holder",
         "ambiguous": false,
         "outputMode": "fallback",
         "forbiddenWords": [
-          "モップでの掃除"
+          "モップでの掃除",
+          "モップを探して",
+          "モップでの掃除",
+          "コードレスタイプを条件にモップ"
         ],
-        "expectedFeatures": [
+        "expectedFeatures": [],
+        "forbiddenFeatures": [
           "モップタイプ"
-        ],
-        "forbiddenFeatures": []
+        ]
       }
     },
     {
