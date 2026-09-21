@@ -443,6 +443,7 @@
       if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
       if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
       if(usage==='ハンディクリーナー' && x==='ブラシタイプ' && /ブラシレス/.test(t)) return false;
+      if(usage==='ドライブベッド' && x==='伸縮タイプ' && /伸縮(?:リード|ベルト|ストラップ)/.test(t)) return false;
       return true;
     });
     if(kind==='charging'){
@@ -978,8 +979,11 @@
     ][idx];
     let second='';
     if(/洗える|手洗い/.test(title)) second='洗える表記があるので、車内で使った後のお手入れ方法も確認しやすい商品です。';
-    else if(/飛び出し防止/.test(title)) second='飛び出し防止用フックの表記があります。';
-    else if(/助手席|後部座席/.test(title)) second='助手席・後部座席での使用表記があります。';
+    else if(/飛び出し防止[^\s]{0,8}フック|フック[^\s]{0,8}飛び出し防止/.test(title)) second='飛び出し防止用フックの表記があります。';
+    else if(/飛び出し防止/.test(title)) second='飛び出し防止の表記があります。';
+    else if(/助手席/.test(title) && /後部座席/.test(title)) second='助手席・後部座席での使用表記があります。';
+    else if(/助手席/.test(title)) second='助手席での使用表記があります。';
+    else if(/後部座席/.test(title)) second='後部座席での使用表記があります。';
     else if(/撥水/.test(title)) second='撥水表記があります。';
     return [first,second].filter(Boolean);
   }
