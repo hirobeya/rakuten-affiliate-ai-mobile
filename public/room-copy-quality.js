@@ -1233,6 +1233,12 @@
     }
     const size=title.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)\s*サイズ(?:\s|$)/i);
     if(size) add(size[1].toUpperCase()+'サイズ');
+    const seats=title.match(/(?:^|[^\d])(\d{1,2})\s*人掛け/);
+    if(seats) add(seats[1]+'人掛け');
+    for(const label of ['幅','奥行','高さ']){
+      const m=title.match(new RegExp(label+'\\s*(\\d+(?:\\.\\d+)?)\\s*(cm|mm|m)?','i'));
+      if(m) add(label+m[1]+(m[2]||''));
+    }
     const pack=title.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組|点)\s*(セット|入り)(?!\s*(?:突破|達成))/);
     if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
     return facts.slice(0,4);
