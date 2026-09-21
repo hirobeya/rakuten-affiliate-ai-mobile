@@ -599,6 +599,27 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
     if(first.includes('…')) fail('natural-dog-'+(i+1),'opening must not use truncated long title: '+first);
     if(/お買い物マラソン|P\d+倍|楽天1位/.test(copy.split('\n').slice(0,2).join(' '))) fail('natural-dog-'+(i+1),'promo residue in opening: '+copy);
   }
+  {
+    const dog=batch.searches.find(x=>x.searchKeyword==='犬 ベッド');
+    const full=[];
+    for(let i=0;i<dog.items.length;i++){
+      const item={itemName:dog.items[i],itemPrice:1000};
+      const a=api.analyzeRoomProduct(item,'犬 ベッド');
+      if(a.outputMode==='full'){
+        const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:i});
+        full.push(copy.split('\n')[0]);
+      }
+    }
+    if(new Set(full).size<Math.min(6,full.length)) fail('natural-dog-variety','dog-bed openings are still too repetitive: '+JSON.stringify(full));
+    const low=dog.items.find(x=>/トゥルースリーパー/.test(x));
+    if(low){
+      const item={itemName:low,itemPrice:9800};
+      const a=api.analyzeRoomProduct(item,'犬 ベッド');
+      const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:8});
+      if(!a.facts.some(x=>/低反発/.test(x))) fail('natural-dog-low-rebound','低反発 title fact was not extracted');
+      if(!/低反発/.test(copy)) fail('natural-dog-low-rebound','低反発 fact missing from generated copy: '+copy);
+    }
+  }
   for(const id of ['S1','S5','S6','live-battery-rank5-anker-zolo']){
     const tc=fixture.cases.find(x=>x.id===id);
     const item={itemName:tc.itemName,itemPrice:tc.itemPrice||1000};
