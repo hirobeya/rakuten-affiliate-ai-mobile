@@ -3,6 +3,9 @@
   if(!root || !root.UrenaviPainCopy) return;
 
   const api=root.UrenaviPainCopy;
+  if(!root.UrenaviProductShadowV2 && typeof require==='function'){
+    try{ require('./product-shadow-v2.js'); }catch(_){}
+  }
   const fmt=n=>new Intl.NumberFormat('ja-JP').format(+n||0);
   const norm=s=>String(s||'').normalize('NFKC').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 
@@ -342,117 +345,16 @@
   }
 
   function extractFacts(item,kind){
-    // Features come from itemName only. No catchcopy/caption/genre keyword extraction.
-    const t=titleOnly(item);
-    const facts=[];
-    const add=x=>uniquePush(facts,x);
-    const byKind={
-      cleaning:[
-        [/取替式|取り替え式|取替え式/,'取替式'],
-        [/使い捨て/,'使い捨てタイプ'],
-        [/伸縮/,'伸縮タイプ'],
-        [/ロング/,'ロングタイプ'],
-        [/網戸|あみ戸|アミ戸/,'網戸掃除向け'],
-        [/手袋|グローブ|ミトン/,'手にはめて使うタイプ'],
-        [/マイクロファイバー/,'マイクロファイバー'],
-        [/吸水/,'吸水タイプ'],
-        [/速乾/,'速乾タイプ'],
-        [/モップ/,'モップタイプ'],
-        [/ブラシ/,'ブラシタイプ'],
-        [/クロス/,'クロスタイプ'],
-        [/充電式/,'充電式'],
-        [/Type-?C|USB\s*Type-?C|USB-?C/i,'USB-C対応表記あり'],
-        [/乾湿両用/,'乾湿両用表記あり'],
-        [/HEPA/,'HEPAフィルター表記あり']
-      ],
-      pet:[
-        [/カバーを外して\s*洗える|カバー.*(?:外して|取り外して).*洗える/,'カバーを外して洗える'],
-        [/丸洗い|洗える/,'洗える表記あり'],
-        [/低反発/,'低反発素材表記あり'],
-        [/高反発/,'高反発素材表記あり'],
-        [/滑り止め/,'滑り止め加工表記あり'],
-        [/日本製/,'日本製表記あり'],
-        [/両面/,'両面タイプ'],
-        [/グローブ|手袋/,'手にはめて使うタイプ'],
-        [/抜け毛|毛取り|毛とり/,'抜け毛・毛取り用途'],
-        [/猫犬兼用|犬猫兼用|猫.*犬|犬.*猫/,'犬・猫向け表記あり']
-      ],
-      storage:[
-        [/圧縮袋/,'圧縮袋タイプ'],
-        [/折りたたみ|折畳|折り畳み/,'折りたたみ対応'],
-        [/省スペース|スリム/,'省スペース設計']
-      ],
-      charging:[
-        [/急速充電/,'急速充電対応'],
-        [/Type-?C|USB-?C/i,'USB-C対応'],
-        [/ワイヤレス充電/,'ワイヤレス充電対応'],
-        [/リン酸鉄/,'リン酸鉄バッテリー表記あり'],
-        [/UPS機能/,'UPS機能表記あり'],
-        [/ソーラーパネル\s*セット/,'ソーラーパネルセット表記あり']
-      ],
-      drinkware:[
-        [/保温/,'保温表記あり'],
-        [/保冷/,'保冷表記あり'],
-        [/炭酸/,'炭酸対応表記あり']
-      ],
-      cooking:[
-        [/食洗機対応|食器洗い乾燥機対応/,'食洗機対応表記あり'],
-        [/電子レンジ対応|レンジ対応/,'電子レンジ対応表記あり'],
-        [/冷凍対応/,'冷凍対応表記あり']
-      ],
-      laundry:[
-        [/洗濯機(?:で)?洗える|洗濯機対応/,'洗濯機対応表記あり'],
-        [/ドラム式/,'ドラム式対応表記あり'],
-        [/乾燥機対応/,'乾燥機対応表記あり'],
-        [/メッシュ/,'メッシュ表記あり'],
-        [/特大サイズ/,'特大サイズ表記あり'],
-        [/速乾/,'速乾タイプ']
-      ]
-    };
-    const distinctTitleFacts=[
-      [/取替式|取り替え式|取替え式/,'取替式'],
-      [/両面/,'両面タイプ'],
-      [/折りたたみ|折畳/,'折りたたみ対応'],
-      [/伸縮/,'伸縮タイプ'],
-      [/防水/,'防水表記あり'],
-      [/撥水/,'撥水表記あり'],
-      [/コードレス/,'コードレスタイプ'],
-      [/コンパクト/,'コンパクト表記あり'],
-      [/薄型|スリム/,'薄型・スリム表記あり']
-    ];
-    for(const [re,label] of distinctTitleFacts) if(re.test(t)) add(label);
-    for(const [re,label] of (byKind[kind]||[])) if(re.test(t)) add(label);
-    if(kind==='pet'){
-      const size=t.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)サイズ(?:\s|$)/i);
-      if(size) add(size[1].toUpperCase()+'サイズ');
-    }
-    if(kind==='charging'){
-      const wh=t.match(/(?:^|\s)(\d{2,5})\s*Wh(?:\s|$)/i);
-      if(wh) add(wh[1]+'Wh');
-      const rated=t.match(/定格\s*(\d{2,5})\s*W/i);
-      if(rated) add('定格'+rated[1]+'W');
-    }
-    const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(セット|入り)(?!\s*(?:突破|達成))/);
-    if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
-    const usage=primaryUsageWord(item);
-    let filtered=facts.filter(x=>{
-      // "両面" can describe a bundled solar panel, not the portable power station itself.
-      if(kind==='charging' && x==='両面タイプ' && /(?:両面[^\n]{0,20}ソーラーパネル|ソーラーパネル[^\n]{0,20}両面)/.test(t)) return false;
-      if(usage==='網戸' && /網戸掃除向け/.test(x)) return false;
-      if(usage==='抜け毛' && /抜け毛・毛取り用途/.test(x)) return false;
-      if(usage==='手袋' && /手にはめて使うタイプ|クロスタイプ/.test(x)) return false;
-      if(usage==='クロス' && /クロスタイプ/.test(x)) return false;
-      if(usage==='ハンディクリーナー' && x==='ブラシタイプ' && /ブラシレス/.test(t)) return false;
-      if(kind==='cleaning' && x==='ブラシタイプ' && usage!=='ブラシ') return false;
-      if(kind==='cleaning' && x==='モップタイプ' && usage!=='モップ') return false;
-      if(usage==='ドライブベッド' && x==='伸縮タイプ' && /伸縮(?:リード|ベルト|ストラップ)/.test(t)) return false;
-      return true;
-    });
-    if(kind==='charging'){
-      const priority=x=>/^\d+Wh$/.test(x)?0:/^定格\d+W$/.test(x)?1:/リン酸鉄/.test(x)?2:/UPS/.test(x)?3:/ソーラーパネル/.test(x)?4:/急速充電/.test(x)?5:/USB-C/.test(x)?6:9;
-      filtered=filtered.map((x,i)=>({x,i,p:priority(x)})).sort((a,b)=>a.p-b.p||a.i-b.i).map(v=>v.x);
-    }
-    return filtered.slice(0,4);
+    const shadow=root.UrenaviProductShadowV2;
+    if(!shadow || typeof shadow.analyze!=='function') return [];
+    const result=shadow.analyze({itemName:titleOnly(item)},'');
+    if(!result?.validation?.allSpansGrounded) return [];
+    return (result.facts||[])
+      .filter(f=>['feature','spec','target'].includes(f.role))
+      .map(f=>String(f.text||'').trim())
+      .filter(Boolean)
+      .filter((x,i,a)=>a.indexOf(x)===i)
+      .slice(0,4);
   }
 
   function primaryUsageWord(item){
