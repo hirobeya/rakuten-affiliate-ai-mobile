@@ -330,6 +330,8 @@
         [/クロス/,'クロスタイプ']
       ],
       pet:[
+        [/カバーを外して\s*洗える|カバー.*(?:外して|取り外して).*洗える/,'カバーを外して洗える'],
+        [/丸洗い|洗える/,'洗える表記あり'],
         [/両面/,'両面タイプ'],
         [/グローブ|手袋/,'手にはめて使うタイプ'],
         [/抜け毛|毛取り|毛とり/,'抜け毛・毛取り用途'],
@@ -373,6 +375,10 @@
     ];
     for(const [re,label] of distinctTitleFacts) if(re.test(t)) add(label);
     for(const [re,label] of (byKind[kind]||[])) if(re.test(t)) add(label);
+    if(kind==='pet'){
+      const size=t.match(/(?:^|\s)(SS|S|M|L|LL|XL|XXL)サイズ(?:\s|$)/i);
+      if(size) add(size[1].toUpperCase()+'サイズ');
+    }
     const pack=t.match(/(?:^|[^\d,])(\d{1,3})\s*(枚|個|本|袋|組)\s*(セット|入り)(?!\s*(?:突破|達成))/);
     if(pack && +pack[1]>1) add(pack[1]+pack[2]+pack[3]);
     const usage=primaryUsageWord(item);
@@ -705,20 +711,49 @@
 
   function groundedAudience(a,item){
     const identity=naturalProductIdentity(item,a);
-    const fact=(a.facts||[])[0];
+    const facts=(a.facts||[]).filter(Boolean);
     if(!identity) return '';
-    if(/犬・猫向け/.test(fact||'')) return identity+'を犬や猫用として探している人';
-    if(/防水|撥水/.test(fact||'')) return '防水・撥水表記のある'+identity+'を探している人';
-    if(/折りたたみ/.test(fact||'')) return '折りたためる'+identity+'を探している人';
-    if(/コードレス/.test(fact||'')) return 'コードレスの'+identity+'を探している人';
+    if(facts.some(x=>/カバーを外して洗える|洗える/.test(x))) return 'お手入れしやすい'+identity+'を探している人';
+    if(facts.some(x=>/防水|撥水/.test(x))) return '防水・撥水表記のある'+identity+'を探している人';
+    if(facts.some(x=>/犬・猫向け/.test(x))) return '犬や猫用の'+identity+'を探している人';
+    if(facts.some(x=>/折りたたみ/.test(x))) return '折りたためる'+identity+'を探している人';
+    if(facts.some(x=>/コードレス/.test(x))) return 'コードレスの'+identity+'を探している人';
+    const fact=facts[0];
     if(fact) return fact+'の'+identity+'を探している人';
     return identity+'を探している人';
+  }
+
+  function petNaturalLines(identity,facts,variant=0){
+    const has=re=>facts.some(x=>re.test(x));
+    const size=(facts.find(x=>/^(?:SS|S|M|L|LL|XL|XXL)サイズ$/.test(x))||'');
+    const lines=[];
+    if(has(/カバーを外して洗える/)){
+      lines.push('カバーを外して洗えるので、汚れが気になったときにお手入れしやすい'+identity+'です。');
+    }else if(has(/洗える/)){
+      lines.push('洗える表記があり、日々のお手入れを考えて選びたい人にも確認しやすい'+identity+'です。');
+    }
+    if(has(/撥水/)) lines.push('撥水表記があるので、水濡れが気になる場面でも選びやすい仕様です。');
+    else if(has(/防水/)) lines.push('防水表記があり、水濡れ対策を重視したいときに確認しやすい仕様です。');
+    if(size) lines.push(size+'表記があるので、サイズを確認しながら選べます。');
+    if(has(/犬・猫向け/)) lines.push('犬・猫向けの表記があります。');
+    if(!lines.length){
+      const fallbacks=[
+        '犬用の'+identity+'を探している人が比較しやすい商品です。',
+        identity+'を犬用で探しているときの比較候補です。',
+        '犬用の寝床を探しているときに確認したい'+identity+'です。',
+        '犬用の'+identity+'を見比べたいときに確認しやすい商品です。'
+      ];
+      lines.push(fallbacks[((Number(variant)||0)%fallbacks.length+fallbacks.length)%fallbacks.length]);
+    }
+    return lines.slice(0,2);
   }
 
   function naturalFactLine(fact,identity,variant=0){
     const f=String(fact||'').trim();
     let core='';
     if(!f) core=identity;
+    else if(/カバーを外して洗える/.test(f)) core='カバーを外して洗える仕様';
+    else if(/洗える/.test(f)) core='洗える表記あり';
     else if(/折りたたみ/.test(f)) core='折りたたみ対応';
     else if(/省スペース/.test(f)) core='省スペース表記あり';
     else if(/スリム|薄型/.test(f)) core='スリム・薄型表記あり';
@@ -732,7 +767,6 @@
     else if(/取替式/.test(f)) core='取替式';
     else if(/両面/.test(f)) core='両面タイプ';
     else core=f;
-
     const patterns=f ? [
       core+'です。', core+'。', '確認できる特徴は、'+core+'です。', 'ポイントは、'+core+'です。',
       '特徴のひとつが、'+core+'です。', core+'という仕様です。', core+'が確認できます。',
@@ -752,7 +786,9 @@
     const identity=naturalProductIdentity(item,a);
     if(!identity) return '';
     const facts=(a.facts||[]).filter(Boolean);
-
+    if(a.category==='pet' && a.usage==='bed'){
+      return petNaturalLines(identity,facts,variant).join('\n');
+    }
     const openings=[
       identity+'を探しているなら、候補に入れたい商品です。',
       identity+'を比べるときに、チェックしておきたい商品です。',

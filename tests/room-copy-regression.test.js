@@ -589,7 +589,7 @@ if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batc
 
 {
   const batch=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','batch-validation-20260921.json'),'utf8'));
-  const forbidden=/商品名に書かれた|商品名から確認できる|商品名にある特徴|という表記を重視|用途と特徴を確認|商品名の特徴を手がかり|ペットが休む場所を整える助け|商品名と用途を確認/;
+  const forbidden=/商品名に書かれた|商品名から確認できる|商品名にある特徴|という表記を重視|用途と特徴を確認|商品名の特徴を手がかり|ペットが休む場所を整える助け|商品名と用途を確認|として掲載されている商品|候補として見ておきたい商品|比較候補に入れやすい商品|犬・猫向け表記ありが/;
   const dog=batch.searches.find(x=>x.searchKeyword==='犬 ベッド');
   for(let i=0;i<dog.items.length;i++){
     const item={itemName:dog.items[i],itemPrice:1000};
