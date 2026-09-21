@@ -110,6 +110,28 @@ function analyze(id,query,itemName){
   }
 }
 
+
+{
+  const finalTuning=[
+    ['tune-tshirt','Tシャツ','Tシャツ メンズ 綿100% 半袖','Tシャツ'],
+    ['tune-seat-cover','シートカバー','車 シートカバー 防水 後部座席 ペット','シートカバー'],
+    ['tune-laptop-stand','ノートPCスタンド','ノートPCスタンド 折りたたみ アルミ 高さ調整','ノートPCスタンド'],
+    ['tune-rug','ラグ','ラグ 185×185cm 洗える 滑り止め','ラグ'],
+    ['tune-storage-basket','収納バスケット','収納バスケット 折りたたみ 布製 Lサイズ','収納バスケット'],
+    ['tune-eco-bag','エコバッグ','エコバッグ 折りたたみ 撥水 コンパクト','エコバッグ'],
+    ['tune-floor-mat','フロアマット','車用 フロアマット 防水 滑り止め','フロアマット'],
+    ['tune-phone-stand','スマホスタンド','スマホスタンド 折りたたみ 卓上 角度調整','スマホスタンド'],
+    ['tune-tissue-case','ティッシュケース','ティッシュケース 壁掛け 防水','ティッシュケース'],
+    ['tune-laundry-rack','ランドリーラック','ランドリーラック 洗濯機上 収納 棚','ランドリーラック']
+  ];
+  for(const [id,query,itemName,primary] of finalTuning){
+    const a=analyze(id,query,itemName);
+    ok(a.primaryProduct?.text===primary,id,'primary mismatch: '+JSON.stringify(a.primaryProduct));
+    ok(a.query.status==='aligned',id,'query must align');
+    ok(a.recommendation.shadowDecision==='fact_only_shadow',id,'must stay fact-only shadow');
+  }
+}
+
 if(failures){
   console.error('Shadow V2 failures:',failures);
   process.exit(1);
