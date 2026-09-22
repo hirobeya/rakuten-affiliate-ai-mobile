@@ -2654,6 +2654,11 @@ function aiSafeFallbackPost(item){
   return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
 }
 
+function aiCheckingPost(item){
+  const title=lexicalProductLabel(item);
+  return [title,'AI確認中です。確認が完了するまで商品名から確認できる情報だけを表示しています。','','※アフィリエイト広告を利用しています'].join('\n');
+}
+
 function ruleSecondOpinion(item,validation,keyword=''){
   const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
     ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
@@ -2729,6 +2734,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
+    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiCheckingPost(item);
     if(gate.useLegacy){
       const options={variant:index};
       if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}

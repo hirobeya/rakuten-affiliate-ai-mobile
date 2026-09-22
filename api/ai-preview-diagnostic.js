@@ -35,12 +35,13 @@ async function analyze(item){
       itemCode:String(item?.itemCode||''),itemName,
       model:result.ai?.model||model,elapsedMs:Date.now()-started,
       stages:result.stages,rateLimit:result.ai?.rateLimit||{},attempts:result.ai?.attempts||1,
+      usage:result.ai?.usage||null,outputTokens:Number(result.ai?.usage?.output_tokens||result.ai?.usage?.output_tokens_details?.total_tokens||0)||null,
       rawAiJson:result.ai?.raw||null,validation:result.validation
     };
   }catch(error){
     return {
       itemCode:String(item?.itemCode||''),itemName,elapsedMs:Date.now()-started,
-      error:{message:String(error?.message||'ai_failed'),status:error?.status||null,detail:error?.safeError||null},
+      error:{message:String(error?.message||'ai_failed'),status:error?.status||null,detail:error?.safeError||null,final429:error?.status===429},
       rateLimit:error?.rateLimit||{}
     };
   }
