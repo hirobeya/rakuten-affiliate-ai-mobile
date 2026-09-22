@@ -167,6 +167,42 @@ function run(name,fn){
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
+  await run('baseball glove high-confidence grounded productType produces fact-only post',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
+      features:[{text:'右投げ用',source:'itemName',evidence:'右投げ用'}],
+      unknowns:[],imageProductTypeHint:'野球グローブ',confidence:'high'
+    },{itemName:'野球グローブ 右投げ用',itemCaption:''},{imageAvailable:true});
+    assert.equal(v.mode,'simple');
+    const text=phase1Post({title:v.productType.value,features:v.features,price:5980});
+    assert.match(text,/^野球グローブ/m);
+    assert.match(text,/右投げ用/);
+    assert.doesNotMatch(text,/掃除用手袋/);
+  });
+
+  await run('motorcycle glove high-confidence grounded productType produces fact-only post',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[{text:'スマホ対応',source:'itemName',evidence:'スマホ対応'}],
+      unknowns:[],imageProductTypeHint:'バイクグローブ',confidence:'high'
+    },{itemName:'バイクグローブ 本革 スマホ対応',itemCaption:''},{imageAvailable:true});
+    assert.equal(v.mode,'simple');
+    const text=phase1Post({title:v.productType.value,features:v.features,price:3100});
+    assert.match(text,/^バイクグローブ/m);
+    assert.match(text,/スマホ対応/);
+    assert.doesNotMatch(text,/掃除用手袋/);
+  });
+
+  await run('motorcycle glove evidence mismatch cannot reach full output',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
+    },{itemName:'野球グローブ 右投げ用',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.mode,'fallback');
+    assert.equal(v.productType.valid,false);
+    assert.ok(v.reasons.includes('product_type_validation_failed'));
+  });
+
   await run('low confidence always falls back',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},

@@ -479,7 +479,7 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
 }
 if(!appHtml.includes('aiHttpStatus:aiRoomResults.get(index)?.status??null')) fail('preview-export','aiHttpStatus missing from validation JSON');
 if(!appHtml.includes("aiMessage:aiRoomResults.get(index)?.message||null")) fail('preview-export','aiMessage missing from validation JSON');
-if(!appHtml.includes('PreviewのOPENAI_API_KEYが設定されていません')) fail('preview-export','missing Preview key UI message');
+if(!appHtml.includes('PreviewのGROQ_API_KEYが設定されていません')) fail('preview-export','missing Preview Groq key UI message');
 
 
 // Misleading catchcopy/itemCaption must never change title-derived classification or promote fallback to full.
