@@ -240,6 +240,11 @@ async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imag
         const safeError=safeGroqError(r.status,data);
         console.warn('groq response error',JSON.stringify({status:r.status,attempt,rateLimit,error:safeError}));
         lastFailure={status:r.status,rateLimit,safeError};
+        const retryableJson400=r.status===400 && safeError?.code==='json_validate_failed' && attempt===0;
+        if(retryableJson400){
+          await sleep(250);
+          continue;
+        }
         if(r.status!==429 || attempt>=GROQ_MAX_RETRIES){
           const err=new Error(`Groq request failed (${r.status})`);
           err.status=r.status; err.rateLimit=rateLimit; err.safeError=safeError;
@@ -269,7 +274,7 @@ function textStageAcceptable(validation){
   );
 }
 
-async function runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader}){
+async function runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader,allowImage=true}){
   const textStarted=Date.now();
   const textAi=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:null});
   const textValidation=validateAiExtraction(textAi.raw,{itemName,itemCaption},{imageAvailable:false});
@@ -278,6 +283,13 @@ async function runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPri
     return {
       ai:textAi,validation:textValidation,image:{available:false,dataUrl:null},
       stages:{textOnly:true,imageAttempted:false,textElapsedMs,imageElapsedMs:0}
+    };
+  }
+
+  if(!allowImage){
+    return {
+      ai:textAi,validation:textValidation,image:{available:false,dataUrl:null},
+      stages:{textOnly:true,imageAttempted:false,textElapsedMs,imageElapsedMs:0,imageSkippedForFreeTier:true}
     };
   }
 
@@ -365,7 +377,7 @@ function createHandler(deps={}){
 
       const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       const started=Date.now();
-      const twoStage=await runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader});
+      const twoStage=await runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader,allowImage:false});
       const ai=twoStage.ai;
       const validation=twoStage.validation;
       const image=twoStage.image;

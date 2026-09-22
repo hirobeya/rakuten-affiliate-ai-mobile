@@ -95,7 +95,8 @@ async function analyze(item,maxOutputTokens=320){
       callAI:args=>defaultCallGroq({...args,maxOutputTokens}),
       apiKey:String(process.env.GROQ_API_KEY||''),
       model,itemName,itemCaption,itemPrice:Number(item?.itemPrice)||0,imageUrl,
-      imageLoader:loadImageDataUrl
+      imageLoader:loadImageDataUrl,
+      allowImage:false
     });
     return {
       itemCode:String(item?.itemCode||''),itemName,maxOutputTokens,

@@ -337,6 +337,27 @@ function run(name,fn){
     assert.equal(parseRetryAfter('2'),2000);
   });
 
+  await run('Preview free tier keeps Groq text-only and does not escalate to image',async()=>{
+    let calls=0,images=0;
+    const out=await runTwoStageGroq({
+      callAI:async()=>{calls++;return {raw:{productType:{value:'グローブ',source:'itemName',evidence:'グローブ'},features:[],confidence:'medium'}};},
+      apiKey:'x',model:'qwen/qwen3.8-27b',itemName:'バイクグローブ',itemCaption:'',itemPrice:1000,imageUrl:'https://example.com/x.jpg',
+      imageLoader:async()=>{images++;return {available:true,dataUrl:'data:image/jpeg;base64,AA=='};},
+      allowImage:false
+    });
+    assert.equal(calls,1);
+    assert.equal(images,0);
+    assert.equal(out.stages.imageAttempted,false);
+    assert.equal(out.stages.imageSkippedForFreeTier,true);
+  });
+
+  await run('Preview Groq retries json_validate_failed only once',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
+    assert.match(src,/retryableJson400/);
+    assert.match(src,/safeError\?\.code==='json_validate_failed'/);
+    assert.match(src,/attempt===0/);
+  });
+
   await run('two-stage Groq skips image when text validation is high and grounded',async()=>{
     let calls=0,images=0;
     const out=await runTwoStageGroq({
