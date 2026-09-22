@@ -587,6 +587,8 @@
     const a=analysis||analyze(item);
     const usageName=safeUsageName(a.category,a.usage);
     if(a.claimRisk){
+      const hasConflict=Array.isArray(a.conflicts)&&a.conflicts.length>0;
+      if(hasConflict) return fallbackProductName(item,a);
       const claimSafe=usageName||deriveSafeUnknownName(item?.itemName||'');
       return claimSafe||stripClaimText(stripPromotionalText(item?.itemName||'')).slice(0,48).trim();
     }
@@ -986,7 +988,8 @@
   function shortFallback(item,withDisclosure=false,analysis=null){
     const a=analysis||analyze(item);
     const usageName=safeUsageName(a.category,a.usage);
-    const title=(a.claimRisk&&usageName)?buildSafeDisplayName(item,a):fallbackProductName(item,a);
+    const hasConflict=Array.isArray(a.conflicts)&&a.conflicts.length>0;
+    const title=(a.claimRisk&&usageName&&!hasConflict)?buildSafeDisplayName(item,a):fallbackProductName(item,a);
     const facts=extractFallbackTitleFacts(item).filter(x=>!a.claimRiskTerms?.some(t=>x.includes(t)));
     const lines=[title];
     if(facts.length)lines.push(facts.join('、'));

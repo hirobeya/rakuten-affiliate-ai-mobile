@@ -360,6 +360,17 @@ if(!appHtml.includes('promoRiskTerms:Array.isArray(a?.promoRiskTerms)?a.promoRis
   const risk=api.detectLegalRisk(raw);
   if(!risk.promoRisk) fail('promo-repeaters','リピーター続出 must set promoRisk');
 }
+{
+  const item={
+    itemName:'【楽天1位】バイクグローブ バイク レザーグローブ メッシュ 春夏用 メンズ レディース おすすめ 防寒 冬用 最強 本革 レザー ツーリング プレゼント 薄手 コスパ 防水 メッシュ オールシーズン 雨 大きいサイズ 手袋 指 スマホ操作',
+    itemPrice:2880
+  };
+  const a=api.analyzeRoomProduct(item,'バイクグローブ');
+  const copy=api.makeRoomCopy(item,'バイクグローブ');
+  if(!(a.conflicts||[]).some(x=>x.usage==='motorcycle_glove')) fail('bike-claim-conflict','motorcycle conflict missing');
+  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('bike-claim-conflict','cleaning label leaked under claimRisk+conflict: '+copy);
+  if(!/バイク|レザーグローブ/.test(copy)) fail('bike-claim-conflict','grounded bike identity missing: '+copy);
+}
 if(!appHtml.includes('claimRiskTerms:Array.isArray(a?.claimRiskTerms)?a.claimRiskTerms:[]')) fail('preview-export','claimRiskTerms missing from validation JSON');
 
 
