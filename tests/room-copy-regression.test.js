@@ -493,6 +493,30 @@ if(!appHtml.includes('UrenaviPainCopy.fallbackProductName')) fail('ai-gate-fallb
 }
 
 
+// Generic glove must never become a cleaning glove when the title has a strong non-cleaning context.
+{
+  const item={itemName:'バイク グローブ 秋 夏 革 本革 バイク用 グローブ ツーリング スマホ対応',itemPrice:2980};
+  const a=api.analyzeRoomProduct(item,'バイクグローブ');
+  const copy=api.makeRoomCopy(item,'バイクグローブ',{variant:0});
+  if(a.outputMode!=='fallback') fail('bike-glove-context','bike glove must fallback, got '+a.outputMode);
+  if(!(a.conflicts||[]).some(x=>x.usage==='motorcycle_glove')) fail('bike-glove-context','motorcycle context conflict missing: '+JSON.stringify(a.conflicts));
+  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('bike-glove-context','cleaning glove wording leaked: '+copy);
+}
+{
+  const item={itemName:'野球 グローブ 軟式 大人 右投げ オールラウンド用 キャッチボール',itemPrice:5980};
+  const a=api.analyzeRoomProduct(item,'野球グローブ');
+  const copy=api.makeRoomCopy(item,'野球グローブ',{variant:0});
+  if(a.outputMode!=='fallback') fail('baseball-glove-context','baseball glove must fallback, got '+a.outputMode);
+  if(!(a.conflicts||[]).some(x=>x.usage==='baseball_glove')) fail('baseball-glove-context','baseball context conflict missing: '+JSON.stringify(a.conflicts));
+  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('baseball-glove-context','cleaning glove wording leaked: '+copy);
+}
+{
+  const item={itemName:'お掃除手袋 マイクロファイバー 掃除 手袋 2枚セット',itemPrice:980};
+  const a=api.analyzeRoomProduct(item,'掃除手袋');
+  if(a.category!=='cleaning'||a.usage!=='glove'||a.outputMode!=='full') fail('explicit-cleaning-glove','explicit cleaning glove must stay cleaning.glove full: '+JSON.stringify({category:a.category,usage:a.usage,mode:a.outputMode,conflicts:a.conflicts}));
+  if((a.conflicts||[]).some(x=>x.category==='non_cleaning')) fail('explicit-cleaning-glove','explicit cleaning glove got false non-cleaning conflict');
+}
+
 // Misleading catchcopy/itemCaption must never change title-derived classification or promote fallback to full.
 for(const tc of fixture.cases){
   const base={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};

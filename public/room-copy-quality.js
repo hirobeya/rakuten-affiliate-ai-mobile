@@ -274,9 +274,31 @@
     return false;
   }
 
+  const GLOVE_NON_CLEANING_CONTEXT_RULES=[
+    {usage:'motorcycle_glove',re:/(?:バイク|オートバイ|ライディング|ツーリング|モトクロス|レーシング)/},
+    {usage:'baseball_glove',re:/(?:野球|ベースボール|硬式|軟式|守備|投手|捕手|キャッチャー|内野|外野)/},
+    {usage:'cycling_glove',re:/(?:自転車|サイクル|サイクリング)/},
+    {usage:'winter_sport_glove',re:/(?:スキー|スノーボード|スノボ)/},
+    {usage:'work_or_protective_glove',re:/(?:作業用|防刃|耐熱|溶接|園芸|ニトリル|医療用)/}
+  ];
+
+  function gloveNonCleaningConflict(title){
+    if(/(?:お掃除\s*手袋|掃除\s*手袋|お掃除手袋|掃除手袋)/.test(title)) return null;
+    for(const rule of GLOVE_NON_CLEANING_CONTEXT_RULES){
+      const m=title.match(rule.re);
+      if(m) return {category:'non_cleaning',usage:rule.usage,phrase:m[0]};
+    }
+    return null;
+  }
+
   function detectConflictingSignals(itemName,chosenCategory,chosenUsage){
     const title=norm(itemName);
     const conflicts=[];
+
+    if(chosenCategory==='cleaning' && chosenUsage==='glove'){
+      const gloveConflict=gloveNonCleaningConflict(title);
+      if(gloveConflict) conflicts.push(gloveConflict);
+    }
 
     if(chosenCategory==='storage' && ['storage_box','storage_case'].includes(chosenUsage)){
       const furniture=title.match(/ベンチ|スツール|椅子|オットマン|座れる/);
@@ -1228,6 +1250,7 @@
   api.collectClassificationCandidates=collectClassificationCandidates;
   api.resolveCategoryAndUsage=resolveCategoryAndUsage;
   api.detectConflictingSignals=detectConflictingSignals;
+  api.gloveNonCleaningConflict=gloveNonCleaningConflict;
   api.groundedQueryIdentity=groundedQueryIdentity;
   api.extractGenericGroundedFacts=extractGenericGroundedFacts;
   api.genericIntent=genericIntent;

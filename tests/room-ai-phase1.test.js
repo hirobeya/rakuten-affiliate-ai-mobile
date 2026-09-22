@@ -272,13 +272,15 @@ function run(name,fn){
       productType:{value:'モップハンガー',source:'itemName',evidence:'モップハンガー'},
       features:[
         {text:'6本掛け',source:'itemName',evidence:'6本掛け'},
-        {text:'軽量仕様',source:'itemCaption',evidence:'軽量'},
+        {text:'軽量仕様',source:'itemCaption',evidence:'薄型'},
         {text:'キャスター付',source:'itemCaption',evidence:'キャスター付'}
       ],
       confidence:'high'
     },{itemName:'モップハンガー 6本掛け',itemCaption:'軽量 キャスター付'},{imageAvailable:false});
     assert.equal(v.mode,'simple_partial');
     assert.equal(v.featureValidation.invalidCount,1);
+    assert.equal(v.featureValidation.criticalInvalidNumeric,false);
+    assert.equal(v.featureValidation.criticalInvalidClaim,false);
     assert.ok(v.reasons.includes('invalid_features_dropped'));
   });
 
@@ -286,12 +288,16 @@ function run(name,fn){
     const v=validateAiExtraction({
       productType:{value:'モップハンガー',source:'itemName',evidence:'モップハンガー'},
       features:[
-        {text:'幅536mm',source:'itemCaption',evidence:'536'},
-        {text:'高さ1375mm',source:'itemCaption',evidence:'1375'}
+        {text:'コンパクト',source:'itemCaption',evidence:'コンパクト'},
+        {text:'軽量仕様',source:'itemCaption',evidence:'薄型'},
+        {text:'省スペース',source:'itemCaption',evidence:'折りたたみ'}
       ],
-      unknowns:[],imageProductTypeHint:null,confidence:'high'
-    },{itemName:'モップハンガー',itemCaption:'536 1375'},{imageAvailable:false});
+      confidence:'high'
+    },{itemName:'モップハンガー',itemCaption:'コンパクト 軽量 省スペース'},{imageAvailable:false});
     assert.equal(v.mode,'fallback');
+    assert.equal(v.featureValidation.invalidCount,2);
+    assert.equal(v.featureValidation.criticalInvalidNumeric,false);
+    assert.equal(v.featureValidation.criticalInvalidClaim,false);
     assert.ok(v.reasons.includes('feature_validation_failed'));
   });
 
