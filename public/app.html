@@ -2222,9 +2222,14 @@ function buildDebugValidationRowsFor(items,keyword){
       ?UrenaviPainCopy.analyzeRoomProduct(item,String(keyword||'').trim())
       :groundedAnalysis(item);
     const options={variant:index};
-    const generatedCopy=UrenaviPainCopy.makeRoomCopy
-      ?UrenaviPainCopy.makeRoomCopy(item,String(keyword||'').trim(),options)
-      :'';
+    const aiResult=aiRoomResults.get(index);
+    const generatedCopy=(aiResult?.state==='done'&&aiResult?.data)
+      ?aiPhase1Post(item,aiResult.data)
+      :(aiResult?.state==='loading'||aiResult?.state==='error')
+        ?aiSafeFallbackPost(item)
+        :(UrenaviPainCopy.makeRoomCopy
+          ?UrenaviPainCopy.makeRoomCopy(item,String(keyword||'').trim(),options)
+          :'');
     const shadowV2=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
       ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
       :null;
@@ -2527,19 +2532,42 @@ async function requestAiRoom(item,index,generation){
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
-      const message=r.status===503&&String(d.message||'').includes('OPENAI_API_KEY')?'PreviewのOPENAI_API_KEYが設定されていません':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
+      const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'PreviewのGROQ_API_KEYが設定されていません':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
     }else aiRoomResults.set(index,{state:'done',data:d});
+    postCache.delete('room:'+index);
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
-  }finally{clearTimeout(timer);if(generation===aiRunGeneration) updateAiPanel(index);}
+  }finally{
+    clearTimeout(timer);
+    if(generation===aiRunGeneration){
+      updateAiPanel(index);
+      const panel=document.querySelector('[data-ai-index="'+index+'"]');
+      const article=panel?.closest('.item');
+      if(article){
+        const active=article.querySelector('.tab.on');
+        const platform=active?.dataset?.p||'room';
+        if(platform==='room'){
+          const copy=article.querySelector('.copy');
+          if(copy) copy.textContent=postDisplay(lastSearchItems[index],'room');
+          const button=article.querySelector('.cb');
+          if(button){
+            const ready=postReady(lastSearchItems[index],'room');
+            button.disabled=!ready;
+            button.textContent=ready?'投稿文をコピー':'コピー不可';
+          }
+        }
+      }
+    }
+  }
 }
 
 async function runAiPreview(items){
   if(!debugExportAllowed) return;
-  const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();
+  const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
   const queue=(Array.isArray(items)?items:[]).map((item,index)=>({item,index}));
+  for(const job of queue) aiRoomResults.set(job.index,{state:'loading'});
   const worker=async()=>{while(queue.length&&generation===aiRunGeneration){const job=queue.shift();await requestAiRoom(job.item,job.index,generation);}};
   await Promise.all(Array.from({length:Math.min(3,queue.length)},()=>worker()));
 }
@@ -2586,10 +2614,37 @@ function pts(i){
   return out.slice(0,2);
 }
 
+function aiSafeFallbackPost(item){
+  const title=aiSafeTitle(item);
+  const price=Number(item?.itemPrice);
+  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
+  return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
+}
+
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
   const key=p+':'+variant;
+
+  if(debugExportAllowed && p==='room'){
+    const ai=aiRoomResults.get(variant);
+    if(ai?.state==='done' && ai?.data){
+      const value=aiPhase1Post(i,ai.data);
+      postCache.set(key,value);
+      return value;
+    }
+    if(ai?.state==='loading' || ai?.state==='not_run' || !ai){
+      const value=aiSafeFallbackPost(i);
+      postCache.set(key,value);
+      return value;
+    }
+    if(ai?.state==='error'){
+      const value=aiSafeFallbackPost(i);
+      postCache.set(key,value);
+      return value;
+    }
+  }
+
   if(postCache.has(key)) return postCache.get(key);
   const options={variant};
   if(p==='room'){
