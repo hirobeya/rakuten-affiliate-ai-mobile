@@ -2,9 +2,9 @@
 
 const assert=require('node:assert/strict');
 const {
-  evidenceExists,numbersSupported,validateAiExtraction,phase1Post
+  evidenceExists,numbersSupported,validateAiExtraction,phase1Post,imageTypeCompatible
 }=require('../lib/room-ai');
-const {createHandler,defaultCallGroq,makeInputHash,CACHE_TTL_DAYS}=require('../api/room-ai');
+const {createHandler,defaultCallGroq,makeInputHash,normalizeCacheCaption,CACHE_TTL_DAYS}=require('../api/room-ai');
 
 function makeRes(){
   return {
@@ -203,6 +203,63 @@ function run(name,fn){
     assert.ok(v.reasons.includes('product_type_validation_failed'));
   });
 
+  await run('medium confidence is fixed fallback',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],unknowns:[],imageProductTypeHint:'レザーグローブ',confidence:'medium'
+    },{itemName:'バイクグローブ レザー',itemCaption:''},{imageAvailable:true});
+    assert.equal(v.mode,'fallback');
+    assert.equal(v.mediumHandling,'fallback_fixed');
+    assert.ok(v.reasons.includes('confidence_medium'));
+  });
+
+  await run('image type allows a shared noun core but rejects unrelated type',()=>{
+    assert.equal(imageTypeCompatible('バイクグローブ','レザーグローブ'),true);
+    assert.equal(imageTypeCompatible('野球用手袋','守備用手袋'),true);
+    assert.equal(imageTypeCompatible('バイクグローブ','収納ボックス'),false);
+  });
+
+  await run('productType cannot expand beyond evidence',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'高級バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
+    },{itemName:'バイクグローブ 本革',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.meaningSupported,false);
+    assert.equal(v.mode,'fallback');
+  });
+
+  await run('cache caption normalization keeps equivalent whitespace on one key',()=>{
+    const a=makeInputHash({itemCode:'x',itemName:'商品',imageUrl:'i',itemCaption:'説明  文\nUSB-C'});
+    const b=makeInputHash({itemCode:'x',itemName:'商品',imageUrl:'i',itemCaption:'説明\n\n文   USB-C'});
+    assert.equal(normalizeCacheCaption('説明  文\nUSB-C'),'説明 文 USB-C');
+    assert.equal(a,b);
+  });
+
+  await run('missing cache table behaves as cache unavailable and still calls Groq',async()=>{
+    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
+    process.env.VERCEL_ENV='preview'; process.env.GROQ_API_KEY='test-key';
+    let aiCalls=0;
+    const handler=createHandler({
+      authorize:async()=>({ok:true,plan:'owner'}),
+      loadCache:async()=>{throw new Error('Database request failed (404)');},
+      saveCache:async()=>{throw new Error('Database request failed (404)');},
+      consumeQuota:async()=>true,
+      loadImageDataUrl:async()=>({available:false,dataUrl:null}),
+      callGroq:async()=>{aiCalls++;return {
+        model:'qwen/qwen3.8-27b',usage:null,
+        raw:{productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'}
+      };}
+    });
+    const res=makeRes();
+    await handler({method:'POST',headers:{},body:{itemCode:'g1',itemName:'バイクグローブ',itemCaption:'本革',imageUrl:''}},res);
+    assert.equal(res.statusCode,200);
+    assert.equal(aiCalls,1);
+    assert.equal(res.body.cache.status,'unavailable');
+    assert.equal(res.body.validation.mode,'simple');
+    if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+  });
+
   await run('low confidence always falls back',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
@@ -222,9 +279,9 @@ function run(name,fn){
   });
 
   await run('cache hash is stable and includes itemCode name and image',()=>{
-    const a=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg'});
-    const b=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg'});
-    const c=makeInputHash({itemCode:'x',itemName:'バイクグローブ',imageUrl:'https://example.com/a.jpg'});
+    const a=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg',itemCaption:'右投げ'});
+    const b=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg',itemCaption:'右投げ'});
+    const c=makeInputHash({itemCode:'x',itemName:'バイクグローブ',imageUrl:'https://example.com/a.jpg',itemCaption:'右投げ'});
     assert.equal(a,b);
     assert.notEqual(a,c);
     assert.equal(CACHE_TTL_DAYS,90);
@@ -267,6 +324,10 @@ function run(name,fn){
     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
     assert.match(html,/return UrenaviPainCopy\.makeRoomCopy/);
     assert.match(html,/rule_second_opinion_conflict/);
+    assert.match(html,/mediumHandling:'fallback_fixed'/);
+    assert.match(html,/cacheKeyComponents/);
+    assert.match(html,/resolvedPost:resolvedPostMeta/);
+    assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
   });
 
   await run('daily limit blocks AI call',async()=>{

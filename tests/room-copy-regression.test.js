@@ -480,6 +480,17 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
 if(!appHtml.includes('aiHttpStatus:aiRoomResults.get(index)?.status??null')) fail('preview-export','aiHttpStatus missing from validation JSON');
 if(!appHtml.includes("aiMessage:aiRoomResults.get(index)?.message||null")) fail('preview-export','aiMessage missing from validation JSON');
 if(!appHtml.includes('PreviewのGROQ_API_KEYが設定されていません')) fail('preview-export','missing Preview Groq key UI message');
+if(!appHtml.includes('UrenaviPainCopy.fallbackProductName')) fail('ai-gate-fallback','AI fallback must reuse fallbackProductName/tidyDisplayTitle pipeline');
+{
+  const bos={itemName:'【20箱セット】 クリロン化成 うんちが臭わない袋 BOS ネコ用 箱型 SSサイズ 200枚入 ボス うんち袋'};
+  const name=api.fallbackProductName(bos,api.analyzeRoomProduct(bos,'うんち袋'));
+  if(!/BOS/.test(name)||!/うんち袋/.test(name)||/うんちが\s+袋/.test(name)) fail('ai-gate-fallback-bos','fallbackProductName broke BOS title: '+name);
+}
+{
+  const bench={itemName:'【P10倍 9/24 9:59迄】 収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 収納ボックス'};
+  const name=api.fallbackProductName(bench,api.analyzeRoomProduct(bench,'収納ベンチ'));
+  if(!/収納/.test(name)||/P10倍|9\/24|9:59/.test(name)) fail('ai-gate-fallback-bench','fallbackProductName promo cleanup failed: '+name);
+}
 
 
 // Misleading catchcopy/itemCaption must never change title-derived classification or promote fallback to full.

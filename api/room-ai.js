@@ -58,9 +58,18 @@ function json(res,status,body){
   return res.status(status).json(body);
 }
 
-function makeInputHash({itemCode='',itemName='',imageUrl=''}) {
+function normalizeCacheCaption(value=''){
+  return String(value||'').normalize('NFKC').replace(/\r\n?/g,'\n').replace(/\s+/g,' ').trim();
+}
+
+function makeInputHash({itemCode='',itemName='',imageUrl='',itemCaption=''}) {
   return crypto.createHash('sha256')
-    .update([String(itemCode||''),String(itemName||''),String(imageUrl||'')].join('\n'))
+    .update([
+      String(itemCode||'').trim(),
+      String(itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim(),
+      String(imageUrl||'').trim(),
+      normalizeCacheCaption(itemCaption)
+    ].join('\n'))
     .digest('hex');
 }
 
@@ -169,12 +178,15 @@ function createHandler(deps={}){
       const body=req.body&&typeof req.body==='object'?req.body:{};
       const itemCode=String(body.itemCode||'').trim().slice(0,300);
       const itemName=String(body.itemName||'').trim().slice(0,1000);
-      const itemCaption=preprocessCaption(String(body.itemCaption||''));
+      const itemCaptionRaw=String(body.itemCaption||'');
+      const itemCaption=preprocessCaption(itemCaptionRaw);
       const itemPrice=Number(body.itemPrice)||0;
       const imageUrl=String(body.imageUrl||'').trim();
       if(!itemName) return json(res,400,{message:'itemName is required'});
 
-      const inputHash=makeInputHash({itemCode,itemName,imageUrl});
+      const itemCaptionNormalized=normalizeCacheCaption(itemCaptionRaw);
+      const cacheKeyComponents={itemCode,itemName,imageUrl,itemCaptionNormalized};
+      const inputHash=makeInputHash({...cacheKeyComponents,itemCaption:itemCaptionNormalized});
       let cached=null,cacheStatus='miss';
       try{
         cached=await loadCache({inputHash,itemCode,itemName,imageUrl});
@@ -199,7 +211,7 @@ function createHandler(deps={}){
           promptVersion:cached.prompt_version||PROMPT_VERSION,
           rawAiJson:cached.raw_ai_json,
           validation,
-          cache:{hit:true,status:'hit',ttlDays:CACHE_TTL_DAYS}
+          cache:{hit:true,status:'hit',ttlDays:CACHE_TTL_DAYS,inputHash,keyComponents:cacheKeyComponents}
         });
       }
 
@@ -249,7 +261,7 @@ function createHandler(deps={}){
         promptVersion:PROMPT_VERSION,
         rawAiJson:ai.raw,
         validation,
-        cache:{hit:false,status:cacheStatus,ttlDays:CACHE_TTL_DAYS}
+        cache:{hit:false,status:cacheStatus,ttlDays:CACHE_TTL_DAYS,inputHash,keyComponents:cacheKeyComponents}
       });
     }catch(error){
       const timeout=error?.name==='AbortError'||/timeout|aborted/i.test(String(error?.message||''));
@@ -264,6 +276,7 @@ module.exports.loadImageDataUrl=loadImageDataUrl;
 module.exports.defaultCallGroq=defaultCallGroq;
 module.exports.defaultCallOpenAI=defaultCallGroq; // compatibility alias for existing tests/tools
 module.exports.makeInputHash=makeInputHash;
+module.exports.normalizeCacheCaption=normalizeCacheCaption;
 module.exports.defaultLoadCache=defaultLoadCache;
 module.exports.defaultSaveCache=defaultSaveCache;
 module.exports.CACHE_TTL_DAYS=CACHE_TTL_DAYS;
