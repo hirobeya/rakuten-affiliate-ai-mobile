@@ -1003,6 +1003,7 @@ let currentAppSession=null;
 let currentAccessPlan='base';
 let proAvailable=false;
 let debugExportAllowed=false;
+let aiGatesFullOutput=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
@@ -2198,6 +2199,7 @@ async function updateDebugExportAccess(){
     preview=false;
   }
   debugExportAllowed=preview && currentAccessPlan==='owner';
+  aiGatesFullOutput=debugExportAllowed && new URLSearchParams(location.search).get('aiGatesFullOutput')==='1';
   const box=document.getElementById('debugExport');
   if(box) box.classList.toggle('on',debugExportAllowed);
   if(!debugExportAllowed){
@@ -2221,15 +2223,8 @@ function buildDebugValidationRowsFor(items,keyword){
     const a=UrenaviPainCopy.analyzeRoomProduct
       ?UrenaviPainCopy.analyzeRoomProduct(item,String(keyword||'').trim())
       :groundedAnalysis(item);
-    const options={variant:index};
-    const aiResult=aiRoomResults.get(index);
-    const generatedCopy=(aiResult?.state==='done'&&aiResult?.data)
-      ?aiPhase1Post(item,aiResult.data)
-      :(aiResult?.state==='loading'||aiResult?.state==='error')
-        ?aiSafeFallbackPost(item)
-        :(UrenaviPainCopy.makeRoomCopy
-          ?UrenaviPainCopy.makeRoomCopy(item,String(keyword||'').trim(),options)
-          :'');
+    const generatedCopy=resolvedPost(item,index,'room',String(keyword||'').trim());
+    const aiGate=resolveAiGate(item,index,String(keyword||'').trim());
     const shadowV2=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
       ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
       :null;
@@ -2253,6 +2248,8 @@ function buildDebugValidationRowsFor(items,keyword){
       fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
       generatedCopy,
       shadowV2,
+      aiGatesFullOutput,
+      aiGate,
       aiPhase1:null,
       aiState:'not_run',
       aiHttpStatus:null,
@@ -2528,14 +2525,14 @@ async function requestAiRoom(item,index,generation){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
+    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'PreviewのGROQ_API_KEYが設定されていません':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
     }else aiRoomResults.set(index,{state:'done',data:d});
-    postCache.delete('room:'+index);
+    for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
@@ -2548,15 +2545,13 @@ async function requestAiRoom(item,index,generation){
       if(article){
         const active=article.querySelector('.tab.on');
         const platform=active?.dataset?.p||'room';
-        if(platform==='room'){
-          const copy=article.querySelector('.copy');
-          if(copy) copy.textContent=postDisplay(lastSearchItems[index],'room');
-          const button=article.querySelector('.cb');
-          if(button){
-            const ready=postReady(lastSearchItems[index],'room');
-            button.disabled=!ready;
-            button.textContent=ready?'投稿文をコピー':'コピー不可';
-          }
+        const copy=article.querySelector('.copy');
+        if(copy) copy.textContent=postDisplay(lastSearchItems[index],platform);
+        const button=article.querySelector('.cb');
+        if(button){
+          const ready=postReady(lastSearchItems[index],platform);
+          button.disabled=!ready;
+          button.textContent=ready?'投稿文をコピー':'コピー不可';
         }
       }
     }
@@ -2614,47 +2609,94 @@ function pts(i){
   return out.slice(0,2);
 }
 
+function lexicalProductLabel(item){
+  let s=String(item?.itemName||'').normalize('NFKC')
+    .replace(/[【\[][^】\]]{0,80}[】\]]/g,' ')
+    .replace(/★[^★]{0,60}★/g,' ')
+    .replace(/(?:楽天|ランキング)\s*1位|受賞|クーポン|\d+%\s*OFF|P\d+倍|SALE|セール|送料無料/gi,' ')
+    .replace(/\s+/g,' ').trim();
+  const tokens=s.split(/\s+/).filter(Boolean).slice(0,10);
+  return (tokens.join(' ').slice(0,90)||'商品名を確認してください').trim();
+}
+
 function aiSafeFallbackPost(item){
-  const title=aiSafeTitle(item);
+  const title=lexicalProductLabel(item);
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
+}
+
+function ruleSecondOpinion(item,validation,keyword=''){
+  const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
+    ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
+    :null;
+  const primary=shadow?.primaryProduct||null;
+  if(!primary?.grounded || !validation?.productType?.valid){
+    return {checked:false,conflict:false,primaryProduct:primary?.text||null};
+  }
+  const q=window.UrenaviProductShadowV2.queryConsistency(
+    String(item?.itemName||''),
+    String(validation.productType.value||''),
+    primary
+  );
+  return {
+    checked:true,
+    conflict:q.status!=='aligned',
+    primaryProduct:primary.text,
+    aiProductType:String(validation.productType.value||''),
+    comparison:q
+  };
+}
+
+function resolveAiGate(item,index,keyword=''){
+  if(!aiGatesFullOutput) return {enabled:false,status:'off',full:false,reasons:[]};
+  const ai=aiRoomResults.get(index);
+  if(!ai || ai.state==='loading' || ai.state==='not_run'){
+    return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.state==='error'){
+    return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  const v=ai.data?.validation||{};
+  const second=ruleSecondOpinion(item,v,keyword);
+  const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
+  if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
+  if(second.conflict) reasons.push('rule_second_opinion_conflict');
+  const full=v.mode==='simple' && v.productType?.valid===true && reasons.length===0;
+  return {
+    enabled:true,
+    status:full?'full':'fallback',
+    full,
+    reasons,
+    ruleSecondOpinion:second,
+    validation:v,
+    cache:ai.data?.cache||null
+  };
+}
+
+function resolvedPost(item,index,p='room',keyword=''){
+  const gate=resolveAiGate(item,index,keyword);
+  if(gate.enabled){
+    if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
+    return aiSafeFallbackPost(item);
+  }
+
+  const options={variant:index};
+  if(p==='room'){
+    options.usedOpenings=roomSentenceContext.openings;
+    options.usedSeconds=roomSentenceContext.seconds;
+  }
+  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
 }
 
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
   const key=p+':'+variant;
-
-  if(debugExportAllowed && p==='room'){
-    const ai=aiRoomResults.get(variant);
-    if(ai?.state==='done' && ai?.data){
-      const value=aiPhase1Post(i,ai.data);
-      postCache.set(key,value);
-      return value;
-    }
-    if(ai?.state==='loading' || ai?.state==='not_run' || !ai){
-      const value=aiSafeFallbackPost(i);
-      postCache.set(key,value);
-      return value;
-    }
-    if(ai?.state==='error'){
-      const value=aiSafeFallbackPost(i);
-      postCache.set(key,value);
-      return value;
-    }
-  }
-
   if(postCache.has(key)) return postCache.get(key);
-  const options={variant};
-  if(p==='room'){
-    options.usedOpenings=roomSentenceContext.openings;
-    options.usedSeconds=roomSentenceContext.seconds;
-  }
-  let value;
-  if(p==='threads') value=UrenaviPainCopy.makeThreadsCopy(i,keyword,options);
-  else if(p==='instagram') value=UrenaviPainCopy.makeInstagramCopy(i,keyword,options);
-  else value=UrenaviPainCopy.makeRoomCopy(i,keyword,options);
+  const value=resolvedPost(i,variant,p,keyword);
   postCache.set(key,value);
   return value;
 }

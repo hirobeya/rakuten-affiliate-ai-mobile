@@ -1,11 +1,15 @@
 'use strict';
 
+const crypto=require('node:crypto');
 const {authorize,db}=require('../lib/billing');
 const {preprocessCaption,validateAiExtraction}=require('../lib/room-ai');
 
 const DEFAULT_MODEL='qwen/qwen3.8-27b';
 const DEFAULT_DAILY_LIMIT=200;
 const AI_TIMEOUT_MS=8000;
+const CACHE_TTL_DAYS=90;
+const PROMPT_VERSION='2026-09-22-ai-phase1-groq-v2';
+const VALIDATION_RULE_VERSION='2026-09-22-ai-gate-v2';
 
 const schema={
   type:'object',
@@ -52,6 +56,32 @@ function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Content-Type','application/json; charset=utf-8');
   return res.status(status).json(body);
+}
+
+function makeInputHash({itemCode='',itemName='',imageUrl=''}) {
+  return crypto.createHash('sha256')
+    .update([String(itemCode||''),String(itemName||''),String(imageUrl||'')].join('\n'))
+    .digest('hex');
+}
+
+async function defaultLoadCache({inputHash}) {
+  const cutoff=new Date(Date.now()-CACHE_TTL_DAYS*86400000).toISOString();
+  const q=new URLSearchParams({
+    input_hash:'eq.'+inputHash,
+    created_at:'gte.'+cutoff,
+    select:'input_hash,raw_ai_json,model,prompt_version,validation_rule_version,image_available,created_at',
+    limit:'1'
+  });
+  const rows=await db('urenavi_ai_room_cache?'+q.toString());
+  return Array.isArray(rows)&&rows[0]?rows[0]:null;
+}
+
+async function defaultSaveCache(row) {
+  await db('urenavi_ai_room_cache',{
+    method:'POST',
+    headers:{Prefer:'resolution=merge-duplicates,return=minimal'},
+    body:JSON.stringify(row)
+  });
 }
 
 async function defaultConsumeQuota(limit){
@@ -125,14 +155,53 @@ function createHandler(deps={}){
   const consumeQuota=deps.consumeQuota||defaultConsumeQuota;
   const callAI=deps.callGroq||deps.callOpenAI||defaultCallGroq;
   const imageLoader=deps.loadImageDataUrl||loadImageDataUrl;
+  const mocked=Boolean(deps.callGroq||deps.callOpenAI);
+  const loadCache=deps.loadCache||(mocked?async()=>null:defaultLoadCache);
+  const saveCache=deps.saveCache||(mocked?async()=>{}:defaultSaveCache);
   return async function handler(req,res){
     res.setHeader('Cache-Control','no-store');
     if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
-    // Production must stop before owner lookup, quota consumption, key access, or AI invocation.
     if(process.env.VERCEL_ENV!=='preview') return json(res,404,{message:'Not found'});
     try{
       const auth=await authorizeFn(req);
       if(!auth?.ok || auth.plan!=='owner') return json(res,403,{message:'owner_preview_only'});
+
+      const body=req.body&&typeof req.body==='object'?req.body:{};
+      const itemCode=String(body.itemCode||'').trim().slice(0,300);
+      const itemName=String(body.itemName||'').trim().slice(0,1000);
+      const itemCaption=preprocessCaption(String(body.itemCaption||''));
+      const itemPrice=Number(body.itemPrice)||0;
+      const imageUrl=String(body.imageUrl||'').trim();
+      if(!itemName) return json(res,400,{message:'itemName is required'});
+
+      const inputHash=makeInputHash({itemCode,itemName,imageUrl});
+      let cached=null,cacheStatus='miss';
+      try{
+        cached=await loadCache({inputHash,itemCode,itemName,imageUrl});
+      }catch(error){
+        cacheStatus='unavailable';
+        console.warn('room-ai cache read unavailable',error?.message||'unknown');
+      }
+
+      if(cached?.raw_ai_json){
+        const validation=validateAiExtraction(
+          cached.raw_ai_json,
+          {itemName,itemCaption},
+          {imageAvailable:Boolean(cached.image_available)}
+        );
+        console.log('room-ai usage',JSON.stringify({
+          cacheStatus:'hit',aiCall:false,model:cached.model||DEFAULT_MODEL,mode:validation.mode
+        }));
+        return json(res,200,{
+          ok:true,phase:1,provider:'groq',
+          model:cached.model||DEFAULT_MODEL,usage:null,elapsedMs:0,
+          validationRuleVersion:VALIDATION_RULE_VERSION,
+          promptVersion:cached.prompt_version||PROMPT_VERSION,
+          rawAiJson:cached.raw_ai_json,
+          validation,
+          cache:{hit:true,status:'hit',ttlDays:CACHE_TTL_DAYS}
+        });
+      }
 
       const apiKey=String(process.env.GROQ_API_KEY||'').trim();
       if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured for Preview'});
@@ -141,20 +210,33 @@ function createHandler(deps={}){
       const allowed=await consumeQuota(limit);
       if(!allowed) return json(res,429,{message:'AI daily limit reached',limit});
 
-      const body=req.body&&typeof req.body==='object'?req.body:{};
-      const itemName=String(body.itemName||'').trim().slice(0,1000);
-      const itemCaption=preprocessCaption(String(body.itemCaption||''));
-      const itemPrice=Number(body.itemPrice)||0;
-      const imageUrl=String(body.imageUrl||'').trim();
-      if(!itemName) return json(res,400,{message:'itemName is required'});
-
       const image=await imageLoader(imageUrl);
       const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       const started=Date.now();
       const ai=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:image.dataUrl});
       const validation=validateAiExtraction(ai.raw,{itemName,itemCaption},{imageAvailable:image.available});
       const elapsedMs=Date.now()-started;
-      console.log('room-ai usage',JSON.stringify({model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode}));
+
+      try{
+        await saveCache({
+          input_hash:inputHash,
+          item_code:itemCode,
+          item_name:itemName,
+          image_url:imageUrl,
+          model:ai.model||model,
+          prompt_version:PROMPT_VERSION,
+          validation_rule_version:VALIDATION_RULE_VERSION,
+          raw_ai_json:ai.raw,
+          image_available:Boolean(image.available),
+          created_at:new Date().toISOString()
+        });
+      }catch(error){
+        console.warn('room-ai cache write unavailable',error?.message||'unknown');
+      }
+
+      console.log('room-ai usage',JSON.stringify({
+        cacheStatus,aiCall:true,model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode
+      }));
 
       return json(res,200,{
         ok:true,
@@ -163,10 +245,11 @@ function createHandler(deps={}){
         usage:ai.usage||null,
         elapsedMs,
         provider:'groq',
-        validationRuleVersion:'2026-09-22-ai-phase1-groq-v1',
-        promptVersion:'2026-09-22-ai-phase1-groq-v1',
+        validationRuleVersion:VALIDATION_RULE_VERSION,
+        promptVersion:PROMPT_VERSION,
         rawAiJson:ai.raw,
-        validation
+        validation,
+        cache:{hit:false,status:cacheStatus,ttlDays:CACHE_TTL_DAYS}
       });
     }catch(error){
       const timeout=error?.name==='AbortError'||/timeout|aborted/i.test(String(error?.message||''));
@@ -175,11 +258,14 @@ function createHandler(deps={}){
     }
   };
 }
-
 module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.loadImageDataUrl=loadImageDataUrl;
 module.exports.defaultCallGroq=defaultCallGroq;
 module.exports.defaultCallOpenAI=defaultCallGroq; // compatibility alias for existing tests/tools
+module.exports.makeInputHash=makeInputHash;
+module.exports.defaultLoadCache=defaultLoadCache;
+module.exports.defaultSaveCache=defaultSaveCache;
+module.exports.CACHE_TTL_DAYS=CACHE_TTL_DAYS;
 module.exports.SYSTEM_PROMPT=SYSTEM_PROMPT;
 module.exports.schema=schema;

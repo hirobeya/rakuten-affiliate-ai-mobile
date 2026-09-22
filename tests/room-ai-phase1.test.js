@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const {
   evidenceExists,numbersSupported,validateAiExtraction,phase1Post
 }=require('../lib/room-ai');
-const {createHandler,defaultCallGroq}=require('../api/room-ai');
+const {createHandler,defaultCallGroq,makeInputHash,CACHE_TTL_DAYS}=require('../api/room-ai');
 
 function makeRes(){
   return {
@@ -60,6 +60,8 @@ function run(name,fn){
       features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
     },{itemName:'収納ボックス',itemCaption:''},{imageAvailable:false});
     assert.equal(v.productType.valid,false);
+    assert.equal(v.mode,'fallback');
+    assert.ok(v.reasons.includes('product_type_validation_failed'));
   });
 
   await run('invalid feature evidence switches to fallback',()=>{
@@ -163,6 +165,72 @@ function run(name,fn){
     assert.equal(res.body.validation.mode,'simple');
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+  });
+
+  await run('low confidence always falls back',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],unknowns:[],imageProductTypeHint:null,confidence:'low'
+    },{itemName:'バイクグローブ 本革',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.mode,'fallback');
+    assert.ok(v.reasons.includes('confidence_low'));
+  });
+
+  await run('productType promotional or claim text is rejected',()=>{
+    const promo=validateAiExtraction({
+      productType:{value:'楽天1位 バイクグローブ',source:'itemName',evidence:'楽天1位 バイクグローブ'},
+      features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
+    },{itemName:'楽天1位 バイクグローブ',itemCaption:''},{imageAvailable:false});
+    assert.equal(promo.productType.valid,false);
+    assert.equal(promo.mode,'fallback');
+  });
+
+  await run('cache hash is stable and includes itemCode name and image',()=>{
+    const a=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg'});
+    const b=makeInputHash({itemCode:'x',itemName:'野球グローブ',imageUrl:'https://example.com/a.jpg'});
+    const c=makeInputHash({itemCode:'x',itemName:'バイクグローブ',imageUrl:'https://example.com/a.jpg'});
+    assert.equal(a,b);
+    assert.notEqual(a,c);
+    assert.equal(CACHE_TTL_DAYS,90);
+  });
+
+  await run('cache hit bypasses quota image and Groq but revalidates evidence',async()=>{
+    const oldEnv=process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV='preview';
+    let quotaCalls=0,imageCalls=0,aiCalls=0;
+    const handler=createHandler({
+      authorize:async()=>({ok:true,plan:'owner'}),
+      loadCache:async()=>({
+        raw_ai_json:{
+          productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
+          features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
+        },
+        model:'qwen/qwen3.8-27b',prompt_version:'test',image_available:false
+      }),
+      consumeQuota:async()=>{quotaCalls++;return true;},
+      loadImageDataUrl:async()=>{imageCalls++;return {available:false,dataUrl:null};},
+      callGroq:async()=>{aiCalls++;return {raw:{}};}
+    });
+    const res=makeRes();
+    await handler({method:'POST',headers:{},body:{itemCode:'b1',itemName:'野球グローブ',imageUrl:''}},res);
+    assert.equal(res.statusCode,200);
+    assert.equal(res.body.cache.hit,true);
+    assert.equal(res.body.validation.mode,'simple');
+    assert.equal(quotaCalls,0);
+    assert.equal(imageCalls,0);
+    assert.equal(aiCalls,0);
+    if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
+  });
+
+  await run('Preview app keeps AI gate default OFF and routes all three media through one resolver',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/let aiGatesFullOutput=false/);
+    assert.match(html,/aiGatesFullOutput=debugExportAllowed && new URLSearchParams\(location\.search\)\.get\('aiGatesFullOutput'\)==='1'/);
+    assert.match(html,/function resolvedPost\(/);
+    assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
+    assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
+    assert.match(html,/return UrenaviPainCopy\.makeRoomCopy/);
+    assert.match(html,/rule_second_opinion_conflict/);
   });
 
   await run('daily limit blocks AI call',async()=>{
