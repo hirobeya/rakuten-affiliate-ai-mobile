@@ -479,7 +479,7 @@ for(const id of ['live-cleaning-rank7-mop-holder','C7']){
 }
 if(!appHtml.includes('aiHttpStatus:aiRoomResults.get(index)?.status??null')) fail('preview-export','aiHttpStatus missing from validation JSON');
 if(!appHtml.includes("aiMessage:aiRoomResults.get(index)?.message||null")) fail('preview-export','aiMessage missing from validation JSON');
-if(!appHtml.includes('PreviewのGROQ_API_KEYが設定されていません')) fail('preview-export','missing Preview Groq key UI message');
+if(!appHtml.includes('AI機能を利用できません。安全のため短文表示です。')) fail('preview-export','missing safe Groq unavailable UI message');
 if(!appHtml.includes('UrenaviPainCopy.fallbackProductName')) fail('ai-gate-fallback','AI fallback must reuse fallbackProductName/tidyDisplayTitle pipeline');
 {
   const bos={itemName:'【20箱セット】 クリロン化成 うんちが臭わない袋 BOS ネコ用 箱型 SSサイズ 200枚入 ボス うんち袋'};

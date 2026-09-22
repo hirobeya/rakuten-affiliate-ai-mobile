@@ -516,7 +516,9 @@ function run(name,fn){
   await run('Preview app keeps AI gate default OFF and routes all three media through one resolver',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/let aiGatesFullOutput=false/);
-    assert.match(html,/aiGatesFullOutput=debugExportAllowed && new URLSearchParams\(location\.search\)\.get\('aiGatesFullOutput'\)==='1'/);
+    assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
+    assert.match(html,/const paidPlan=\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
+    assert.match(html,/aiGatesFullOutput=runtimeKnown/);
     assert.match(html,/function resolvedPost\(/);
     assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
