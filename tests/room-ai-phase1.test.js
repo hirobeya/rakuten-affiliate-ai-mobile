@@ -536,7 +536,9 @@ function run(name,fn){
     assert.match(html,/setTimeout\(r,250\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.match(html,/function aiCheckingPost\(/);
-    assert.match(html,/AI確認中です/);
+    assert.doesNotMatch(html,/AI確認中です/);
+    assert.match(html,/return aiSafeFallbackPost\(item\)/);
+    assert.match(html,/\.tab\[data-i=/);
   });
 
   await run('daily limit blocks AI call',async()=>{

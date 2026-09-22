@@ -353,6 +353,13 @@ if(!appHtml.includes('promoRisk:Boolean(a?.promoRisk)')) fail('preview-export','
 if(!appHtml.includes('claimRisk:Boolean(a?.claimRisk)')) fail('preview-export','claimRisk missing from validation JSON');
 if(!appHtml.includes('warningRisk:Boolean(a?.warningRisk)')) fail('preview-export','warningRisk missing from validation JSON');
 if(!appHtml.includes('promoRiskTerms:Array.isArray(a?.promoRiskTerms)?a.promoRiskTerms:[]')) fail('preview-export','promoRiskTerms missing from validation JSON');
+{
+  const raw='【リピーター続出】 バイク グローブ 秋 夏 革 本革';
+  const cleaned=api.stripPromotionalText(raw);
+  if(/リピーター続出/.test(cleaned)) fail('promo-repeaters','リピーター続出 remains: '+cleaned);
+  const risk=api.detectLegalRisk(raw);
+  if(!risk.promoRisk) fail('promo-repeaters','リピーター続出 must set promoRisk');
+}
 if(!appHtml.includes('claimRiskTerms:Array.isArray(a?.claimRiskTerms)?a.claimRiskTerms:[]')) fail('preview-export','claimRiskTerms missing from validation JSON');
 
 
