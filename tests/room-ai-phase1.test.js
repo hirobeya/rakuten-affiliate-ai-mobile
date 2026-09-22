@@ -311,6 +311,13 @@ function run(name,fn){
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
+  await run('Preview free tier caps AI calls at two per search',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/FREE_TIER_AI_PER_SEARCH_LIMIT=2/);
+    assert.match(html,/reason:'free_tier_ai_limit'/);
+    assert.match(html,/targeted>FREE_TIER_AI_PER_SEARCH_LIMIT/);
+  });
+
   await run('Groq caption input is capped for token control',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
     assert.match(src,/preprocessedCaption\.length<=700/);
