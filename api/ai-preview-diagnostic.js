@@ -1,4 +1,8 @@
 'use strict';
+global.window=global.window||{};
+require('../public/pain-copy.js');
+require('../public/room-copy-quality.js');
+const ruleApi=global.window.UrenaviPainCopy;
 const {createHandler:createSearchHandler}=require('./search');
 const {runTwoStageGroq,defaultCallGroq,loadImageDataUrl}=require('./room-ai');
 
@@ -10,6 +14,52 @@ const CASES={
   'face-roller':'美顔ローラー',
   'lint-roller':'粘着ローラー'
 };
+const TARGET_KEYWORDS=[
+  '野球グローブ','バイクグローブ','収納ベンチ','収納ボックス',
+  'モバイルバッテリー','ポータブル電源',
+  'ペットベッド','犬 ベッド','ペット給水器',
+  'モップハンガー','電動モップ','ハンディクリーナー','洗濯ネット'
+];
+
+function aiTargetDecision(item){
+  const a=ruleApi.analyzeRoomProduct(item,'');
+  const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
+  const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
+  if(a?.outputMode!=='full') return {target:true,reason:'rule_fallback',analysis:a};
+  if(a?.ambiguous) return {target:true,reason:'rule_ambiguous',analysis:a};
+  if(conflicts.length) return {target:true,reason:'rule_conflict',analysis:a};
+  if(top.length>=2){
+    const gap=Number(top[0]?.score||0)-Number(top[1]?.score||0);
+    if(gap<20) return {target:true,reason:'small_candidate_gap',gap,analysis:a};
+  }
+  if(top.length===1 && Number(top[0]?.score||0)<80) return {target:true,reason:'weak_single_candidate',analysis:a};
+  return {target:false,reason:'rule_confident',analysis:a};
+}
+
+async function targetingDistribution(){
+  const rows=[];
+  for(const keyword of TARGET_KEYWORDS){
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    const decisions=items.map((item,index)=>{
+      const d=aiTargetDecision(item);
+      return {
+        index,itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),
+        target:d.target,reason:d.reason,
+        outputMode:d.analysis?.outputMode||null,ambiguous:Boolean(d.analysis?.ambiguous),
+        conflicts:(d.analysis?.conflicts||[]).map(x=>x.usage||x.category||String(x)),
+        topCandidates:d.analysis?.topCandidates||[]
+      };
+    });
+    rows.push({keyword,count:items.length,targetCount:decisions.filter(x=>x.target).length,searchMs:Date.now()-t0,decisions});
+  }
+  const counts=rows.map(x=>x.targetCount);
+  return {
+    searches:rows.length,totalItems:rows.reduce((s,x)=>s+x.count,0),
+    average:Number((counts.reduce((a,b)=>a+b,0)/Math.max(1,counts.length)).toFixed(2)),
+    min:Math.min(...counts),max:Math.max(...counts),rows
+  };
+}
 function fakeRes(){return {statusCode:200,body:null,setHeader(){},status(n){this.statusCode=n;return this;},json(v){this.body=v;return this;}};}
 async function searchItems(keyword){
   const h=createSearchHandler({authorize:async()=>({ok:true,plan:'owner'})});
@@ -48,7 +98,12 @@ async function analyze(item){
 }
 module.exports=async function(req,res){
   res.setHeader('Cache-Control','no-store');
-  if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-22T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-23T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(String(req.query?.mode||'')==='targeting'){
+    const t0=Date.now();
+    const distribution=await targetingDistribution();
+    return res.status(200).json({ok:true,mode:'targeting',totalMs:Date.now()-t0,distribution});
+  }
   const keyword=CASES[String(req.query?.case||'')];
   if(!keyword) return res.status(400).json({message:'invalid_case'});
   const index=Math.max(0,Math.min(9,Number(req.query?.index)||0));

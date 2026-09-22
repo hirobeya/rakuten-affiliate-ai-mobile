@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const {
   evidenceExists,numbersSupported,validateAiExtraction,phase1Post,imageTypeCompatible,productTypeCoverage
 }=require('../lib/room-ai');
-const {createHandler,defaultCallGroq,runTwoStageGroq,makeInputHash,normalizeCacheCaption,CACHE_TTL_DAYS,parseRetryAfter,classifyGroqError,schemaForCall}=require('../api/room-ai');
+const {createHandler,defaultCallGroq,runTwoStageGroq,makeInputHash,normalizeCacheCaption,CACHE_TTL_DAYS,parseRetryAfter,classifyGroqError,schemaForCall,SYSTEM_PROMPT}=require('../api/room-ai');
 
 function makeRes(){
   return {
@@ -304,9 +304,18 @@ function run(name,fn){
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
     assert.match(src,/maxItems:3/);
-    assert.match(src,/max_output_tokens:420/);
+    assert.match(src,/max_output_tokens:320/);
+    assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
+    assert.ok(SYSTEM_PROMPT.length<220);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
+  });
+
+  await run('Groq caption input is capped for token control',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
+    assert.match(src,/preprocessedCaption\.length<=700/);
+    assert.match(src,/slice\(0,520\)/);
+    assert.match(src,/slice\(-160\)/);
   });
 
   await run('Retry-After parser supports seconds',()=>{
