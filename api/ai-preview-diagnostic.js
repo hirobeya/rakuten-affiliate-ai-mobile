@@ -36,22 +36,27 @@ function aiTargetDecision(item){
   return {target:false,reason:'rule_confident',analysis:a};
 }
 
+function summarizeTargeting(keyword,items){
+  const decisions=items.map((item,index)=>{
+    const d=aiTargetDecision(item);
+    return {
+      index,itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),
+      target:d.target,reason:d.reason,
+      outputMode:d.analysis?.outputMode||null,ambiguous:Boolean(d.analysis?.ambiguous),
+      conflicts:(d.analysis?.conflicts||[]).map(x=>x.usage||x.category||String(x)),
+      topCandidates:d.analysis?.topCandidates||[]
+    };
+  });
+  return {keyword,count:items.length,targetCount:decisions.filter(x=>x.target).length,decisions};
+}
+
 async function targetingDistribution(){
   const rows=[];
   for(const keyword of TARGET_KEYWORDS){
     const t0=Date.now();
     const items=await searchItems(keyword);
-    const decisions=items.map((item,index)=>{
-      const d=aiTargetDecision(item);
-      return {
-        index,itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),
-        target:d.target,reason:d.reason,
-        outputMode:d.analysis?.outputMode||null,ambiguous:Boolean(d.analysis?.ambiguous),
-        conflicts:(d.analysis?.conflicts||[]).map(x=>x.usage||x.category||String(x)),
-        topCandidates:d.analysis?.topCandidates||[]
-      };
-    });
-    rows.push({keyword,count:items.length,targetCount:decisions.filter(x=>x.target).length,searchMs:Date.now()-t0,decisions});
+    rows.push({...summarizeTargeting(keyword,items),searchMs:Date.now()-t0});
+    await sleep(1400);
   }
   const counts=rows.map(x=>x.targetCount);
   return {
@@ -61,12 +66,19 @@ async function targetingDistribution(){
   };
 }
 function fakeRes(){return {statusCode:200,body:null,setHeader(){},status(n){this.statusCode=n;return this;},json(v){this.body=v;return this;}};}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function searchItems(keyword){
   const h=createSearchHandler({authorize:async()=>({ok:true,plan:'owner'})});
-  const res=fakeRes();
-  await h({method:'GET',query:{keyword,sort:'standard'},headers:{}},res);
-  if(res.statusCode!==200) throw new Error('search_failed_'+res.statusCode);
-  return (res.body?.items||[]).slice(0,10);
+  let lastStatus=0;
+  for(let attempt=0;attempt<3;attempt++){
+    const res=fakeRes();
+    await h({method:'GET',query:{keyword,sort:'standard'},headers:{}},res);
+    lastStatus=res.statusCode;
+    if(res.statusCode===200) return (res.body?.items||[]).slice(0,10);
+    if(res.statusCode!==429) break;
+    await sleep(1200*(attempt+1));
+  }
+  throw new Error('search_failed_'+lastStatus);
 }
 async function analyze(item){
   const itemName=String(item?.itemName||'');
@@ -99,6 +111,13 @@ async function analyze(item){
 module.exports=async function(req,res){
   res.setHeader('Cache-Control','no-store');
   if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-23T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(String(req.query?.mode||'')==='targeting-one'){
+    const keyword=String(req.query?.keyword||'').trim();
+    if(!TARGET_KEYWORDS.includes(keyword)) return res.status(400).json({message:'invalid_keyword'});
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    return res.status(200).json({ok:true,mode:'targeting-one',searchMs:Date.now()-t0,...summarizeTargeting(keyword,items)});
+  }
   if(String(req.query?.mode||'')==='targeting'){
     const t0=Date.now();
     const distribution=await targetingDistribution();
