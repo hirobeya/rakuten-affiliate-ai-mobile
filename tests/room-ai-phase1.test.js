@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const {
   evidenceExists,numbersSupported,validateAiExtraction,phase1Post
 }=require('../lib/room-ai');
-const {createHandler}=require('../api/room-ai');
+const {createHandler,defaultCallGroq}=require('../api/room-ai');
 
 function makeRes(){
   return {
@@ -86,7 +86,34 @@ function run(name,fn){
     assert.match(text,/※アフィリエイト広告を利用しています/);
   });
 
-  await run('Production never invokes owner auth, quota, image, or OpenAI',async()=>{
+
+  await run('Groq caller uses Qwen 3.8 Responses API with structured output and image',async()=>{
+    let seenUrl='',seenOptions=null;
+    const raw={
+      productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
+      features:[],unknowns:[],imageProductTypeHint:'野球グローブ',confidence:'high'
+    };
+    const fakeFetch=async(url,options)=>{
+      seenUrl=url;seenOptions=options;
+      return {ok:true,json:async()=>({output_text:JSON.stringify(raw),model:'qwen/qwen3.8-27b',usage:{input_tokens:10,output_tokens:10}})};
+    };
+    const result=await defaultCallGroq({
+      apiKey:'test-key',model:'qwen/qwen3.8-27b',
+      itemName:'野球グローブ',itemCaption:'',itemPrice:3000,
+      imageDataUrl:'data:image/png;base64,AA==',fetchImpl:fakeFetch
+    });
+    assert.equal(seenUrl,'https://api.groq.com/openai/v1/responses');
+    assert.equal(seenOptions.headers.Authorization,'Bearer test-key');
+    const body=JSON.parse(seenOptions.body);
+    assert.equal(body.model,'qwen/qwen3.8-27b');
+    assert.equal(body.reasoning.effort,'none');
+    assert.equal(body.text.format.type,'json_schema');
+    assert.equal(body.text.format.strict,true);
+    assert.equal(body.input[1].content[1].type,'input_image');
+    assert.equal(result.raw.productType.value,'野球グローブ');
+  });
+
+  await run('Production never invokes owner auth, quota, image, or Groq',async()=>{
     const old=process.env.VERCEL_ENV;
     process.env.VERCEL_ENV='production';
     let authCalls=0,quotaCalls=0,aiCalls=0,imageCalls=0;
@@ -94,7 +121,7 @@ function run(name,fn){
       authorize:async()=>{authCalls++;return {ok:true,plan:'owner'};},
       consumeQuota:async()=>{quotaCalls++;return true;},
       loadImageDataUrl:async()=>{imageCalls++;return {available:false,dataUrl:null};},
-      callOpenAI:async()=>{aiCalls++;return {raw:{}};}
+      callGroq:async()=>{aiCalls++;return {raw:{}};}
     });
     const req={method:'POST',headers:{},body:{itemName:'商品'}};
     const res=makeRes();
@@ -108,16 +135,16 @@ function run(name,fn){
   });
 
   await run('Preview owner mock invokes one AI request and validates output',async()=>{
-    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.OPENAI_API_KEY;
+    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';
-    process.env.OPENAI_API_KEY='test-key';
+    process.env.GROQ_API_KEY='test-key';
     let aiCalls=0;
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner',user:{email:'owner@example.com'}}),
       consumeQuota:async limit=>{assert.equal(limit,200);return true;},
       loadImageDataUrl:async()=>({available:true,dataUrl:'data:image/png;base64,AA=='}),
-      callOpenAI:async()=>{aiCalls++;return {
-        model:'gpt-5.6-luna',
+      callGroq:async()=>{aiCalls++;return {
+        model:'qwen/qwen3.8-27b',
         usage:{input_tokens:100,output_tokens:50},
         raw:{
           productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
@@ -135,25 +162,25 @@ function run(name,fn){
     assert.equal(aiCalls,1);
     assert.equal(res.body.validation.mode,'simple');
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
-    if(oldKey===undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY=oldKey;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
   await run('daily limit blocks AI call',async()=>{
-    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.OPENAI_API_KEY;
+    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';
-    process.env.OPENAI_API_KEY='test-key';
+    process.env.GROQ_API_KEY='test-key';
     let aiCalls=0;
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       consumeQuota:async()=>false,
-      callOpenAI:async()=>{aiCalls++;return {raw:{}};}
+      callGroq:async()=>{aiCalls++;return {raw:{}};}
     });
     const res=makeRes();
     await handler({method:'POST',headers:{},body:{itemName:'商品'}},res);
     assert.equal(res.statusCode,429);
     assert.equal(aiCalls,0);
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
-    if(oldKey===undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY=oldKey;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
   if(process.exitCode) process.exit(process.exitCode);

@@ -3,7 +3,7 @@
 const {authorize,db}=require('../lib/billing');
 const {preprocessCaption,validateAiExtraction}=require('../lib/room-ai');
 
-const DEFAULT_MODEL='gpt-5.6-luna';
+const DEFAULT_MODEL='qwen/qwen3.8-27b';
 const DEFAULT_DAILY_LIMIT=200;
 const AI_TIMEOUT_MS=8000;
 
@@ -87,7 +87,7 @@ function extractOutputText(data){
   return '';
 }
 
-async function defaultCallOpenAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,fetchImpl=fetch}){
+async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,fetchImpl=fetch}){
   const content=[
     {type:'input_text',text:JSON.stringify({itemName,itemCaption,itemPrice})}
   ];
@@ -95,7 +95,7 @@ async function defaultCallOpenAI({apiKey,model,itemName,itemCaption,itemPrice,im
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),AI_TIMEOUT_MS);
   try{
-    const r=await fetchImpl('https://api.openai.com/v1/responses',{
+    const r=await fetchImpl('https://api.groq.com/openai/v1/responses',{
       method:'POST',
       headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -111,11 +111,11 @@ async function defaultCallOpenAI({apiKey,model,itemName,itemCaption,itemPrice,im
       signal:controller.signal
     });
     const data=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(`OpenAI request failed (${r.status})`);
+    if(!r.ok) throw new Error(`Groq request failed (${r.status})`);
     const text=extractOutputText(data);
-    if(!text) throw new Error('OpenAI returned no structured output');
+    if(!text) throw new Error('Groq returned no structured output');
     let parsed;
-    try{parsed=JSON.parse(text);}catch{throw new Error('OpenAI returned invalid JSON');}
+    try{parsed=JSON.parse(text);}catch{throw new Error('Groq returned invalid JSON');}
     return {raw:parsed,usage:data.usage||null,model:data.model||model};
   }finally{clearTimeout(timer);}
 }
@@ -123,7 +123,7 @@ async function defaultCallOpenAI({apiKey,model,itemName,itemCaption,itemPrice,im
 function createHandler(deps={}){
   const authorizeFn=deps.authorize||authorize;
   const consumeQuota=deps.consumeQuota||defaultConsumeQuota;
-  const callOpenAI=deps.callOpenAI||defaultCallOpenAI;
+  const callAI=deps.callGroq||deps.callOpenAI||defaultCallGroq;
   const imageLoader=deps.loadImageDataUrl||loadImageDataUrl;
   return async function handler(req,res){
     res.setHeader('Cache-Control','no-store');
@@ -134,9 +134,9 @@ function createHandler(deps={}){
       const auth=await authorizeFn(req);
       if(!auth?.ok || auth.plan!=='owner') return json(res,403,{message:'owner_preview_only'});
 
-      const apiKey=String(process.env.OPENAI_API_KEY||'').trim();
-      if(!apiKey) return json(res,503,{message:'OPENAI_API_KEY is not configured for Preview'});
-      const limitRaw=Number(process.env.OPENAI_ROOM_DAILY_LIMIT||DEFAULT_DAILY_LIMIT);
+      const apiKey=String(process.env.GROQ_API_KEY||'').trim();
+      if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured for Preview'});
+      const limitRaw=Number(process.env.GROQ_ROOM_DAILY_LIMIT||DEFAULT_DAILY_LIMIT);
       const limit=Number.isSafeInteger(limitRaw)&&limitRaw>0?limitRaw:DEFAULT_DAILY_LIMIT;
       const allowed=await consumeQuota(limit);
       if(!allowed) return json(res,429,{message:'AI daily limit reached',limit});
@@ -149,9 +149,9 @@ function createHandler(deps={}){
       if(!itemName) return json(res,400,{message:'itemName is required'});
 
       const image=await imageLoader(imageUrl);
-      const model=String(process.env.OPENAI_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
+      const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       const started=Date.now();
-      const ai=await callOpenAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:image.dataUrl});
+      const ai=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:image.dataUrl});
       const validation=validateAiExtraction(ai.raw,{itemName,itemCaption},{imageAvailable:image.available});
       const elapsedMs=Date.now()-started;
       console.log('room-ai usage',JSON.stringify({model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode}));
@@ -162,8 +162,9 @@ function createHandler(deps={}){
         model:ai.model||model,
         usage:ai.usage||null,
         elapsedMs,
-        validationRuleVersion:'2026-09-20-ai-phase1-v1',
-        promptVersion:'2026-09-20-ai-phase1-v1',
+        provider:'groq',
+        validationRuleVersion:'2026-09-22-ai-phase1-groq-v1',
+        promptVersion:'2026-09-22-ai-phase1-groq-v1',
         rawAiJson:ai.raw,
         validation
       });
@@ -178,6 +179,7 @@ function createHandler(deps={}){
 module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.loadImageDataUrl=loadImageDataUrl;
-module.exports.defaultCallOpenAI=defaultCallOpenAI;
+module.exports.defaultCallGroq=defaultCallGroq;
+module.exports.defaultCallOpenAI=defaultCallGroq; // compatibility alias for existing tests/tools
 module.exports.SYSTEM_PROMPT=SYSTEM_PROMPT;
 module.exports.schema=schema;
