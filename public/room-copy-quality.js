@@ -108,7 +108,6 @@
     {phrases:['収納'],category:'storage',usage:'generic_storage',priority:40},
     {phrases:['ブラシ'],category:'cleaning',usage:'brush',priority:40},
     {phrases:['クロス'],category:'cleaning',usage:'cloth',priority:40},
-    {phrases:['バイクグローブ','バイク グローブ','バイク用グローブ','バイク用 グローブ','バイク手袋','バイク 手袋','オートバイグローブ','オートバイ グローブ','ライディンググローブ','ライダーグローブ','レーシンググローブ','MOTOグローブ'],category:'motorcycle',usage:'riding_glove',priority:160},
     {phrases:['手袋','グローブ'],category:'cleaning',usage:'glove',priority:40}
   ];
 
