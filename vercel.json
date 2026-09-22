@@ -57,6 +57,9 @@
   "functions": {
     "api/room-ai.js": {
       "maxDuration": 20
+    },
+    "api/ai-preview-diagnostic.js": {
+      "maxDuration": 60
     }
   }
 }
