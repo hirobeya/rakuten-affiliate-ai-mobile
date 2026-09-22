@@ -202,7 +202,7 @@ function serialGroq(task){
   return next;
 }
 
-async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,fetchImpl=fetch}){
+async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,maxOutputTokens=320,fetchImpl=fetch}){
   return serialGroq(async()=>{
     const content=[{type:'input_text',text:JSON.stringify({itemName,itemCaption,itemPrice})}];
     if(imageDataUrl) content.push({type:'input_image',image_url:imageDataUrl,detail:'low'});
@@ -222,7 +222,7 @@ async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imag
               {role:'user',content}
             ],
             text:{format:{type:'json_schema',name:'urenavi_room_product_facts',strict:true,schema:schemaForCall(Boolean(imageDataUrl))}},
-            max_output_tokens:320
+            max_output_tokens:Math.max(256,Math.min(400,Number(maxOutputTokens)||320))
           }),
           signal:controller.signal
         });

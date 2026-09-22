@@ -25,15 +25,17 @@ function aiTargetDecision(item){
   const a=ruleApi.analyzeRoomProduct(item,'');
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
-  if(a?.outputMode!=='full') return {target:true,reason:'rule_fallback',analysis:a};
-  if(a?.ambiguous) return {target:true,reason:'rule_ambiguous',analysis:a};
-  if(conflicts.length) return {target:true,reason:'rule_conflict',analysis:a};
-  if(top.length>=2){
-    const gap=Number(top[0]?.score||0)-Number(top[1]?.score||0);
-    if(gap<20) return {target:true,reason:'small_candidate_gap',gap,analysis:a};
+  const fallbackFacts=(ruleApi.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
+  const safeFallback=fallbackFacts.length>=1;
+  const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
+  const gap=top.length>=2?Math.abs(Number(top[0]?.score||0)-Number(top[1]?.score||0)):Infinity;
+  if(conflicts.length) return {target:true,reason:'rule_conflict',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+  if(unresolved&&!safeFallback){
+    if(a?.ambiguous) return {target:true,reason:'rule_ambiguous',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+    if(top.length>=2&&gap<20) return {target:true,reason:'small_candidate_gap',analysis:a,safeFallback,fallbackFacts,gap};
+    return {target:true,reason:'insufficient_grounded_facts',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
   }
-  if(top.length===1 && Number(top[0]?.score||0)<80) return {target:true,reason:'weak_single_candidate',analysis:a};
-  return {target:false,reason:'rule_confident',analysis:a};
+  return {target:false,reason:safeFallback&&unresolved?'safe_fallback':'rule_confident',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
 }
 
 function summarizeTargeting(keyword,items){
@@ -41,7 +43,9 @@ function summarizeTargeting(keyword,items){
     const d=aiTargetDecision(item);
     return {
       index,itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),
-      target:d.target,reason:d.reason,
+      target:d.target,reason:d.reason,safeFallback:Boolean(d.safeFallback),
+      fallbackFactCount:Array.isArray(d.fallbackFacts)?d.fallbackFacts.length:0,
+      fallbackFacts:(d.fallbackFacts||[]).slice(0,3),
       outputMode:d.analysis?.outputMode||null,ambiguous:Boolean(d.analysis?.ambiguous),
       conflicts:(d.analysis?.conflicts||[]).map(x=>x.usage||x.category||String(x)),
       topCandidates:d.analysis?.topCandidates||[]
@@ -80,7 +84,7 @@ async function searchItems(keyword){
   }
   throw new Error('search_failed_'+lastStatus);
 }
-async function analyze(item){
+async function analyze(item,maxOutputTokens=320){
   const itemName=String(item?.itemName||'');
   const itemCaption=String(item?.itemCaption||'');
   const imageUrl=String([...(item?.mediumImageUrls||[]),...(item?.smallImageUrls||[])].find(Boolean)||'');
@@ -88,13 +92,13 @@ async function analyze(item){
   const started=Date.now();
   try{
     const result=await runTwoStageGroq({
-      callAI:defaultCallGroq,
+      callAI:args=>defaultCallGroq({...args,maxOutputTokens}),
       apiKey:String(process.env.GROQ_API_KEY||''),
       model,itemName,itemCaption,itemPrice:Number(item?.itemPrice)||0,imageUrl,
       imageLoader:loadImageDataUrl
     });
     return {
-      itemCode:String(item?.itemCode||''),itemName,
+      itemCode:String(item?.itemCode||''),itemName,maxOutputTokens,
       model:result.ai?.model||model,elapsedMs:Date.now()-started,
       stages:result.stages,rateLimit:result.ai?.rateLimit||{},attempts:result.ai?.attempts||1,
       usage:result.ai?.usage||null,outputTokens:Number(result.ai?.usage?.output_tokens||result.ai?.usage?.output_tokens_details?.total_tokens||0)||null,
@@ -102,7 +106,7 @@ async function analyze(item){
     };
   }catch(error){
     return {
-      itemCode:String(item?.itemCode||''),itemName,elapsedMs:Date.now()-started,
+      itemCode:String(item?.itemCode||''),itemName,maxOutputTokens,elapsedMs:Date.now()-started,
       error:{message:String(error?.message||'ai_failed'),status:error?.status||null,detail:error?.safeError||null,final429:error?.status===429},
       rateLimit:error?.rateLimit||{}
     };
@@ -131,7 +135,9 @@ module.exports=async function(req,res){
   const searchMs=Date.now()-t0;
   const item=items[index];
   if(!item) return res.status(404).json({message:'item_not_found',keyword,index,count:items.length});
-  const result=await analyze(item);
+  const requestedBudget=Number(req.query?.budget)||320;
+  const budget=[320,350,380,400].includes(requestedBudget)?requestedBudget:320;
+  const result=await analyze(item,budget);
   return res.status(200).json({
     ok:true,keyword,index,count:items.length,provider:'groq',searchMs,totalMs:Date.now()-t0,result
   });

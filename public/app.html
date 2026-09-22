@@ -2565,15 +2565,25 @@ function aiTargetDecision(item){
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
   const secondScore=Number(top[1]?.score||0);
-  const gap=top.length>1?topScore-secondScore:Infinity;
-  const weakSingle=top.length===1 && topScore<80;
+  const gap=top.length>1?Math.abs(topScore-secondScore):Infinity;
+  const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
+  const fallbackFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
+  const safeFallback=fallbackFacts.length>=1;
+  const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
   const reasons=[];
-  if(a?.outputMode!=='full') reasons.push('rule_fallback');
-  if(a?.ambiguous) reasons.push('rule_ambiguous');
-  if(Array.isArray(a?.conflicts)&&a.conflicts.length) reasons.push('rule_conflict');
-  if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
-  if(weakSingle) reasons.push('weak_single_candidate');
-  return {callAi:reasons.length>0,reasons,topScore,secondScore:top.length>1?secondScore:null,gap:Number.isFinite(gap)?gap:null};
+  if(conflicts.length) reasons.push('rule_conflict');
+  else if(unresolved&&!safeFallback){
+    if(a?.ambiguous) reasons.push('rule_ambiguous');
+    if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
+    reasons.push('insufficient_grounded_facts');
+  }
+  return {
+    callAi:reasons.length>0,reasons,topScore,
+    secondScore:top.length>1?secondScore:null,
+    gap:Number.isFinite(gap)?gap:null,
+    safeFallback,fallbackFactCount:fallbackFacts.length,
+    fallbackFacts:fallbackFacts.slice(0,3)
+  };
 }
 
 const FREE_TIER_AI_PER_SEARCH_LIMIT=2;

@@ -304,7 +304,7 @@ function run(name,fn){
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
     assert.match(src,/maxItems:3/);
-    assert.match(src,/max_output_tokens:320/);
+    assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
     assert.ok(SYSTEM_PROMPT.length<220);
@@ -323,6 +323,14 @@ function run(name,fn){
     assert.match(src,/preprocessedCaption\.length<=700/);
     assert.match(src,/slice\(0,520\)/);
     assert.match(src,/slice\(-160\)/);
+  });
+
+  await run('AI targeting distinguishes safe fallback from AI-needed fallback',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(src,/fallbackFacts\.length>=1/);
+    assert.match(src,/insufficient_grounded_facts/);
+    assert.match(src,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
+    assert.doesNotMatch(src,/if\(a\?\.outputMode!=='full'\) reasons\.push\('rule_fallback'\)/);
   });
 
   await run('Retry-After parser supports seconds',()=>{
