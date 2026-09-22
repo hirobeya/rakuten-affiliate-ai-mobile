@@ -196,6 +196,18 @@ input,select{
   line-height:1.4
 }
 
+.legal-warn{
+  margin-top:9px;
+  padding:9px 10px;
+  border-radius:10px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  font-size:11px;
+  line-height:1.5;
+  font-weight:700
+}
+
 .guide{
   margin-top:9px;
   padding:10px;
@@ -803,6 +815,8 @@ input,select{
 
 <div id="st" class="muted"></div>
 
+
+
 </section>
 
 
@@ -863,7 +877,8 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/room-copy-quality.js?v=20260920-6"></script>
+<script src="/room-copy-quality.js?v=20260920-7"></script>
+<script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
@@ -929,6 +944,9 @@ let searching=false;
 let currentAppSession=null;
 let currentAccessPlan='base';
 let proAvailable=false;
+let aiGatesFullOutput=false;
+let aiRoomResults=new Map();
+let aiRunGeneration=0;
 
 
 function setAuthMessage(
@@ -957,6 +975,10 @@ function showLogin(
 
   accessGeneration++;
   lastSearchItems=[];
+  lastSearchKeyword='';
+  aiRoomResults=new Map();
+  
+  aiRunGeneration++;
   document.getElementById('res').replaceChildren();
   appRoot.style.display=
   'none';
@@ -976,6 +998,9 @@ function showLogin(
 
 let accessGeneration=0;
 let lastSearchItems=[];
+let lastSearchKeyword='';
+let postCache=new Map();
+let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
 function bootAuth(){
   if(!authBoot) authBoot=checkAuth().finally(()=>{authBoot=null;});
@@ -1001,6 +1026,7 @@ function restoreSearchState(email){
     const state=UrenaviReturnState.load(sessionStorage,email);
     if(!state) return;
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
+    lastSearchKeyword=String(state.fields?.k||'').trim();
     render(state.items);
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
@@ -1028,11 +1054,12 @@ async function showApp(session) {
   try {
     const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
-    const access=await response.json().catch(()=>({}));
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
+    const access=typeof response.json==='function'?await response.json().catch(()=>({})):{};
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
+    await updateAiRuntimeAccess();
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
@@ -2102,8 +2129,176 @@ function groundedAnalysis(i){
   return {audience:ctx.audience||'',impact:ctx.benefit||''};
 }
 
+async function updateAiRuntimeAccess(){
+  let enabled=false;
+  try{
+    const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    enabled=r.ok && d.aiGatesFullOutput===true;
+  }catch{
+    enabled=false;
+  }
+  const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
+  aiGatesFullOutput=enabled && paidPlan;
+}
+
+function firstImageUrl(item){
+  const list=[...(item?.mediumImageUrls||[]),...(item?.smallImageUrls||[])];
+  const first=list.find(Boolean);
+  if(typeof first==='string') return safeUrl(first);
+  if(first&&typeof first.imageUrl==='string') return safeUrl(first.imageUrl);
+  return '#';
+}
+
+function aiSafeTitle(item){
+  try{
+    const a=groundedAnalysis(item);
+    if(UrenaviPainCopy.buildSafeDisplayName) return UrenaviPainCopy.buildSafeDisplayName(item,a);
+  }catch{}
+  return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
+}
+
+function aiPhase1Post(item,result){
+  const v=result?.validation;
+  const title=(v?.mode==='simple'&&v?.productType?.valid)?String(v.productType.value||''):aiSafeTitle(item);
+  const price=Number(item?.itemPrice);
+  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
+  if(v?.mode!=='simple') return title+(priceLine?'\n'+priceLine:'')+'\n\n※アフィリエイト広告を利用しています';
+  const features=(v?.features||[]).filter(x=>x?.eligibleForPost);
+  const lines=[title];
+  if(features.length) lines.push('','商品の特徴👇',...features.slice(0,5).map(x=>'✔ '+x.text));
+  if(priceLine) lines.push('',priceLine);
+  lines.push('','※アフィリエイト広告を利用しています');
+  return lines.join('\n').slice(0,500);
+}
+
+function aiPanelMarkup(){return '';}
+function updateAiPanel(){}
+
+async function requestAiRoom(item,index,generation){
+  if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
+  aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  try{
+    const headers={'Content-Type':'application/json'};
+    if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
+    const imageUrl=firstImageUrl(item);
+    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
+    const d=await r.json().catch(()=>({}));
+    if(generation!==aiRunGeneration) return;
+    if(!r.ok){
+      const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
+      aiRoomResults.set(index,{state:'error',message,status:r.status});
+    }else aiRoomResults.set(index,{state:'done',data:d});
+    for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
+  }catch(e){
+    if(generation!==aiRunGeneration) return;
+    aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+  }finally{
+    clearTimeout(timer);
+    if(generation===aiRunGeneration){
+      updateAiPanel(index);
+      const article=document.querySelector('.item[data-item-index="'+index+'"]');
+      if(article){
+        const active=article.querySelector('.tab.on');
+        const platform=active?.dataset?.p||'room';
+        const copy=article.querySelector('.copy');
+        if(copy) copy.textContent=postDisplay(lastSearchItems[index],platform);
+        const button=article.querySelector('.cb');
+        if(button){
+          const ready=postReady(lastSearchItems[index],platform);
+          button.disabled=!ready;
+          button.textContent=ready?'投稿文をコピー':'コピー不可';
+        }
+      }
+    }
+  }
+}
+
+function aiTargetDecision(item){
+  const a=groundedAnalysis(item);
+  const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
+  const topScore=Number(top[0]?.score||0);
+  const secondScore=Number(top[1]?.score||0);
+  const gap=top.length>1?Math.abs(topScore-secondScore):Infinity;
+  const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
+  const fallbackFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
+  const safeFallback=fallbackFacts.length>=1;
+  const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
+  const reasons=[];
+  if(conflicts.length) reasons.push('rule_conflict');
+  else if(unresolved&&!safeFallback){
+    if(a?.ambiguous) reasons.push('rule_ambiguous');
+    if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
+    reasons.push('insufficient_grounded_facts');
+  }
+  return {
+    callAi:reasons.length>0,reasons,topScore,
+    secondScore:top.length>1?secondScore:null,
+    gap:Number.isFinite(gap)?gap:null,
+    safeFallback,fallbackFactCount:fallbackFacts.length,
+    fallbackFacts:fallbackFacts.slice(0,3)
+  };
+}
+
+const FREE_TIER_AI_PER_SEARCH_LIMIT=2;
+
+async function runAiPreview(items){
+  if(!aiGatesFullOutput) return;
+  const generation=++aiRunGeneration;aiRoomResults=new Map();postCache=new Map();
+  const queue=[];
+  let targeted=0;
+  (Array.isArray(items)?items:[]).forEach((item,index)=>{
+    const target=aiTargetDecision(item);
+    if(aiGatesFullOutput && !target.callAi){
+      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target});
+      return;
+    }
+    if(aiGatesFullOutput && target.callAi){
+      targeted++;
+      if(targeted>FREE_TIER_AI_PER_SEARCH_LIMIT){
+        aiRoomResults.set(index,{state:'skipped',reason:'free_tier_ai_limit',target});
+        return;
+      }
+    }
+    aiRoomResults.set(index,{state:'loading',target});
+    queue.push({item,index});
+  });
+  while(queue.length&&generation===aiRunGeneration){
+    const job=queue.shift();
+    await requestAiRoom(job.item,job.index,generation);
+    if(queue.length) await new Promise(r=>setTimeout(r,250));
+  }
+}
+
+function legalWarning(i){
+  const a=groundedAnalysis(i);
+  if(!a?.claimRisk) return '';
+  return '<div class="legal-warn">商品名に効能・健康・美容・衛生表現として注意が必要な語句が含まれています。投稿前に商品ページをご確認ください。</div>';
+}
+
 function aud(i){
   return groundedAnalysis(i).audience;
+}
+
+function isFullOutput(i){
+  return groundedAnalysis(i).outputMode==='full';
+}
+
+function fullOutputItems(items){
+  return (Array.isArray(items)?items:[]).filter(isFullOutput);
+}
+
+function analysisGuide(i){
+  const a=groundedAnalysis(i);
+  if(a.outputMode!=='full'){
+    return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。</div></div>';
+  }
+  return `<div class="guide">
+    <div class="gt">この商品は誰に・何を刺す？</div>
+    <div class="target">${esc(aud(i))}</div>
+    <ul class="pts">${pts(i).map(z=>`<li>${esc(z)}</li>`).join('')}</ul>
+  </div>`;
 }
 
 function pts(i){
@@ -2114,13 +2309,135 @@ function pts(i){
   return out.slice(0,2);
 }
 
+function lexicalProductLabel(item){
+  try{
+    const a=groundedAnalysis(item);
+    if(UrenaviPainCopy.fallbackProductName) return UrenaviPainCopy.fallbackProductName(item,a);
+    if(UrenaviPainCopy.stripPromotionalText) return UrenaviPainCopy.stripPromotionalText(item?.itemName||'').slice(0,90).trim();
+  }catch{}
+  return String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim().slice(0,90)||'商品名を確認してください';
+}
+
+function aiSafeFallbackPost(item){
+  const title=lexicalProductLabel(item);
+  const price=Number(item?.itemPrice);
+  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
+  return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
+}
+
+function aiCheckingPost(item){
+  const title=lexicalProductLabel(item);
+  return [title,'AI確認中です。確認が完了するまで商品名から確認できる情報だけを表示しています。','','※アフィリエイト広告を利用しています'].join('\n');
+}
+
+function ruleSecondOpinion(item,validation,keyword=''){
+  const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
+    ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
+    :null;
+  const primary=shadow?.primaryProduct||null;
+  if(!primary?.grounded || !validation?.productType?.valid){
+    return {checked:false,conflict:false,primaryProduct:primary?.text||null};
+  }
+  const q=window.UrenaviProductShadowV2.queryConsistency(
+    String(item?.itemName||''),
+    String(validation.productType.value||''),
+    primary
+  );
+  return {
+    checked:true,
+    conflict:q.status!=='aligned',
+    primaryProduct:primary.text,
+    aiProductType:String(validation.productType.value||''),
+    comparison:q
+  };
+}
+
+function resolveAiGate(item,index,keyword=''){
+  if(!aiGatesFullOutput) return {enabled:false,status:'off',full:false,reasons:[]};
+  const ai=aiRoomResults.get(index);
+  if(!ai || ai.state==='loading' || ai.state==='not_run'){
+    return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.state==='skipped'&&ai.reason==='rule_confident'){
+    return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.state==='skipped'&&ai.reason==='free_tier_ai_limit'){
+    return {enabled:true,status:'fallback',full:false,reasons:['free_tier_ai_limit'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.state==='error'){
+    return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  const v=ai.data?.validation||{};
+  const second=ruleSecondOpinion(item,v,keyword);
+  const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
+  if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
+  if(second.conflict) reasons.push('rule_second_opinion_conflict');
+  const softReasons=new Set(['invalid_features_dropped']);
+  const blockingReasons=reasons.filter(x=>!softReasons.has(x));
+  const full=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
+  return {
+    enabled:true,
+    status:full?'full':'fallback',
+    full,
+    reasons,
+    mediumHandling:'fallback_fixed',
+    cacheKeyComponents:ai.data?.cache?.keyComponents||{
+      itemCode:String(item?.itemCode||''),
+      itemName:String(item?.itemName||''),
+      imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
+      itemCaptionNormalized:String(item?.itemCaption||'').normalize('NFKC').replace(/\s+/g,' ').trim()
+    },
+    ruleSecondOpinion:second,
+    validation:v,
+    cache:ai.data?.cache||null,
+    stages:ai.data?.stages||null,
+    rateLimit:ai.data?.rateLimit||{},
+    target:ai.target||null
+  };
+}
+
+function mediaTemplateFor(item,index,p='room',keyword=''){
+  const gate=resolveAiGate(item,index,keyword);
+  if(gate.enabled){
+    if(gate.useLegacy) return 'legacy_rule_confident_'+p;
+    return gate.full?p+'_fact_only':p+'_safe_fallback';
+  }
+  return 'legacy_'+p;
+}
+
+function resolvedPost(item,index,p='room',keyword=''){
+  const gate=resolveAiGate(item,index,keyword);
+  if(gate.enabled){
+    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiCheckingPost(item);
+    if(gate.useLegacy){
+      const options={variant:index};
+      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
+      if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+      if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+    }
+    if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
+    return aiSafeFallbackPost(item);
+  }
+
+  const options={variant:index};
+  if(p==='room'){
+    options.usedOpenings=roomSentenceContext.openings;
+    options.usedSeconds=roomSentenceContext.seconds;
+  }
+  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+}
+
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
-  const options={variant};
-  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(i,keyword,options);
-  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(i,keyword,options);
-  return UrenaviPainCopy.makeRoomCopy(i,keyword,options);
+  const key=p+':'+variant;
+  if(postCache.has(key)) return postCache.get(key);
+  const value=resolvedPost(i,variant,p,keyword);
+  postCache.set(key,value);
+  return value;
 }
 
 function postReady(i,p='room'){
@@ -2159,17 +2476,24 @@ function today(
   a
 ){
 
+  const eligible=fullOutputItems(a);
+
   if(
-    !a.length
+    !eligible.length
   ){
 
-    return'';
+    return`
+<section class="today">
+  <h2>今日売るならこれ</h2>
+  <div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div>
+</section>
+`;
 
   }
 
 
   const i=
-  [...a]
+  [...eligible]
   .sort(
     (
       a,
@@ -2460,6 +2784,11 @@ function render(
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
+  aiRoomResults=new Map();
+  
+  aiRunGeneration++;
+  postCache=new Map();
+  roomSentenceContext={openings:new Set(),seconds:new Set()};
   $('#res').innerHTML=
 
   today(
@@ -2486,7 +2815,7 @@ function render(
       n
     )=>`
 
-<article class="item">
+<article class="item" data-item-index="${n}">
 
   <div class="rank">
     おすすめ ${n+1}位　AI ${i.score}/100
@@ -2580,6 +2909,9 @@ function render(
 
   </div>
 
+
+  ${legalWarning(i)}
+  ${aiPanelMarkup(i,n)}
   <div class="ins">
 
     <div class="it">
@@ -2608,30 +2940,7 @@ function render(
 
   </div>
 
-  <div class="guide">
-
-    <div class="gt">
-      この商品は誰に・何を刺す？
-    </div>
-
-    <div class="target">
-      ${esc(aud(i))}
-    </div>
-
-    <ul class="pts">
-
-      ${
-        pts(i)
-        .map(
-          z=>
-          `<li>${esc(z)}</li>`
-        )
-        .join('')
-      }
-
-    </ul>
-
-  </div>
+  ${analysisGuide(i)}
 
   <div class="tabs">
 
@@ -2836,7 +3145,7 @@ function render(
   ){
 
     const i=
-    [...a]
+    fullOutputItems(a)
     .sort(
       (
         a,
@@ -2844,6 +3153,9 @@ function render(
       )=>
       b.sellability-
       a.sellability
+      ||
+      b.score-
+      a.score
     )[0];
 
 
@@ -2873,6 +3185,10 @@ function render(
 
     };
 
+  }
+
+  if(aiGatesFullOutput){
+    runAiPreview(a);
   }
 
 }
@@ -3131,6 +3447,7 @@ async()=>{
     });
 
 
+    lastSearchKeyword=keyword;
     render(
       d.items||
       []
