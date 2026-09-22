@@ -115,25 +115,42 @@ function run(name,fn){
     assert.equal(result.raw.productType.value,'野球グローブ');
   });
 
-  await run('Production never invokes owner auth, quota, image, or Groq',async()=>{
-    const old=process.env.VERCEL_ENV;
+  await run('Production paid plan can use text-only AI',async()=>{
+    const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='production';
+    process.env.GROQ_API_KEY='test-key';
     let authCalls=0,quotaCalls=0,aiCalls=0,imageCalls=0;
     const handler=createHandler({
-      authorize:async()=>{authCalls++;return {ok:true,plan:'owner'};},
+      authorize:async()=>{authCalls++;return {ok:true,plan:'base'};},
       consumeQuota:async()=>{quotaCalls++;return true;},
-      loadImageDataUrl:async()=>{imageCalls++;return {available:false,dataUrl:null};},
-      callGroq:async()=>{aiCalls++;return {raw:{}};}
+      loadCache:async()=>null,
+      saveCache:async()=>{},
+      loadImageDataUrl:async()=>{imageCalls++;return {available:true,dataUrl:'data:image/png;base64,AA=='};},
+      callGroq:async()=>{aiCalls++;return {
+        model:'qwen/qwen3.8-27b',
+        usage:{input_tokens:100,output_tokens:40},
+        raw:{productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},features:[],confidence:'high'}
+      };}
     });
-    const req={method:'POST',headers:{},body:{itemName:'商品'}};
     const res=makeRes();
-    await handler(req,res);
-    assert.equal(res.statusCode,404);
-    assert.equal(authCalls,0);
-    assert.equal(quotaCalls,0);
+    await handler({method:'POST',headers:{},body:{itemName:'バイクグローブ',itemCaption:'',itemPrice:1000}},res);
+    assert.equal(res.statusCode,200);
+    assert.equal(authCalls,1);
+    assert.equal(quotaCalls,1);
+    assert.equal(aiCalls,1);
     assert.equal(imageCalls,0);
-    assert.equal(aiCalls,0);
-    if(old===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=old;
+    assert.equal(res.body.stages.imageAttempted,false);
+    if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+  });
+
+  await run('Production client enables AI only for paid plans while debug stays Preview owner only',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/runtimeKnown/);
+    assert.match(html,/\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
+    assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
+    assert.match(html,/if\(!aiGatesFullOutput\|\|generation!==aiRunGeneration\) return/);
+    assert.match(html,/async function runAiPreview\(items\)\{\n  if\(!aiGatesFullOutput\) return/);
   });
 
   await run('Preview owner mock invokes one AI request and validates output',async()=>{

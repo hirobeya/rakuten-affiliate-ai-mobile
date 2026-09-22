@@ -320,10 +320,13 @@ function createHandler(deps={}){
   return async function handler(req,res){
     res.setHeader('Cache-Control','no-store');
     if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
-    if(process.env.VERCEL_ENV!=='preview') return json(res,404,{message:'Not found'});
+    const runtimeEnv=String(process.env.VERCEL_ENV||'');
+    if(!['preview','production'].includes(runtimeEnv)) return json(res,404,{message:'Not found'});
     try{
       const auth=await authorizeFn(req);
-      if(!auth?.ok || auth.plan!=='owner') return json(res,403,{message:'owner_preview_only'});
+      if(!auth?.ok) return json(res,403,{message:'access_required'});
+      if(runtimeEnv==='preview' && auth.plan!=='owner') return json(res,403,{message:'owner_preview_only'});
+      if(runtimeEnv==='production' && !['base','pro','owner'].includes(String(auth.plan||''))) return json(res,403,{message:'paid_plan_required'});
 
       const body=req.body&&typeof req.body==='object'?req.body:{};
       const itemCode=String(body.itemCode||'').trim().slice(0,300);
@@ -369,7 +372,7 @@ function createHandler(deps={}){
       }
 
       const apiKey=String(process.env.GROQ_API_KEY||'').trim();
-      if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured for Preview'});
+      if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
       const limitRaw=Number(process.env.GROQ_ROOM_DAILY_LIMIT||DEFAULT_DAILY_LIMIT);
       const limit=Number.isSafeInteger(limitRaw)&&limitRaw>0?limitRaw:DEFAULT_DAILY_LIMIT;
       const allowed=await consumeQuota(limit);

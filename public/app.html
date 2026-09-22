@@ -2191,15 +2191,23 @@ function groundedAnalysis(i){
 
 async function updateDebugExportAccess(){
   let preview=false;
+  let runtimeKnown=false;
   try{
     const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
     const d=await r.json().catch(()=>({}));
-    preview=r.ok && d.preview===true;
+    runtimeKnown=r.ok && typeof d.preview==='boolean';
+    preview=runtimeKnown && d.preview===true;
   }catch{
     preview=false;
+    runtimeKnown=false;
   }
-  debugExportAllowed=preview && currentAccessPlan==='owner';
-  aiGatesFullOutput=debugExportAllowed && new URLSearchParams(location.search).get('aiGatesFullOutput')==='1';
+  debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
+  const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
+  aiGatesFullOutput=runtimeKnown && (
+    preview
+      ?debugExportAllowed && new URLSearchParams(location.search).get('aiGatesFullOutput')==='1'
+      :paidPlan
+  );
   const box=document.getElementById('debugExport');
   if(box) box.classList.toggle('on',debugExportAllowed);
   if(!debugExportAllowed){
@@ -2520,7 +2528,7 @@ function updateAiPanel(index){
 }
 
 async function requestAiRoom(item,index,generation){
-  if(!debugExportAllowed||generation!==aiRunGeneration) return;
+  if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
   try{
@@ -2531,7 +2539,7 @@ async function requestAiRoom(item,index,generation){
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
-      const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'PreviewのGROQ_API_KEYが設定されていません':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
+      const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
@@ -2589,7 +2597,7 @@ function aiTargetDecision(item){
 const FREE_TIER_AI_PER_SEARCH_LIMIT=2;
 
 async function runAiPreview(items){
-  if(!debugExportAllowed) return;
+  if(!aiGatesFullOutput) return;
   const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
   const queue=[];
   let targeted=0;
