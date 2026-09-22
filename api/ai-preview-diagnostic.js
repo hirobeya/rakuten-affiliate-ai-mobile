@@ -77,16 +77,19 @@ module.exports=async function handler(req,res){
     const t0=Date.now();
     const items=(await searchItems(spec.keyword)).slice(0,spec.limit);
     const searchMs=Date.now()-t0;
-    const out=new Array(items.length);
-    let cursor=0;
-    const worker=async()=>{
-      while(cursor<items.length){
-        const i=cursor++;
-        out[i]=await analyzeOne(items[i]);
-      }
-    };
+    const out=[];
     const aiStarted=Date.now();
-    await Promise.all(Array.from({length:Math.min(3,items.length)},()=>worker()));
+    for(const item of items){
+      try{
+        out.push(await analyzeOne(item));
+      }catch(error){
+        out.push({
+          itemCode:String(item?.itemCode||''),
+          itemName:String(item?.itemName||''),
+          error:String(error?.message||'ai_failed')
+        });
+      }
+    }
     const aiBatchMs=Date.now()-aiStarted;
     return res.status(200).json({
       ok:true,case:key,keyword:spec.keyword,count:items.length,
