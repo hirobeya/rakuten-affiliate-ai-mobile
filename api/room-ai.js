@@ -7,6 +7,10 @@ const {preprocessCaption,validateAiExtraction}=require('../lib/room-ai');
 const DEFAULT_MODEL='qwen/qwen3.8-27b';
 const DEFAULT_DAILY_LIMIT=200;
 const AI_TIMEOUT_MS=8000;
+const GROQ_MIN_INTERVAL_MS=250;
+const GROQ_MAX_RETRIES=3;
+let groqSerialTail=Promise.resolve();
+let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
 const PROMPT_VERSION='2026-09-22-ai-phase1-groq-v2';
 const VALIDATION_RULE_VERSION='2026-09-22-ai-gate-v2';
@@ -126,37 +130,143 @@ function extractOutputText(data){
   return '';
 }
 
-async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,fetchImpl=fetch}){
-  const content=[
-    {type:'input_text',text:JSON.stringify({itemName,itemCaption,itemPrice})}
+function sleep(ms){return new Promise(r=>setTimeout(r,Math.max(0,ms||0)));}
+
+function parseRetryAfter(value){
+  const x=String(value||'').trim();
+  if(!x) return null;
+  const n=Number(x);
+  if(Number.isFinite(n)&&n>=0) return Math.ceil(n*1000);
+  const t=Date.parse(x);
+  if(Number.isFinite(t)) return Math.max(0,t-Date.now());
+  return null;
+}
+
+function rateLimitHeaders(headers){
+  const names=[
+    'x-ratelimit-limit-requests','x-ratelimit-remaining-requests',
+    'x-ratelimit-limit-tokens','x-ratelimit-remaining-tokens',
+    'x-ratelimit-reset-requests','x-ratelimit-reset-tokens',
+    'retry-after'
   ];
-  if(imageDataUrl) content.push({type:'input_image',image_url:imageDataUrl,detail:'low'});
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),AI_TIMEOUT_MS);
-  try{
-    const r=await fetchImpl('https://api.groq.com/openai/v1/responses',{
-      method:'POST',
-      headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model,
-        reasoning:{effort:'none'},
-        input:[
-          {role:'system',content:[{type:'input_text',text:SYSTEM_PROMPT}]},
-          {role:'user',content}
-        ],
-        text:{format:{type:'json_schema',name:'urenavi_room_product_facts',strict:true,schema}},
-        max_output_tokens:1200
-      }),
-      signal:controller.signal
-    });
-    const data=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(`Groq request failed (${r.status})`);
-    const text=extractOutputText(data);
-    if(!text) throw new Error('Groq returned no structured output');
-    let parsed;
-    try{parsed=JSON.parse(text);}catch{throw new Error('Groq returned invalid JSON');}
-    return {raw:parsed,usage:data.usage||null,model:data.model||model};
-  }finally{clearTimeout(timer);}
+  const out={};
+  for(const name of names){
+    const value=headers?.get?.(name);
+    if(value!==null&&value!==undefined&&value!=='') out[name]=String(value);
+  }
+  return out;
+}
+
+function safeGroqError(status,data){
+  const e=data?.error&&typeof data.error==='object'?data.error:{};
+  return {
+    status:Number(status)||0,
+    type:e.type?String(e.type).slice(0,120):null,
+    code:e.code?String(e.code).slice(0,120):null,
+    message:e.message?String(e.message).slice(0,500):null
+  };
+}
+
+function serialGroq(task){
+  const run=async()=>{
+    const gap=Date.now()-lastGroqStartAt;
+    if(gap<GROQ_MIN_INTERVAL_MS) await sleep(GROQ_MIN_INTERVAL_MS-gap);
+    lastGroqStartAt=Date.now();
+    return task();
+  };
+  const next=groqSerialTail.then(run,run);
+  groqSerialTail=next.catch(()=>{});
+  return next;
+}
+
+async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl,fetchImpl=fetch}){
+  return serialGroq(async()=>{
+    const content=[{type:'input_text',text:JSON.stringify({itemName,itemCaption,itemPrice})}];
+    if(imageDataUrl) content.push({type:'input_image',image_url:imageDataUrl,detail:'low'});
+    let lastFailure=null;
+    for(let attempt=0;attempt<=GROQ_MAX_RETRIES;attempt++){
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),AI_TIMEOUT_MS);
+      try{
+        const r=await fetchImpl('https://api.groq.com/openai/v1/responses',{
+          method:'POST',
+          headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},
+          body:JSON.stringify({
+            model,
+            reasoning:{effort:'none'},
+            input:[
+              {role:'system',content:[{type:'input_text',text:SYSTEM_PROMPT}]},
+              {role:'user',content}
+            ],
+            text:{format:{type:'json_schema',name:'urenavi_room_product_facts',strict:true,schema}},
+            max_output_tokens:1200
+          }),
+          signal:controller.signal
+        });
+        const rateLimit=rateLimitHeaders(r.headers);
+        const data=await r.json().catch(()=>({}));
+        if(r.ok){
+          console.log('groq response meta',JSON.stringify({status:r.status,attempt,rateLimit}));
+          const outputText=extractOutputText(data);
+          if(!outputText) throw new Error('Groq returned no structured output');
+          let parsed;
+          try{parsed=JSON.parse(outputText);}catch{throw new Error('Groq returned invalid JSON');}
+          return {raw:parsed,usage:data.usage||null,model:data.model||model,rateLimit,attempts:attempt+1};
+        }
+
+        const safeError=safeGroqError(r.status,data);
+        console.warn('groq response error',JSON.stringify({status:r.status,attempt,rateLimit,error:safeError}));
+        lastFailure={status:r.status,rateLimit,safeError};
+        if(r.status!==429 || attempt>=GROQ_MAX_RETRIES){
+          const err=new Error(`Groq request failed (${r.status})`);
+          err.status=r.status; err.rateLimit=rateLimit; err.safeError=safeError;
+          throw err;
+        }
+        const retryMs=parseRetryAfter(r.headers.get('retry-after')) ?? [1000,2000,4000][Math.min(attempt,2)];
+        await sleep(retryMs);
+      }finally{clearTimeout(timer);}
+    }
+    const err=new Error('Groq request failed');
+    if(lastFailure){err.status=lastFailure.status;err.rateLimit=lastFailure.rateLimit;err.safeError=lastFailure.safeError;}
+    throw err;
+  });
+}
+
+function textStageAcceptable(validation){
+  return Boolean(
+    validation &&
+    validation.productType?.valid===true &&
+    validation.confidence==='high' &&
+    (validation.mode==='simple'||validation.mode==='simple_partial')
+  );
+}
+
+async function runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader}){
+  const textStarted=Date.now();
+  const textAi=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:null});
+  const textValidation=validateAiExtraction(textAi.raw,{itemName,itemCaption},{imageAvailable:false});
+  const textElapsedMs=Date.now()-textStarted;
+  if(textStageAcceptable(textValidation)){
+    return {
+      ai:textAi,validation:textValidation,image:{available:false,dataUrl:null},
+      stages:{textOnly:true,imageAttempted:false,textElapsedMs,imageElapsedMs:0}
+    };
+  }
+
+  const image=await imageLoader(imageUrl);
+  if(!image.available){
+    return {
+      ai:textAi,validation:textValidation,image,
+      stages:{textOnly:true,imageAttempted:false,textElapsedMs,imageElapsedMs:0,imageUnavailable:true}
+    };
+  }
+  const imageStarted=Date.now();
+  const imageAi=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:image.dataUrl});
+  const imageValidation=validateAiExtraction(imageAi.raw,{itemName,itemCaption},{imageAvailable:true});
+  return {
+    ai:imageAi,validation:imageValidation,image,
+    stages:{textOnly:false,imageAttempted:true,textElapsedMs,imageElapsedMs:Date.now()-imageStarted}
+  };
 }
 
 function createHandler(deps={}){
@@ -222,11 +332,13 @@ function createHandler(deps={}){
       const allowed=await consumeQuota(limit);
       if(!allowed) return json(res,429,{message:'AI daily limit reached',limit});
 
-      const image=await imageLoader(imageUrl);
       const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       const started=Date.now();
-      const ai=await callAI({apiKey,model,itemName,itemCaption,itemPrice,imageDataUrl:image.dataUrl});
-      const validation=validateAiExtraction(ai.raw,{itemName,itemCaption},{imageAvailable:image.available});
+      const twoStage=await runTwoStageGroq({callAI,apiKey,model,itemName,itemCaption,itemPrice,imageUrl,imageLoader});
+      const ai=twoStage.ai;
+      const validation=twoStage.validation;
+      const image=twoStage.image;
+      const stages=twoStage.stages;
       const elapsedMs=Date.now()-started;
 
       try{
@@ -247,7 +359,7 @@ function createHandler(deps={}){
       }
 
       console.log('room-ai usage',JSON.stringify({
-        cacheStatus,aiCall:true,model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode
+        cacheStatus,aiCall:true,model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode,stages,rateLimit:ai.rateLimit||{}
       }));
 
       return json(res,200,{
@@ -261,12 +373,26 @@ function createHandler(deps={}){
         promptVersion:PROMPT_VERSION,
         rawAiJson:ai.raw,
         validation,
+        stages,
+        rateLimit:ai.rateLimit||{},
+        attempts:ai.attempts||1,
         cache:{hit:false,status:cacheStatus,ttlDays:CACHE_TTL_DAYS,inputHash,keyComponents:cacheKeyComponents}
       });
     }catch(error){
       const timeout=error?.name==='AbortError'||/timeout|aborted/i.test(String(error?.message||''));
-      console.error('room-ai failed',error?.message||'unknown');
-      return json(res,timeout?504:502,{message:timeout?'AI analysis timed out':'AI analysis failed',fallback:true});
+      console.error('room-ai failed',JSON.stringify({
+        message:error?.message||'unknown',
+        status:error?.status||null,
+        rateLimit:error?.rateLimit||{},
+        error:error?.safeError||null
+      }));
+      return json(res,timeout?504:502,{
+        message:timeout?'AI analysis timed out':'AI analysis failed',
+        fallback:true,
+        upstreamStatus:error?.status||null,
+        upstreamError:error?.safeError||null,
+        rateLimit:error?.rateLimit||{}
+      });
     }
   };
 }
@@ -274,6 +400,11 @@ module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.loadImageDataUrl=loadImageDataUrl;
 module.exports.defaultCallGroq=defaultCallGroq;
+module.exports.runTwoStageGroq=runTwoStageGroq;
+module.exports.textStageAcceptable=textStageAcceptable;
+module.exports.rateLimitHeaders=rateLimitHeaders;
+module.exports.safeGroqError=safeGroqError;
+module.exports.parseRetryAfter=parseRetryAfter;
 module.exports.defaultCallOpenAI=defaultCallGroq; // compatibility alias for existing tests/tools
 module.exports.makeInputHash=makeInputHash;
 module.exports.normalizeCacheCaption=normalizeCacheCaption;

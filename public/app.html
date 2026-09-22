@@ -2560,13 +2560,40 @@ async function requestAiRoom(item,index,generation){
   }
 }
 
+function aiTargetDecision(item){
+  const a=groundedAnalysis(item);
+  const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
+  const topScore=Number(top[0]?.score||0);
+  const secondScore=Number(top[1]?.score||0);
+  const gap=top.length>1?topScore-secondScore:Infinity;
+  const weakSingle=top.length===1 && topScore<80;
+  const reasons=[];
+  if(a?.outputMode!=='full') reasons.push('rule_fallback');
+  if(a?.ambiguous) reasons.push('rule_ambiguous');
+  if(Array.isArray(a?.conflicts)&&a.conflicts.length) reasons.push('rule_conflict');
+  if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
+  if(weakSingle) reasons.push('weak_single_candidate');
+  return {callAi:reasons.length>0,reasons,topScore,secondScore:top.length>1?secondScore:null,gap:Number.isFinite(gap)?gap:null};
+}
+
 async function runAiPreview(items){
   if(!debugExportAllowed) return;
   const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
-  const queue=(Array.isArray(items)?items:[]).map((item,index)=>({item,index}));
-  for(const job of queue) aiRoomResults.set(job.index,{state:'loading'});
-  const worker=async()=>{while(queue.length&&generation===aiRunGeneration){const job=queue.shift();await requestAiRoom(job.item,job.index,generation);}};
-  await Promise.all(Array.from({length:Math.min(3,queue.length)},()=>worker()));
+  const queue=[];
+  (Array.isArray(items)?items:[]).forEach((item,index)=>{
+    const target=aiTargetDecision(item);
+    if(aiGatesFullOutput && !target.callAi){
+      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target});
+    }else{
+      aiRoomResults.set(index,{state:'loading',target});
+      queue.push({item,index});
+    }
+  });
+  while(queue.length&&generation===aiRunGeneration){
+    const job=queue.shift();
+    await requestAiRoom(job.item,job.index,generation);
+    if(queue.length) await new Promise(r=>setTimeout(r,250));
+  }
 }
 
 document.addEventListener('click',e=>{
@@ -2655,15 +2682,20 @@ function resolveAiGate(item,index,keyword=''){
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
   }
+  if(ai.state==='skipped'&&ai.reason==='rule_confident'){
+    return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
   if(ai.state==='error'){
-    return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],ruleSecondOpinion:{checked:false,conflict:false}};
+    return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
   const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
   if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
   if(second.conflict) reasons.push('rule_second_opinion_conflict');
-  const full=v.mode==='simple' && v.productType?.valid===true && reasons.length===0;
+  const softReasons=new Set(['invalid_features_dropped']);
+  const blockingReasons=reasons.filter(x=>!softReasons.has(x));
+  const full=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
   return {
     enabled:true,
     status:full?'full':'fallback',
@@ -2678,19 +2710,32 @@ function resolveAiGate(item,index,keyword=''){
     },
     ruleSecondOpinion:second,
     validation:v,
-    cache:ai.data?.cache||null
+    cache:ai.data?.cache||null,
+    stages:ai.data?.stages||null,
+    rateLimit:ai.data?.rateLimit||{},
+    target:ai.target||null
   };
 }
 
 function mediaTemplateFor(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
-  if(gate.enabled) return gate.full?p+'_fact_only':p+'_safe_fallback';
+  if(gate.enabled){
+    if(gate.useLegacy) return 'legacy_rule_confident_'+p;
+    return gate.full?p+'_fact_only':p+'_safe_fallback';
+  }
   return 'legacy_'+p;
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
+    if(gate.useLegacy){
+      const options={variant:index};
+      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
+      if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+      if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+    }
     if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
     return aiSafeFallbackPost(item);
   }

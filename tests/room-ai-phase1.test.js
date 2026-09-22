@@ -2,9 +2,9 @@
 
 const assert=require('node:assert/strict');
 const {
-  evidenceExists,numbersSupported,validateAiExtraction,phase1Post,imageTypeCompatible
+  evidenceExists,numbersSupported,validateAiExtraction,phase1Post,imageTypeCompatible,productTypeCoverage
 }=require('../lib/room-ai');
-const {createHandler,defaultCallGroq,makeInputHash,normalizeCacheCaption,CACHE_TTL_DAYS}=require('../api/room-ai');
+const {createHandler,defaultCallGroq,runTwoStageGroq,makeInputHash,normalizeCacheCaption,CACHE_TTL_DAYS,parseRetryAfter}=require('../api/room-ai');
 
 function makeRes(){
   return {
@@ -203,6 +203,69 @@ function run(name,fn){
     assert.ok(v.reasons.includes('product_type_validation_failed'));
   });
 
+  await run('productType coverage allows >=90 percent character support and rejects lower coverage',()=>{
+    assert.ok(productTypeCoverage('バイクグローブ','バイク グローブ')>=0.90);
+    assert.ok(productTypeCoverage('高級バイクグローブ','バイクグローブ')<0.90);
+  });
+
+  await run('partial feature fallback keeps product when less than half features invalid',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'モップハンガー',source:'itemName',evidence:'モップハンガー'},
+      features:[
+        {text:'6本掛け',source:'itemName',evidence:'6本掛け'},
+        {text:'幅536mm',source:'itemCaption',evidence:'536'},
+        {text:'キャスター付',source:'itemCaption',evidence:'キャスター付'}
+      ],
+      unknowns:[],imageProductTypeHint:null,confidence:'high'
+    },{itemName:'モップハンガー 6本掛け',itemCaption:'536 キャスター付'},{imageAvailable:false});
+    assert.equal(v.mode,'simple_partial');
+    assert.equal(v.featureValidation.invalidCount,1);
+    assert.ok(v.reasons.includes('invalid_features_dropped'));
+  });
+
+  await run('half or more invalid features forces whole-product fallback',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'モップハンガー',source:'itemName',evidence:'モップハンガー'},
+      features:[
+        {text:'幅536mm',source:'itemCaption',evidence:'536'},
+        {text:'高さ1375mm',source:'itemCaption',evidence:'1375'}
+      ],
+      unknowns:[],imageProductTypeHint:null,confidence:'high'
+    },{itemName:'モップハンガー',itemCaption:'536 1375'},{imageAvailable:false});
+    assert.equal(v.mode,'fallback');
+    assert.ok(v.reasons.includes('feature_validation_failed'));
+  });
+
+  await run('Retry-After parser supports seconds',()=>{
+    assert.equal(parseRetryAfter('2'),2000);
+  });
+
+  await run('two-stage Groq skips image when text validation is high and grounded',async()=>{
+    let calls=0,images=0;
+    const out=await runTwoStageGroq({
+      callAI:async({imageDataUrl})=>{calls++;assert.equal(imageDataUrl,null);return {
+        raw:{productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'}
+      };},
+      apiKey:'x',model:'qwen/qwen3.8-27b',itemName:'バイクグローブ',itemCaption:'',itemPrice:1000,imageUrl:'https://example.com/x.jpg',
+      imageLoader:async()=>{images++;return {available:true,dataUrl:'data:image/jpeg;base64,AA=='};}
+    });
+    assert.equal(calls,1);assert.equal(images,0);assert.equal(out.stages.imageAttempted,false);
+  });
+
+  await run('two-stage Groq adds image only after uncertain text stage',async()=>{
+    let calls=0,images=0;
+    const out=await runTwoStageGroq({
+      callAI:async({imageDataUrl})=>{
+        calls++;
+        if(!imageDataUrl) return {raw:{productType:{value:'グローブ',source:'itemName',evidence:'グローブ'},features:[],unknowns:[],imageProductTypeHint:null,confidence:'medium'}};
+        return {raw:{productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},features:[],unknowns:[],imageProductTypeHint:'レザーグローブ',confidence:'high'}};
+      },
+      apiKey:'x',model:'qwen/qwen3.8-27b',itemName:'バイクグローブ グローブ',itemCaption:'',itemPrice:1000,imageUrl:'https://example.com/x.jpg',
+      imageLoader:async()=>{images++;return {available:true,dataUrl:'data:image/jpeg;base64,AA=='};}
+    });
+    assert.equal(calls,2);assert.equal(images,1);assert.equal(out.stages.imageAttempted,true);assert.equal(out.validation.mode,'simple');
+  });
+
   await run('medium confidence is fixed fallback',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
@@ -328,6 +391,10 @@ function run(name,fn){
     assert.match(html,/cacheKeyComponents/);
     assert.match(html,/resolvedPost:resolvedPostMeta/);
     assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
+    assert.match(html,/function aiTargetDecision\(/);
+    assert.match(html,/weak_single_candidate/);
+    assert.match(html,/setTimeout\(r,250\)/);
+    assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
   });
 
   await run('daily limit blocks AI call',async()=>{
