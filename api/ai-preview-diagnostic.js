@@ -47,7 +47,7 @@ async function analyze(item){
 }
 module.exports=async function(req,res){
   res.setHeader('Cache-Control','no-store');
-  if(process.env.VERCEL_ENV!=='preview'||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-22T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
   const keyword=CASES[String(req.query?.case||'')];
   if(!keyword) return res.status(400).json({message:'invalid_case'});
   const index=Math.max(0,Math.min(9,Number(req.query?.index)||0));

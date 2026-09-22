@@ -236,6 +236,13 @@ function run(name,fn){
     assert.ok(v.reasons.includes('feature_validation_failed'));
   });
 
+  await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
+    assert.match(src,/maxItems:6/);
+    assert.match(src,/max_output_tokens:700/);
+    assert.doesNotMatch(src,/max_output_tokens:1200/);
+  });
+
   await run('Retry-After parser supports seconds',()=>{
     assert.equal(parseRetryAfter('2'),2000);
   });

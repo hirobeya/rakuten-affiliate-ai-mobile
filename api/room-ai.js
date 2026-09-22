@@ -30,7 +30,7 @@ const schema={
       }
     },
     features:{
-      type:'array',maxItems:12,
+      type:'array',maxItems:6,
       items:{
         type:'object',additionalProperties:false,
         required:['text','source','evidence'],
@@ -199,7 +199,7 @@ async function defaultCallGroq({apiKey,model,itemName,itemCaption,itemPrice,imag
               {role:'user',content}
             ],
             text:{format:{type:'json_schema',name:'urenavi_room_product_facts',strict:true,schema}},
-            max_output_tokens:1200
+            max_output_tokens:700
           }),
           signal:controller.signal
         });
