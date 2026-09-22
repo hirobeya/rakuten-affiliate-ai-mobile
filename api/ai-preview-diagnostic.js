@@ -50,18 +50,14 @@ module.exports=async function(req,res){
   if(process.env.VERCEL_ENV!=='preview'||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
   const keyword=CASES[String(req.query?.case||'')];
   if(!keyword) return res.status(400).json({message:'invalid_case'});
+  const index=Math.max(0,Math.min(9,Number(req.query?.index)||0));
   const t0=Date.now();
   const items=await searchItems(keyword);
   const searchMs=Date.now()-t0;
-  const results=[];
-  for(const item of items) results.push(await analyze(item));
+  const item=items[index];
+  if(!item) return res.status(404).json({message:'item_not_found',keyword,index,count:items.length});
+  const result=await analyze(item);
   return res.status(200).json({
-    ok:true,keyword,count:items.length,provider:'groq',searchMs,aiBatchMs:Date.now()-t0-searchMs,totalMs:Date.now()-t0,
-    successCount:results.filter(x=>!x.error).length,
-    status429Count:results.filter(x=>x.error?.status===429).length,
-    status400Count:results.filter(x=>x.error?.status===400).length,
-    textOnlyConfirmed:results.filter(x=>x.stages?.imageAttempted===false&&!x.error).length,
-    imageStageUsed:results.filter(x=>x.stages?.imageAttempted===true&&!x.error).length,
-    results
+    ok:true,keyword,index,count:items.length,provider:'groq',searchMs,totalMs:Date.now()-t0,result
   });
 };
