@@ -1,0 +1,17 @@
+name: ROOM Production Safety Regression
+
+on:
+  push:
+    branches:
+      - rule-safety-production-candidate-20260922
+  pull_request:
+
+jobs:
+  test-copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: npm run test:copy
