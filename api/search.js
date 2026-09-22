@@ -469,9 +469,8 @@ function profitabilityScore(x){
 }
 
 
-function createHandler(deps={}){
-const authorizeFn=deps.authorize||authorize;
-return async function handler(req,res){
+module.exports=
+async function handler(req,res){
 
   if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
@@ -483,7 +482,7 @@ return async function handler(req,res){
 
 
     const auth=
-    await authorizeFn(
+    await authorize(
       req
     );
 
@@ -933,10 +932,7 @@ return async function handler(req,res){
   }
 
 };
-}
 
-module.exports=createHandler();
-module.exports.createHandler=createHandler;
 
 module.exports._measurementInternals={
   relevance,
