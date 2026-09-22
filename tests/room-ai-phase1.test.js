@@ -489,7 +489,10 @@ function run(name,fn){
     assert.match(html,/resolvedPost:resolvedPostMeta/);
     assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
     assert.match(html,/function aiTargetDecision\(/);
-    assert.match(html,/weak_single_candidate/);
+    assert.match(html,/safeFallback/);
+    assert.match(html,/insufficient_grounded_facts/);
+    assert.match(html,/rule_conflict/);
+    assert.doesNotMatch(html,/weak_single_candidate/);
     assert.match(html,/setTimeout\(r,250\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.match(html,/function aiCheckingPost\(/);
