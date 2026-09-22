@@ -445,4 +445,5 @@ module.exports.defaultLoadCache=defaultLoadCache;
 module.exports.defaultSaveCache=defaultSaveCache;
 module.exports.CACHE_TTL_DAYS=CACHE_TTL_DAYS;
 module.exports.SYSTEM_PROMPT=SYSTEM_PROMPT;
-module.exports.schema=schema;
+module.exports.schema=textSchema;
+module.exports.imageSchema=imageSchema;
