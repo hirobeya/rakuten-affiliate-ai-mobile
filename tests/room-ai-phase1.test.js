@@ -267,7 +267,10 @@ function run(name,fn){
 
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
-    assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
+    assert.deepEqual(text.required,['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence']);
+    assert.equal(text.properties.audienceHook.properties.text.maxLength,52);
+    assert.equal(text.properties.buyerBenefits.maxItems,2);
+    assert.equal(text.properties.buyerBenefits.items.properties.text.maxLength,52);
     assert.equal(text.properties.features.maxItems,3);
     assert.equal(text.properties.features.items.properties.text.maxLength,20);
     assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
