@@ -338,7 +338,7 @@ function run(name,fn){
 
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
-    assert.match(src,/maxItems:5/);
+    assert.match(src,/maxItems:4/);
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
@@ -581,7 +581,8 @@ function run(name,fn){
     assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/購入比較に役立つ客観的な事実/);
+    assert.match(apiText,/カテゴリ非依存/);
+    assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/投稿文を選ぶとGroqで商品内容を確認します/);
@@ -594,7 +595,7 @@ function run(name,fn){
     assert.match(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
-    assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
+    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
     assert.match(html,/商品ページで確認できるポイント/);
@@ -608,7 +609,7 @@ function run(name,fn){
     assert.match(html,/return dedupeGroundedFeatures\(values\)/);
     assert.doesNotMatch(html,/スマホ・タッチ対応/);
     assert.doesNotMatch(html,/本革（山羊革）/);
-    assert.match(html,/const features=mergeSemanticFeatureLabels\(/);
+    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
   });
 
   await run('daily limit blocks AI call',async()=>{
