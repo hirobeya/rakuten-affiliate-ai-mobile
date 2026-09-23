@@ -238,9 +238,9 @@ function run(name,fn){
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
     assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
-    assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,15);
-    assert.equal(text.properties.features.items.properties.evidence.maxLength,15);
+    assert.equal(text.properties.features.maxItems,5);
+    assert.equal(text.properties.features.items.properties.text.maxLength,24);
+    assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
     assert.equal(text.properties.sellingPoints.maxItems,3);
     assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,40);
     assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,80);
@@ -338,11 +338,11 @@ function run(name,fn){
 
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
-    assert.match(src,/maxItems:3/);
+    assert.match(src,/maxItems:5/);
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
-    assert.ok(SYSTEM_PROMPT.length<260);
+    assert.ok(SYSTEM_PROMPT.length<900);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
@@ -559,7 +559,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.match(html,/function aiCheckingPost\(/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/return aiSafeFallbackPost\(item\)/);
+    assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
@@ -568,7 +568,7 @@ function run(name,fn){
     assert.match(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function groundedBenefitLines\(/);
     assert.match(html,/function aiSalesInsight\(/);
-    assert.match(html,/商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません/);
+    assert.match(html,/商品内容をGroqで確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
@@ -581,7 +581,7 @@ function run(name,fn){
     assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/意味拡張/);
+    assert.match(apiText,/購入比較に役立つ客観的な事実/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/投稿文を選ぶとGroqで商品内容を確認します/);
@@ -597,7 +597,7 @@ function run(name,fn){
     assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
-    assert.match(html,/商品ページで確認できる特徴/);
+    assert.match(html,/商品ページで確認できるポイント/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
