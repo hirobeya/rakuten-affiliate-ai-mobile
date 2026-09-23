@@ -519,6 +519,7 @@ function run(name,fn){
     assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
     assert.match(html,/const paidPlan=\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
     assert.match(html,/aiGatesFullOutput=runtimeKnown/);
+    assert.match(html,/preview\s*\?debugExportAllowed/);
     assert.match(html,/function resolvedPost\(/);
     assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
@@ -539,6 +540,16 @@ function run(name,fn){
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/return aiSafeFallbackPost\(item\)/);
     assert.match(html,/\.tab\[data-i=/);
+  });
+
+  await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/function groundedTitleFeatures\(/);
+    assert.match(html,/function groundedBenefitLines\(/);
+    assert.match(html,/function aiSalesInsight\(/);
+    assert.match(html,/商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません/);
+    assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
+    assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
 
   await run('daily limit blocks AI call',async()=>{

@@ -2205,7 +2205,7 @@ async function updateDebugExportAccess(){
   const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
-      ?debugExportAllowed && new URLSearchParams(location.search).get('aiGatesFullOutput')==='1'
+      ?debugExportAllowed
       :paidPlan
   );
   const box=document.getElementById('debugExport');
@@ -2472,15 +2472,82 @@ function aiSafeTitle(item){
   return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
 }
 
+function groundedTitleFeatures(item){
+  const title=String(item?.itemName||'').normalize('NFKC');
+  const rules=[
+    /スマホ対応|タッチパネル対応|タッチ対応/g,
+    /メッシュ|通気性/g,
+    /本革|山羊革|牛革|ゴートレザー/g,
+    /防風|防水/g,
+    /プロテクター/g,
+    /滑り止め|すべり止め/g,
+    /耐熱/g,
+    /コードレス/g,
+    /折りたたみ|折り畳み/g,
+    /キャスター付き/g,
+    /コンパクト/g,
+    /軽量/g,
+    /洗える/g
+  ];
+  const out=[];
+  for(const re of rules){
+    re.lastIndex=0;
+    let m;
+    while((m=re.exec(title))){
+      const v=String(m[0]||'').trim();
+      if(v&&!out.includes(v)) out.push(v);
+      if(out.length>=6) return out;
+    }
+  }
+  return out;
+}
+
+function groundedBenefitLines(productType,features){
+  const joined=(features||[]).join(' ');
+  const out=[];
+  const add=x=>{if(x&&!out.includes(x))out.push(x);};
+  if(/スマホ対応|タッチ/.test(joined)) add('手袋やカバーを外す回数を減らして、スマホを確認しやすいのが便利です。');
+  if(/メッシュ|通気性/.test(joined)) add('通気性を重視したい場面で使いやすそうです。');
+  if(/防風/.test(joined)) add('風が気になる場面で使うものを探している人に向いていそうです。');
+  if(/防水/.test(joined)) add('水濡れが気になる場面も想定して選びたい人に向いていそうです。');
+  if(/本革|山羊革|牛革|ゴートレザー/.test(joined)) add('革素材の質感を重視して選びたい人にも候補にしやすいタイプです。');
+  if(/プロテクター/.test(joined)) add('保護機能も意識して選びたい人に検討しやすい仕様です。');
+  if(/滑り止め|すべり止め/.test(joined)) add('握ったときの扱いやすさを重視したい人にも確認したいポイントです。');
+  if(/コードレス/.test(joined)) add('コードの取り回しを減らして使いたい場面に取り入れやすそうです。');
+  if(/折りたたみ|折り畳み/.test(joined)) add('使わないときの置き場所を抑えたい人にも扱いやすそうです。');
+  if(/キャスター付き/.test(joined)) add('置き場所を変えながら使いたいときに移動させやすそうです。');
+  if(/コンパクト|軽量/.test(joined)) add('取り回しや持ち運びを重視したい人にも選びやすそうです。');
+  if(/洗える/.test(joined)) add('日常的に手入れしながら使いたい人にも取り入れやすそうです。');
+  if(!out.length&&productType) add(productType+'を探していて、商品名に書かれた仕様を比較して選びたい人に。');
+  return out.slice(0,2);
+}
+
+function aiSalesInsight(item,result){
+  const v=result?.validation||{};
+  const productType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
+  const validated=(v.features||[]).filter(x=>x?.valid&&x?.text).map(x=>String(x.text).trim());
+  const titleFacts=groundedTitleFeatures(item);
+  const features=[...new Set([...validated,...titleFacts])].filter(Boolean).slice(0,5);
+  const benefits=groundedBenefitLines(productType,features);
+  return {
+    productType,
+    features,
+    benefits,
+    audience:productType+'を探していて、使い勝手も含めて比較したい人'
+  };
+}
+
 function aiPhase1Post(item,result){
   const v=result?.validation;
-  const title=(v?.mode==='simple'&&v?.productType?.valid)?String(v.productType.value||''):aiSafeTitle(item);
+  const title=(v?.productType?.valid)?String(v.productType.value||''):aiSafeTitle(item);
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  if(v?.mode!=='simple') return title+(priceLine?'\n'+priceLine:'')+'\n\n※アフィリエイト広告を利用しています';
-  const features=(v?.features||[]).filter(x=>x?.eligibleForPost);
-  const lines=[title];
-  if(features.length) lines.push('','商品の特徴👇',...features.slice(0,5).map(x=>'✔ '+x.text));
+  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item);
+  const insight=aiSalesInsight(item,result);
+  const lines=[title+'を探している方に。'];
+  if(insight.benefits.length) lines.push(...insight.benefits);
+  if(insight.features.length) lines.push('','商品の特徴👇',...insight.features.slice(0,5).map(x=>'✔ '+x));
+  lines.push('','こんな人に向いていそう👇','・'+insight.audience);
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
@@ -2558,6 +2625,20 @@ async function requestAiRoom(item,index,generation){
         const platform=active?.dataset?.p||'room';
         const copy=article.querySelector('.copy');
         if(copy) copy.textContent=postDisplay(lastSearchItems[index],platform);
+        const guide=article.querySelector('.guide');
+        if(guide){
+          const temp=document.createElement('div');
+          temp.innerHTML=analysisGuide(lastSearchItems[index],index,lastSearchKeyword);
+          const next=temp.firstElementChild;
+          if(next) guide.replaceWith(next);
+        }
+        const todayBox=document.querySelector('#res > .today');
+        if(todayBox){
+          const temp=document.createElement('div');
+          temp.innerHTML=today(lastSearchItems);
+          const next=temp.firstElementChild;
+          if(next) todayBox.replaceWith(next);
+        }
         const button=article.querySelector('.cb');
         if(button){
           const ready=postReady(lastSearchItems[index],platform);
@@ -2647,16 +2728,26 @@ function fullOutputItems(items){
   return (Array.isArray(items)?items:[]).filter(isFullOutput);
 }
 
-function analysisGuide(i){
+function analysisGuide(i,index,keyword=''){
+  if(aiGatesFullOutput){
+    const gate=resolveAiGate(i,index,keyword);
+    if(gate.full&&!gate.useLegacy){
+      const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
+      return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div>'+
+        '<div class="target">'+esc(insight.audience)+'</div>'+
+        '<ul class="pts">'+insight.benefits.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
+    }
+    if(gate.useLegacy){
+      const a=groundedAnalysis(i);
+      if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
+    }
+    return '<div class="guide"><div class="muted">商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません。</div></div>';
+  }
   const a=groundedAnalysis(i);
   if(a.outputMode!=='full'){
     return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。</div></div>';
   }
-  return `<div class="guide">
-    <div class="gt">この商品は誰に・何を刺す？</div>
-    <div class="target">${esc(aud(i))}</div>
-    <ul class="pts">${pts(i).map(z=>`<li>${esc(z)}</li>`).join('')}</ul>
-  </div>`;
+  return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
 }
 
 function pts(i){
@@ -2829,118 +2920,33 @@ function short(
 }
 
 
-function today(
-  a
-){
-
-  const eligible=fullOutputItems(a);
-
-  if(
-    !eligible.length
-  ){
-
-    return`
-<section class="today">
-  <h2>今日売るならこれ</h2>
-  <div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div>
-</section>
-`;
-
+function today(a){
+  if(aiGatesFullOutput){
+    const candidates=(Array.isArray(a)?a:[]).map((item,index)=>({item,index,gate:resolveAiGate(item,index,lastSearchKeyword)}))
+      .filter(x=>x.gate.full);
+    if(!candidates.length){
+      return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
+    }
+    const chosen=candidates.sort((x,y)=>(y.item.sellability||0)-(x.item.sellability||0)||(y.item.score||0)-(x.item.score||0))[0];
+    const i=chosen.item;
+    let audience='',points=[];
+    if(chosen.gate.useLegacy){
+      audience=aud(i);points=pts(i);
+    }else{
+      const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
+      audience=insight.audience;points=insight.benefits;
+    }
+    return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
+      '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
+      '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(audience)+'</div>'+
+      '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
-
-
-  const i=
-  [...eligible]
-  .sort(
-    (
-      a,
-      b
-    )=>
-
-    (
-      b.sellability||
-      0
-    )
-    -
-    (
-      a.sellability||
-      0
-    )
-
-    ||
-
-    (
-      b.score||
-      0
-    )
-    -
-    (
-      a.score||
-      0
-    )
-  )[0];
-
-
-  return`
-<section class="today">
-
-  <h2>
-    今日売るならこれ
-  </h2>
-
-  <div class="name">
-    ${short(i)}
-  </div>
-
-  <div class="muted">
-    売れやすさ ${i.sellability}/100・AI ${i.score}/100。
-    まず成約を狙うならこの商品を優先。
-  </div>
-
-  <div class="guide">
-
-    <div class="gt">
-      狙う相手
-    </div>
-
-    <div class="target">
-      ${esc(aud(i))}
-    </div>
-
-    <ul class="pts">
-
-      ${
-        pts(i)
-        .map(
-          z=>
-          `<li>${esc(z)}</li>`
-        )
-        .join('')
-      }
-
-    </ul>
-
-  </div>
-
-  <div class="btns">
-
-    <button class="tc">
-      投稿文をコピー
-    </button>
-
-    ${roomAction(i)}
-
-    <a
-      href="${esc(safeUrl(i.affiliateUrl))}"
-    >
-      楽天で見る
-    </a>
-
-  </div>
-
-</section>
-`;
-
+  const eligible=fullOutputItems(a);
+  if(!eligible.length) return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
+  const i=[...eligible].sort((a,b)=>(b.sellability||0)-(a.sellability||0)||(b.score||0)-(a.score||0))[0];
+  return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
+    '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。まず成約を狙うならこの商品を優先。</div>'+
+    '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
 }
 
 
@@ -3301,7 +3307,7 @@ function render(
 
   </div>
 
-  ${analysisGuide(i)}
+  ${analysisGuide(i,n,lastSearchKeyword)}
 
   <div class="tabs">
 
@@ -3548,7 +3554,7 @@ function render(
 
   }
 
-  if(debugExportAllowed){
+  if(aiGatesFullOutput){
     runAiPreview(a);
   }
 
