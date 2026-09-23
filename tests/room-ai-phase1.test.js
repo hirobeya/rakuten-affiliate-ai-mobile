@@ -349,18 +349,26 @@ function run(name,fn){
     assert.ok(v.reasons.includes('critical_invalid_numeric_feature'));
   });
 
-  await run('invalid claim feature forces whole-product fallback',()=>{
+  await run('invalid claim feature is dropped when multiple grounded facts remain',()=>{
     const v=validateAiExtraction({
       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
       features:[
         {text:'小顔効果',source:'itemCaption',evidence:'小顔'},
         {text:'約196g',source:'itemCaption',evidence:'約196g'},
         {text:'日本製',source:'itemCaption',evidence:'日本製'}
-      ],
-      confidence:'high'
+      ],confidence:'high'
     },{itemName:'美顔ローラー',itemCaption:'小顔 約196g 日本製'},{imageAvailable:false});
+    assert.equal(v.mode,'simple_partial');
+    assert.ok(v.reasons.includes('invalid_claim_features_dropped'));
+    assert.equal(v.features.filter(x=>x.eligibleForPost).length,2);
+  });
+
+  await run('claim-only extraction still falls back',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+      features:[{text:'小顔効果',source:'itemCaption',evidence:'小顔'}],confidence:'high'
+    },{itemName:'美顔ローラー',itemCaption:'小顔'},{imageAvailable:false});
     assert.equal(v.mode,'fallback');
-    assert.equal(v.featureValidation.criticalInvalidClaim,true);
     assert.ok(v.reasons.includes('critical_invalid_claim_feature'));
   });
 
@@ -419,6 +427,9 @@ function run(name,fn){
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
     assert.ok(SYSTEM_PROMPT.length<360);
+    assert.match(SYSTEM_PROMPT,/confidence=high/);
+    assert.match(SYSTEM_PROMPT,/textとevidenceを同じ完全な連続引用/);
+    assert.match(SYSTEM_PROMPT,/数字・単位も完全一致/);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
@@ -554,6 +565,19 @@ function run(name,fn){
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
+  await run('product type must exist exactly in its declared source',()=>{
+    const v=validateAiExtraction({productType:{value:'美顔ロー roller',source:'itemName',evidence:'美顔ローラー'},features:[],sellingPoints:[],confidence:'high'},{itemName:'美顔ローラー 美顔器',itemCaption:''});
+    assert.equal(v.productType.textEvidenceValid,false);
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.mode,'fallback');
+  });
+
+  await run('shipping language is never eligible for posting',()=>{
+    const v=validateAiExtraction({productType:{value:'かっさ プレート',source:'itemName',evidence:'かっさ プレート'},features:[],sellingPoints:[{text:'当日発送',source:'itemName',evidence:'当日発送'}],confidence:'high'},{itemName:'当日発送 かっさ プレート 収納袋付き',itemCaption:''});
+    assert.equal(v.sellingPoints[0].promoRisk,true);
+    assert.equal(v.sellingPoints[0].eligibleForPost,false);
+  });
+
   await run('low confidence always falls back',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
@@ -588,7 +612,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-24-ai-facts-only-v12',
+        prompt_version:'2026-09-24-ai-facts-only-v13',
           validation_rule_version:'2026-09-24-ai-facts-v8',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -654,12 +678,12 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-24-ai-facts-only-v12/);
+    assert.match(apiText,/2026-09-24-ai-facts-only-v13/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/事実抽出のみ/);
-    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
-    assert.match(apiText,/途中切れさせない/);
+    assert.match(apiText,/事実だけ抽出/);
+    assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
+    assert.match(apiText,/途中切れ禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
@@ -680,7 +704,7 @@ function run(name,fn){
     assert.doesNotMatch(apiText,/audienceHook/);
     assert.doesNotMatch(apiText,/buyerBenefits/);
     assert.doesNotMatch(apiText,/fitLine/);
-    assert.match(apiText,/意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止/);
+    assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
     assert.match(html,/const VALUE_RULES=/);
     assert.match(html,/function valueFromFacts\(/);
     assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
