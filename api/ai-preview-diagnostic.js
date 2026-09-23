@@ -5,6 +5,7 @@ require('../public/room-copy-quality.js');
 const ruleApi=global.window.UrenaviPainCopy;
 const {createHandler:createSearchHandler}=require('./search');
 const {runTwoStageGroq,defaultCallGroq,loadImageDataUrl}=require('./room-ai');
+const benefitGrounding=require('../public/benefit-grounding.js');
 
 const TOKEN='preview-rate-retest-20260922-49e7d2';
 const CASES={
@@ -20,6 +21,33 @@ const TARGET_KEYWORDS=[
   'ペットベッド','犬 ベッド','ペット給水器',
   'モップハンガー','電動モップ','ハンディクリーナー','洗濯ネット'
 ];
+
+const CROSS_CASES={
+  storage:'収納ボックス',
+  cleaning:'電動モップ',
+  pet:'ペットベッド',
+  beauty:'美顔ローラー',
+  kitchen:'フライパン',
+  appliance:'電気ケトル',
+  fashion:'Tシャツ',
+  motorcycle:'バイクグローブ',
+  food:'レトルトカレー',
+  daily_goods:'ティッシュペーパー',
+  furniture:'ダイニングチェア',
+  outdoor:'キャンプチェア',
+  pc:'USB-C ハブ',
+  car:'車用スマホホルダー',
+  baby:'ベビーカー',
+  laundry:'洗濯ネット',
+  charging:'モバイルバッテリー',
+  accident_bike_glove:'バイクグローブ',
+  accident_baseball_glove:'野球グローブ',
+  accident_storage_bench:'収納ベンチ',
+  accident_mop_holder:'モップハンガー',
+  accident_bos:'うんち袋 BOS',
+  accident_drive_bed:'ドライブベッド',
+  accident_electric_mop:'電動モップ'
+};
 
 function aiTargetDecision(item){
   const a=ruleApi.analyzeRoomProduct(item,'');
@@ -113,9 +141,40 @@ async function analyze(item,maxOutputTokens=320){
     };
   }
 }
+
+function benefitAudit(item,validation){
+  const sources=[String(item?.itemName||''),String(item?.itemCaption||'')];
+  const checks=(validation?.features||[]).filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence).map(x=>{
+    const safe=benefitGrounding.makeGroundedSelectionLine({label:x.text,evidence:x.evidence,sources});
+    return {feature:x.text,evidence:x.evidence,valid:safe.valid,text:safe.text,reasons:safe.reasons};
+  });
+  return {checked:checks.length,passed:checks.filter(x=>x.valid).length,failed:checks.filter(x=>!x.valid).length,checks};
+}
 module.exports=async function(req,res){
   res.setHeader('Cache-Control','no-store');
   if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-23T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(String(req.query?.mode||'')==='cross-one'){
+    const key=String(req.query?.key||'').trim();
+    const keyword=CROSS_CASES[key];
+    if(!keyword) return res.status(400).json({message:'invalid_cross_key'});
+    const index=Math.max(0,Math.min(1,Number(req.query?.index)||0));
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    const item=items[index];
+    if(!item) return res.status(404).json({message:'item_not_found',key,keyword,index,count:items.length});
+    const target=aiTargetDecision(item);
+    const result=await analyze(item,320);
+    const rule=target.analysis||ruleApi.analyzeRoomProduct(item,keyword);
+    return res.status(200).json({
+      ok:true,mode:'cross-one',key,keyword,index,count:items.length,totalMs:Date.now()-t0,
+      constraints:{textOnly:true,maxOutputTokens:320,perSearchMax:2},
+      item:{itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,700)},
+      target:{target:target.target,reason:target.reason,safeFallback:target.safeFallback},
+      rule:{category:rule?.category||null,usage:rule?.usage||null,outputMode:rule?.outputMode||null,ambiguous:Boolean(rule?.ambiguous),conflicts:rule?.conflicts||[]},
+      result,
+      benefitAudit:benefitAudit(item,result?.validation)
+    });
+  }
   if(String(req.query?.mode||'')==='targeting-one'){
     const keyword=String(req.query?.keyword||'').trim();
     if(!TARGET_KEYWORDS.includes(keyword)) return res.status(400).json({message:'invalid_keyword'});
