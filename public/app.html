@@ -2202,7 +2202,8 @@ async function requestAiRoom(item,index,generation){
     if(generation===aiRunGeneration){
       updateAiPanel(index);
       const panel=document.querySelector('[data-ai-index="'+index+'"]');
-      const article=panel?.closest('.item');
+      const article=panel?.closest('.item')
+        ||document.querySelector('.tab[data-i="'+index+'"]')?.closest('.item');
       if(article){
         const active=article.querySelector('.tab.on');
         const platform=active?.dataset?.p||'room';
@@ -2330,8 +2331,7 @@ function aiSafeFallbackPost(item){
 }
 
 function aiCheckingPost(item){
-  const title=lexicalProductLabel(item);
-  return [title,'AI確認中です。確認が完了するまで商品名から確認できる情報だけを表示しています。','','※アフィリエイト広告を利用しています'].join('\n');
+  return aiSafeFallbackPost(item);
 }
 
 function ruleSecondOpinion(item,validation,keyword=''){
@@ -2412,7 +2412,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
-    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiCheckingPost(item);
+    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiSafeFallbackPost(item);
     if(gate.useLegacy){
       const options={variant:index};
       if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
