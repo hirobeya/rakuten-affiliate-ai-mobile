@@ -45,6 +45,26 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
+  await run('feature text itself must be a contiguous source quote',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'モバイルバッテリー',source:'itemName',evidence:'モバイルバッテリー'},
+      features:[{text:'USB-C対応',source:'itemCaption',evidence:'Type-C対応'}],
+      sellingPoints:[],confidence:'high'
+    },{itemName:'モバイルバッテリー',itemCaption:'Type-C対応'},{imageAvailable:false});
+    assert.equal(v.features[0].textEvidenceValid,false);
+    assert.equal(v.features[0].valid,false);
+  });
+
+  await run('clean product type stays valid when surrounding evidence contains promotion',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'ペットウォーターボトル',source:'itemName',evidence:'楽天1位 ペットウォーターボトル'},
+      features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'楽天1位 ペットウォーターボトル 犬用',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.promoRisk,false);
+    assert.equal(v.productType.evidencePromoRisk,true);
+    assert.equal(v.productType.valid,true);
+  });
+
   await run('AI selling points are evidence-gated and category independent',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
@@ -212,7 +232,7 @@ function run(name,fn){
         usage:{input_tokens:100,output_tokens:50},
         raw:{
           productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
-          features:[{text:'折りたたみ対応',source:'itemName',evidence:'折りたたみ'}],
+          features:[{text:'折りたたみ',source:'itemName',evidence:'折りたたみ'}],
           unknowns:[],
           imageProductTypeHint:'収納ベンチ',
           confidence:'high'
@@ -271,11 +291,11 @@ function run(name,fn){
 
 
     assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,20);
-    assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
+    assert.equal(text.properties.features.items.properties.text.maxLength,48);
+    assert.equal(text.properties.features.items.properties.evidence.maxLength,72);
     assert.equal(text.properties.sellingPoints.maxItems,2);
-    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,36);
-    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,56);
+    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,64);
+    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,96);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
     assert.equal(Object.hasOwn(text.properties,'imageProductTypeHint'),false);
     assert.equal(image.properties.imageProductTypeHint.maxLength,24);
@@ -544,8 +564,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-facts-only-v11',
-          validation_rule_version:'2026-09-23-ai-facts-v6',
+        prompt_version:'2026-09-24-ai-facts-only-v12',
+          validation_rule_version:'2026-09-24-ai-facts-v7',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -610,12 +630,12 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-facts-only-v11/);
+    assert.match(apiText,/2026-09-24-ai-facts-only-v12/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/事実抽出のみ/);
-    assert.match(apiText,/text自体も原文引用/);
-    assert.match(apiText,/途中断片禁止/);
+    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
+    assert.match(apiText,/途中切れさせない/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);

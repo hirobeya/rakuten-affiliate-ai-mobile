@@ -12,19 +12,22 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-facts-only-v11';
-const VALIDATION_RULE_VERSION='2026-09-23-ai-facts-v6';
+const PROMPT_VERSION='2026-09-24-ai-facts-only-v12';
+const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v7';
 
-const FEATURE_MAX_CHARS=20;
+const FEATURE_MAX_CHARS=48;
+const FEATURE_EVIDENCE_MAX_CHARS=72;
+const SELLING_POINT_MAX_CHARS=64;
+const SELLING_POINT_EVIDENCE_MAX_CHARS=96;
 
 const baseSchemaProperties={
   productType:{
     type:'object',additionalProperties:false,
     required:['value','source','evidence'],
     properties:{
-      value:{type:'string',maxLength:16},
+      value:{type:'string',maxLength:24},
       source:{type:'string',enum:['itemName','itemCaption']},
-      evidence:{type:'string',maxLength:24}
+      evidence:{type:'string',maxLength:40}
     }
   },
   features:{
@@ -35,7 +38,7 @@ const baseSchemaProperties={
       properties:{
         text:{type:'string',maxLength:FEATURE_MAX_CHARS},
         source:{type:'string',enum:['itemName','itemCaption']},
-        evidence:{type:'string',maxLength:32}
+        evidence:{type:'string',maxLength:FEATURE_EVIDENCE_MAX_CHARS}
       }
     }
   },
@@ -45,9 +48,9 @@ const baseSchemaProperties={
       type:'object',additionalProperties:false,
       required:['text','source','evidence'],
       properties:{
-        text:{type:'string',maxLength:36},
+        text:{type:'string',maxLength:SELLING_POINT_MAX_CHARS},
         source:{type:'string',enum:['itemName','itemCaption']},
-        evidence:{type:'string',maxLength:56}
+        evidence:{type:'string',maxLength:SELLING_POINT_EVIDENCE_MAX_CHARS}
       }
     }
   },
@@ -73,7 +76,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文の商品種別。features=素材・仕様・対応・サイズ・容量など比較用の明示事実を最大3件。sellingPoints=購入判断に役立つ原文の完結した4〜36字の連続引用を最大2件。全項目source/evidence必須。sellingPointsのtext自体も原文引用、途中断片禁止。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測禁止。数字単位一致。`;
+const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文にある短い商品種別。features=素材・仕様・対応・サイズ・容量など、原文からそのまま抜き出した完全な連続引用を最大3件。sellingPoints=購入判断に役立つ原文の完結した連続引用を最大2件。全項目source/evidence必須。text自体も必ず原文に連続して存在する引用にする。文字数上限で途中切れさせない。長い場合は別の短い完全な事実を選ぶ。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測は禁止。数字と単位は原文一致。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
