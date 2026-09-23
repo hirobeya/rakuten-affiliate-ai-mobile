@@ -45,6 +45,15 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
+
+  await run('feature text itself must be grounded in source evidence',()=>{
+    const ok=validateAiExtraction({productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},features:[{text:'5面開き',source:'itemCaption',evidence:'5面開き'}],confidence:'high'},{itemName:'収納ボックス',itemCaption:'特徴 5面開き'});
+    assert.equal(ok.features[0].valid,true);
+    const ng=validateAiExtraction({productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},features:[{text:'ABS,PP樹脂',source:'itemCaption',evidence:'ABSプラスチック'}],confidence:'high'},{itemName:'収納ボックス',itemCaption:'素材 ABSプラスチック'});
+    assert.equal(ng.features[0].valid,false);
+    assert.equal(ng.features[0].textEvidenceValid,false);
+  });
+
   await run('image product type conflict switches to fallback',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},
@@ -492,8 +501,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-phase1-groq-v4',
-          validation_rule_version:'2026-09-23-ai-gate-v3',
+        prompt_version:'2026-09-23-ai-phase1-groq-v5',
+          validation_rule_version:'2026-09-23-ai-gate-v4',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -559,7 +568,7 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-phase1-groq-v4/);
+    assert.match(apiText,/2026-09-23-ai-phase1-groq-v5/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/英訳・言い換え禁止/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
