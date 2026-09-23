@@ -684,7 +684,7 @@ function run(name,fn){
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/事実だけ抽出/);
     assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
-    assert.match(apiText,/途中切れさせない/);
+    assert.match(apiText,/途中切れ禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
