@@ -51,7 +51,7 @@ test('low-confidence product never gets a fabricated sales pitch',()=>{
   const api=load();
   const item={itemName:'限定モデル QZ-999',itemPrice:3980,catchcopy:'人気',itemCaption:'こだわり仕様'};
   const copy=api.makeRoomCopy(item,'便利グッズ');
-  assert.match(copy,/自動投稿文の生成を止めています/);
+  assert.equal(copy,'');
   assert.doesNotMatch(copy,/掃除|収納|揚げ物|充電切れ|切る作業/);
 });
 
