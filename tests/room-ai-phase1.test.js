@@ -45,13 +45,19 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
-
-  await run('feature text itself must be grounded in source evidence',()=>{
-    const ok=validateAiExtraction({productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},features:[{text:'5面開き',source:'itemCaption',evidence:'5面開き'}],confidence:'high'},{itemName:'収納ボックス',itemCaption:'特徴 5面開き'});
-    assert.equal(ok.features[0].valid,true);
-    const ng=validateAiExtraction({productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},features:[{text:'ABS,PP樹脂',source:'itemCaption',evidence:'ABSプラスチック'}],confidence:'high'},{itemName:'収納ボックス',itemCaption:'素材 ABSプラスチック'});
-    assert.equal(ng.features[0].valid,false);
-    assert.equal(ng.features[0].textEvidenceValid,false);
+  await run('AI selling points are evidence-gated and category independent',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
+      features:[{text:'折りたたみ式',source:'itemCaption',evidence:'折りたたみ式'}],
+      sellingPoints:[
+        {text:'使わない時はコンパクト収納',source:'itemCaption',evidence:'使わない時はコンパクト収納'},
+        {text:'部屋が必ず片付く',source:'itemCaption',evidence:'大容量収納'}
+      ],
+      confidence:'high'
+    },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].valid,true);
+    assert.equal(v.sellingPoints[0].eligibleForPost,true);
+    assert.equal(v.sellingPoints[1].valid,false);
   });
 
   await run('image product type conflict switches to fallback',()=>{
@@ -176,7 +182,7 @@ function run(name,fn){
         usage:{input_tokens:100,output_tokens:50},
         raw:{
           productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
-          features:[{text:'折りたたみ',source:'itemName',evidence:'折りたたみ'}],
+          features:[{text:'折りたたみ対応',source:'itemName',evidence:'折りたたみ'}],
           unknowns:[],
           imageProductTypeHint:'収納ベンチ',
           confidence:'high'
@@ -231,10 +237,13 @@ function run(name,fn){
 
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
-    assert.deepEqual(text.required,['productType','features','confidence']);
-    assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,15);
-    assert.equal(text.properties.features.items.properties.evidence.maxLength,15);
+    assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
+    assert.equal(text.properties.features.maxItems,4);
+    assert.equal(text.properties.features.items.properties.text.maxLength,24);
+    assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
+    assert.equal(text.properties.sellingPoints.maxItems,2);
+    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,40);
+    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,80);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
     assert.equal(Object.hasOwn(text.properties,'imageProductTypeHint'),false);
     assert.equal(image.properties.imageProductTypeHint.maxLength,24);
@@ -329,19 +338,20 @@ function run(name,fn){
 
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
-    assert.match(src,/maxItems:3/);
+    assert.match(src,/maxItems:4/);
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
-    assert.ok(SYSTEM_PROMPT.length<220);
+    assert.ok(SYSTEM_PROMPT.length<260);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
-  await run('Preview free tier caps AI calls at two per search',()=>{
+  await run('Preview auto AI caps at two and remaining items use on-demand Groq',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/FREE_TIER_AI_PER_SEARCH_LIMIT=2/);
-    assert.match(html,/reason:'free_tier_ai_limit'/);
-    assert.match(html,/targeted>FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.match(html,/reason:'on_demand_ai'/);
+    assert.match(html,/index<FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.match(html,/function ensureAiForItem\(index\)/);
   });
 
   await run('Groq caption input is capped for token control',()=>{
@@ -501,8 +511,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-phase1-groq-v5',
-          validation_rule_version:'2026-09-23-ai-gate-v4',
+        prompt_version:'2026-09-23-ai-generic-sales-v5',
+          validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -549,7 +559,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.match(html,/function aiCheckingPost\(/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/return aiSafeFallbackPost\(item\)/);
+    assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
@@ -558,7 +568,7 @@ function run(name,fn){
     assert.match(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function groundedBenefitLines\(/);
     assert.match(html,/function aiSalesInsight\(/);
-    assert.match(html,/商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません/);
+    assert.match(html,/商品内容をGroqで確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
@@ -568,12 +578,14 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-phase1-groq-v5/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
     assert.match(apiText,/cacheVersionMatch/);
-    assert.match(apiText,/英訳・言い換え禁止/);
+    assert.match(apiText,/sellingPoints/);
+    assert.match(apiText,/カテゴリ非依存/);
+    assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
-    assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);
+    assert.match(appText,/投稿文を選ぶとGroqで商品内容を確認します/);
   });
 
   await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
@@ -581,22 +593,23 @@ function run(name,fn){
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function specificGroundedProductType\(/);
     assert.match(html,/function groundedCaptionFeatures\(/);
-    assert.match(html,/function groundedUseContexts\(/);
-    assert.match(html,/function audienceForProduct\(/);
-    assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
-    assert.match(html,/insight\.productType\+'選びで確認したいポイントをまとめました。'/);
-    assert.match(html,/商品ページに記載のある特徴をチェックできます/);
+    assert.match(html,/function ensureAiForItem\(index\)/);
+    assert.doesNotMatch(html,/function audienceForProduct\(/);
+    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
+    assert.match(html,/insight\.sellingPoints/);
+    assert.match(html,/この商品の選びどころ/);
+    assert.match(html,/商品ページで確認できるポイント/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
-  await run('semantic feature labels merge duplicate smartphone and leather facts',()=>{
+  await run('semantic feature handling stays category independent',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function mergeSemanticFeatureLabels\(/);
-    assert.match(html,/スマホ・タッチ対応/);
-    assert.match(html,/本革（山羊革）/);
-    assert.match(html,/本革（牛革）/);
-    assert.match(html,/const features=mergeSemanticFeatureLabels\(/);
+    assert.match(html,/return dedupeGroundedFeatures\(values\)/);
+    assert.doesNotMatch(html,/スマホ・タッチ対応/);
+    assert.doesNotMatch(html,/本革（山羊革）/);
+    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
   });
 
   await run('daily limit blocks AI call',async()=>{
