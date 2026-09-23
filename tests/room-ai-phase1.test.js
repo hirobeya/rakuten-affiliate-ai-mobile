@@ -613,7 +613,7 @@ function run(name,fn){
     assert.match(apiText,/2026-09-23-ai-facts-only-v11/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/欲しい理由/);
+    assert.match(apiText,/事実抽出のみ/);
     assert.match(apiText,/text自体も原文引用/);
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
@@ -651,7 +651,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
-    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
+    assert.match(html,/const featureRows=\(v\.features\|\|\[\]\)/);
     assert.doesNotMatch(html,/UrenaviBenefitGrounding/);
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
