@@ -325,7 +325,7 @@ function run(name,fn){
     assert.ok(v.reasons.includes('critical_invalid_numeric_feature'));
   });
 
-  await run('invalid claim feature forces whole-product fallback',()=>{
+  await run('invalid claim feature is dropped when multiple grounded facts remain',()=>{
     const v=validateAiExtraction({
       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
       features:[
@@ -335,8 +335,19 @@ function run(name,fn){
       ],
       confidence:'high'
     },{itemName:'美顔ローラー',itemCaption:'小顔 約196g 日本製'},{imageAvailable:false});
-    assert.equal(v.mode,'fallback');
+    assert.equal(v.mode,'simple_partial');
     assert.equal(v.featureValidation.criticalInvalidClaim,true);
+    assert.ok(v.reasons.includes('invalid_claim_features_dropped'));
+    assert.equal(v.features.filter(x=>x.eligibleForPost).length,2);
+  });
+
+  await run('claim-only extraction still falls back',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+      features:[{text:'小顔効果',source:'itemCaption',evidence:'小顔'}],
+      confidence:'high'
+    },{itemName:'美顔ローラー',itemCaption:'小顔'},{imageAvailable:false});
+    assert.equal(v.mode,'fallback');
     assert.ok(v.reasons.includes('critical_invalid_claim_feature'));
   });
 
@@ -671,8 +682,8 @@ function run(name,fn){
     assert.match(apiText,/2026-09-24-ai-facts-only-v13/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/事実抽出のみ/);
-    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
+    assert.match(apiText,/事実だけ抽出/);
+    assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
     assert.match(apiText,/途中切れさせない/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
@@ -694,7 +705,7 @@ function run(name,fn){
     assert.doesNotMatch(apiText,/audienceHook/);
     assert.doesNotMatch(apiText,/buyerBenefits/);
     assert.doesNotMatch(apiText,/fitLine/);
-    assert.match(apiText,/意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止/);
+    assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
     assert.match(html,/const VALUE_RULES=/);
     assert.match(html,/function valueFromFacts\(/);
     assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
