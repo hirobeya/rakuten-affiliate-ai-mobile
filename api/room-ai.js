@@ -12,8 +12,8 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-persuasion-v10';
-const VALIDATION_RULE_VERSION='2026-09-23-ai-value-v5';
+const PROMPT_VERSION='2026-09-23-ai-facts-only-v11';
+const VALIDATION_RULE_VERSION='2026-09-23-ai-facts-v6';
 
 const FEATURE_MAX_CHARS=20;
 
@@ -51,48 +51,18 @@ const baseSchemaProperties={
       }
     }
   },
-  audienceHook:{
-    type:['object','null'],additionalProperties:false,
-    required:['text','source','evidence'],
-    properties:{
-      text:{type:'string',maxLength:52},
-      source:{type:'string',enum:['itemName','itemCaption']},
-      evidence:{type:'string',maxLength:64}
-    }
-  },
-  buyerBenefits:{
-    type:'array',maxItems:2,
-    items:{
-      type:'object',additionalProperties:false,
-      required:['text','source','evidence'],
-      properties:{
-        text:{type:'string',maxLength:52},
-        source:{type:'string',enum:['itemName','itemCaption']},
-        evidence:{type:'string',maxLength:64}
-      }
-    }
-  },
-  fitLine:{
-    type:['object','null'],additionalProperties:false,
-    required:['text','source','evidence'],
-    properties:{
-      text:{type:'string',maxLength:60},
-      source:{type:'string',enum:['itemName','itemCaption']},
-      evidence:{type:'string',maxLength:72}
-    }
-  },
   confidence:{type:'string',enum:['high','medium','low']}
 };
 
 const textSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence'],
+  required:['productType','features','sellingPoints','confidence'],
   properties:baseSchemaProperties
 };
 
 const imageSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence','imageProductTypeHint'],
+  required:['productType','features','sellingPoints','confidence','imageProductTypeHint'],
   properties:{
     ...baseSchemaProperties,
     imageProductTypeHint:{type:['string','null'],maxLength:24}
@@ -103,7 +73,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天ROOM向けに、商品事実から「欲しい理由」まで自然な日本語で整理。productType=商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=使う人の具体的な小さな困りごと/場面を1文。buyerBenefits=その困りごとがどう楽になるかを最大2文。fitLine=誰に向くかを1文。各派生文はsource/evidence必須で一段推論まで。sellingPointsはtext自体も原文引用、途中断片禁止。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。『使いやすい』『おすすめ』『商品ページを確認』だけの抽象文禁止。例:タッチ対応→スマホを見るたび外す手間を減らしやすい、折りたたみ→使わない時の置き場所を取りにくい。`;
+const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文の商品種別。features=素材・仕様・対応・サイズ・容量など比較用の明示事実を最大3件。sellingPoints=購入判断に役立つ原文の完結した4〜36字の連続引用を最大2件。全項目source/evidence必須。sellingPointsのtext自体も原文引用、途中断片禁止。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測禁止。数字単位一致。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
