@@ -5,13 +5,14 @@ const TOKEN='prod-smoke-20260923-urenavi-final';
 const ALLOWED=new Set(['バイクグローブ','野球グローブ','収納ベンチ','電動モップ']);
 async function searchOne(keyword){
   const appId=String(process.env.RAKUTEN_APP_ID||'').trim();
+  const accessKey=String(process.env.RAKUTEN_ACCESS_KEY||'').trim();
   const affiliateId=String(process.env.RAKUTEN_AFFILIATE_ID||'').trim();
-  if(!appId||!affiliateId) throw new Error('rakuten_env_missing');
-  const p=new URLSearchParams({applicationId:appId,affiliateId,keyword,format:'json',formatVersion:'2',hits:'1',availability:'1',sort:'standard'});
-  const r=await fetch('https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?'+p,{signal:AbortSignal.timeout(12000)});
+  if(!appId||!accessKey||!affiliateId) throw new Error('rakuten_env_missing');
+  const p=new URLSearchParams({applicationId:appId,accessKey,affiliateId,keyword,format:'json',formatVersion:'2',hits:'1',availability:'1',sort:'standard'});
+  const r=await fetch('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?'+p,{signal:AbortSignal.timeout(12000),headers:{Origin:'https://rakuten-affiliate-ai-mobile.vercel.app',Referer:'https://rakuten-affiliate-ai-mobile.vercel.app/'}});
   if(!r.ok) throw new Error('rakuten_'+r.status);
   const j=await r.json();
-  const item=(j.Items||[])[0];
+  const item=(j.items||j.Items||[])[0];
   if(!item) throw new Error('item_not_found');
   return item.Item||item;
 }
