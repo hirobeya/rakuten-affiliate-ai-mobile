@@ -542,7 +542,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-generic-sales-v7',
+        prompt_version:'2026-09-23-ai-generic-sales-v8',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -589,7 +589,7 @@ function run(name,fn){
     assert.match(html,/setTimeout\(r,750\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
+    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
@@ -607,7 +607,7 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-generic-sales-v7/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v8/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/カテゴリ非依存/);
@@ -616,6 +616,22 @@ function run(name,fn){
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
+  });
+
+  await run('AI-needed products hide unfinished fallback copy until validation completes',()=>{
+    const fs=require('node:fs'),path=require('node:path');
+    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/確認が終わると投稿文を表示します/);
+    assert.match(html,/誤った投稿文は表示していません/);
+  });
+
+  await run('AI ROOM copy converts validated facts into buyer-focused copy without repeating feature bullets',()=>{
+    const fs=require('node:fs'),path=require('node:path');
+    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/を重視して、'\+insight\.productType\+'を選びたい方へ/);
+    assert.match(html,/さらに、'\+extras\.join\('・'\)\+'も商品ページで確認できます/);
+    assert.doesNotMatch(html,/商品の特徴👇/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{

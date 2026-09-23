@@ -12,7 +12,7 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-generic-sales-v7';
+const PROMPT_VERSION='2026-09-23-ai-generic-sales-v8';
 const VALIDATION_RULE_VERSION='2026-09-23-ai-gate-v3';
 
 const FEATURE_MAX_CHARS=20;
@@ -73,7 +73,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品をカテゴリ非依存で事実抽出。productTypeは原文の最短の商品種別名詞を2〜16字で抜き、修飾語を混ぜない。featuresは比較用の明示事実を最大3件。sellingPointsは原文の完結した4〜36字の連続引用を最大2件、text自体も原文引用。全項目にsourceとevidence必須。意味拡張・販促・ランキング・効能・安全・健康・美容・保証・推測禁止。sellingPointsの途中断片禁止。数字単位一致。画像なし推測禁止。`;
+const SYSTEM_PROMPT=`楽天商品をカテゴリ非依存で事実抽出。productTypeは原文の最短の商品種別名詞2〜16字。featuresは素材・仕様・対応・サイズ・容量など比較用の明示事実を最大3件。sellingPointsは購入判断に役立つ原文の完結した4〜36字の連続引用を最大2件。全項目source/evidence必須。text自体も原文引用。途中断片禁止。意味拡張・販促・ランキング・効能・安全・健康・美容・保証・推測禁止。数字単位一致。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');

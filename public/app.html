@@ -2503,21 +2503,45 @@ function aiSalesInsight(item,result){
   return {productType,features,sellingPoints};
 }
 
+function salesFactCore(value){
+  return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
+}
+
 function aiPhase1Post(item,result){
   const v=result?.validation;
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item,result);
+  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
   const insight=aiSalesInsight(item,result);
-  const lines=[insight.productType+'を探している方へ。'];
-  if(insight.sellingPoints.length){
-    lines.push(...insight.sellingPoints.map(x=>'・'+x));
-  }else if(insight.features.length){
-    lines.push('・'+insight.features.slice(0,2).join(' / '));
+  const features=insight.features.slice(0,4);
+  const points=insight.sellingPoints.slice(0,2);
+  const lines=[];
+  if(features.length>=2){
+    lines.push(features[0]+'と'+features[1]+'を重視して、'+insight.productType+'を選びたい方へ。');
+  }else if(features.length===1){
+    lines.push(features[0]+'をチェックして、'+insight.productType+'を選びたい方へ。');
+  }else if(points.length){
+    lines.push(insight.productType+'選びで、商品ページの違いをきちんと比べたい方へ。');
+  }else{
+    return '';
   }
-  if(insight.features.length){
-    lines.push('','商品の特徴👇',...insight.features.map(x=>'✔ '+x));
+
+  if(points.length){
+    lines.push('',...points);
   }
+
+  const extras=features.filter(feature=>{
+    const fc=salesFactCore(feature);
+    return fc&&!points.some(point=>{
+      const pc=salesFactCore(point);
+      return pc.includes(fc)||fc.includes(pc);
+    });
+  }).slice(0,3);
+
+  if(extras.length){
+    lines.push('','さらに、'+extras.join('・')+'も商品ページで確認できます。');
+  }
+
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
@@ -2549,7 +2573,7 @@ function updateAiPanel(index){
   const copy=box.querySelector('.aiCopy');
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。安全のため短文に切り替えました。';facts.textContent='';copy.textContent=aiPhase1Post(item,{validation:{mode:'fallback'}});return;}
+  if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。誤った投稿文を出さないため、この商品の投稿文は表示しません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='skipped'){
     status.textContent=result.reason==='rule_confident'
       ?'ルール判定で十分に確認できたため、Groqは使用していません。'
@@ -2861,7 +2885,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
-    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiSafeFallbackPost(item,aiRoomResults.get(index)?.data);
+    if(gate.status==='fallback') return '';
     if(gate.useLegacy){
       const options={variant:index};
       if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
@@ -2870,7 +2894,7 @@ function resolvedPost(item,index,p='room',keyword=''){
       return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
     }
     if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
-    return aiSafeFallbackPost(item,aiRoomResults.get(index)?.data);
+    return '';
   }
 
   const options={variant:index};
@@ -2898,8 +2922,17 @@ function postReady(i,p='room'){
 }
 
 function postDisplay(i,p='room'){
+  const index=Math.max(0,lastSearchItems.indexOf(i));
+  const gate=resolveAiGate(i,index,lastSearchKeyword);
   const text=String(post(i,p)||'').trim();
-  return text || 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
+  if(text) return text;
+  if(gate.enabled&&gate.reasons?.includes('ai_pending')){
+    return '商品内容をGroqで確認中です。確認が終わると投稿文を表示します。';
+  }
+  if(gate.enabled&&!gate.useLegacy&&!gate.full){
+    return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
+  }
+  return 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
 }
 
 
