@@ -196,68 +196,6 @@ input,select{
   line-height:1.4
 }
 
-.debugExport{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border:1px dashed #94a3b8;
-  border-radius:12px;
-  background:#f8fafc
-}
-.debugExport.on{display:block}
-.debugExport button{
-  width:100%;
-  border:0;
-  border-radius:10px;
-  padding:11px;
-  font-weight:800
-}
-.debugExport textarea{
-  width:100%;
-  min-height:220px;
-  max-height:52vh;
-  margin-top:9px;
-  border:1px solid #cbd5e1;
-  border-radius:10px;
-  padding:9px;
-  font-size:11px;
-  line-height:1.45;
-  background:#fff;
-  color:#111827;
-  resize:vertical;
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
-  white-space:pre;
-  overflow-wrap:normal
-}
-
-.aiPreview{margin-top:12px;padding:12px;border:1px solid #c7d2fe;border-radius:13px;background:#f8faff}
-.aiPreview h4{margin:0 0 7px;font-size:13px}
-.aiPreview .aiStatus{font-size:11px;color:#4b5563;line-height:1.5}
-.aiPreview .aiFacts{margin-top:8px;font-size:11px;line-height:1.55}
-.aiPreview .aiFact{padding:7px 0;border-top:1px solid #e5e7eb}
-.aiPreview .aiCaption{margin-top:8px;padding:8px;background:#fff;border-radius:9px;font-size:10px;line-height:1.5;white-space:pre-wrap}
-.aiPreview .aiThumb{width:76px;height:76px;object-fit:cover;border-radius:9px;margin-top:8px}
-.aiPreview .aiCopy{white-space:pre-wrap;margin-top:8px;padding:9px;background:#fff;border:1px solid #e5e7eb;border-radius:9px;font-size:11px;line-height:1.5}
-.aiPreview .aiWarn{margin-top:8px;font-size:10px;font-weight:800;color:#9a3412}
-.aiPreview .aiReview{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.aiPreview .aiReview button{border:1px solid #d1d5db;background:#fff;border-radius:8px;padding:7px 8px;font-size:10px;font-weight:800}
-.aiPreview .aiReview button.on{background:#111;color:#fff}
-.aiPreview .aiLinks{margin-top:8px;font-size:11px}
-.aiPreview .aiLinks a{color:#1d4ed8;font-weight:800}
-
-.legal-warn{
-  margin-top:9px;
-  padding:9px 10px;
-  border-radius:10px;
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  color:#9a3412;
-  font-size:11px;
-  line-height:1.5;
-  font-weight:700
-}
-
 .guide{
   margin-top:9px;
   padding:10px;
@@ -865,16 +803,6 @@ input,select{
 
 <div id="st" class="muted"></div>
 
-<div id="debugExport" class="debugExport">
-  <strong>検証データ出力（プレビュー・owner限定）</strong>
-  <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>
-  <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
-  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
-  <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
-  <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
-  <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
-</div>
-
 </section>
 
 
@@ -935,9 +863,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/room-copy-quality.js?v=20260920-7"></script>
-<script src="/benefit-grounding.js?v=20260923-1"></script>
-<script src="/product-shadow-v2.js?v=20260921-1"></script>
+<script src="/room-copy-quality.js?v=20260920-6"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
@@ -1003,11 +929,6 @@ let searching=false;
 let currentAppSession=null;
 let currentAccessPlan='base';
 let proAvailable=false;
-let debugExportAllowed=false;
-let aiGatesFullOutput=false;
-let aiRoomResults=new Map();
-let aiRoomReviews=new Map();
-let aiRunGeneration=0;
 
 
 function setAuthMessage(
@@ -1036,10 +957,6 @@ function showLogin(
 
   accessGeneration++;
   lastSearchItems=[];
-  lastSearchKeyword='';
-  aiRoomResults=new Map();
-  aiRoomReviews=new Map();
-  aiRunGeneration++;
   document.getElementById('res').replaceChildren();
   appRoot.style.display=
   'none';
@@ -1059,9 +976,6 @@ function showLogin(
 
 let accessGeneration=0;
 let lastSearchItems=[];
-let lastSearchKeyword='';
-let postCache=new Map();
-let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
 function bootAuth(){
   if(!authBoot) authBoot=checkAuth().finally(()=>{authBoot=null;});
@@ -1087,7 +1001,6 @@ function restoreSearchState(email){
     const state=UrenaviReturnState.load(sessionStorage,email);
     if(!state) return;
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
-    lastSearchKeyword=String(state.fields?.k||'').trim();
     render(state.items);
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
@@ -1115,12 +1028,11 @@ async function showApp(session) {
   try {
     const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
+    const access=await response.json().catch(()=>({}));
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
-    const access=typeof response.json==='function'?await response.json().catch(()=>({})):{};
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
-    await updateDebugExportAccess();
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
@@ -2190,669 +2102,8 @@ function groundedAnalysis(i){
   return {audience:ctx.audience||'',impact:ctx.benefit||''};
 }
 
-async function updateDebugExportAccess(){
-  let preview=false;
-  let runtimeKnown=false;
-  try{
-    const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
-    const d=await r.json().catch(()=>({}));
-    runtimeKnown=r.ok && typeof d.preview==='boolean';
-    preview=runtimeKnown && d.preview===true;
-  }catch{
-    preview=false;
-    runtimeKnown=false;
-  }
-  debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
-  const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
-  aiGatesFullOutput=runtimeKnown && (
-    preview
-      ?debugExportAllowed
-      :paidPlan
-  );
-  const box=document.getElementById('debugExport');
-  if(box) box.classList.toggle('on',debugExportAllowed);
-  if(!debugExportAllowed){
-    const ta=document.getElementById('debugJson');
-    if(ta) ta.value='';
-  }
-}
-
-function debugFallbackReason(a){
-  if(a?.ambiguityReason==='no_match' || (a?.category==='unknown' && a?.usage==='unknown')) return 'no_match';
-  if(a?.ambiguous) return 'ambiguous';
-  if(Array.isArray(a?.conflicts) && a.conflicts.length) return 'conflict';
-  if(!a?.supported) return 'unsupported_usage';
-  if(a?.legalRisk) return 'legalRisk';
-  return null;
-}
-
-function buildDebugValidationRowsFor(items,keyword){
-  if(!debugExportAllowed) return [];
-  return (Array.isArray(items)?items:[]).map((item,index)=>{
-    const a=UrenaviPainCopy.analyzeRoomProduct
-      ?UrenaviPainCopy.analyzeRoomProduct(item,String(keyword||'').trim())
-      :groundedAnalysis(item);
-    const generatedCopy=resolvedPost(item,index,'room',String(keyword||'').trim());
-    const aiGate=resolveAiGate(item,index,String(keyword||'').trim());
-    const resolvedPostMeta={mediaTemplate:mediaTemplateFor(item,index,'room',String(keyword||'').trim())};
-    const shadowV2=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
-      ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
-      :null;
-    return {
-      rank:index+1,
-      itemName:String(item?.itemName||''),
-      category:String(a?.category||'unknown'),
-      usage:String(a?.usage||'unknown'),
-      ambiguous:Boolean(a?.ambiguous),
-      legalRisk:Boolean(a?.legalRisk),
-      promoRisk:Boolean(a?.promoRisk),
-      claimRisk:Boolean(a?.claimRisk),
-      warningRisk:Boolean(a?.warningRisk),
-      promoRiskTerms:Array.isArray(a?.promoRiskTerms)?a.promoRiskTerms:[],
-      claimRiskTerms:Array.isArray(a?.claimRiskTerms)?a.claimRiskTerms:[],
-      riskTerms:Array.isArray(a?.riskTerms)?a.riskTerms:[],
-      supported:Boolean(a?.supported),
-      conflicts:Array.isArray(a?.conflicts)?a.conflicts:[],
-      topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[],
-      outputMode:String(a?.outputMode||'fallback'),
-      fallbackReason:String(a?.outputMode||'fallback')==='fallback'?debugFallbackReason(a):null,
-      generatedCopy,
-      shadowV2,
-      aiGatesFullOutput,
-      aiGate,
-      resolvedPost:resolvedPostMeta,
-      aiPhase1:null,
-      aiState:'not_run',
-      aiHttpStatus:null,
-      aiMessage:null,
-      humanReview:null,
-      itemCaptionPreview:String(item?.itemCaption||'').slice(0,300),
-      imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
-      itemUrl:String(item?.itemUrl||'')
-    };
-  });
-}
-
-function buildDebugValidationRows(){
-  return buildDebugValidationRowsFor(lastSearchItems,lastSearchKeyword).map((row,index)=>({
-    ...row,
-    aiPhase1:aiRoomResults.get(index)?.data||null,
-    aiState:aiRoomResults.get(index)?.state||'not_run',
-    aiHttpStatus:aiRoomResults.get(index)?.status??null,
-    aiMessage:aiRoomResults.get(index)?.message||null,
-    humanReview:aiRoomReviews.get(index)||null
-  }));
-}
-
-const DEBUG_BATCH_KEYWORDS=[
-  'ハンディクリーナー',
-  '洗濯ネット',
-  'ポータブル電源',
-  '犬 ベッド',
-  'ドライブベッド 犬'
-];
-
-async function debugSearchOne(keyword,session,sort){
-  const q=new URLSearchParams({keyword,sort:sort||'standard'});
-  const r=await fetch('/api/search?'+q.toString(),{
-    headers:{Authorization:`Bearer ${session.access_token}`},
-    credentials:'same-origin',
-    cache:'no-store'
-  });
-  const d=await r.json().catch(()=>({}));
-  if(r.status===401) throw new Error('ログインの有効期限が切れました。');
-  if(r.status===403) throw new Error('有効な契約を確認できませんでした。');
-  if(r.status===429) throw new Error('アクセスが集中しています。');
-  if(!r.ok) throw new Error(d.message||'検索に失敗しました。');
-  return Array.isArray(d.items)?d.items:[];
-}
-
-async function copyBatchDebugValidation(){
-  const btn=document.getElementById('debugBatchBtn');
-  const ta=document.getElementById('debugJson');
-  const meta=document.getElementById('debugJsonMeta');
-  if(!debugExportAllowed){
-    if(meta) meta.textContent='この機能はPreview環境のownerだけ利用できます。';
-    return;
-  }
-  if(btn?.disabled) return;
-
-  btn.disabled=true;
-  btn.textContent='5件を検証中…';
-  if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
-
-  let session=null;
-  try{
-    const result=await authDeadline(sb.auth.getSession(),20000);
-    if(result?.error) throw result.error;
-    session=result?.data?.session||null;
-    if(!session) throw new Error('ログインの有効期限が切れました。');
-    if(sessionTooOld(session)) throw new Error('安全のため再認証が必要です。');
-
-    const selectedSort=String($('#sort')?.value||'').trim()||'standard';
-    const searches=[];
-
-    for(let index=0;index<DEBUG_BATCH_KEYWORDS.length;index++){
-      const keyword=DEBUG_BATCH_KEYWORDS[index];
-      btn.textContent=`${index+1}/${DEBUG_BATCH_KEYWORDS.length} 検証中…`;
-      if(meta) meta.textContent=`「${keyword}」を検索しています。`;
-      try{
-        const items=await debugSearchOne(keyword,session,selectedSort);
-        searches.push({
-          searchKeyword:keyword,
-          sort:selectedSort,
-          count:items.length,
-          error:null,
-          items:buildDebugValidationRowsFor(items,keyword)
-        });
-      }catch(error){
-        searches.push({
-          searchKeyword:keyword,
-          sort:selectedSort,
-          count:0,
-          error:String(error?.message||'検索に失敗しました。'),
-          items:[]
-        });
-      }
-      if(index<DEBUG_BATCH_KEYWORDS.length-1) await new Promise(resolve=>setTimeout(resolve,350));
-    }
-
-    const payload={
-      batch:true,
-      searchCount:DEBUG_BATCH_KEYWORDS.length,
-      generatedAt:new Date().toISOString(),
-      searches
-    };
-    const json=JSON.stringify(payload,null,2);
-    if(ta){ta.value=json;ta.scrollTop=0;}
-    const okCount=searches.filter(x=>!x.error).length;
-    const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
-    if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
-
-    try{
-      if(navigator.clipboard?.writeText){
-        await navigator.clipboard.writeText(json);
-        btn.textContent='全部コピーしました';
-      }else throw new Error('Clipboard API unavailable');
-    }catch(error){
-      console.warn('batch clipboard copy failed',error);
-      btn.textContent='JSONを表示しました';
-      if(meta) meta.textContent+=' 自動コピーできない場合は下の枠を長押ししてコピーしてください。';
-    }
-  }catch(error){
-    console.error('batch validation failed',error);
-    if(meta) meta.textContent='一括検証を開始できませんでした：'+String(error?.message||'不明なエラー');
-    btn.textContent='一括検証エラー';
-  }finally{
-    btn.disabled=false;
-    setTimeout(()=>{if(btn) btn.textContent='5件まとめて検証 → JSONをコピー';},2600);
-  }
-}
-
-async function copyDebugValidation(){
-  const btn=document.getElementById('debugCopyBtn');
-  const ta=document.getElementById('debugJson');
-  const meta=document.getElementById('debugJsonMeta');
-
-  if(!debugExportAllowed){
-    if(meta) meta.textContent='この機能はPreview環境のownerだけ利用できます。';
-    return;
-  }
-
-  let json='';
-  try{
-    const currentKeyword=k.value.trim();
-    if(currentKeyword!==lastSearchKeyword){
-      if(meta) meta.textContent='検索キーワードが前回の検索結果と一致していません。もう一度「商品を探して評価する」を押してからJSONを作成してください。';
-      if(btn) btn.textContent='再検索してください';
-      setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
-      return;
-    }
-    const payload={
-      searchKeyword:lastSearchKeyword,
-      count:lastSearchItems.length,
-      generatedAt:new Date().toISOString(),
-      items:buildDebugValidationRows()
-    };
-    json=JSON.stringify(payload,null,2);
-    if(ta){
-      ta.value=json;
-      ta.scrollTop=0;
-    }
-    if(meta){
-      meta.textContent=lastSearchItems.length
-        ?`10件までの検証JSONを表示しました（${json.length.toLocaleString()}文字）。長押しでも選択・コピーできます。`
-        :'検索結果がまだありません。空の検証JSONを表示しました。';
-    }
-  }catch(error){
-    console.error('debug validation export failed',error);
-    if(ta) ta.value='';
-    if(meta) meta.textContent='JSONの作成中にエラーが発生しました。検索をやり直して再度お試しください。';
-    if(btn) btn.textContent='JSON作成エラー';
-    setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
-    return;
-  }
-
-  try{
-    if(navigator.clipboard?.writeText){
-      await navigator.clipboard.writeText(json);
-      if(btn) btn.textContent='コピーしました';
-    }else{
-      throw new Error('Clipboard API unavailable');
-    }
-  }catch(error){
-    console.warn('clipboard copy failed; JSON remains visible',error);
-    if(btn) btn.textContent='JSONを表示しました';
-    if(meta) meta.textContent+=' 自動コピーできない場合は、枠内を長押しして手動コピーしてください。';
-  }
-
-  setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
-}
-
-document.getElementById('debugCopyBtn')?.addEventListener('click',copyDebugValidation);
-document.getElementById('debugBatchBtn')?.addEventListener('click',copyBatchDebugValidation);
-
-document.getElementById('debugJson')?.addEventListener('focus',e=>{
-  // Keep native iOS selection behavior; do not auto-select the full payload.
-  e.currentTarget.setSelectionRange?.(0,0);
-});
-
-function firstImageUrl(item){
-  const list=[...(item?.mediumImageUrls||[]),...(item?.smallImageUrls||[])];
-  const first=list.find(Boolean);
-  if(typeof first==='string') return safeUrl(first);
-  if(first&&typeof first.imageUrl==='string') return safeUrl(first.imageUrl);
-  return '#';
-}
-
-function aiSafeTitle(item){
-  try{
-    const a=groundedAnalysis(item);
-    if(UrenaviPainCopy.buildSafeDisplayName) return UrenaviPainCopy.buildSafeDisplayName(item,a);
-  }catch{}
-  return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
-}
-
-function collectGroundedMatches(text,rules,max=8){
-  const src=String(text||'').normalize('NFKC');
-  const out=[];
-  for(const re of rules){
-    re.lastIndex=0;
-    let m;
-    while((m=re.exec(src))){
-      const v=String(m[0]||'').trim();
-      if(v&&!out.includes(v)) out.push(v);
-      if(out.length>=max) return out;
-    }
-  }
-  return out;
-}
-
-const GROUNDED_FEATURE_RULES=[
-  /スマホ対応|タッチパネル対応|タッチ対応/g,
-  /メッシュ|通気性/g,
-  /本革|山羊革|牛革|ゴートレザー/g,
-  /防風|防水/g,
-  /プロテクター/g,
-  /滑り止め|すべり止め/g,
-  /耐熱/g,
-  /S[・\/／]M[・\/／]Lサイズ|S\/M\/Lサイズ/g,
-  /コードレス/g,
-  /折りたたみ|折り畳み/g,
-  /キャスター付き/g,
-  /コンパクト/g,
-  /軽量/g,
-  /洗える/g
-];
-
-function groundedTitleFeatures(item){
-  return collectGroundedMatches(item?.itemName||'',GROUNDED_FEATURE_RULES,6);
-}
-
-function groundedCaptionFeatures(item){
-  return collectGroundedMatches(item?.itemCaption||'',GROUNDED_FEATURE_RULES,6);
-}
-
-function groundedUseContexts(item){
-  const text=(String(item?.itemName||'')+' '+String(item?.itemCaption||'')).normalize('NFKC');
-  return collectGroundedMatches(text,[
-    /ツーリング/g,/バイク通勤/g,/キャンプ/g,/アウトドア/g,/焚火/g,/薪ストーブ/g
-  ],4);
-}
-
-function compactGrounded(value){
-  return String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
-}
-
-function specificGroundedProductType(item,aiType){
-  const base=String(aiType||'').trim()||lexicalProductLabel(item);
-  const q=String(lastSearchKeyword||'').trim();
-  const title=compactGrounded(item?.itemName||'');
-  const qc=compactGrounded(q);
-  const bc=compactGrounded(base);
-  if(q&&qc.length>=3&&title.includes(qc)&&(qc.includes(bc)||bc.includes(qc))) return q;
-  return base;
-}
-
-function groundedBenefitLines(productType,featureRecords,item){
-  const api=window.UrenaviBenefitGrounding;
-  if(!api||typeof api.makeGroundedSelectionLine!=='function') return [];
-  const sources=[String(item?.itemName||''),String(item?.itemCaption||'')];
-  const out=[];
-  for(const record of featureRecords||[]){
-    if(out.length>=2) break;
-    const label=String(record?.text||'').trim();
-    const evidence=String(record?.evidence||'').trim();
-    if(!label||!evidence) continue;
-    const checked=api.makeGroundedSelectionLine({label,evidence,sources});
-    if(checked?.valid&&checked.text&&!out.includes(checked.text)) out.push(checked.text);
-  }
-  return out;
-}
-function featureCore(value){
-  return String(value||'').normalize('NFKC').replace(/\s+/g,'').replace(/[性製用対応付き付]/g,'').toLowerCase();
-}
-function dedupeGroundedFeatures(values){
-  const out=[];
-  for(const raw of values||[]){
-    const v=String(raw||'').trim();
-    const core=featureCore(v);
-    if(!v||!core) continue;
-    const duplicate=out.some(existing=>{
-      const ec=featureCore(existing);
-      return ec===core || (ec.length>=2&&core.includes(ec)) || (core.length>=2&&ec.includes(core));
-    });
-    if(!duplicate) out.push(v);
-  }
-  return out;
-}
-
-function mergeSemanticFeatureLabels(values){
-  const src=[...new Set((values||[]).filter(Boolean).map(v=>String(v).trim()))];
-  const out=[];
-  const used=new Set();
-
-  const phoneIdx=src.map((v,i)=>/スマホ対応|スマートフォン対応|タッチパネル対応|タッチ対応/.test(v)?i:-1).filter(i=>i>=0);
-  if(phoneIdx.length){
-    out.push('スマホ・タッチ対応');
-    phoneIdx.forEach(i=>used.add(i));
-  }
-
-  const leatherIdx=src.map((v,i)=>/本革|山羊革|牛革|ゴートレザー/.test(v)?i:-1).filter(i=>i>=0);
-  if(leatherIdx.length){
-    const labels=leatherIdx.map(i=>src[i]);
-    let merged='';
-    if(labels.some(v=>/山羊革|ゴートレザー/.test(v))) merged='本革（山羊革）';
-    else if(labels.some(v=>/牛革/.test(v))) merged='本革（牛革）';
-    else if(labels.some(v=>/本革/.test(v))) merged='本革';
-    if(merged) out.push(merged);
-    leatherIdx.forEach(i=>used.add(i));
-  }
-
-  src.forEach((v,i)=>{if(!used.has(i)) out.push(v);});
-  return out;
-}
-
-function audienceForProduct(productType,features){
-  const first=String((features||[])[0]||'').trim();
-  if(first) return productType+'を探していて、「'+first+'」を条件に比較したい人';
-  return productType+'を探していて、商品名や説明にある仕様を比較したい人';
-}
-
-function aiSalesInsight(item,result){
-  const v=result?.validation||{};
-  const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
-  const productType=specificGroundedProductType(item,rawType);
-  const validatedRecords=(v.features||[])
-    .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
-    .map(x=>({text:String(x.text).trim(),evidence:String(x.evidence).trim(),source:String(x.source||'')}));
-  const validated=validatedRecords.map(x=>x.text);
-  const titleFacts=groundedTitleFeatures(item);
-  const captionFacts=groundedCaptionFeatures(item);
-  const titleRecords=titleFacts.map(x=>({text:x,evidence:x,source:'itemName'}));
-  const captionRecords=captionFacts.map(x=>({text:x,evidence:x,source:'itemCaption'}));
-  const features=mergeSemanticFeatureLabels(
-    dedupeGroundedFeatures([...validated,...titleFacts,...captionFacts])
-  ).slice(0,5);
-  const contexts=groundedUseContexts(item);
-  const featureRecords=[...validatedRecords,...titleRecords,...captionRecords]
-    .filter((x,i,a)=>a.findIndex(y=>featureCore(y.text)===featureCore(x.text))===i);
-  const benefits=groundedBenefitLines(productType,featureRecords,item);
-  return {
-    productType,
-    features,
-    contexts,
-    benefits,
-    audience:audienceForProduct(productType,features)
-  };
-}
-
-function aiPhase1Post(item,result){
-  const v=result?.validation;
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item);
-  const insight=aiSalesInsight(item,result);
-  const lines=[insight.productType+'を探している方に。'];
-  if(insight.benefits.length) lines.push(...insight.benefits);
-  if(insight.features.length) lines.push('','商品の特徴👇',...insight.features.slice(0,5).map(x=>'✔ '+x));
-  lines.push('','こんな人に向いていそう👇','・'+insight.audience);
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500);
-}
-
-function aiPanelMarkup(item,index){
-  if(!debugExportAllowed) return '';
-  const image=firstImageUrl(item);
-  const caption=String(item?.itemCaption||'').slice(0,300);
-  return '<section class="aiPreview" data-ai-index="'+index+'">'+
-    '<h4>AI事実抽出版（Preview・owner限定）</h4>'+
-    '<div class="aiStatus">AI分析待ち…</div>'+
-    (image!=='#'?'<img class="aiThumb" src="'+esc(image)+'" alt="">':'')+
-    '<div class="aiCaption"><strong>itemCaption先頭300文字</strong><br>'+esc(caption||'（説明文なし）')+'</div>'+
-    '<div class="aiFacts"></div><div class="aiCopy"></div>'+
-    '<div class="aiWarn">自動生成です。投稿前に商品ページの内容と表現を必ず確認してください。</div>'+
-    '<div class="aiLinks">'+(safeUrl(item?.itemUrl)!=='#'?'<a href="'+esc(safeUrl(item.itemUrl))+'" target="_blank" rel="noopener noreferrer">楽天の商品ページで確認</a>':'商品ページURLなし')+'</div>'+
-    '<div class="aiReview"><button type="button" data-ai-review="ok" data-i="'+index+'">○ 問題なし</button><button type="button" data-ai-review="minor" data-i="'+index+'">△ 軽微な誤り</button><button type="button" data-ai-review="major" data-i="'+index+'">× 重大な誤り</button></div>'+
-    '</section>';
-}
-
-function updateAiPanel(index){
-  const box=document.querySelector('.aiPreview[data-ai-index="'+index+'"]');
-  if(!box) return;
-  const item=lastSearchItems[index];
-  const result=aiRoomResults.get(index);
-  const status=box.querySelector('.aiStatus');
-  const facts=box.querySelector('.aiFacts');
-  const copy=box.querySelector('.aiCopy');
-  if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。安全のため短文に切り替えました。';facts.textContent='';copy.textContent=aiPhase1Post(item,{validation:{mode:'fallback'}});return;}
-  if(result.state==='skipped'){
-    status.textContent=result.reason==='free_tier_ai_limit'
-      ?'無料枠のAI上限対象外です。安全な短文を表示します。'
-      :'ルール判定でAI追加確認は不要です。';
-    facts.textContent='';
-    copy.textContent=result.reason==='rule_confident'?resolvedPost(item,index,'room',lastSearchKeyword):aiSafeFallbackPost(item);
-    return;
-  }
-  const v=result.data?.validation||{};
-  status.textContent='検証：'+(v.mode==='simple'?'簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
-  const rows=[];
-  const p=v.productType||{};
-  rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
-  if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
-  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
-  if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
-  if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
-  facts.innerHTML=rows.join('');
-  copy.textContent=aiPhase1Post(item,result.data);
-  box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
-}
-
-async function requestAiRoom(item,index,generation){
-  if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
-  aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
-  try{
-    const headers={'Content-Type':'application/json'};
-    if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
-    const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
-    const d=await r.json().catch(()=>({}));
-    if(generation!==aiRunGeneration) return;
-    if(!r.ok){
-      const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message,status:r.status});
-    }else aiRoomResults.set(index,{state:'done',data:d});
-    for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
-  }catch(e){
-    if(generation!==aiRunGeneration) return;
-    aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
-  }finally{
-    clearTimeout(timer);
-    if(generation===aiRunGeneration){
-      updateAiPanel(index);
-      const panel=document.querySelector('[data-ai-index="'+index+'"]');
-      const article=panel?.closest('.item')
-        ||document.querySelector('.tab[data-i="'+index+'"]')?.closest('.item');
-      if(article){
-        const active=article.querySelector('.tab.on');
-        const platform=active?.dataset?.p||'room';
-        const copy=article.querySelector('.copy');
-        if(copy) copy.textContent=postDisplay(lastSearchItems[index],platform);
-        const guide=article.querySelector('.guide');
-        if(guide){
-          const temp=document.createElement('div');
-          temp.innerHTML=analysisGuide(lastSearchItems[index],index,lastSearchKeyword);
-          const next=temp.firstElementChild;
-          if(next) guide.replaceWith(next);
-        }
-        const todayBox=document.querySelector('#res > .today');
-        if(todayBox){
-          const temp=document.createElement('div');
-          temp.innerHTML=today(lastSearchItems);
-          const next=temp.firstElementChild;
-          if(next) todayBox.replaceWith(next);
-        }
-        const button=article.querySelector('.cb');
-        if(button){
-          const ready=postReady(lastSearchItems[index],platform);
-          button.disabled=!ready;
-          button.textContent=ready?'投稿文をコピー':'コピー不可';
-        }
-      }
-    }
-  }
-}
-
-function aiTargetDecision(item){
-  const a=groundedAnalysis(item);
-  const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
-  const topScore=Number(top[0]?.score||0);
-  const secondScore=Number(top[1]?.score||0);
-  const gap=top.length>1?Math.abs(topScore-secondScore):Infinity;
-  const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
-  const fallbackFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
-  const safeFallback=fallbackFacts.length>=1;
-  const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
-  const reasons=[];
-  if(conflicts.length) reasons.push('rule_conflict');
-  else if(unresolved&&!safeFallback){
-    if(a?.ambiguous) reasons.push('rule_ambiguous');
-    if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
-    reasons.push('insufficient_grounded_facts');
-  }
-  return {
-    callAi:reasons.length>0,reasons,topScore,
-    secondScore:top.length>1?secondScore:null,
-    gap:Number.isFinite(gap)?gap:null,
-    safeFallback,fallbackFactCount:fallbackFacts.length,
-    fallbackFacts:fallbackFacts.slice(0,3)
-  };
-}
-
-const FREE_TIER_AI_PER_SEARCH_LIMIT=2;
-
-async function runAiPreview(items){
-  if(!aiGatesFullOutput) return;
-  const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
-  const queue=[];
-  let targeted=0;
-  (Array.isArray(items)?items:[]).forEach((item,index)=>{
-    const target=aiTargetDecision(item);
-    if(aiGatesFullOutput && !target.callAi){
-      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target});
-      updateAiPanel(index);
-      return;
-    }
-    if(aiGatesFullOutput && target.callAi){
-      targeted++;
-      if(targeted>FREE_TIER_AI_PER_SEARCH_LIMIT){
-        aiRoomResults.set(index,{state:'skipped',reason:'free_tier_ai_limit',target});
-        updateAiPanel(index);
-        return;
-      }
-    }
-    aiRoomResults.set(index,{state:'loading',target});
-    queue.push({item,index});
-  });
-  while(queue.length&&generation===aiRunGeneration){
-    const job=queue.shift();
-    await requestAiRoom(job.item,job.index,generation);
-    if(queue.length) await new Promise(r=>setTimeout(r,750));
-  }
-}
-
-document.addEventListener('click',e=>{
-  const b=e.target.closest?.('[data-ai-review]');if(!b)return;
-  const index=Number(b.dataset.i);aiRoomReviews.set(index,b.dataset.aiReview);updateAiPanel(index);
-});
-function legalWarning(i){
-  const a=groundedAnalysis(i);
-  if(!a?.claimRisk) return '';
-  return '<div class="legal-warn">商品名に効能・健康・美容・衛生表現として注意が必要な語句が含まれています。投稿前に商品ページをご確認ください。</div>';
-}
-
 function aud(i){
   return groundedAnalysis(i).audience;
-}
-
-function isFullOutput(i){
-  return groundedAnalysis(i).outputMode==='full';
-}
-
-function fullOutputItems(items){
-  return (Array.isArray(items)?items:[]).filter(isFullOutput);
-}
-
-function analysisGuide(i,index,keyword=''){
-  if(aiGatesFullOutput){
-    const gate=resolveAiGate(i,index,keyword);
-    if(gate.full&&!gate.useLegacy){
-      const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
-      return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div>'+
-        '<div class="target">'+esc(insight.audience)+'</div>'+
-        '<ul class="pts">'+insight.benefits.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
-    }
-    if(gate.useLegacy){
-      const a=groundedAnalysis(i);
-      if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
-    }
-    if(gate.reasons?.includes('free_tier_ai_limit')){
-      return '<div class="guide"><div class="muted">無料枠のAI確認上限のため、この商品は安全な短文表示です。</div></div>';
-    }
-    if(gate.reasons?.includes('ai_error')){
-      return '<div class="guide"><div class="muted">AI確認に失敗したため、誤った用途やメリットを出さず安全な短文表示です。</div></div>';
-    }
-    return '<div class="guide"><div class="muted">商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません。</div></div>';
-  }
-  const a=groundedAnalysis(i);
-  if(a.outputMode!=='full'){
-    return '<div class="guide"><div class="muted">この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。</div></div>';
-  }
-  return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
 }
 
 function pts(i){
@@ -2863,134 +2114,13 @@ function pts(i){
   return out.slice(0,2);
 }
 
-function lexicalProductLabel(item){
-  try{
-    const a=groundedAnalysis(item);
-    if(UrenaviPainCopy.fallbackProductName) return UrenaviPainCopy.fallbackProductName(item,a);
-    if(UrenaviPainCopy.stripPromotionalText) return UrenaviPainCopy.stripPromotionalText(item?.itemName||'').slice(0,90).trim();
-  }catch{}
-  return String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim().slice(0,90)||'商品名を確認してください';
-}
-
-function aiSafeFallbackPost(item){
-  const title=lexicalProductLabel(item);
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
-}
-
-function aiCheckingPost(item){
-  return aiSafeFallbackPost(item);
-}
-
-function ruleSecondOpinion(item,validation,keyword=''){
-  const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
-    ?window.UrenaviProductShadowV2.analyze(item,String(keyword||'').trim())
-    :null;
-  const primary=shadow?.primaryProduct||null;
-  if(!primary?.grounded || !validation?.productType?.valid){
-    return {checked:false,conflict:false,primaryProduct:primary?.text||null};
-  }
-  const q=window.UrenaviProductShadowV2.queryConsistency(
-    String(item?.itemName||''),
-    String(validation.productType.value||''),
-    primary
-  );
-  return {
-    checked:true,
-    conflict:q.status!=='aligned',
-    primaryProduct:primary.text,
-    aiProductType:String(validation.productType.value||''),
-    comparison:q
-  };
-}
-
-function resolveAiGate(item,index,keyword=''){
-  if(!aiGatesFullOutput) return {enabled:false,status:'off',full:false,reasons:[]};
-  const ai=aiRoomResults.get(index);
-  if(!ai || ai.state==='loading' || ai.state==='not_run'){
-    return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
-  }
-  if(ai.state==='skipped'&&ai.reason==='rule_confident'){
-    return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
-  }
-  if(ai.state==='skipped'&&ai.reason==='free_tier_ai_limit'){
-    return {enabled:true,status:'fallback',full:false,reasons:['free_tier_ai_limit'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
-  }
-  if(ai.state==='error'){
-    return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
-  }
-  const v=ai.data?.validation||{};
-  const second=ruleSecondOpinion(item,v,keyword);
-  const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
-  if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
-  if(second.conflict) reasons.push('rule_second_opinion_conflict');
-  const softReasons=new Set(['invalid_features_dropped']);
-  const blockingReasons=reasons.filter(x=>!softReasons.has(x));
-  const full=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
-  return {
-    enabled:true,
-    status:full?'full':'fallback',
-    full,
-    reasons,
-    mediumHandling:'fallback_fixed',
-    cacheKeyComponents:ai.data?.cache?.keyComponents||{
-      itemCode:String(item?.itemCode||''),
-      itemName:String(item?.itemName||''),
-      imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
-      itemCaptionNormalized:String(item?.itemCaption||'').normalize('NFKC').replace(/\s+/g,' ').trim()
-    },
-    ruleSecondOpinion:second,
-    validation:v,
-    cache:ai.data?.cache||null,
-    stages:ai.data?.stages||null,
-    rateLimit:ai.data?.rateLimit||{},
-    target:ai.target||null
-  };
-}
-
-function mediaTemplateFor(item,index,p='room',keyword=''){
-  const gate=resolveAiGate(item,index,keyword);
-  if(gate.enabled){
-    if(gate.useLegacy) return 'legacy_rule_confident_'+p;
-    return gate.full?p+'_fact_only':p+'_safe_fallback';
-  }
-  return 'legacy_'+p;
-}
-
-function resolvedPost(item,index,p='room',keyword=''){
-  const gate=resolveAiGate(item,index,keyword);
-  if(gate.enabled){
-    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiSafeFallbackPost(item);
-    if(gate.useLegacy){
-      const options={variant:index};
-      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
-      if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-      if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
-    }
-    if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
-    return aiSafeFallbackPost(item);
-  }
-
-  const options={variant:index};
-  if(p==='room'){
-    options.usedOpenings=roomSentenceContext.openings;
-    options.usedSeconds=roomSentenceContext.seconds;
-  }
-  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
-}
-
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
-  const key=p+':'+variant;
-  if(postCache.has(key)) return postCache.get(key);
-  const value=resolvedPost(i,variant,p,keyword);
-  postCache.set(key,value);
-  return value;
+  const options={variant};
+  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(i,keyword,options);
+  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(i,keyword,options);
+  return UrenaviPainCopy.makeRoomCopy(i,keyword,options);
 }
 
 function postReady(i,p='room'){
@@ -3025,33 +2155,111 @@ function short(
 }
 
 
-function today(a){
-  if(aiGatesFullOutput){
-    const candidates=(Array.isArray(a)?a:[]).map((item,index)=>({item,index,gate:resolveAiGate(item,index,lastSearchKeyword)}))
-      .filter(x=>x.gate.full);
-    if(!candidates.length){
-      return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
-    }
-    const chosen=candidates.sort((x,y)=>(y.item.sellability||0)-(x.item.sellability||0)||(y.item.score||0)-(x.item.score||0))[0];
-    const i=chosen.item;
-    let audience='',points=[];
-    if(chosen.gate.useLegacy){
-      audience=aud(i);points=pts(i);
-    }else{
-      const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=insight.audience;points=insight.benefits;
-    }
-    return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-      '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
-      '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(audience)+'</div>'+
-      '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
+function today(
+  a
+){
+
+  if(
+    !a.length
+  ){
+
+    return'';
+
   }
-  const eligible=fullOutputItems(a);
-  if(!eligible.length) return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
-  const i=[...eligible].sort((a,b)=>(b.sellability||0)-(a.sellability||0)||(b.score||0)-(a.score||0))[0];
-  return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-    '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。まず成約を狙うならこの商品を優先。</div>'+
-    '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
+
+
+  const i=
+  [...a]
+  .sort(
+    (
+      a,
+      b
+    )=>
+
+    (
+      b.sellability||
+      0
+    )
+    -
+    (
+      a.sellability||
+      0
+    )
+
+    ||
+
+    (
+      b.score||
+      0
+    )
+    -
+    (
+      a.score||
+      0
+    )
+  )[0];
+
+
+  return`
+<section class="today">
+
+  <h2>
+    今日売るならこれ
+  </h2>
+
+  <div class="name">
+    ${short(i)}
+  </div>
+
+  <div class="muted">
+    売れやすさ ${i.sellability}/100・AI ${i.score}/100。
+    まず成約を狙うならこの商品を優先。
+  </div>
+
+  <div class="guide">
+
+    <div class="gt">
+      狙う相手
+    </div>
+
+    <div class="target">
+      ${esc(aud(i))}
+    </div>
+
+    <ul class="pts">
+
+      ${
+        pts(i)
+        .map(
+          z=>
+          `<li>${esc(z)}</li>`
+        )
+        .join('')
+      }
+
+    </ul>
+
+  </div>
+
+  <div class="btns">
+
+    <button class="tc">
+      投稿文をコピー
+    </button>
+
+    ${roomAction(i)}
+
+    <a
+      href="${esc(safeUrl(i.affiliateUrl))}"
+    >
+      楽天で見る
+    </a>
+
+  </div>
+
+</section>
+`;
+
 }
 
 
@@ -3252,15 +2460,6 @@ function render(
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
-  aiRoomResults=new Map();
-  aiRoomReviews=new Map();
-  aiRunGeneration++;
-  postCache=new Map();
-  roomSentenceContext={openings:new Set(),seconds:new Set()};
-  const debugJson=document.getElementById('debugJson');
-  if(debugJson) debugJson.value='';
-  const debugJsonMeta=document.getElementById('debugJsonMeta');
-  if(debugJsonMeta) debugJsonMeta.textContent='';
   $('#res').innerHTML=
 
   today(
@@ -3381,9 +2580,6 @@ function render(
 
   </div>
 
-
-  ${legalWarning(i)}
-  ${aiPanelMarkup(i,n)}
   <div class="ins">
 
     <div class="it">
@@ -3412,7 +2608,30 @@ function render(
 
   </div>
 
-  ${analysisGuide(i,n,lastSearchKeyword)}
+  <div class="guide">
+
+    <div class="gt">
+      この商品は誰に・何を刺す？
+    </div>
+
+    <div class="target">
+      ${esc(aud(i))}
+    </div>
+
+    <ul class="pts">
+
+      ${
+        pts(i)
+        .map(
+          z=>
+          `<li>${esc(z)}</li>`
+        )
+        .join('')
+      }
+
+    </ul>
+
+  </div>
 
   <div class="tabs">
 
@@ -3617,7 +2836,7 @@ function render(
   ){
 
     const i=
-    fullOutputItems(a)
+    [...a]
     .sort(
       (
         a,
@@ -3625,9 +2844,6 @@ function render(
       )=>
       b.sellability-
       a.sellability
-      ||
-      b.score-
-      a.score
     )[0];
 
 
@@ -3657,10 +2873,6 @@ function render(
 
     };
 
-  }
-
-  if(aiGatesFullOutput){
-    runAiPreview(a);
   }
 
 }
@@ -3919,7 +3131,6 @@ async()=>{
     });
 
 
-    lastSearchKeyword=keyword;
     render(
       d.items||
       []
