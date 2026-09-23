@@ -60,6 +60,21 @@ function run(name,fn){
     assert.equal(v.sellingPoints[1].valid,false);
   });
 
+  await run('selling point text itself must be a source quote',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
+      features:[],
+      sellingPoints:[
+        {text:'7つのポートを一つにまとめる',source:'itemCaption',evidence:'7つのポートを一つにまとめたUSB Cハブ'},
+        {text:'接続をもっと便利に',source:'itemCaption',evidence:'7つのポートを一つにまとめたUSB Cハブ'}
+      ],
+      confidence:'high'
+    },{itemName:'USB Cハブ',itemCaption:'7つのポートを一つにまとめたUSB Cハブ'},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].textEvidenceValid,false);
+    assert.equal(v.sellingPoints[0].valid,false);
+    assert.equal(v.sellingPoints[1].valid,false);
+  });
+
   await run('image product type conflict switches to fallback',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},
@@ -238,12 +253,12 @@ function run(name,fn){
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
     assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
-    assert.equal(text.properties.features.maxItems,4);
-    assert.equal(text.properties.features.items.properties.text.maxLength,24);
+    assert.equal(text.properties.features.maxItems,3);
+    assert.equal(text.properties.features.items.properties.text.maxLength,20);
     assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
     assert.equal(text.properties.sellingPoints.maxItems,2);
-    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,40);
-    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,80);
+    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,36);
+    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,56);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
     assert.equal(Object.hasOwn(text.properties,'imageProductTypeHint'),false);
     assert.equal(image.properties.imageProductTypeHint.maxLength,24);
@@ -338,7 +353,7 @@ function run(name,fn){
 
   await run('Groq schema/output budget stays below observed OTPM single-request limit',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
-    assert.match(src,/maxItems:4/);
+    assert.match(src,/maxItems:3/);
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
@@ -511,7 +526,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-generic-sales-v5',
+        prompt_version:'2026-09-23-ai-generic-sales-v6',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -578,10 +593,11 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v6/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/カテゴリ非依存/);
+    assert.match(apiText,/text自体も原文引用/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
