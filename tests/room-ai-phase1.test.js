@@ -34,7 +34,7 @@ function run(name,fn){
     assert.equal(numbersSupported('幅40cm','39cm'),false);
   });
 
-  await run('itemCaption features validate but are not eligible for phase1 post',()=>{
+  await run('validated itemCaption features are eligible for grounded phase1 post',()=>{
     const v=validateAiExtraction({
       productType:{value:'モバイルバッテリー',source:'itemName',evidence:'モバイルバッテリー'},
       features:[{text:'USB-C対応',source:'itemCaption',evidence:'USB-C対応'}],
@@ -42,7 +42,7 @@ function run(name,fn){
     },{itemName:'モバイルバッテリー',itemCaption:'USB-C対応'},{imageAvailable:false});
     assert.equal(v.mode,'simple');
     assert.equal(v.features[0].valid,true);
-    assert.equal(v.features[0].eligibleForPost,false);
+    assert.equal(v.features[0].eligibleForPost,true);
   });
 
   await run('image product type conflict switches to fallback',()=>{
@@ -492,7 +492,9 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        raw_ai_json:{
+        prompt_version:'2026-09-23-ai-phase1-groq-v3',
+          validation_rule_version:'2026-09-23-ai-gate-v3',
+          raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
         },
