@@ -94,7 +94,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品を事実→購入価値まで整理。productType=原文の商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=原文事実から一段だけ導ける具体的な悩み/場面を1文。buyerBenefits=原文事実から一段だけ導ける実用価値を最大2。各項目source/evidence必須。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。数字一致。例:タッチ対応→着けたままスマホ操作しやすい、面ファスナー→フィット調整しやすい。`;
+const SYSTEM_PROMPT=`楽天商品を事実→購入価値まで整理。productType=原文の商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=原文事実から一段だけ導ける具体的な悩み/場面を1文。buyerBenefits=原文事実から一段だけ導ける実用価値を最大2。各項目source/evidence必須。sellingPointsのtext自体も原文引用。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。数字一致。例:タッチ対応→着けたままスマホ操作しやすい、面ファスナー→フィット調整しやすい。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
