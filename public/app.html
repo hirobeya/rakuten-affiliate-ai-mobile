@@ -2594,9 +2594,10 @@ function mergeSemanticFeatureLabels(values){
 }
 
 function audienceForProduct(productType,features){
-  const first=String((features||[])[0]||'').trim();
-  if(first) return productType+'を探していて、「'+first+'」を条件に比較したい人';
-  return productType+'を探していて、商品名や説明にある仕様を比較したい人';
+  const picked=(features||[]).map(x=>String(x||'').trim()).filter(Boolean).slice(0,2);
+  if(picked.length>=2) return picked[0]+'や'+picked[1]+'を重視して選びたい方';
+  if(picked.length===1) return picked[0]+'を重視して選びたい方';
+  return productType+'の仕様を商品ページで確認して選びたい方';
 }
 
 function aiSalesInsight(item,result){
@@ -2631,12 +2632,24 @@ function aiPhase1Post(item,result){
   const v=result?.validation;
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item);
+  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item,result);
   const insight=aiSalesInsight(item,result);
-  const lines=[insight.productType+'を探している方に。'];
+  const facts=insight.features.slice(0,5);
+  const lines=[];
+  if(facts.length>=2){
+    lines.push(insight.productType+'選びで確認したいポイントをまとめました。');
+    lines.push(facts[0]+'・'+facts[1]+'など、商品ページに記載のある特徴をチェックできます。');
+  }else if(facts.length===1){
+    lines.push(insight.productType+'を選ぶ際に、'+facts[0]+'を確認したい方へ。');
+  }else{
+    lines.push(insight.productType+'の商品内容を、商品ページの記載に沿って確認できます。');
+  }
+  if(insight.contexts.length){
+    lines.push('用途の記載：'+insight.contexts.slice(0,2).join('・'));
+  }
   if(insight.benefits.length) lines.push(...insight.benefits);
-  if(insight.features.length) lines.push('','商品の特徴👇',...insight.features.slice(0,5).map(x=>'✔ '+x));
-  lines.push('','こんな人に向いていそう👇','・'+insight.audience);
+  if(facts.length) lines.push('','商品のポイント👇',...facts.map(x=>'✔ '+x));
+  lines.push('','こんな方に👇','・'+insight.audience);
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
@@ -2872,15 +2885,30 @@ function lexicalProductLabel(item){
   return String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim().slice(0,90)||'商品名を確認してください';
 }
 
-function aiSafeFallbackPost(item){
+function aiSafeFallbackPost(item,result=null){
   const title=lexicalProductLabel(item);
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  return [title,priceLine,'','※アフィリエイト広告を利用しています'].filter((x,i,a)=>x!==''||i===a.length-2).join('\n').trim();
+  const validated=((result?.validation?.features)||[])
+    .filter(x=>x?.eligibleForPost&&x?.text)
+    .map(x=>String(x.text).trim())
+    .filter(Boolean);
+  const grounded=dedupeGroundedFeatures([
+    ...validated,
+    ...groundedTitleFeatures(item),
+    ...groundedCaptionFeatures(item)
+  ]).slice(0,4);
+  const lines=[title];
+  if(grounded.length){
+    lines.push('','商品ページで確認できるポイント👇',...grounded.map(x=>'✔ '+x));
+  }
+  if(priceLine) lines.push('',priceLine);
+  lines.push('','※アフィリエイト広告を利用しています');
+  return lines.join('\n').slice(0,500).trim();
 }
 
 function aiCheckingPost(item){
-  return aiSafeFallbackPost(item);
+  return aiSafeFallbackPost(item,result);
 }
 
 function ruleSecondOpinion(item,validation,keyword=''){
@@ -2961,7 +2989,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
-    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiSafeFallbackPost(item);
+    if(gate.status==='fallback' && gate.reasons?.includes('ai_pending')) return aiSafeFallbackPost(item,aiRoomResults.get(index)?.data);
     if(gate.useLegacy){
       const options={variant:index};
       if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
