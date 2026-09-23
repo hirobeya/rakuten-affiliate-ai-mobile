@@ -2506,7 +2506,8 @@ function aiSalesInsight(item,result){
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,2);
-  return {productType,features,sellingPoints,audienceHook,buyerBenefits};
+  const fitLine=(v.fitLine?.eligibleForPost&&v.fitLine?.text)?String(v.fitLine.text).trim():'';
+  return {productType,features,sellingPoints,audienceHook,buyerBenefits,fitLine};
 }
 
 function salesFactCore(value){
@@ -2533,23 +2534,19 @@ function aiPhase1Post(item,result){
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
 
   const insight=aiSalesInsight(item,result);
-  const facts=insight.features.slice(0,3);
   const benefits=insight.buyerBenefits.slice(0,2);
-  const lines=[];
+  if(!insight.audienceHook||!benefits.length) return '';
 
-  if(insight.audienceHook){
-    lines.push(insight.audienceHook.replace(/[。！!]+$/,'')+'。');
-  }else if(benefits.length){
-    lines.push(insight.productType+'選びで、使いやすさまでしっかり見たい方に。');
-  }else{
-    return '';
-  }
+  const clean=s=>String(s||'').replace(/^[✓✔・\-\s]+/,'').replace(/[。！!]+$/,'').trim();
+  const lines=[
+    clean(insight.audienceHook)+'。',
+    '',
+    'この'+insight.productType+'なら、'+clean(benefits[0])+'。'
+  ];
 
-  if(benefits.length){
-    lines.push('',...benefits.map(x=>'✓ '+x.replace(/[。]+$/,'')+'。'));
-  }
+  if(benefits[1]) lines.push(clean(benefits[1])+'。');
 
-  const proof=[...insight.sellingPoints,...facts]
+  const proof=[...insight.sellingPoints,...insight.features]
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .filter(x=>!benefits.some(b=>{
       const xc=salesFactCore(x),bc=salesFactCore(b);
@@ -2557,10 +2554,8 @@ function aiPhase1Post(item,result){
     }))
     .slice(0,2);
 
-  if(proof.length){
-    lines.push('', '商品ページで確認できるポイント：'+proof.join('／'));
-  }
-
+  if(proof.length) lines.push('', '根拠になる仕様：'+proof.join('／'));
+  if(insight.fitLine) lines.push('', clean(insight.fitLine)+'。');
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
@@ -2610,6 +2605,7 @@ function updateAiPanel(index){
   for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
   if(v.audienceHook) rows.push('<div class="aiFact"><strong>audienceHook:</strong> '+esc(v.audienceHook.text||'')+'<br>根拠: '+esc(v.audienceHook.evidence||'')+'<br>検証: '+(v.audienceHook.valid?'PASS':'FAIL')+'</div>');
   for(const bf of v.buyerBenefits||[]) rows.push('<div class="aiFact"><strong>buyerBenefit:</strong> '+esc(bf.text||'')+'<br>根拠: '+esc(bf.evidence||'')+'<br>検証: '+(bf.valid?'PASS':'FAIL')+'</div>');
+  if(v.fitLine) rows.push('<div class="aiFact"><strong>fitLine:</strong> '+esc(v.fitLine.text||'')+'<br>根拠: '+esc(v.fitLine.evidence||'')+'<br>検証: '+(v.fitLine.valid?'PASS':'FAIL')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
   facts.innerHTML=rows.join('');

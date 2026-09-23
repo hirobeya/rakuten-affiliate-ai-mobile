@@ -267,7 +267,8 @@ function run(name,fn){
 
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
-    assert.deepEqual(text.required,['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence']);
+    assert.deepEqual(text.required,['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence']);
+    assert.equal(text.properties.fitLine.properties.text.maxLength,60);
     assert.equal(text.properties.audienceHook.properties.text.maxLength,52);
     assert.equal(text.properties.buyerBenefits.maxItems,2);
     assert.equal(text.properties.buyerBenefits.items.properties.text.maxLength,52);
@@ -545,8 +546,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-value-layer-v9',
-          validation_rule_version:'2026-09-23-ai-value-v4',
+        prompt_version:'2026-09-23-ai-persuasion-v10',
+          validation_rule_version:'2026-09-23-ai-value-v5',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -611,12 +612,13 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-value-layer-v9/);
+    assert.match(apiText,/2026-09-23-ai-persuasion-v10/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/audienceHook/);
     assert.match(apiText,/buyerBenefits/);
-    assert.match(apiText,/購入価値/);
+    assert.match(apiText,/fitLine/);
+    assert.match(apiText,/欲しい理由/);
     assert.match(apiText,/text自体も原文引用/);
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
@@ -638,10 +640,12 @@ function run(name,fn){
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     assert.match(html,/insight\.audienceHook/);
     assert.match(html,/insight\.buyerBenefits/);
-    assert.match(html,/✓ /);
-    assert.match(html,/商品ページで確認できるポイント/);
+    assert.match(html,/insight\.fitLine/);
+    assert.match(html,/この'\+insight\.productType\+'なら/);
+    assert.match(html,/根拠になる仕様/);
     assert.match(libText,/function validateDerivedValue/);
     assert.match(libText,/DERIVED_VALUE_RISK_RE/);
+    assert.match(libText,/DERIVED_GENERIC_RE/);
     assert.doesNotMatch(html,/商品の特徴👇/);
   });
 
