@@ -1,0 +1,204 @@
+'use strict';
+global.window=global.window||{};
+require('../public/pain-copy.js');
+require('../public/room-copy-quality.js');
+const ruleApi=global.window.UrenaviPainCopy;
+const {createHandler:createSearchHandler}=require('./search');
+const {runTwoStageGroq,defaultCallGroq,loadImageDataUrl}=require('./room-ai');
+const benefitGrounding=require('../public/benefit-grounding.js');
+
+const TOKEN='preview-rate-retest-20260922-49e7d2';
+const CASES={
+  'baseball-glove':'野球グローブ',
+  'bike-glove':'バイクグローブ',
+  'storage-bench':'収納ベンチ',
+  'face-roller':'美顔ローラー',
+  'lint-roller':'粘着ローラー'
+};
+const TARGET_KEYWORDS=[
+  '野球グローブ','バイクグローブ','収納ベンチ','収納ボックス',
+  'モバイルバッテリー','ポータブル電源',
+  'ペットベッド','犬 ベッド','ペット給水器',
+  'モップハンガー','電動モップ','ハンディクリーナー','洗濯ネット'
+];
+
+const CROSS_CASES={
+  storage:'収納ボックス',
+  cleaning:'電動モップ',
+  pet:'ペットベッド',
+  beauty:'美顔ローラー',
+  kitchen:'フライパン',
+  appliance:'電気ケトル',
+  fashion:'Tシャツ',
+  motorcycle:'バイクグローブ',
+  food:'レトルトカレー',
+  daily_goods:'ティッシュペーパー',
+  furniture:'ダイニングチェア',
+  outdoor:'キャンプチェア',
+  pc:'USB-C ハブ',
+  car:'車用スマホホルダー',
+  baby:'ベビーカー',
+  laundry:'洗濯ネット',
+  charging:'モバイルバッテリー',
+  accident_bike_glove:'バイクグローブ',
+  accident_baseball_glove:'野球グローブ',
+  accident_storage_bench:'収納ベンチ',
+  accident_mop_holder:'モップハンガー',
+  accident_bos:'うんち袋 BOS',
+  accident_drive_bed:'ドライブベッド',
+  accident_electric_mop:'電動モップ'
+};
+
+function aiTargetDecision(item){
+  const a=ruleApi.analyzeRoomProduct(item,'');
+  const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
+  const conflicts=Array.isArray(a?.conflicts)?a.conflicts:[];
+  const fallbackFacts=(ruleApi.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
+  const safeFallback=fallbackFacts.length>=1;
+  const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
+  const gap=top.length>=2?Math.abs(Number(top[0]?.score||0)-Number(top[1]?.score||0)):Infinity;
+  if(conflicts.length) return {target:true,reason:'rule_conflict',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+  if(unresolved&&!safeFallback){
+    if(a?.ambiguous) return {target:true,reason:'rule_ambiguous',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+    if(top.length>=2&&gap<20) return {target:true,reason:'small_candidate_gap',analysis:a,safeFallback,fallbackFacts,gap};
+    return {target:true,reason:'insufficient_grounded_facts',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+  }
+  return {target:false,reason:safeFallback&&unresolved?'safe_fallback':'rule_confident',analysis:a,safeFallback,fallbackFacts,gap:Number.isFinite(gap)?gap:null};
+}
+
+function summarizeTargeting(keyword,items){
+  const decisions=items.map((item,index)=>{
+    const d=aiTargetDecision(item);
+    return {
+      index,itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),
+      target:d.target,reason:d.reason,safeFallback:Boolean(d.safeFallback),
+      fallbackFactCount:Array.isArray(d.fallbackFacts)?d.fallbackFacts.length:0,
+      fallbackFacts:(d.fallbackFacts||[]).slice(0,3),
+      outputMode:d.analysis?.outputMode||null,ambiguous:Boolean(d.analysis?.ambiguous),
+      conflicts:(d.analysis?.conflicts||[]).map(x=>x.usage||x.category||String(x)),
+      topCandidates:d.analysis?.topCandidates||[]
+    };
+  });
+  return {keyword,count:items.length,targetCount:decisions.filter(x=>x.target).length,decisions};
+}
+
+async function targetingDistribution(){
+  const rows=[];
+  for(const keyword of TARGET_KEYWORDS){
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    rows.push({...summarizeTargeting(keyword,items),searchMs:Date.now()-t0});
+    await sleep(1400);
+  }
+  const counts=rows.map(x=>x.targetCount);
+  return {
+    searches:rows.length,totalItems:rows.reduce((s,x)=>s+x.count,0),
+    average:Number((counts.reduce((a,b)=>a+b,0)/Math.max(1,counts.length)).toFixed(2)),
+    min:Math.min(...counts),max:Math.max(...counts),rows
+  };
+}
+function fakeRes(){return {statusCode:200,body:null,setHeader(){},status(n){this.statusCode=n;return this;},json(v){this.body=v;return this;}};}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function searchItems(keyword){
+  const h=createSearchHandler({authorize:async()=>({ok:true,plan:'owner'})});
+  let lastStatus=0;
+  for(let attempt=0;attempt<3;attempt++){
+    const res=fakeRes();
+    await h({method:'GET',query:{keyword,sort:'standard'},headers:{}},res);
+    lastStatus=res.statusCode;
+    if(res.statusCode===200) return (res.body?.items||[]).slice(0,10);
+    if(res.statusCode!==429) break;
+    await sleep(1200*(attempt+1));
+  }
+  throw new Error('search_failed_'+lastStatus);
+}
+async function analyze(item,maxOutputTokens=320){
+  const itemName=String(item?.itemName||'');
+  const itemCaption=String(item?.itemCaption||'');
+  const imageUrl=String([...(item?.mediumImageUrls||[]),...(item?.smallImageUrls||[])].find(Boolean)||'');
+  const model=String(process.env.GROQ_ROOM_MODEL||'qwen/qwen3.8-27b').trim()||'qwen/qwen3.8-27b';
+  const started=Date.now();
+  try{
+    const result=await runTwoStageGroq({
+      callAI:args=>defaultCallGroq({...args,maxOutputTokens}),
+      apiKey:String(process.env.GROQ_API_KEY||''),
+      model,itemName,itemCaption,itemPrice:Number(item?.itemPrice)||0,imageUrl,
+      imageLoader:loadImageDataUrl,
+      allowImage:false
+    });
+    return {
+      itemCode:String(item?.itemCode||''),itemName,maxOutputTokens,
+      model:result.ai?.model||model,elapsedMs:Date.now()-started,
+      stages:result.stages,rateLimit:result.ai?.rateLimit||{},attempts:result.ai?.attempts||1,
+      usage:result.ai?.usage||null,outputTokens:Number(result.ai?.usage?.output_tokens||result.ai?.usage?.output_tokens_details?.total_tokens||0)||null,
+      rawAiJson:result.ai?.raw||null,validation:result.validation
+    };
+  }catch(error){
+    return {
+      itemCode:String(item?.itemCode||''),itemName,maxOutputTokens,elapsedMs:Date.now()-started,
+      error:{message:String(error?.message||'ai_failed'),status:error?.status||null,detail:error?.safeError||null,final429:error?.status===429},
+      rateLimit:error?.rateLimit||{}
+    };
+  }
+}
+
+function benefitAudit(item,validation){
+  const sources=[String(item?.itemName||''),String(item?.itemCaption||'')];
+  const checks=(validation?.features||[]).filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence).map(x=>{
+    const safe=benefitGrounding.makeGroundedSelectionLine({label:x.text,evidence:x.evidence,sources});
+    return {feature:x.text,evidence:x.evidence,valid:safe.valid,text:safe.text,reasons:safe.reasons};
+  });
+  return {checked:checks.length,passed:checks.filter(x=>x.valid).length,failed:checks.filter(x=>!x.valid).length,checks};
+}
+module.exports=async function(req,res){
+  res.setHeader('Cache-Control','no-store');
+  if(process.env.VERCEL_ENV!=='preview'||Date.now()>Date.parse('2026-09-23T15:30:00Z')||String(req.query?.token||'')!==TOKEN) return res.status(404).json({message:'Not found'});
+  if(String(req.query?.mode||'')==='cross-one'){
+    const key=String(req.query?.key||'').trim();
+    const keyword=CROSS_CASES[key];
+    if(!keyword) return res.status(400).json({message:'invalid_cross_key'});
+    const index=Math.max(0,Math.min(1,Number(req.query?.index)||0));
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    const item=items[index];
+    if(!item) return res.status(404).json({message:'item_not_found',key,keyword,index,count:items.length});
+    const target=aiTargetDecision(item);
+    const result=await analyze(item,320);
+    const rule=target.analysis||ruleApi.analyzeRoomProduct(item,keyword);
+    return res.status(200).json({
+      ok:true,mode:'cross-one',key,keyword,index,count:items.length,totalMs:Date.now()-t0,
+      constraints:{textOnly:true,maxOutputTokens:320,perSearchMax:2},
+      item:{itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,700)},
+      target:{target:target.target,reason:target.reason,safeFallback:target.safeFallback},
+      rule:{category:rule?.category||null,usage:rule?.usage||null,outputMode:rule?.outputMode||null,ambiguous:Boolean(rule?.ambiguous),conflicts:rule?.conflicts||[]},
+      result,
+      benefitAudit:benefitAudit(item,result?.validation)
+    });
+  }
+  if(String(req.query?.mode||'')==='targeting-one'){
+    const keyword=String(req.query?.keyword||'').trim();
+    if(!TARGET_KEYWORDS.includes(keyword)) return res.status(400).json({message:'invalid_keyword'});
+    const t0=Date.now();
+    const items=await searchItems(keyword);
+    return res.status(200).json({ok:true,mode:'targeting-one',searchMs:Date.now()-t0,...summarizeTargeting(keyword,items)});
+  }
+  if(String(req.query?.mode||'')==='targeting'){
+    const t0=Date.now();
+    const distribution=await targetingDistribution();
+    return res.status(200).json({ok:true,mode:'targeting',totalMs:Date.now()-t0,distribution});
+  }
+  const keyword=CASES[String(req.query?.case||'')];
+  if(!keyword) return res.status(400).json({message:'invalid_case'});
+  const index=Math.max(0,Math.min(9,Number(req.query?.index)||0));
+  const t0=Date.now();
+  const items=await searchItems(keyword);
+  const searchMs=Date.now()-t0;
+  const item=items[index];
+  if(!item) return res.status(404).json({message:'item_not_found',keyword,index,count:items.length});
+  const requestedBudget=Number(req.query?.budget)||320;
+  const budget=[320,350,380,400].includes(requestedBudget)?requestedBudget:320;
+  const result=await analyze(item,budget);
+  return res.status(200).json({
+    ok:true,keyword,index,count:items.length,provider:'groq',searchMs,totalMs:Date.now()-t0,result
+  });
+};

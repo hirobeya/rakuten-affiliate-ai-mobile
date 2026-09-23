@@ -1,1 +1,14 @@
-{"name":"rakuten-affiliate-ai-mobile","version":"1.0.1","private":true}
+{
+  "name": "rakuten-affiliate-ai-mobile",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "test:copy": "node tests/room-copy-regression.test.js && node tests/benefit-grounding.test.js",
+    "vercel-build": "npm run test:copy && npm run test:shadow && npm run test:ai",
+    "test:ai": "node tests/room-ai-phase1.test.js",
+    "test:shadow": "node tests/product-shadow-v2.test.js"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}
