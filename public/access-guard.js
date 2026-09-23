@@ -136,6 +136,72 @@
     }
   });
 
+  async function installPreviewOwnerAccess(){
+    try{
+      const envRes=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
+      const env=await envRes.json().catch(()=>({}));
+      if(!envRes.ok || env.preview!==true) return;
+    }catch{return;}
+
+    const loginBtn=document.getElementById('loginBtn');
+    if(!loginBtn || document.getElementById('previewOwnerAccess')) return;
+
+    const box=document.createElement('div');
+    box.id='previewOwnerAccess';
+    Object.assign(box.style,{
+      marginTop:'12px',
+      padding:'12px',
+      border:'1px solid #bfd3ee',
+      borderRadius:'13px',
+      background:'#f3f8ff',
+      color:'#294466',
+      fontSize:'12px',
+      lineHeight:'1.6'
+    });
+
+    const title=document.createElement('strong');
+    title.textContent='Preview確認用（オーナーのみ）';
+
+    const note=document.createElement('div');
+    note.textContent='ログインメールを使わず、本番ウレナビで認証済みの端末情報を使ってPreviewへ入れます。';
+
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.textContent='本番の認証でPreviewを開く';
+    Object.assign(btn.style,{
+      display:'block',
+      width:'100%',
+      marginTop:'9px',
+      padding:'12px',
+      border:'0',
+      borderRadius:'10px',
+      background:'#172a4b',
+      color:'#fff',
+      fontWeight:'900'
+    });
+
+    const msg=document.createElement('div');
+    msg.style.marginTop='8px';
+
+    btn.addEventListener('click',()=>{
+      const code=randomHandoff();
+      localStorage.setItem(HANDOFF_KEY,code);
+      startHandoffPolling();
+
+      const approveUrl='https://rakuten-affiliate-ai-mobile.vercel.app/api/access?action=handoff-approve&code='+encodeURIComponent(code);
+      const win=window.open(approveUrl,'_blank','noopener,noreferrer');
+
+      if(win){
+        msg.textContent='新しいタブで本番の認証確認を開きました。確認後、このPreviewタブへ戻ってください。';
+      }else{
+        msg.textContent='新しいタブを開けませんでした。Safariのポップアップ許可を確認してください。';
+      }
+    });
+
+    box.append(title,note,btn,msg);
+    loginBtn.insertAdjacentElement('afterend',box);
+  }
+
   function installScoreCopyFix(){
     if(typeof pts==='function'){
       const basePts=pts;
@@ -290,6 +356,7 @@
   installPriceLayout();
   installCompactHistory();
   addPurchaseLink();
+  void installPreviewOwnerAccess();
   applyActivationMessage();
   startHandoffPolling();
 

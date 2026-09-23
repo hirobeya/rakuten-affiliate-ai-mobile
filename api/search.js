@@ -16,6 +16,17 @@ const compact=s=>
 norm(s)
 .replace(/\s+/g,'');
 
+function normalizeSearchKeyword(keyword){
+  const raw=String(keyword||'').normalize('NFKC').trim();
+  const compactRaw=raw.replace(/\s+/g,'');
+  const aliases=new Map([
+    ['ハンディークリーナー','ハンディクリーナー'],
+    ['ハンディー掃除機','ハンディ掃除機'],
+    ['ハンディークリーナ','ハンディクリーナー']
+  ]);
+  return aliases.get(compactRaw)||raw;
+}
+
 
 const genreCache=new Map();
 
@@ -458,8 +469,9 @@ function profitabilityScore(x){
 }
 
 
-module.exports=
-async function handler(req,res){
+function createHandler(deps={}){
+  const authorizeFn=deps.authorize||authorize;
+  return async function handler(req,res){
 
   if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
@@ -471,7 +483,7 @@ async function handler(req,res){
 
 
     const auth=
-    await authorize(
+    await authorizeFn(
       req
     );
 
@@ -492,11 +504,10 @@ async function handler(req,res){
 
 
     const keyword=
-    String(
+    normalizeSearchKeyword(
       req.query.keyword||
       ''
-    )
-    .trim();
+    );
 
 
     const minPrice=
@@ -921,4 +932,16 @@ async function handler(req,res){
 
   }
 
+  };
+}
+
+module.exports=createHandler();
+module.exports.createHandler=createHandler;
+
+
+module.exports._measurementInternals={
+  relevance,
+  sellabilityScore,
+  profitabilityScore,
+  normalizeSearchKeyword
 };

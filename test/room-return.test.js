@@ -23,6 +23,12 @@ test('network failure preserves displayed results and offers a retry message',as
 for(const status of [401,403]) test(`${status} hides protected screen`,async()=>{
   const app=setup(async()=>({ok:false,status}));await app.show();assert.equal(app.state.appRoot.style.display,'none');assert.equal(app.state.authGate.style.display,'flex');
 });
+for(const status of [401,403]) test(`${status} hides protected screen with JSON response`,async()=>{
+  const app=setup(async()=>({ok:false,status,json:async()=>({message:'denied'})}));
+  await app.show();
+  assert.equal(app.state.appRoot.style.display,'none');
+  assert.equal(app.state.authGate.style.display,'flex');
+});
 test('cold load failure leaves a visible login screen',async()=>{
   const app=setup(async()=>{throw Error('offline');},false);await app.show();assert.equal(app.state.authGate.style.display,'flex');assert.match(app.state.message,/通信/);
 });
