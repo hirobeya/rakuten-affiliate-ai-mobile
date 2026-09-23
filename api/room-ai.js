@@ -12,7 +12,7 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-24-ai-facts-only-v12';
+const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
 const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v7';
 
 const FEATURE_MAX_CHARS=48;
@@ -76,7 +76,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文にある短い商品種別。features=素材・仕様・対応・サイズ・容量など、原文からそのまま抜き出した完全な連続引用を最大3件。sellingPoints=購入判断に役立つ原文の完結した連続引用を最大2件。全項目source/evidence必須。text自体も必ず原文に連続して存在する引用にする。文字数上限で途中切れさせない。長い場合は別の短い完全な事実を選ぶ。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測は禁止。数字と単位は原文一致。`;
+const SYSTEM_PROMPT=`楽天商品から事実だけ抽出。productType=商品名に完全一致する短い商品種別名詞。商品名で種別が明確ならconfidence=high、特定不能時だけlow。productTypeのevidenceはvalueと同じ完全な連続引用。features=素材・仕様・対応・サイズ・容量など安全な事実を最大3件。sellingPoints=購入判断に使える安全な事実を最大2件。features/sellingPointsはtextとevidenceを同じ完全な連続引用にし、数字・単位も完全一致。商品名に安全な仕様語があれば最低1件抽出。途中切れ禁止。販促・ランキング・配送情報・効能・安全・健康・美容・保証・推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
