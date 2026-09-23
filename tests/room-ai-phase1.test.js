@@ -589,7 +589,7 @@ function run(name,fn){
     assert.match(html,/setTimeout\(r,750\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
+    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
