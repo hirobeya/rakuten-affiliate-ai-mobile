@@ -267,17 +267,10 @@ function run(name,fn){
 
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
-    assert.deepEqual(text.required,['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence']);
-    assert.equal(text.properties.fitLine.properties.text.maxLength,60);
-    assert.equal(text.properties.audienceHook.properties.text.maxLength,52);
-    assert.equal(text.properties.buyerBenefits.maxItems,2);
-    assert.equal(text.properties.buyerBenefits.items.properties.text.maxLength,52);
+    assert.deepEqual(text.required,['productType','features','confidence']);
     assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,20);
-    assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
-    assert.equal(text.properties.sellingPoints.maxItems,2);
-    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,36);
-    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,56);
+    assert.equal(text.properties.features.items.properties.text.maxLength,15);
+    assert.equal(text.properties.features.items.properties.evidence.maxLength,15);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
     assert.equal(Object.hasOwn(text.properties,'imageProductTypeHint'),false);
     assert.equal(image.properties.imageProductTypeHint.maxLength,24);
@@ -546,7 +539,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-persuasion-v10',
+        prompt_version:'2026-09-23-ai-phase1-groq-v4',
           validation_rule_version:'2026-09-23-ai-value-v5',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -612,16 +605,9 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-persuasion-v10/);
+    assert.match(apiText,/2026-09-23-ai-phase1-groq-v4/);
     assert.match(apiText,/cacheVersionMatch/);
-    assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/audienceHook/);
-    assert.match(apiText,/buyerBenefits/);
-    assert.match(apiText,/fitLine/);
     assert.match(apiText,/欲しい理由/);
-    assert.match(apiText,/text自体も原文引用/);
-    assert.match(apiText,/途中断片禁止/);
-    assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
@@ -634,20 +620,25 @@ function run(name,fn){
     assert.match(html,/誤った投稿文は表示していません/);
   });
 
-  await run('AI ROOM copy uses validated audience and buyer-value layer',()=>{
-    const fs=require('node:fs'),path=require('node:path');
-    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
-    assert.match(html,/insight\.audienceHook/);
-    assert.match(html,/insight\.buyerBenefits/);
-    assert.match(html,/insight\.fitLine/);
-    assert.match(html,/この'\+insight\.productType\+'なら/);
-    assert.match(html,/根拠になる仕様/);
-    assert.match(libText,/function validateDerivedValue/);
-    assert.match(libText,/DERIVED_VALUE_RISK_RE/);
-    assert.match(libText,/DERIVED_GENERIC_RE/);
-    assert.doesNotMatch(html,/商品の特徴👇/);
+  await run('fact-only Groq output feeds deterministic value templates with validation',()=>{
+    const {buildDerivedCopy,buildValueFirstPost}=require('../lib/room-ai');
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[
+        {text:'スマホ対応',source:'itemName',evidence:'スマホ対応'},
+        {text:'本革',source:'itemName',evidence:'本革'}
+      ],
+      confidence:'high'
+    },{itemName:'バイクグローブ スマホ対応 本革',itemCaption:''},{imageAvailable:false});
+    const derived=buildDerivedCopy(v);
+    const post=buildValueFirstPost({validation:v,derived,itemPrice:3100});
+    assert.equal(derived.valid,true);
+    assert.match(post,/手袋を外す手間/);
+    assert.match(post,/商品の特徴/);
+    assert.match(post,/スマホ対応/);
+    assert.match(post,/本革/);
   });
+
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
     const fs=require('node:fs'),path=require('node:path');
