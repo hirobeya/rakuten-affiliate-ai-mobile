@@ -13,7 +13,7 @@ let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
 const PROMPT_VERSION='2026-09-24-ai-facts-only-v12';
-const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v7';
+const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v8';
 
 const FEATURE_MAX_CHARS=48;
 const FEATURE_EVIDENCE_MAX_CHARS=72;
