@@ -2576,6 +2576,32 @@ function dedupeGroundedFeatures(values){
   return out;
 }
 
+function mergeSemanticFeatureLabels(values){
+  const src=[...new Set((values||[]).filter(Boolean).map(v=>String(v).trim()))];
+  const out=[];
+  const used=new Set();
+
+  const phoneIdx=src.map((v,i)=>/スマホ対応|スマートフォン対応|タッチパネル対応|タッチ対応/.test(v)?i:-1).filter(i=>i>=0);
+  if(phoneIdx.length){
+    out.push('スマホ・タッチ対応');
+    phoneIdx.forEach(i=>used.add(i));
+  }
+
+  const leatherIdx=src.map((v,i)=>/本革|山羊革|牛革|ゴートレザー/.test(v)?i:-1).filter(i=>i>=0);
+  if(leatherIdx.length){
+    const labels=leatherIdx.map(i=>src[i]);
+    let merged='';
+    if(labels.some(v=>/山羊革|ゴートレザー/.test(v))) merged='本革（山羊革）';
+    else if(labels.some(v=>/牛革/.test(v))) merged='本革（牛革）';
+    else if(labels.some(v=>/本革/.test(v))) merged='本革';
+    if(merged) out.push(merged);
+    leatherIdx.forEach(i=>used.add(i));
+  }
+
+  src.forEach((v,i)=>{if(!used.has(i)) out.push(v);});
+  return out;
+}
+
 function audienceForProduct(productType,features){
   const joined=(features||[]).join(' ');
   if(/本革|山羊革|牛革|ゴートレザー/.test(joined)) return productType+'を探していて、素材と使い勝手を比べたい人';
@@ -2590,7 +2616,9 @@ function aiSalesInsight(item,result){
   const validated=(v.features||[]).filter(x=>x?.eligibleForPost&&x?.text).map(x=>String(x.text).trim());
   const titleFacts=groundedTitleFeatures(item);
   const captionFacts=groundedCaptionFeatures(item);
-  const features=dedupeGroundedFeatures([...validated,...titleFacts,...captionFacts]).slice(0,5);
+  const features=mergeSemanticFeatureLabels(
+    dedupeGroundedFeatures([...validated,...titleFacts,...captionFacts])
+  ).slice(0,5);
   const contexts=groundedUseContexts(item);
   const benefits=groundedBenefitLines(productType,features,contexts);
   return {

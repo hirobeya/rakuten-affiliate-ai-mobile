@@ -578,6 +578,16 @@ function run(name,fn){
     assert.match(html,/insight\.productType\+'を探している方に。'/);
   });
 
+  await run('semantic feature labels merge duplicate smartphone and leather facts',()=>{
+    const fs=require('node:fs'),path=require('node:path');
+    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/function mergeSemanticFeatureLabels\(/);
+    assert.match(html,/スマホ・タッチ対応/);
+    assert.match(html,/本革（山羊革）/);
+    assert.match(html,/本革（牛革）/);
+    assert.match(html,/const features=mergeSemanticFeatureLabels\(/);
+  });
+
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';
