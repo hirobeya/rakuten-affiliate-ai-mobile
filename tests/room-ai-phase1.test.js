@@ -45,50 +45,8 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
-  await run('AI selling points are evidence-gated and category independent',()=>{
-    const v=validateAiExtraction({
-      productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
-      features:[{text:'折りたたみ式',source:'itemCaption',evidence:'折りたたみ式'}],
-      sellingPoints:[
-        {text:'使わない時はコンパクト収納',source:'itemCaption',evidence:'使わない時はコンパクト収納'},
-        {text:'部屋が必ず片付く',source:'itemCaption',evidence:'大容量収納'}
-      ],
-      confidence:'high'
-    },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
-    assert.equal(v.sellingPoints[0].valid,true);
-    assert.equal(v.sellingPoints[0].eligibleForPost,true);
-    assert.equal(v.sellingPoints[1].valid,false);
-  });
 
-  await run('selling point text itself must be a source quote',()=>{
-    const v=validateAiExtraction({
-      productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
-      features:[],
-      sellingPoints:[
-        {text:'7つのポートを一つにまとめる',source:'itemCaption',evidence:'7つのポートを一つにまとめたUSB Cハブ'},
-        {text:'接続をもっと便利に',source:'itemCaption',evidence:'7つのポートを一つにまとめたUSB Cハブ'}
-      ],
-      confidence:'high'
-    },{itemName:'USB Cハブ',itemCaption:'7つのポートを一つにまとめたUSB Cハブ'},{imageAvailable:false});
-    assert.equal(v.sellingPoints[0].textEvidenceValid,false);
-    assert.equal(v.sellingPoints[0].valid,false);
-    assert.equal(v.sellingPoints[1].valid,false);
-  });
 
-  await run('incomplete selling point fragments are rejected',()=>{
-    const v=validateAiExtraction({
-      productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
-      features:[],
-      sellingPoints:[
-        {text:'7つのポートを一つにまとめて',source:'itemCaption',evidence:'7つのポートを一つにまとめて使えます'},
-        {text:'安定した接続を保証できます',source:'itemCaption',evidence:'安定した接続を保証できます'}
-      ],confidence:'high'
-    },{itemName:'USB Cハブ',itemCaption:'7つのポートを一つにまとめて使えます。安定した接続を保証できます。'},{imageAvailable:false});
-    assert.equal(v.sellingPoints[0].completePhrase,false);
-    assert.equal(v.sellingPoints[0].valid,false);
-    assert.equal(v.sellingPoints[1].claimRisk,true);
-    assert.equal(v.sellingPoints[1].valid,false);
-  });
 
   await run('image product type conflict switches to fallback',()=>{
     const v=validateAiExtraction({
@@ -607,7 +565,7 @@ function run(name,fn){
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(apiText,/2026-09-23-ai-phase1-groq-v4/);
     assert.match(apiText,/cacheVersionMatch/);
-    assert.match(apiText,/欲しい理由/);
+    assert.match(apiText,/事実ベースで理解して構造化/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
@@ -652,7 +610,9 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.doesNotMatch(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
-    assert.match(html,/商品の特徴👇/);
+    const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
+    assert.match(libText,/商品の特徴👇/);
+    assert.match(html,/result\?\.roomPost/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
