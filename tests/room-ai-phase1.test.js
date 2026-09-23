@@ -269,7 +269,7 @@ function run(name,fn){
     const text=schemaForCall(false), image=schemaForCall(true);
     assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
     assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,20);
+    assert.equal(text.properties.features.items.properties.text.maxLength,36);
     assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
     assert.equal(text.properties.sellingPoints.maxItems,2);
     assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,36);
@@ -286,6 +286,27 @@ function run(name,fn){
     },{itemName:'グローブ ケース',itemCaption:''},{imageAvailable:false});
     assert.equal(v.productType.meaningSupported,false);
     assert.equal(v.mode,'fallback');
+  });
+
+  await run('feature text must be an exact source quote, not an AI rewrite',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイク用グローブ',source:'itemName',evidence:'バイク用グローブ'},
+      features:[{text:'スパンデ克斯4%',source:'itemCaption',evidence:'スパンデックス4%'}],
+      sellingPoints:[],confidence:'high'
+    },{itemName:'バイク用グローブ',itemCaption:'手の甲:ポリエステル96%、スパンデックス4%'},{imageAvailable:false});
+    assert.equal(v.features[0].textEvidenceValid,false);
+    assert.equal(v.features[0].valid,false);
+  });
+
+  await run('selling point rejects a truncated Japanese phrase',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'バイク用グローブ',source:'itemName',evidence:'バイク用グローブ'},
+      features:[],
+      sellingPoints:[{text:'手首部分はベルクロで多少の調節が可能なた',source:'itemCaption',evidence:'手首部分はベルクロで多少の調節が可能なため'}],
+      confidence:'high'
+    },{itemName:'バイク用グローブ',itemCaption:'手首部分はベルクロで多少の調節が可能なため、自分にあったフィット感に調整できます。'},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].completePhrase,false);
+    assert.equal(v.sellingPoints[0].valid,false);
   });
 
   await run('invalid numeric feature forces whole-product fallback even below half',()=>{
@@ -542,7 +563,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-generic-sales-v8',
+        prompt_version:'2026-09-23-ai-generic-sales-v9',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -607,7 +628,7 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-generic-sales-v8/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v9/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/カテゴリ非依存/);
@@ -629,7 +650,7 @@ function run(name,fn){
   await run('AI ROOM copy converts validated facts into buyer-focused copy without repeating feature bullets',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/を重視して、'\+insight\.productType\+'を選びたい方へ/);
+    assert.match(html,/スペックだけでなく、使う場面まで見て/);
     assert.match(html,/さらに、'\+extras\.join\('・'\)\+'も商品ページで確認できます/);
     assert.doesNotMatch(html,/商品の特徴👇/);
   });
