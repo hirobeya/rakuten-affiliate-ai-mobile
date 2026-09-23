@@ -176,7 +176,7 @@ function run(name,fn){
         usage:{input_tokens:100,output_tokens:50},
         raw:{
           productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
-          features:[{text:'折りたたみ対応',source:'itemName',evidence:'折りたたみ'}],
+          features:[{text:'折りたたみ',source:'itemName',evidence:'折りたたみ'}],
           unknowns:[],
           imageProductTypeHint:'収納ベンチ',
           confidence:'high'
