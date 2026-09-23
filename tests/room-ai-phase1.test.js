@@ -498,7 +498,7 @@ function run(name,fn){
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
         },
-        model:'qwen/qwen3.8-27b',prompt_version:'test',image_available:false
+        model:'qwen/qwen3.8-27b',image_available:false
       }),
       consumeQuota:async()=>{quotaCalls++;return true;},
       loadImageDataUrl:async()=>{imageCalls++;return {available:false,dataUrl:null};},
