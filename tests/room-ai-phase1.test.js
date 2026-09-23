@@ -75,6 +75,21 @@ function run(name,fn){
     assert.equal(v.sellingPoints[1].valid,false);
   });
 
+  await run('incomplete selling point fragments are rejected',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
+      features:[],
+      sellingPoints:[
+        {text:'7つのポートを一つにまとめて',source:'itemCaption',evidence:'7つのポートを一つにまとめて使えます'},
+        {text:'安定した接続を保証できます',source:'itemCaption',evidence:'安定した接続を保証できます'}
+      ],confidence:'high'
+    },{itemName:'USB Cハブ',itemCaption:'7つのポートを一つにまとめて使えます。安定した接続を保証できます。'},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].completePhrase,false);
+    assert.equal(v.sellingPoints[0].valid,false);
+    assert.equal(v.sellingPoints[1].claimRisk,true);
+    assert.equal(v.sellingPoints[1].valid,false);
+  });
+
   await run('image product type conflict switches to fallback',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},
@@ -526,7 +541,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-generic-sales-v6',
+        prompt_version:'2026-09-23-ai-generic-sales-v7',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -593,11 +608,12 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-generic-sales-v6/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v7/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/カテゴリ非依存/);
     assert.match(apiText,/text自体も原文引用/);
+    assert.match(apiText,/途中断片を禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);

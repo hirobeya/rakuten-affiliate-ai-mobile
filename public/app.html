@@ -2521,7 +2521,7 @@ function groundedUseContexts(item){
 }
 
 function compactGrounded(value){
-  return String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
+  return String(value||'').normalize('NFKC').replace(/[\s\-‐‑–—\/／]+/g,'').toLowerCase();
 }
 
 function specificGroundedProductType(item,aiType){
@@ -2842,7 +2842,8 @@ function lexicalProductLabel(item){
 }
 
 function aiSafeFallbackPost(item,result=null){
-  const title=lexicalProductLabel(item);
+  const aiType=(result?.validation?.productType?.valid&&result.validation.productType.value)?String(result.validation.productType.value):'';
+  const title=specificGroundedProductType(item,aiType);
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   const safePoints=((result?.validation?.sellingPoints)||[])
