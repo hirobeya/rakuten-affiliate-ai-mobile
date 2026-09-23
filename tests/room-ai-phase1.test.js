@@ -376,11 +376,12 @@ function run(name,fn){
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
-  await run('Preview auto AI caps at two and remaining items use on-demand Groq',()=>{
+  await run('rule-first AI gate only calls Groq when rule analysis needs help',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/FREE_TIER_AI_PER_SEARCH_LIMIT=2/);
-    assert.match(html,/reason:'on_demand_ai'/);
-    assert.match(html,/index<FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.doesNotMatch(html,/FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.match(html,/if\(target\.callAi\)/);
+    assert.match(html,/reason:'rule_confident'/);
+    assert.match(html,/if\(!target\.callAi\)/);
     assert.match(html,/function ensureAiForItem\(index\)/);
   });
 
@@ -617,7 +618,7 @@ function run(name,fn){
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
-    assert.match(appText,/投稿文を選ぶとGroqで商品内容を確認します/);
+    assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
   await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
