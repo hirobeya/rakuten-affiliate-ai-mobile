@@ -936,7 +936,6 @@ input,select{
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
 <script src="/room-copy-quality.js?v=20260920-7"></script>
-<script src="/benefit-grounding.js?v=20260923-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
@@ -2473,53 +2472,6 @@ function aiSafeTitle(item){
   return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
 }
 
-function collectGroundedMatches(text,rules,max=8){
-  const src=String(text||'').normalize('NFKC');
-  const out=[];
-  for(const re of rules){
-    re.lastIndex=0;
-    let m;
-    while((m=re.exec(src))){
-      const v=String(m[0]||'').trim();
-      if(v&&!out.includes(v)) out.push(v);
-      if(out.length>=max) return out;
-    }
-  }
-  return out;
-}
-
-const GROUNDED_FEATURE_RULES=[
-  /スマホ対応|タッチパネル対応|タッチ対応/g,
-  /メッシュ|通気性/g,
-  /本革|山羊革|牛革|ゴートレザー/g,
-  /防風|防水/g,
-  /プロテクター/g,
-  /滑り止め|すべり止め/g,
-  /耐熱/g,
-  /S[・\/／]M[・\/／]Lサイズ|S\/M\/Lサイズ/g,
-  /コードレス/g,
-  /折りたたみ|折り畳み/g,
-  /キャスター付き/g,
-  /コンパクト/g,
-  /軽量/g,
-  /洗える/g
-];
-
-function groundedTitleFeatures(item){
-  return collectGroundedMatches(item?.itemName||'',GROUNDED_FEATURE_RULES,6);
-}
-
-function groundedCaptionFeatures(item){
-  return collectGroundedMatches(item?.itemCaption||'',GROUNDED_FEATURE_RULES,6);
-}
-
-function groundedUseContexts(item){
-  const text=(String(item?.itemName||'')+' '+String(item?.itemCaption||'')).normalize('NFKC');
-  return collectGroundedMatches(text,[
-    /ツーリング/g,/バイク通勤/g,/キャンプ/g,/アウトドア/g,/焚火/g,/薪ストーブ/g
-  ],4);
-}
-
 function compactGrounded(value){
   return String(value||'').normalize('NFKC').replace(/[\s\-‐‑–—\/／]+/g,'').toLowerCase();
 }
@@ -2532,43 +2484,6 @@ function specificGroundedProductType(item,aiType){
   const bc=compactGrounded(base);
   if(q&&qc.length>=3&&title.includes(qc)&&(qc.includes(bc)||bc.includes(qc))) return q;
   return base;
-}
-
-function groundedBenefitLines(productType,featureRecords,item){
-  const api=window.UrenaviBenefitGrounding;
-  if(!api||typeof api.makeGroundedSelectionLine!=='function') return [];
-  const sources=[String(item?.itemName||''),String(item?.itemCaption||'')];
-  const out=[];
-  for(const record of featureRecords||[]){
-    if(out.length>=2) break;
-    const label=String(record?.text||'').trim();
-    const evidence=String(record?.evidence||'').trim();
-    if(!label||!evidence) continue;
-    const checked=api.makeGroundedSelectionLine({label,evidence,sources});
-    if(checked?.valid&&checked.text&&!out.includes(checked.text)) out.push(checked.text);
-  }
-  return out;
-}
-function featureCore(value){
-  return String(value||'').normalize('NFKC').replace(/\s+/g,'').replace(/[性製用対応付き付]/g,'').toLowerCase();
-}
-function dedupeGroundedFeatures(values){
-  const out=[];
-  for(const raw of values||[]){
-    const v=String(raw||'').trim();
-    const core=featureCore(v);
-    if(!v||!core) continue;
-    const duplicate=out.some(existing=>{
-      const ec=featureCore(existing);
-      return ec===core || (ec.length>=2&&core.includes(ec)) || (core.length>=2&&ec.includes(core));
-    });
-    if(!duplicate) out.push(v);
-  }
-  return out;
-}
-
-function mergeSemanticFeatureLabels(values){
-  return dedupeGroundedFeatures(values);
 }
 
 function aiSalesInsight(item,result){
@@ -2870,9 +2785,6 @@ function aiSafeFallbackPost(item,result=null){
   return lines.join('\n').slice(0,500).trim();
 }
 
-function aiCheckingPost(item){
-  return aiSafeFallbackPost(item,null);
-}
 
 function ruleSecondOpinion(item,validation,keyword=''){
   const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')

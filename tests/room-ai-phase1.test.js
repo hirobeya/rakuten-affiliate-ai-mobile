@@ -588,7 +588,6 @@ function run(name,fn){
     assert.doesNotMatch(html,/weak_single_candidate/);
     assert.match(html,/setTimeout\(r,750\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
-    assert.match(html,/function aiCheckingPost\(/);
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
     assert.match(html,/\.tab\[data-i=/);
@@ -596,8 +595,7 @@ function run(name,fn){
 
   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function groundedTitleFeatures\(/);
-    assert.match(html,/function groundedBenefitLines\(/);
+    assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function aiSalesInsight\(/);
     assert.match(html,/商品内容をGroqで確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
@@ -617,33 +615,25 @@ function run(name,fn){
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
-    assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
-  await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
+  await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function specificGroundedProductType\(/);
-    assert.match(html,/function groundedCaptionFeatures\(/);
+    assert.doesNotMatch(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
     assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
+    assert.doesNotMatch(html,/UrenaviBenefitGrounding/);
+    assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
     assert.match(html,/商品ページで確認できるポイント/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
-  await run('semantic feature handling stays category independent',()=>{
-    const fs=require('node:fs'),path=require('node:path');
-    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function mergeSemanticFeatureLabels\(/);
-    assert.match(html,/return dedupeGroundedFeatures\(values\)/);
-    assert.doesNotMatch(html,/スマホ・タッチ対応/);
-    assert.doesNotMatch(html,/本革（山羊革）/);
-    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
-  });
 
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
