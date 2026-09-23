@@ -492,7 +492,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-phase1-groq-v3',
+        prompt_version:'2026-09-23-ai-phase1-groq-v4',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
