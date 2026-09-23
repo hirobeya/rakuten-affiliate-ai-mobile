@@ -2568,29 +2568,7 @@ function dedupeGroundedFeatures(values){
 }
 
 function mergeSemanticFeatureLabels(values){
-  const src=[...new Set((values||[]).filter(Boolean).map(v=>String(v).trim()))];
-  const out=[];
-  const used=new Set();
-
-  const phoneIdx=src.map((v,i)=>/スマホ対応|スマートフォン対応|タッチパネル対応|タッチ対応/.test(v)?i:-1).filter(i=>i>=0);
-  if(phoneIdx.length){
-    out.push('スマホ・タッチ対応');
-    phoneIdx.forEach(i=>used.add(i));
-  }
-
-  const leatherIdx=src.map((v,i)=>/本革|山羊革|牛革|ゴートレザー/.test(v)?i:-1).filter(i=>i>=0);
-  if(leatherIdx.length){
-    const labels=leatherIdx.map(i=>src[i]);
-    let merged='';
-    if(labels.some(v=>/山羊革|ゴートレザー/.test(v))) merged='本革（山羊革）';
-    else if(labels.some(v=>/牛革/.test(v))) merged='本革（牛革）';
-    else if(labels.some(v=>/本革/.test(v))) merged='本革';
-    if(merged) out.push(merged);
-    leatherIdx.forEach(i=>used.add(i));
-  }
-
-  src.forEach((v,i)=>{if(!used.has(i)) out.push(v);});
-  return out;
+  return dedupeGroundedFeatures(values);
 }
 
 function aiSalesInsight(item,result){
@@ -2624,15 +2602,17 @@ function aiPhase1Post(item,result){
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return aiSafeFallbackPost(item,result);
   const insight=aiSalesInsight(item,result);
-  const facts=insight.features.slice(0,5);
-  const points=insight.sellingPoints.slice(0,3);
-  const lines=[insight.productType+'を探している方へ。'];
-  if(points.length){
-    lines.push(...points.map(x=>'・'+x));
-  }else if(facts.length){
-    lines.push('商品ページで確認できる特徴：'+facts.slice(0,2).join('・'));
+  const f=insight.features.slice(0,5);
+  const lines=[];
+  if(f.length>=2){
+    lines.push(f[0]+'と'+f[1]+'を確認して選びたい方に。');
+    if(f.length>=3) lines.push('商品名・説明では'+f.slice(2,4).join('、')+'も確認できます。');
+  }else if(f.length===1){
+    lines.push(f[0]+'を確認して選びたい方に。');
+  }else{
+    lines.push(insight.productType+'の仕様を確認して選びたい方に。');
   }
-  if(facts.length) lines.push('','商品のポイント👇',...facts.map(x=>'✔ '+x));
+  if(f.length) lines.push('','商品の特徴👇',...f.map(x=>'✔ '+x));
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
   return lines.join('\n').slice(0,500);
@@ -2670,7 +2650,7 @@ function updateAiPanel(index){
       ?'無料枠のAI上限対象外です。安全な短文を表示します。'
       :'ルール判定でAI追加確認は不要です。';
     facts.textContent='';
-    copy.textContent=result.reason==='rule_confident'?resolvedPost(item,index,'room',lastSearchKeyword):aiSafeFallbackPost(item);
+    copy.textContent=result.reason==='rule_confident'?resolvedPost(item,index,'room',lastSearchKeyword):aiSafeFallbackPost(item,result.data);
     return;
   }
   const v=result.data?.validation||{};
@@ -2895,7 +2875,7 @@ function aiSafeFallbackPost(item,result=null){
 }
 
 function aiCheckingPost(item){
-  return aiSafeFallbackPost(item);
+  return aiSafeFallbackPost(item,null);
 }
 
 function ruleSecondOpinion(item,validation,keyword=''){
