@@ -2543,15 +2543,22 @@ function aiPhase1Post(item,result){
 
   const insight=aiSalesInsight(item,result);
   const values=valueFromFacts(insight.features);
-  if(!values.length) return '';
+  const proof=[...insight.features,...insight.sellingPoints]
+    .filter((x,i,a)=>x&&a.indexOf(x)===i)
+    .slice(0,3);
+  if(!values.length){
+    if(!proof.length) return '';
+    const lines=[insight.productType+'で確認できる仕様をまとめました。',''];
+    proof.forEach(x=>lines.push('✓ '+x));
+    if(priceLine) lines.push('',priceLine);
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
+  }
 
   const lines=[values[0].hook,''];
   lines.push('✓ '+values[0].benefit);
   if(values[1]) lines.push('✓ '+values[1].benefit);
 
-  const proof=[...insight.features,...insight.sellingPoints]
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,3);
   if(proof.length){
     lines.push('', '根拠になる仕様：'+proof.join('／'));
   }
