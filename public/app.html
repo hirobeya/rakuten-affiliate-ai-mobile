@@ -2494,71 +2494,18 @@ function aiSalesInsight(item,result){
     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,4);
-  const sellingPoints=(v.sellingPoints||[])
-    .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,2);
-  const audienceHook=(v.audienceHook?.eligibleForPost&&v.audienceHook?.text)?String(v.audienceHook.text).trim():'';
-  const buyerBenefits=(v.buyerBenefits||[])
-    .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,2);
-  const fitLine=(v.fitLine?.eligibleForPost&&v.fitLine?.text)?String(v.fitLine.text).trim():'';
-  return {productType,features,sellingPoints,audienceHook,buyerBenefits,fitLine};
+    .slice(0,3);
+  return {productType,features};
 }
 
 function salesFactCore(value){
   return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
 }
 
-function aiBuyerDimensions(insight){
-  const text=[...(insight.features||[]),...(insight.sellingPoints||[])].join(' ');
-  const dimensions=[];
-  const add=(label,re)=>{if(re.test(text)&&!dimensions.includes(label)) dimensions.push(label);};
-  add('素材',/本革|革|レザー|素材|綿|コットン|ステンレス|アルミ|木製|シリコン|樹脂/);
-  add('フィット感',/フィット|調整|面ファスナー|ベルト|伸縮|サイズ|着脱/);
-  add('対応機能',/対応|互換|適合|タッチ|スマホ|usb|type-?c|iphone|android/i);
-  add('使い心地',/通気|メッシュ|軽量|柔らか|クッション|グリップ/);
-  add('容量・セット内容',/容量|大容量|収納|セット|\d+\s*(?:個|枚|本|点|食|包)/);
-  add('お手入れ',/洗え|丸洗い|水洗い|お手入れ|掃除|洗濯/);
-  return dimensions.slice(0,3);
-}
-
 function aiPhase1Post(item,result){
   const v=result?.validation;
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
-
-  const insight=aiSalesInsight(item,result);
-  const benefits=insight.buyerBenefits.slice(0,2);
-  if(!insight.audienceHook||!benefits.length) return '';
-
-  const clean=s=>String(s||'').replace(/^[✓✔・\-\s]+/,'').replace(/[。！!]+$/,'').trim();
-  const lines=[
-    clean(insight.audienceHook)+'。',
-    '',
-    'この'+insight.productType+'なら、'+clean(benefits[0])+'。'
-  ];
-
-  if(benefits[1]) lines.push(clean(benefits[1])+'。');
-
-  const proof=[...insight.sellingPoints,...insight.features]
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .filter(x=>!benefits.some(b=>{
-      const xc=salesFactCore(x),bc=salesFactCore(b);
-      return xc&&bc&&(bc.includes(xc)||xc.includes(bc));
-    }))
-    .slice(0,2);
-
-  if(proof.length) lines.push('', '根拠になる仕様：'+proof.join('／'));
-  if(insight.fitLine) lines.push('', clean(insight.fitLine)+'。');
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500);
+  return String(result?.roomPost||'').trim();
 }
 
 function aiPanelMarkup(item,index){
@@ -2603,9 +2550,6 @@ function updateAiPanel(index){
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
   if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
   for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
-  if(v.audienceHook) rows.push('<div class="aiFact"><strong>audienceHook:</strong> '+esc(v.audienceHook.text||'')+'<br>根拠: '+esc(v.audienceHook.evidence||'')+'<br>検証: '+(v.audienceHook.valid?'PASS':'FAIL')+'</div>');
-  for(const bf of v.buyerBenefits||[]) rows.push('<div class="aiFact"><strong>buyerBenefit:</strong> '+esc(bf.text||'')+'<br>根拠: '+esc(bf.evidence||'')+'<br>検証: '+(bf.valid?'PASS':'FAIL')+'</div>');
-  if(v.fitLine) rows.push('<div class="aiFact"><strong>fitLine:</strong> '+esc(v.fitLine.text||'')+'<br>根拠: '+esc(v.fitLine.evidence||'')+'<br>検証: '+(v.fitLine.valid?'PASS':'FAIL')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
   facts.innerHTML=rows.join('');
@@ -2761,7 +2705,7 @@ function analysisGuide(i,index,keyword=''){
     const gate=resolveAiGate(i,index,keyword);
     if(gate.full&&!gate.useLegacy){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
-      const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
+      const points=insight.features.slice(0,2);
       return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
         '<div class="target">'+esc(insight.productType)+'</div>'+
         '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
@@ -2808,18 +2752,12 @@ function aiSafeFallbackPost(item,result=null){
   const title=specificGroundedProductType(item,aiType);
   const price=Number(item?.itemPrice);
   const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  const safePoints=((result?.validation?.sellingPoints)||[])
-    .filter(x=>x?.eligibleForPost&&x?.text)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,2);
   const facts=((result?.validation?.features)||[])
     .filter(x=>x?.eligibleForPost&&x?.text)
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,4);
   const lines=[title];
-  if(safePoints.length) lines.push('',...safePoints.map(x=>'・'+x));
   if(facts.length) lines.push('','商品ページで確認できるポイント👇',...facts.map(x=>'✔ '+x));
   if(priceLine) lines.push('',priceLine);
   lines.push('','※アフィリエイト広告を利用しています');
