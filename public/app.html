@@ -2486,43 +2486,6 @@ function specificGroundedProductType(item,aiType){
   return base;
 }
 
-function groundedBenefitLines(productType,featureRecords,item){
-  const api=window.UrenaviBenefitGrounding;
-  if(!api||typeof api.makeGroundedSelectionLine!=='function') return [];
-  const sources=[String(item?.itemName||''),String(item?.itemCaption||'')];
-  const out=[];
-  for(const record of featureRecords||[]){
-    if(out.length>=2) break;
-    const label=String(record?.text||'').trim();
-    const evidence=String(record?.evidence||'').trim();
-    if(!label||!evidence) continue;
-    const checked=api.makeGroundedSelectionLine({label,evidence,sources});
-    if(checked?.valid&&checked.text&&!out.includes(checked.text)) out.push(checked.text);
-  }
-  return out;
-}
-function featureCore(value){
-  return String(value||'').normalize('NFKC').replace(/\s+/g,'').replace(/[性製用対応付き付]/g,'').toLowerCase();
-}
-function dedupeGroundedFeatures(values){
-  const out=[];
-  for(const raw of values||[]){
-    const v=String(raw||'').trim();
-    const core=featureCore(v);
-    if(!v||!core) continue;
-    const duplicate=out.some(existing=>{
-      const ec=featureCore(existing);
-      return ec===core || (ec.length>=2&&core.includes(ec)) || (core.length>=2&&ec.includes(core));
-    });
-    if(!duplicate) out.push(v);
-  }
-  return out;
-}
-
-function mergeSemanticFeatureLabels(values){
-  return dedupeGroundedFeatures(values);
-}
-
 function aiSalesInsight(item,result){
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
