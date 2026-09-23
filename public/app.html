@@ -2801,7 +2801,7 @@ async function runAiPreview(items){
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
     await requestAiRoom(job.item,job.index,generation);
-    if(queue.length) await new Promise(r=>setTimeout(r,250));
+    if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
 }
 
