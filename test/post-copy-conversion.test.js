@@ -43,7 +43,7 @@ test('unknown item stays safe instead of inventing a product use',()=>{
   const api=load();
   const item={itemName:'限定モデル ABC-123',itemPrice:5000,reviewCount:1,reviewAverage:5};
   const copy=api.makeRoomCopy(item,'便利グッズ');
-  assert.match(copy,/用途を十分に特定できません|自動投稿文の生成を止めています/);
+  assert.equal(copy,'');
 });
 
 
