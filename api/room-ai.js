@@ -12,10 +12,10 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-generic-sales-v8';
+const PROMPT_VERSION='2026-09-23-ai-generic-sales-v9';
 const VALIDATION_RULE_VERSION='2026-09-23-ai-gate-v3';
 
-const FEATURE_MAX_CHARS=20;
+const FEATURE_MAX_CHARS=36;
 
 const baseSchemaProperties={
   productType:{
@@ -73,7 +73,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品をカテゴリ非依存で事実抽出。productTypeは原文の最短の商品種別名詞2〜16字。featuresは素材・仕様・対応・サイズ・容量など比較用の明示事実を最大3件。sellingPointsは購入判断に役立つ原文の完結した4〜36字の連続引用を最大2件。全項目source/evidence必須。text自体も原文引用。途中断片禁止。意味拡張・販促・ランキング・効能・安全・健康・美容・保証・推測禁止。数字単位一致。`;
+const SYSTEM_PROMPT=`楽天商品をカテゴリ非依存で理解。productTypeは原文の最短商品種別名詞2〜16字。featuresは購入比較に効く実用仕様を最大3件。タッチ対応・調整・通気・サイズ・容量・付属などを優先し、素材組成比率は主な選択理由でない限り避ける。sellingPointsは使い方・便利さ・選ぶ理由を示す完結した原文引用を最大2件。features/textも必ず原文の連続引用。source/evidence必須。途中断片、意味拡張、販促、ランキング、効能、安全、健康、美容、保証、推測禁止。数字一致。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
