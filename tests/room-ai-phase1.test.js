@@ -267,11 +267,9 @@ function run(name,fn){
 
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
-    assert.deepEqual(text.required,['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence']);
-    assert.equal(text.properties.fitLine.properties.text.maxLength,60);
-    assert.equal(text.properties.audienceHook.properties.text.maxLength,52);
-    assert.equal(text.properties.buyerBenefits.maxItems,2);
-    assert.equal(text.properties.buyerBenefits.items.properties.text.maxLength,52);
+    assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
+
+
     assert.equal(text.properties.features.maxItems,3);
     assert.equal(text.properties.features.items.properties.text.maxLength,20);
     assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
@@ -376,7 +374,7 @@ function run(name,fn){
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
-    assert.ok(SYSTEM_PROMPT.length<420);
+    assert.ok(SYSTEM_PROMPT.length<360);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
@@ -546,8 +544,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-persuasion-v10',
-          validation_rule_version:'2026-09-23-ai-value-v5',
+        prompt_version:'2026-09-23-ai-facts-only-v11',
+          validation_rule_version:'2026-09-23-ai-facts-v6',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -612,13 +610,10 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-persuasion-v10/);
+    assert.match(apiText,/2026-09-23-ai-facts-only-v11/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/audienceHook/);
-    assert.match(apiText,/buyerBenefits/);
-    assert.match(apiText,/fitLine/);
-    assert.match(apiText,/欲しい理由/);
+    assert.match(apiText,/事実抽出のみ/);
     assert.match(apiText,/text自体も原文引用/);
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
@@ -634,19 +629,19 @@ function run(name,fn){
     assert.match(html,/誤った投稿文は表示していません/);
   });
 
-  await run('AI ROOM copy uses validated audience and buyer-value layer',()=>{
+  await run('AI stays fact-only and ROOM value copy is deterministic from validated facts',()=>{
     const fs=require('node:fs'),path=require('node:path');
+    const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
-    assert.match(html,/insight\.audienceHook/);
-    assert.match(html,/insight\.buyerBenefits/);
-    assert.match(html,/insight\.fitLine/);
-    assert.match(html,/この'\+insight\.productType\+'なら/);
-    assert.match(html,/根拠になる仕様/);
-    assert.match(libText,/function validateDerivedValue/);
-    assert.match(libText,/DERIVED_VALUE_RISK_RE/);
-    assert.match(libText,/DERIVED_GENERIC_RE/);
-    assert.doesNotMatch(html,/商品の特徴👇/);
+    assert.doesNotMatch(apiText,/audienceHook/);
+    assert.doesNotMatch(apiText,/buyerBenefits/);
+    assert.doesNotMatch(apiText,/fitLine/);
+    assert.match(apiText,/意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止/);
+    assert.match(html,/const VALUE_RULES=/);
+    assert.match(html,/function valueFromFacts\(/);
+    assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
+    assert.match(html,/着けたままスマホ操作をしやすい/);
+    assert.match(html,/使わないときは省スペースでしまいやすい/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
@@ -656,7 +651,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
-    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
+    assert.match(html,/const featureRows=\(v\.features\|\|\[\]\)/);
     assert.doesNotMatch(html,/UrenaviBenefitGrounding/);
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
