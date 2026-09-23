@@ -650,9 +650,9 @@ function run(name,fn){
     assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
     assert.doesNotMatch(html,/UrenaviBenefitGrounding/);
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
-    assert.match(html,/insight\.sellingPoints/);
+    assert.doesNotMatch(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
-    assert.match(html,/商品ページで確認できるポイント/);
+    assert.match(html,/商品の特徴👇/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
