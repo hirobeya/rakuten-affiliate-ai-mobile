@@ -559,7 +559,7 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-phase1-groq-v3/);
+    assert.match(apiText,/2026-09-23-ai-phase1-groq-v4/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/英訳・言い換え禁止/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
@@ -575,7 +575,9 @@ function run(name,fn){
     assert.match(html,/function groundedUseContexts\(/);
     assert.match(html,/function audienceForProduct\(/);
     assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
-    assert.match(html,/insight\.productType\+'を探している方に。'/);
+    assert.match(html,/insight\.productType\+'選びで確認したいポイントをまとめました。'/);
+    assert.match(html,/商品ページに記載のある特徴をチェックできます/);
+    assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
   await run('semantic feature labels merge duplicate smartphone and leather facts',()=>{
