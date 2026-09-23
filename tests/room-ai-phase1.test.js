@@ -601,13 +601,13 @@ function run(name,fn){
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
-  await run('semantic feature labels merge duplicate smartphone and leather facts',()=>{
+  await run('semantic feature handling stays category independent',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function mergeSemanticFeatureLabels\(/);
-    assert.match(html,/スマホ・タッチ対応/);
-    assert.match(html,/本革（山羊革）/);
-    assert.match(html,/本革（牛革）/);
+    assert.match(html,/return dedupeGroundedFeatures\(values\)/);
+    assert.doesNotMatch(html,/スマホ・タッチ対応/);
+    assert.doesNotMatch(html,/本革（山羊革）/);
     assert.match(html,/const features=mergeSemanticFeatureLabels\(/);
   });
 
