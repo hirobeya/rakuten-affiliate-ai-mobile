@@ -618,14 +618,16 @@ function run(name,fn){
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
-  await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
+  await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function specificGroundedProductType\(/);
-    assert.match(html,/function groundedCaptionFeatures\(/);
+    assert.doesNotMatch(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
     assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
+    assert.doesNotMatch(html,/UrenaviBenefitGrounding/);
+    assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
     assert.match(html,/商品ページで確認できるポイント/);
