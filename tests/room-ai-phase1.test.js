@@ -95,6 +95,30 @@ function run(name,fn){
     assert.equal(v.sellingPoints[1].valid,false);
   });
 
+  await run('selling point keeps full quote beyond forty characters and rejects mid-word truncation',()=>{
+    const full='手のひら、手の甲両側に多数の通気孔を配置。通気性が高く、湿気を排出する仕様です';
+    const v=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],
+      sellingPoints:[{text:full,source:'itemCaption',evidence:full}],
+      confidence:'high'
+    },{itemName:'バイクグローブ',itemCaption:full},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].text,full);
+    assert.equal(v.sellingPoints[0].valid,true);
+
+    const truncated='手のひら、手の甲両側に多数の通気孔を配置。通気性が高く、湿気を排出するので汗をか';
+    const source=truncated+'きやすい季節でも使えます';
+    const bad=validateAiExtraction({
+      productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+      features:[],
+      sellingPoints:[{text:truncated,source:'itemCaption',evidence:source}],
+      confidence:'high'
+    },{itemName:'バイクグローブ',itemCaption:source},{imageAvailable:false});
+    assert.equal(bad.sellingPoints[0].boundaryValid,false);
+    assert.equal(bad.sellingPoints[0].truncationRisk,true);
+    assert.equal(bad.sellingPoints[0].valid,false);
+  });
+
   await run('incomplete selling point fragments are rejected',()=>{
     const v=validateAiExtraction({
       productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
@@ -565,7 +589,7 @@ function run(name,fn){
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
         prompt_version:'2026-09-24-ai-facts-only-v12',
-          validation_rule_version:'2026-09-24-ai-facts-v7',
+          validation_rule_version:'2026-09-24-ai-facts-v8',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
