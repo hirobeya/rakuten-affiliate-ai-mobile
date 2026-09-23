@@ -2507,6 +2507,12 @@ function salesFactCore(value){
   return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
 }
 
+function salesSentence(value){
+  const text=String(value||'').trim().replace(/^[・●✔✓]+\s*/,'');
+  if(!text) return '';
+  return /[。！？!?]$/.test(text)?text:text+'。';
+}
+
 function aiPhase1Post(item,result){
   const v=result?.validation;
   const price=Number(item?.itemPrice);
@@ -2515,19 +2521,16 @@ function aiPhase1Post(item,result){
   const insight=aiSalesInsight(item,result);
   const features=insight.features.slice(0,4);
   const points=insight.sellingPoints.slice(0,2);
-  const lines=[];
-  if(features.length>=2){
-    lines.push(features[0]+'と'+features[1]+'を重視して、'+insight.productType+'を選びたい方へ。');
-  }else if(features.length===1){
-    lines.push(features[0]+'をチェックして、'+insight.productType+'を選びたい方へ。');
-  }else if(points.length){
-    lines.push(insight.productType+'選びで、商品ページの違いをきちんと比べたい方へ。');
-  }else{
-    return '';
-  }
+  if(!points.length&&!features.length) return '';
+
+  const lines=[
+    points.length
+      ?'スペックだけでなく、使う場面まで見て'+insight.productType+'を選びたい方へ。'
+      :insight.productType+'の仕様をきちんと比べて選びたい方へ。'
+  ];
 
   if(points.length){
-    lines.push('',...points);
+    lines.push('',...points.map(salesSentence).filter(Boolean));
   }
 
   const extras=features.filter(feature=>{
