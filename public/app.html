@@ -2636,7 +2636,9 @@ function updateAiPanel(index){
   if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。安全のため短文に切り替えました。';facts.textContent='';copy.textContent=aiPhase1Post(item,{validation:{mode:'fallback'}});return;}
   if(result.state==='skipped'){
-    status.textContent='この商品は、投稿文を選ぶとGroqで商品内容を確認します。';
+    status.textContent=result.reason==='rule_confident'
+      ?'ルール判定で十分に確認できたため、Groqは使用していません。'
+      :'AI追加確認は不要です。';
     facts.textContent='';
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
@@ -2737,19 +2739,17 @@ function aiTargetDecision(item){
   };
 }
 
-const FREE_TIER_AI_PER_SEARCH_LIMIT=2;
-
 async function runAiPreview(items){
   if(!aiGatesFullOutput) return;
   const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
   const queue=[];
   (Array.isArray(items)?items:[]).forEach((item,index)=>{
     const target=aiTargetDecision(item);
-    if(index<FREE_TIER_AI_PER_SEARCH_LIMIT){
+    if(target.callAi){
       aiRoomResults.set(index,{state:'loading',target,auto:true});
       queue.push({item,index});
     }else{
-      aiRoomResults.set(index,{state:'skipped',reason:'on_demand_ai',target,auto:false});
+      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
       updateAiPanel(index);
     }
   });
@@ -2763,11 +2763,17 @@ async function runAiPreview(items){
 async function ensureAiForItem(index){
   if(!aiGatesFullOutput) return;
   const current=aiRoomResults.get(index);
-  if(current?.state==='done'||current?.state==='loading') return;
+  if(current?.state==='done'||current?.state==='loading'||current?.reason==='rule_confident') return;
   const item=lastSearchItems[index];
   if(!item) return;
+  const target=current?.target||aiTargetDecision(item);
+  if(!target.callAi){
+    aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
+    updateAiPanel(index);
+    return;
+  }
   const generation=aiRunGeneration;
-  aiRoomResults.set(index,{state:'loading',target:current?.target||aiTargetDecision(item),auto:false});
+  aiRoomResults.set(index,{state:'loading',target,auto:false});
   updateAiPanel(index);
   await requestAiRoom(item,index,generation);
 }
@@ -2806,8 +2812,8 @@ function analysisGuide(i,index,keyword=''){
     }
     if(gate.useLegacy){
       const a=groundedAnalysis(i);
-      const hint=gate.status==='on_demand'
-        ?'<div class="muted">この商品は投稿文を選ぶとGroqで商品内容を確認します。</div>'
+      const hint=gate.status==='rule_confident'
+        ?'<div class="muted">ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。</div>'
         :'';
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
       return '<div class="guide">'+hint+'</div>';
@@ -2896,8 +2902,8 @@ function resolveAiGate(item,index,keyword=''){
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  if(ai.state==='skipped'&&ai.reason==='on_demand_ai'){
-    return {enabled:true,status:'on_demand',full:true,useLegacy:true,reasons:['on_demand_ai'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  if(ai.state==='skipped'&&ai.reason==='rule_confident'){
+    return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
