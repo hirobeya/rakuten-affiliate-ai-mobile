@@ -12,8 +12,8 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-value-layer-v9';
-const VALIDATION_RULE_VERSION='2026-09-23-ai-value-v4';
+const PROMPT_VERSION='2026-09-23-ai-persuasion-v10';
+const VALIDATION_RULE_VERSION='2026-09-23-ai-value-v5';
 
 const FEATURE_MAX_CHARS=20;
 
@@ -72,18 +72,27 @@ const baseSchemaProperties={
       }
     }
   },
+  fitLine:{
+    type:['object','null'],additionalProperties:false,
+    required:['text','source','evidence'],
+    properties:{
+      text:{type:'string',maxLength:60},
+      source:{type:'string',enum:['itemName','itemCaption']},
+      evidence:{type:'string',maxLength:72}
+    }
+  },
   confidence:{type:'string',enum:['high','medium','low']}
 };
 
 const textSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence'],
+  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence'],
   properties:baseSchemaProperties
 };
 
 const imageSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence','imageProductTypeHint'],
+  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','fitLine','confidence','imageProductTypeHint'],
   properties:{
     ...baseSchemaProperties,
     imageProductTypeHint:{type:['string','null'],maxLength:24}
@@ -94,7 +103,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品を事実→購入価値まで整理。productType=原文の商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=原文事実から一段だけ導ける具体的な悩み/場面を1文。buyerBenefits=原文事実から一段だけ導ける実用価値を最大2。各項目source/evidence必須。sellingPointsのtext自体も原文引用。途中断片禁止。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。数字一致。例:タッチ対応→着けたままスマホ操作しやすい、面ファスナー→フィット調整しやすい。`;
+const SYSTEM_PROMPT=`楽天ROOM向けに、商品事実から「欲しい理由」まで自然な日本語で整理。productType=商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=使う人の具体的な小さな困りごと/場面を1文。buyerBenefits=その困りごとがどう楽になるかを最大2文。fitLine=誰に向くかを1文。各派生文はsource/evidence必須で一段推論まで。sellingPointsはtext自体も原文引用、途中断片禁止。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。『使いやすい』『おすすめ』『商品ページを確認』だけの抽象文禁止。例:タッチ対応→スマホを見るたび外す手間を減らしやすい、折りたたみ→使わない時の置き場所を取りにくい。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
