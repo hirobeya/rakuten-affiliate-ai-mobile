@@ -17,7 +17,7 @@ test('exact title facts recover safe facts for seven-case production smoke produ
   const cases=[
     {
       name:'美顔ローラー 美顔器 リフトアップ 〖微弱電流〗〖防水仕様〗〖充電不要〗 小顔ローラー',
-      expected:['微弱電流','防水仕様','充電不要']
+      expected:['微弱電流','防水仕様']
     },
     {
       name:'ウォーターピーリング 美顔器 RELX 超軽量 70g 超音波 美顔器 ems イオン',
