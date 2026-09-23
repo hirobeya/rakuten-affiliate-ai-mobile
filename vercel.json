@@ -53,10 +53,5 @@
       "path": "/api/pro-cron",
       "schedule": "0 21 * * *"
     }
-  ],
-  "functions": {
-    "api/room-ai.js": {
-      "maxDuration": 20
-    }
-  }
+  ]
 }
