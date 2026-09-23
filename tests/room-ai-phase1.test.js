@@ -45,6 +45,26 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
+  await run('feature text itself must be a contiguous source quote',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'モバイルバッテリー',source:'itemName',evidence:'モバイルバッテリー'},
+      features:[{text:'USB-C対応',source:'itemCaption',evidence:'Type-C対応'}],
+      sellingPoints:[],confidence:'high'
+    },{itemName:'モバイルバッテリー',itemCaption:'Type-C対応'},{imageAvailable:false});
+    assert.equal(v.features[0].textEvidenceValid,false);
+    assert.equal(v.features[0].valid,false);
+  });
+
+  await run('clean product type stays valid when surrounding evidence contains promotion',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'ペットウォーターボトル',source:'itemName',evidence:'楽天1位 ペットウォーターボトル'},
+      features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'楽天1位 ペットウォーターボトル 犬用',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.promoRisk,false);
+    assert.equal(v.productType.evidencePromoRisk,true);
+    assert.equal(v.productType.valid,true);
+  });
+
   await run('AI selling points are evidence-gated and category independent',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
@@ -271,11 +291,11 @@ function run(name,fn){
 
 
     assert.equal(text.properties.features.maxItems,3);
-    assert.equal(text.properties.features.items.properties.text.maxLength,20);
-    assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
+    assert.equal(text.properties.features.items.properties.text.maxLength,48);
+    assert.equal(text.properties.features.items.properties.evidence.maxLength,72);
     assert.equal(text.properties.sellingPoints.maxItems,2);
-    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,36);
-    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,56);
+    assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,64);
+    assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,96);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
     assert.equal(Object.hasOwn(text.properties,'imageProductTypeHint'),false);
     assert.equal(image.properties.imageProductTypeHint.maxLength,24);
