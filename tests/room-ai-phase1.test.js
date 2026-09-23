@@ -590,6 +590,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/if\(aiGatesFullOutput&&s\.target\.callAi&&s\.state\?\.state!=='done'\) return false/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
@@ -629,8 +630,9 @@ function run(name,fn){
   await run('AI ROOM copy converts validated facts into buyer-focused copy without repeating feature bullets',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/を重視して、'\+insight\.productType\+'を選びたい方へ/);
-    assert.match(html,/さらに、'\+extras\.join\('・'\)\+'も商品ページで確認できます/);
+    assert.match(html,/insight\.productType\+'を、'\+dimensions\.join\('・'\)\+'まで見て選びたい方に/);
+    assert.match(html,/商品ページでは、'\+quoted\.join\('、'\)\+'と案内されています/);
+    assert.match(html,/ほかにも、'\+extras\.join\('・'\)\+'を確認できます/);
     assert.doesNotMatch(html,/商品の特徴👇/);
   });
 
