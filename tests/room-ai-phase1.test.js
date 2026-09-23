@@ -536,7 +536,7 @@ function run(name,fn){
     assert.match(html,/insufficient_grounded_facts/);
     assert.match(html,/rule_conflict/);
     assert.doesNotMatch(html,/weak_single_candidate/);
-    assert.match(html,/setTimeout\(r,250\)/);
+    assert.match(html,/setTimeout\(r,750\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.match(html,/function aiCheckingPost\(/);
     assert.doesNotMatch(html,/AI確認中です/);
