@@ -2646,11 +2646,9 @@ function updateAiPanel(index){
   if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。安全のため短文に切り替えました。';facts.textContent='';copy.textContent=aiPhase1Post(item,{validation:{mode:'fallback'}});return;}
   if(result.state==='skipped'){
-    status.textContent=result.reason==='free_tier_ai_limit'
-      ?'無料枠のAI上限対象外です。安全な短文を表示します。'
-      :'ルール判定でAI追加確認は不要です。';
+    status.textContent='この商品は、投稿文を選ぶとGroqで商品内容を確認します。';
     facts.textContent='';
-    copy.textContent=result.reason==='rule_confident'?resolvedPost(item,index,'room',lastSearchKeyword):aiSafeFallbackPost(item,result.data);
+    copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
   }
   const v=result.data?.validation||{};
@@ -2755,30 +2753,33 @@ async function runAiPreview(items){
   if(!aiGatesFullOutput) return;
   const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
   const queue=[];
-  let targeted=0;
   (Array.isArray(items)?items:[]).forEach((item,index)=>{
     const target=aiTargetDecision(item);
-    if(aiGatesFullOutput && !target.callAi){
-      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target});
+    if(index<FREE_TIER_AI_PER_SEARCH_LIMIT){
+      aiRoomResults.set(index,{state:'loading',target,auto:true});
+      queue.push({item,index});
+    }else{
+      aiRoomResults.set(index,{state:'skipped',reason:'on_demand_ai',target,auto:false});
       updateAiPanel(index);
-      return;
     }
-    if(aiGatesFullOutput && target.callAi){
-      targeted++;
-      if(targeted>FREE_TIER_AI_PER_SEARCH_LIMIT){
-        aiRoomResults.set(index,{state:'skipped',reason:'free_tier_ai_limit',target});
-        updateAiPanel(index);
-        return;
-      }
-    }
-    aiRoomResults.set(index,{state:'loading',target});
-    queue.push({item,index});
   });
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
     await requestAiRoom(job.item,job.index,generation);
     if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
+}
+
+async function ensureAiForItem(index){
+  if(!aiGatesFullOutput) return;
+  const current=aiRoomResults.get(index);
+  if(current?.state==='done'||current?.state==='loading') return;
+  const item=lastSearchItems[index];
+  if(!item) return;
+  const generation=aiRunGeneration;
+  aiRoomResults.set(index,{state:'loading',target:current?.target||aiTargetDecision(item),auto:false});
+  updateAiPanel(index);
+  await requestAiRoom(item,index,generation);
 }
 
 document.addEventListener('click',e=>{
@@ -2808,21 +2809,23 @@ function analysisGuide(i,index,keyword=''){
     const gate=resolveAiGate(i,index,keyword);
     if(gate.full&&!gate.useLegacy){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
-      return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div>'+
-        '<div class="target">'+esc(insight.audience)+'</div>'+
-        '<ul class="pts">'+insight.benefits.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
+      const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
+      return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
+        '<div class="target">'+esc(insight.productType)+'</div>'+
+        '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
     }
     if(gate.useLegacy){
       const a=groundedAnalysis(i);
-      if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
-    }
-    if(gate.reasons?.includes('free_tier_ai_limit')){
-      return '<div class="guide"><div class="muted">無料枠のAI確認上限のため、この商品は安全な短文表示です。</div></div>';
+      const hint=gate.status==='on_demand'
+        ?'<div class="muted">この商品は投稿文を選ぶとGroqで商品内容を確認します。</div>'
+        :'';
+      if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
+      return '<div class="guide">'+hint+'</div>';
     }
     if(gate.reasons?.includes('ai_error')){
-      return '<div class="guide"><div class="muted">AI確認に失敗したため、誤った用途やメリットを出さず安全な短文表示です。</div></div>';
+      return '<div class="guide"><div class="muted">AI確認に失敗したため、確認できた事実だけを表示しています。</div></div>';
     }
-    return '<div class="guide"><div class="muted">商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません。</div></div>';
+    return '<div class="guide"><div class="muted">商品内容をGroqで確認中です。</div></div>';
   }
   const a=groundedAnalysis(i);
   if(a.outputMode!=='full'){
@@ -2906,11 +2909,8 @@ function resolveAiGate(item,index,keyword=''){
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  if(ai.state==='skipped'&&ai.reason==='rule_confident'){
-    return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
-  }
-  if(ai.state==='skipped'&&ai.reason==='free_tier_ai_limit'){
-    return {enabled:true,status:'fallback',full:false,reasons:['free_tier_ai_limit'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  if(ai.state==='skipped'&&ai.reason==='on_demand_ai'){
+    return {enabled:true,status:'on_demand',full:true,useLegacy:true,reasons:['on_demand_ai'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
@@ -3477,7 +3477,7 @@ function render(
     b=>{
 
       b.onclick=
-      ()=>{
+      async()=>{
 
         const ar=
         b.closest(
@@ -3490,6 +3490,7 @@ function render(
         const p=
         b.dataset.p;
 
+        await ensureAiForItem(i);
 
         ar
         .querySelectorAll(
@@ -3559,10 +3560,13 @@ function render(
       b.onclick=
       async()=>{
 
+        const index=+b.dataset.i;
+        await ensureAiForItem(index);
+
         const copy=
         post(
           a[
-            +b.dataset.i
+            index
           ],
           b.dataset.p
         );

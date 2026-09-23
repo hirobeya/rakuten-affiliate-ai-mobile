@@ -346,11 +346,12 @@ function run(name,fn){
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
-  await run('Preview free tier caps AI calls at two per search',()=>{
+  await run('Preview auto AI caps at two and remaining items use on-demand Groq',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/FREE_TIER_AI_PER_SEARCH_LIMIT=2/);
-    assert.match(html,/reason:'free_tier_ai_limit'/);
-    assert.match(html,/targeted>FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.match(html,/reason:'on_demand_ai'/);
+    assert.match(html,/index<FREE_TIER_AI_PER_SEARCH_LIMIT/);
+    assert.match(html,/function ensureAiForItem\(index\)/);
   });
 
   await run('Groq caption input is capped for token control',()=>{
@@ -583,7 +584,7 @@ function run(name,fn){
     assert.match(apiText,/意味拡張/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
-    assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);
+    assert.match(appText,/投稿文を選ぶとGroqで商品内容を確認します/);
   });
 
   await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
@@ -591,10 +592,11 @@ function run(name,fn){
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function specificGroundedProductType\(/);
     assert.match(html,/function groundedCaptionFeatures\(/);
-    assert.match(html,/function groundedUseContexts\(/);
+    assert.match(html,/function ensureAiForItem\(index\)/);
     assert.doesNotMatch(html,/function audienceForProduct\(/);
     assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
     assert.match(html,/insight\.sellingPoints/);
+    assert.match(html,/この商品の選びどころ/);
     assert.match(html,/商品ページで確認できる特徴/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
