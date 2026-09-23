@@ -372,7 +372,7 @@ function run(name,fn){
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
-    assert.ok(SYSTEM_PROMPT.length<260);
+    assert.ok(SYSTEM_PROMPT.length<420);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
@@ -542,8 +542,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-generic-sales-v8',
-          validation_rule_version:'2026-09-23-ai-gate-v3',
+        prompt_version:'2026-09-23-ai-value-layer-v9',
+          validation_rule_version:'2026-09-23-ai-value-v4',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -608,10 +608,12 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-generic-sales-v8/);
+    assert.match(apiText,/2026-09-23-ai-value-layer-v9/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/カテゴリ非依存/);
+    assert.match(apiText,/audienceHook/);
+    assert.match(apiText,/buyerBenefits/);
+    assert.match(apiText,/購入価値/);
     assert.match(apiText,/text自体も原文引用/);
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
@@ -627,12 +629,16 @@ function run(name,fn){
     assert.match(html,/誤った投稿文は表示していません/);
   });
 
-  await run('AI ROOM copy converts validated facts into buyer-focused copy without repeating feature bullets',()=>{
+  await run('AI ROOM copy uses validated audience and buyer-value layer',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/insight\.productType\+'を、'\+dimensions\.join\('・'\)\+'まで見て選びたい方に/);
-    assert.match(html,/商品ページでは、'\+quoted\.join\('、'\)\+'と案内されています/);
-    assert.match(html,/ほかにも、'\+extras\.join\('・'\)\+'を確認できます/);
+    const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
+    assert.match(html,/insight\.audienceHook/);
+    assert.match(html,/insight\.buyerBenefits/);
+    assert.match(html,/✓ /);
+    assert.match(html,/商品ページで確認できるポイント/);
+    assert.match(libText,/function validateDerivedValue/);
+    assert.match(libText,/DERIVED_VALUE_RISK_RE/);
     assert.doesNotMatch(html,/商品の特徴👇/);
   });
 
