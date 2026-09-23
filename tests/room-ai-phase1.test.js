@@ -567,6 +567,17 @@ function run(name,fn){
     assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);
   });
 
+  await run('sales copy prefers grounded specific query and caption facts without extra AI',()=>{
+    const fs=require('node:fs'),path=require('node:path');
+    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/function specificGroundedProductType\(/);
+    assert.match(html,/function groundedCaptionFeatures\(/);
+    assert.match(html,/function groundedUseContexts\(/);
+    assert.match(html,/function audienceForProduct\(/);
+    assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
+    assert.match(html,/insight\.productType\+'を探している方に。'/);
+  });
+
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';
