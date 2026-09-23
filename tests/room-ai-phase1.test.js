@@ -552,6 +552,19 @@ function run(name,fn){
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
 
+  await run('new AI versions invalidate stale cache and caption facts can be posted',async()=>{
+    const fs=require('node:fs'),path=require('node:path');
+    const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
+    const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
+    const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    assert.match(apiText,/2026-09-23-ai-phase1-groq-v3/);
+    assert.match(apiText,/cacheVersionMatch/);
+    assert.match(apiText,/英訳・言い換え禁止/);
+    assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
+    assert.match(appText,/function dedupeGroundedFeatures\(/);
+    assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);
+  });
+
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';

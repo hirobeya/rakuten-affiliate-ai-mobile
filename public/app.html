@@ -2522,12 +2522,29 @@ function groundedBenefitLines(productType,features){
   return out.slice(0,2);
 }
 
+function featureCore(value){
+  return String(value||'').normalize('NFKC').replace(/\s+/g,'').replace(/[性製用対応付き付]/g,'').toLowerCase();
+}
+function dedupeGroundedFeatures(values){
+  const out=[];
+  for(const raw of values||[]){
+    const v=String(raw||'').trim();
+    const core=featureCore(v);
+    if(!v||!core) continue;
+    const duplicate=out.some(existing=>{
+      const ec=featureCore(existing);
+      return ec===core || (ec.length>=2&&core.includes(ec)) || (core.length>=2&&ec.includes(core));
+    });
+    if(!duplicate) out.push(v);
+  }
+  return out;
+}
 function aiSalesInsight(item,result){
   const v=result?.validation||{};
   const productType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
-  const validated=(v.features||[]).filter(x=>x?.valid&&x?.text).map(x=>String(x.text).trim());
+  const validated=(v.features||[]).filter(x=>x?.eligibleForPost&&x?.text).map(x=>String(x.text).trim());
   const titleFacts=groundedTitleFeatures(item);
-  const features=[...new Set([...validated,...titleFacts])].filter(Boolean).slice(0,5);
+  const features=dedupeGroundedFeatures([...validated,...titleFacts]).slice(0,5);
   const benefits=groundedBenefitLines(productType,features);
   return {
     productType,
@@ -2580,13 +2597,21 @@ function updateAiPanel(index){
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。安全のため短文に切り替えました。';facts.textContent='';copy.textContent=aiPhase1Post(item,{validation:{mode:'fallback'}});return;}
+  if(result.state==='skipped'){
+    status.textContent=result.reason==='free_tier_ai_limit'
+      ?'無料枠のAI上限対象外です。安全な短文を表示します。'
+      :'ルール判定でAI追加確認は不要です。';
+    facts.textContent='';
+    copy.textContent=result.reason==='rule_confident'?resolvedPost(item,index,'room',lastSearchKeyword):aiSafeFallbackPost(item);
+    return;
+  }
   const v=result.data?.validation||{};
   status.textContent='検証：'+(v.mode==='simple'?'簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
   const p=v.productType||{};
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
   if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
-  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.source==='itemCaption'?' / 投稿には未使用・人確認対象':'')+'</div>');
+  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
   facts.innerHTML=rows.join('');
@@ -2687,12 +2712,14 @@ async function runAiPreview(items){
     const target=aiTargetDecision(item);
     if(aiGatesFullOutput && !target.callAi){
       aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target});
+      updateAiPanel(index);
       return;
     }
     if(aiGatesFullOutput && target.callAi){
       targeted++;
       if(targeted>FREE_TIER_AI_PER_SEARCH_LIMIT){
         aiRoomResults.set(index,{state:'skipped',reason:'free_tier_ai_limit',target});
+        updateAiPanel(index);
         return;
       }
     }
@@ -2740,6 +2767,12 @@ function analysisGuide(i,index,keyword=''){
     if(gate.useLegacy){
       const a=groundedAnalysis(i);
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
+    }
+    if(gate.reasons?.includes('free_tier_ai_limit')){
+      return '<div class="guide"><div class="muted">無料枠のAI確認上限のため、この商品は安全な短文表示です。</div></div>';
+    }
+    if(gate.reasons?.includes('ai_error')){
+      return '<div class="guide"><div class="muted">AI確認に失敗したため、誤った用途やメリットを出さず安全な短文表示です。</div></div>';
     }
     return '<div class="guide"><div class="muted">商品内容を確認中です。確認できるまでは、誤った用途やメリットを表示しません。</div></div>';
   }
