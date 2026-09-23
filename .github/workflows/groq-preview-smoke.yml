@@ -1,0 +1,23 @@
+name: Groq Preview Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix-fact-value-split-20260923
+    paths:
+      - scripts/groq-preview-smoke.js
+      - .github/workflows/groq-preview-smoke.yml
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - name: Run exactly three Groq checks
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node scripts/groq-preview-smoke.js
