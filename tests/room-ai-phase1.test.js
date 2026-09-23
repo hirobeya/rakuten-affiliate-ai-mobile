@@ -613,7 +613,7 @@ function run(name,fn){
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/カテゴリ非依存/);
     assert.match(apiText,/text自体も原文引用/);
-    assert.match(apiText,/途中断片を禁止/);
+    assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
