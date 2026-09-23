@@ -634,7 +634,7 @@ function run(name,fn){
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/事実抽出のみ/);
-    assert.match(apiText,/text自体も原文引用/);
+    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
     assert.match(apiText,/途中切れさせない/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
