@@ -232,7 +232,7 @@ function run(name,fn){
         usage:{input_tokens:100,output_tokens:50},
         raw:{
           productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
-          features:[{text:'折りたたみ対応',source:'itemName',evidence:'折りたたみ'}],
+          features:[{text:'折りたたみ',source:'itemName',evidence:'折りたたみ'}],
           unknowns:[],
           imageProductTypeHint:'収納ベンチ',
           confidence:'high'
@@ -564,8 +564,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-facts-only-v11',
-          validation_rule_version:'2026-09-23-ai-facts-v6',
+        prompt_version:'2026-09-24-ai-facts-only-v12',
+          validation_rule_version:'2026-09-24-ai-facts-v7',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -630,12 +630,12 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-facts-only-v11/);
+    assert.match(apiText,/2026-09-24-ai-facts-only-v12/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
     assert.match(apiText,/事実抽出のみ/);
     assert.match(apiText,/text自体も原文引用/);
-    assert.match(apiText,/途中断片禁止/);
+    assert.match(apiText,/途中切れさせない/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
