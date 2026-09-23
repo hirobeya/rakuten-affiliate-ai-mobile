@@ -12,8 +12,8 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-23-ai-generic-sales-v8';
-const VALIDATION_RULE_VERSION='2026-09-23-ai-gate-v3';
+const PROMPT_VERSION='2026-09-23-ai-value-layer-v9';
+const VALIDATION_RULE_VERSION='2026-09-23-ai-value-v4';
 
 const FEATURE_MAX_CHARS=20;
 
@@ -51,18 +51,39 @@ const baseSchemaProperties={
       }
     }
   },
+  audienceHook:{
+    type:['object','null'],additionalProperties:false,
+    required:['text','source','evidence'],
+    properties:{
+      text:{type:'string',maxLength:52},
+      source:{type:'string',enum:['itemName','itemCaption']},
+      evidence:{type:'string',maxLength:64}
+    }
+  },
+  buyerBenefits:{
+    type:'array',maxItems:2,
+    items:{
+      type:'object',additionalProperties:false,
+      required:['text','source','evidence'],
+      properties:{
+        text:{type:'string',maxLength:52},
+        source:{type:'string',enum:['itemName','itemCaption']},
+        evidence:{type:'string',maxLength:64}
+      }
+    }
+  },
   confidence:{type:'string',enum:['high','medium','low']}
 };
 
 const textSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','confidence'],
+  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence'],
   properties:baseSchemaProperties
 };
 
 const imageSchema={
   type:'object',additionalProperties:false,
-  required:['productType','features','sellingPoints','confidence','imageProductTypeHint'],
+  required:['productType','features','sellingPoints','audienceHook','buyerBenefits','confidence','imageProductTypeHint'],
   properties:{
     ...baseSchemaProperties,
     imageProductTypeHint:{type:['string','null'],maxLength:24}
@@ -73,7 +94,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品をカテゴリ非依存で事実抽出。productTypeは原文の最短の商品種別名詞2〜16字。featuresは素材・仕様・対応・サイズ・容量など比較用の明示事実を最大3件。sellingPointsは購入判断に役立つ原文の完結した4〜36字の連続引用を最大2件。全項目source/evidence必須。text自体も原文引用。途中断片禁止。意味拡張・販促・ランキング・効能・安全・健康・美容・保証・推測禁止。数字単位一致。`;
+const SYSTEM_PROMPT=`楽天商品を事実→購入価値まで整理。productType=原文の商品種別。features=明示事実最大3。sellingPoints=原文引用最大2。audienceHook=原文事実から一段だけ導ける具体的な悩み/場面を1文。buyerBenefits=原文事実から一段だけ導ける実用価値を最大2。各項目source/evidence必須。sellingPointsのtext自体も原文引用。途中断片禁止。誇張・断定・ランキング・効能・安全・健康・美容・保証・推測禁止。数字一致。例:タッチ対応→着けたままスマホ操作しやすい、面ファスナー→フィット調整しやすい。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
