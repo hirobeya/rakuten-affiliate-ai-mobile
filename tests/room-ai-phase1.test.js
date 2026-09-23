@@ -45,6 +45,21 @@ function run(name,fn){
     assert.equal(v.features[0].eligibleForPost,true);
   });
 
+  await run('AI selling points are evidence-gated and category independent',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'収納ベンチ',source:'itemName',evidence:'収納ベンチ'},
+      features:[{text:'折りたたみ式',source:'itemCaption',evidence:'折りたたみ式'}],
+      sellingPoints:[
+        {text:'使わない時はコンパクト収納',source:'itemCaption',evidence:'使わない時はコンパクト収納'},
+        {text:'部屋が必ず片付く',source:'itemCaption',evidence:'大容量収納'}
+      ],
+      confidence:'high'
+    },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].valid,true);
+    assert.equal(v.sellingPoints[0].eligibleForPost,true);
+    assert.equal(v.sellingPoints[1].valid,false);
+  });
+
   await run('image product type conflict switches to fallback',()=>{
     const v=validateAiExtraction({
       productType:{value:'収納ボックス',source:'itemName',evidence:'収納ボックス'},
@@ -492,7 +507,7 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-23-ai-phase1-groq-v4',
+        prompt_version:'2026-09-23-ai-generic-sales-v5',
           validation_rule_version:'2026-09-23-ai-gate-v3',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
@@ -559,9 +574,10 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-23-ai-phase1-groq-v4/);
+    assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
     assert.match(apiText,/cacheVersionMatch/);
-    assert.match(apiText,/英訳・言い換え禁止/);
+    assert.match(apiText,/sellingPoints/);
+    assert.match(apiText,/意味を広げない/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);
@@ -573,10 +589,10 @@ function run(name,fn){
     assert.match(html,/function specificGroundedProductType\(/);
     assert.match(html,/function groundedCaptionFeatures\(/);
     assert.match(html,/function groundedUseContexts\(/);
-    assert.match(html,/function audienceForProduct\(/);
+    assert.doesNotMatch(html,/function audienceForProduct\(/);
     assert.match(html,/captionFacts=groundedCaptionFeatures\(item\)/);
-    assert.match(html,/insight\.productType\+'選びで確認したいポイントをまとめました。'/);
-    assert.match(html,/商品ページに記載のある特徴をチェックできます/);
+    assert.match(html,/insight\.sellingPoints/);
+    assert.match(html,/商品ページで確認できる特徴/);
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
