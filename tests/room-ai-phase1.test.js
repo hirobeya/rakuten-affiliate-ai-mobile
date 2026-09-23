@@ -238,10 +238,10 @@ function run(name,fn){
   await run('compact schema removes unknowns and limits features to three short fields',()=>{
     const text=schemaForCall(false), image=schemaForCall(true);
     assert.deepEqual(text.required,['productType','features','sellingPoints','confidence']);
-    assert.equal(text.properties.features.maxItems,5);
+    assert.equal(text.properties.features.maxItems,4);
     assert.equal(text.properties.features.items.properties.text.maxLength,24);
     assert.equal(text.properties.features.items.properties.evidence.maxLength,32);
-    assert.equal(text.properties.sellingPoints.maxItems,3);
+    assert.equal(text.properties.sellingPoints.maxItems,2);
     assert.equal(text.properties.sellingPoints.items.properties.text.maxLength,40);
     assert.equal(text.properties.sellingPoints.items.properties.evidence.maxLength,80);
     assert.equal(Object.hasOwn(text.properties,'unknowns'),false);
@@ -342,7 +342,7 @@ function run(name,fn){
     assert.match(src,/max_output_tokens:Math\.max\(256,Math\.min\(400,Number\(maxOutputTokens\)\|\|320\)\)/);
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
-    assert.ok(SYSTEM_PROMPT.length<900);
+    assert.ok(SYSTEM_PROMPT.length<260);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
