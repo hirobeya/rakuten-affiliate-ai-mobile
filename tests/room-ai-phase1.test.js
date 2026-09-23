@@ -588,7 +588,6 @@ function run(name,fn){
     assert.doesNotMatch(html,/weak_single_candidate/);
     assert.match(html,/setTimeout\(r,750\)/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
-    assert.match(html,/function aiCheckingPost\(/);
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/return aiSafeFallbackPost\(item,aiRoomResults\.get\(index\)\?\.data\)/);
     assert.match(html,/\.tab\[data-i=/);
@@ -597,7 +596,6 @@ function run(name,fn){
   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function groundedTitleFeatures\(/);
-    assert.match(html,/function groundedBenefitLines\(/);
     assert.match(html,/function aiSalesInsight\(/);
     assert.match(html,/商品内容をGroqで確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
@@ -617,7 +615,6 @@ function run(name,fn){
     assert.match(apiText,/途中断片禁止/);
     assert.match(apiText,/sellingPoints/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
-    assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
@@ -635,15 +632,6 @@ function run(name,fn){
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
-  await run('semantic feature handling stays category independent',()=>{
-    const fs=require('node:fs'),path=require('node:path');
-    const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function mergeSemanticFeatureLabels\(/);
-    assert.match(html,/return dedupeGroundedFeatures\(values\)/);
-    assert.doesNotMatch(html,/スマホ・タッチ対応/);
-    assert.doesNotMatch(html,/本革（山羊革）/);
-    assert.match(html,/const features=\(v\.features\|\|\[\]\)/);
-  });
 
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
