@@ -595,7 +595,7 @@ function run(name,fn){
 
   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function groundedTitleFeatures\(/);
+    assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function aiSalesInsight\(/);
     assert.match(html,/商品内容をGroqで確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
