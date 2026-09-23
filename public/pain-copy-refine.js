@@ -343,12 +343,10 @@
   }
 
   function benefitLead(item,ctx){
-    const s=productSpecificSectionsRaw(item,ctx);
+    const lead=featureLead(item,ctx);
     const impact=lifestyleImpact(item,ctx);
-    const fact=s.facts[0]||'';
-    if(impact && fact) return impact+' '+fact+'のが、この商品のポイント。';
-    if(impact) return impact;
-    return featureLead(item,ctx);
+    if(impact) return lead+' '+impact;
+    return lead;
   }
 
   function productSpecificSectionsRaw(item,ctx){

@@ -43,7 +43,7 @@ test('return bridge cannot relaunch ROOM on a cold history return or reload',()=
   }
 });
 
-test('both rendered ROOM actions preserve the Urenavi browsing context',()=>{
+test('legacy ROOM search action opens separately without replacing Urenavi',()=>{
   const app=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   const functions=app.slice(app.indexOf('function roomSearchUrl('),app.indexOf('function hist('));
   const context=vm.createContext({URLSearchParams,esc:s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')});
@@ -52,5 +52,5 @@ test('both rendered ROOM actions preserve the Urenavi browsing context',()=>{
   assert.match(link,/target="_blank"/);
   assert.match(link,/rel="noopener noreferrer"/);
   assert.match(link,/href="https:\/\/room\.rakuten\.co\.jp\/search\/item\?/);
-  assert.equal((app.match(/\$\{roomAction\(i\)\}/g)||[]).length,2);
+  assert.equal((app.match(/\$\{roomAction\(i\)\}/g)||[]).length,1);
 });
