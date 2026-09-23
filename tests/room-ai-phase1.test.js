@@ -580,7 +580,7 @@ function run(name,fn){
     assert.match(apiText,/2026-09-23-ai-generic-sales-v5/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/意味を広げない/);
+    assert.match(apiText,/意味拡張/);
     assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
     assert.match(appText,/function dedupeGroundedFeatures\(/);
     assert.match(appText,/無料枠のAI上限対象外です。安全な短文を表示します/);

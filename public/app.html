@@ -2593,13 +2593,6 @@ function mergeSemanticFeatureLabels(values){
   return out;
 }
 
-function audienceForProduct(productType,features){
-  const picked=(features||[]).map(x=>String(x||'').trim()).filter(Boolean).slice(0,2);
-  if(picked.length>=2) return picked[0]+'や'+picked[1]+'を重視して選びたい方';
-  if(picked.length===1) return picked[0]+'を重視して選びたい方';
-  return productType+'の仕様を商品ページで確認して選びたい方';
-}
-
 function aiSalesInsight(item,result){
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
