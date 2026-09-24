@@ -76,7 +76,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品から事実だけ抽出。productType=商品名に完全一致する短い具体的商品名詞。表記・空白は原文どおり。明確ならconfidence=high。美顔・美容・ペット・メンズ・レディース・グッズ・用品など属性語単独は禁止し具体名を選ぶ。features=仕様・素材・対応・サイズ・容量・数量・重量・搭載機能を最大3件。sellingPoints=安全な事実を最大2件。features/sellingPointsはtextとevidenceを同じ完全な連続引用。productTypeはvalue=evidence。数字・単位も完全一致。途中切れ禁止。販促・ランキング・配送・効能・安全・健康・美容・保証は禁止。推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止。`;
+const SYSTEM_PROMPT=`楽天商品から事実だけ抽出。productType=商品名に完全一致する1〜2語の具体的商品名詞。仕様語禁止。表記・空白は原文どおり。明確ならconfidence=high。美顔・美容・ペット・メンズ・レディース・グッズ・用品など属性語単独は禁止し具体名を選ぶ。features=仕様・素材・対応・サイズ・容量・数量・重量・搭載機能を最大3件。sellingPoints=安全な事実を最大2件。features/sellingPointsはtextとevidenceを同じ完全な連続引用。productTypeはvalue=evidence。数字・単位も完全一致。途中切れ禁止。販促・ランキング・配送・効能・安全・健康・美容・保証は禁止。推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
