@@ -128,3 +128,47 @@ test('通気性 suppresses duplicate 通気 fact',()=>{
   assert.ok(facts.includes('通気性'),JSON.stringify(facts));
   assert.ok(!facts.includes('通気'),JSON.stringify(facts));
 });
+
+
+test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
+  const names=fs.readdirSync('public').filter(x=>x.endsWith('.js')||x==='app.html');
+  for(const name of names){
+    const src=fs.readFileSync('public/'+name,'utf8');
+    assert.ok(!src.includes('(?<'),name+' contains regex lookbehind');
+  }
+});
+
+test('generic smartphone compatibility and ONE TOUCH never become glove smartphone messaging',()=>{
+  const api=load();
+  for(const name of ['スマホスタンド スマホ対応 卓上','ワンタッチ ONE TOUCH テント']){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    const values=api.valueFromFacts(facts);
+    assert.ok(!values.some(x=>x.label==='スマホ操作'),name+' => '+JSON.stringify({facts,values}));
+  }
+  assert.ok(!api.valueFromFacts(['スマホ対応']).some(x=>x.label==='スマホ操作'));
+  assert.ok(!api.valueFromFacts(['ONE TOUCH']).some(x=>x.label==='スマホ操作'));
+  assert.equal(api.valueFromFacts(['スマホタッチ'])[0]?.label,'スマホ操作');
+});
+
+test('promotional quantity patterns are excluded while attached-count specs remain',()=>{
+  const api=load();
+  const blocked=[
+    ['【限定100個】収納袋','100個'],
+    ['数量限定30個 マスク','30個'],
+    ['2個目半額 スポンジ','2個'],
+    ['2点で10%OFF タオル','2点'],
+    ['3個で10％オフ 洗剤','3個'],
+    ['1個プレゼント ボトル','1個'],
+    ['1個おまけ ケース','1個'],
+    ['1個無料 サンプル','1個'],
+    ['残り3個 バッグ','3個'],
+    ['在庫5個 ケース','5個'],
+    ['2個で¥1000 セット','2個']
+  ];
+  for(const [name,bad] of blocked){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    assert.ok(!facts.includes(bad),name+' => '+JSON.stringify(facts));
+  }
+  const attached=api.extractFallbackTitleFacts({itemName:'替え刃2個付き シェーバー'});
+  assert.ok(attached.includes('2個'),JSON.stringify(attached));
+});
