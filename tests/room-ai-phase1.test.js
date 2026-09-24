@@ -119,6 +119,15 @@ function run(name,fn){
     assert.equal(bad.sellingPoints[0].valid,false);
   });
 
+  await run('brand-like transliteration is not accepted as product type',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'RELX リラクス',source:'itemName',evidence:'RELX リラクス'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'ウォーターピーリング 美顔器 RELX リラクス 超軽量 70g',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.productType.brandLikeProductTypeRisk,true);
+    assert.equal(v.mode,'fallback');
+  });
+
   await run('product type rejects truncation and spec-heavy phrases',()=>{
     const truncated=validateAiExtraction({
       productType:{value:'USBハブ Type-C 7in1 HDMI P',source:'itemName',evidence:'USBハブ Type-C 7in1 HDMI P'},features:[],sellingPoints:[],confidence:'high'
