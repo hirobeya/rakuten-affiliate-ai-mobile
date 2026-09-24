@@ -54,8 +54,8 @@ test('neutral post contains no hook benefit audience or inferred use language',(
   const api=load();
   const item={itemName:'ペットシーツ 54枚 10枚入り ワンタッチ',itemPrice:1980};
   const facts=api.extractFallbackTitleFacts(item);
-  const out=api.buildNeutralFactPost(item,'ペットシーツ',facts);
-  assert.match(out,/ペットシーツの商品名・説明に記載されている仕様です。/);
+  const out=api.buildNeutralFactPost(item,facts);
+  assert.match(out,/商品名・説明に記載されている仕様です。/);
   assert.match(out,/✓ 10枚入り/);
   assert.match(out,/✓ ワンタッチ/);
   assert.doesNotMatch(out,/54枚/);
@@ -67,7 +67,7 @@ test('neutral post contains no hook benefit audience or inferred use language',(
 test('neutral builder refuses facts that are not exact source tokens',()=>{
   const api=load();
   const item={itemName:'防水仕様 ワンタッチ ペットボトル',itemPrice:1000};
-  const out=api.buildNeutralFactPost(item,'ペットボトル',['防水','ワンタッチ','存在しない仕様']);
+  const out=api.buildNeutralFactPost(item,['防水','ワンタッチ','存在しない仕様']);
   assert.doesNotMatch(out,/✓ 防水\n/);
   assert.match(out,/✓ ワンタッチ/);
   assert.doesNotMatch(out,/存在しない仕様/);
