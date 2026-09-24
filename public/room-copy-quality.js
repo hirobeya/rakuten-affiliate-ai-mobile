@@ -933,11 +933,7 @@
     return groundedOpening(a,item,variant,options);
   }
 
-  const SERVER_PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍|当日発送|即日発送|発送/i;
-  const SERVER_CLAIM_RE=/改善|予防|防止|安全|安心|無害|保証|発火しない|燃えにくい|難燃|抗菌|除菌|殺菌|消臭|防臭|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|引き締め|リフトアップ|治る|痩せる|若返/i;
-  const LOCAL_FACT_REJECT_RE=/非|不|無し|なし|不可|除く|目|以上|まで|限定|半額|OFF|オフ|%|％|送料|購入|注文|プレゼント|おまけ/i;
-  const LOCAL_QUANTITY_FORM_RE=/^(?:\d+\s*(?:枚入り|個入|セット|本組|個組)|内容量\s*\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L)?)$/i;
-  const LOCAL_NUMBER_UNIT_RE=/\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L|個|枚|本|袋|組|台|段|色|ポート|時間|分)/i;
+  const FactSafety=(typeof window!=='undefined'&&window.UrenaviFactSafety)||null;
   const LOCAL_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
 
   function titleFactTokens(item){
@@ -949,12 +945,7 @@
   }
 
   function isSafeLocalFactToken(token){
-    const value=String(token||'').trim();
-    if(!value) return false;
-    if(LOCAL_FACT_REJECT_RE.test(value)) return false;
-    if(SERVER_CLAIM_RE.test(value) || SERVER_PROMO_RE.test(value)) return false;
-    if(LOCAL_NUMBER_UNIT_RE.test(value) && !LOCAL_QUANTITY_FORM_RE.test(value)) return false;
-    return true;
+    return Boolean(FactSafety?.isAllowedSpecFact?.(token));
   }
 
   function extractFallbackTitleFacts(item){
@@ -978,7 +969,7 @@
       .slice(0,6);
     if(!safeFacts.length) return '';
     const price=Number(item?.itemPrice);
-    const lines=['商品名・説明に記載されている仕様です。',''];
+    const lines=['商品名に記載されている仕様です。',''];
     for(const fact of safeFacts) lines.push('✓ '+fact);
     if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
@@ -1228,46 +1219,15 @@
   }
 
   function makeRoomCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
-
-    const title=naturalProductIdentity(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    const opening=groundedOpening(a,item,variant,options);
-    if(!opening) return shortFallback(item,true,a);
-    const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
-    const price=priceLine(item);
-    const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
-    let out=trimCopy(opening+facts+ending,500);
-    out=finalScan(out);
-    if(!validateBody(item,a,out)) return shortFallback(item,true,a);
-    return out;
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeThreadsCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
-    const title=buildSafeDisplayName(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    let out=openingFor(a,item,variant,options);
-    if(a.facts[0]) out+='\n✔ '+a.facts[0];
-    const price=priceLine(item,'');
-    out+='\n\n'+title+(price?'\n'+price:'');
-    out=finalScan(trimCopy(out,360));
-    return validateBody(item,a,out)?out:shortFallback(item);
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeInstagramCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
-    const title=buildSafeDisplayName(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    let out=openingFor(a,item,variant);
-    if(a.facts.length) out+='\n\n'+a.facts.map(x=>'✔ '+x).join('\n');
-    const price=priceLine(item);
-    out+='\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+(price?'\n'+price:'');
-    out=finalScan(trimCopy(out,500));
-    return validateBody(item,a,out)?out:shortFallback(item);
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
 
