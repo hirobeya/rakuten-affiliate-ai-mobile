@@ -1230,9 +1230,19 @@
 
   function makeRoomCopy(item,keyword,options={}){
     const a=analyze(item,keyword);
-    const type=buildSafeDisplayName(item,a)||fallbackProductName(item,a);
-    const facts=extractFallbackTitleFacts(item);
-    return buildNeutralFactPost(item,type,facts);
+    if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
+
+    const title=naturalProductIdentity(item,a);
+    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
+    const opening=groundedOpening(a,item,variant,options);
+    if(!opening) return shortFallback(item,true,a);
+    const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
+    const price=priceLine(item);
+    const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
+    let out=trimCopy(opening+facts+ending,500);
+    out=finalScan(out);
+    if(!validateBody(item,a,out)) return shortFallback(item,true,a);
+    return out;
   }
 
   function makeThreadsCopy(item,keyword,options={}){
