@@ -316,7 +316,7 @@ function run(name,fn){
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
-  await run('baseball glove high-confidence grounded productType produces fact-only post',()=>{
+  await run('non-allowlisted baseball usage phrase stays out of post facts',()=>{
     const v=validateAiExtraction({
       productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
       features:[{text:'右投げ用',source:'itemName',evidence:'右投げ用'}],
@@ -325,11 +325,12 @@ function run(name,fn){
     assert.equal(v.mode,'simple');
     const text=phase1Post({title:v.productType.value,features:v.features,price:5980});
     assert.match(text,/^野球グローブ/m);
-    assert.match(text,/右投げ用/);
+    assert.equal(v.features[0].eligibleForPost,false);
+    assert.doesNotMatch(text,/右投げ用/);
     assert.doesNotMatch(text,/掃除用手袋/);
   });
 
-  await run('motorcycle glove high-confidence grounded productType produces fact-only post',()=>{
+  await run('non-allowlisted smartphone compatibility phrase stays out of post facts',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
       features:[{text:'スマホ対応',source:'itemName',evidence:'スマホ対応'}],
@@ -338,7 +339,8 @@ function run(name,fn){
     assert.equal(v.mode,'simple');
     const text=phase1Post({title:v.productType.value,features:v.features,price:3100});
     assert.match(text,/^バイクグローブ/m);
-    assert.match(text,/スマホ対応/);
+    assert.equal(v.features[0].eligibleForPost,false);
+    assert.doesNotMatch(text,/スマホ対応/);
     assert.doesNotMatch(text,/掃除用手袋/);
   });
 
