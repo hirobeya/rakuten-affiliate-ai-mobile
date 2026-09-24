@@ -61,6 +61,12 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
       }
 
       const post=api.buildNeutralFactPost(item,facts);
+      const roomPost=api.makeRoomCopy(item,'');
+      const threadsPost=api.makeThreadsCopy(item,'');
+      const instagramPost=api.makeInstagramCopy(item,'');
+      assert.equal(roomPost,post,genre.nameJa+' ROOM route differs from strict builder');
+      assert.equal(threadsPost,post,genre.nameJa+' Threads route differs from strict builder');
+      assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from strict builder');
       if(post){
         generated++;gGenerated++;
         assert.match(post,/^商品名に記載されている仕様です。/);
