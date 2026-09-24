@@ -12,123 +12,76 @@ function load(){
   return window.UrenaviPainCopy;
 }
 
-test('exact title facts recover safe facts for seven-case production smoke products',()=>{
+test('local fact extraction only returns whole delimited title tokens',()=>{
   const api=load();
-  const cases=[
-    {
-      name:'美顔ローラー 美顔器 リフトアップ 〖微弱電流〗〖防水仕様〗〖充電不要〗 小顔ローラー',
-      expected:['微弱電流','防水仕様']
-    },
-    {
-      name:'ウォーターピーリング 美顔器 RELX 超軽量 70g 超音波 美顔器 ems イオン',
-      expected:['超軽量 70g','超音波','ems','イオン']
-    },
-    {
-      name:'ペットウォーターボトル 犬 グッズ 散歩 外出 ドライブ 旅行 漏れ防止 ワンタッチ',
-      expected:['ワンタッチ']
-    },
-    {
-      name:'ユニ・チャーム デオシート ワイド 54枚 ペットシーツ',
-      expected:['54枚']
-    },
-    {
-      name:'犬用 猫用 ふわふわ ペットベッド 洗える 犬ベッド 猫ベッド',
-      expected:['犬用','猫用','洗える']
-    },
-    {
-      name:'バイク グローブ タッチパネル操作可能 スマホタッチ 通気',
-      expected:['タッチパネル操作可能','スマホタッチ','通気']
-    }
+  const item={itemName:'ライオン 【防水】 非防水 ワンタッチ 2個目半額 54枚 ペットシーツ'};
+  const tokens=api.titleFactTokens(item);
+  assert.ok(tokens.includes('ライオン'));
+  assert.ok(tokens.includes('防水'));
+  assert.ok(tokens.includes('非防水'));
+  const facts=api.extractFallbackTitleFacts(item);
+  assert.ok(facts.includes('ライオン'));
+  assert.ok(facts.includes('防水'));
+  assert.ok(facts.includes('ワンタッチ'));
+  assert.ok(facts.includes('ペットシーツ'));
+  assert.ok(!facts.includes('イオン'));
+  assert.ok(!facts.includes('非防水'));
+  assert.ok(!facts.includes('2個目半額'));
+  assert.ok(!facts.includes('54枚'));
+});
+
+test('negative, condition, claim and promo tokens are rejected structurally',()=>{
+  const api=load();
+  const rejected=[
+    '非防水','防水なし','使用不可','2個目','3個以上','5個まで','数量限定',
+    '半額','10%OFF','送料無料','購入特典','注文限定','プレゼント','おまけ',
+    '小顔','リフトアップ','抗菌','除菌','ランキング','受賞','クーポン','SALE'
   ];
-  for(const row of cases){
-    const facts=api.extractFallbackTitleFacts({itemName:row.name});
-    for(const fact of row.expected) assert.ok(facts.includes(fact),row.name+' missing '+fact+' from '+JSON.stringify(facts));
+  for(const token of rejected){
+    assert.equal(api.isSafeLocalFactToken(token),false,token);
   }
 });
 
-test('deterministic value copy consumes exact local title facts without adding AI value fields',()=>{
+test('only structured quantity tokens are accepted, naked quantities are rejected',()=>{
+  const api=load();
+  const accepted=['10枚入り','2個入','3セット','4本組','2個組','内容量500ml'];
+  const rejected=['10枚','2個','4本','500ml','2個目半額'];
+  for(const token of accepted) assert.equal(api.isSafeLocalFactToken(token),true,token);
+  for(const token of rejected) assert.equal(api.isSafeLocalFactToken(token),false,token);
+});
+
+test('neutral post contains no hook benefit audience or inferred use language',()=>{
+  const api=load();
+  const item={itemName:'ペットシーツ 54枚 10枚入り ワンタッチ',itemPrice:1980};
+  const facts=api.extractFallbackTitleFacts(item);
+  const out=api.buildNeutralFactPost(item,'ペットシーツ',facts);
+  assert.match(out,/ペットシーツの商品名・説明に記載されている仕様です。/);
+  assert.match(out,/✓ 10枚入り/);
+  assert.match(out,/✓ ワンタッチ/);
+  assert.doesNotMatch(out,/54枚/);
+  assert.doesNotMatch(out,/悩み|使いやす|おすすめ|向いて|しやすい|重視して|スマホを見る|お手入れ|省スペース/);
+  assert.match(out,/価格：1,980円/);
+  assert.match(out,/※アフィリエイト広告を利用しています/);
+});
+
+test('neutral builder refuses facts that are not exact source tokens',()=>{
+  const api=load();
+  const item={itemName:'防水仕様 ワンタッチ ペットボトル',itemPrice:1000};
+  const out=api.buildNeutralFactPost(item,'ペットボトル',['防水','ワンタッチ','存在しない仕様']);
+  assert.doesNotMatch(out,/✓ 防水\n/);
+  assert.match(out,/✓ ワンタッチ/);
+  assert.doesNotMatch(out,/存在しない仕様/);
+});
+
+test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
   const html=fs.readFileSync('public/app.html','utf8');
   const quality=fs.readFileSync('public/room-copy-quality.js','utf8');
-  assert.match(html,/const localTitleFacts=/);
-  assert.match(html,/extractFallbackTitleFacts/);
-  assert.match(html,/valueFromFacts/);
-  assert.match(quality,/防水・撥水/);
-  assert.match(quality,/ワンタッチ/);
-  assert.match(quality,/搭載機能/);
-  assert.doesNotMatch(html,/audienceHook/);
-  assert.doesNotMatch(html,/buyerBenefits/);
+  assert.doesNotMatch(html,/valueFromFacts/);
+  assert.doesNotMatch(quality,/VALUE_RULES/);
+  assert.doesNotMatch(quality,/function valueFromFacts\(/);
+  assert.match(html,/buildNeutralFactPost/);
+  assert.match(quality,/商品名・説明に記載されている仕様です/);
 });
-
-test('one-touch fact never resolves to smartphone-touch messaging',()=>{
-  const api=load();
-  const values=api.valueFromFacts(['ワンタッチ']);
-  assert.equal(values.length,1);
-  assert.equal(values[0].label,'ワンタッチ');
-  assert.match(values[0].benefit,/ワンタッチ仕様/);
-  assert.doesNotMatch(values[0].benefit,/スマホ操作/);
-  assert.doesNotMatch(values[0].hook,/スマホ/);
-});
-
-test('katakana boundary prevents Lion brand from fabricating ion feature',()=>{
-  const api=load();
-  const lion=api.extractFallbackTitleFacts({itemName:'ライオン キッチンクリーナー 詰め替え'});
-  assert.ok(!lion.includes('イオン'),JSON.stringify(lion));
-  const ion=api.extractFallbackTitleFacts({itemName:'美顔器 イオン 超音波'});
-  assert.ok(ion.includes('イオン'),JSON.stringify(ion));
-});
-
-test('quantity extraction ignores purchase-limit and shipping-count language',()=>{
-  const api=load();
-  for(const name of [
-    '収納袋 2個以上で送料無料',
-    'タオル お一人様3個まで',
-    'スポンジ 最大5個購入',
-    'マスク 先着10枚限定'
-  ]){
-    const facts=api.extractFallbackTitleFacts({itemName:name});
-    assert.ok(!facts.some(x=>/^(?:2個|3個|5個|10枚)$/.test(x)),name+' => '+JSON.stringify(facts));
-  }
-  assert.ok(api.extractFallbackTitleFacts({itemName:'ペットシーツ 54枚'}).includes('54枚'));
-});
-
-
-test('quantity extraction ignores more purchase and shipping conditions',()=>{
-  const api=load();
-  const blocked=[
-    ['収納袋 2個ご購入で送料無料','2個'],
-    ['スポンジ 3個で送料無料','3個'],
-    ['タオル 2個で1000円','2個'],
-    ['マスク 2個から注文可','2個'],
-    ['洗剤 3個注文で割引','3個'],
-    ['電池 1個あたり500円','1個'],
-    ['ティッシュ おひとり様2個まで','2個'],
-    ['タオル お1人様3個まで','3個']
-  ];
-  for(const [name,bad] of blocked){
-    const facts=api.extractFallbackTitleFacts({itemName:name});
-    assert.ok(!facts.includes(bad),name+' => '+JSON.stringify(facts));
-  }
-});
-
-test('EMS extraction requires ASCII word boundaries',()=>{
-  const api=load();
-  for(const name of ['ABC SYSTEMS ケーブル','items ケース']){
-    const facts=api.extractFallbackTitleFacts({itemName:name});
-    assert.ok(!facts.some(x=>/^ems$/i.test(x)),name+' => '+JSON.stringify(facts));
-    const values=api.valueFromFacts(facts);
-    assert.ok(!values.some(x=>x.label==='搭載機能'),name+' => '+JSON.stringify(values));
-  }
-  const facts=api.extractFallbackTitleFacts({itemName:'美顔器 EMS 超音波'});
-  assert.ok(facts.some(x=>/^EMS$/i.test(x)),JSON.stringify(facts));
-});
-
-test('通気性 suppresses duplicate 通気 fact',()=>{
-  const api=load();
-  const facts=api.extractFallbackTitleFacts({itemName:'バイクグローブ 通気性 スマホ対応'});
-  assert.ok(facts.includes('通気性'),JSON.stringify(facts));
-  assert.ok(!facts.includes('通気'),JSON.stringify(facts));
-});
-
 
 test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
   const names=fs.readdirSync('public').filter(x=>x.endsWith('.js')||x==='app.html');
@@ -136,39 +89,4 @@ test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
     const src=fs.readFileSync('public/'+name,'utf8');
     assert.ok(!src.includes('(?<'),name+' contains regex lookbehind');
   }
-});
-
-test('generic smartphone compatibility and ONE TOUCH never become glove smartphone messaging',()=>{
-  const api=load();
-  for(const name of ['スマホスタンド スマホ対応 卓上','ワンタッチ ONE TOUCH テント']){
-    const facts=api.extractFallbackTitleFacts({itemName:name});
-    const values=api.valueFromFacts(facts);
-    assert.ok(!values.some(x=>x.label==='スマホ操作'),name+' => '+JSON.stringify({facts,values}));
-  }
-  assert.ok(!api.valueFromFacts(['スマホ対応']).some(x=>x.label==='スマホ操作'));
-  assert.ok(!api.valueFromFacts(['ONE TOUCH']).some(x=>x.label==='スマホ操作'));
-  assert.equal(api.valueFromFacts(['スマホタッチ'])[0]?.label,'スマホ操作');
-});
-
-test('promotional quantity patterns are excluded while attached-count specs remain',()=>{
-  const api=load();
-  const blocked=[
-    ['【限定100個】収納袋','100個'],
-    ['数量限定30個 マスク','30個'],
-    ['2個目半額 スポンジ','2個'],
-    ['2点で10%OFF タオル','2点'],
-    ['3個で10％オフ 洗剤','3個'],
-    ['1個プレゼント ボトル','1個'],
-    ['1個おまけ ケース','1個'],
-    ['1個無料 サンプル','1個'],
-    ['残り3個 バッグ','3個'],
-    ['在庫5個 ケース','5個'],
-    ['2個で¥1000 セット','2個']
-  ];
-  for(const [name,bad] of blocked){
-    const facts=api.extractFallbackTitleFacts({itemName:name});
-    assert.ok(!facts.includes(bad),name+' => '+JSON.stringify(facts));
-  }
-  const attached=api.extractFallbackTitleFacts({itemName:'替え刃2個付き シェーバー'});
-  assert.ok(attached.includes('2個'),JSON.stringify(attached));
 });
