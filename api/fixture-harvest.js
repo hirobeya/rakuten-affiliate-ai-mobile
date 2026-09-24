@@ -27,6 +27,15 @@ module.exports=async function handler(req,res){
       if(!r.ok) return res.status(r.status).json({message:'genre fetch failed',status:r.status});
       return res.status(200).json({genres:(Array.isArray(d.children)?d.children:[]).map(cleanGenre).filter(Boolean)});
     }
+    if(mode==='children'){
+      const genreId=String(req.query?.genreId||'').trim();
+      if(!/^\d+$/.test(genreId)) return res.status(400).json({message:'genreId invalid'});
+      const p=new URLSearchParams({applicationId,accessKey,genreId,format:'json',formatVersion:'2'});
+      const r=await fetch(GENRE_URL+'?'+p,{signal:AbortSignal.timeout(12000)});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok) return res.status(r.status).json({message:'genre fetch failed',status:r.status});
+      return res.status(200).json({genreId,genres:(Array.isArray(d.children)?d.children:[]).map(cleanGenre).filter(Boolean)});
+    }
     if(mode==='genre'){
       const genreId=String(req.query?.genreId||'').trim();
       if(!/^\d+$/.test(genreId)) return res.status(400).json({message:'genreId invalid'});
