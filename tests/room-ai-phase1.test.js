@@ -119,6 +119,17 @@ function run(name,fn){
     assert.equal(bad.sellingPoints[0].valid,false);
   });
 
+  await run('decorative brackets end a complete grounded selling point',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+      features:[],
+      sellingPoints:[{text:'充電不要',source:'itemName',evidence:'充電不要'}],
+      confidence:'high'
+    },{itemName:'美顔ローラー 〖充電不要〗 防水仕様',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].boundaryValid,true);
+    assert.equal(v.sellingPoints[0].valid,true);
+  });
+
   await run('incomplete selling point fragments are rejected',()=>{
     const v=validateAiExtraction({
       productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
