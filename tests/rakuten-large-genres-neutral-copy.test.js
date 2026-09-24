@@ -9,6 +9,7 @@ function load(){
   const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
   const window={document,Intl};
   const ctx=vm.createContext({window,Intl,console});
+  vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
   return window.UrenaviPainCopy;
@@ -62,7 +63,7 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
       const post=api.buildNeutralFactPost(item,facts);
       if(post){
         generated++;gGenerated++;
-        assert.match(post,/^商品名・説明に記載されている仕様です。/);
+        assert.match(post,/^商品名に記載されている仕様です。/);
         assert.match(post,/※アフィリエイト広告を利用しています/);
         const factLines=post.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
         assert.ok(factLines.length>0,genre.nameJa+' generated post without facts');
