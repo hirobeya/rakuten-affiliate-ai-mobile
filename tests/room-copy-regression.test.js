@@ -4,6 +4,7 @@ const fs=require('fs');
 const path=require('path');
 
 global.window={};
+require(path.join(__dirname,'..','public','fact-safety.js'));
 require(path.join(__dirname,'..','public','pain-copy.js'));
 require(path.join(__dirname,'..','public','room-copy-quality.js'));
 
