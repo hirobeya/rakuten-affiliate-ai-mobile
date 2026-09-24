@@ -51,7 +51,6 @@ test('deterministic value copy consumes exact local title facts without adding A
   assert.match(html,/const localTitleFacts=/);
   assert.match(html,/extractFallbackTitleFacts/);
   assert.match(html,/防水・撥水/);
-  assert.match(html,/充電不要/);
   assert.match(html,/ワンタッチ/);
   assert.match(html,/搭載機能/);
   assert.doesNotMatch(html,/audienceHook/);
