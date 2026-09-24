@@ -2493,10 +2493,15 @@ function aiSalesInsight(item,result){
   const featureRows=(v.features||[])
     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
     .filter(x=>x.source==='itemName'||x.source==='itemCaption');
-  const features=featureRows
-    .map(x=>String(x.text).trim())
+  const localTitleFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[])
+    .map(x=>String(x).trim())
+    .filter(Boolean);
+  const features=[
+    ...featureRows.map(x=>String(x.text).trim()),
+    ...localTitleFacts
+  ]
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,4);
+    .slice(0,6);
   const sellingPoints=(v.sellingPoints||[])
     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
     .map(x=>String(x.text).trim())
@@ -2511,6 +2516,9 @@ function salesFactCore(value){
 
 const VALUE_RULES=[
   {re:/タッチ|スマホ対応|touch/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
+  {re:/防水仕様|防水|撥水/i,hook:'水まわりで使うことがあるなら、防水・撥水の記載はチェック。',benefit:'水ぬれへの対応が明記された仕様を選びやすい。',label:'防水・撥水'},
+  {re:/ワンタッチ/i,hook:'操作の手順を増やしたくないなら、ワンタッチの記載はチェック。',benefit:'ワンタッチ仕様を確認して選びやすい。',label:'ワンタッチ'},
+  {re:/微弱電流|超音波|ems|イオン/i,hook:'搭載されている機能を比べて選びたいなら、ここはチェック。',benefit:'商品名に記載された搭載機能を確認して選びやすい。',label:'搭載機能'},
   {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
   {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
   {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
