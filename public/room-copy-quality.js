@@ -969,17 +969,16 @@
     return out;
   }
 
-  function buildNeutralFactPost(item,productType,facts=[]){
-    const type=String(productType||'').trim();
+  function buildNeutralFactPost(item,facts=[]){
     const sourceTokens=new Set(titleFactTokens(item));
     const safeFacts=(Array.isArray(facts)?facts:[])
       .map(x=>String(x||'').trim())
       .filter(x=>x&&sourceTokens.has(x)&&isSafeLocalFactToken(x))
       .filter((x,i,a)=>a.indexOf(x)===i)
       .slice(0,6);
-    if(!type || !safeFacts.length) return '';
+    if(!safeFacts.length) return '';
     const price=Number(item?.itemPrice);
-    const lines=[type+'の商品名・説明に記載されている仕様です。',''];
+    const lines=['商品名・説明に記載されている仕様です。',''];
     for(const fact of safeFacts) lines.push('✓ '+fact);
     if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
