@@ -2,7 +2,7 @@
   const api=factory();
   if(typeof module==='object'&&module.exports) module.exports=api;
   if(root) root.UrenaviFactSafety=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(){
+})(typeof window!=='undefined'?window:(typeof globalThis!=='undefined'?globalThis:this),function(){
   'use strict';
 
   const PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍|当日発送|即日発送|発送/i;
