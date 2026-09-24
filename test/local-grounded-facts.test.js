@@ -26,9 +26,17 @@ test('local facts use a strict allowlist instead of exclusion-only tokens',()=>{
 test('only explicit measured specs structured counts standards and materials are allowed',()=>{
   const api=load();
   const accepted=['500ml','約196g','10000mAh','1.45x1m','10枚入り','2個入','3セット','4本組','2個組','3枚×7袋','USB-C対応','HDMI','本革','コットン','セラミック','日本製'];
-  const rejected=['10枚','2個','4本','防水','ワンタッチ','散歩','ドライブ','ギフト','父の日','メンズ','人気色','とらや','トヨタ','ケース','牛カレー'];
+  const rejected=['10枚','2個','4本','防水','ワンタッチ','散歩','ドライブ','ギフト','父の日','メンズ','人気色','とらや','トヨタ','ケース','牛カレー','A4','B3','PD'];
   for(const token of accepted) assert.equal(api.isSafeLocalFactToken(token),true,token);
   for(const token of rejected) assert.equal(api.isSafeLocalFactToken(token),false,token);
+});
+
+test('ambiguous repeated units and multiple count variants are dropped',()=>{
+  const api=load();
+  const variants=api.extractFallbackTitleFacts({itemName:'ハーブティー 20g 30g 50g コットン'});
+  assert.deepEqual(Array.from(variants),['コットン']);
+  const counts=api.extractFallbackTitleFacts({itemName:'セット 3枚入り 5枚入り 本革'});
+  assert.deepEqual(Array.from(counts),['本革']);
 });
 
 test('all client copy channels use the same neutral safe-fact output',()=>{
