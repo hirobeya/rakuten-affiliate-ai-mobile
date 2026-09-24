@@ -119,6 +119,15 @@ function run(name,fn){
     assert.equal(bad.sellingPoints[0].valid,false);
   });
 
+  await run('generic descriptor-only product type is rejected',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔',source:'itemName',evidence:'美顔'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'4in1美顔 かっさ プレート 美顔器',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.productType.genericProductTypeRisk,true);
+    assert.equal(v.mode,'fallback');
+  });
+
   await run('decorative brackets end a complete grounded selling point',()=>{
     const v=validateAiExtraction({
       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
