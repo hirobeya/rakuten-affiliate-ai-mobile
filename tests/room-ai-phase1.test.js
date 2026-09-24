@@ -76,7 +76,8 @@ function run(name,fn){
       confidence:'high'
     },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
     assert.equal(v.sellingPoints[0].valid,true);
-    assert.equal(v.sellingPoints[0].eligibleForPost,true);
+    assert.equal(v.sellingPoints[0].specLike,false);
+    assert.equal(v.sellingPoints[0].eligibleForPost,false);
     assert.equal(v.sellingPoints[1].valid,false);
   });
 
@@ -742,7 +743,8 @@ function run(name,fn){
     assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
     assert.match(apiText,/途中切れ禁止/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
+    assert.match(libText,/eligibleForPost:valid&&specLike&&\(source==='itemName'\|\|source==='itemCaption'\)/);
+    assert.match(libText,/require\('\.\.\/public\/fact-safety\.js'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
@@ -768,10 +770,11 @@ function run(name,fn){
     assert.doesNotMatch(quality,/hook:/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
     assert.match(html,/buildNeutralFactPost/);
-    assert.match(quality,/商品名・説明に記載されている仕様です/);
+    assert.match(quality,/商品名に記載されている仕様です/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
-    assert.match(quality,/SERVER_CLAIM_RE/);
-    assert.match(quality,/SERVER_PROMO_RE/);
+    assert.match(quality,/UrenaviFactSafety/);
+    assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
+    assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
@@ -790,6 +793,27 @@ function run(name,fn){
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
+
+  await run('Groq eligibleForPost uses strict spec allowlist',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'商品',source:'itemName',evidence:'商品'},
+      features:[
+        {text:'500ml',source:'itemName',evidence:'500ml'},
+        {text:'USB-C対応',source:'itemName',evidence:'USB-C対応'},
+        {text:'本革',source:'itemName',evidence:'本革'},
+        {text:'ケース',source:'itemName',evidence:'ケース'},
+        {text:'トヨタ',source:'itemName',evidence:'トヨタ'},
+        {text:'防水',source:'itemName',evidence:'防水'}
+      ],sellingPoints:[],confidence:'high'
+    },{itemName:'商品 500ml USB-C対応 本革 ケース トヨタ 防水',itemCaption:''},{imageAvailable:false});
+    const eligible=v.features.filter(x=>x.eligibleForPost).map(x=>x.text);
+    assert.deepEqual(eligible,['500ml','USB-C対応','本革']);
+    for(const x of v.features.filter(x=>['ケース','トヨタ','防水'].includes(x.text))){
+      assert.equal(x.valid,true);
+      assert.equal(x.specLike,false);
+      assert.equal(x.eligibleForPost,false);
+    }
+  });
 
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
