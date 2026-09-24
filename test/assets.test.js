@@ -32,7 +32,8 @@ test('product engine is loaded before interactive app logic and is not injected 
 test('app has a single source of truth for product copy',()=>{
   const app=fs.readFileSync('public/app.html','utf8');
   assert.match(app,/function productContext\(i\)/);
-  assert.match(app,/UrenaviPainCopy\.makeRoomCopy/);
+  assert.match(app,/function neutralRulePost\(/);
+  assert.match(app,/UrenaviPainCopy\?\.buildNeutralFactPost/);
   assert.match(app,/UrenaviPainCopy\.makeThreadsCopy/);
   assert.match(app,/UrenaviPainCopy\.makeInstagramCopy/);
   assert.doesNotMatch(app,/楽天で見つけた注目アイテム/);
