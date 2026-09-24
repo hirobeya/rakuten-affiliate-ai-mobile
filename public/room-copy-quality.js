@@ -942,7 +942,7 @@
       /(?:超)?軽量\s*\d+(?:\.\d+)?\s*(?:g|kg)/gi,
       /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
       /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
-      /\d+\s*(?:枚|個|本|袋|箱|組|点)(?!\s*(?:販売|突破|達成))/g,
+      /(?<!お一人様)(?<!最大)(?<!累計)(?<!先着)\d+\s*(?:枚|個|本|袋|箱|組|点)(?!\s*(?:販売|突破|達成|以上|まで|購入|ごと|につき|限定))/g,
       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
     ];
     for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
@@ -952,9 +952,43 @@
       const m=re.exec(title);
       if(m) add(m[0],m.index);
     }
-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','EMS','ems','イオン','洗える','ワンタッチ','スマホ対応','スマホタッチ','タッチパネル操作可能','通気性','通気'];
-    for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
+    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','EMS','ems','洗える','ワンタッチ','スマホ対応','スマホタッチ','タッチパネル操作可能','通気性','通気'];
+    for(const word of words){
+      if(word==='防水'&&title.includes('防水仕様')) continue;
+      const i=title.indexOf(word);if(i>=0)add(word,i);
+    }
+    const boundedKatakana=[/(?<![ァ-ヶー])イオン(?![ァ-ヶー])/g];
+    for(const re of boundedKatakana){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
     return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
+  }
+
+  const VALUE_RULES=[
+    {re:/スマホタッチ|タッチパネル|スマホ対応|touch/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
+    {re:/防水仕様|防水|撥水/i,hook:'水まわりで使うことがあるなら、防水・撥水の記載はチェック。',benefit:'水ぬれへの対応が明記された仕様を選びやすい。',label:'防水・撥水'},
+    {re:/ワンタッチ/i,hook:'操作の手順を増やしたくないなら、ワンタッチの記載はチェック。',benefit:'ワンタッチ仕様を確認して選びやすい。',label:'ワンタッチ'},
+    {re:/微弱電流|超音波|ems|(?<![ァ-ヶー])イオン(?![ァ-ヶー])/i,hook:'搭載されている機能を比べて選びたいなら、ここはチェック。',benefit:'商品名に記載された搭載機能を確認して選びやすい。',label:'搭載機能'},
+    {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
+    {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
+    {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
+    {re:/防寒|裏起毛|保温/i,hook:'寒い時期にも使いたいなら、ここはチェック。',benefit:'寒い時期の使用を考えた仕様を選びやすい。',label:'防寒'},
+    {re:/折りたたみ|折り畳み/i,hook:'使わないときの置き場所を取りたくないなら、ここはチェック。',benefit:'使わないときは省スペースでしまいやすい。',label:'省スペース'},
+    {re:/軽量|軽い/i,hook:'持ち運びの負担を抑えたいなら、ここはチェック。',benefit:'持ち運びや取り回しの負担を抑えやすい。',label:'軽さ'},
+    {re:/洗える|丸洗い|水洗い|洗濯可/i,hook:'汚れた後のお手入れを簡単にしたいなら、ここはチェック。',benefit:'汚れたときに手入れしやすい。',label:'お手入れ'},
+    {re:/大容量|容量\s*\d|\d+\s*(?:L|ℓ|ml|mL)/i,hook:'まとめて入れられる容量を重視するなら、ここはチェック。',benefit:'収納量を重視して選びやすい。',label:'容量'},
+    {re:/\d+\s*(?:個|枚|本|点|食|包|袋)\s*(?:セット|入|入り)?/i,hook:'まとめ買いのしやすさを重視するなら、ここはチェック。',benefit:'必要な数をまとめて揃えやすい。',label:'セット内容'},
+    {re:/usb[- ]?c|type[- ]?c|急速充電|pd対応/i,hook:'充電まわりをすっきりまとめたいなら、ここはチェック。',benefit:'対応端子や充電仕様を見て選びやすい。',label:'充電対応'},
+    {re:/滑り止め|ノンスリップ|グリップ/i,hook:'持ったときの扱いやすさを重視するなら、ここはチェック。',benefit:'グリップ性を意識して選びやすい。',label:'グリップ'},
+    {re:/クッション|低反発|高反発|厚手/i,hook:'当たりのやわらかさや厚みを重視するなら、ここはチェック。',benefit:'クッション性を比べて選びやすい。',label:'クッション'}
+  ];
+
+  function valueFromFacts(features=[]){
+    const matched=[];
+    for(const fact of features){
+      const text=String(fact||'').trim();
+      const rule=VALUE_RULES.find(r=>r.re.test(text));
+      if(rule&&!matched.some(x=>x.label===rule.label)) matched.push({...rule,fact:text});
+    }
+    return matched.slice(0,2);
   }
 
   function fallbackProductName(item,analysis){
@@ -1246,6 +1280,7 @@
   api.detectLegalRisk=detectLegalRisk;
   api.buildSafeDisplayName=buildSafeDisplayName;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
+  api.valueFromFacts=valueFromFacts;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;
