@@ -119,6 +119,19 @@ function run(name,fn){
     assert.equal(bad.sellingPoints[0].valid,false);
   });
 
+  await run('product type rejects truncation and spec-heavy phrases',()=>{
+    const truncated=validateAiExtraction({
+      productType:{value:'USBハブ Type-C 7in1 HDMI P',source:'itemName',evidence:'USBハブ Type-C 7in1 HDMI P'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'USBハブ Type-C 7in1 HDMI PD対応 SDカード',itemCaption:''},{imageAvailable:false});
+    assert.equal(truncated.productType.valid,false);
+    assert.equal(truncated.productType.boundaryValid,false);
+    const specHeavy=validateAiExtraction({
+      productType:{value:'Tシャツ メンズ 綿100% 半袖',source:'itemName',evidence:'Tシャツ メンズ 綿100% 半袖'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'Tシャツ メンズ 綿100% 半袖',itemCaption:''},{imageAvailable:false});
+    assert.equal(specHeavy.productType.valid,false);
+    assert.equal(specHeavy.productType.productTypeStructureRisk,true);
+  });
+
   await run('generic descriptor-only product type is rejected',()=>{
     const v=validateAiExtraction({
       productType:{value:'美顔',source:'itemName',evidence:'美顔'},features:[],sellingPoints:[],confidence:'high'
