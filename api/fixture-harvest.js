@@ -36,6 +36,25 @@ module.exports=async function handler(req,res){
       if(!r.ok) return res.status(r.status).json({message:'genre fetch failed',status:r.status});
       return res.status(200).json({genreId,genres:(Array.isArray(d.children)?d.children:[]).map(cleanGenre).filter(Boolean)});
     }
+    if(mode==='keyword'){
+      const keyword=String(req.query?.keyword||'').trim().slice(0,80);
+      if(!keyword) return res.status(400).json({message:'keyword required'});
+      const p=new URLSearchParams({
+        applicationId,accessKey,keyword,format:'json',formatVersion:'2',
+        hits:'30',availability:'1',sort:'standard'
+      });
+      const r=await fetch(ITEM_URL+'?'+p,{signal:AbortSignal.timeout(15000)});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok) return res.status(r.status).json({message:'item fetch failed',status:r.status});
+      const raw=Array.isArray(d.items)?d.items:Array.isArray(d.Items)?d.Items:[];
+      const items=raw.map(v=>v?.Item||v).map(x=>({
+        itemName:String(x?.itemName||'').trim(),
+        itemPrice:Number(x?.itemPrice)||0,
+        genreId:String(x?.genreId||''),
+        itemCode:String(x?.itemCode||'')
+      })).filter(x=>x.itemName).slice(0,25);
+      return res.status(200).json({keyword,items});
+    }
     if(mode==='genre'){
       const genreId=String(req.query?.genreId||'').trim();
       if(!/^\d+$/.test(genreId)) return res.status(400).json({message:'genreId invalid'});
