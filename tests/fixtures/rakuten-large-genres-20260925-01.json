@@ -1,0 +1,1266 @@
+{
+  "source": "Rakuten Ichiba API",
+  "capturedAt": "2026-09-25",
+  "genres": [
+    {
+      "genreId": "100371",
+      "nameJa": "レディースファッション",
+      "items": [
+        {
+          "itemName": "OPAQUE オペーク チェック ロング スカート sizeM/黒x白 ■■ ☆ gfd0 レディース【USED】【中古】【古着】【ブランド古着買取・販売ABJ】",
+          "itemPrice": 770,
+          "genreId": "110734",
+          "itemCode": "furugi-abj:11195784"
+        },
+        {
+          "itemName": "【送料無料】トップス カジュアル おしゃれ エレガント ドット シャツ 春秋 ファッション シンプル 風 サテン 長袖",
+          "itemPrice": 6053,
+          "genreId": "206471",
+          "itemCode": "miz-design:10049443"
+        },
+        {
+          "itemName": "ARTS&SCIENCE アーツアンドサイエンスパンツ（その他） レディース 1(S位) 紺【中古】【古着】",
+          "itemPrice": 5200,
+          "genreId": "206440",
+          "itemCode": "ragtag:17696763"
+        },
+        {
+          "itemName": "ボアジャケット レディース ボアブルゾン ボアコート ブルゾン 防寒 フリース スタンドカラー ファー ふわふわ モコモコ 可愛い ゆったり 秋冬アウター 秋冬 冬 秋 春 春秋 秋冬春 防寒",
+          "itemPrice": 7180,
+          "genreId": "112719",
+          "itemCode": "takami-store:10062026"
+        },
+        {
+          "itemName": "【中古】plage / プラージュMoist V/N TEE半袖Tシャツ【cacgahae-l】",
+          "itemPrice": 2750,
+          "genreId": "303656",
+          "itemCode": "kanful:11978349"
+        },
+        {
+          "itemName": "ポリエステル 旅行 プール 海水浴 ビーチ XL L M S 墨緑花 紫紅",
+          "itemPrice": 5263,
+          "genreId": "409365",
+          "itemCode": "kansaisakabashop:10018216"
+        },
+        {
+          "itemName": "【サイズオーダー】パーティードレス ショートドレス ミニ ミディアム イブニングドレス party dress 結婚式 披露宴 二次会 演奏会 フォーマル カラードレス 花嫁ドレス お呼ばれ オーダードレス TP0384",
+          "itemPrice": 20800,
+          "genreId": "555084",
+          "itemCode": "erinbella:10000370"
+        },
+        {
+          "itemName": "レディース トップス 無袖 キャミソール プリーツ 収腰 デザイン ハイウエスト ワイドパンツ セットアップ 浅緑 ピンク 黒 気質 优雅 スタイル 私服 御姐風 春季 コレクション 切り替え デザイン 軽量 素材 ビッグシルエット 伸縮性 素材 日常使",
+          "itemPrice": 6700,
+          "genreId": "112719",
+          "itemCode": "remake-buddy:10445195"
+        },
+        {
+          "itemName": "サンダル レディース ぺたんこ 防水 ストラップ ベルトデザイン 滑り止め 36-40cm ブラック ピンク ホワイト カーキ 夏の外出 レイン対応 ビーチサンダル ルーム外履きにも使える",
+          "itemPrice": 3440,
+          "genreId": "101801",
+          "itemCode": "felixland:10023199"
+        },
+        {
+          "itemName": "花柄刺繍ベスト レディース 婦人服 春物 春夏 トップス 服 シニア 羽織り 高齢者 ファッション 前開きベ 春夏 軽量 通気性 おしゃれ かわいい 上品 体型カバー 散歩 外出 冷房対策 母の日",
+          "itemPrice": 2680,
+          "genreId": "403890",
+          "itemCode": "goon00:10046695"
+        },
+        {
+          "itemName": "レディース ワンピース水着 連体 背中開き 三角 腹部カバー スリム ビキニ風 温泉 泳装 黒 白 米 純色 セクシー 保守 ジャカード ナイロン スパンデックス ポリエステル 無袖 胸パッド 無ワイヤー 200g プール ビーチ 水中運動 軽量 伸縮性",
+          "itemPrice": 4100,
+          "genreId": "409365",
+          "itemCode": "shadowtail:11140118"
+        },
+        {
+          "itemName": "ブラウス レディース 半袖 Vネック かぎ針編み 透かし彫り カーディガン ショート丈 トップス 春夏 韓国風",
+          "itemPrice": 3500,
+          "genreId": "112719",
+          "itemCode": "remake-buddy:10771241"
+        },
+        {
+          "itemName": "休闲裤 花柄 薄手 奶奶裤 宽松 直筒 九分裤 显瘦 妈妈装 冰丝 夏季 复古 减龄 40代 50代 60代 宽松腰 显瘦 遮肚",
+          "itemPrice": 2700,
+          "genreId": "206440",
+          "itemCode": "astershop:10444728"
+        },
+        {
+          "itemName": "オフィス Tシャツ カジュアル レディース 丸首 パフスリーブ カットソー 半袖tシャツ ゆったり クルーネック パフ袖 体型カバー 半袖 無地 きれいめ 上品 ボリューム袖 コットン 綿 大人 シンプル 春 夏 トップス 通勤",
+          "itemPrice": 1900,
+          "genreId": "303656",
+          "itemCode": "sshop1:10111139"
+        },
+        {
+          "itemName": "【中古】ブルーフロンス BLUE FRONCE デニムジャケット 長袖 胸ポケット 40 ベージュ /ML ■ECF006 レディース 【ベクトル 古着】 260910",
+          "itemPrice": 3600,
+          "genreId": "555087",
+          "itemCode": "vectorpremium:19416696"
+        },
+        {
+          "itemName": "レディース 薄手 スカンツ ワイドパンツ 通気性 綿麻 女性 ガウチョパンツ きれいめ リネン 綿麻 コットンリネン スカーチョ ワイドパンツ ウェストゴム ウェスト紐 体型カバー 細見せ",
+          "itemPrice": 3720,
+          "genreId": "206440",
+          "itemCode": "hayashop:10086032"
+        },
+        {
+          "itemName": "女の子 トップス ピンク チェック プリーツ キャミソール ワイドパンツ セット 綿 素材 伸縮性 軽量 夏 服 かわいい 柄 デザイン 通気性 涼しい 子供服 幼児 ガールズ ファッション 日常使い",
+          "itemPrice": 3300,
+          "genreId": "110729",
+          "itemCode": "lilishop6-store:10715687"
+        },
+        {
+          "itemName": "ワンピース レディース レトロ 花柄 Vネック 短袖 ロングドレス エレガント プリント ファッション スタイリッシュ 女性用 日常使い 膝下丈 軽やか シルエット",
+          "itemPrice": 4773,
+          "genreId": "110734",
+          "itemCode": "miyashop-01:11371633"
+        },
+        {
+          "itemName": "【中古】MM6◆ダウンジャケット/S/ポリエステル/ブラック/S32AM0271【レディースウェア】",
+          "itemPrice": 55660,
+          "genreId": "555087",
+          "itemCode": "jumblestore:38541942"
+        },
+        {
+          "itemName": "【中古】インディヴィ INDIVI パンツ 38 茶 ブラウン チェック柄 クロップド丈 /AO42 ■GY70 レディース 【ベクトル 古着】 260623",
+          "itemPrice": 2000,
+          "genreId": "206440",
+          "itemCode": "vectorpremium:19206009"
+        }
+      ]
+    },
+    {
+      "genreId": "551177",
+      "nameJa": "メンズファッション",
+      "items": [
+        {
+          "itemName": "＼P5倍 当店だけの大還元祭 期間限定 9/19〜9/27／スウェット トレーナー ヒップホップ チカーノ チカーナ chicano chicana ホーミー homies メキシコ ウエッサイ westcoast ブランド アパレル ファッション メンズ レディース アパレル ワンポイント",
+          "itemPrice": 4950,
+          "genreId": "303855",
+          "itemCode": "i-tron:12915447"
+        },
+        {
+          "itemName": "Ernie Palo アーニーパロ 25SS 日本製 Melange L/S T-shirt メランジロングスリーブTシャツ EP09CT07 48 BLACK 長袖 定価46,200円 リンガー リブ トップス【新古品】【中古】【Ernie Palo】",
+          "itemPrice": 31980,
+          "genreId": "551180",
+          "itemCode": "loop-online:10152990"
+        },
+        {
+          "itemName": "Tシャツ メンズ 半袖 カットソー トップス 厚手 ゆったり 大きいサイズ ストリート系 アメカジ カジュアル プルオーバー 丸首 クルーネック コットン 綿 おしゃれ 通学 お出かけ 夏",
+          "itemPrice": 3100,
+          "genreId": "551180",
+          "itemCode": "inokoya:10346565"
+        },
+        {
+          "itemName": "シャツ メンズ 長袖 デジタルプリント ヨーロッパ風 アメリカ風 トレンド トップス カジュアル ストリート おしゃれ 春夏",
+          "itemPrice": 5900,
+          "genreId": "551182",
+          "itemCode": "novolstore:10894477"
+        },
+        {
+          "itemName": "桑和 3400 防風カラーブルゾン Mサイズ レッド(43) SEDUCTIVE 【北海道・沖縄・離島配送不可】",
+          "itemPrice": 8422,
+          "genreId": "558873",
+          "itemCode": "fujix:12485607"
+        },
+        {
+          "itemName": "メンズ Tシャツ 短袖 丸首 薄手 ゆったり レイヤード トップス 針織 セーター 若者 夏用 吸湿速乾 化繊混紡 ロブヘム 切り替え 色 ホワイト ピンク レッド ブラック ライトグレー ベージュ ライトグリーン ダークグレー ライトブルー キャメル",
+          "itemPrice": 3979,
+          "genreId": "551180",
+          "itemCode": "orange-island:10779666"
+        },
+        {
+          "itemName": "エムシーツーセイントバース メンズ カーディガン アウター Notting hooded cardigan Grey",
+          "itemPrice": 54800,
+          "genreId": "101807",
+          "itemCode": "asty-shop:47048910"
+        },
+        {
+          "itemName": "おもしろTシャツ みかん箱 【宴の始まりじゃー！】 ドライ生地 ポリエステル 文字Tシャツ プレゼント ふざけtシャツ 格言 名言 語録",
+          "itemPrice": 2280,
+          "genreId": "551180",
+          "itemCode": "mikanbako:10020460"
+        },
+        {
+          "itemName": "ジャージ メッシュパンツ ズボン ロングパンツ パンツ ズボン 薄手 ジョガーパンツ スポーツ",
+          "itemPrice": 3150,
+          "genreId": "558846",
+          "itemCode": "janworks:10016816"
+        },
+        {
+          "itemName": "大きいサイズ カジュアル コットン セットアップ スウェット スエット 長袖 ストリート系コーデ b系 綿 春秋 スウェットパンツ ファッション シンプル パーカー 上下セット 裏起毛",
+          "itemPrice": 3602,
+          "genreId": "303855",
+          "itemCode": "raihu:10112102"
+        },
+        {
+          "itemName": "メンズ ポロシャツ 夏 短袖 シンプル 伸縮性 接触冷感 薄手 トップス 普段使い カジュアル 吸湿速乾 軽量 綿混 ブラック ネイビー グレー",
+          "itemPrice": 4028,
+          "genreId": "403915",
+          "itemCode": "faithful11:10056118"
+        },
+        {
+          "itemName": "ニット セーター キッズ 男の子 子供 ポロシャツ プルオーバー トップス 長袖 ウール 羊毛 暖かい あったか 防寒 秋冬 通学 通園 お出かけ カジュアル シンプル おしゃれ 定番 スタンダード 上着 インナー",
+          "itemPrice": 4300,
+          "genreId": "403915",
+          "itemCode": "putera:10490310"
+        },
+        {
+          "itemName": "Tシャツ メンズ 春夏 長袖 クルーネック スリムフィット アクリル 麻混紡 デザインプリント トップス カジュアル 抗菌 デイリーユース",
+          "itemPrice": 5087,
+          "genreId": "551180",
+          "itemCode": "ajyuri:10480178"
+        },
+        {
+          "itemName": "アウトレット 50%OFF 裏毛パーカー パーカー メンズ トップス 長袖 無地 裏毛・メール便不可【Z】【251B】",
+          "itemPrice": 1980,
+          "genreId": "502530",
+          "itemCode": "osakewalker:10007780"
+        },
+        {
+          "itemName": "ポロシャツ メンズ 長袖 コットン混紡 無地 厚手 春秋 トップス 抗菌 防臭 ノーアイロン 白 紺 グレー",
+          "itemPrice": 4800,
+          "genreId": "112726",
+          "itemCode": "shadowtail:10488277"
+        },
+        {
+          "itemName": "[BURTLE] [バートル] エアークラフト 半袖ブルゾン (ファンなし) AC2106 ハイバック AIRCRAFT L 57スティ―ルグレー",
+          "itemPrice": 5460,
+          "genreId": "566039",
+          "itemCode": "gramsky2nd:10031674"
+        },
+        {
+          "itemName": "デニムパンツ ユニセックス アメカジ ストリート系 レトロ ウォッシュ加工 しわ加工 ゆったり ドレープ感 ワイド ストレート ロング丈 カジュアル ジーンズ 綿 ブルー ブラック",
+          "itemPrice": 5169,
+          "genreId": "558846",
+          "itemCode": "narukimar:10437010"
+        },
+        {
+          "itemName": "ストレッチパンツ 夏 メンズ 速乾 超伸縮 スキニーパンツ チノパンツ 薄手 9分丈 ストレッチ テーパードパンツ 薄手 チノパン ス",
+          "itemPrice": 2880,
+          "genreId": "558846",
+          "itemCode": "mnshoten-osaka:10036928"
+        },
+        {
+          "itemName": "シャツ メンズ 半袖 トップス 接触冷感 カジュアル 無地 ストリート系 韓国風 オーバーサイズ ゆったり シンプル 普段使い アウトドア オールシーズン",
+          "itemPrice": 3300,
+          "genreId": "551182",
+          "itemCode": "lachaceshop:10501611"
+        },
+        {
+          "itemName": "【送料無料】ワークパンツ 作業ズボン 作業着 夏用 スリム ボトムス 五分丈 半ズボン カーゴパンツ ショートパンツ ハーフパンツ",
+          "itemPrice": 2780,
+          "genreId": "558846",
+          "itemCode": "mondeselection:10001884"
+        }
+      ]
+    },
+    {
+      "genreId": "100433",
+      "nameJa": "インナー・下着・ナイトウェア",
+      "items": [
+        {
+          "itemName": "靴下 男性用 コットン 抗菌 防臭 吸汗 中筒 リブソックス オールシーズン 普段使い ビジネス フォーマル カジュアル 白 グレー 黒 紺",
+          "itemPrice": 2700,
+          "genreId": "408907",
+          "itemCode": "lachaceshop:10302322"
+        },
+        {
+          "itemName": "メンズビキニ 男性下着 ティーバック Tバッグ ビキニブリーフ インナー ローカット 透け 老人の日",
+          "itemPrice": 2373,
+          "genreId": "303991",
+          "itemCode": "powerful55:10019933"
+        },
+        {
+          "itemName": "パジャマ メンズ 薄手 春 夏 秋 長袖 長ズボン 2点セット ルームウェア 上下セット 春 夏 秋 冬 コットン 前開き パジャマ 男性 紳士 部屋",
+          "itemPrice": 3240,
+          "genreId": "510884",
+          "itemCode": "gori:10012801"
+        },
+        {
+          "itemName": "パジャマ モコモコルームウェア レディース 秋冬 長袖 パジャマ フランネルルームウェア 無地 暖かい 上下セット 可愛い 厚手 部屋着 ゆったり韓国風 オシャレ",
+          "itemPrice": 4484,
+          "genreId": "408907",
+          "itemCode": "bi-jou:10039496"
+        },
+        {
+          "itemName": "パジャマ　レディース　上下 春秋 女性用 クラウド コットン パジャマ 長袖 胸 パッド 付きの 大きいサイズ カーディガン 屋外で 着用 可能 グリーンの 民族 風 スーツ ホームウェア",
+          "itemPrice": 5519,
+          "genreId": "100452",
+          "itemCode": "miyashop-01:11280108"
+        },
+        {
+          "itemName": "送料無料 レッグウォーマー レディース 女性 レッグウェア ルーズソックス風 ロング丈 長め ゆったり ボリューム 冷え対象 カジュアル おしゃれ",
+          "itemPrice": 2280,
+          "genreId": "403731",
+          "itemCode": "aikei2016:10080801"
+        },
+        {
+          "itemName": "【送料無料】ユメロンHEATRAY エアー ボディウォーマー ブラック",
+          "itemPrice": 5500,
+          "genreId": "206732",
+          "itemCode": "auc-formals:10095223"
+        },
+        {
+          "itemName": "レギンス 裏起毛 ボトムス キッズ タイツ 子供 パンツ 女の子 100cm 110cm 120cm 130cm 140cm",
+          "itemPrice": 1680,
+          "genreId": "510882",
+          "itemCode": "shinri:10024355"
+        },
+        {
+          "itemName": "【お得な3枚セット】Calvin Klein カルバンクライン ボクサーパンツ 3枚組 マルチカラー or ワンカラー トランクス アンダーウェア 下着 正規品 おしゃれ プレゼント ギフト 000NB4002A ボクサー 3 ユニット",
+          "itemPrice": 6950,
+          "genreId": "303975",
+          "itemCode": "mycolor:10000347"
+        },
+        {
+          "itemName": "体感-5℃ 送料無料 高品質 お得な5枚セット シルク 福袋 吸汗速乾 シンプル おしゃれ 伸縮性 響かない スポーツ 薄型 男性用 シームレス ノーマル 無地 ストレッチ サラッと快適 5A抗菌 消臭 大きいサイズ ゴルフウェア メンズインナー パンツ ヨガ 抗菌加工 インナーパンツ",
+          "itemPrice": 3980,
+          "genreId": "303975",
+          "itemCode": "yuiyui:10000892"
+        },
+        {
+          "itemName": "靴下 ソックス くつ下 日本製 ブランド カーキ グレー 紺 無地 ビジネス ローゲージ レディース メンズ 天然素材 春 秋 冬 暖かい かわいい 綿 厚手 防寒 あったか 丈夫 ソウキ SOUKI 大きいサイズ 22 23 24 25 26 27 履き口 ゆったり 脱げにくい おしゃれ プレゼント ギフト",
+          "itemPrice": 2530,
+          "genreId": "403725",
+          "itemCode": "shinfulife:10005643"
+        },
+        {
+          "itemName": "ワコール wacoal BQB400 ブラジャー 3/4カップ 脇高 着やせ 高補整 ミドリフ丈ブラ スタイルチェンジャー Gカップ WB",
+          "itemPrice": 16632,
+          "genreId": "110854",
+          "itemCode": "emi-ikoma:10015948"
+        },
+        {
+          "itemName": "2枚セット ショーツ 下着 パンツ 快適 通気性 伸縮性 ストレッチ フィット感 蒸れない 抗菌 防臭 清潔 肌に優しい 柔らかい さらさら 吸汗速乾 響かない 裾切りっぱなし 食い込まない 締め付けない 股上 安定感 耐久性 型崩れしにくい 24時間着用 デイリー スタイルアップ",
+          "itemPrice": 2950,
+          "genreId": "206712",
+          "itemCode": "tnkshop:10006436"
+        },
+        {
+          "itemName": "エコアー レディース アンダーウェア ナイトウェア ボタンダウン シャツ サテン シルク ダウン Ekouaer Satinightgowns for Women Button Down Sleep Shirtsilky Night Shirts 3/4 Sleeve Pajama Khaki カーキ",
+          "itemPrice": 11480,
+          "genreId": "510859",
+          "itemCode": "re-vida:25085046"
+        },
+        {
+          "itemName": "クッションパンツ 転倒 お尻+大腿骨2点パッド パンツ ヒッププロテクター お尻 婦人 大腿骨 介護 クッションパンツ プロテクター付パンツ シニア 転倒予防パンツ 散歩 旅行 危険 安心 安全 施設おすすめ 大きめサイズ S-6XL プレゼント",
+          "itemPrice": 1599,
+          "genreId": "566232",
+          "itemCode": "josho-shop5:10008335"
+        },
+        {
+          "itemName": "ショートパンツ メンズ 短めパンツ フィットネスパンツ トレーニング 短パン スポーツウェア カジュアル 春 夏 筋トレ トレーニング ラ",
+          "itemPrice": 2970,
+          "genreId": "303975",
+          "itemCode": "rayoheistore:10018624"
+        },
+        {
+          "itemName": "ガーリードール Girly Doll ソックス【韓国ファッション】 （ベージュ）",
+          "itemPrice": 1508,
+          "genreId": "403725",
+          "itemCode": "locondo:13087793"
+        },
+        {
+          "itemName": "パジャマ レディース 春夏 薄手 セット 蝶結び 襟口 長袖 ゆったり 部屋着 かわいい カートゥーン柄 リラックス",
+          "itemPrice": 3901,
+          "genreId": "510883",
+          "itemCode": "hunndosi:11084425"
+        },
+        {
+          "itemName": "ルームウェア レディース 長袖 パジャマ トップス 接触冷感 フレンチスタイル レース 透かし彫り リボン かわいい 春秋",
+          "itemPrice": 6400,
+          "genreId": "510859",
+          "itemCode": "united-shop01:10405503"
+        },
+        {
+          "itemName": "ネグリジェ ワンピース ロング 姫 ナイトドレス パジャマ レディース かわいい 可愛い ゆったり 長袖 母親 大きいサイズ ルームウエア 白 お祝い 入院 おしゃれ 婦人 ナイトウエア 部屋着 寝間着 プレゼント 母の日 妻 誕生日 クリスマス 敬老の日 ギフト",
+          "itemPrice": 4810,
+          "genreId": "510865",
+          "itemCode": "shopnakakuni:10025088"
+        }
+      ]
+    },
+    {
+      "genreId": "216131",
+      "nameJa": "バッグ・小物・ブランド雑貨",
+      "items": [
+        {
+          "itemName": "デニムハット メンズ 麻素材 UVカット 日差し対策 つば広 フラットトップ エンボス加工 刺繍 ファッション カジュアル ビーチハット 乗馬帽 通年 多色展開",
+          "itemPrice": 4320,
+          "genreId": "403735",
+          "itemCode": "soarsole:10209333"
+        },
+        {
+          "itemName": "ベルト メンズ 自動バックル 合金メッキ メッシュ ビジネス 通勤 カジュアル 普段使い シンプル 欧米風 高級感 万能 黒 ブラウン 標準幅",
+          "itemPrice": 4444,
+          "genreId": "207235",
+          "itemCode": "purebliss:10173427"
+        },
+        {
+          "itemName": "猫耳 IDカードケース ネックストラップ aoneco アオネコ 日本製 レディース 本革 革小物 姫路レザー 牛革 IDカードホルダー 横型 クリア 透明 猫型 猫柄 ネコ柄 猫グッズ waji ワジ 革 ストラップ 着脱 おしゃれ 送料無料 保護猫 支援 ブラック グレー ブラウン グリーン",
+          "itemPrice": 6490,
+          "genreId": "403776",
+          "itemCode": "osaifuyasan:10004766"
+        },
+        {
+          "itemName": "リュックサック キッズ 子供 男の子 女の子 恐竜 動物 キャラクター バックパック 幼稚園 遠足 軽量 防水 通気性 かわいい",
+          "itemPrice": 4515,
+          "genreId": "112749",
+          "itemCode": "ajyuri:10867941"
+        },
+        {
+          "itemName": "シルク手袋 シルク100% UVカット 保湿 紫外線対策 日焼け防止 静電気防止 ハンドケア 肌荒れ防止 敏感肌用 美容手袋 就寝用 ナイトケア おやすみ手袋 春 夏 秋 冬 対応 薄手 高品質 レディ",
+          "itemPrice": 2080,
+          "genreId": "403755",
+          "itemCode": "pureplus:10053831"
+        },
+        {
+          "itemName": "仕事用 透明バッグ 痛バ 防水 透明 クリアバッグ 頑丈 抗菌 ショルダー クリア トートバッグ ファスナー付き 防水透明厚手 PVC 素材 大容量 トラベルかばん レディース 大きめ 整理 コスメ 化粧品 ジム 旅行 便利 プール 痛バッグ 鞄 女性用",
+          "itemPrice": 3117,
+          "genreId": "403770",
+          "itemCode": "shop-gfield:10025507"
+        },
+        {
+          "itemName": "エルメス　HERMES ネクタイ　シルク 馬　005925T 03　CRAVATE TWILL TIE 7　POULAIN 　ネイビー系　MARIN FONCE/MARIN　保存箱付　メンズ　男性【未使用】【新古品】【中古】エルメス　メンズ　小物　aq11650",
+          "itemPrice": 27280,
+          "genreId": "502429",
+          "itemCode": "auc-aquan:10017642"
+        },
+        {
+          "itemName": "シナぷしゅ マルチケース 母子手帳ケース K4284",
+          "itemPrice": 1800,
+          "genreId": "568566",
+          "itemCode": "esp-store:10011441"
+        },
+        {
+          "itemName": "＜ロングセラー＞カシュカシュ cache cache ナイロンボストントートバッグ （OK）",
+          "itemPrice": 6490,
+          "genreId": "110950",
+          "itemCode": "locondo:12515235"
+        },
+        {
+          "itemName": "田中帽子店 Cecil セシル 麦わら カンカン帽 垂れリボン レディース 57cm uk-h122",
+          "itemPrice": 14300,
+          "genreId": "403743",
+          "itemCode": "3df:10004591"
+        },
+        {
+          "itemName": "送料無料 コインケース 小銭入れ キーリング付き 女性 レディース 婦人 カードケース キーケース 小物入れ 口紅 リップケース コスメ 財布 ウォレット シンプル オーロラ 光沢 半透明 おしゃれ かわいい コンパクト 学生 女子 女の子",
+          "itemPrice": 2210,
+          "genreId": "408849",
+          "itemCode": "wakuwakustore0909:10089344"
+        },
+        {
+          "itemName": "雨傘 日傘 傘 折りたたみ 自動開閉 折り畳み傘 紫外線対策 日焼け対策 おりたたみ傘 晴雨兼用 軽量 8本骨 メンズ レディース 撥水 耐風 梅雨 雨 かさ",
+          "itemPrice": 1860,
+          "genreId": "565218",
+          "itemCode": "onepeace1:10002147"
+        },
+        {
+          "itemName": "ショルダー ぽこぽこ レディース バッグ 通勤通学 ポップコーン ポコポコ 人気BAG 肩掛け 斜め掛け ポップコーンショルダーバッグ 肩掛け 可愛い ブラック ホワイト 黒 白 ショルダーバッグ",
+          "itemPrice": 2550,
+          "genreId": "110942",
+          "itemCode": "bright-life-market:10021656"
+        },
+        {
+          "itemName": "■美品■ COACH コーチ レザー バッグ用 ショルダーストラップ 斜め掛け 肩掛け レディース ピンク系 FH7165",
+          "itemPrice": 5550,
+          "genreId": "112750",
+          "itemCode": "ypeace2015:10048478"
+        },
+        {
+          "itemName": "バレンシアガ リュック エブリデイ レザー 552374 BALENCIAGA バックパック 黒 【安心保証】 【中古】 バレンシアガ バッグ バレンシアガ リュックサック BALENCIAGA BAG",
+          "itemPrice": 82500,
+          "genreId": "110966",
+          "itemCode": "watch-timezone:10214871"
+        },
+        {
+          "itemName": "キーケース フォルクスワーゲン スマートキーケース キーカバー キーホルダー VW向け ゴルフ ジェッタ シロッコ ポロ アルテオン 鍵",
+          "itemPrice": 2666,
+          "genreId": "568465",
+          "itemCode": "kingwa:10027900"
+        },
+        {
+          "itemName": "スマホショルダーバッグ 安い ピンク グレー ミニバッグ ポシェット スマホ入れ 財布付き たて スマホポシェット 縦 スマホポーチ おしゃれ 手ぶら ジップ 落ちない お洒落 かわいい 黒",
+          "itemPrice": 7980,
+          "genreId": "110942",
+          "itemCode": "shotai:10000077"
+        },
+        {
+          "itemName": "リュックサック 送料無料 リュック 撥水 学生 透明バッグ 大容量 オタクバッグ 痛バ 透明窓 クリアバッグ a4 推し活 バックパッ",
+          "itemPrice": 5358,
+          "genreId": "110942",
+          "itemCode": "kansaisakabashop:10047533"
+        },
+        {
+          "itemName": "優美社　4G39-00　Twilight Avenue （トワイライトアベニュー） 多機能トート レッド【代引不可】",
+          "itemPrice": 3180,
+          "genreId": "509176",
+          "itemCode": "ichibankanshop:11246520"
+        },
+        {
+          "itemName": "SUPREME(シュプリーム) 21AW×Timberland 6-Panel Cap 6パネル キャップ ブラック【中古】【程度B】【カラーブラック】【オンライン限定商品】",
+          "itemPrice": 11990,
+          "genreId": "408922",
+          "itemCode": "bring-sg:11122691"
+        }
+      ]
+    },
+    {
+      "genreId": "558885",
+      "nameJa": "靴",
+      "items": [
+        {
+          "itemName": "ASICS アシックス メンズ スニーカー 【ASICS Gel BND 'White Black' 1021A145-001】 サイズ US_9.5(27.5cm)",
+          "itemPrice": 103800,
+          "genreId": "206878",
+          "itemCode": "asty-shop:46687261"
+        },
+        {
+          "itemName": "500円OFFクーポン 厚底 プラットフォーム ベルト ショートブーツ レディース 編み上げブーツ ハイヒール レースアップブーツ 厚底ブーツ 歩きやすい ロリータ コスプレ 黒 白 アンクルブーツ かわいい カジュアル ブーティ パーティー mysco",
+          "itemPrice": 8743,
+          "genreId": "558903",
+          "itemCode": "mysco:10004249"
+        },
+        {
+          "itemName": "ローファー メンズ メンズローファー 靴 スリッポンシューズ 短靴 男性 スエード調 フラットシューズ ビジネスシューズ 黒 灰 通勤 通学 入学式 卒業式 学生靴 防滑底 スクール 外出 ドライビン",
+          "itemPrice": 13072,
+          "genreId": "558927",
+          "itemCode": "mai-do:10031550"
+        },
+        {
+          "itemName": "ダンスコ レディース シューズ サンダル Dansko Maggy Clog Olive Green グリーン",
+          "itemPrice": 49800,
+          "genreId": "216158",
+          "itemCode": "re-vida:25315617"
+        },
+        {
+          "itemName": "ロックポート メンズ シューズ オックスフォード Rockport Dressports 2 Goxfordark Blue ブルー",
+          "itemPrice": 40800,
+          "genreId": "112759",
+          "itemCode": "re-vida:25407890"
+        },
+        {
+          "itemName": "New Balance ニューバランス メンズ スニーカー 【New Balance Teddy Santis x 990v1 Made in USA 'Incense' M990AD1】 サイズ US_9(27.0cm)",
+          "itemPrice": 66800,
+          "genreId": "206878",
+          "itemCode": "asty-shop:43070342"
+        },
+        {
+          "itemName": "復古風 丸頭 浅口 パンプス レディース 2025春秋 イギリス風 小さい革靴 レディース 韓国 フラットシューズ メリージェーンシューズ ローファー 普段使い 通勤用 卒業式 入学式 フォーマル カジュアル きれいめ細やか 上品 きれいめ 柔",
+          "itemPrice": 5200,
+          "genreId": "216160",
+          "itemCode": "rise0729ri:10400969"
+        },
+        {
+          "itemName": "フラワービジューストラップ／エスペランサ（ESPERANZA）",
+          "itemPrice": 4290,
+          "genreId": "112758",
+          "itemCode": "0101marui:13282305"
+        },
+        {
+          "itemName": "ショートブーツ レディース チャンキーヒール ブーティ サイドジッパー 歩きやすい ブーツ 痛くない 疲れない カジュアル シューズ 美脚 太ヒール",
+          "itemPrice": 4245,
+          "genreId": "206904",
+          "itemCode": "p-needs:10055241"
+        },
+        {
+          "itemName": "Nike ナイキ メンズ スニーカー ダンク 【Nike Dunk High 'Sports Specialties' DH0953-400】 サイズ US_11(29.0cm)",
+          "itemPrice": 53800,
+          "genreId": "206878",
+          "itemCode": "asty-shop:47397925"
+        },
+        {
+          "itemName": "adidas アディダス メンズ スニーカー 【adidas Adi Racer High 'Black' JH8733】 サイズ US_M_4",
+          "itemPrice": 39800,
+          "genreId": "206878",
+          "itemCode": "asty-shop:42994134"
+        },
+        {
+          "itemName": "メンズ レディース スリッポン デッキシューズ 無地 黒 白 ライン キャンバス カジュアル スニーカー 男女 ネイビー measurement_22_point_5_centimeters (ネイビー, 22.5 cm 2E)",
+          "itemPrice": 3180,
+          "genreId": "558926",
+          "itemCode": "zestnationjapan-03:10378705"
+        },
+        {
+          "itemName": "[NEARDREAM] ビジネスサンダル メン ズ スリッパ スリッポン 革靴 オフィスサンダル 通気性 蒸れない 幅広 室内 職場 事務所 会社",
+          "itemPrice": 4879,
+          "genreId": "110997",
+          "itemCode": "hitcreations:10359616"
+        },
+        {
+          "itemName": "スリッパ 男女兼用 厚底 滑り止め 通気性 蒸れにくい 清涼感 快適 リネン 麻 ゴザ風 い草風 室内履き ルームシューズ 部屋履き カップル 春夏",
+          "itemPrice": 4201,
+          "genreId": "559278",
+          "itemCode": "secure-depo:11181032"
+        },
+        {
+          "itemName": "クリスチャン シリアノ レディース シューズ サンダル Christian Siriano New York Imay Sandal Gold Metallic ゴールド",
+          "itemPrice": 29800,
+          "genreId": "216158",
+          "itemCode": "re-vida:24042167"
+        },
+        {
+          "itemName": "サンダル シューズ 靴 夏 ビーサン レディース ストラップ ビーサン 大きいサイズ 小さいサイズ 歩きやすい おしゃれ スポーツサンダル アウトドア カジュアル 軽量 室内 調節 春 人気 可愛い 通勤通学 日常着用",
+          "itemPrice": 3253,
+          "genreId": "216158",
+          "itemCode": "nextstore0227:10002781"
+        },
+        {
+          "itemName": "【送料無料】 ミッシェル・ヴィヴィアン レディース ブーツ シューズ Ankle boots Beige",
+          "itemPrice": 101800,
+          "genreId": "409418",
+          "itemCode": "asty-shop:47259062"
+        },
+        {
+          "itemName": "Vans バンズ メンズ スニーカー 【Vans Era Low Tops Skateboarding Shoes Black cashew 'Black White' VN0A4P39BLK】 サイズ US_5(23.0cm)",
+          "itemPrice": 31800,
+          "genreId": "206878",
+          "itemCode": "asty-shop:46335801"
+        },
+        {
+          "itemName": "パンプス レディース 中高齢者用 本革 ぺたんこ フラットシューズ 柔らかい 歩きやすい 疲れない 涼しい 穴あき 通気性 サンダル 快適 履きやすい 軽い 軽量 柔らか素材 コンフォートシューズ 婦人靴 お母さん用 通勤用 普段使い デイリーユース マ",
+          "itemPrice": 5803,
+          "genreId": "216141",
+          "itemCode": "miyashop-01:11361351"
+        },
+        {
+          "itemName": "Nike ナイキ レディース スニーカー 【Nike Dunk Low Cyber Reflective (Women's)】 サイズ US_8(25.0cm) Anthracite/Racer Blue-Black",
+          "itemPrice": 67800,
+          "genreId": "206906",
+          "itemCode": "asty-shop:47514835"
+        }
+      ]
+    },
+    {
+      "genreId": "558929",
+      "nameJa": "腕時計",
+      "items": [
+        {
+          "itemName": "シチズン CITIZEN シチズンコレクション メンズ 自動巻き 腕時計 NP4080-50L 国内正規",
+          "itemPrice": 47373,
+          "genreId": "301981",
+          "itemCode": "hnshop:10008021"
+        },
+        {
+          "itemName": "ストゥーリング オリジナル 腕時計 3926.2 オートマチック 自動巻き アナログ男性用 レザー 本革 時計 ウォッチ Mens Skeleton Watch Analog Watch Dial Mens Automatic Watch - Dual Time, AM/PM Sun Moon, Genuine Leather Band, Legacy Mens Watches Collection",
+          "itemPrice": 81030,
+          "genreId": "302133",
+          "itemCode": "i-selection:10136992"
+        },
+        {
+          "itemName": "【送料無料】gs0269721 rotary gents stainless steel leather strap watch",
+          "itemPrice": 39980,
+          "genreId": "302133",
+          "itemCode": "hokushinco:10714518"
+        },
+        {
+          "itemName": "アップルウォッチ バンド 一体型 46mm Series10 耐衝撃 傷防止 Series9 8 7 6 5 4 3 2 1 SE se2 apple watch バンド 一体型 38mm 40mm 41mm 42mm 44mm 45mm 49mmに対応 スポーツベルト 交換ベルト 調整工具不要 装着簡単",
+          "itemPrice": 1890,
+          "genreId": "302145",
+          "itemCode": "clown-b:10000609"
+        },
+        {
+          "itemName": "【送料無料】腕時計　ウォッチ　スワロフスキーブラックベルトピンクゴールドnuevo anuncioreloj swarovski crystalline 5275043 correa color negro pvd oro rosa",
+          "itemPrice": 75980,
+          "genreId": "302133",
+          "itemCode": "hokushinco:10817427"
+        },
+        {
+          "itemName": "腕時計用ベルト apple watch バンド 時計バンド アップルウォッチ レディース 女性 交換ベルト 交換バンド 付け替え 着せ替え シンプル",
+          "itemPrice": 1820,
+          "genreId": "302145",
+          "itemCode": "aikei2016:10072257"
+        },
+        {
+          "itemName": "ワインディングマシーン1本ウォッチワインダー自動巻き上げ機機械式1本巻腕時計ケース静音設計ギフトレザー調腕時計収納プレゼントマブチモーター",
+          "itemPrice": 3700,
+          "genreId": "505724",
+          "itemCode": "doops:10030100"
+        },
+        {
+          "itemName": "【送料無料】腕時計　カリプソダドナヌオーヴォcalypso k5733_6 orologio da polso donna nuovo e originale it",
+          "itemPrice": 24980,
+          "genreId": "302133",
+          "itemCode": "hokushinco:11035362"
+        },
+        {
+          "itemName": "AppleWatch用 バンド ケース カバー アップルウォッチ用カバー アップルウォッチケース iWatch 4 5 6 7 SE 対応 40/41/44/45mm フィルム 全面保護 耐衝撃 おしゃれ 薄型 バンド セット シリコン おしゃれ ベルト",
+          "itemPrice": 12550,
+          "genreId": "302181",
+          "itemCode": "tokyoecstore:10139026"
+        },
+        {
+          "itemName": "取寄品 正規品 CASIO腕時計 カシオ G-SHOCK ジーショック アナデジ アナログ&デジタル GST-W100G-1BJF 人気モデル メンズ腕時計 送料無料",
+          "itemPrice": 42075,
+          "genreId": "301981",
+          "itemCode": "smileprj:10023523"
+        },
+        {
+          "itemName": "【中古】【3年保証】【返品可】カルティエ CARTIER タンク マスト SM レディース 腕時計 クォーツ ステンレススチール レザー シルバー WSTA0042 [送料無料]【ポイント10倍●9.23〜10.1】 101891103",
+          "itemPrice": 494800,
+          "genreId": "302050",
+          "itemCode": "tokyo-brand-2:10013797"
+        },
+        {
+          "itemName": "【ワインディングマシーン】両方向回転式 収納ケース 自動巻き上げ機 保管用 ワインディングマシーン 1本/2本時計アクセサリー ボックス",
+          "itemPrice": 6021,
+          "genreId": "112747",
+          "itemCode": "zb-market:10014093"
+        },
+        {
+          "itemName": "【送料無料】akribos xxiv womens ak951ygpch multifunction gold tone stainless steel watch",
+          "itemPrice": 23980,
+          "genreId": "302133",
+          "itemCode": "hokushinco:10704375"
+        },
+        {
+          "itemName": "Geekria ヘッドバンド 互換性 ヘッドホンヘッドバンド AirPod Max 対応 交換用 パッド (グレー)",
+          "itemPrice": 2014,
+          "genreId": "112747",
+          "itemCode": "pinkbeltorchika:10002725"
+        },
+        {
+          "itemName": "BVLGARI ブルガリ レッタンゴロ RT39SL ホワイト レディース 腕時計-新品",
+          "itemPrice": 299800,
+          "genreId": "302050",
+          "itemCode": "e-ousama:10005602"
+        },
+        {
+          "itemName": "ブローバ 腕時計 ウォッチ BULOVA 98M125 時計 アナログ クォーツ レディース 女性用 Bulova Women's Analog-Quartz Watch with Stainless-Steel Strap, Multi, 14 (Model: 98M125)",
+          "itemPrice": 73190,
+          "genreId": "302050",
+          "itemCode": "i-selection:10131882"
+        },
+        {
+          "itemName": "【 ガラス繊維 】フィルム SILLAID GW20 (2枚セット) ガラスフィルム (極薄ファイバー) 保護フィルム アンチグレア 9H 高硬度 液晶保護フィルム",
+          "itemPrice": 1510,
+          "genreId": "302181",
+          "itemCode": "joyify:10030384"
+        },
+        {
+          "itemName": "質屋 腕時計 稼働 オメガ OMEGA D 6672 cal.620 14K 手巻き ヴィンテージ ベルト・尾錠 社外品 21.8g H711 みいち質店",
+          "itemPrice": 248000,
+          "genreId": "301981",
+          "itemCode": "miichi78:10002111"
+        },
+        {
+          "itemName": "Fitbit inspire 2 対応バンド ナイロン 交換ベルト フィットビット アルタ Fitbit inspire ベルト Fitbit HR交換バンド スマートウォッチ バンド 交換ベルト 腕時計 バンド 交換用 高品質 耐久性 軽量 人気 腕時計バンド 時計ベルド 男女兼用 替えベルド",
+          "itemPrice": 1560,
+          "genreId": "302145",
+          "itemCode": "giorno2020:10007029"
+        },
+        {
+          "itemName": "【送料無料】　腕時計　ダーツダートメンズメンズプレゼントdarts dartboard mens gents mens wrist watch engraving birthday gift",
+          "itemPrice": 29800,
+          "genreId": "301981",
+          "itemCode": "hokushinco:10991518"
+        }
+      ]
+    },
+    {
+      "genreId": "216129",
+      "nameJa": "ジュエリー・アクセサリー",
+      "items": [
+        {
+          "itemName": "【factoryzazie ファクトリーザジ 唐草透かしリング 「奇」】※商品の発送は、ご入金から10日前後になります。日本製 made in japan ハンドメイド 手作り 金 ゴールド 作家 職人 日本語 文字 アクセサリー 和 個性的",
+          "itemPrice": 8800,
+          "genreId": "100487",
+          "itemCode": "senbamuromachi:10028530"
+        },
+        {
+          "itemName": "ヘアクリップ レディース バンスクリップ メタル ダッカールクリップ 大 大きめ シンプル おしゃれ かみどめ まとめ髪 髪飾り ヘアアクセサリー 金属製",
+          "itemPrice": 4080,
+          "genreId": "100532",
+          "itemCode": "hanbokhome:10681106"
+        },
+        {
+          "itemName": "[Silvora] ピアス メンズ つけっぱなし ゴールド フープピアス レディース 小さい リングピアス k18金 ジルコニア 内径10mm 20G アクセサリー",
+          "itemPrice": 4764,
+          "genreId": "301974",
+          "itemCode": "happynight:10452351"
+        },
+        {
+          "itemName": "レディース アクセサリー 天然タンザナイト 方形 レトロ シンプル 925シルバー ゴールドメッキ 指輪 ネックレス イヤリング セット ジュエリー 天然石 アクセサリー 女性用 日常使い ギフト向き 高級感 輝き デザイン",
+          "itemPrice": 7620,
+          "genreId": "407382",
+          "itemCode": "celone:10236247"
+        },
+        {
+          "itemName": "ブローチ レディース 高級感 ツバメ 鳥 モチーフ エナメル ラインストーン 合金 コサージュ ピン レトロ 北欧風 入学式 卒業式 結婚式 パーティー 発表会 通勤 フォーマル エレガント",
+          "itemPrice": 4156,
+          "genreId": "100532",
+          "itemCode": "way-ugo:10948911"
+        },
+        {
+          "itemName": "ベス バングススタイリングコーム シースルーバング用(1個)【ベス】",
+          "itemPrice": 715,
+          "genreId": "407308",
+          "itemCode": "kenkocom:12163207"
+        },
+        {
+          "itemName": "メンズペンダント ペンダントトップ ペンダントヘッド 男性用 シルバー クロス 十字架 ダイヤモンド 送料無料 人気 おすすめ トレンド プレゼント ギフト ジュエリー 敬老の日",
+          "itemPrice": 562500,
+          "genreId": "407351",
+          "itemCode": "shinjunomori:10340362"
+        },
+        {
+          "itemName": "ハワイアンジュエリー シルバー ピアス 揺れる2つプルメリアウィズCZピアス PEE1121CLギフト プレゼント 誕生日 お祝 クリスマス 記念日 ホワイトデー",
+          "itemPrice": 4620,
+          "genreId": "301974",
+          "itemCode": "clara-hawaii:10003609"
+        },
+        {
+          "itemName": "ピアス レディース アクセサリー ハート リボン モチーフ スタッドピアス ジュエリー エレガント おしゃれ かわいい キラキラ ジルコニア 高級感 大人かわいい ガーリー フェミニン 上品 華やか デート パーティー お呼ばれ プレゼント ギフト シルバ",
+          "itemPrice": 3429,
+          "genreId": "407279",
+          "itemCode": "slope-up:10126301"
+        },
+        {
+          "itemName": "イヤーカフ レディース 幾何学模様 シルバー パール 銀色 埋め込み 暗夜系 ヴィンテージ レトロ おしゃれ 通勤用 気質抜群 アクセサリー 普段使い お呼ばれ 結婚式 二次会 パーティー オフィス フォーマル シンプル 高見え 高級感 エレガント 大人",
+          "itemPrice": 3400,
+          "genreId": "111048",
+          "itemCode": "taico:10098537"
+        },
+        {
+          "itemName": "レディース ネックレス 水晶 ビーズ ハート型 ステンレス 多面カット キラキラ ビビッドカラー 普段使い 軽量 輝き アクセサリー",
+          "itemPrice": 4100,
+          "genreId": "111029",
+          "itemCode": "rise0729ri:10293819"
+        },
+        {
+          "itemName": "【6jib0268】ティファニー ネックレス オープンハート K18PG ピンクゴールド【中古】レディース",
+          "itemPrice": 84480,
+          "genreId": "111029",
+          "itemCode": "otakarayaotakaraya:10540157"
+        },
+        {
+          "itemName": "地金リング プラチナ900 地金リング ファッションリング 品質保証書 金属アレルギー 日本製 おしゃれ ジュエリー プレゼント ギフト クリスマス 卒業式 入学式 卒園式 入園式 お祝い",
+          "itemPrice": 66300,
+          "genreId": "100487",
+          "itemCode": "cococaru:10295149"
+        },
+        {
+          "itemName": "ネックレス メンズ 男性用 レトロ ヴィンテージ クロス 十字架 神の目 プロビデンスの目 個性的 ユニーク タイシルバー シルバーメッキ 銅製 ペンダント トップ アクセサリー ファッション 普段使い",
+          "itemPrice": 4086,
+          "genreId": "508593",
+          "itemCode": "narukimar:10479636"
+        },
+        {
+          "itemName": "グリーン 兵隊さん カフリングス 【 色 ： 緑 】 カフスボタン 【 グリーン 営業マン 元気 男女 カフリングス スーツ プレゼント 大人気 やる気満々 卒業式 成人式 結婚式 カフス専門店 】",
+          "itemPrice": 2300,
+          "genreId": "508574",
+          "itemCode": "urich:10001307"
+        },
+        {
+          "itemName": "0.4ct.E-VVS2-3EX(H&C)PTプラチナ婚約指輪（エンゲージリング）ダイヤモンドリング、フラワー(花びら）タイプ（鑑定書付)",
+          "itemPrice": 320000,
+          "genreId": "206952",
+          "itemCode": "wadaco:10004742"
+        },
+        {
+          "itemName": "【中古】Pt850　ネックレス　ダイヤモンド0.418ct.　40.2cm　70192　新入荷",
+          "itemPrice": 49830,
+          "genreId": "111029",
+          "itemCode": "auc-tomida78:10020540"
+        },
+        {
+          "itemName": "グッディ フォーフルール ヘアクリップ チェリー柄 Goody Faux Fleur Claw Clip, Hair Accessory, Cherries 【お取り寄せ商品】",
+          "itemPrice": 3210,
+          "genreId": "207052",
+          "itemCode": "speed:10064190"
+        },
+        {
+          "itemName": "【送料無料】ジュエリー・アクセサリー クリスタルホワイトジュエルファンシーペンダントpendentif fantaisie de couleur or et argente cristal blanc bijou",
+          "itemPrice": 17980,
+          "genreId": "508618",
+          "itemCode": "hokushinco:11494947"
+        },
+        {
+          "itemName": "イヤリング 女性用 ビーズ セット 民族風 気質 デイジー 花モチーフ 真珠 ジルコニア 幾何学 電気メッキ加工 金属 合金素材 夏向け かわいい 軽量 独立パッケージ 誕生日 記念 旅行 ギフト 人気 欧米スタイル",
+          "itemPrice": 2800,
+          "genreId": "407355",
+          "itemCode": "emuland-store:10471979"
+        }
+      ]
+    },
+    {
+      "genreId": "100533",
+      "nameJa": "キッズ・ベビー・マタニティ",
+      "items": [
+        {
+          "itemName": "セットアップ キッズ 子供服 上下セット 綿100％ 半袖 Tシャツ ショートパンツ 韓国 カジュアル かわいい おしゃれ 柔らかい 通気性 吸汗 速乾 肌に優しい トップス ボトムス ベビー 男の子 女の子 男女兼用 普段着 ルームウェア パジャマ 部",
+          "itemPrice": 3234,
+          "genreId": "564582",
+          "itemCode": "sinkouecomart:10213617"
+        },
+        {
+          "itemName": "【全品5%ポイント】ベビーカー b型 軽量 コンパクト 4輪 メッシュ 折りたたみ 日除け 軽い サンルーフ 持ち運び お出かけ 涼しい 01.ブラック 人気",
+          "itemPrice": 8991,
+          "genreId": "401151",
+          "itemCode": "pdashop:10004506"
+        },
+        {
+          "itemName": "スマートウォッチ バンド 46mm スポーツ 通気性 柔らかい 防水 防汗 運動 シリコンベルト (ホワイト)",
+          "itemPrice": 2040,
+          "genreId": "205153",
+          "itemCode": "panchasemart:10371195"
+        },
+        {
+          "itemName": "総柄 シースルー キャミソール ショート丈 へそ出し 応援団 女の子 キッズダンス衣装 セットアップ 黒 スカート フリル チアガール チア 暗黒系 ダンスウェア ステージ衣装 ヒップホップ 上下セット hiphop K-POP 演出服 団体服 個性派 かわいい キッズ ファッション",
+          "itemPrice": 2695,
+          "genreId": "213870",
+          "itemCode": "poshpetiteport:10007562"
+        },
+        {
+          "itemName": "期間限定【1000円OFF】クーポン！Jordan ナイキ GS エアジョーダン1 ミッド “グレー ホワイト/アンスラサイト“ Jordan 1 Mid “Light Smoke Grey (GS)“ Jordan 554725-078 大人も履ける キッズモデル レディース スニーカー キッズスニーカー ベビーシューズ",
+          "itemPrice": 33200,
+          "genreId": "505374",
+          "itemCode": "frenz2:10074740"
+        },
+        {
+          "itemName": "panpantutu 巾着トートバッグM(シューズバッグ) パンパンチュチュ バッグ トートバッグ",
+          "itemPrice": 1870,
+          "genreId": "508418",
+          "itemCode": "stylife-kids:10300098"
+        },
+        {
+          "itemName": "ヘアゴム ヘアアクセサリー 髪飾り レディース 女性 アクセサリー ビーズ ボール 丸 ストーン タグ ファッション小物 まとめ髪 ヘアアレンジ カジ",
+          "itemPrice": 1752,
+          "genreId": "200847",
+          "itemCode": "ouki-shop:10024106"
+        },
+        {
+          "itemName": "ジャンパースカート ベビー キッズ 女の子 春秋 灯芯绒 コーデュロイ フリル 吊りスカート カジュアル 無地 かわいい",
+          "itemPrice": 4487,
+          "genreId": "500960",
+          "itemCode": "soarsole:10364531"
+        },
+        {
+          "itemName": "個人宅配送不可 森田アルミ工業 極小アルミ巾木 アルベース albase 入隅部材L (2組入り) AL15I-S シルバー",
+          "itemPrice": 11210,
+          "genreId": "200821",
+          "itemCode": "kiro-2:10391146"
+        },
+        {
+          "itemName": "自転車バッグ 防水 サイクルバッグ 40CMx30CM アウトドア スポーツバッグ シューズ収納可能 携帯便利 ブラック",
+          "itemPrice": 3300,
+          "genreId": "207696",
+          "itemCode": "shadowtail:10410667"
+        },
+        {
+          "itemName": "ポロラルフローレン POLO RALPH LAUREN コート・ジャンパー 160 男の子 ブルー、ネイビー 子供服 ベビー服 キッズ アウトレット ユーズド 【中古】キッズ・ベビー・マタニティ",
+          "itemPrice": 5500,
+          "genreId": "500996",
+          "itemCode": "carryon:13709710"
+        },
+        {
+          "itemName": "ポケットモンスター ボディスポンジ ゼニガメ2 356230 0 pokemon ポケモン",
+          "itemPrice": 473,
+          "genreId": "213971",
+          "itemCode": "laughlaugh:10523324"
+        },
+        {
+          "itemName": "女の子 水着 セパレート キッズ ベビー水着 ラッシュガード 長袖 スイムウェア 上下セット キャップ付き 3点セット パンツ 子供用 セットアップ 紫外線対策 女児水着 小学生 保育園",
+          "itemPrice": 3300,
+          "genreId": "205184",
+          "itemCode": "reves-2021:10009371"
+        },
+        {
+          "itemName": "【送料無料】バケットハット 帽子 ハット 夏 UV 日焼け防止 ベビー 子供 キッズ 女の子 男の子 日焼け止め 日よけ帽子 男女兼用 日よけ UVカット 速乾 防水 撥水 軽量 アウトドア釣り 登山用 バケットハット おすすめ 人気 おしゃれ キッズハット 4色",
+          "itemPrice": 2180,
+          "genreId": "213872",
+          "itemCode": "zhong:10013969"
+        },
+        {
+          "itemName": "Tシャツ ガールズ 春秋 長袖 子供服 ベビー服 丸首 トップス カットソー 綿100% 抗菌 普段着 レイヤード かわいい ブラック ホワイト ピンク系 90 100 110 120 130 140",
+          "itemPrice": 3000,
+          "genreId": "566092",
+          "itemCode": "e-myshop:10704286"
+        },
+        {
+          "itemName": "ロンパース 女の子 ベビー 春夏 薄手 コットン 新生児 カバーオール アイボリー プリンセス風 普段使い お宮参り お出かけ着",
+          "itemPrice": 5116,
+          "genreId": "508434",
+          "itemCode": "bloomelier:10206143"
+        },
+        {
+          "itemName": "子供靴 レザー風シューズ通学靴リボン お姫様風ブラック靴 女の子フォーマルシューズ フラットシューズ ドレスシューズ ガールズ プリンセスシューズ フォーマル靴 子供パンプス 演奏会 発表会 結婚式 入学式キッズ ピアノ 発表会 パーティー 卒園式 卒業式 入園式 普通着",
+          "itemPrice": 2960,
+          "genreId": "401107",
+          "itemCode": "fstshop:10005407"
+        },
+        {
+          "itemName": "【クーポン配布中】（まとめ）ステンレスビーカー3000ml 本体【×3セット】",
+          "itemPrice": 24600,
+          "genreId": "205169",
+          "itemCode": "1bankanwebshop:34717523"
+        },
+        {
+          "itemName": "パンツ 子供服 誕生日 パンツ キッズ 子供 演奏会 スラックス ウェストゴム 長ズボン スーツパンツ フォーマル ジュ",
+          "itemPrice": 2370,
+          "genreId": "564582",
+          "itemCode": "shin821:10011883"
+        },
+        {
+          "itemName": "水泳バッグ キッズ 子供用 乾湿分離 防水 リュック カートーン ビーチ 大容量 ファスナー付き 立方体 ポリエステル ブルー ピンク",
+          "itemPrice": 2900,
+          "genreId": "207696",
+          "itemCode": "tomy-shopr:10590073"
+        }
+      ]
+    },
+    {
+      "genreId": "566382",
+      "nameJa": "おもちゃ",
+      "items": [
+        {
+          "itemName": "【中古】(未使用・未開封品)トミカ ハイパーレスキュー ドライブヘッド シンクロ合体シリーズ サポートビークル 03 レスキューヘリコプター",
+          "itemPrice": 19200,
+          "genreId": "553789",
+          "itemCode": "skymarketplus:11884949"
+        },
+        {
+          "itemName": "アーテック デザインボトルキャップコースター 13799 コースター オブジェ 置物 パッケージデザイン オリジナル 手作り 美術 自由工作",
+          "itemPrice": 590,
+          "genreId": "101914",
+          "itemCode": "tokka-com:10910201"
+        },
+        {
+          "itemName": "折りたたみ 子供 テント ハウス 室内 おしゃれ シンプル 北欧 無地 女の子 男の子 プリンセス お城 お姫様 子ども おもちゃ",
+          "itemPrice": 5460,
+          "genreId": "568272",
+          "itemCode": "womancrossroad:10011022"
+        },
+        {
+          "itemName": "【中古】ホーガン 1/200 MD-90 JAS 3号機 完成品",
+          "itemPrice": 12558,
+          "genreId": "101914",
+          "itemCode": "goodlifestore:10182307"
+        },
+        {
+          "itemName": "70-45 ジェシー",
+          "itemPrice": 1980,
+          "genreId": "201606",
+          "itemCode": "suzukidenkioutlets:10022162"
+        },
+        {
+          "itemName": "みにちゅあーとキット スタジオジブリmini S=NON 湯婆婆と千尋 MP07-13【お寄せ品、返品キャンセル不可。欠品終売時連絡あり】",
+          "itemPrice": 3797,
+          "genreId": "201632",
+          "itemCode": "parusu:11880862"
+        },
+        {
+          "itemName": "Sumnacon パイプ型 ウォールハンガー 壁掛け衣類ハンガー 錆びにくい ホワイト 25cm 2個セット",
+          "itemPrice": 3279,
+          "genreId": "566400",
+          "itemCode": "happynight:10329809"
+        },
+        {
+          "itemName": "ZTTY ボクシンググローブ パンチンググローブ メッシュ通気性 子供 男女兼用(黒&金, 10oz)",
+          "itemPrice": 5699,
+          "genreId": "207523",
+          "itemCode": "best-plice:10208458"
+        },
+        {
+          "itemName": "タカラトミー(TAKARA TOMY) T-SPARK ZOIDS ゾイド ハンターウルフ 警視庁仕様 2号機",
+          "itemPrice": 6765,
+          "genreId": "101914",
+          "itemCode": "rainbow-arch:10126268"
+        },
+        {
+          "itemName": "シュガーココムー てのりぬいぐるみ (チューポップキャンディ(ポップ)) MV18801",
+          "itemPrice": 989,
+          "genreId": "201632",
+          "itemCode": "yousay-do-pointup:10056593"
+        },
+        {
+          "itemName": "ジーロン スクエアボックスプール 80×80×25cm プール・海水浴・水遊び・夏のレジャーにピッタリ JL-688079",
+          "itemPrice": 2331,
+          "genreId": "205259",
+          "itemCode": "emblstore:10165279"
+        },
+        {
+          "itemName": "クリスマスツリー 足元隠し スカート 78cm クリスマスツリー 飾り 装飾 下隠し 土台隠し 目隠",
+          "itemPrice": 2161,
+          "genreId": "101914",
+          "itemCode": "dreamers-store:10312055"
+        },
+        {
+          "itemName": "サンエックス すみっコぐらし すみっコのおきにいり むにっとぬいぐるみ ぬいぐるみ ミニ 小さい 持ち運び もちもち ふわふわ",
+          "itemPrice": 2480,
+          "genreId": "201632",
+          "itemCode": "innclive:10002006"
+        },
+        {
+          "itemName": "【中古】ポケモンカードゲーム シュバルゴ（Aランク） 【SM10a 031 / 054 U】 強化拡張パック ジージーエンド シングルカード",
+          "itemPrice": 30,
+          "genreId": "207659",
+          "itemCode": "auc-stepreikodo:10068092"
+        },
+        {
+          "itemName": "タカラトミー プラレール ドクターイエロー スタートレールセット 電車 列車 おもちゃ 3歳以上 【北海道・沖縄・離島配送不可】",
+          "itemPrice": 5143,
+          "genreId": "566445",
+          "itemCode": "fujix:12633233"
+        },
+        {
+          "itemName": "大きいサイズ動物ぬいぐるみ 子供のプレゼント 亀 カメ/かめ カメ 巨大 特大 ぬいぐるみ ふわふわな手触りがたまらないぬいぐるみ 100cm 可愛いくま抱き枕",
+          "itemPrice": 7500,
+          "genreId": "201632",
+          "itemCode": "doops:10012113"
+        },
+        {
+          "itemName": "窯変兜（渋緑）MK254 SHIBURYOKU / 五月人形 コンパクト 陶器 小さい 兜 かぶと こどもの日 端午の節句 初夏 お祝い 贈り物 プレゼント",
+          "itemPrice": 3080,
+          "genreId": "213458",
+          "itemCode": "kyozenbi:10001081"
+        },
+        {
+          "itemName": "【中古】(非常に良い)MAFEX マフェックス CAPTAIN PHASMA キャプテン・ファズマ 『スター・ウォーズ/フォースの覚醒』ノンスケール ABS&ATBC-PVC塗装済みアクションフ",
+          "itemPrice": 14881,
+          "genreId": "201632",
+          "itemCode": "happystorefujioka:10322379"
+        },
+        {
+          "itemName": "Maxichamps 1/43 フォルクスワーゲン 1600 1966 ライトブルー 完成品ダイキャストミニカー 940055300",
+          "itemPrice": 6400,
+          "genreId": "566432",
+          "itemCode": "o-kawaya:10131826"
+        },
+        {
+          "itemName": "白ダック 抱き枕 70cm さめ 抱きおもちゃ 可愛い 抱きまくら 柔らかい 縫い包み もこもこ 添い寝 おもちゃ枕 お クリスマス 抱き枕 可愛い インテリア 寝そべり",
+          "itemPrice": 4790,
+          "genreId": "201632",
+          "itemCode": "kingwa:10016646"
+        }
+      ]
+    },
+    {
+      "genreId": "101070",
+      "nameJa": "スポーツ・アウトドア",
+      "items": [
+        {
+          "itemName": "ゴルフ PUレザー ヘッドカバー アイアン パター用 傷防止 耐久性 軽量 クラブ保護アクセサリー 多色展開",
+          "itemPrice": 4201,
+          "genreId": "112001",
+          "itemCode": "mzymzy:10435995"
+        },
+        {
+          "itemName": "【ジャッカル】NAGISA　65SPカラー：ピンキーチャートクラウン【4525807201772】",
+          "itemPrice": 1742,
+          "genreId": "204309",
+          "itemCode": "mizutani:10049922"
+        },
+        {
+          "itemName": "【9/30まで★最大10万pt当たる】 ビーハウス(Bee House) 海王丸 450m 50号",
+          "itemPrice": 4634,
+          "genreId": "208108",
+          "itemCode": "naturum:14629563"
+        },
+        {
+          "itemName": "【最大P5倍！9/30迄】NEW! HighMOUNT ハイマウント NATURE LOO （ネイチャールー） / / 20508",
+          "itemPrice": 770,
+          "genreId": "101991",
+          "itemCode": "kojitu:10154714"
+        },
+        {
+          "itemName": "ZAPPU ラウンドヘッド “インチ”",
+          "itemPrice": 550,
+          "genreId": "111967",
+          "itemCode": "fishing-you:10041981"
+        },
+        {
+          "itemName": "OUDEバドミントン、モデル300と12個のガチョウの羽羽根安定した丈夫なスポーツトレーニングのバドミントンボール、屋内屋外ゲーム用、CHEN KEJIEが販売",
+          "itemPrice": 4409,
+          "genreId": "101893",
+          "itemCode": "dreamers-store:10286474"
+        },
+        {
+          "itemName": "水着 レディース ワンピース 体型カバー 盛れる 接触冷感 速乾 セクシー スリム フィット 胸パッド付き ノンワイヤー 無地 ビーチ 海 温泉 パープル",
+          "itemPrice": 4944,
+          "genreId": "554974",
+          "itemCode": "la-graine:11972365"
+        },
+        {
+          "itemName": "Tabata(タバタ) ゴルフ ティー プラスチックティー 49mm リフトティー ショート GV1413 S",
+          "itemPrice": 980,
+          "genreId": "564242",
+          "itemCode": "n-gifted:10184554"
+        },
+        {
+          "itemName": "タープテント 天幕テント ソロキャンプ テント 3.3m サイドシート付き シルバーコーティング 体感マイナス インフレーム アウトフレーム タープテント 一人で設営 軽量 日よけ 日陰 紫外線防止 熱中症予防 UVカット 耐水 クイックキャンプ 運動会",
+          "itemPrice": 15800,
+          "genreId": "302373",
+          "itemCode": "keipuraimu:10003719"
+        },
+        {
+          "itemName": "(LINEクーポン有)4938915700011 アサヒサイクル シートポスト【バラ】 25．4Φx380mm ステンレス シートポスト 25．4Φx380mm ST",
+          "itemPrice": 988,
+          "genreId": "563149",
+          "itemCode": "akarica:10866014"
+        },
+        {
+          "itemName": "【中古】DAIWA◆リール/--/EXIST 2508 055284//【スポーツ】",
+          "itemPrice": 31460,
+          "genreId": "201912",
+          "itemCode": "jumblestore:38346613"
+        },
+        {
+          "itemName": "【TAKA/タカ産業】マルチすべらんロープ 4mm×10m ロープ-N 300248 ロープ 組ヒモタイプ",
+          "itemPrice": 880,
+          "genreId": "112908",
+          "itemCode": "a-k-k:10006052"
+        },
+        {
+          "itemName": "グリップテープ テニス 滑り止めテープ 10本セット ラケット バドミントン ゴルフ 野球 自転車 釣り竿 スポーツ用 交換 汗対策 防水 (赤, 長さ：約1100mm、幅：約25mm、厚み：0.75mm)",
+          "itemPrice": 1180,
+          "genreId": "214526",
+          "itemCode": "mlinestore:10228405"
+        },
+        {
+          "itemName": "宇崎日新 磯竿 N’S 遠投",
+          "itemPrice": 24444,
+          "genreId": "101893",
+          "itemCode": "ouchikenko:11578431"
+        },
+        {
+          "itemName": "OCRU クールリング Lサイズ 全3色 男女兼用 ユニセックス ネックリング 繰り返し使える 熱中症対策 冷却グッズ 首回り38.5cm オークス株式会社",
+          "itemPrice": 1980,
+          "genreId": "101991",
+          "itemCode": "a-n-s:10001815"
+        },
+        {
+          "itemName": "【中古】 タイトリストスリーブ付き(GTS系) フジクラドライバー用 シャフト SPEEDER NX 60 (フレックスS)Bランク ゴルフクラブ",
+          "itemPrice": 16428,
+          "genreId": "204973",
+          "itemCode": "golfpartner:22749239"
+        },
+        {
+          "itemName": "スズキ 船外機 純正部品 11351-92F11 ガスケット,クランクケース",
+          "itemPrice": 618,
+          "genreId": "302346",
+          "itemCode": "kuninao:10015520"
+        },
+        {
+          "itemName": "花柄シャツ ボタニカルプリント 半袖 アロハシャツ 短パン 上下セット セットアップ ハワイパンツ メンズ 薄い 汗染み防止 涼しい 蒸れにくい 吸汗速乾 発汗性 放熱性 ラフティング 海遊び",
+          "itemPrice": 4536,
+          "genreId": "563184",
+          "itemCode": "stick-fukuoka:10021672"
+        },
+        {
+          "itemName": "ユニックス スーパータフボールA 野球 練習用品 トレーニングボール 指 握力 スナップ 手首 強化 BX7371",
+          "itemPrice": 1408,
+          "genreId": "201789",
+          "itemCode": "sposaku:10052715"
+        },
+        {
+          "itemName": "SCHWALBE シュワルベ マラソン プラス(車椅子用) 24x1.00 ブラック クリンチャータイヤ 車椅子",
+          "itemPrice": 8241,
+          "genreId": "501365",
+          "itemCode": "auc-cycle-parts:10126552"
+        }
+      ]
+    }
+  ]
+}
