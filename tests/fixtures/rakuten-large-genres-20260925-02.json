@@ -1,0 +1,1266 @@
+{
+  "source": "Rakuten Ichiba API",
+  "capturedAt": "2026-09-25",
+  "genres": [
+    {
+      "genreId": "562637",
+      "nameJa": "家電",
+      "items": [
+        {
+          "itemName": "【メーカー純正品】ジャノメミシンJANOME家庭用ミシン『棒定規(キルトステッチ定規)』【ジグザグ振り幅最大7mm用水平全回転釜ミシン専用】ステッチガイド",
+          "itemPrice": 572,
+          "genreId": "212619",
+          "itemCode": "mishin:10003188"
+        },
+        {
+          "itemName": "充電式 節電 DCモーター サーキュレーター 兼用 扇風機",
+          "itemPrice": 11483,
+          "genreId": "208375",
+          "itemCode": "lifestylepartner:10110369"
+        },
+        {
+          "itemName": "TR FESTOOL セルフクリ-ン集塵フィルターバッグ CT 36 (5枚入) ［5枚入X1パック］",
+          "itemPrice": 13556,
+          "genreId": "212000",
+          "itemCode": "ytnetshop:10157317"
+        },
+        {
+          "itemName": "スタンドミキサー 6.5L 大容量 卓上ミキサー 一台三役 多機能メタルミキサー 3種類アタッチメント付き キッチンエイド 6段階速度調節可能",
+          "itemPrice": 32410,
+          "genreId": "301474",
+          "itemCode": "mstrend:10001846"
+        },
+        {
+          "itemName": "【中古】OLYMPUS デジタルカメラ TG-620 1200万画素 5m防水 裏面照射型CMOS 広角28mm ホワイト TG-620 WHT",
+          "itemPrice": 16400,
+          "genreId": "565074",
+          "itemCode": "camera-fanksproshop22:10055970"
+        },
+        {
+          "itemName": "日立 パーツ HITACHI 【R-B5200-1-200】 シンクウチルドクミ(ダンネツツキ) 冷蔵庫　部品・パーツ・交換用・部材",
+          "itemPrice": 33170,
+          "genreId": "565248",
+          "itemCode": "cathy-b:10380936"
+        },
+        {
+          "itemName": "【中古】【未使用】1/4 インチカメラクイックリリースネジ三脚ネジアダプタコネクタビデオカメラリグアクセサリーボールヘッドレンズコラ 1/4 三脚ネジプレートヘッ",
+          "itemPrice": 6480,
+          "genreId": "563338",
+          "itemCode": "ajimura4861:12400523"
+        },
+        {
+          "itemName": "《在庫あり》◆15時迄出荷OK！パナソニック【FY-25GSU3】25cm 有圧換気扇 産業用有圧換気扇 鋼板製 低騒音形 単相100V",
+          "itemPrice": 14505,
+          "genreId": "101758",
+          "itemCode": "clover9608:13995270"
+        },
+        {
+          "itemName": "【中古】SONY デジタルカメラ Cybershot HX1 (910万画素/光学x20/デジタルx40/ブラック) DSC-HX1",
+          "itemPrice": 23310,
+          "genreId": "563338",
+          "itemCode": "fujinamielectric:10006342"
+        },
+        {
+          "itemName": "30ミリまでの断熱材使用5面OK【三菱550リットル　角型タンクカバー　】　防雨　日差し・保温・塩害・・黄砂対策　　　　　　　※断熱材はお客様でご用意ください",
+          "itemPrice": 29000,
+          "genreId": "562647",
+          "itemCode": "soneda:10000264"
+        },
+        {
+          "itemName": "コンパクト　洗濯機 キチン用品　食品専用　除菌　野菜洗浄機 　果物と野菜の洗濯機 全自動食品清浄 家庭用 ワイヤレス 食品洗浄 イヤレスフルーツ食品清浄機 洗浄装置 IPX7防水　お手入れ簡単　操作簡単 超音波ミニ洗浄機",
+          "itemPrice": 8940,
+          "genreId": "565068",
+          "itemCode": "palrun:10021472"
+        },
+        {
+          "itemName": "パナソニック 【分岐水栓】 TBC製水栓用 レバー CB-STA6",
+          "itemPrice": 14740,
+          "genreId": "212406",
+          "itemCode": "den-mart:10040717"
+        },
+        {
+          "itemName": "遮光シート 窓ガラス目隠しフィルム 【真っ黒・超遮光】 目隠しシート 遮光フィルム 光漏れ",
+          "itemPrice": 1488,
+          "genreId": "101766",
+          "itemCode": "dreamers-store:10339839"
+        },
+        {
+          "itemName": "【中古】(非常に良い)Turpone Ronzio 回転式プロパン駆動ピザオーブン(旧ミニ)、穴あきピール付きブラック",
+          "itemPrice": 247871,
+          "genreId": "100205",
+          "itemCode": "goodlifestore:10565424"
+        },
+        {
+          "itemName": "CHNPOFNT PMAC-100HF IA-300GF 空気清浄機交換フィルター PMMS-AC100 KPMMS-AC40 MSAP-AC100 空気清浄機に適合します。 3枚入 交換用 パーツ 部品 清掃 互換",
+          "itemPrice": 4800,
+          "genreId": "563338",
+          "itemCode": "lapistores:10074227"
+        },
+        {
+          "itemName": "ロボ・クープ マジミックス用 パーツ スライス盤 (各機種共通) 1mm厚用【FMI エフエムアイ フードプロセッサー】【万能調理器】【攪拌機】【業務用】",
+          "itemPrice": 10690,
+          "genreId": "100204",
+          "itemCode": "chubo-pro-soko:10052587"
+        },
+        {
+          "itemName": "【中古】【未使用】PATIKIL 16\" 直径ランプシェードディフューザー 2個 2.7mm 厚いラウンドディフューザーシート ドラムランプシェード ペンダントライト DIYライト",
+          "itemPrice": 8664,
+          "genreId": "563338",
+          "itemCode": "ajimura4861:13193798"
+        },
+        {
+          "itemName": "日立 パーツ HITACHI 【BD-V3400L-034】 ソーフーカバー(イトクズ) ビッグドラム 部品 ビックドラム ドラム式洗濯乾燥機 部品・パーツ・交換用・部材",
+          "itemPrice": 1583,
+          "genreId": "565109",
+          "itemCode": "cathy-b:10364234"
+        },
+        {
+          "itemName": "PLZ-ERMP63HLE6 (2.5馬力 三相200V ワイヤレス)三菱電機 業務用エアコン 4方向天井カセット形＜i-スクエアタイプ＞ スリムER(ムーブアイセンサーパネル) シングル63形 取付工事費別途",
+          "itemPrice": 221396,
+          "genreId": "208369",
+          "itemCode": "tss-shop:14323398"
+        },
+        {
+          "itemName": "アイリスオーヤマ 炊飯器 内蓋 RC-PD10-B用 H994918",
+          "itemPrice": 6490,
+          "genreId": "568262",
+          "itemCode": "partscomstore:10028394"
+        }
+      ]
+    },
+    {
+      "genreId": "211742",
+      "nameJa": "TV・オーディオ・カメラ",
+      "items": [
+        {
+          "itemName": "【中古】【非常に良い】レグザ 65V型 有機ELテレビ 65X9400 4Kチューナー内蔵 外付けHDD タイムシフトマシン対応 (2020年モデル)",
+          "itemPrice": 920260,
+          "genreId": "563843",
+          "itemCode": "skymarketplus:12709187"
+        },
+        {
+          "itemName": "【中古】FUJIFILM デジタルカメラ FinePix (ファインピクス) Z100fd ピンク FX-Z100FDP bme6fzu",
+          "itemPrice": 38915,
+          "genreId": "110110",
+          "itemCode": "doriem:10249407"
+        },
+        {
+          "itemName": "TMC GoPro 多機能 自撮り棒 自撮り/三脚/アーム型 GY",
+          "itemPrice": 1500,
+          "genreId": "565060",
+          "itemCode": "auc-hercules-gear:10007011"
+        },
+        {
+          "itemName": "防音スピーカーカバー 防水防塵プロテクター 大型スピーカー用保護カバー オーディオ機器防護 スピーカー傷防止 音楽スタジオ対応 防音性能アップ 軽量耐衝撃ケース",
+          "itemPrice": 2900,
+          "genreId": "567199",
+          "itemCode": "monolith-1:10011109"
+        },
+        {
+          "itemName": "【中古】Beats by Dr. Dre Beats Studio3 Wireless MQ562PA／A マットブラック 【269-ud】",
+          "itemPrice": 15379,
+          "genreId": "502835",
+          "itemCode": "akiba-u-shop:11429527"
+        },
+        {
+          "itemName": "Pro Ears Stealth28 ステルス28 HTBT/HT用 交換用 ウレタンフォーム イヤーチップ イヤーピース 2個×3ペア",
+          "itemPrice": 847,
+          "genreId": "567201",
+          "itemCode": "haco:10004114"
+        },
+        {
+          "itemName": "【中古】(未使用・未開封品)　スピーカー用 天吊り 壁掛け 取付 金具 2個セット （1ペア） 汎用 取り付け金具 f4u0baa",
+          "itemPrice": 5712,
+          "genreId": "100165",
+          "itemCode": "doriem:10630568"
+        },
+        {
+          "itemName": "HORIC DisplayPort→HDMI変換ケーブル 1m DPHA10-808BB(1本)【HORIC】",
+          "itemPrice": 2406,
+          "genreId": "568200",
+          "itemCode": "rakuten24:11326164"
+        },
+        {
+          "itemName": "自由雲台 360度回転 1/4インチネジ ボールヘッド アダプター Q88 BS-TPBH-Q88-1",
+          "itemPrice": 2670,
+          "genreId": "213382",
+          "itemCode": "sproutsllc:10088766"
+        },
+        {
+          "itemName": "【中古】(非常に良い)SAMYANG 単焦点広角レンズ MF 14mm F2.8 MK2 ソニー FEマウント フルサイズ対応 【国内正規品】",
+          "itemPrice": 115376,
+          "genreId": "110335",
+          "itemCode": "cocohouse:10478904"
+        },
+        {
+          "itemName": "CDプレーヤー Bluetooth 高音質 卓上 充電式 レコードプレーヤー型 スピーカー内蔵 スマホ&ヘッドホン対応 リピートシャッフル再生 コン",
+          "itemPrice": 13703,
+          "genreId": "204466",
+          "itemCode": "samidare7:10014687"
+        },
+        {
+          "itemName": "透明で中身が確認しやすい！ テンバ TENBA TOOLS ツールボックス4 カメラ アクションカム 収納 小分け ブラック 636-647",
+          "itemPrice": 3960,
+          "genreId": "200136",
+          "itemCode": "etsumi:10001438"
+        },
+        {
+          "itemName": "【中古】(非常に良い)OLYMPUS ミラーレス一眼 PEN E-P2 ボディ ブラック E-P2BODY-BLK",
+          "itemPrice": 38689,
+          "genreId": "564286",
+          "itemCode": "cocohouse:10490453"
+        },
+        {
+          "itemName": "【中古】【未使用】SONY DT 18-200mm F3.5-6.3 SAL18200",
+          "itemPrice": 70560,
+          "genreId": "110335",
+          "itemCode": "ajimura4861:12761755"
+        },
+        {
+          "itemName": "セット 天体望遠鏡 スマホ 撮影 初心者 望遠鏡 天体 子供用 口径70MM 小学生 三脚 高さ調節可能 接眼レンズ 天体観測 検索 科学 知育 ス",
+          "itemPrice": 11649,
+          "genreId": "509508",
+          "itemCode": "tr-jjstore:10054499"
+        },
+        {
+          "itemName": "【中古】Canon スピードライト 430EX II カメラ 中古 人気 おすすめ 高画質",
+          "itemPrice": 20200,
+          "genreId": "110110",
+          "itemCode": "camera-fanksproshop22:10042914"
+        },
+        {
+          "itemName": "HiFiGo イヤモニ イヤホン 有線 モニターイヤホンDUNU x Gizaudio Da Vinci 2DD+4BA 5ウェイ周波数クロスオーバー IEM カナル型 HIFIイヤホン HiFi音質 2pin着脱式",
+          "itemPrice": 62537,
+          "genreId": "502835",
+          "itemCode": "daily-store:10129087"
+        },
+        {
+          "itemName": "【中古】 JVC HA-FW03 CLASS-S WOODシリーズ カナル型イヤホン ハイレゾ音源対応 HA-FW03",
+          "itemPrice": 23560,
+          "genreId": "502835",
+          "itemCode": "trmt-1:10001726"
+        },
+        {
+          "itemName": "MONSTER ( モンスター ) / P600-M-20夏休スペシャル",
+          "itemPrice": 13178,
+          "genreId": "550925",
+          "itemCode": "auc-mhfriend:10043224"
+        },
+        {
+          "itemName": "(まとめ) エレコム アンテナケーブルL型-ストレート 3m ブラック AV-ATLS30BK 1本 【×10セット】",
+          "itemPrice": 25630,
+          "genreId": "550922",
+          "itemCode": "shop-polite:10194479"
+        }
+      ]
+    },
+    {
+      "genreId": "100026",
+      "nameJa": "パソコン・周辺機器",
+      "items": [
+        {
+          "itemName": "【大画面レッツノート】 【日本製】 パナソニック Panasonic Let's note CF-B11 第3世代 Core i7 8GB HDD250GB スーパーマルチ 無線LAN Windows10 64bit WPSOffice 15.6インチ 中古パソコン ノートパソコン PC Notebook 【中古】",
+          "itemPrice": 26800,
+          "genreId": "100040",
+          "itemCode": "okadenki:10015643"
+        },
+        {
+          "itemName": "【中古】AX-IRMBTEL(1)(W) NTT AX ISDN主装置内蔵電話機 [オフィス用品] ビジネスフォン [オフィス用品] [オフィス用品] [オフィス用品]",
+          "itemPrice": 49730,
+          "genreId": "208591",
+          "itemCode": "scarlet2021:10152463"
+        },
+        {
+          "itemName": "FUJITSU Notebook LIFEBOOK A576 Celeron 4GB 新品SSD480GB DVD-ROM 無線LAN Windows10 64bitWPS Office 15.6インチ 中古パソコン ノートパソコン Notebook 【中古】",
+          "itemPrice": 28300,
+          "genreId": "100040",
+          "itemCode": "okadenki:10011210"
+        },
+        {
+          "itemName": "HP 15s-fq5000 15.6インチ 16:9 向けの 保護フィルム ブルーライトカット 光沢仕様",
+          "itemPrice": 1780,
+          "genreId": "211543",
+          "itemCode": "motomoto:10096871"
+        },
+        {
+          "itemName": "(LINEクーポン有)サンワサプライ CR-LA602 デュアルシステムアーム(ノートPC台)",
+          "itemPrice": 31160,
+          "genreId": "101752",
+          "itemCode": "ra-kudenmart:10073431"
+        },
+        {
+          "itemName": "TN-499C / TN499 シアン (TN-491C/TN-493Cの超大容量) リサイクルトナーカートリッジ (即納再生品) 【沖縄・離島 お届け不可】",
+          "itemPrice": 7900,
+          "genreId": "208552",
+          "itemCode": "mitashop:10028700"
+        },
+        {
+          "itemName": "【中古】eboxer-1 USB有線ミニスリムキーボードキーボード 小型 コンパクト シンプル 防水 ビジネスキーボード ノートパソコン デスクトップコンピュータ",
+          "itemPrice": 8680,
+          "genreId": "560088",
+          "itemCode": "ajimura4861:12997926"
+        },
+        {
+          "itemName": "【中古】【非常に良い】トレインシミュレータ JR北海道1(余市~札幌)(Win版)",
+          "itemPrice": 16272,
+          "genreId": "211741",
+          "itemCode": "skymarketplus:12275010"
+        },
+        {
+          "itemName": "日本製紙 npi上質 B5T目209.3g 1セット （2000枚） プリンタ PCサプライ・消耗品 コピー用紙・印刷用紙 コピー用紙 コピー 紙 プリンタ用紙",
+          "itemPrice": 15210,
+          "genreId": "100132",
+          "itemCode": "a-gallery:10426753"
+        },
+        {
+          "itemName": "エコリカ インクカートリッジ ブラザー LC211BK-2PK BK2個パック ブラック ECI-BR211B-2P(代引不可)",
+          "itemPrice": 1760,
+          "genreId": "502185",
+          "itemCode": "rcmdse:16455370"
+        },
+        {
+          "itemName": "KICKER ペア 45KM84L 8インチ 600ワット マリンボート 防水スピーカー LED付き KM8バンドル Rockville デュアル 7.7インチ 光沢シルバー アルミニウム ウェイクボード タワー スピーカーエンクロージャ付き",
+          "itemPrice": 184434,
+          "genreId": "502185",
+          "itemCode": "global-laboratory:10094381"
+        },
+        {
+          "itemName": "UNDER DEFEAT - PS5",
+          "itemPrice": 3750,
+          "genreId": "211723",
+          "itemCode": "saino:10069073"
+        },
+        {
+          "itemName": "【中古】【非常に良い】中古ノートパソコン デル(DELL) B5サイズ Latitude E6220 Core i5-2.5GHz",
+          "itemPrice": 79994,
+          "genreId": "100040",
+          "itemCode": "doriem:11529030"
+        },
+        {
+          "itemName": "LiNKFOR LAN 分配器 1入力2出力 高速1000Mbps ギガビット RJ45 ネットワーク スプリッター ギガビットLANケーブル 2台同時使用Cat5 Cat5e Cat6 Cat7 Cat8対応 USBケーブル 日本語説明書付き",
+          "itemPrice": 3524,
+          "genreId": "565183",
+          "itemCode": "best-plice:10197427"
+        },
+        {
+          "itemName": "Canon（キャノン）:インクタンクBCI-351+350/5M BCI-351+350/5MP",
+          "itemPrice": 5820,
+          "genreId": "502185",
+          "itemCode": "cocoterrace:13911621"
+        },
+        {
+          "itemName": "【中古】【非常に良い】M-K24KLC 大興 Taiko ソルボーネ SOLVONET-M　24内線増設ユニット　ビジネスフォン [オフィス用品]",
+          "itemPrice": 17625,
+          "genreId": "208591",
+          "itemCode": "iinex:10311403"
+        },
+        {
+          "itemName": "【エントリーで最大10万ポイント】Apricorn アプリコーン外付けHDD ポータブル Aegis Fortress L3 - USB 3.0 AFL3-500 AFL3-500(2573530)代引不可 送料無料",
+          "itemPrice": 61990,
+          "genreId": "101748",
+          "itemCode": "e-zoa:10105551"
+        },
+        {
+          "itemName": "StarTech.com USB A-USB Cケーブル 1m アラミド繊維補強 ブラック RUSB2AC1MB 1本",
+          "itemPrice": 3240,
+          "genreId": "552480",
+          "itemCode": "shop-polite:10492339"
+        },
+        {
+          "itemName": "Xiaomi G24i 2026 ブルーライトカット フィルム 液晶保護フィルム 光沢仕様",
+          "itemPrice": 2790,
+          "genreId": "211543",
+          "itemCode": "lifeinnotech:10142576"
+        },
+        {
+          "itemName": "【新品/取寄品/代引不可】HD-QHU3/R5シリーズ用オプション 交換HDD 3TB OP-HD3.0QH",
+          "itemPrice": 35070,
+          "genreId": "408516",
+          "itemCode": "outletplaza:10747948"
+        }
+      ]
+    },
+    {
+      "genreId": "564500",
+      "nameJa": "スマートフォン・タブレット",
+      "items": [
+        {
+          "itemName": "タブレットスタンド 卓上 タブレット スタンド 本立て ブックスタンド 書見台 ぶっくすたんど 卓上 譜面台 傾斜台 ノート PCスタンド 画板 ホルダー iPad スタンド 充電スタンド 角度調整可能 携帯便利 透明 クリア おしゃれ アクリル 韓国",
+          "itemPrice": 3580,
+          "genreId": "560055",
+          "itemCode": "burigi666:10002708"
+        },
+        {
+          "itemName": "スマホケース Galaxy S20+ 5G SC-52A ケース 手帳型 ギャラクシーs20+ プラス カバー デザイン 絵画 名画 作品 グッズ 芸術 ブリューゲル 版画 七つの大罪 大きな魚が小さな魚を食う 風刺 宗教画 農民画",
+          "itemPrice": 3180,
+          "genreId": "560271",
+          "itemCode": "kougalog:11442796"
+        },
+        {
+          "itemName": "Xperia Ace SO-02L エクスペリア エース ストラップ付き so02l ケース ショルダー スマホ 落下防止 手帳型 マグネット式 ピタッと閉まる スマホカバー 肩掛け 斜めかけ 025848 線路　ぬいぐるみ　人形",
+          "itemPrice": 2480,
+          "genreId": "560271",
+          "itemCode": "case-style:34163613"
+        },
+        {
+          "itemName": "Galaxy S23 FE S23FE ケース カバー ギャラクシー S23 FE スマホケース 手帳型ケース ハイビスカス はいびすかす 花 フラワー 南国 オシャレ おしゃれ シンプル おしゃれ きれい 手帳型カバー スマホカバー プチプラ 携帯ケース 携帯カバー",
+          "itemPrice": 1200,
+          "genreId": "560271",
+          "itemCode": "woodgreen:13716097"
+        },
+        {
+          "itemName": "フローラル TYPE2 (クリア) iPhone 17 SECOND SKIN 本体 保護 ハードケース スマホカバー　送料無料",
+          "itemPrice": 2310,
+          "genreId": "560271",
+          "itemCode": "casecamp:13114868"
+        },
+        {
+          "itemName": "AQUOS R9 用 ハードケース SH-51E / A401SH 共通対応 ハード ケース sh51e 対応 ケース カバー 023473 デニム風　写真",
+          "itemPrice": 1580,
+          "genreId": "560271",
+          "itemCode": "case-style:36933681"
+        },
+        {
+          "itemName": "P5倍15%OF Xiaomi 15 Ultra ケース カバー 手帳型 ツートン スマイル にこ 全機種対応 Xiaomi 15 Ultraケース Xiaomi 15 Ultraカバー Xiaomi15Ultraケース Xiaomi15Ultraカバー シャオミー15ウルトラケース シャオミー15ウルトラカバー 2m-27-dn11",
+          "itemPrice": 1980,
+          "genreId": "560271",
+          "itemCode": "asana-nm:11041354"
+        },
+        {
+          "itemName": "OPPO A79 A79 ケース カバー オッポ A79 スマホケース 三つ折りタイプ チワワ ちわわ 小型犬 犬 いぬ イラスト もふもふ 可愛い かわいい ゆるい ブラックタン レターケース 携帯ケース 携帯カバー",
+          "itemPrice": 1980,
+          "genreId": "560271",
+          "itemCode": "woodgreen:13837740"
+        },
+        {
+          "itemName": "iPad Pro 12.9 第3世代 2019年版 用 ケース ソフト TPUケース A1876 A2014 A1895 対応 タブレットケース タブレットカバー 013388 漢字　文字　文",
+          "itemPrice": 1580,
+          "genreId": "560051",
+          "itemCode": "case-style:33044976"
+        },
+        {
+          "itemName": "AQUOS sense8 SH-54D / SHG11 共通対応 アクオスセンス8 ストラップ付き sh54d ケース ショルダー スマホ 落下防止 手帳型 マグネット式 ピタッと閉まる スマホカバー 肩掛け 斜めかけ 012960 レコード　音楽",
+          "itemPrice": 2480,
+          "genreId": "560271",
+          "itemCode": "case-style:35921789"
+        },
+        {
+          "itemName": "SK11（エスケー11） スマホケース ダブル 4977292968799",
+          "itemPrice": 1670,
+          "genreId": "560271",
+          "itemCode": "ichinennet-plus:10227548"
+        },
+        {
+          "itemName": "iPhone11 ケース 手帳型 マカロン スマホケース 耐衝撃 ベルトあり iPhone11カバー アイフォン11 アイホン11 アイフォン11 iPhone11ケース アイフォン カバー カード収納 マグネット スマホカバー 携帯ケース 9色",
+          "itemPrice": 1650,
+          "genreId": "560271",
+          "itemCode": "uo3911:10139017"
+        },
+        {
+          "itemName": "P5倍15%OF Xperia XZ2 SOV37 SO-03K 702SO ケース カバー ハードケース PC 可愛い キャラ SO-03Kケース SO-03Kカバー SOV37ケース SOV37カバー 702SOケース 702SOカバー \"nanohapc-001",
+          "itemPrice": 1980,
+          "genreId": "560271",
+          "itemCode": "asana-nm:10849446"
+        },
+        {
+          "itemName": "Galaxy S23 Ultra SC-52D SCG20 用 ケース カバー 手帳型 マグネット式 ピタッと閉まる レザーケース sc52d カード収納 ポケット 006199 野球　イラスト",
+          "itemPrice": 2180,
+          "genreId": "560271",
+          "itemCode": "case-style:36234583"
+        },
+        {
+          "itemName": "P5倍15%OF Galaxy S26 Plus SC-52G SCG38 ケース カバー 手帳型 ベルトなし 磁石 上質レザー 手提げ 犬 いぬ Galaxy S26 Plusケース Galaxy S26 Plusカバー SC-52Gケース SC-52Gカバー SCG38ケース SCG38カバー \"4m-3-kei-17",
+          "itemPrice": 1980,
+          "genreId": "560271",
+          "itemCode": "asana-nm:10921126"
+        },
+        {
+          "itemName": "arrows Alpha F-51F ケース 手帳型 M08 カバー アローズ arrowsM08 手帳 手帳型ケース F-51Fケース F-51Fカバー F-51F手帳 F-51Fスマホケース 【西陣織 竹】 スマホケース",
+          "itemPrice": 12800,
+          "genreId": "560271",
+          "itemCode": "kitakazekitakaze:10031445"
+        },
+        {
+          "itemName": "P5倍15%OF Google Pixel10 PRO XL ケース カバー 手帳型 ツートン キャット 猫 ねこ 全機種対応 Pixel10 PRO XLケース Pixel10 PRO XLカバー Pixelケース Pixelカバー ピクセル10プロXLケース ピクセル10プロXLカバー 5m-27-dn06",
+          "itemPrice": 1980,
+          "genreId": "560271",
+          "itemCode": "asana-nm:11014969"
+        },
+        {
+          "itemName": "手帳型スマートフォンケース ブロックウェーブ グリーン Android One S4・DIGNO J 704KC Y!mobile・SoftBank YESNO android one s4 ケース android one s4 カバー アンドロイドワンs4ケース アンドロイドワンs4カバー s4ケース スマホケース 送料無料",
+          "itemPrice": 3300,
+          "genreId": "560271",
+          "itemCode": "casecamp:11956440"
+        },
+        {
+          "itemName": "スマホケース 液晶保護ガラスフィルム付 GALAXY A41 ギャラクシー エーフォーティーワン[SC-41A SCV48]docomo auいちごとチェック[ スマホカバー 携帯ケース 人気 定番 ]",
+          "itemPrice": 3860,
+          "genreId": "560271",
+          "itemCode": "keitaidonya2:10613018"
+        },
+        {
+          "itemName": "Xperia 5 SOV41 スマホ ケース 手帳型 ベルトなし イニシャル ペア 英字 W デニム スマホ カバー 頭文字03 eb24803_03",
+          "itemPrice": 3377,
+          "genreId": "560271",
+          "itemCode": "shoptiara:11646078"
+        }
+      ]
+    },
+    {
+      "genreId": "565004",
+      "nameJa": "光回線・モバイル通信",
+      "items": [
+        {
+          "itemName": "SANWA 4入力1出力HDMI画面分割切替器(4K/60Hz対応) SW-PHD41MTV 1個 ■▼683-6469 ※個人宅様送り不可",
+          "itemPrice": 73061,
+          "genreId": "565015",
+          "itemCode": "asahiprocureace:15449251"
+        },
+        {
+          "itemName": "WiFi レンタル 14日 即日発送 レンタルwifi レンタルWi-Fi レンタルワイファイ wifiレンタル Wi-Fiレンタル ワイファイレンタル wi-fi ワイファイ 国内 ポケットwifi ポケットWi-Fi ポケットワイファイ 入院 旅行 一時帰国 sim モバイルWiFi 2週間 501 ソフトバンク50GB 空港",
+          "itemPrice": 3611,
+          "genreId": "565007",
+          "itemCode": "rental-shop:10000032"
+        },
+        {
+          "itemName": "PDA工房 モバイルWiFiルーター NA02 対応 紙に書くような描き心地 保護 フィルム 反射低減 日本製 自社製造直販",
+          "itemPrice": 998,
+          "genreId": "568381",
+          "itemCode": "pfdc:10183486"
+        },
+        {
+          "itemName": "【中古】 超美品 SH-05L Wi-Fi STATION ブラック 本体 白ロム 中古 土日祝発送OK",
+          "itemPrice": 4400,
+          "genreId": "565007",
+          "itemCode": "ekosuta:10435357"
+        },
+        {
+          "itemName": "ニュージーランド eSIM | 最短30分でQRコード自動発行(24時間対応) | メールで納品 即利用可 | 1GB ／ 3日間 | LINEサポート | データ通信専用(電話番号なし) | 日本で事前設定OK | TORA eSIM 正規品 | 当日発行 | パスポート情報不要 発行手続き不要",
+          "itemPrice": 870,
+          "genreId": "565010",
+          "itemCode": "torawifi:10000723"
+        },
+        {
+          "itemName": "データ通信SIM カンボジア SIMカード 3GB 毎日 20日間 プリペイドSIM SIMカード SIMプリー 低速データ無制限 SIM データ専用 Cellcard",
+          "itemPrice": 8110,
+          "genreId": "565010",
+          "itemCode": "yhplus-shop:10001599"
+        },
+        {
+          "itemName": "WiFi レンタル 海外 アルゼンチン sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 4泊5日 wifi アルゼンチン simカード 5日間 ギガプラン 1日1GB1600円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アルゼンチン 5日 ワイファイ",
+          "itemPrice": 8800,
+          "genreId": "565007",
+          "itemCode": "rental-shop:10000863"
+        },
+        {
+          "itemName": "WAIYUJP収納ケース互換の 富士ソフト(Fujisoft) Wi-Fiモバイルルーター +F FS050W 保護 キャリング 収納ケース.",
+          "itemPrice": 3291,
+          "genreId": "565007",
+          "itemCode": "sugarlight:10106961"
+        },
+        {
+          "itemName": "【中古】(非常に良い)Speed Wi-Fi NEXT WiMAX 2＋ W01 ホワイト HWD31SWU",
+          "itemPrice": 4880,
+          "genreId": "565007",
+          "itemCode": "iinex:10886436"
+        },
+        {
+          "itemName": "WiFi レンタル 海外 ラオス sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 1泊2日 プラン wifi ラオス simカード 2日間 大容量 1日500MB 1日料金 600円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim ラオス 2日 ワイファイ 空港",
+          "itemPrice": 1320,
+          "genreId": "565007",
+          "itemCode": "rental-shop:10000810"
+        },
+        {
+          "itemName": "NEC Aterm MR51FN PA-MR51FN 保護 フィルム OverLay Brilliant モバイルルータ PAMR51FN 液晶保護 指紋がつきにくい 指紋防止 高光沢",
+          "itemPrice": 998,
+          "genreId": "568381",
+          "itemCode": "vis-a-vis:10098119"
+        },
+        {
+          "itemName": "【24時間QR自動先行即配】台湾 eSIM 20GB 7日間 プリペイドeSIM esim 旅行 即時利用 快適 simカード 快適 sim card QRコード 送料無料 データ専用 365日24時間 最速QR 自動発送",
+          "itemPrice": 2350,
+          "genreId": "565012",
+          "itemCode": "ibattle:10000068"
+        },
+        {
+          "itemName": "WiFi レンタル 海外 ルーマニア sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 6泊7日 wifi ルーマニア simカード 7日間 ギガプラン 1日1GB 1日800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim ルーマニア 7日 ワイファイ",
+          "itemPrice": 6160,
+          "genreId": "565007",
+          "itemCode": "rental-shop:10001826"
+        },
+        {
+          "itemName": "WiFi レンタル 海外 アイスランド sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 9泊10日 wifi アイスランド simカード 10日間 ギガプラン 1日1GB800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アイスランド 10日 ワイファイ",
+          "itemPrice": 8800,
+          "genreId": "565007",
+          "itemCode": "rental-shop:10001189"
+        },
+        {
+          "itemName": "MCO HDMIセレクタ フルHD対応 HDS-FH01/BK 1個 ■▼683-7807 【送料都度見積】",
+          "itemPrice": 2002,
+          "genreId": "565015",
+          "itemCode": "asahiprocureace:15458398"
+        },
+        {
+          "itemName": "お買い物マラソン【P5倍】1ポット4カップセット 茶具 ホームホーム シンプルさ ティーセット セラミック ポータブル テリーヌ ティーポ",
+          "itemPrice": 5380,
+          "genreId": "565007",
+          "itemCode": "izamstore:10006582"
+        },
+        {
+          "itemName": "【延長専用】安心補償付き SoftBank 無制限 K4 501HW 303ZT E5785 FS030W NA01 WN-CS300FR E5383 T6 無制限 wifi レンタル 延長 専用 14日 ポケットwifi Pocket WiFi レンタルwifi ルーター wi-fi 中継器 wifiレンタル ポケットWiFi ポケットWi-Fi WiFiレンタルどっとこむ",
+          "itemPrice": 4460,
+          "genreId": "565007",
+          "itemCode": "wifi-rental:10000167"
+        },
+        {
+          "itemName": "【中古】NEC UQmobile 【SIMフリー】 Speed Wi-Fi 5G X12 NAR03 シャドーブラック【川崎】保証期間1ヶ月【ランクB】",
+          "itemPrice": 8980,
+          "genreId": "565007",
+          "itemCode": "janpara:10848906"
+        },
+        {
+          "itemName": "シンガポール eSIM | 最短30分 で QRコード自動発行 ( 24時間対応 ) | メールで納品 即利用可 | 無制限 ／ 7日間 | LINEサポート | データ通信専用 (電話番号なし) | 日本で事前設定OK | TORA eSIM 正規品 | 当日発行",
+          "itemPrice": 2320,
+          "genreId": "565010",
+          "itemCode": "torawifi:10000136"
+        },
+        {
+          "itemName": "フィリピン eSIM 選べる日数・容量 (1日間・3日間・5日間・7日間・10日間・15日間・20日間・30日間) (無制限/使用期間内で30・50GB/1日あたり500MB・1GB・2GB) 選べるプラン",
+          "itemPrice": 935,
+          "genreId": "565010",
+          "itemCode": "bluejstore2022:10001787"
+        }
+      ]
+    },
+    {
+      "genreId": "100227",
+      "nameJa": "食品",
+      "items": [
+        {
+          "itemName": "ボーノ・ターボラ 銘牛カレー＆ホワイトシチューセット・ポイントアップ中 送料無料 出産内祝い 内祝い 入園 入学祝い 七五三 お見舞い 快気祝い お返し 結婚祝い 出産祝い ギフト BUONO TAVOLA 新築内祝い 入学内祝い 結婚内祝い 新築祝い お祝い グルメギフト",
+          "itemPrice": 6333,
+          "genreId": "214099",
+          "itemCode": "jhs:10033896"
+        },
+        {
+          "itemName": "ピジョン　ランブータンのシロップ漬け 565g 　24個セット",
+          "itemPrice": 15880,
+          "genreId": "566653",
+          "itemCode": "bungushop:10324915"
+        },
+        {
+          "itemName": "丸美屋 ソフトふりかけ 牛カレー 28g×10個 送料無料",
+          "itemPrice": 1591,
+          "genreId": "564658",
+          "itemCode": "easylifeshop:10024006"
+        },
+        {
+          "itemName": "熊本県産 和王 しゃぶしゃぶ用(400g) バラスライス",
+          "itemPrice": 6470,
+          "genreId": "110432",
+          "itemCode": "utopia-style:10006287"
+        },
+        {
+          "itemName": "ベア・ネイキッド グラノーラシリアル、全粒グラノーラ、朝食スナック、バニラアーモンドクランチ(6袋) Bear Naked Granola Cereal, Whole Grain Granola, Breakfast Snacks, Vanilla Almond Crisp (6 Bags)",
+          "itemPrice": 10073,
+          "genreId": "204876",
+          "itemCode": "glomarket:12621721"
+        },
+        {
+          "itemName": "三島食品 あまのり佃煮　8g×40袋 (小袋タイプ)",
+          "itemPrice": 970,
+          "genreId": "404953",
+          "itemCode": "sankin-asaichi:10055469"
+        },
+        {
+          "itemName": "原そう鳴門糸わかめ 大（240g）化粧ケース入り【送料無料（沖縄1000円)】",
+          "itemPrice": 6600,
+          "genreId": "410746",
+          "itemCode": "e-hanafusa:10000264"
+        },
+        {
+          "itemName": "味の素　「お塩控えめの・ほんだし」6gスティック5本入袋　30g×80袋",
+          "itemPrice": 10800,
+          "genreId": "410995",
+          "itemCode": "k-relight:10005381"
+        },
+        {
+          "itemName": "北海大和 北海道の畑で生まれたスープ （アスパラスープ・男爵いもスープ・かぼちゃスープ・たまねぎスープ・コーンスープ各1袋入） 北海道 北海道産 野菜 スープ インスタント お土産 贈り物 昼食 朝食バレンタイン",
+          "itemPrice": 702,
+          "genreId": "100276",
+          "itemCode": "senka-land:10002229"
+        },
+        {
+          "itemName": "【天下一品】参鶏湯 サムゲタン 1kg　 韓国食品 韓国料理 韓国スープ 参鶏湯 サンゲタン ファインサムゲタン レトルト食品 韓国食材 鶏スープ 鶏肉 丸鶏",
+          "itemPrice": 1080,
+          "genreId": "566660",
+          "itemCode": "hantosi-shop:10000882"
+        },
+        {
+          "itemName": "【ふるさと納税】博多長谷川徳用無着色辛子明太子1kg《築上町》【株式会社壱岐の島】[ABEM002] 20000 20000円",
+          "itemPrice": 20000,
+          "genreId": "110416",
+          "itemCode": "f406473-chikujo:10001897"
+        },
+        {
+          "itemName": "日清 MCTリセッタ(600g×20セット)",
+          "itemPrice": 12003,
+          "genreId": "214291",
+          "itemCode": "rakuten24:11279390"
+        },
+        {
+          "itemName": "タカハシソース　特別栽培の野菜使用 とんかつソース 1.8L　8本セット　012111【代引不可】",
+          "itemPrice": 12876,
+          "genreId": "204880",
+          "itemCode": "ichibankanshop:10991218"
+        },
+        {
+          "itemName": "[ハウチョン]参鶏湯 1kg / サムゲタン レトルト 韓国料理 韓国食材 韓国食品",
+          "itemPrice": 1650,
+          "genreId": "566660",
+          "itemCode": "kankokufoodcosme:10002105"
+        },
+        {
+          "itemName": "先着限りクーポン付 ヤマサ 醤油 イチオシ!うどんたれ釜玉バター醤油230ml×2ケース（全24本）送料無料【co】",
+          "itemPrice": 8556,
+          "genreId": "101784",
+          "itemCode": "umaimon-healthsalute:10021501"
+        },
+        {
+          "itemName": "【15セット】グリコ 超カリカリプリッツ ハーブ香る 香味チキン味 55g【Y倉庫】",
+          "itemPrice": 3000,
+          "genreId": "101769",
+          "itemCode": "ecmikiya:10082669"
+        },
+        {
+          "itemName": "【秋 売りたいんや】サラヤ ラカントS 顆粒 130g 低カロリー 甘味料",
+          "itemPrice": 529,
+          "genreId": "214261",
+          "itemCode": "yoikenkou:10623518"
+        },
+        {
+          "itemName": "EAST BEE うまさ際立つ花かつお 100g [業務用 常温 鰹節 花鰹 削りぶし 削り節 だし 出汁 ダシ お好み焼き たこ焼き] (1303171)",
+          "itemPrice": 813,
+          "genreId": "507800",
+          "itemCode": "apriceonline:10003118"
+        },
+        {
+          "itemName": "エバラ e-Basic 豚骨ラーメンスープ 1.8L",
+          "itemPrice": 3695,
+          "genreId": "564658",
+          "itemCode": "sunflowerjapan:10018852"
+        },
+        {
+          "itemName": "＜送料無料＞食用岩塩 ピンク岩塩 標準タイプ(約1mm以下) 食用 5kg ミネラル ヒマラヤ ソルト【G塩】",
+          "itemPrice": 2998,
+          "genreId": "201228",
+          "itemCode": "pet-sweet:10045261"
+        }
+      ]
+    },
+    {
+      "genreId": "551167",
+      "nameJa": "スイーツ・お菓子",
+      "items": [
+        {
+          "itemName": "とらや 中形羊羹 4本入",
+          "itemPrice": 11217,
+          "genreId": "214237",
+          "itemCode": "dreamstore78:10027975"
+        },
+        {
+          "itemName": "【送料無料】★まとめ買い★　伊那　カップゼリーの素 青リンゴ　600g　×12個【イージャパンモール】",
+          "itemPrice": 13018,
+          "genreId": "203229",
+          "itemCode": "ejapan:10000817"
+        },
+        {
+          "itemName": "ラ・ロシェル 坂井宏行シェフ監修 チョコレートパウンドケーキアソート SAD-BOA 内祝 内祝い お祝 御祝 記念品 出産内祝い プレゼント 快気祝い 粗供養 引出物",
+          "itemPrice": 1263,
+          "genreId": "502908",
+          "itemCode": "c-mania:10191701"
+        },
+        {
+          "itemName": "【ポイント3倍】どら焼き＆ドトールコーヒー詰合せ出産内祝い 内祝い 御祝い お祝い返し お返し 返礼 快気祝い 入学内祝い 結婚内祝い 和スイーツ 人気 スイーツ スイーツセット 志 粗供養 香典返し お供え 送料込み 送料無料",
+          "itemPrice": 2390,
+          "genreId": "200104",
+          "itemCode": "baby-street:10008178"
+        },
+        {
+          "itemName": "【ギフト包装・のし紙無料】ひとくちクロワッサン ギフトセット DCR-BO(A4)",
+          "itemPrice": 1100,
+          "genreId": "502908",
+          "itemCode": "taps:10278205"
+        },
+        {
+          "itemName": "「金澤兼六製菓 かりんとうギフト 各3種(MKT-20R)」かりんとう 和菓子 和菓子詰め合わせセット アソートセット 贈答品 贈り物 ギフト お返し 返礼品 オシャレ ちょこっとギフト・プチギフト・プチプライス スイーツ おやつ お菓子【メーカー包装済み・のし完全無料】",
+          "itemPrice": 1868,
+          "genreId": "201166",
+          "itemCode": "momijiya64:10004100"
+        },
+        {
+          "itemName": "【楽天最安値挑戦】 キラぷるステッカー ジュエルペット 12個 食玩 ステッカー ガム",
+          "itemPrice": 2480,
+          "genreId": "405027",
+          "itemCode": "miyagikurimu:10002973"
+        },
+        {
+          "itemName": "ドトールコーヒー＆スイーツバラエティ FADH-BEY FADH-BEY 内祝い お祝 出産内祝い",
+          "itemPrice": 2311,
+          "genreId": "502908",
+          "itemCode": "c-mania:10201293"
+        },
+        {
+          "itemName": "※2026年10月20日入荷分予約受付中 ロイヤルダンスク ホワイトチョコ＆ラズベリークッキー 250g 12個セット 011061",
+          "itemPrice": 16017,
+          "genreId": "214278",
+          "itemCode": "world-depo:15584808"
+        },
+        {
+          "itemName": "モナン ホワイトピーチ シロップ 700ml 正規　JAN3052911214509",
+          "itemPrice": 1880,
+          "genreId": "214258",
+          "itemCode": "masaya:10012262"
+        },
+        {
+          "itemName": "前田製菓 3枚×7袋 カラッとおから 10個入",
+          "itemPrice": 3164,
+          "genreId": "509693",
+          "itemCode": "rugia:10015689"
+        },
+        {
+          "itemName": "SEオリジナル FDパッションパウダー 500g サンエイト貿易 パウダー",
+          "itemPrice": 23055,
+          "genreId": "509724",
+          "itemCode": "kashizairyo:10110146"
+        },
+        {
+          "itemName": "家紋入りどら焼き 10個入り 化粧箱入り 短納期 オーダーメイド | 家紋 お菓子 和菓子 名入れ どらやき スイーツ 誕生日プレゼント メッセージ入り 還暦 古希 喜寿 傘寿 米寿 祝い お祝い 内祝い ギフト 贈り物 メッセージ 個包装 お盆 お供え 粗品 引き出物 引出物 お返し",
+          "itemPrice": 5238,
+          "genreId": "405051",
+          "itemCode": "aionline-japan:10002757"
+        },
+        {
+          "itemName": "双葉洋行 しょうが湯 4袋入り まとめ買い(×6)|4902692201412(tc)(005881)",
+          "itemPrice": 1600,
+          "genreId": "203229",
+          "itemCode": "the-fuji:10238654"
+        },
+        {
+          "itemName": "和菓子 お菓子 米菓 敬老の日 ギフト せんべい 煎餅 セット 金澤兼六製菓 兼六の華 詰め合わせ 個包装 食品 内祝い お返し 出産内祝い 結婚内祝い 結婚祝い 出産祝い 香典返し 快気祝い お礼 プレゼント KRN-30R (10) 【包装済 外のし対応】",
+          "itemPrice": 2946,
+          "genreId": "502917",
+          "itemCode": "happy-hellobaby:10169404"
+        },
+        {
+          "itemName": "【選べる箱数（1～10箱）】リーガロイヤルホテル監修 ロイヤルガトーコレクション(RRH-15)【送料込み価格】",
+          "itemPrice": 2484,
+          "genreId": "502911",
+          "itemCode": "gift1484:10079943"
+        },
+        {
+          "itemName": "ミンティア(MINTIA) カテキンミント 50粒 × 10個 アサヒグループ食品 緑茶風味",
+          "itemPrice": 1528,
+          "genreId": "564654",
+          "itemCode": "maidora:10029099"
+        },
+        {
+          "itemName": "サクサクスナック さつまいも味/45g【サンコー】",
+          "itemPrice": 430,
+          "genreId": "564652",
+          "itemCode": "kenyu-kan:10022293"
+        },
+        {
+          "itemName": "【ふるさと納税】和三盆 コテツガトーショコラ 和三盆 無添加 コテツ焼プリン8個 2種 セット 1ホール 5.5号 直径17cm ケーキ わさんぼん ガトーショコラ プリン デザート 食べ比べ 詰め合わせ 洋菓子 スイーツ 福岡県 苅田町 送料無料",
+          "itemPrice": 29000,
+          "genreId": "502908",
+          "itemCode": "f406210-kanda:10001061"
+        },
+        {
+          "itemName": "【常温】食用色素(黄) 6G (三幸/添加物) 業務用",
+          "itemPrice": 205,
+          "genreId": "567456",
+          "itemCode": "manten:10008475"
+        }
+      ]
+    },
+    {
+      "genreId": "100316",
+      "nameJa": "水・ソフトドリンク",
+      "items": [
+        {
+          "itemName": "比嘉製茶 カキ茶 100g×1袋 沖縄 土産 ビタミン・ミネラル・ポリフェノール豊富 柿の葉の健康茶",
+          "itemPrice": 2173,
+          "genreId": "565603",
+          "itemCode": "umaimon-hunter:10024653"
+        },
+        {
+          "itemName": "キリン メッツ ブラック 炭酸飲料 缶(350ml×24本)【Mets(メッツ)】",
+          "itemPrice": 3650,
+          "genreId": "506536",
+          "itemCode": "soukaidrink:10024779"
+        },
+        {
+          "itemName": "送料無料 キッコーマン 豆乳キッズ 160ml 6ケース(108本) 調整豆乳 ミルク風味 子ども向け豆乳飲料 ポケモン デザイン",
+          "itemPrice": 12740,
+          "genreId": "408234",
+          "itemCode": "milkheart:10002910"
+        },
+        {
+          "itemName": "ダイドーブレンド デミタスコーヒー 150g×30本 送料無料",
+          "itemPrice": 3233,
+          "genreId": "201402",
+          "itemCode": "easylifeshop:10027198"
+        },
+        {
+          "itemName": "送料無料 伊藤園 おーいお茶 濃い茶 さらさら抹茶入り緑茶 40g ×4袋 【機能性表示食品】",
+          "itemPrice": 2976,
+          "genreId": "100361",
+          "itemCode": "quickfactory:10003950"
+        },
+        {
+          "itemName": "お好きな3種が選べるティーバッグお試しセット 50P×3種 紅茶 アールグレイ ダージリン アッサム セイロン 日本茶 ルイボス ローズヒップ 甜茶 送料無料",
+          "itemPrice": 3888,
+          "genreId": "100351",
+          "itemCode": "ange-yokohama:10020273"
+        },
+        {
+          "itemName": "日本銘水百選 屋久島縄文水1.5L×8本＜箱売り＞【1梱包となり同梱はできません】★屋久島の地下天然水。硬度10の超軟水です。pH(ペーハー)値6〜7★弱酸性〜中性。",
+          "itemPrice": 3609,
+          "genreId": "201351",
+          "itemCode": "yuukiya0097:10013494"
+        },
+        {
+          "itemName": "【1ケース】アクエリアス ニューウォーター PET 500ml*24本[コカ・コーラ]",
+          "itemPrice": 4141,
+          "genreId": "559936",
+          "itemCode": "soukaikenbi:10281578"
+        },
+        {
+          "itemName": "待ちこがれのお酢 （900ml×12本セット） 【EM生活】※送料無料（一部地域を除く）",
+          "itemPrice": 42720,
+          "genreId": "201393",
+          "itemCode": "kenkoumeister:10035634"
+        },
+        {
+          "itemName": "ファンタ オレンジ 1.5L PET ×6本 　送料無料",
+          "itemPrice": 1739,
+          "genreId": "506536",
+          "itemCode": "tokyotmkshop:10046487"
+        },
+        {
+          "itemName": "ポッカサッポロ アイスコーヒーブラック無糖1.5L 16本[代引不可]",
+          "itemPrice": 4930,
+          "genreId": "408254",
+          "itemCode": "tokka-com:10843730"
+        },
+        {
+          "itemName": "富永貿易 神戸茶房 烏龍茶 185g缶×30本入｜ 送料無料 茶飲料 ウーロン茶 お茶 缶",
+          "itemPrice": 2710,
+          "genreId": "567849",
+          "itemCode": "nozomi-market:10012414"
+        },
+        {
+          "itemName": "【ふるさと納税】緑の館／カフェオレベース6本セット カフェオレ カフェオレベース コーヒー 珈琲 紅茶ベース 紅茶 家カフェ 牛乳 ミルク 豆乳 下呂温泉 おすすめ ギフト 贈り物 32000円 岐阜県 下呂市",
+          "itemPrice": 32000,
+          "genreId": "408254",
+          "itemCode": "f212202-gero:10000838"
+        },
+        {
+          "itemName": "inゼリー エネルギーBCAA 180g×6個入【4個セット】(4902888733925-4)",
+          "itemPrice": 7440,
+          "genreId": "559939",
+          "itemCode": "besthbi:10050529"
+        },
+        {
+          "itemName": "【パッションフラワー】量り売り 20g 30g 50g ｜ハーブティー シングル 落ち着く リラックス トケイソウ 健康 お茶 紅茶 注文梱包",
+          "itemPrice": 716,
+          "genreId": "201439",
+          "itemCode": "lessentiel-japon:10000266"
+        },
+        {
+          "itemName": "【送料一律540円】有機梅干番茶 スティック　8g×20本（無双本舗）【B】",
+          "itemPrice": 1400,
+          "genreId": "567848",
+          "itemCode": "jf-foods:10005846"
+        },
+        {
+          "itemName": "創愛 AGF＆リプトン 珈琲・紅茶＆オリジナルケーキセット ASF-50 ギフト 贈り物 送料無料[24]",
+          "itemPrice": 3556,
+          "genreId": "101799",
+          "itemCode": "cagu-le:10763380"
+        },
+        {
+          "itemName": "【TeaEAT】ティート ルビーオレンジ 50g ノンカフェインフルーツティー 1000円ポッキリ 定形外郵便送料無料",
+          "itemPrice": 1000,
+          "genreId": "565601",
+          "itemCode": "eternalbooth:10000265"
+        },
+        {
+          "itemName": "山本漢方 とうもろこし桑の葉茶(5g*24包入)【正規品】※軽減税率対象品",
+          "itemPrice": 745,
+          "genreId": "567645",
+          "itemCode": "bloomgreen:10414916"
+        },
+        {
+          "itemName": "アフマドティー セイロンティー、100 g Ahmad Tea Ceylon Tea, 100 g",
+          "itemPrice": 3221,
+          "genreId": "304902",
+          "itemCode": "glomarket:10047385"
+        }
+      ]
+    },
+    {
+      "genreId": "510915",
+      "nameJa": "ビール・洋酒",
+      "items": [
+        {
+          "itemName": "【中古・未開栓】【埼玉県内配送限定】 サントリー クレスト 12年 秋の花 限定ボトル 600ml 43％ モルト グレーン ウイスキー 国産酒 ジャパニーズ SUNTORY WHISKY 本体のみ【リサイクルマート＋質 秩父店】r265-1200577905801420",
+          "itemPrice": 15800,
+          "genreId": "567655",
+          "itemCode": "rsm-c:10005730"
+        },
+        {
+          "itemName": "ニッカ 仙台宮城峡シングルカスクモルトウイスキー10年【2014-2024】58%700mlNIKKA SINGLE CASK MALT WHISKY10 YEARS OLD",
+          "itemPrice": 138000,
+          "genreId": "567655",
+          "itemCode": "sake-sato:10004644"
+        },
+        {
+          "itemName": "黄桜 ハイボール 梅酒 235mL ハイボール チューハイ お酒",
+          "itemPrice": 363,
+          "genreId": "565952",
+          "itemCode": "cocodecow:10912471"
+        },
+        {
+          "itemName": "モンテペローゾ ナルド [2010] 750ml /イタリアワイン/赤ワイン（クール代別途要）",
+          "itemPrice": 11995,
+          "genreId": "563339",
+          "itemCode": "azumazuru:10006072"
+        },
+        {
+          "itemName": "ワイン ファンティ ポッジョ デッラ バディア NV 750ml 赤ワイン イタリア (f01-3724)",
+          "itemPrice": 5500,
+          "genreId": "563339",
+          "itemCode": "grandmarket:10006513"
+        },
+        {
+          "itemName": "P5倍【6本〜送料無料】ブーズロン ファミーユ ガジェ 2023 ルイ ジャド 白ワイン フランス 750ml アリゴテ ブルゴーニュ フルーティ 果実味 敬老の日",
+          "itemPrice": 5192,
+          "genreId": "563340",
+          "itemCode": "toscana:10118038"
+        },
+        {
+          "itemName": "【アルゼンチンワイン】【赤ワイン】ミッシェル・トリノ コレクション ピノ・ノワール 2024 ボデガ・エル・エステコ ［ミディアムボディー］",
+          "itemPrice": 1160,
+          "genreId": "563339",
+          "itemCode": "vin2:10012914"
+        },
+        {
+          "itemName": "アール ギルマール クレーム ド カシス マガリ 15度 1000ml x 12本[ケース販売] 送料無料(本州のみ) [KO フランス ブルゴーニュ リキュール]",
+          "itemPrice": 26512,
+          "genreId": "110612",
+          "itemCode": "se-sake222:10043785"
+        },
+        {
+          "itemName": "コンチャ イ トロ フロンテラ カルメネール [瓶] 750ml × 12本[ケース販売][メルシャン チリ チリ 赤ワイン ミディアムボディ 420197]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 8101,
+          "genreId": "563339",
+          "itemCode": "se-sake:10039587"
+        },
+        {
+          "itemName": "【よりどり6本以上送料無料】 ドメーヌ メールラン マコン ラ ロシュ ヴィヌーズ ブラン 2022 750ml 白ワイン シャルドネ フランス ブルゴーニュ",
+          "itemPrice": 3935,
+          "genreId": "563340",
+          "itemCode": "ledled:10034850"
+        },
+        {
+          "itemName": "ワイン　ドゥルト bボルドー 白 375ml (F2013) 複数本ラッピング・熨斗不可　wine(78-3)",
+          "itemPrice": 748,
+          "genreId": "563340",
+          "itemCode": "yunyuusyu:10008819"
+        },
+        {
+          "itemName": "〇ドメーヌ ド ヴィレーヌ リュリー プルミエクリュ ルージュ レ シャン クル [2022] 750ml 赤DOMAINE DE VILLAINE RULLY PREMIER CRU ROUGE LES CHAMPS CLOUX",
+          "itemPrice": 13267,
+          "genreId": "563339",
+          "itemCode": "mashimo:10045475"
+        },
+        {
+          "itemName": "《16,500円以上で送料無料》 セッラ モスカ カンノナウ ディ サルデーニャ 2024 Sella Mosca Cannonau di Sardegna 赤ワイン イタリア サルデーニャ",
+          "itemPrice": 1969,
+          "genreId": "563339",
+          "itemCode": "co2s:10015849"
+        },
+        {
+          "itemName": "23：正規品:赤：[2023]　シャサーニュ　モンラッシェ　ルージュ （フォンテーヌ・ガニャール）CHASSAGNE-MONTRACHET ROUGE (Fontaine Gagnard)",
+          "itemPrice": 9380,
+          "genreId": "563339",
+          "itemCode": "fitch:10044395"
+        },
+        {
+          "itemName": "《16,500円以上で送料無料》 セッション スパークリング ホワイト NV リビング ルーツ Session Sparkling White Living Roots スパークリングワイン アメリカ ニューヨーク",
+          "itemPrice": 4213,
+          "genreId": "563342",
+          "itemCode": "co2s:10013971"
+        },
+        {
+          "itemName": "【送料無料】【1ケース 12本入り】ギュギュッと搾ったサングリア 赤ワイン オレンジ＆カシス 400ml x 12 1ケース アルコール6％",
+          "itemPrice": 6380,
+          "genreId": "563339",
+          "itemCode": "ukigoods:10028989"
+        },
+        {
+          "itemName": "ノンアルコール ハイボール チューハイ 送料無料 宝 タカラ 辛口ゼロボール 500ml×2ケース/48本《048》『BSH』 寶 宝酒造",
+          "itemPrice": 7598,
+          "genreId": "562612",
+          "itemCode": "d-craft:10025199"
+        },
+        {
+          "itemName": "デザイン一新／ スラ・ヴィンヤード、ラサ　シラー 2022 赤 750ml／インドワイン",
+          "itemPrice": 3880,
+          "genreId": "563339",
+          "itemCode": "tanakashouten:10000198"
+        },
+        {
+          "itemName": "フェアヴァレー ピノタージュ 750ml[MT 南アフリカ 赤ワイン ウエスタン ケープ ミディアムボディ 648710]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 1773,
+          "genreId": "563339",
+          "itemCode": "yo-sake:10126827"
+        },
+        {
+          "itemName": "サントリー オールフリー クリア レモン＆ライム 350ml缶×3ケース（全72本） 送料無料",
+          "itemPrice": 9792,
+          "genreId": "562584",
+          "itemCode": "umaimon-healthsalute:10018023"
+        }
+      ]
+    },
+    {
+      "genreId": "510901",
+      "nameJa": "日本酒・焼酎",
+      "items": [
+        {
+          "itemName": "直火請福 30度,360ml / 請福酒造 / 二合 ハーフボトル 泡盛 琉球泡盛 沖縄の蒸留酒 お中元 ギフト 家飲み 宅飲み お歳暮 お年賀 沖縄土産 母の日 父の日 敬老の日",
+          "itemPrice": 981,
+          "genreId": "302916",
+          "itemCode": "awamori-street:10002526"
+        },
+        {
+          "itemName": "瑞穂 30度 1.8L 1800ml × 6本 [ケース販売][瑞穂酒造 泡盛 焼酎 日本 沖縄] 送料無料(本州のみ)ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 15910,
+          "genreId": "302916",
+          "itemCode": "yo-sake222:10050966"
+        },
+        {
+          "itemName": "【ふるさと納税】【全3回定期便】海軍兵学校と歩んできた江田島の酒 『同期の桜』上撰 1.8L 人気 日本酒 おしゃれ 和食 ギフト プレゼント 料理 広島県産 江田島市 /江田島銘醸 株式会社[XAF041] 日本酒 さけ sake 酒 お酒 アルコール 地酒 純米 大吟醸 焼酎 飲み比べ",
+          "itemPrice": 29000,
+          "genreId": "112709",
+          "itemCode": "f342157-etajima:10000546"
+        },
+        {
+          "itemName": "喜久酔 特別本醸造 1800ml",
+          "itemPrice": 3900,
+          "genreId": "302869",
+          "itemCode": "hakataimoto:10001535"
+        },
+        {
+          "itemName": "紀土 カラクチキッド 720ml",
+          "itemPrice": 1580,
+          "genreId": "302860",
+          "itemCode": "flatyamanashi:10000229"
+        },
+        {
+          "itemName": "美和桜（みわさくら）　大吟醸　双三（ふたみ）の夏　1800ml",
+          "itemPrice": 4290,
+          "genreId": "302854",
+          "itemCode": "sakemirai:10004255"
+        },
+        {
+          "itemName": "【名入れ彫刻ボトル】【梅酒】山崎蒸溜所貯蔵『 焙煎樽熟成梅酒 リッチアンバー 』 750ml 横文字デザイン（PC書体×彫刻ボトル）名入れ お酒 酒 記念日 プレゼント ギフト おしゃれ 面白い 退職 就職 卒業 誕生日 還暦 祝 お祝い 敬老の日",
+          "itemPrice": 25457,
+          "genreId": "510903",
+          "itemCode": "sakenookurimono:10010821"
+        },
+        {
+          "itemName": "梅乃宿 あらごし梅酒 720ml リキュール 梅酒 奈良県",
+          "itemPrice": 1900,
+          "genreId": "510903",
+          "itemCode": "sakaz-r:10016492"
+        },
+        {
+          "itemName": "【限定入荷しました！】【年1回！1500本限定出荷！】【今までに無い旨みのある芋焼酎！】　いったいさん　磨き芋　芋焼酎　一年熟成　25度　720ml",
+          "itemPrice": 1405,
+          "genreId": "207865",
+          "itemCode": "first19782012:10020794"
+        },
+        {
+          "itemName": "奥の松 特別純米 1800ml 日本酒 地酒 福島県 奥の松酒造 おくのまつ ギフト プレゼント",
+          "itemPrice": 2750,
+          "genreId": "302857",
+          "itemCode": "kishuuitibanya:10002360"
+        },
+        {
+          "itemName": "金武 龍 ゴールド 古酒 25度 720ml [金武酒造所 泡盛 焼酎 日本 沖縄] 送料無料(本州のみ)ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 2302,
+          "genreId": "302916",
+          "itemCode": "yo-sake222:10050201"
+        },
+        {
+          "itemName": "崎元 与那国 クバ巻 30度 600ml x 2本 送料無料(本州のみ) [崎元酒造所 泡盛 焼酎 日本 沖縄]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 4250,
+          "genreId": "302916",
+          "itemCode": "yo-sake222:10063625"
+        },
+        {
+          "itemName": "船尾瀧 特別本醸造 濃い生 1800ml お酒 日本酒 お中元 お歳暮 父の日 母の日 敬老の日 プレゼント お土産 贈り物 内祝い グルメ セール",
+          "itemPrice": 3280,
+          "genreId": "302869",
+          "itemCode": "sake-kadoya:10000821"
+        },
+        {
+          "itemName": "【ふるさと納税】★あさ開★紅白セット(純米大吟醸・純米吟醸)　720ml×計2本【1633925】",
+          "itemPrice": 16000,
+          "genreId": "302863",
+          "itemCode": "f030007-iwate:10000496"
+        },
+        {
+          "itemName": "［麦焼酎］★送料無料★※　25度　五代麦　長期貯蔵酒　1．8Lパック　1ケース6本入り　（1800ml）（2000）（3年以上長期熟成）（完熟）（本格焼酎）山元酒造",
+          "itemPrice": 11557,
+          "genreId": "207853",
+          "itemCode": "sake-makino:10058368"
+        },
+        {
+          "itemName": "【北海道】北海道生貯蔵 男山 300ml 【同一規格12本まで1個口送料】【クール便にて発送致します】",
+          "itemPrice": 568,
+          "genreId": "302878",
+          "itemCode": "watashoweb:10000930"
+        },
+        {
+          "itemName": "国分 黄麹蔵 25度 720ml×3本 芋焼酎 国分酒造※北海道・東北エリアは別途運賃が1000円発生します。",
+          "itemPrice": 5500,
+          "genreId": "207865",
+          "itemCode": "sakedondon:10016033"
+        },
+        {
+          "itemName": "【ふるさと納税】 美潮 純米吟醸3本セット 高知県 芸西村 返礼品 日本酒 お酒 仙頭酒造 ふるさと納税限定 720ml 飲み比べセット のみくらべ 雄町 きたしずく お祝い 贈答品 箱入り ギフト 贈り物 プレゼント 送料無料 お取り寄せ 飲みやすい甘口 果実味 お中元 御中元 のし",
+          "itemPrice": 30000,
+          "genreId": "567223",
+          "itemCode": "f393070-geisei:10001224"
+        },
+        {
+          "itemName": "松竹梅 白壁蔵 澪（みお） 150ml | スパークリング清酒 宝酒造 日本酒 低アルコール 甘口 フルーティー 飲み切り プチギフト 乾杯",
+          "itemPrice": 440,
+          "genreId": "302878",
+          "itemCode": "liquorshopohno:10001128"
+        },
+        {
+          "itemName": "れんと 25度 [紙パック] 1.8L 1800ml x 2本 送料無料(本州のみ) [奄美大島開運酒造 黒糖焼酎 こくとう焼酎 乙類 日本 鹿児島県 111705]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
+          "itemPrice": 5197,
+          "genreId": "302894",
+          "itemCode": "se-sake222:10048526"
+        }
+      ]
+    }
+  ]
+}
