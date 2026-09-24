@@ -754,21 +754,24 @@ function run(name,fn){
     assert.match(html,/誤った投稿文は表示していません/);
   });
 
-  await run('AI stays fact-only and ROOM value copy is deterministic from validated facts',()=>{
+  await run('AI stays fact-only and client copy is neutral exact-token output',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    const quality=fs.readFileSync(path.join(__dirname,'../public/room-copy-quality.js'),'utf8');
     assert.doesNotMatch(apiText,/audienceHook/);
     assert.doesNotMatch(apiText,/buyerBenefits/);
     assert.doesNotMatch(apiText,/fitLine/);
     assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
-    const quality=fs.readFileSync(path.join(__dirname,'../public/room-copy-quality.js'),'utf8');
-    assert.doesNotMatch(html,/const VALUE_RULES=/);
-    assert.doesNotMatch(html,/function valueFromFacts\(/);
-    assert.match(html,/UrenaviPainCopy\?\.valueFromFacts/);
-    assert.match(quality,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(quality,/着けたままスマホ操作をしやすい/);
-    assert.match(quality,/使わないときは省スペースでしまいやすい/);
+    assert.doesNotMatch(html,/valueFromFacts/);
+    assert.doesNotMatch(quality,/VALUE_RULES/);
+    assert.doesNotMatch(quality,/hook:/);
+    assert.doesNotMatch(quality,/benefit:/);
+    assert.match(html,/buildNeutralFactPost/);
+    assert.match(quality,/商品名・説明に記載されている仕様です/);
+    assert.match(quality,/sourceTokens\.has\(x\)/);
+    assert.match(quality,/SERVER_CLAIM_RE/);
+    assert.match(quality,/SERVER_PROMO_RE/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
