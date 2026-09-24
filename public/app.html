@@ -2523,7 +2523,7 @@ function aiPhase1Post(item,result){
   if(!String(insight.productType||'').trim()) return '';
 
   const facts=window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,insight.productType,facts)||'';
+  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
 function aiPanelMarkup(item,index){
@@ -2862,10 +2862,8 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 }
 
 function neutralRulePost(item,keyword=''){
-  const analysis=UrenaviPainCopy?.analyzeRoomProduct?.(item,keyword)||null;
-  const type=UrenaviPainCopy?.buildSafeDisplayName?.(item,analysis)||lexicalProductLabel(item);
   const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildNeutralFactPost?.(item,type,facts)||'';
+  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
