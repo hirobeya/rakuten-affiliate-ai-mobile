@@ -16,8 +16,8 @@
   ]);
 
   const STANDARDS=new Set([
-    'USB-C','USB C','USB-C対応','USB C対応','Type-C','Type C','Type-C対応','Type C対応','HDMI','DisplayPort','PD対応','PD',
-    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','A4','A5','B4','B5','B3','日本製'
+    'USB-C','USB C','USB-C対応','USB C対応','Type-C','Type C','Type-C対応','Type C対応','HDMI','DisplayPort','PD対応',
+    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','日本製'
   ]);
 
   const NUMERIC_UNIT_RE=/^(?:約)?\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i;
@@ -38,9 +38,38 @@
     return false;
   }
 
+  function numericUnitKey(value){
+    const x=normalize(value);
+    const m=x.match(/^(?:約)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
+    return m?String(m[1]||'').toLowerCase():'';
+  }
+
+  function filterAllowedSpecFacts(values){
+    const input=(Array.isArray(values)?values:[]).map(normalize).filter(Boolean);
+    const allowed=input.filter(isAllowedSpecFact);
+    const byUnit=new Map();
+    for(const x of allowed){
+      const key=numericUnitKey(x);
+      if(!key) continue;
+      if(!byUnit.has(key)) byUnit.set(key,new Set());
+      byUnit.get(key).add(x.toLowerCase());
+    }
+    const ambiguousUnits=new Set([...byUnit.entries()].filter(([,set])=>set.size>1).map(([key])=>key));
+    const countFacts=allowed.filter(x=>STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x));
+    const ambiguousCounts=new Set(countFacts.map(x=>x.toLowerCase())).size>1;
+    const out=[];
+    for(const x of allowed){
+      const unit=numericUnitKey(x);
+      if(unit&&ambiguousUnits.has(unit)) continue;
+      if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x))) continue;
+      if(!out.includes(x)) out.push(x);
+    }
+    return out;
+  }
+
   return {
     PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
     NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
-    normalize,isAllowedSpecFact
+    normalize,isAllowedSpecFact,numericUnitKey,filterAllowedSpecFacts
   };
 });
