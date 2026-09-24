@@ -971,9 +971,10 @@
 
   function buildNeutralFactPost(item,productType,facts=[]){
     const type=String(productType||'').trim();
+    const sourceTokens=new Set(titleFactTokens(item));
     const safeFacts=(Array.isArray(facts)?facts:[])
       .map(x=>String(x||'').trim())
-      .filter(Boolean)
+      .filter(x=>x&&sourceTokens.has(x)&&isSafeLocalFactToken(x))
       .filter((x,i,a)=>a.indexOf(x)===i)
       .slice(0,6);
     if(!type || !safeFacts.length) return '';
