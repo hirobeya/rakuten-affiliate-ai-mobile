@@ -2861,29 +2861,31 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
   return 'legacy_'+p;
 }
 
+function neutralRulePost(item,keyword=''){
+  const analysis=UrenaviPainCopy?.analyzeRoomProduct?.(item,keyword)||null;
+  const type=UrenaviPainCopy?.buildSafeDisplayName?.(item,analysis)||lexicalProductLabel(item);
+  const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  return UrenaviPainCopy?.buildNeutralFactPost?.(item,type,facts)||'';
+}
+
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
     if(gate.status==='fallback') return '';
     if(gate.useLegacy){
       const options={variant:index};
-      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
       if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
       if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+      return neutralRulePost(item,keyword);
     }
     if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
     return '';
   }
 
   const options={variant:index};
-  if(p==='room'){
-    options.usedOpenings=roomSentenceContext.openings;
-    options.usedSeconds=roomSentenceContext.seconds;
-  }
   if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
   if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+  return neutralRulePost(item,keyword);
 }
 
 function post(i,p='room'){
