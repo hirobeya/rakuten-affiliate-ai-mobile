@@ -13,7 +13,7 @@ let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
 const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
-const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v8';
+const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9';
 
 const FEATURE_MAX_CHARS=48;
 const FEATURE_EVIDENCE_MAX_CHARS=72;
@@ -94,7 +94,9 @@ function makeInputHash({itemCode='',itemName='',imageUrl='',itemCaption=''}) {
       String(itemCode||'').trim(),
       String(itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim(),
       String(imageUrl||'').trim(),
-      normalizeCacheCaption(itemCaption)
+      normalizeCacheCaption(itemCaption),
+      PROMPT_VERSION,
+      VALIDATION_RULE_VERSION
     ].join('\n'))
     .digest('hex');
 }
