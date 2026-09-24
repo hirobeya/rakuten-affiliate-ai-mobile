@@ -16,11 +16,11 @@
   ]);
 
   const STANDARDS=new Set([
-    'USB-C','USB C','Type-C','Type C','HDMI','DisplayPort','PD対応','PD',
-    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','A4','A5','B4','B5','B3'
+    'USB-C','USB C','USB-C対応','USB C対応','Type-C','Type C','Type-C対応','Type C対応','HDMI','DisplayPort','PD対応','PD',
+    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','A4','A5','B4','B5','B3','日本製'
   ]);
 
-  const NUMERIC_UNIT_RE=/^\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i;
+  const NUMERIC_UNIT_RE=/^(?:約)?\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i;
   const DIMENSION_RE=/^\d+(?:[.,]\d+)?\s*[x×X]\s*\d+(?:[.,]\d+)?(?:\s*[x×X]\s*\d+(?:[.,]\d+)?)?\s*(?:mm|cm|m)$/i;
   const STRUCTURED_COUNT_RE=/^(?:\d+\s*(?:枚|個|本|袋|箱|組|点|粒|錠|食|包)\s*(?:入|入り|セット|組)|\d+\s*セット)$/i;
   const MULTIPACK_RE=/^\d+\s*(?:枚|個|本|袋|粒|錠)\s*[x×X]\s*\d+\s*(?:枚|個|本|袋|粒|錠)(?:\s*(?:入|入り|セット))?$/i;
