@@ -37,7 +37,7 @@ module.exports=async function handler(req,res){
     const v=result.validation||{};
     const eligibleFeatures=(Array.isArray(v.features)?v.features:[])
       .filter(x=>x&&x.eligibleForPost===true)
-      .map(x=>({value:x.value,evidence:x.evidence,source:x.source,valid:x.valid,eligibleForPost:x.eligibleForPost}));
+      .map(x=>({value:String(x.text||x.value||''),evidence:x.evidence,source:x.source,valid:x.valid,eligibleForPost:x.eligibleForPost}));
     const eligibleSellingPoints=(Array.isArray(v.sellingPoints)?v.sellingPoints:[])
       .filter(x=>x&&x.eligibleForPost===true)
       .map(x=>({value:x.value,evidence:x.evidence,source:x.source,valid:x.valid,eligibleForPost:x.eligibleForPost}));
