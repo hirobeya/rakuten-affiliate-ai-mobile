@@ -949,15 +949,9 @@
   }
 
   function extractFallbackTitleFacts(item){
-    const seen=new Set(),out=[];
-    for(const token of titleFactTokens(item)){
-      if(!isSafeLocalFactToken(token)) continue;
-      if(seen.has(token)) continue;
-      seen.add(token);
-      out.push(token);
-      if(out.length>=6) break;
-    }
-    return out;
+    const tokens=titleFactTokens(item);
+    const filtered=FactSafety?.filterAllowedSpecFacts?.(tokens)||[];
+    return filtered.slice(0,6);
   }
 
   function buildNeutralFactPost(item,facts=[]){
