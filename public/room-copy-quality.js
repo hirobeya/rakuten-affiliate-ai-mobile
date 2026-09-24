@@ -933,92 +933,56 @@
     return groundedOpening(a,item,variant,options);
   }
 
-  function extractFallbackTitleFacts(item){
-    const title=titleOnly(item);
-    const out=[],seen=new Set();
-    const add=(value,index)=>{const v=String(value||'').trim();if(!v||seen.has(v))return;seen.add(v);out.push({value:v,index:Number.isFinite(index)?index:title.indexOf(v)});};
-    const patterns=[
-      /(?:幅|奥行|高さ)\s*\d+(?:\.\d+)?\s*(?:cm|mm|m)?/gi,
-      /(?:超)?軽量\s*\d+(?:\.\d+)?\s*(?:g|kg)/gi,
-      /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
-      /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
-      /\d+\s*(?:枚|個|本|袋|箱|組|点)/g,
-      /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
-    ];
-    function promotionalQuantityContext(match){
-      const value=String(match?.[0]||'');
-      if(!/^\d+\s*(?:枚|個|本|袋|箱|組|点)$/.test(value)) return false;
-      const start=Number(match.index)||0;
-      const end=start+value.length;
-      const before=title.slice(Math.max(0,start-12),start);
-      const after=title.slice(end,end+12);
-      if(/(?:(?:数量)?限定|残り|在庫|お(?:一|1|ひと)人様|最大|累計|先着)\s*$/.test(before)) return true;
-      if(/^\s*(?:販売|突破|達成|以上|まで|ご購入|購入|注文|ごと|につき|限定|から|あたり|目|おまけ|プレゼント|無料|半額|[%％]|OFF|オフ)/i.test(after)) return true;
-      if(/^\s*で(?=\s*(?:送料無料|\d+[円￥]|[0-9,]+\s*円|[¥￥]\s*[0-9,]+|\d+\s*[%％]|OFF|オフ|半額|割引|クーポン|ポイント|特典|プレゼント|購入|注文|セット))/i.test(after)) return true;
-      return false;
-    }
-    for(const re of patterns){
-      re.lastIndex=0;
-      let m;
-      while((m=re.exec(title))){
-        if(promotionalQuantityContext(m)) continue;
-        add(m[0],m.index);
-      }
-    }
-    const targetTerms=['犬用','猫用','ネコ用','ペット用'];
-    for(const word of targetTerms){
-      const re=new RegExp(word+'(?!品|具)','g');
-      const m=re.exec(title);
-      if(m) add(m[0],m.index);
-    }
-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','洗える','ワンタッチ','スマホタッチ','タッチパネル操作可能','通気性','通気'];
-    for(const word of words){
-      if(word==='防水'&&title.includes('防水仕様')) continue;
-      if(word==='通気'&&title.includes('通気性')) continue;
-      const i=title.indexOf(word);if(i>=0)add(word,i);
-    }
-    const boundedTerms=[
-      {re:/(^|[^ァ-ヶー])(イオン)(?![ァ-ヶー])/g,group:2},
-      {re:/(^|[^A-Za-z])(EMS)(?![A-Za-z])/gi,group:2}
-    ];
-    for(const row of boundedTerms){
-      row.re.lastIndex=0;
-      let m;
-      while((m=row.re.exec(title))){
-        const prefix=String(m[1]||'');
-        add(m[row.group],m.index+prefix.length);
-      }
-    }
-    return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
+  const SERVER_PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍|当日発送|即日発送|発送/i;
+  const SERVER_CLAIM_RE=/改善|予防|防止|安全|安心|無害|保証|発火しない|燃えにくい|難燃|抗菌|除菌|殺菌|消臭|防臭|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|引き締め|リフトアップ|治る|痩せる|若返/i;
+  const LOCAL_FACT_REJECT_RE=/非|不|無し|なし|不可|除く|目|以上|まで|限定|半額|OFF|オフ|%|％|送料|購入|注文|プレゼント|おまけ/i;
+  const LOCAL_QUANTITY_FORM_RE=/^(?:\d+\s*(?:枚入り|個入|セット|本組|個組)|内容量\s*\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L)?)$/i;
+  const LOCAL_NUMBER_UNIT_RE=/\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L|個|枚|本|袋|組|台|段|色|ポート|時間|分)/i;
+  const LOCAL_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
+
+  function titleFactTokens(item){
+    return String(item?.itemName||'')
+      .replace(/<[^>]*>/g,' ')
+      .split(LOCAL_SPLIT_RE)
+      .map(x=>String(x||'').trim())
+      .filter(Boolean);
   }
 
-  const VALUE_RULES=[
-    {re:/スマホタッチ|タッチパネル操作可能/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
-    {re:/防水仕様|防水|撥水/i,hook:'水まわりで使うことがあるなら、防水・撥水の記載はチェック。',benefit:'水ぬれへの対応が明記された仕様を選びやすい。',label:'防水・撥水'},
-    {re:/ワンタッチ/i,hook:'操作の手順を増やしたくないなら、ワンタッチの記載はチェック。',benefit:'ワンタッチ仕様を確認して選びやすい。',label:'ワンタッチ'},
-    {re:/微弱電流|超音波|(?:^|[^A-Za-z])ems(?![A-Za-z])|(?:^|[^ァ-ヶー])イオン(?![ァ-ヶー])/i,hook:'搭載されている機能を比べて選びたいなら、ここはチェック。',benefit:'商品名に記載された搭載機能を確認して選びやすい。',label:'搭載機能'},
-    {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
-    {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
-    {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
-    {re:/防寒|裏起毛|保温/i,hook:'寒い時期にも使いたいなら、ここはチェック。',benefit:'寒い時期の使用を考えた仕様を選びやすい。',label:'防寒'},
-    {re:/折りたたみ|折り畳み/i,hook:'使わないときの置き場所を取りたくないなら、ここはチェック。',benefit:'使わないときは省スペースでしまいやすい。',label:'省スペース'},
-    {re:/軽量|軽い/i,hook:'持ち運びの負担を抑えたいなら、ここはチェック。',benefit:'持ち運びや取り回しの負担を抑えやすい。',label:'軽さ'},
-    {re:/洗える|丸洗い|水洗い|洗濯可/i,hook:'汚れた後のお手入れを簡単にしたいなら、ここはチェック。',benefit:'汚れたときに手入れしやすい。',label:'お手入れ'},
-    {re:/大容量|容量\s*\d|\d+\s*(?:L|ℓ|ml|mL)/i,hook:'まとめて入れられる容量を重視するなら、ここはチェック。',benefit:'収納量を重視して選びやすい。',label:'容量'},
-    {re:/\d+\s*(?:個|枚|本|点|食|包|袋)\s*(?:セット|入|入り)?/i,hook:'まとめ買いのしやすさを重視するなら、ここはチェック。',benefit:'必要な数をまとめて揃えやすい。',label:'セット内容'},
-    {re:/usb[- ]?c|type[- ]?c|急速充電|pd対応/i,hook:'充電まわりをすっきりまとめたいなら、ここはチェック。',benefit:'対応端子や充電仕様を見て選びやすい。',label:'充電対応'},
-    {re:/滑り止め|ノンスリップ|グリップ/i,hook:'持ったときの扱いやすさを重視するなら、ここはチェック。',benefit:'グリップ性を意識して選びやすい。',label:'グリップ'},
-    {re:/クッション|低反発|高反発|厚手/i,hook:'当たりのやわらかさや厚みを重視するなら、ここはチェック。',benefit:'クッション性を比べて選びやすい。',label:'クッション'}
-  ];
+  function isSafeLocalFactToken(token){
+    const value=String(token||'').trim();
+    if(!value) return false;
+    if(LOCAL_FACT_REJECT_RE.test(value)) return false;
+    if(SERVER_CLAIM_RE.test(value) || SERVER_PROMO_RE.test(value)) return false;
+    if(LOCAL_NUMBER_UNIT_RE.test(value) && !LOCAL_QUANTITY_FORM_RE.test(value)) return false;
+    return true;
+  }
 
-  function valueFromFacts(features=[]){
-    const matched=[];
-    for(const fact of features){
-      const text=String(fact||'').trim();
-      const rule=VALUE_RULES.find(r=>r.re.test(text));
-      if(rule&&!matched.some(x=>x.label===rule.label)) matched.push({...rule,fact:text});
+  function extractFallbackTitleFacts(item){
+    const seen=new Set(),out=[];
+    for(const token of titleFactTokens(item)){
+      if(!isSafeLocalFactToken(token)) continue;
+      if(seen.has(token)) continue;
+      seen.add(token);
+      out.push(token);
+      if(out.length>=6) break;
     }
-    return matched.slice(0,2);
+    return out;
+  }
+
+  function buildNeutralFactPost(item,productType,facts=[]){
+    const type=String(productType||'').trim();
+    const safeFacts=(Array.isArray(facts)?facts:[])
+      .map(x=>String(x||'').trim())
+      .filter(Boolean)
+      .filter((x,i,a)=>a.indexOf(x)===i)
+      .slice(0,6);
+    if(!type || !safeFacts.length) return '';
+    const price=Number(item?.itemPrice);
+    const lines=[type+'の商品名・説明に記載されている仕様です。',''];
+    for(const fact of safeFacts) lines.push('✓ '+fact);
+    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
   }
 
   function fallbackProductName(item,analysis){
@@ -1309,8 +1273,10 @@
 
   api.detectLegalRisk=detectLegalRisk;
   api.buildSafeDisplayName=buildSafeDisplayName;
+  api.titleFactTokens=titleFactTokens;
+  api.isSafeLocalFactToken=isSafeLocalFactToken;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
-  api.valueFromFacts=valueFromFacts;
+  api.buildNeutralFactPost=buildNeutralFactPost;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;
