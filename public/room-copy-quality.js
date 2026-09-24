@@ -939,8 +939,10 @@
     const add=(value,index)=>{const v=String(value||'').trim();if(!v||seen.has(v))return;seen.add(v);out.push({value:v,index:Number.isFinite(index)?index:title.indexOf(v)});};
     const patterns=[
       /(?:幅|奥行|高さ)\s*\d+(?:\.\d+)?\s*(?:cm|mm|m)?/gi,
+      /(?:超)?軽量\s*\d+(?:\.\d+)?\s*(?:g|kg)/gi,
       /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
       /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
+      /\d+\s*(?:枚|個|本|袋|箱|組|点)(?!\s*(?:販売|突破|達成))/g,
       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
     ];
     for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
@@ -950,7 +952,7 @@
       const m=re.exec(title);
       if(m) add(m[0],m.index);
     }
-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
+    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','EMS','ems','イオン','洗える','ワンタッチ','スマホ対応','スマホタッチ','タッチパネル操作可能','通気性','通気'];
     for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
     return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
   }
