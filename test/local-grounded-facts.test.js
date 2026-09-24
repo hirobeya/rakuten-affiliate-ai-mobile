@@ -90,3 +90,41 @@ test('quantity extraction ignores purchase-limit and shipping-count language',()
   }
   assert.ok(api.extractFallbackTitleFacts({itemName:'ペットシーツ 54枚'}).includes('54枚'));
 });
+
+
+test('quantity extraction ignores more purchase and shipping conditions',()=>{
+  const api=load();
+  const blocked=[
+    ['収納袋 2個ご購入で送料無料','2個'],
+    ['スポンジ 3個で送料無料','3個'],
+    ['タオル 2個で1000円','2個'],
+    ['マスク 2個から注文可','2個'],
+    ['洗剤 3個注文で割引','3個'],
+    ['電池 1個あたり500円','1個'],
+    ['ティッシュ おひとり様2個まで','2個'],
+    ['タオル お1人様3個まで','3個']
+  ];
+  for(const [name,bad] of blocked){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    assert.ok(!facts.includes(bad),name+' => '+JSON.stringify(facts));
+  }
+});
+
+test('EMS extraction requires ASCII word boundaries',()=>{
+  const api=load();
+  for(const name of ['ABC SYSTEMS ケーブル','items ケース']){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    assert.ok(!facts.some(x=>/^ems$/i.test(x)),name+' => '+JSON.stringify(facts));
+    const values=api.valueFromFacts(facts);
+    assert.ok(!values.some(x=>x.label==='搭載機能'),name+' => '+JSON.stringify(values));
+  }
+  const facts=api.extractFallbackTitleFacts({itemName:'美顔器 EMS 超音波'});
+  assert.ok(facts.some(x=>/^EMS$/i.test(x)),JSON.stringify(facts));
+});
+
+test('通気性 suppresses duplicate 通気 fact',()=>{
+  const api=load();
+  const facts=api.extractFallbackTitleFacts({itemName:'バイクグローブ 通気性 スマホ対応'});
+  assert.ok(facts.includes('通気性'),JSON.stringify(facts));
+  assert.ok(!facts.includes('通気'),JSON.stringify(facts));
+});
