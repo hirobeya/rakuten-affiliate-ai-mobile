@@ -20,8 +20,8 @@
       /(?:ソーラーパネル|ケース|カバー|ポーチ|バッグ|リード|ベルト|ストラップ|ケーブル|パッド|フック|アダプター|ホルダー|スタンド)(?:付き|付属|セット)?/g
     ],
     spec:[
-      /(?<![\d,])\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b/gi,
-      /(?<![\d,])\d{4,}(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b/gi,
+      /(?:^|[^\d,])(\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b)/gi,
+      /(?:^|[^\d,])(\d{4,}(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b)/gi,
       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,
       /\d+\s*(?:枚|個|本|袋|箱|組|点)\s*(?:セット|入り|入)/g
     ],
@@ -84,8 +84,9 @@
   function collectSpans(title){
     const spans=[];
     const add=(role,m,meta={})=>{
-      const text=String(m[0]||'');
-      const start=Number(m.index);
+      const capturedSpec=role==='spec'&&m[1]&&/^\d/.test(String(m[1]))?String(m[1]):'';
+      const text=capturedSpec||String(m[0]||'');
+      const start=Number(m.index)+(capturedSpec?String(m[0]||'').length-capturedSpec.length:0);
       if(!text || !Number.isFinite(start)) return;
       spans.push({role,text,start,end:start+text.length,source:'title',...meta});
     };
