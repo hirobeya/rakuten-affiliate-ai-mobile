@@ -2516,39 +2516,14 @@ function salesFactCore(value){
 
 function aiPhase1Post(item,result){
   const v=result?.validation;
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
   if(v.productType?.valid!==true) return '';
 
   const insight=aiSalesInsight(item,result);
   if(!String(insight.productType||'').trim()) return '';
-  const values=window.UrenaviPainCopy?.valueFromFacts?.(insight.features)||[];
-  const proof=[...insight.features,...insight.sellingPoints]
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,3);
-  if(!values.length){
-    if(!proof.length) return '';
-    const lines=[insight.productType+'で確認できる仕様をまとめました。',''];
-    proof.forEach(x=>lines.push('✓ '+x));
-    if(priceLine) lines.push('',priceLine);
-    lines.push('','※アフィリエイト広告を利用しています');
-    return lines.join('\n').slice(0,500);
-  }
 
-  const lines=[values[0].hook,''];
-  lines.push('✓ '+values[0].benefit);
-  if(values[1]) lines.push('✓ '+values[1].benefit);
-
-  if(proof.length){
-    lines.push('', '根拠になる仕様：'+proof.join('／'));
-  }
-
-  const fitLabels=values.map(x=>x.label).join('と');
-  if(fitLabels) lines.push('',fitLabels+'を重視して'+insight.productType+'を選びたい人に。');
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500);
+  const facts=window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,insight.productType,facts)||'';
 }
 
 function aiPanelMarkup(item,index){
