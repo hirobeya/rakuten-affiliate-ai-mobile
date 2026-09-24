@@ -45,24 +45,28 @@
   }
 
   function filterAllowedSpecFacts(values){
-    const input=(Array.isArray(values)?values:[]).map(normalize).filter(Boolean);
-    const allowed=input.filter(isAllowedSpecFact);
+    const input=(Array.isArray(values)?values:[])
+      .map(raw=>({raw:String(raw||'').trim(),norm:normalize(raw)}))
+      .filter(x=>x.raw&&x.norm&&isAllowedSpecFact(x.norm));
     const byUnit=new Map();
-    for(const x of allowed){
-      const key=numericUnitKey(x);
+    for(const x of input){
+      const key=numericUnitKey(x.norm);
       if(!key) continue;
       if(!byUnit.has(key)) byUnit.set(key,new Set());
-      byUnit.get(key).add(x.toLowerCase());
+      byUnit.get(key).add(x.norm.toLowerCase());
     }
     const ambiguousUnits=new Set([...byUnit.entries()].filter(([,set])=>set.size>1).map(([key])=>key));
-    const countFacts=allowed.filter(x=>STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x));
-    const ambiguousCounts=new Set(countFacts.map(x=>x.toLowerCase())).size>1;
-    const out=[];
-    for(const x of allowed){
-      const unit=numericUnitKey(x);
+    const countFacts=input.filter(x=>STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm));
+    const ambiguousCounts=new Set(countFacts.map(x=>x.norm.toLowerCase())).size>1;
+    const out=[],seen=new Set();
+    for(const x of input){
+      const unit=numericUnitKey(x.norm);
       if(unit&&ambiguousUnits.has(unit)) continue;
-      if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x))) continue;
-      if(!out.includes(x)) out.push(x);
+      if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm))) continue;
+      const key=x.norm.toLowerCase();
+      if(seen.has(key)) continue;
+      seen.add(key);
+      out.push(x.raw);
     }
     return out;
   }
