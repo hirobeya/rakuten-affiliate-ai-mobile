@@ -655,7 +655,7 @@ function run(name,fn){
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
         prompt_version:'2026-09-24-ai-facts-only-v13',
-          validation_rule_version:'2026-09-24-ai-facts-v8',
+          validation_rule_version:'2026-09-24-ai-facts-v9',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -706,6 +706,21 @@ function run(name,fn){
     assert.match(html,/\.tab\[data-i=/);
   });
 
+  await run('client copy accepts simple_partial but rejects fallback and invalid product type',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
+    assert.match(html,/if\(v\.productType\?\.valid!==true\) return ''/);
+    assert.match(html,/if\(!String\(insight\.productType\|\|''\)\.trim\(\)\) return ''/);
+  });
+
+  await run('validation cache hash includes prompt and rule versions',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
+    assert.match(src,/VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9'/);
+    const hashBody=(src.match(/function makeInputHash[\s\S]*?\.digest\('hex'\);/)||[])[0]||'';
+    assert.match(hashBody,/PROMPT_VERSION/);
+    assert.match(hashBody,/VALIDATION_RULE_VERSION/);
+  });
+
   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
@@ -747,11 +762,13 @@ function run(name,fn){
     assert.doesNotMatch(apiText,/buyerBenefits/);
     assert.doesNotMatch(apiText,/fitLine/);
     assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
-    assert.match(html,/const VALUE_RULES=/);
-    assert.match(html,/function valueFromFacts\(/);
-    assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(html,/着けたままスマホ操作をしやすい/);
-    assert.match(html,/使わないときは省スペースでしまいやすい/);
+    const quality=fs.readFileSync(path.join(__dirname,'../public/room-copy-quality.js'),'utf8');
+    assert.doesNotMatch(html,/const VALUE_RULES=/);
+    assert.doesNotMatch(html,/function valueFromFacts\(/);
+    assert.match(html,/UrenaviPainCopy\?\.valueFromFacts/);
+    assert.match(quality,/スマホを見るたびに外す手間が気になるなら/);
+    assert.match(quality,/着けたままスマホ操作をしやすい/);
+    assert.match(quality,/使わないときは省スペースでしまいやすい/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
