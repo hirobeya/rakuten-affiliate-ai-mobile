@@ -31,7 +31,7 @@ module.exports=async function handler(req,res){
       const genreId=String(req.query?.genreId||'').trim();
       if(!/^\d+$/.test(genreId)) return res.status(400).json({message:'genreId invalid'});
       const p=new URLSearchParams({applicationId,accessKey,genreId,format:'json',formatVersion:'2'});
-      const r=await fetch(GENRE_URL+'?'+p,{signal:AbortSignal.timeout(12000)});
+      const r=await fetch(GENRE_URL+'?'+p,{signal:AbortSignal.timeout(12000),headers:{Origin:'https://rakuten-affiliate-ai-mobile.vercel.app',Referer:'https://rakuten-affiliate-ai-mobile.vercel.app/'}});
       const d=await r.json().catch(()=>({}));
       if(!r.ok) return res.status(r.status).json({message:'genre fetch failed',status:r.status});
       return res.status(200).json({genreId,genres:(Array.isArray(d.children)?d.children:[]).map(cleanGenre).filter(Boolean)});
@@ -43,7 +43,7 @@ module.exports=async function handler(req,res){
         applicationId,accessKey,keyword,format:'json',formatVersion:'2',
         hits:'30',availability:'1',sort:'standard'
       });
-      const r=await fetch(ITEM_URL+'?'+p,{signal:AbortSignal.timeout(15000)});
+      const r=await fetch(ITEM_URL+'?'+p,{signal:AbortSignal.timeout(15000),headers:{Origin:'https://rakuten-affiliate-ai-mobile.vercel.app',Referer:'https://rakuten-affiliate-ai-mobile.vercel.app/'}});
       const d=await r.json().catch(()=>({}));
       if(!r.ok) return res.status(r.status).json({message:'item fetch failed',status:r.status});
       const raw=Array.isArray(d.items)?d.items:Array.isArray(d.Items)?d.Items:[];
@@ -54,15 +54,6 @@ module.exports=async function handler(req,res){
         itemCode:String(x?.itemCode||'')
       })).filter(x=>x.itemName).slice(0,25);
       return res.status(200).json({keyword,items});
-    }
-    if(mode==='children'){
-      const genreId=String(req.query?.genreId||'').trim();
-      if(!/^\d+$/.test(genreId)) return res.status(400).json({message:'genreId invalid'});
-      const p=new URLSearchParams({applicationId,accessKey,genreId,format:'json',formatVersion:'2'});
-      const r=await fetch(GENRE_URL+'?'+p,{signal:AbortSignal.timeout(12000),headers:{Origin:'https://rakuten-affiliate-ai-mobile.vercel.app',Referer:'https://rakuten-affiliate-ai-mobile.vercel.app/'}});
-      const d=await r.json().catch(()=>({}));
-      if(!r.ok) return res.status(r.status).json({message:'genre children fetch failed',status:r.status});
-      return res.status(200).json({genreId,children:(Array.isArray(d.children)?d.children:[]).map(cleanGenre).filter(Boolean)});
     }
     if(mode==='genre'){
       const genreId=String(req.query?.genreId||'').trim();
