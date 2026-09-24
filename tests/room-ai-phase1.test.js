@@ -687,7 +687,7 @@ function run(name,fn){
     assert.match(html,/function resolvedPost\(/);
     assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
-    assert.match(html,/return UrenaviPainCopy\.makeRoomCopy/);
+    assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/rule_second_opinion_conflict/);
     assert.match(html,/mediumHandling:'fallback_fixed'/);
     assert.match(html,/cacheKeyComponents/);
@@ -766,7 +766,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/valueFromFacts/);
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/hook:/);
-    assert.doesNotMatch(quality,/benefit:/);
+    assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
     assert.match(html,/buildNeutralFactPost/);
     assert.match(quality,/商品名・説明に記載されている仕様です/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
