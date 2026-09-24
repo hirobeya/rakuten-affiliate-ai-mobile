@@ -942,23 +942,46 @@
       /(?:超)?軽量\s*\d+(?:\.\d+)?\s*(?:g|kg)/gi,
       /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
       /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
-      /(?<!お一人様)(?<!最大)(?<!累計)(?<!先着)\d+\s*(?:枚|個|本|袋|箱|組|点)(?!\s*(?:販売|突破|達成|以上|まで|購入|ごと|につき|限定))/g,
+      /\d+\s*(?:枚|個|本|袋|箱|組|点)/g,
       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
     ];
-    for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
+    function promotionalQuantityContext(match){
+      const value=String(match?.[0]||'');
+      if(!/^\d+\s*(?:枚|個|本|袋|箱|組|点)$/.test(value)) return false;
+      const start=Number(match.index)||0;
+      const end=start+value.length;
+      const before=title.slice(Math.max(0,start-12),start);
+      const after=title.slice(end,end+12);
+      if(/(?:お(?:一|1|ひと)人様|最大|累計|先着)\s*$/.test(before)) return true;
+      if(/^\s*(?:販売|突破|達成|以上|まで|ご購入|購入|注文|ごと|につき|限定|から|あたり)/.test(after)) return true;
+      if(/^\s*で(?=\s*(?:送料無料|\d+[円￥]|[0-9,]+\s*円|割引|クーポン|ポイント|特典|プレゼント|購入|注文|セット))/i.test(after)) return true;
+      return false;
+    }
+    for(const re of patterns){
+      re.lastIndex=0;
+      let m;
+      while((m=re.exec(title))){
+        if(promotionalQuantityContext(m)) continue;
+        add(m[0],m.index);
+      }
+    }
     const targetTerms=['犬用','猫用','ネコ用','ペット用'];
     for(const word of targetTerms){
       const re=new RegExp(word+'(?!品|具)','g');
       const m=re.exec(title);
       if(m) add(m[0],m.index);
     }
-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','EMS','ems','洗える','ワンタッチ','スマホ対応','スマホタッチ','タッチパネル操作可能','通気性','通気'];
+    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト','防水仕様','防水','撥水','微弱電流','超音波','洗える','ワンタッチ','スマホ対応','スマホタッチ','タッチパネル操作可能','通気性','通気'];
     for(const word of words){
       if(word==='防水'&&title.includes('防水仕様')) continue;
+      if(word==='通気'&&title.includes('通気性')) continue;
       const i=title.indexOf(word);if(i>=0)add(word,i);
     }
-    const boundedKatakana=[/(?<![ァ-ヶー])イオン(?![ァ-ヶー])/g];
-    for(const re of boundedKatakana){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
+    const boundedTerms=[
+      /(?<![ァ-ヶー])イオン(?![ァ-ヶー])/g,
+      /(?<![A-Za-z])EMS(?![A-Za-z])/gi
+    ];
+    for(const re of boundedTerms){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
     return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
   }
 
@@ -966,7 +989,7 @@
     {re:/スマホタッチ|タッチパネル|スマホ対応|touch/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
     {re:/防水仕様|防水|撥水/i,hook:'水まわりで使うことがあるなら、防水・撥水の記載はチェック。',benefit:'水ぬれへの対応が明記された仕様を選びやすい。',label:'防水・撥水'},
     {re:/ワンタッチ/i,hook:'操作の手順を増やしたくないなら、ワンタッチの記載はチェック。',benefit:'ワンタッチ仕様を確認して選びやすい。',label:'ワンタッチ'},
-    {re:/微弱電流|超音波|ems|(?<![ァ-ヶー])イオン(?![ァ-ヶー])/i,hook:'搭載されている機能を比べて選びたいなら、ここはチェック。',benefit:'商品名に記載された搭載機能を確認して選びやすい。',label:'搭載機能'},
+    {re:/微弱電流|超音波|(?<![A-Za-z])ems(?![A-Za-z])|(?<![ァ-ヶー])イオン(?![ァ-ヶー])/i,hook:'搭載されている機能を比べて選びたいなら、ここはチェック。',benefit:'商品名に記載された搭載機能を確認して選びやすい。',label:'搭載機能'},
     {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
     {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
     {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
