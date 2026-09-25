@@ -174,3 +174,42 @@ test('grounded benefit builder drops facts not present in the source title',()=>
   assert.match(out,/本革/);
   assert.doesNotMatch(out,/USB-C|10枚入り/);
 });
+
+
+test('contextual product copy uses explicit product noun from title',()=>{
+  const api=load();
+  const cases=[
+    {
+      item:{itemName:'猫耳 IDカードケース 日本製 本革 牛革',itemPrice:6490},
+      must:['IDカードケースを、素材や生産地まで確認して選びたいなら。','「日本製」','「本革」','IDカードケースを素材と生産地の両方から見比べたいときの候補です。']
+    },
+    {
+      item:{itemName:'パジャマ メンズ 2点セット コットン',itemPrice:3240},
+      must:['パジャマを、セット内容と素材の両方まで確認して選びたいなら。','「2点セット」','「コットン」']
+    },
+    {
+      item:{itemName:'Calvin Klein ボクサーパンツ 3枚組',itemPrice:6950},
+      must:['ボクサーパンツを、セット内容や入数まで確認して選びたいなら。','「3枚組」']
+    },
+    {
+      item:{itemName:'スクエアボックスプール 80×80×25cm',itemPrice:2331},
+      must:['スクエアボックスプールを、サイズ表記まで確認して選びたいなら。','「80×80×25cm」']
+    },
+    {
+      item:{itemName:'HDMIケーブル USB-C対応',itemPrice:1800},
+      must:['HDMIケーブルを、対応規格まで確認して選びたいなら。','「USB-C対応」']
+    }
+  ];
+  for(const c of cases){
+    const out=api.makeRoomCopy(c.item,'');
+    for(const x of c.must) assert.ok(out.includes(x),x+' missing from '+out);
+    assert.doesNotMatch(out,/高級|丈夫|長持ち|吸水|高画質|急速充電|絶対|必ず|確実に/);
+  }
+});
+
+test('contextual product noun must exist verbatim in title',()=>{
+  const api=load();
+  const item={itemName:'商品 本革 日本製',itemPrice:1000};
+  const out=api.makeRoomCopy(item,'');
+  assert.doesNotMatch(out,/財布|バッグ|IDカードケース|パジャマ|プール/);
+});
