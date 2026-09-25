@@ -156,7 +156,7 @@ test('grounded benefit copy only expands verified fact types',()=>{
     },
     {
       item:{itemName:'財布 本革 ブラック',itemPrice:4980},
-      must:['本革','素材を見て選びたいときに。'],
+      must:['本革','財布を、素材表記まで確認して選びたいなら。'],
       mustNot:['高級','丈夫','長く使える']
     }
   ];
