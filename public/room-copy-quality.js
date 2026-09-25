@@ -562,6 +562,7 @@
     'IDカードケース','IDカードホルダー','スマホケース','カードケース',
     'ボクサーパンツ','ボクサーショーツ','トランクス','ショーツ',
     'パウンドケーキ','Tシャツ','tシャツ','カットソー','パジャマ',
+    'モバイルバッテリー','Power Bank','パワーバンク','ポータブル電源',
     'アンテナケーブル','変換ケーブル','HDMIケーブル','USBケーブル','ケーブル',
     'フラットシューズ','コンフォートシューズ','パンプス','サンダル',
     'スクエアボックスプール','ビニールプール','プール',
@@ -569,7 +570,7 @@
     '収納ボックス','収納ケース',
     'うんち袋','ウンチ袋','マナー袋','ウェットティッシュ','ウェットシート',
     'ペットシート','キャリーバッグ','ペットバッグ','ペットマット',
-    'フードボウル','ペット食器','給餌器','モバイルバッテリー','パワーバンク'
+    'フードボウル','ペット食器','給餌器'
   ];
 
   function exactProductTypeName(itemName){
@@ -1052,23 +1053,24 @@
   function contextualMeaningLine(identity,safeFacts){
     const id=String(identity||'').trim();
     if(!id||!safeFacts.length) return '';
-    const quoted=safeFacts.slice(0,3).map(x=>'「'+x+'」').join('・');
+    const first=String(safeFacts[0]||'').trim();
+    const rest=safeFacts.slice(1,3).map(x=>'「'+x+'」').join('・');
+    const evidence='商品名には「'+first+'」と明記されています。'+(rest?'さらに'+rest+'も確認できます。':'');
     const hasCount=safeFacts.some(x=>FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x));
     const hasDimension=safeFacts.some(x=>FactSafety?.DIMENSION_RE?.test(x));
     const hasMaterial=safeFacts.some(x=>FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x));
     const hasOrigin=safeFacts.includes('日本製');
     const hasStandard=safeFacts.some(x=>FactSafety?.STANDARDS?.has?.(x)&&x!=='日本製');
 
-    if(hasDimension) return '商品名では'+quoted+'が確認できます。'+id+'のサイズを先に見比べたいときの判断材料になります。';
-    if(hasCount&&hasMaterial) return '商品名では'+quoted+'が確認できます。'+id+'の枚数・セット内容と素材を一緒に見比べられます。';
-    if(hasMaterial&&hasOrigin) return '商品名では'+quoted+'が確認できます。'+id+'を素材と生産地の両方から見比べたいときの候補です。';
-    if(hasStandard) return '商品名では'+quoted+'が確認できます。'+id+'が手持ちの機器や使いたい規格に合うか確認する材料になります。';
-    if(hasCount) return '商品名では'+quoted+'が確認できます。'+id+'を必要な枚数やセット数で比べたいときに見やすい商品です。';
-    if(hasMaterial) return '商品名では'+quoted+'が確認できます。'+id+'を素材から比べたいときに確認しやすい商品です。';
-    if(hasOrigin) return '商品名では'+quoted+'が確認できます。'+id+'を生産地も含めて比べたいときの候補です。';
-    return '商品名では'+quoted+'が確認できます。'+id+'の仕様を見比べたいときの判断材料になります。';
+    if(hasDimension) return evidence+id+'のサイズを先に見比べたいときの判断材料になります。';
+    if(hasCount&&hasMaterial) return evidence+id+'の枚数・セット内容と素材を一緒に見比べられます。';
+    if(hasMaterial&&hasOrigin) return evidence+id+'を素材と生産地の両方から見比べたいときの候補です。';
+    if(hasStandard) return evidence+id+'が手持ちの機器や使いたい規格に合うか確認する材料になります。';
+    if(hasCount) return evidence+id+'を必要な枚数やセット数で比べたいときに見やすい商品です。';
+    if(hasMaterial) return evidence+id+'を素材から比べたいときに確認しやすい商品です。';
+    if(hasOrigin) return evidence+id+'を生産地も含めて比べたいときの候補です。';
+    return evidence+id+'の仕様を見比べたいときの判断材料になります。';
   }
-
   function buildGroundedBenefitPost(item,facts=[]){
     const safeFacts=safePostFacts(item,facts);
     if(!safeFacts.length) return '';
