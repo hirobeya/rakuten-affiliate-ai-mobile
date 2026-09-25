@@ -89,7 +89,7 @@ test('all client copy channels use the same grounded benefit output from safe fa
   const instagram=api.makeInstagramCopy(item,'');
   assert.equal(room,threads);
   assert.equal(room,instagram);
-  assert.match(room,/必要な数をまとめて揃えたいときにチェック。|接続規格や対応規格を確認して選びたいときに。/);
+  assert.match(room,/モバイルバッテリーを、対応規格まで確認して選びたいなら。/);
   assert.match(room,/商品名には「(?:10枚入り|USB-C対応)」と明記されています。/);
   assert.match(room,/確認できる仕様👇/);
   assert.match(room,/✓ 10枚入り/);
@@ -151,7 +151,7 @@ test('grounded benefit copy only expands verified fact types',()=>{
     },
     {
       item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},
-      must:['HDMI','USB-C対応','接続規格や対応規格を確認して選びたいときに。'],
+      must:['HDMI','USB-C対応','ケーブルを、対応規格まで確認して選びたいなら。'],
       mustNot:['高速','高画質','急速充電']
     },
     {
