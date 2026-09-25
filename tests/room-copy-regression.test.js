@@ -99,7 +99,7 @@ for(const id of ['counter-power-bank-case','counter-powerbank-pouch']){
 
 // Strict output examples: generate only explicit allowlisted specifications.
 const strictCases=[
-  {id:'strict-battery',itemName:'モバイルバッテリー 10000mAh USB-C対応 人気 ギフト',itemPrice:2980,want:['10000mAh','USB-C対応'],drop:['人気','ギフト']},
+  {id:'strict-battery',itemName:'モバイルバッテリー 10000mAh USB-C対応 人気 ギフト',itemPrice:2980,want:['USB-C対応'],drop:['10000mAh','人気','ギフト']},
   {id:'strict-material',itemName:'財布 本革 メンズ ブランド名',itemPrice:5000,want:['本革'],drop:['メンズ','ブランド名']},
   {id:'strict-count',itemName:'タオル 10枚入り 送料無料',itemPrice:1200,want:['10枚入り'],drop:['送料無料']},
   {id:'strict-stop',itemName:'ケース 防水 ワンタッチ 人気',itemPrice:1000,want:[],drop:['ケース','防水','ワンタッチ','人気']}
