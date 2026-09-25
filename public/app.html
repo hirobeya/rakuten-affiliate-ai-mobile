@@ -2529,7 +2529,9 @@ function aiPhase1Post(item,result){
   ];
   const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
   const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
-  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)
+    ||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)
+    ||'';
 }
 
 function aiPanelMarkup(item,index){
