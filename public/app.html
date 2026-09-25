@@ -2523,7 +2523,11 @@ function aiPhase1Post(item,result){
   const insight=aiSalesInsight(item,result);
   if(!String(insight.productType||'').trim()) return '';
 
-  const facts=window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  const combinedFacts=[
+    ...(Array.isArray(insight.features)?insight.features:[]),
+    ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
+  ];
+  const facts=window.UrenaviFactSafety?.filterAllowedSpecFacts?.(combinedFacts)||[];
   return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
