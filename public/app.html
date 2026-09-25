@@ -2917,15 +2917,10 @@ function postReady(i,p='room'){
 function postDisplay(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
-    if(s.state?.state==='error') return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
-    return '商品内容をGroqで確認中です。確認が終わると投稿文を表示します。';
+    if(s.state?.state==='error') return '';
+    return '商品内容を確認中です。';
   }
-  const text=String(post(i,p)||'').trim();
-  if(text) return text;
-  if(s.gate.enabled&&!s.gate.useLegacy&&!s.gate.full){
-    return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
-  }
-  return 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
+  return String(post(i,p)||'').trim();
 }
 
 
