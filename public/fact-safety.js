@@ -33,7 +33,7 @@
     const x=normalize(value);
     if(!x) return false;
     if(PROMO_RE.test(x)||CLAIM_RE.test(x)) return false;
-    if(NUMERIC_UNIT_RE.test(x)||DIMENSION_RE.test(x)||STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x)||CONTENT_AMOUNT_RE.test(x)||MATERIAL_WITH_PERCENT_RE.test(x)) return true;
+    if(DIMENSION_RE.test(x)||STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x)||CONTENT_AMOUNT_RE.test(x)||MATERIAL_WITH_PERCENT_RE.test(x)) return true;
     if(MATERIALS.has(x)||STANDARDS.has(x)) return true;
     return false;
   }
@@ -58,11 +58,14 @@
     const ambiguousUnits=new Set([...byUnit.entries()].filter(([,set])=>set.size>1).map(([key])=>key));
     const countFacts=input.filter(x=>STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm));
     const ambiguousCounts=new Set(countFacts.map(x=>x.norm.toLowerCase())).size>1;
+    const dimensionFacts=input.filter(x=>DIMENSION_RE.test(x.norm));
+    const ambiguousDimensions=new Set(dimensionFacts.map(x=>x.norm.toLowerCase())).size>1;
     const out=[],seen=new Set();
     for(const x of input){
       const unit=numericUnitKey(x.norm);
       if(unit&&ambiguousUnits.has(unit)) continue;
       if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm))) continue;
+      if(ambiguousDimensions&&DIMENSION_RE.test(x.norm)) continue;
       const key=x.norm.toLowerCase();
       if(seen.has(key)) continue;
       seen.add(key);
