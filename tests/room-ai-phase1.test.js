@@ -399,10 +399,10 @@ function run(name,fn){
       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
       features:[
         {text:'小顔効果',source:'itemCaption',evidence:'小顔'},
-        {text:'約196g',source:'itemCaption',evidence:'約196g'},
+        {text:'内容量196g',source:'itemCaption',evidence:'内容量196g'},
         {text:'日本製',source:'itemCaption',evidence:'日本製'}
       ],confidence:'high'
-    },{itemName:'美顔ローラー',itemCaption:'小顔 約196g 日本製'},{imageAvailable:false});
+    },{itemName:'美顔ローラー',itemCaption:'小顔 内容量196g 日本製'},{imageAvailable:false});
     assert.equal(v.mode,'simple_partial');
     assert.ok(v.reasons.includes('invalid_claim_features_dropped'));
     assert.equal(v.features.filter(x=>x.eligibleForPost).length,2);
@@ -800,16 +800,16 @@ function run(name,fn){
     const v=validateAiExtraction({
       productType:{value:'商品',source:'itemName',evidence:'商品'},
       features:[
-        {text:'500ml',source:'itemName',evidence:'500ml'},
+        {text:'内容量500ml',source:'itemName',evidence:'内容量500ml'},
         {text:'USB-C対応',source:'itemName',evidence:'USB-C対応'},
         {text:'本革',source:'itemName',evidence:'本革'},
         {text:'ケース',source:'itemName',evidence:'ケース'},
         {text:'トヨタ',source:'itemName',evidence:'トヨタ'},
         {text:'防水',source:'itemName',evidence:'防水'}
       ],sellingPoints:[],confidence:'high'
-    },{itemName:'商品 500ml USB-C対応 本革 ケース トヨタ 防水',itemCaption:''},{imageAvailable:false});
+    },{itemName:'商品 内容量500ml USB-C対応 本革 ケース トヨタ 防水',itemCaption:''},{imageAvailable:false});
     const eligible=v.features.filter(x=>x.eligibleForPost).map(x=>x.text);
-    assert.deepEqual(eligible,['500ml','USB-C対応','本革']);
+    assert.deepEqual(eligible,['内容量500ml','USB-C対応','本革']);
     for(const x of v.features.filter(x=>['ケース','トヨタ','防水'].includes(x.text))){
       assert.equal(x.valid,true);
       assert.equal(x.specLike,false);
