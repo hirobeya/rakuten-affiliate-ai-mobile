@@ -40,7 +40,7 @@
 
   function numericUnitKey(value){
     const x=normalize(value);
-    const m=x.match(/^(?:約)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
+    const m=x.match(/^(?:内容量\s*)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
     return m?String(m[1]||'').toLowerCase():'';
   }
 
