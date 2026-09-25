@@ -81,7 +81,7 @@ test('combined Groq and local facts are ambiguity-filtered again before posting'
   assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
 });
 
-test('all client copy channels use the same neutral safe-fact output',()=>{
+test('all client copy channels use the same grounded benefit output from safe facts',()=>{
   const api=load();
   const item={itemName:'モバイルバッテリー USB-C対応 ブラック 人気 ギフト 10枚入り',itemPrice:1980};
   const room=api.makeRoomCopy(item,'');
@@ -89,10 +89,12 @@ test('all client copy channels use the same neutral safe-fact output',()=>{
   const instagram=api.makeInstagramCopy(item,'');
   assert.equal(room,threads);
   assert.equal(room,instagram);
-  assert.match(room,/^商品名に記載されている仕様です。/);
+  assert.match(room,/必要な数をまとめて揃えたいときにチェック。|接続規格や対応規格を確認して選びたいときに。/);
+  assert.match(room,/商品名には「(?:10枚入り|USB-C対応)」と明記されています。/);
+  assert.match(room,/確認できる仕様👇/);
   assert.match(room,/✓ 10枚入り/);
   assert.match(room,/✓ USB-C対応/);
-  assert.doesNotMatch(room,/ブラック|人気|ギフト|おすすめ|向いて|悩み|使いやす|しやすい|こんな人/);
+  assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
   assert.match(room,/価格：1,980円/);
   assert.match(room,/※アフィリエイト広告を利用しています/);
 });
@@ -125,8 +127,9 @@ test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
   assert.doesNotMatch(html,/valueFromFacts/);
   assert.doesNotMatch(quality,/VALUE_RULES/);
   assert.doesNotMatch(quality,/function valueFromFacts\(/);
-  assert.match(html,/buildNeutralFactPost/);
-  assert.match(quality,/商品名に記載されている仕様です/);
+  assert.match(html,/buildGroundedBenefitPost/);
+  assert.match(quality,/function buildGroundedBenefitPost/);
+  assert.match(quality,/確認できる仕様/);
 });
 
 test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
@@ -135,4 +138,39 @@ test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
     const src=fs.readFileSync('public/'+name,'utf8');
     assert.ok(!src.includes('(?<'),name+' contains regex lookbehind');
   }
+});
+
+
+test('grounded benefit copy only expands verified fact types',()=>{
+  const api=load();
+  const cases=[
+    {
+      item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},
+      must:['10枚入り','必要な数をまとめて揃えたいときにチェック。'],
+      mustNot:['洗い替え','長持ち','吸水']
+    },
+    {
+      item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},
+      must:['HDMI','USB-C対応','接続規格や対応規格を確認して選びたいときに。'],
+      mustNot:['高速','高画質','急速充電']
+    },
+    {
+      item:{itemName:'財布 本革 ブラック',itemPrice:4980},
+      must:['本革','素材を見て選びたいときに。'],
+      mustNot:['高級','丈夫','長く使える']
+    }
+  ];
+  for(const c of cases){
+    const out=api.makeRoomCopy(c.item,'');
+    for(const x of c.must) assert.ok(out.includes(x),x+' missing from '+out);
+    for(const x of c.mustNot) assert.ok(!out.includes(x),x+' leaked into '+out);
+  }
+});
+
+test('grounded benefit builder drops facts not present in the source title',()=>{
+  const api=load();
+  const item={itemName:'財布 本革 ブラック',itemPrice:4980};
+  const out=api.buildGroundedBenefitPost(item,['本革','USB-C対応','10枚入り']);
+  assert.match(out,/本革/);
+  assert.doesNotMatch(out,/USB-C|10枚入り/);
 });
