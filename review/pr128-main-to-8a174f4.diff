@@ -1,0 +1,3933 @@
+diff --git a/api/room-ai.js b/api/room-ai.js
+--- a/api/room-ai.js
++++ b/api/room-ai.js
+@@ -12,8 +12,8 @@ const GROQ_MAX_RETRIES=3;
+ let groqSerialTail=Promise.resolve();
+ let lastGroqStartAt=0;
+ const CACHE_TTL_DAYS=90;
+-const PROMPT_VERSION='2026-09-24-ai-facts-only-v12';
+-const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v8';
++const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
++const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9';
+ 
+ const FEATURE_MAX_CHARS=48;
+ const FEATURE_EVIDENCE_MAX_CHARS=72;
+@@ -76,7 +76,7 @@ function schemaForCall(hasImage){
+   return hasImage?imageSchema:textSchema;
+ }
+ 
+-const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文にある短い商品種別。features=素材・仕様・対応・サイズ・容量など、原文からそのまま抜き出した完全な連続引用を最大3件。sellingPoints=購入判断に役立つ原文の完結した連続引用を最大2件。全項目source/evidence必須。text自体も必ず原文に連続して存在する引用にする。文字数上限で途中切れさせない。長い場合は別の短い完全な事実を選ぶ。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測は禁止。数字と単位は原文一致。`;
++const SYSTEM_PROMPT=`楽天商品から事実だけ抽出。productType=商品名に完全一致する1〜2語の具体的商品名詞。仕様語・ブランド・型番禁止。表記・空白は原文どおり。明確ならconfidence=high。美顔・美容・ペット・メンズ・レディース・グッズ・用品など属性語単独は禁止し具体名を選ぶ。features=仕様・素材・対応・サイズ・容量・数量・重量・搭載機能を最大3件。sellingPoints=安全な事実を最大2件。features/sellingPointsはtextとevidenceを同じ完全な連続引用。productTypeはvalue=evidence。数字・単位も完全一致。途中切れ禁止。販促・ランキング・配送・効能・安全・健康・美容・保証は禁止。推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止。`;
+ 
+ function json(res,status,body){
+   res.setHeader('Cache-Control','no-store');
+@@ -94,7 +94,9 @@ function makeInputHash({itemCode='',itemName='',imageUrl='',itemCaption=''}) {
+       String(itemCode||'').trim(),
+       String(itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim(),
+       String(imageUrl||'').trim(),
+-      normalizeCacheCaption(itemCaption)
++      normalizeCacheCaption(itemCaption),
++      PROMPT_VERSION,
++      VALIDATION_RULE_VERSION
+     ].join('\n'))
+     .digest('hex');
+ }
+
+diff --git a/lib/room-ai.js b/lib/room-ai.js
+--- a/lib/room-ai.js
++++ b/lib/room-ai.js
+@@ -1,9 +1,10 @@
+ 'use strict';
+ 
+-const PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍/i;
+-const CLAIM_RE=/改善|予防|防止|安全|安心|無害|保証|発火しない|燃えにくい|難燃|抗菌|除菌|殺菌|消臭|防臭|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|引き締め|リフトアップ|治る|痩せる|若返/i;
++const FactSafety=require('../public/fact-safety.js');
++const {PROMO_RE,CLAIM_RE,isAllowedSpecFactForEvidence,filterAllowedSpecFacts}=FactSafety;
+ const NUMBER_UNIT_RE=/\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L|個|枚|本|袋|組|台|段|色|ポート|時間|分)/gi;
+ const DERIVED_GENERIC_RE=/^(?:使いやすい|便利|おすすめ|選びやすい|商品ページ(?:を)?確認|チェックしたい|比較したい)[。！!]*$/;
++const GENERIC_PRODUCT_TYPE_RE=/^(?:美顔|美容|ペット|犬用|猫用|メンズ|レディース|家電|グッズ|用品)$/i;
+ 
+ const norm=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+ const compact=s=>norm(s).replace(/\s+/g,'').toLowerCase();
+@@ -45,7 +46,7 @@ function quoteBoundaryValid(source,text,itemName,itemCaption){
+   const end=index+needle.length;
+   if(end>=hay.length) return true;
+   const next=hay[end];
+-  return /[\s。！？!?、，,.・\/／）)\]】]/.test(next);
++  return /[\s。！？!?、，,.・\/／）)\]】〕〉》」』〗}]/.test(next);
+ }
+ 
+ function numberUnitTokens(text){
+@@ -74,20 +75,34 @@ function validateProductType(productType,itemName,itemCaption){
+   const evidence=norm(p.evidence);
+   const validSource=source==='itemName'||source==='itemCaption';
+   const evidenceValid=validSource&&evidenceExists(source,evidence,itemName,itemCaption);
++  const textEvidenceValid=validSource&&evidenceExists(source,value,itemName,itemCaption);
+   const numbersValid=numbersSupported(value,evidence);
+   const promoRisk=PROMO_RE.test(value);
+   const claimRisk=CLAIM_RE.test(value);
+   const evidencePromoRisk=PROMO_RE.test(evidence);
+   const evidenceClaimRisk=CLAIM_RE.test(evidence);
+   const coverage=productTypeCoverage(value,evidence);
+   const meaningSupported=Boolean(value&&evidence&&coverage>=0.90);
++  const genericProductTypeRisk=GENERIC_PRODUCT_TYPE_RE.test(value);
++  const boundaryValid=quoteBoundaryValid(source,value,itemName,itemCaption);
++  const productTypeParts=value.split(/\s+/).filter(Boolean);
++  const productTypeStructureRisk=productTypeParts.length>2;
++  const brandLikeProductTypeRisk=productTypeParts.length===2
++    && /^[A-Za-z0-9.+-]+$/.test(productTypeParts[0])
++    && /^[ァ-ヶー]{2,}$/.test(productTypeParts[1])
++    && !/^(?:USB|PC|LED|HDMI|PD|Wi-?Fi|PowerBank)$/i.test(productTypeParts[0]);
+   return {
+     value,source,evidence,
+-    valid:Boolean(value&&evidenceValid&&numbersValid&&meaningSupported&&!promoRisk&&!claimRisk),
++    valid:Boolean(value&&evidenceValid&&textEvidenceValid&&boundaryValid&&numbersValid&&meaningSupported&&!promoRisk&&!claimRisk&&!genericProductTypeRisk&&!productTypeStructureRisk&&!brandLikeProductTypeRisk),
+     evidenceValid,
++    textEvidenceValid,
+     numbersValid,
+     meaningSupported,
+     meaningCoverage:Number(coverage.toFixed(3)),
++    genericProductTypeRisk,
++    boundaryValid,
++    productTypeStructureRisk,
++    brandLikeProductTypeRisk,
+     promoRisk,
+     claimRisk,
+     evidencePromoRisk,
+@@ -112,9 +127,11 @@ function validateFeature(feature,itemName,itemCaption){
+   const tc=compact(text),ec=compact(evidence);
+   const truncationRisk=Boolean(text.length>=44&&tc&&ec.startsWith(tc)&&ec.length>tc.length);
+   const valid=Boolean(text&&evidenceValid&&textEvidenceValid&&numbersValid&&!promoRisk&&!claimRisk&&!genericRisk&&!truncationRisk);
++  const specSource=source==='itemName'?itemName:itemCaption;
++  const specLike=isAllowedSpecFactForEvidence(text,specSource);
+   return {
+-    text,source,evidence,valid,evidenceValid,textEvidenceValid,numbersValid,promoRisk,claimRisk,evidencePromoRisk,evidenceClaimRisk,genericRisk,truncationRisk,
+-    eligibleForPost:valid&&(source==='itemName'||source==='itemCaption')
++    text,source,evidence,valid,evidenceValid,textEvidenceValid,numbersValid,promoRisk,claimRisk,evidencePromoRisk,evidenceClaimRisk,genericRisk,truncationRisk,specLike,
++    eligibleForPost:valid&&specLike&&(source==='itemName'||source==='itemCaption')
+   };
+ }
+ 
+@@ -138,10 +155,12 @@ function validateSellingPoint(point,itemName,itemCaption){
+   const tc=compact(text),ec=compact(evidence);
+   const truncationRisk=Boolean(text&&textEvidenceValid&&!boundaryValid)||(text.length>64)||(evidence.length>96);
+   const valid=Boolean(text&&evidenceValid&&textEvidenceValid&&completePhrase&&numbersValid&&meaningSupported&&!promoRisk&&!claimRisk&&!truncationRisk);
++  const specSource=source==='itemName'?itemName:itemCaption;
++  const specLike=isAllowedSpecFactForEvidence(text,specSource);
+   return {
+     text,source,evidence,valid,evidenceValid,textEvidenceValid,boundaryValid,completePhrase,numbersValid,meaningSupported,
+-    meaningCoverage:Number(meaningCoverage.toFixed(3)),promoRisk,claimRisk,evidencePromoRisk,evidenceClaimRisk,truncationRisk,
+-    eligibleForPost:valid&&(source==='itemName'||source==='itemCaption')
++    meaningCoverage:Number(meaningCoverage.toFixed(3)),promoRisk,claimRisk,evidencePromoRisk,evidenceClaimRisk,truncationRisk,specLike,
++    eligibleForPost:valid&&specLike&&(source==='itemName'||source==='itemCaption')
+   };
+ }
+ 
+@@ -181,6 +200,11 @@ function validateAiExtraction(raw,input,{imageAvailable=false}={}){
+   const productType=validateProductType(raw?.productType,itemName,itemCaption);
+   const features=Array.isArray(raw?.features)?raw.features.map(f=>validateFeature(f,itemName,itemCaption)):[];
+   const sellingPoints=Array.isArray(raw?.sellingPoints)?raw.sellingPoints.map(p=>validateSellingPoint(p,itemName,itemCaption)):[];
++  const postCandidates=[...features,...sellingPoints].filter(x=>x.eligibleForPost).map(x=>x.text);
++  const selectedPostFacts=new Set(filterAllowedSpecFacts(postCandidates));
++  for(const row of [...features,...sellingPoints]){
++    if(row.eligibleForPost&&!selectedPostFacts.has(row.text)) row.eligibleForPost=false;
++  }
+   const invalidFeatures=features.filter(f=>!f.valid);
+   const invalidCount=invalidFeatures.length;
+   const featureCount=features.length;
+@@ -202,8 +226,15 @@ function validateAiExtraction(raw,input,{imageAvailable=false}={}){
+   if(hardProductFailure){
+     mode='fallback';
+   }else if(invalidCount){
+-    if(criticalInvalidFeature){
+-      reasons.push(criticalInvalidNumeric?'critical_invalid_numeric_feature':'critical_invalid_claim_feature');
++    const validFeatureCount=features.filter(f=>f.valid).length;
++    if(criticalInvalidNumeric){
++      reasons.push('critical_invalid_numeric_feature');
++      mode='fallback';
++    }else if(criticalInvalidClaim&&validFeatureCount>=1&&invalidRatio<0.5){
++      reasons.push('invalid_claim_features_dropped');
++      mode='simple_partial';
++    }else if(criticalInvalidClaim){
++      reasons.push('critical_invalid_claim_feature');
+       mode='fallback';
+     }else if(invalidRatio>=0.5){
+       reasons.push('feature_validation_failed');
+
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -3,7 +3,7 @@
+   "version": "1.0.1",
+   "private": true,
+   "scripts": {
+-    "test:copy": "node tests/room-copy-regression.test.js && node tests/benefit-grounding.test.js",
++    "test:copy": "node tests/room-copy-regression.test.js && node tests/benefit-grounding.test.js && node test/local-grounded-facts.test.js && node tests/rakuten-large-genres-neutral-copy.test.js",
+     "vercel-build": "npm run test:copy && npm run test:shadow && npm run test:ai",
+     "test:ai": "node tests/room-ai-phase1.test.js",
+     "test:shadow": "node tests/product-shadow-v2.test.js"
+
+diff --git a/public/app.html b/public/app.html
+--- a/public/app.html
++++ b/public/app.html
+@@ -935,7 +935,8 @@ <h1>ウレナビ</h1>
+ <script src="/pain-copy.js?v=20260918-4"></script>
+ <script src="/pain-copy-refine.js?v=20260920-1"></script>
+ <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+-<script src="/room-copy-quality.js?v=20260920-7"></script>
++<script src="/fact-safety.js?v=20260925-1"></script>
++<script src="/room-copy-quality.js?v=20260925-1"></script>
+ <script src="/product-shadow-v2.js?v=20260921-1"></script>
+ <script src="/return-state.js?v=20260918-8"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+@@ -2493,10 +2494,15 @@ <h1>ウレナビ</h1>
+   const featureRows=(v.features||[])
+     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
+     .filter(x=>x.source==='itemName'||x.source==='itemCaption');
+-  const features=featureRows
+-    .map(x=>String(x.text).trim())
++  const localTitleFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[])
++    .map(x=>String(x).trim())
++    .filter(Boolean);
++  const features=[
++    ...featureRows.map(x=>String(x.text).trim()),
++    ...localTitleFacts
++  ]
+     .filter((x,i,a)=>x&&a.indexOf(x)===i)
+-    .slice(0,4);
++    .slice(0,6);
+   const sellingPoints=(v.sellingPoints||[])
+     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
+     .map(x=>String(x.text).trim())
+@@ -2509,58 +2515,21 @@ <h1>ウレナビ</h1>
+   return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
+ }
+ 
+-const VALUE_RULES=[
+-  {re:/タッチ|スマホ対応|touch/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
+-  {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
+-  {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
+-  {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
+-  {re:/防寒|裏起毛|保温/i,hook:'寒い時期にも使いたいなら、ここはチェック。',benefit:'寒い時期の使用を考えた仕様を選びやすい。',label:'防寒'},
+-  {re:/折りたたみ|折り畳み/i,hook:'使わないときの置き場所を取りたくないなら、ここはチェック。',benefit:'使わないときは省スペースでしまいやすい。',label:'省スペース'},
+-  {re:/軽量|軽い/i,hook:'持ち運びの負担を抑えたいなら、ここはチェック。',benefit:'持ち運びや取り回しの負担を抑えやすい。',label:'軽さ'},
+-  {re:/洗える|丸洗い|水洗い|洗濯可/i,hook:'汚れた後のお手入れを簡単にしたいなら、ここはチェック。',benefit:'汚れたときに手入れしやすい。',label:'お手入れ'},
+-  {re:/大容量|容量\s*\d|\d+\s*(?:L|ℓ|ml|mL)/i,hook:'まとめて入れられる容量を重視するなら、ここはチェック。',benefit:'収納量を重視して選びやすい。',label:'容量'},
+-  {re:/\d+\s*(?:個|枚|本|点|食|包|袋)\s*(?:セット|入|入り)?/i,hook:'まとめ買いのしやすさを重視するなら、ここはチェック。',benefit:'必要な数をまとめて揃えやすい。',label:'セット内容'},
+-  {re:/usb[- ]?c|type[- ]?c|急速充電|pd対応/i,hook:'充電まわりをすっきりまとめたいなら、ここはチェック。',benefit:'対応端子や充電仕様を見て選びやすい。',label:'充電対応'},
+-  {re:/滑り止め|ノンスリップ|グリップ/i,hook:'持ったときの扱いやすさを重視するなら、ここはチェック。',benefit:'グリップ性を意識して選びやすい。',label:'グリップ'},
+-  {re:/クッション|低反発|高反発|厚手/i,hook:'当たりのやわらかさや厚みを重視するなら、ここはチェック。',benefit:'クッション性を比べて選びやすい。',label:'クッション'}
+-];
+-
+-function valueFromFacts(features=[]){
+-  const matched=[];
+-  for(const fact of features){
+-    const text=String(fact||'').trim();
+-    const rule=VALUE_RULES.find(r=>r.re.test(text));
+-    if(rule&&!matched.some(x=>x.label===rule.label)) matched.push({...rule,fact:text});
+-  }
+-  return matched.slice(0,2);
+-}
+-
+ function aiPhase1Post(item,result){
+   const v=result?.validation;
+-  const price=Number(item?.itemPrice);
+-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
+   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
++  if(v.productType?.valid!==true) return '';
+ 
+   const insight=aiSalesInsight(item,result);
+-  const values=valueFromFacts(insight.features);
+-  if(!values.length) return '';
+-
+-  const lines=[values[0].hook,''];
+-  lines.push('✓ '+values[0].benefit);
+-  if(values[1]) lines.push('✓ '+values[1].benefit);
++  if(!String(insight.productType||'').trim()) return '';
+ 
+-  const proof=[...insight.features,...insight.sellingPoints]
+-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
+-    .slice(0,3);
+-  if(proof.length){
+-    lines.push('', '根拠になる仕様：'+proof.join('／'));
+-  }
+-
+-  const fitLabels=values.map(x=>x.label).join('と');
+-  if(fitLabels) lines.push('',fitLabels+'を重視して'+insight.productType+'を選びたい人に。');
+-  if(priceLine) lines.push('',priceLine);
+-  lines.push('','※アフィリエイト広告を利用しています');
+-  return lines.join('\n').slice(0,500);
++  const combinedFacts=[
++    ...(Array.isArray(insight.features)?insight.features:[]),
++    ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
++  ];
++  const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
++  const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
++  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+ }
+ 
+ function aiPanelMarkup(item,index){
+@@ -2599,7 +2568,7 @@ <h1>ウレナビ</h1>
+     return;
+   }
+   const v=result.data?.validation||{};
+-  status.textContent='検証：'+(v.mode==='simple'?'簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
++  status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
+   const rows=[];
+   const p=v.productType||{};
+   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
+@@ -2898,29 +2867,29 @@ <h1>ウレナビ</h1>
+   return 'legacy_'+p;
+ }
+ 
++function neutralRulePost(item,keyword=''){
++  const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
++  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
++}
++
+ function resolvedPost(item,index,p='room',keyword=''){
+   const gate=resolveAiGate(item,index,keyword);
+   if(gate.enabled){
+     if(gate.status==='fallback') return '';
+     if(gate.useLegacy){
+       const options={variant:index};
+-      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
+       if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+       if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+-      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
++      return neutralRulePost(item,keyword);
+     }
+     if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
+     return '';
+   }
+ 
+   const options={variant:index};
+-  if(p==='room'){
+-    options.usedOpenings=roomSentenceContext.openings;
+-    options.usedSeconds=roomSentenceContext.seconds;
+-  }
+   if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
+   if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+-  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
++  return neutralRulePost(item,keyword);
+ }
+ 
+ function post(i,p='room'){
+@@ -2949,15 +2918,10 @@ <h1>ウレナビ</h1>
+ function postDisplay(i,p='room'){
+   const s=aiPostState(i);
+   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
+-    if(s.state?.state==='error') return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
+-    return '商品内容をGroqで確認中です。確認が終わると投稿文を表示します。';
+-  }
+-  const text=String(post(i,p)||'').trim();
+-  if(text) return text;
+-  if(s.gate.enabled&&!s.gate.useLegacy&&!s.gate.full){
+-    return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
++    if(s.state?.state==='error') return '';
++    return '商品内容を確認中です。';
+   }
+-  return 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
++  return String(post(i,p)||'').trim();
+ }
+ 
+ 
+
+diff --git a/public/fact-safety.js b/public/fact-safety.js
+--- a/public/fact-safety.js
++++ b/public/fact-safety.js
+@@ -0,0 +1,118 @@
++(function(root,factory){
++  const api=factory();
++  if(typeof module==='object'&&module.exports) module.exports=api;
++  if(root) root.UrenaviFactSafety=api;
++})(typeof window!=='undefined'?window:(typeof globalThis!=='undefined'?globalThis:this),function(){
++  'use strict';
++
++  const PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍|当日発送|即日発送|発送/i;
++  const CLAIM_RE=/改善|予防|防止|安全|安心|無害|保証|発火しない|燃えにくい|難燃|抗菌|除菌|殺菌|消臭|防臭|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|引き締め|リフトアップ|治る|痩せる|若返/i;
++
++  const MATERIALS=new Set([
++    '本革','牛革','山羊革','羊革','豚革','合皮','人工皮革','レザー',
++    'コットン','綿','綿100%','綿100％','ポリエステル','ナイロン',
++    'アルミ','アルミニウム','ステンレス','シリコン','TPU','ABS',
++    'ガラス','木製','セラミック'
++  ]);
++
++  const STANDARDS=new Set([
++    'USB-C','USB C','USB-C対応','USB C対応','Type-C','Type C','Type-C対応','Type C対応','HDMI','DisplayPort','PD対応',
++    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','日本製'
++  ]);
++
++  const NUMERIC_UNIT_RE=/^(?:約)?\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i;
++  const DIMENSION_RE=/^\d+(?:[.,]\d+)?\s*[x×X]\s*\d+(?:[.,]\d+)?(?:\s*[x×X]\s*\d+(?:[.,]\d+)?)?\s*(?:mm|cm|m)$/i;
++  const STRUCTURED_COUNT_RE=/^(?:\d+\s*(?:枚|個|本|袋|箱|組|点|粒|錠|食|包)\s*(?:入|入り|セット|組)|\d+\s*セット)$/i;
++  const MULTIPACK_RE=/^\d+\s*(?:枚|個|本|袋|粒|錠)\s*[x×X]\s*\d+\s*(?:枚|個|本|袋|粒|錠)(?:\s*(?:入|入り|セット))?$/i;
++  const CONTENT_AMOUNT_RE=/^内容量\s*\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|GB|MB|TB)$/i;
++  const MATERIAL_WITH_PERCENT_RE=/^(?:綿|コットン|ポリエステル|ナイロン)\s*100[%％]$/i;
++  const SOURCE_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
++  const MATERIAL_PREFIX_MODIFIERS=new Set(['フェイク']);
++  const MATERIAL_SUFFIX_MODIFIERS=new Set(['調','風','タッチ','柄','ライク','プリント']);
++
++  const normalize=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
++  const sourceTokens=s=>String(s||'').replace(/<[^>]*>/g,' ').split(SOURCE_SPLIT_RE).map(normalize).filter(Boolean);
++
++  function isAllowedSpecFact(value){
++    const x=normalize(value);
++    if(!x) return false;
++    if(PROMO_RE.test(x)||CLAIM_RE.test(x)) return false;
++    if(DIMENSION_RE.test(x)||STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x)||CONTENT_AMOUNT_RE.test(x)||MATERIAL_WITH_PERCENT_RE.test(x)) return true;
++    if(MATERIALS.has(x)||STANDARDS.has(x)) return true;
++    return false;
++  }
++
++  function numericUnitKey(value){
++    const x=normalize(value);
++    const m=x.match(/^(?:内容量\s*)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
++    return m?String(m[1]||'').toLowerCase():'';
++  }
++
++  function materialOccurrenceIsUnmodified(tokens,index){
++    const prev=normalize(tokens[index-1]||'');
++    const next=normalize(tokens[index+1]||'');
++    return !MATERIAL_PREFIX_MODIFIERS.has(prev)&&!MATERIAL_SUFFIX_MODIFIERS.has(next);
++  }
++
++  function isAllowedSpecFactForEvidence(value,evidence){
++    const x=normalize(value);
++    if(!isAllowedSpecFact(x)) return false;
++    if(!MATERIALS.has(x)) return true;
++    const tokens=sourceTokens(evidence);
++    const matches=[];
++    for(let i=0;i<tokens.length;i++) if(tokens[i]===x) matches.push(i);
++    if(!matches.length) return false;
++    return matches.some(i=>materialOccurrenceIsUnmodified(tokens,i));
++  }
++
++
++  function filterAllowedSpecFacts(values){
++    const input=(Array.isArray(values)?values:[])
++      .map(raw=>({raw:String(raw||'').trim(),norm:normalize(raw)}))
++      .filter(x=>x.raw&&x.norm&&isAllowedSpecFact(x.norm));
++    const byUnit=new Map();
++    for(const x of input){
++      const key=numericUnitKey(x.norm);
++      if(!key) continue;
++      if(!byUnit.has(key)) byUnit.set(key,new Set());
++      byUnit.get(key).add(x.norm.toLowerCase());
++    }
++    const ambiguousUnits=new Set([...byUnit.entries()].filter(([,set])=>set.size>1).map(([key])=>key));
++    const countFacts=input.filter(x=>STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm));
++    const ambiguousCounts=new Set(countFacts.map(x=>x.norm.toLowerCase())).size>1;
++    const dimensionFacts=input.filter(x=>DIMENSION_RE.test(x.norm));
++    const ambiguousDimensions=new Set(dimensionFacts.map(x=>x.norm.toLowerCase())).size>1;
++    const out=[],seen=new Set();
++    for(const x of input){
++      const unit=numericUnitKey(x.norm);
++      if(unit&&ambiguousUnits.has(unit)) continue;
++      if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm))) continue;
++      if(ambiguousDimensions&&DIMENSION_RE.test(x.norm)) continue;
++      const key=x.norm.toLowerCase();
++      if(seen.has(key)) continue;
++      seen.add(key);
++      out.push(x.raw);
++    }
++    return out;
++  }
++
++  function filterAllowedTitleFacts(titleTokens,candidates=titleTokens){
++    const source=(Array.isArray(titleTokens)?titleTokens:[]).map(x=>String(x||'').trim()).filter(Boolean);
++    const sourceNorm=source.map(normalize);
++    const candidateSet=new Set((Array.isArray(candidates)?candidates:[]).map(normalize).filter(Boolean));
++    const accepted=[];
++    for(let i=0;i<source.length;i++){
++      const raw=source[i], x=sourceNorm[i];
++      if(!candidateSet.has(x)||!isAllowedSpecFact(x)) continue;
++      if(MATERIALS.has(x)&&!materialOccurrenceIsUnmodified(sourceNorm,i)) continue;
++      accepted.push(raw);
++    }
++    return filterAllowedSpecFacts(accepted);
++  }
++
++  return {
++    PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
++    NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
++    normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts
++  };
++});
+
+diff --git a/public/product-shadow-v2.js b/public/product-shadow-v2.js
+--- a/public/product-shadow-v2.js
++++ b/public/product-shadow-v2.js
+@@ -20,8 +20,8 @@
+       /(?:ソーラーパネル|ケース|カバー|ポーチ|バッグ|リード|ベルト|ストラップ|ケーブル|パッド|フック|アダプター|ホルダー|スタンド)(?:付き|付属|セット)?/g
+     ],
+     spec:[
+-      /(?<![\d,])\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b/gi,
+-      /(?<![\d,])\d{4,}(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b/gi,
++      /(?:^|[^\d,])(\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b)/gi,
++      /(?:^|[^\d,])(\d{4,}(?:\.\d+)?\s*(?:Wh|W|mAh|Pa|kg|g|cm|mm|L|ml)\b)/gi,
+       /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,
+       /\d+\s*(?:枚|個|本|袋|箱|組|点)\s*(?:セット|入り|入)/g
+     ],
+@@ -84,8 +84,9 @@
+   function collectSpans(title){
+     const spans=[];
+     const add=(role,m,meta={})=>{
+-      const text=String(m[0]||'');
+-      const start=Number(m.index);
++      const capturedSpec=role==='spec'&&m[1]&&/^\d/.test(String(m[1]))?String(m[1]):'';
++      const text=capturedSpec||String(m[0]||'');
++      const start=Number(m.index)+(capturedSpec?String(m[0]||'').length-capturedSpec.length:0);
+       if(!text || !Number.isFinite(start)) return;
+       spans.push({role,text,start,end:start+text.length,source:'title',...meta});
+     };
+
+diff --git a/public/room-copy-quality.js b/public/room-copy-quality.js
+--- a/public/room-copy-quality.js
++++ b/public/room-copy-quality.js
+@@ -933,26 +933,41 @@
+     return groundedOpening(a,item,variant,options);
+   }
+ 
++  const FactSafety=(typeof window!=='undefined'&&window.UrenaviFactSafety)||null;
++  const LOCAL_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
++
++  function titleFactTokens(item){
++    return String(item?.itemName||'')
++      .replace(/<[^>]*>/g,' ')
++      .split(LOCAL_SPLIT_RE)
++      .map(x=>String(x||'').trim())
++      .filter(Boolean);
++  }
++
++  function isSafeLocalFactToken(token){
++    return Boolean(FactSafety?.isAllowedSpecFact?.(token));
++  }
++
+   function extractFallbackTitleFacts(item){
+-    const title=titleOnly(item);
+-    const out=[],seen=new Set();
+-    const add=(value,index)=>{const v=String(value||'').trim();if(!v||seen.has(v))return;seen.add(v);out.push({value:v,index:Number.isFinite(index)?index:title.indexOf(v)});};
+-    const patterns=[
+-      /(?:幅|奥行|高さ)\s*\d+(?:\.\d+)?\s*(?:cm|mm|m)?/gi,
+-      /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
+-      /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
+-      /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
+-    ];
+-    for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
+-    const targetTerms=['犬用','猫用','ネコ用','ペット用'];
+-    for(const word of targetTerms){
+-      const re=new RegExp(word+'(?!品|具)','g');
+-      const m=re.exec(title);
+-      if(m) add(m[0],m.index);
+-    }
+-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
+-    for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
+-    return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
++    const tokens=titleFactTokens(item);
++    const filtered=FactSafety?.filterAllowedTitleFacts?.(tokens,tokens)||[];
++    return filtered.slice(0,6);
++  }
++
++  function buildNeutralFactPost(item,facts=[]){
++    const sourceTokens=new Set(titleFactTokens(item));
++    const safeFacts=(Array.isArray(facts)?facts:[])
++      .map(x=>String(x||'').trim())
++      .filter(x=>x&&sourceTokens.has(x)&&isSafeLocalFactToken(x))
++      .filter((x,i,a)=>a.indexOf(x)===i)
++      .slice(0,6);
++    if(!safeFacts.length) return '';
++    const price=Number(item?.itemPrice);
++    const lines=['商品名に記載されている仕様です。',''];
++    for(const fact of safeFacts) lines.push('✓ '+fact);
++    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
++    lines.push('','※アフィリエイト広告を利用しています');
++    return lines.join('\n').slice(0,500);
+   }
+ 
+   function fallbackProductName(item,analysis){
+@@ -1198,52 +1213,24 @@
+   }
+ 
+   function makeRoomCopy(item,keyword,options={}){
+-    const a=analyze(item,keyword);
+-    if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
+-
+-    const title=naturalProductIdentity(item,a);
+-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
+-    const opening=groundedOpening(a,item,variant,options);
+-    if(!opening) return shortFallback(item,true,a);
+-    const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
+-    const price=priceLine(item);
+-    const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
+-    let out=trimCopy(opening+facts+ending,500);
+-    out=finalScan(out);
+-    if(!validateBody(item,a,out)) return shortFallback(item,true,a);
+-    return out;
++    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+   }
+ 
+   function makeThreadsCopy(item,keyword,options={}){
+-    const a=analyze(item,keyword);
+-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
+-    const title=buildSafeDisplayName(item,a);
+-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
+-    let out=openingFor(a,item,variant,options);
+-    if(a.facts[0]) out+='\n✔ '+a.facts[0];
+-    const price=priceLine(item,'');
+-    out+='\n\n'+title+(price?'\n'+price:'');
+-    out=finalScan(trimCopy(out,360));
+-    return validateBody(item,a,out)?out:shortFallback(item);
++    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+   }
+ 
+   function makeInstagramCopy(item,keyword,options={}){
+-    const a=analyze(item,keyword);
+-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
+-    const title=buildSafeDisplayName(item,a);
+-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
+-    let out=openingFor(a,item,variant);
+-    if(a.facts.length) out+='\n\n'+a.facts.map(x=>'✔ '+x).join('\n');
+-    const price=priceLine(item);
+-    out+='\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+(price?'\n'+price:'');
+-    out=finalScan(trimCopy(out,500));
+-    return validateBody(item,a,out)?out:shortFallback(item);
++    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+   }
+ 
+ 
+   api.detectLegalRisk=detectLegalRisk;
+   api.buildSafeDisplayName=buildSafeDisplayName;
++  api.titleFactTokens=titleFactTokens;
++  api.isSafeLocalFactToken=isSafeLocalFactToken;
+   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
++  api.buildNeutralFactPost=buildNeutralFactPost;
+   api.fallbackProductName=fallbackProductName;
+   api.exactProductTypeName=exactProductTypeName;
+   api.earlyProductNounSignals=earlyProductNounSignals;
+
+diff --git a/test/assets.test.js b/test/assets.test.js
+--- a/test/assets.test.js
++++ b/test/assets.test.js
+@@ -32,7 +32,8 @@ test('product engine is loaded before interactive app logic and is not injected
+ test('app has a single source of truth for product copy',()=>{
+   const app=fs.readFileSync('public/app.html','utf8');
+   assert.match(app,/function productContext\(i\)/);
+-  assert.match(app,/UrenaviPainCopy\.makeRoomCopy/);
++  assert.match(app,/function neutralRulePost\(/);
++  assert.match(app,/UrenaviPainCopy\?\.buildNeutralFactPost/);
+   assert.match(app,/UrenaviPainCopy\.makeThreadsCopy/);
+   assert.match(app,/UrenaviPainCopy\.makeInstagramCopy/);
+   assert.doesNotMatch(app,/楽天で見つけた注目アイテム/);
+
+diff --git a/test/local-grounded-facts.test.js b/test/local-grounded-facts.test.js
+--- a/test/local-grounded-facts.test.js
++++ b/test/local-grounded-facts.test.js
+@@ -0,0 +1,138 @@
++const test=require('node:test');
++const assert=require('node:assert/strict');
++const fs=require('node:fs');
++const vm=require('node:vm');
++
++function load(){
++  const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
++  const window={document,Intl};
++  const ctx=vm.createContext({window,Intl,console});
++  vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
++  vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
++  vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
++  return window.UrenaviPainCopy;
++}
++
++test('local facts use a strict allowlist instead of exclusion-only tokens',()=>{
++  const api=load();
++  const item={itemName:'商品 コットン 500ml 10枚入り USB-C対応 防水 ギフト 54枚 メンズ ブランド名'};
++  const facts=api.extractFallbackTitleFacts(item);
++  assert.deepEqual(Array.from(facts),['コットン','10枚入り','USB-C対応']);
++  for(const bad of ['商品','500ml','防水','ギフト','54枚','メンズ','ブランド名']){
++    assert.ok(!facts.includes(bad),bad+' leaked '+JSON.stringify(facts));
++  }
++});
++
++test('only explicit measured specs structured counts standards and materials are allowed',()=>{
++  const api=load();
++  const accepted=['1.45x1m','10枚入り','2個入','3セット','4本組','2個組','3枚×7袋','USB-C対応','HDMI','本革','コットン','セラミック','日本製','内容量500ml'];
++  const rejected=['500ml','約196g','10000mAh','最大500ml','500ml以上','500ml相当','500mlペットボトル対応','10枚','2個','4本','防水','ワンタッチ','散歩','ドライブ','ギフト','父の日','メンズ','人気色','とらや','トヨタ','ケース','牛カレー','A4','B3','PD','レザー調','本革風','コットンタッチ','フェイクレザー','ナイロン柄'];
++  for(const token of accepted) assert.equal(api.isSafeLocalFactToken(token),true,token);
++  for(const token of rejected) assert.equal(api.isSafeLocalFactToken(token),false,token);
++});
++
++test('material modifiers are rejected even when separated into adjacent tokens',()=>{
++  const api=load();
++  for(const name of [
++    '財布 フェイク レザー ブラック',
++    'バッグ レザー 調 ブラウン',
++    'ソファ 本革 風 ブラック',
++    '生地 コットン タッチ',
++    'シャツ ナイロン 柄',
++    '靴 レザー ライク',
++    'ポーチ レザー プリント'
++  ]){
++    assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:name})),[],name);
++  }
++  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'財布 本革 ブラック'})),['本革']);
++});
++
++test('ambiguous repeated units and multiple count variants are dropped',()=>{
++  const api=load();
++  const variants=api.extractFallbackTitleFacts({itemName:'ハーブティー 内容量20g 内容量30g 内容量50g コットン'});
++  assert.deepEqual(Array.from(variants),['コットン']);
++  const counts=api.extractFallbackTitleFacts({itemName:'セット 3枚入り 5枚入り 本革'});
++  assert.deepEqual(Array.from(counts),['本革']);
++});
++
++test('material modifiers separated by delimiters are rejected in title context',()=>{
++  const api=load();
++  for(const name of [
++    'バッグ フェイク レザー ブラック',
++    'バッグ レザー 調 ブラック',
++    '生地 コットン 風',
++    'ケース ナイロン プリント'
++  ]){
++    const facts=api.extractFallbackTitleFacts({itemName:name});
++    assert.equal(facts.length,0,name+' => '+JSON.stringify(facts));
++  }
++  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'バッグ 本革 ブラック'})),['本革']);
++});
++
++test('multiple dimension variants are dropped as ambiguous',()=>{
++  const api=load();
++  const dims=api.extractFallbackTitleFacts({itemName:'ポスター 61×49.5cm 52×42cm 42×34cm 本革'});
++  assert.deepEqual(Array.from(dims),['本革']);
++});
++
++test('combined Groq and local facts are ambiguity-filtered again before posting',()=>{
++  const app=fs.readFileSync('public/app.html','utf8');
++  assert.match(app,/combinedFacts=\[/);
++  assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
++});
++
++test('all client copy channels use the same neutral safe-fact output',()=>{
++  const api=load();
++  const item={itemName:'モバイルバッテリー USB-C対応 ブラック 人気 ギフト 10枚入り',itemPrice:1980};
++  const room=api.makeRoomCopy(item,'');
++  const threads=api.makeThreadsCopy(item,'');
++  const instagram=api.makeInstagramCopy(item,'');
++  assert.equal(room,threads);
++  assert.equal(room,instagram);
++  assert.match(room,/^商品名に記載されている仕様です。/);
++  assert.match(room,/✓ 10枚入り/);
++  assert.match(room,/✓ USB-C対応/);
++  assert.doesNotMatch(room,/ブラック|人気|ギフト|おすすめ|向いて|悩み|使いやす|しやすい|こんな人/);
++  assert.match(room,/価格：1,980円/);
++  assert.match(room,/※アフィリエイト広告を利用しています/);
++});
++
++test('neutral builder rejects non-source and non-allowlisted facts',()=>{
++  const api=load();
++  const item={itemName:'本革 内容量500ml USB-C対応 商品',itemPrice:1000};
++  const out=api.buildNeutralFactPost(item,['本革','内容量500ml','防水','存在しない仕様']);
++  assert.match(out,/✓ 本革/);
++  assert.match(out,/✓ 内容量500ml/);
++  assert.doesNotMatch(out,/防水|存在しない仕様/);
++});
++
++test('client and server share one fact safety module',()=>{
++  const quality=fs.readFileSync('public/room-copy-quality.js','utf8');
++  const lib=fs.readFileSync('lib/room-ai.js','utf8');
++  const app=fs.readFileSync('public/app.html','utf8');
++  assert.match(app,/fact-safety\.js/);
++  assert.match(quality,/UrenaviFactSafety/);
++  assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
++  assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
++  assert.match(lib,/require\('\.\.\/public\/fact-safety\.js'\)/);
++  assert.doesNotMatch(lib,/const PROMO_RE=\//);
++  assert.doesNotMatch(lib,/const CLAIM_RE=\//);
++});
++
++test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
++  const html=fs.readFileSync('public/app.html','utf8');
++  const quality=fs.readFileSync('public/room-copy-quality.js','utf8');
++  assert.doesNotMatch(html,/valueFromFacts/);
++  assert.doesNotMatch(quality,/VALUE_RULES/);
++  assert.doesNotMatch(quality,/function valueFromFacts\(/);
++  assert.match(html,/buildNeutralFactPost/);
++  assert.match(quality,/商品名に記載されている仕様です/);
++});
++
++test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
++  const names=fs.readdirSync('public').filter(x=>x.endsWith('.js')||x==='app.html');
++  for(const name of names){
++    const src=fs.readFileSync('public/'+name,'utf8');
++    assert.ok(!src.includes('(?<'),name+' contains regex lookbehind');
++  }
++});
+
+diff --git a/tests/rakuten-large-genres-neutral-copy.test.js b/tests/rakuten-large-genres-neutral-copy.test.js
+--- a/tests/rakuten-large-genres-neutral-copy.test.js
++++ b/tests/rakuten-large-genres-neutral-copy.test.js
+@@ -0,0 +1,103 @@
++const test=require('node:test');
++const assert=require('node:assert/strict');
++const fs=require('node:fs');
++const path=require('node:path');
++const vm=require('node:vm');
++const crypto=require('node:crypto');
++
++function load(){
++  const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
++  const window={document,Intl};
++  const ctx=vm.createContext({window,Intl,console});
++  vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
++  vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
++  vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
++  return window.UrenaviPainCopy;
++}
++
++function fixtureGenres(){
++  const dir=path.join(__dirname,'fixtures');
++  const files=fs.readdirSync(dir)
++    .filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x))
++    .sort();
++  const genres=[];
++  for(const file of files){
++    const data=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));
++    for(const genre of data.genres||[]) genres.push({...genre,fixtureFile:file});
++  }
++  return genres;
++}
++
++function stableHash(s){
++  return crypto.createHash('sha256').update(String(s||'')).digest('hex');
++}
++
++test('Rakuten major genres neutral copy structural validation >=700 fixed products',()=>{
++  const api=load();
++  const genres=fixtureGenres();
++  const seenGenre=new Set();
++  let total=0,generated=0,fallback=0;
++  const rows=[];
++  const genreStats=[];
++
++  for(const genre of genres){
++    assert.ok(!seenGenre.has(genre.genreId),'duplicate genre '+genre.genreId);
++    seenGenre.add(genre.genreId);
++    assert.ok(Array.isArray(genre.items)&&genre.items.length>=20,genre.nameJa+' must have >=20 products');
++
++    let gGenerated=0,gFallback=0;
++    for(const item of genre.items){
++      total++;
++      const title=String(item.itemName||'');
++      assert.ok(title,'empty itemName in '+genre.nameJa);
++
++      const sourceTokens=api.titleFactTokens(item);
++      const facts=api.extractFallbackTitleFacts(item);
++      for(const fact of facts){
++        assert.ok(sourceTokens.includes(fact),genre.nameJa+' non-token fact: '+fact+' <= '+title);
++        assert.equal(api.isSafeLocalFactToken(fact),true,genre.nameJa+' unsafe fact: '+fact);
++        const nums=String(fact).match(/\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|W|V|cm|mm|kg|mg|g|ml|mL|L|個|枚|本|袋|組|台|段|色|ポート|時間|分)/gi)||[];
++        for(const num of nums) assert.ok(title.includes(num),genre.nameJa+' unsupported number/unit: '+num+' <= '+title);
++      }
++
++      const post=api.buildNeutralFactPost(item,facts);
++      const roomPost=api.makeRoomCopy(item,'');
++      const threadsPost=api.makeThreadsCopy(item,'');
++      const instagramPost=api.makeInstagramCopy(item,'');
++      assert.equal(roomPost,post,genre.nameJa+' ROOM route differs from strict builder');
++      assert.equal(threadsPost,post,genre.nameJa+' Threads route differs from strict builder');
++      assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from strict builder');
++      if(post){
++        generated++;gGenerated++;
++        assert.match(post,/^商品名に記載されている仕様です。/);
++        assert.match(post,/※アフィリエイト広告を利用しています/);
++        const factLines=post.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
++        assert.ok(factLines.length>0,genre.nameJa+' generated post without facts');
++        for(const fact of factLines){
++          assert.ok(sourceTokens.includes(fact),genre.nameJa+' post fact not exact source token: '+fact);
++          assert.equal(api.isSafeLocalFactToken(fact),true,genre.nameJa+' post contains claim/promo/unsafe token: '+fact);
++        }
++      }else{
++        fallback++;gFallback++;
++      }
++      rows.push({
++        genreId:genre.genreId,genre:genre.nameJa,itemName:title,itemPrice:Number(item.itemPrice)||0,
++        generated:Boolean(post),facts,post
++      });
++    }
++    genreStats.push({genreId:genre.genreId,genre:genre.nameJa,count:genre.items.length,generated:gGenerated,fallback:gFallback,fallbackRate:Number((gFallback/genre.items.length).toFixed(4))});
++  }
++
++  assert.ok(total>=700,'expected >=700 fixed Rakuten products, got '+total);
++  assert.equal(generated+fallback,total);
++  const sample=[...rows]
++    .sort((a,b)=>stableHash(a.genreId+'|'+a.itemName).localeCompare(stableHash(b.genreId+'|'+b.itemName)))
++    .slice(0,100);
++
++  console.log('RAKUTEN_MAJOR_GENRE_REPORT '+JSON.stringify({
++    genreCount:genres.length,total,generated,fallback,
++    fallbackRate:Number((fallback/total).toFixed(4)),
++    genres:genreStats
++  }));
++  console.log('RAKUTEN_MAJOR_GENRE_SAMPLE100 '+JSON.stringify(sample));
++});
+
+diff --git a/tests/reports/rakuten-neutral-copy-report-20260925.json b/tests/reports/rakuten-neutral-copy-report-20260925.json
+--- a/tests/reports/rakuten-neutral-copy-report-20260925.json
++++ b/tests/reports/rakuten-neutral-copy-report-20260925.json
+@@ -0,0 +1,1872 @@
++{
++  "generatedAt": "2026-09-25",
++  "source": "CI fixed Rakuten fixture validation",
++  "report": {
++    "genreCount": 39,
++    "total": 780,
++    "generated": 779,
++    "fallback": 1,
++    "fallbackRate": 0.0013,
++    "genres": [
++      {
++        "genreId": "100371",
++        "genre": "レディースファッション",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "551177",
++        "genre": "メンズファッション",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100433",
++        "genre": "インナー・下着・ナイトウェア",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "216131",
++        "genre": "バッグ・小物・ブランド雑貨",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "558885",
++        "genre": "靴",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "558929",
++        "genre": "腕時計",
++        "count": 20,
++        "generated": 19,
++        "fallback": 1,
++        "fallbackRate": 0.05
++      },
++      {
++        "genreId": "216129",
++        "genre": "ジュエリー・アクセサリー",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100533",
++        "genre": "キッズ・ベビー・マタニティ",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "566382",
++        "genre": "おもちゃ",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101070",
++        "genre": "スポーツ・アウトドア",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "562637",
++        "genre": "家電",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "211742",
++        "genre": "TV・オーディオ・カメラ",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100026",
++        "genre": "パソコン・周辺機器",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "564500",
++        "genre": "スマートフォン・タブレット",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "565004",
++        "genre": "光回線・モバイル通信",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100227",
++        "genre": "食品",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "551167",
++        "genre": "スイーツ・お菓子",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100316",
++        "genre": "水・ソフトドリンク",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "510915",
++        "genre": "ビール・洋酒",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "510901",
++        "genre": "日本酒・焼酎",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100804",
++        "genre": "インテリア・寝具・収納",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "215783",
++        "genre": "日用品雑貨・文房具・手芸",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "558944",
++        "genre": "キッチン用品・食器・調理器具",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "200162",
++        "genre": "本・雑誌・コミック",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101240",
++        "genre": "CD・DVD",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101205",
++        "genre": "テレビゲーム",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101164",
++        "genre": "ホビー",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "112493",
++        "genre": "楽器・音響機器",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101114",
++        "genre": "車・バイク",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "503190",
++        "genre": "車用品・バイク用品",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100939",
++        "genre": "美容・コスメ・香水",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100938",
++        "genre": "ダイエット・健康",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "551169",
++        "genre": "医薬品・コンタクト・介護",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101213",
++        "genre": "ペット・ペットグッズ",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100005",
++        "genre": "花・ガーデン・DIY",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101438",
++        "genre": "サービス・リフォーム",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "111427",
++        "genre": "住宅・不動産",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "101381",
++        "genre": "カタログギフト・チケット",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      },
++      {
++        "genreId": "100000",
++        "genre": "百貨店・総合通販・ギフト",
++        "count": 20,
++        "generated": 20,
++        "fallback": 0,
++        "fallbackRate": 0
++      }
++    ]
++  },
++  "sample100": [
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "OPPO A79 A79 ケース カバー オッポ A79 スマホケース 三つ折りタイプ チワワ ちわわ 小型犬 犬 いぬ イラスト もふもふ 可愛い かわいい ゆるい ブラックタン レターケース 携帯ケース 携帯カバー",
++      "itemPrice": 1980,
++      "generated": true,
++      "facts": [
++        "OPPO",
++        "A79",
++        "ケース",
++        "カバー",
++        "オッポ",
++        "スマホケース"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ OPPO\n✓ A79\n✓ ケース\n✓ カバー\n✓ オッポ\n✓ スマホケース\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510901",
++      "genre": "日本酒・焼酎",
++      "itemName": "紀土 カラクチキッド 720ml",
++      "itemPrice": 1580,
++      "generated": true,
++      "facts": [
++        "紀土",
++        "カラクチキッド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 紀土\n✓ カラクチキッド\n\n価格：1,580円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100371",
++      "genre": "レディースファッション",
++      "itemName": "花柄刺繍ベスト レディース 婦人服 春物 春夏 トップス 服 シニア 羽織り 高齢者 ファッション 前開きベ 春夏 軽量 通気性 おしゃれ かわいい 上品 体型カバー 散歩 外出 冷房対策 母の日",
++      "itemPrice": 2680,
++      "generated": true,
++      "facts": [
++        "花柄刺繍ベスト",
++        "レディース",
++        "婦人服",
++        "春物",
++        "春夏",
++        "トップス"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 花柄刺繍ベスト\n✓ レディース\n✓ 婦人服\n✓ 春物\n✓ 春夏\n✓ トップス\n\n価格：2,680円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101205",
++      "genre": "テレビゲーム",
++      "itemName": "【中古】Wiiスポーツ リゾート (「Wiiモーションプラス (シロ) 」1個同梱)",
++      "itemPrice": 4980,
++      "generated": true,
++      "facts": [
++        "中古",
++        "Wiiスポーツ",
++        "リゾート",
++        "Wiiモーションプラス",
++        "シロ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ Wiiスポーツ\n✓ リゾート\n✓ Wiiモーションプラス\n✓ シロ\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "558885",
++      "genre": "靴",
++      "itemName": "パンプス レディース 中高齢者用 本革 ぺたんこ フラットシューズ 柔らかい 歩きやすい 疲れない 涼しい 穴あき 通気性 サンダル 快適 履きやすい 軽い 軽量 柔らか素材 コンフォートシューズ 婦人靴 お母さん用 通勤用 普段使い デイリーユース マ",
++      "itemPrice": 5803,
++      "generated": true,
++      "facts": [
++        "パンプス",
++        "レディース",
++        "中高齢者用",
++        "本革",
++        "ぺたんこ",
++        "フラットシューズ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ パンプス\n✓ レディース\n✓ 中高齢者用\n✓ 本革\n✓ ぺたんこ\n✓ フラットシューズ\n\n価格：5,803円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551167",
++      "genre": "スイーツ・お菓子",
++      "itemName": "ラ・ロシェル 坂井宏行シェフ監修 チョコレートパウンドケーキアソート SAD-BOA 内祝 内祝い お祝 御祝 記念品 出産内祝い プレゼント 快気祝い 粗供養 引出物",
++      "itemPrice": 1263,
++      "generated": true,
++      "facts": [
++        "ラ",
++        "ロシェル",
++        "坂井宏行シェフ監修",
++        "チョコレートパウンドケーキアソート",
++        "SAD-BOA",
++        "内祝"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ラ\n✓ ロシェル\n✓ 坂井宏行シェフ監修\n✓ チョコレートパウンドケーキアソート\n✓ SAD-BOA\n✓ 内祝\n\n価格：1,263円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "SK11（エスケー11） スマホケース ダブル 4977292968799",
++      "itemPrice": 1670,
++      "generated": true,
++      "facts": [
++        "SK11",
++        "エスケー11",
++        "スマホケース",
++        "ダブル",
++        "4977292968799"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ SK11\n✓ エスケー11\n✓ スマホケース\n✓ ダブル\n✓ 4977292968799\n\n価格：1,670円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100433",
++      "genre": "インナー・下着・ナイトウェア",
++      "itemName": "靴下 男性用 コットン 抗菌 防臭 吸汗 中筒 リブソックス オールシーズン 普段使い ビジネス フォーマル カジュアル 白 グレー 黒 紺",
++      "itemPrice": 2700,
++      "generated": true,
++      "facts": [
++        "靴下",
++        "男性用",
++        "コットン",
++        "吸汗",
++        "中筒",
++        "リブソックス"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 靴下\n✓ 男性用\n✓ コットン\n✓ 吸汗\n✓ 中筒\n✓ リブソックス\n\n価格：2,700円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100316",
++      "genre": "水・ソフトドリンク",
++      "itemName": "日本銘水百選 屋久島縄文水1.5L×8本＜箱売り＞【1梱包となり同梱はできません】★屋久島の地下天然水。硬度10の超軟水です。pH(ペーハー)値6〜7★弱酸性〜中性。",
++      "itemPrice": 3609,
++      "generated": true,
++      "facts": [
++        "日本銘水百選",
++        "箱売り",
++        "1梱包となり同梱はできません",
++        "屋久島の地下天然水。硬度10の超軟水です。pH",
++        "ペーハー",
++        "値6〜7"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 日本銘水百選\n✓ 箱売り\n✓ 1梱包となり同梱はできません\n✓ 屋久島の地下天然水。硬度10の超軟水です。pH\n✓ ペーハー\n✓ 値6〜7\n\n価格：3,609円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100939",
++      "genre": "美容・コスメ・香水",
++      "itemName": "チーク＆バリガラス コットン綿棒入れセットL フロストタイプ【バリ島直輸入】おしゃれ 綿棒 コットン入れ アメニティ コットンケース ガラスケース 蓋付き 洗面 リゾートホテル アジアンインテリア【バリ・アジアン雑貨バリパラダイス】",
++      "itemPrice": 11880,
++      "generated": true,
++      "facts": [
++        "チーク＆バリガラス",
++        "コットン綿棒入れセットL",
++        "フロストタイプ",
++        "バリ島直輸入",
++        "おしゃれ",
++        "綿棒"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ チーク＆バリガラス\n✓ コットン綿棒入れセットL\n✓ フロストタイプ\n✓ バリ島直輸入\n✓ おしゃれ\n✓ 綿棒\n\n価格：11,880円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "215783",
++      "genre": "日用品雑貨・文房具・手芸",
++      "itemName": "（まとめ）ぺんてる 筆ペン XFP5F 極細顔料【×10セット】 (代引不可)",
++      "itemPrice": 5702,
++      "generated": true,
++      "facts": [
++        "まとめ",
++        "ぺんてる",
++        "筆ペン",
++        "XFP5F",
++        "極細顔料",
++        "×10セット"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ まとめ\n✓ ぺんてる\n✓ 筆ペン\n✓ XFP5F\n✓ 極細顔料\n✓ ×10セット\n\n価格：5,702円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100005",
++      "genre": "花・ガーデン・DIY",
++      "itemName": "【ポイント10倍】日東工器 ジェットブローチ ワンタッチタイプ重ね板用 25x50LW (16525)",
++      "itemPrice": 15400,
++      "generated": true,
++      "facts": [
++        "日東工器",
++        "ジェットブローチ",
++        "ワンタッチタイプ重ね板用",
++        "16525"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 日東工器\n✓ ジェットブローチ\n✓ ワンタッチタイプ重ね板用\n✓ 16525\n\n価格：15,400円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "211742",
++      "genre": "TV・オーディオ・カメラ",
++      "itemName": "(まとめ) エレコム アンテナケーブルL型-ストレート 3m ブラック AV-ATLS30BK 1本 【×10セット】",
++      "itemPrice": 25630,
++      "generated": true,
++      "facts": [
++        "まとめ",
++        "エレコム",
++        "アンテナケーブルL型-ストレート",
++        "3m",
++        "ブラック",
++        "AV-ATLS30BK"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ まとめ\n✓ エレコム\n✓ アンテナケーブルL型-ストレート\n✓ 3m\n✓ ブラック\n✓ AV-ATLS30BK\n\n価格：25,630円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100316",
++      "genre": "水・ソフトドリンク",
++      "itemName": "創愛 AGF＆リプトン 珈琲・紅茶＆オリジナルケーキセット ASF-50 ギフト 贈り物 送料無料[24]",
++      "itemPrice": 3556,
++      "generated": true,
++      "facts": [
++        "創愛",
++        "AGF＆リプトン",
++        "珈琲",
++        "紅茶＆オリジナルケーキセット",
++        "ASF-50",
++        "ギフト"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 創愛\n✓ AGF＆リプトン\n✓ 珈琲\n✓ 紅茶＆オリジナルケーキセット\n✓ ASF-50\n✓ ギフト\n\n価格：3,556円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101070",
++      "genre": "スポーツ・アウトドア",
++      "itemName": "【中古】 タイトリストスリーブ付き(GTS系) フジクラドライバー用 シャフト SPEEDER NX 60 (フレックスS)Bランク ゴルフクラブ",
++      "itemPrice": 16428,
++      "generated": true,
++      "facts": [
++        "中古",
++        "タイトリストスリーブ付き",
++        "GTS系",
++        "フジクラドライバー用",
++        "シャフト",
++        "SPEEDER"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ タイトリストスリーブ付き\n✓ GTS系\n✓ フジクラドライバー用\n✓ シャフト\n✓ SPEEDER\n\n価格：16,428円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "503190",
++      "genre": "車用品・バイク用品",
++      "itemName": "ウェッズ ホイール レオニスMX クラウンマジェスタ 210系 トヨタ 20インチ 5H 1本 0037453 WEDS",
++      "itemPrice": 44044,
++      "generated": true,
++      "facts": [
++        "ウェッズ",
++        "ホイール",
++        "レオニスMX",
++        "クラウンマジェスタ",
++        "210系",
++        "トヨタ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ウェッズ\n✓ ホイール\n✓ レオニスMX\n✓ クラウンマジェスタ\n✓ 210系\n✓ トヨタ\n\n価格：44,044円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510901",
++      "genre": "日本酒・焼酎",
++      "itemName": "れんと 25度 [紙パック] 1.8L 1800ml x 2本 送料無料(本州のみ) [奄美大島開運酒造 黒糖焼酎 こくとう焼酎 乙類 日本 鹿児島県 111705]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日",
++      "itemPrice": 5197,
++      "generated": true,
++      "facts": [
++        "れんと",
++        "25度",
++        "紙パック",
++        "x",
++        "本州のみ",
++        "奄美大島開運酒造"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ れんと\n✓ 25度\n✓ 紙パック\n✓ x\n✓ 本州のみ\n✓ 奄美大島開運酒造\n\n価格：5,197円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "111427",
++      "genre": "住宅・不動産",
++      "itemName": "刷り込み板 9文字 H120mm　丸ゴシック体　吹き付け板　吹き付けプレート",
++      "itemPrice": 27800,
++      "generated": true,
++      "facts": [
++        "刷り込み板",
++        "9文字",
++        "丸ゴシック体",
++        "吹き付け板",
++        "吹き付けプレート"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 刷り込み板\n✓ 9文字\n✓ 丸ゴシック体\n✓ 吹き付け板\n✓ 吹き付けプレート\n\n価格：27,800円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100433",
++      "genre": "インナー・下着・ナイトウェア",
++      "itemName": "パジャマ レディース 春夏 薄手 セット 蝶結び 襟口 長袖 ゆったり 部屋着 かわいい カートゥーン柄 リラックス",
++      "itemPrice": 3901,
++      "generated": true,
++      "facts": [
++        "パジャマ",
++        "レディース",
++        "春夏",
++        "薄手",
++        "セット",
++        "蝶結び"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ パジャマ\n✓ レディース\n✓ 春夏\n✓ 薄手\n✓ セット\n✓ 蝶結び\n\n価格：3,901円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100533",
++      "genre": "キッズ・ベビー・マタニティ",
++      "itemName": "個人宅配送不可 森田アルミ工業 極小アルミ巾木 アルベース albase 入隅部材L (2組入り) AL15I-S シルバー",
++      "itemPrice": 11210,
++      "generated": true,
++      "facts": [
++        "森田アルミ工業",
++        "極小アルミ巾木",
++        "アルベース",
++        "albase",
++        "入隅部材L",
++        "AL15I-S"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 森田アルミ工業\n✓ 極小アルミ巾木\n✓ アルベース\n✓ albase\n✓ 入隅部材L\n✓ AL15I-S\n\n価格：11,210円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101381",
++      "genre": "カタログギフト・チケット",
++      "itemName": "【ふるさと納税】FARM VILLA taku 宿泊チケット（一棟貸し素泊まり2泊） 竹下牧場 takeshita farm | ファーム ヴィラ 素泊まり 一棟 2泊 宿泊 チケット 2室 4名 高級 農家宿 北海道 中標津町 中標津【24032】",
++      "itemPrice": 624000,
++      "generated": true,
++      "facts": [
++        "ふるさと納税",
++        "FARM",
++        "VILLA",
++        "taku",
++        "宿泊チケット",
++        "一棟貸し素泊まり2泊"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ふるさと納税\n✓ FARM\n✓ VILLA\n✓ taku\n✓ 宿泊チケット\n✓ 一棟貸し素泊まり2泊\n\n価格：624,000円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100939",
++      "genre": "美容・コスメ・香水",
++      "itemName": "髭剃り シェーバー 電気 カミソリ ひげそり メンズ ポータブル コンパクト 回転式 6枚刃 ミニ 防水 小型 軽量 充電",
++      "itemPrice": 3319,
++      "generated": true,
++      "facts": [
++        "髭剃り",
++        "シェーバー",
++        "電気",
++        "カミソリ",
++        "ひげそり",
++        "メンズ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 髭剃り\n✓ シェーバー\n✓ 電気\n✓ カミソリ\n✓ ひげそり\n✓ メンズ\n\n価格：3,319円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510901",
++      "genre": "日本酒・焼酎",
++      "itemName": "【ふるさと納税】 美潮 純米吟醸3本セット 高知県 芸西村 返礼品 日本酒 お酒 仙頭酒造 ふるさと納税限定 720ml 飲み比べセット のみくらべ 雄町 きたしずく お祝い 贈答品 箱入り ギフト 贈り物 プレゼント 送料無料 お取り寄せ 飲みやすい甘口 果実味 お中元 御中元 のし",
++      "itemPrice": 30000,
++      "generated": true,
++      "facts": [
++        "ふるさと納税",
++        "美潮",
++        "高知県",
++        "芸西村",
++        "返礼品",
++        "日本酒"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ふるさと納税\n✓ 美潮\n✓ 高知県\n✓ 芸西村\n✓ 返礼品\n✓ 日本酒\n\n価格：30,000円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "558944",
++      "genre": "キッチン用品・食器・調理器具",
++      "itemName": "【田中糧機製作所】田中糧機 T 18-8 クッキー抜き型セット NO.2119 動物Aセット 6ヶ入",
++      "itemPrice": 1081,
++      "generated": true,
++      "facts": [
++        "田中糧機製作所",
++        "田中糧機",
++        "T",
++        "18-8",
++        "クッキー抜き型セット",
++        "NO.2119"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 田中糧機製作所\n✓ 田中糧機\n✓ T\n✓ 18-8\n✓ クッキー抜き型セット\n✓ NO.2119\n\n価格：1,081円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100533",
++      "genre": "キッズ・ベビー・マタニティ",
++      "itemName": "期間限定【1000円OFF】クーポン！Jordan ナイキ GS エアジョーダン1 ミッド “グレー ホワイト/アンスラサイト“ Jordan 1 Mid “Light Smoke Grey (GS)“ Jordan 554725-078 大人も履ける キッズモデル レディース スニーカー キッズスニーカー ベビーシューズ",
++      "itemPrice": 33200,
++      "generated": true,
++      "facts": [
++        "Jordan",
++        "ナイキ",
++        "GS",
++        "エアジョーダン1",
++        "ミッド",
++        "“グレー"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Jordan\n✓ ナイキ\n✓ GS\n✓ エアジョーダン1\n✓ ミッド\n✓ “グレー\n\n価格：33,200円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551167",
++      "genre": "スイーツ・お菓子",
++      "itemName": "とらや 中形羊羹 4本入",
++      "itemPrice": 11217,
++      "generated": true,
++      "facts": [
++        "とらや",
++        "中形羊羹"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ とらや\n✓ 中形羊羹\n\n価格：11,217円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100938",
++      "genre": "ダイエット・健康",
++      "itemName": "【前十字靭帯】《固定用》膝サポーター｜ニーケアー・ACL",
++      "itemPrice": 19800,
++      "generated": true,
++      "facts": [
++        "前十字靭帯",
++        "固定用",
++        "膝サポーター",
++        "ニーケアー",
++        "ACL"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 前十字靭帯\n✓ 固定用\n✓ 膝サポーター\n✓ ニーケアー\n✓ ACL\n\n価格：19,800円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100000",
++      "genre": "百貨店・総合通販・ギフト",
++      "itemName": "百貨店の進化 【電子書籍】[ 伊藤元重 ]",
++      "itemPrice": 1980,
++      "generated": true,
++      "facts": [
++        "百貨店の進化",
++        "電子書籍",
++        "伊藤元重"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 百貨店の進化\n✓ 電子書籍\n✓ 伊藤元重\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101240",
++      "genre": "CD・DVD",
++      "itemName": "【中古】(非常に良い)永遠と一日 [DVD]",
++      "itemPrice": 17955,
++      "generated": true,
++      "facts": [
++        "中古",
++        "永遠と一日",
++        "DVD"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ 永遠と一日\n✓ DVD\n\n価格：17,955円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "503190",
++      "genre": "車用品・バイク用品",
++      "itemName": "後部座席用 収納ホック 車載ホルダー ヘッドレスト ホルダー 伸縮アームスタンド スマホ ホルダー ヘッドレスト 折り畳み 式 車用ホック 携帯電話のクリップ 娯楽も収納もできます 4イン…",
++      "itemPrice": 2069,
++      "generated": true,
++      "facts": [
++        "後部座席用",
++        "収納ホック",
++        "車載ホルダー",
++        "ヘッドレスト",
++        "ホルダー",
++        "伸縮アームスタンド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 後部座席用\n✓ 収納ホック\n✓ 車載ホルダー\n✓ ヘッドレスト\n✓ ホルダー\n✓ 伸縮アームスタンド\n\n価格：2,069円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101438",
++      "genre": "サービス・リフォーム",
++      "itemName": "道路表示シート (A～Z各種) 1文字 N 白 120×60 (835-078W) 安全用品・工事看板 交通標識・路面標示 路面表示用品 ローマ字シート",
++      "itemPrice": 700,
++      "generated": true,
++      "facts": [
++        "道路表示シート",
++        "A～Z各種",
++        "1文字",
++        "N",
++        "白",
++        "120×60"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 道路表示シート\n✓ A～Z各種\n✓ 1文字\n✓ N\n✓ 白\n✓ 120×60\n\n価格：700円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101114",
++      "genre": "車・バイク",
++      "itemName": "セキュリティステッカー(2代目BRZタイプ)",
++      "itemPrice": 1320,
++      "generated": true,
++      "facts": [
++        "セキュリティステッカー"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ セキュリティステッカー\n\n価格：1,320円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "211742",
++      "genre": "TV・オーディオ・カメラ",
++      "itemName": "【中古】【非常に良い】レグザ 65V型 有機ELテレビ 65X9400 4Kチューナー内蔵 外付けHDD タイムシフトマシン対応 (2020年モデル)",
++      "itemPrice": 920260,
++      "generated": true,
++      "facts": [
++        "中古",
++        "レグザ",
++        "有機ELテレビ",
++        "65X9400",
++        "4Kチューナー内蔵",
++        "外付けHDD"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ レグザ\n✓ 有機ELテレビ\n✓ 65X9400\n✓ 4Kチューナー内蔵\n✓ 外付けHDD\n\n価格：920,260円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101164",
++      "genre": "ホビー",
++      "itemName": "天下統一 【英】【ABYR-EN079】【N】_[中古]",
++      "itemPrice": 30,
++      "generated": true,
++      "facts": [
++        "天下統一",
++        "英",
++        "ABYR-EN079",
++        "N",
++        "_",
++        "中古"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 天下統一\n✓ 英\n✓ ABYR-EN079\n✓ N\n✓ _\n✓ 中古\n\n価格：30円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "503190",
++      "genre": "車用品・バイク用品",
++      "itemName": "自動車用バッテリー プリウス ZA-NHW20 2003〜2007 新車搭載:S34B20R 1個(寒冷地仕様) ECHNO HV/エクノHV 古河/FURUKAWA 品番:S34B20R 1個",
++      "itemPrice": 21133,
++      "generated": true,
++      "facts": [
++        "自動車用バッテリー",
++        "プリウス",
++        "ZA-NHW20",
++        "2003〜2007",
++        "新車搭載",
++        "S34B20R"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 自動車用バッテリー\n✓ プリウス\n✓ ZA-NHW20\n✓ 2003〜2007\n✓ 新車搭載\n✓ S34B20R\n\n価格：21,133円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "558944",
++      "genre": "キッチン用品・食器・調理器具",
++      "itemName": "メラミン ラーメン丼受皿 No.50 クリーム【調理器具 厨房用品 厨房機器 プロ 愛用 販売 なら 名調】",
++      "itemPrice": 855,
++      "generated": true,
++      "facts": [
++        "メラミン",
++        "ラーメン丼受皿",
++        "No.50",
++        "クリーム",
++        "調理器具",
++        "厨房用品"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ メラミン\n✓ ラーメン丼受皿\n✓ No.50\n✓ クリーム\n✓ 調理器具\n✓ 厨房用品\n\n価格：855円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "200162",
++      "genre": "本・雑誌・コミック",
++      "itemName": "Our Monthly Devotions 【電子書籍】[ Albert A. Lings ]",
++      "itemPrice": 166,
++      "generated": true,
++      "facts": [
++        "Our",
++        "Monthly",
++        "Devotions",
++        "電子書籍",
++        "Albert",
++        "A."
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Our\n✓ Monthly\n✓ Devotions\n✓ 電子書籍\n✓ Albert\n✓ A.\n\n価格：166円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "215783",
++      "genre": "日用品雑貨・文房具・手芸",
++      "itemName": "【J-725105】【桜井】アジャスタケース BS90K ブラック【製図用品】",
++      "itemPrice": 5515,
++      "generated": true,
++      "facts": [
++        "J-725105",
++        "桜井",
++        "アジャスタケース",
++        "BS90K",
++        "ブラック",
++        "製図用品"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ J-725105\n✓ 桜井\n✓ アジャスタケース\n✓ BS90K\n✓ ブラック\n✓ 製図用品\n\n価格：5,515円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100316",
++      "genre": "水・ソフトドリンク",
++      "itemName": "inゼリー エネルギーBCAA 180g×6個入【4個セット】(4902888733925-4)",
++      "itemPrice": 7440,
++      "generated": true,
++      "facts": [
++        "inゼリー",
++        "エネルギーBCAA",
++        "4902888733925-4"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ inゼリー\n✓ エネルギーBCAA\n✓ 4902888733925-4\n\n価格：7,440円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "216129",
++      "genre": "ジュエリー・アクセサリー",
++      "itemName": "イヤーカフ レディース 幾何学模様 シルバー パール 銀色 埋め込み 暗夜系 ヴィンテージ レトロ おしゃれ 通勤用 気質抜群 アクセサリー 普段使い お呼ばれ 結婚式 二次会 パーティー オフィス フォーマル シンプル 高見え 高級感 エレガント 大人",
++      "itemPrice": 3400,
++      "generated": true,
++      "facts": [
++        "イヤーカフ",
++        "レディース",
++        "幾何学模様",
++        "シルバー",
++        "パール",
++        "銀色"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ イヤーカフ\n✓ レディース\n✓ 幾何学模様\n✓ シルバー\n✓ パール\n✓ 銀色\n\n価格：3,400円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101164",
++      "genre": "ホビー",
++      "itemName": "【中古】マジックザギャザリング/英語版/C/黒/基本セット2012 118/249[C]：【M12】Wring Flesh/肉体のねじ切り",
++      "itemPrice": 200,
++      "generated": true,
++      "facts": [
++        "中古",
++        "マジックザギャザリング",
++        "英語版",
++        "C",
++        "黒",
++        "基本セット2012"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ マジックザギャザリング\n✓ 英語版\n✓ C\n✓ 黒\n✓ 基本セット2012\n\n価格：200円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100804",
++      "genre": "インテリア・寝具・収納",
++      "itemName": "川島織物セルコン オーダーカーテン FELTA(フェルタ)▼スタンダード縫製 下部3ッ巻(100mm) ウエイトバー付属【推奨仕様】 レースカーテン 約2.5倍ヒダ 片開き▼FT7608 防炎 ウォッシャブル【製品幅5巾 2410〜3000×製品高さ1610〜1800mm】",
++      "itemPrice": 39567,
++      "generated": true,
++      "facts": [
++        "川島織物セルコン",
++        "オーダーカーテン",
++        "FELTA",
++        "フェルタ",
++        "▼スタンダード縫製",
++        "下部3ッ巻"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 川島織物セルコン\n✓ オーダーカーテン\n✓ FELTA\n✓ フェルタ\n✓ ▼スタンダード縫製\n✓ 下部3ッ巻\n\n価格：39,567円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "565004",
++      "genre": "光回線・モバイル通信",
++      "itemName": "データ通信SIM カンボジア SIMカード 3GB 毎日 20日間 プリペイドSIM SIMカード SIMプリー 低速データ無制限 SIM データ専用 Cellcard",
++      "itemPrice": 8110,
++      "generated": true,
++      "facts": [
++        "データ通信SIM",
++        "カンボジア",
++        "SIMカード",
++        "毎日",
++        "20日間",
++        "プリペイドSIM"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ データ通信SIM\n✓ カンボジア\n✓ SIMカード\n✓ 毎日\n✓ 20日間\n✓ プリペイドSIM\n\n価格：8,110円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "Xperia Ace SO-02L エクスペリア エース ストラップ付き so02l ケース ショルダー スマホ 落下防止 手帳型 マグネット式 ピタッと閉まる スマホカバー 肩掛け 斜めかけ 025848 線路　ぬいぐるみ　人形",
++      "itemPrice": 2480,
++      "generated": true,
++      "facts": [
++        "Xperia",
++        "Ace",
++        "エクスペリア",
++        "エース",
++        "ストラップ付き",
++        "ケース"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Xperia\n✓ Ace\n✓ エクスペリア\n✓ エース\n✓ ストラップ付き\n✓ ケース\n\n価格：2,480円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100804",
++      "genre": "インテリア・寝具・収納",
++      "itemName": "パナソニック 配線金具【WTF7702F】コンセントプレート 簡易耐火用コンセントプレート ラウンド ベージュ",
++      "itemPrice": 431,
++      "generated": true,
++      "facts": [
++        "パナソニック",
++        "配線金具",
++        "WTF7702F",
++        "コンセントプレート",
++        "簡易耐火用コンセントプレート",
++        "ラウンド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ パナソニック\n✓ 配線金具\n✓ WTF7702F\n✓ コンセントプレート\n✓ 簡易耐火用コンセントプレート\n✓ ラウンド\n\n価格：431円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "562637",
++      "genre": "家電",
++      "itemName": "TR FESTOOL セルフクリ-ン集塵フィルターバッグ CT 36 (5枚入) ［5枚入X1パック］",
++      "itemPrice": 13556,
++      "generated": true,
++      "facts": [
++        "TR",
++        "FESTOOL",
++        "セルフクリ-ン集塵フィルターバッグ",
++        "CT",
++        "36"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ TR\n✓ FESTOOL\n✓ セルフクリ-ン集塵フィルターバッグ\n✓ CT\n✓ 36\n\n価格：13,556円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100938",
++      "genre": "ダイエット・健康",
++      "itemName": "ハウスウェルネスフーズ株式会社メガシャキ 100ml×6本セット【RCP】【TKauto】",
++      "itemPrice": 1657,
++      "generated": true,
++      "facts": [
++        "ハウスウェルネスフーズ株式会社メガシャキ",
++        "RCP",
++        "TKauto"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ハウスウェルネスフーズ株式会社メガシャキ\n✓ RCP\n✓ TKauto\n\n価格：1,657円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "566382",
++      "genre": "おもちゃ",
++      "itemName": "タカラトミー(TAKARA TOMY) T-SPARK ZOIDS ゾイド ハンターウルフ 警視庁仕様 2号機",
++      "itemPrice": 6765,
++      "generated": true,
++      "facts": [
++        "タカラトミー",
++        "TAKARA",
++        "TOMY",
++        "T-SPARK",
++        "ZOIDS",
++        "ゾイド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ タカラトミー\n✓ TAKARA\n✓ TOMY\n✓ T-SPARK\n✓ ZOIDS\n✓ ゾイド\n\n価格：6,765円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "216129",
++      "genre": "ジュエリー・アクセサリー",
++      "itemName": "[Silvora] ピアス メンズ つけっぱなし ゴールド フープピアス レディース 小さい リングピアス k18金 ジルコニア 内径10mm 20G アクセサリー",
++      "itemPrice": 4764,
++      "generated": true,
++      "facts": [
++        "Silvora",
++        "ピアス",
++        "メンズ",
++        "ゴールド",
++        "フープピアス",
++        "レディース"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Silvora\n✓ ピアス\n✓ メンズ\n✓ ゴールド\n✓ フープピアス\n✓ レディース\n\n価格：4,764円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101438",
++      "genre": "サービス・リフォーム",
++      "itemName": "クリアアメリカンA4-10P ABW-30/茶/業務用/新品/小物送料対象商品",
++      "itemPrice": 2970,
++      "generated": true,
++      "facts": [
++        "クリアアメリカンA4-10P",
++        "ABW-30",
++        "茶",
++        "業務用",
++        "新品"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ クリアアメリカンA4-10P\n✓ ABW-30\n✓ 茶\n✓ 業務用\n✓ 新品\n\n価格：2,970円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "558929",
++      "genre": "腕時計",
++      "itemName": "【送料無料】腕時計　ウォッチ　スワロフスキーブラックベルトピンクゴールドnuevo anuncioreloj swarovski crystalline 5275043 correa color negro pvd oro rosa",
++      "itemPrice": 75980,
++      "generated": true,
++      "facts": [
++        "腕時計",
++        "ウォッチ",
++        "スワロフスキーブラックベルトピンクゴールドnuevo",
++        "anuncioreloj",
++        "swarovski",
++        "crystalline"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 腕時計\n✓ ウォッチ\n✓ スワロフスキーブラックベルトピンクゴールドnuevo\n✓ anuncioreloj\n✓ swarovski\n✓ crystalline\n\n価格：75,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100433",
++      "genre": "インナー・下着・ナイトウェア",
++      "itemName": "パジャマ　レディース　上下 春秋 女性用 クラウド コットン パジャマ 長袖 胸 パッド 付きの 大きいサイズ カーディガン 屋外で 着用 可能 グリーンの 民族 風 スーツ ホームウェア",
++      "itemPrice": 5519,
++      "generated": true,
++      "facts": [
++        "パジャマ",
++        "レディース",
++        "上下",
++        "春秋",
++        "女性用",
++        "クラウド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ パジャマ\n✓ レディース\n✓ 上下\n✓ 春秋\n✓ 女性用\n✓ クラウド\n\n価格：5,519円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551167",
++      "genre": "スイーツ・お菓子",
++      "itemName": "前田製菓 3枚×7袋 カラッとおから 10個入",
++      "itemPrice": 3164,
++      "generated": true,
++      "facts": [
++        "前田製菓",
++        "カラッとおから",
++        "10個入"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 前田製菓\n✓ カラッとおから\n✓ 10個入\n\n価格：3,164円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "211742",
++      "genre": "TV・オーディオ・カメラ",
++      "itemName": "HORIC DisplayPort→HDMI変換ケーブル 1m DPHA10-808BB(1本)【HORIC】",
++      "itemPrice": 2406,
++      "generated": true,
++      "facts": [
++        "HORIC",
++        "DisplayPort→HDMI変換ケーブル",
++        "1m",
++        "DPHA10-808BB"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ HORIC\n✓ DisplayPort→HDMI変換ケーブル\n✓ 1m\n✓ DPHA10-808BB\n\n価格：2,406円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "211742",
++      "genre": "TV・オーディオ・カメラ",
++      "itemName": "Pro Ears Stealth28 ステルス28 HTBT/HT用 交換用 ウレタンフォーム イヤーチップ イヤーピース 2個×3ペア",
++      "itemPrice": 847,
++      "generated": true,
++      "facts": [
++        "Pro",
++        "Ears",
++        "Stealth28",
++        "ステルス28",
++        "HTBT",
++        "HT用"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Pro\n✓ Ears\n✓ Stealth28\n✓ ステルス28\n✓ HTBT\n✓ HT用\n\n価格：847円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "P5倍15%OF Galaxy S26 Plus SC-52G SCG38 ケース カバー 手帳型 ベルトなし 磁石 上質レザー 手提げ 犬 いぬ Galaxy S26 Plusケース Galaxy S26 Plusカバー SC-52Gケース SC-52Gカバー SCG38ケース SCG38カバー \"4m-3-kei-17",
++      "itemPrice": 1980,
++      "generated": true,
++      "facts": [
++        "Galaxy",
++        "S26",
++        "Plus",
++        "SCG38",
++        "ケース",
++        "カバー"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Galaxy\n✓ S26\n✓ Plus\n✓ SCG38\n✓ ケース\n✓ カバー\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "200162",
++      "genre": "本・雑誌・コミック",
++      "itemName": "Querkopf Wilson: Historischer Kriminalroman Bereicherte Ausgabe.【電子書籍】[ Mark Twain ]",
++      "itemPrice": 150,
++      "generated": true,
++      "facts": [
++        "Querkopf",
++        "Wilson",
++        "Historischer",
++        "Kriminalroman",
++        "Bereicherte",
++        "Ausgabe."
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Querkopf\n✓ Wilson\n✓ Historischer\n✓ Kriminalroman\n✓ Bereicherte\n✓ Ausgabe.\n\n価格：150円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "スマホケース 液晶保護ガラスフィルム付 GALAXY A41 ギャラクシー エーフォーティーワン[SC-41A SCV48]docomo auいちごとチェック[ スマホカバー 携帯ケース 人気 定番 ]",
++      "itemPrice": 3860,
++      "generated": true,
++      "facts": [
++        "スマホケース",
++        "液晶保護ガラスフィルム付",
++        "GALAXY",
++        "A41",
++        "ギャラクシー",
++        "エーフォーティーワン"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ スマホケース\n✓ 液晶保護ガラスフィルム付\n✓ GALAXY\n✓ A41\n✓ ギャラクシー\n✓ エーフォーティーワン\n\n価格：3,860円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101438",
++      "genre": "サービス・リフォーム",
++      "itemName": "腰ケアパンツ 膝ラク LL ネイビー (878-48NB-L) 安全用品・工事看板 安全保護具",
++      "itemPrice": 17600,
++      "generated": true,
++      "facts": [
++        "腰ケアパンツ",
++        "膝ラク",
++        "LL",
++        "ネイビー",
++        "878-48NB-L",
++        "工事看板"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 腰ケアパンツ\n✓ 膝ラク\n✓ LL\n✓ ネイビー\n✓ 878-48NB-L\n✓ 工事看板\n\n価格：17,600円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551167",
++      "genre": "スイーツ・お菓子",
++      "itemName": "【ギフト包装・のし紙無料】ひとくちクロワッサン ギフトセット DCR-BO(A4)",
++      "itemPrice": 1100,
++      "generated": true,
++      "facts": [
++        "ギフト包装",
++        "のし紙無料",
++        "ひとくちクロワッサン",
++        "ギフトセット",
++        "DCR-BO",
++        "A4"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ギフト包装\n✓ のし紙無料\n✓ ひとくちクロワッサン\n✓ ギフトセット\n✓ DCR-BO\n✓ A4\n\n価格：1,100円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101213",
++      "genre": "ペット・ペットグッズ",
++      "itemName": "スドー S-1041 エアセラS20 2個",
++      "itemPrice": 508,
++      "generated": true,
++      "facts": [
++        "スドー",
++        "S-1041",
++        "エアセラS20"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ スドー\n✓ S-1041\n✓ エアセラS20\n\n価格：508円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100804",
++      "genre": "インテリア・寝具・収納",
++      "itemName": "ポスター ウォールステッカー シール式ステッカー 飾り 364×515mm B3 写真 フォト 壁 インテリア おしゃれ 剥がせる wall sticker poster 010498 蝶　模様　ピンク",
++      "itemPrice": 1980,
++      "generated": true,
++      "facts": [
++        "ポスター",
++        "ウォールステッカー",
++        "シール式ステッカー",
++        "飾り",
++        "B3",
++        "写真"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ポスター\n✓ ウォールステッカー\n✓ シール式ステッカー\n✓ 飾り\n✓ B3\n✓ 写真\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100804",
++      "genre": "インテリア・寝具・収納",
++      "itemName": "アスワン オーダーカーテン オーセンス▼フラット縫製(形態安定加工なし) 約1倍 ヒダなし カーテン エルサム▼ドレープ Grand Harmony[noble]【カーテン幅5650〜7100×カン下寸法600〜1000mm】",
++      "itemPrice": 47547,
++      "generated": true,
++      "facts": [
++        "アスワン",
++        "オーダーカーテン",
++        "オーセンス▼フラット縫製",
++        "約1倍",
++        "カーテン",
++        "エルサム▼ドレープ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ アスワン\n✓ オーダーカーテン\n✓ オーセンス▼フラット縫製\n✓ 約1倍\n✓ カーテン\n✓ エルサム▼ドレープ\n\n価格：47,547円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510915",
++      "genre": "ビール・洋酒",
++      "itemName": "ワイン ファンティ ポッジョ デッラ バディア NV 750ml 赤ワイン イタリア (f01-3724)",
++      "itemPrice": 5500,
++      "generated": true,
++      "facts": [
++        "ワイン",
++        "ファンティ",
++        "ポッジョ",
++        "デッラ",
++        "バディア",
++        "NV"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ワイン\n✓ ファンティ\n✓ ポッジョ\n✓ デッラ\n✓ バディア\n✓ NV\n\n価格：5,500円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101240",
++      "genre": "CD・DVD",
++      "itemName": "【和訳付】2025年 9月号 GQ HONGKONG SEVENTEEN S.COUPS セブンティーン",
++      "itemPrice": 4780,
++      "generated": true,
++      "facts": [
++        "和訳付",
++        "2025年",
++        "9月号",
++        "GQ",
++        "HONGKONG",
++        "SEVENTEEN"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 和訳付\n✓ 2025年\n✓ 9月号\n✓ GQ\n✓ HONGKONG\n✓ SEVENTEEN\n\n価格：4,780円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551169",
++      "genre": "医薬品・コンタクト・介護",
++      "itemName": "【第1類医薬品】佐藤製薬 エンペシドL 6錠 【膣カンジダの再発治療薬】 ★セルフメディケーション税制対象商品 ※要メール返信",
++      "itemPrice": 3080,
++      "generated": true,
++      "facts": [
++        "第1類医薬品",
++        "佐藤製薬",
++        "エンペシドL",
++        "6錠",
++        "膣カンジダの再発治療薬",
++        "セルフメディケーション税制対象商品"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 第1類医薬品\n✓ 佐藤製薬\n✓ エンペシドL\n✓ 6錠\n✓ 膣カンジダの再発治療薬\n✓ セルフメディケーション税制対象商品\n\n価格：3,080円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "566382",
++      "genre": "おもちゃ",
++      "itemName": "ZTTY ボクシンググローブ パンチンググローブ メッシュ通気性 子供 男女兼用(黒&金, 10oz)",
++      "itemPrice": 5699,
++      "generated": true,
++      "facts": [
++        "ZTTY",
++        "ボクシンググローブ",
++        "パンチンググローブ",
++        "メッシュ通気性",
++        "子供",
++        "男女兼用"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ZTTY\n✓ ボクシンググローブ\n✓ パンチンググローブ\n✓ メッシュ通気性\n✓ 子供\n✓ 男女兼用\n\n価格：5,699円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "565004",
++      "genre": "光回線・モバイル通信",
++      "itemName": "【24時間QR自動先行即配】台湾 eSIM 20GB 7日間 プリペイドeSIM esim 旅行 即時利用 快適 simカード 快適 sim card QRコード 送料無料 データ専用 365日24時間 最速QR 自動発送",
++      "itemPrice": 2350,
++      "generated": true,
++      "facts": [
++        "台湾",
++        "eSIM",
++        "7日間",
++        "プリペイドeSIM",
++        "esim",
++        "旅行"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 台湾\n✓ eSIM\n✓ 7日間\n✓ プリペイドeSIM\n✓ esim\n✓ 旅行\n\n価格：2,350円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101213",
++      "genre": "ペット・ペットグッズ",
++      "itemName": "ドギーマンハヤシ MD1132 ロングマンテル 3.0mm「宅配便送料無料(B)」",
++      "itemPrice": 4780,
++      "generated": true,
++      "facts": [
++        "ドギーマンハヤシ",
++        "MD1132",
++        "ロングマンテル",
++        "B"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ドギーマンハヤシ\n✓ MD1132\n✓ ロングマンテル\n✓ B\n\n価格：4,780円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101070",
++      "genre": "スポーツ・アウトドア",
++      "itemName": "スズキ 船外機 純正部品 11351-92F11 ガスケット,クランクケース",
++      "itemPrice": 618,
++      "generated": true,
++      "facts": [
++        "スズキ",
++        "船外機",
++        "純正部品",
++        "11351-92F11",
++        "ガスケット",
++        "クランクケース"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ スズキ\n✓ 船外機\n✓ 純正部品\n✓ 11351-92F11\n✓ ガスケット\n✓ クランクケース\n\n価格：618円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100938",
++      "genre": "ダイエット・健康",
++      "itemName": "デントクリア 酵素入り入れ歯洗浄剤 緑茶パワー 部分入れ歯・総入れ歯兼用 120錠入",
++      "itemPrice": 779,
++      "generated": true,
++      "facts": [
++        "デントクリア",
++        "酵素入り入れ歯洗浄剤",
++        "緑茶パワー",
++        "部分入れ歯",
++        "総入れ歯兼用",
++        "120錠入"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ デントクリア\n✓ 酵素入り入れ歯洗浄剤\n✓ 緑茶パワー\n✓ 部分入れ歯\n✓ 総入れ歯兼用\n✓ 120錠入\n\n価格：779円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "216129",
++      "genre": "ジュエリー・アクセサリー",
++      "itemName": "ベス バングススタイリングコーム シースルーバング用(1個)【ベス】",
++      "itemPrice": 715,
++      "generated": true,
++      "facts": [
++        "ベス",
++        "バングススタイリングコーム",
++        "シースルーバング用"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ベス\n✓ バングススタイリングコーム\n✓ シースルーバング用\n\n価格：715円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100938",
++      "genre": "ダイエット・健康",
++      "itemName": "[3個セット] 【ハーフサイズ】 ビオチン 5000mcg 60粒 NOW Foods Biotin 5000mcg 60vcaps",
++      "itemPrice": 3705,
++      "generated": true,
++      "facts": [
++        "ハーフサイズ",
++        "ビオチン",
++        "5000mcg",
++        "60粒",
++        "NOW",
++        "Foods"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ハーフサイズ\n✓ ビオチン\n✓ 5000mcg\n✓ 60粒\n✓ NOW\n✓ Foods\n\n価格：3,705円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100371",
++      "genre": "レディースファッション",
++      "itemName": "【中古】インディヴィ INDIVI パンツ 38 茶 ブラウン チェック柄 クロップド丈 /AO42 ■GY70 レディース 【ベクトル 古着】 260623",
++      "itemPrice": 2000,
++      "generated": true,
++      "facts": [
++        "中古",
++        "インディヴィ",
++        "INDIVI",
++        "パンツ",
++        "38",
++        "茶"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ インディヴィ\n✓ INDIVI\n✓ パンツ\n✓ 38\n✓ 茶\n\n価格：2,000円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "565004",
++      "genre": "光回線・モバイル通信",
++      "itemName": "お買い物マラソン【P5倍】1ポット4カップセット 茶具 ホームホーム シンプルさ ティーセット セラミック ポータブル テリーヌ ティーポ",
++      "itemPrice": 5380,
++      "generated": true,
++      "facts": [
++        "お買い物マラソン",
++        "1ポット4カップセット",
++        "茶具",
++        "ホームホーム",
++        "シンプルさ",
++        "ティーセット"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ お買い物マラソン\n✓ 1ポット4カップセット\n✓ 茶具\n✓ ホームホーム\n✓ シンプルさ\n✓ ティーセット\n\n価格：5,380円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100316",
++      "genre": "水・ソフトドリンク",
++      "itemName": "【パッションフラワー】量り売り 20g 30g 50g ｜ハーブティー シングル 落ち着く リラックス トケイソウ 健康 お茶 紅茶 注文梱包",
++      "itemPrice": 716,
++      "generated": true,
++      "facts": [
++        "パッションフラワー",
++        "量り売り",
++        "ハーブティー",
++        "シングル",
++        "落ち着く",
++        "リラックス"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ パッションフラワー\n✓ 量り売り\n✓ ハーブティー\n✓ シングル\n✓ 落ち着く\n✓ リラックス\n\n価格：716円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100005",
++      "genre": "花・ガーデン・DIY",
++      "itemName": "TS DESIGN TS 4Dレディースパンツ 3L チャコールグレー ( 91121 3L 25 )",
++      "itemPrice": 5614,
++      "generated": true,
++      "facts": [
++        "TS",
++        "DESIGN",
++        "4Dレディースパンツ",
++        "チャコールグレー",
++        "91121",
++        "25"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ TS\n✓ DESIGN\n✓ 4Dレディースパンツ\n✓ チャコールグレー\n✓ 91121\n✓ 25\n\n価格：5,614円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "112493",
++      "genre": "楽器・音響機器",
++      "itemName": "バイオリンペグリーマー 金属部品 木製ハンドル バイオリン 修理工具 ペグ穴工具 調整ブロック チューニング安定 反復作業向け 操作性良好 ルシアー向け suitable 音楽店,出張修理,自宅整備,演奏前点検",
++      "itemPrice": 6680,
++      "generated": true,
++      "facts": [
++        "バイオリンペグリーマー",
++        "金属部品",
++        "木製ハンドル",
++        "バイオリン",
++        "修理工具",
++        "ペグ穴工具"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ バイオリンペグリーマー\n✓ 金属部品\n✓ 木製ハンドル\n✓ バイオリン\n✓ 修理工具\n✓ ペグ穴工具\n\n価格：6,680円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100533",
++      "genre": "キッズ・ベビー・マタニティ",
++      "itemName": "女の子 水着 セパレート キッズ ベビー水着 ラッシュガード 長袖 スイムウェア 上下セット キャップ付き 3点セット パンツ 子供用 セットアップ 紫外線対策 女児水着 小学生 保育園",
++      "itemPrice": 3300,
++      "generated": true,
++      "facts": [
++        "女の子",
++        "水着",
++        "セパレート",
++        "キッズ",
++        "ベビー水着",
++        "ラッシュガード"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 女の子\n✓ 水着\n✓ セパレート\n✓ キッズ\n✓ ベビー水着\n✓ ラッシュガード\n\n価格：3,300円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "215783",
++      "genre": "日用品雑貨・文房具・手芸",
++      "itemName": "DUOFIRE 遮光シート 100%完全遮光フィルム 遮熱シート 断熱シート UVカット 目隠しシート 窓用フィルム (黒+シルバー 1.45x1m)",
++      "itemPrice": 3324,
++      "generated": true,
++      "facts": [
++        "DUOFIRE",
++        "遮光シート",
++        "遮熱シート",
++        "断熱シート",
++        "UVカット",
++        "窓用フィルム"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ DUOFIRE\n✓ 遮光シート\n✓ 遮熱シート\n✓ 断熱シート\n✓ UVカット\n✓ 窓用フィルム\n\n価格：3,324円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100227",
++      "genre": "食品",
++      "itemName": "丸美屋 ソフトふりかけ 牛カレー 28g×10個 送料無料",
++      "itemPrice": 1591,
++      "generated": true,
++      "facts": [
++        "丸美屋",
++        "ソフトふりかけ",
++        "牛カレー"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 丸美屋\n✓ ソフトふりかけ\n✓ 牛カレー\n\n価格：1,591円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "215783",
++      "genre": "日用品雑貨・文房具・手芸",
++      "itemName": "デニムジャケット レディース 春秋物 Gジャン 切り替え 衬衫袖 コットン ゆったり 通勤 ポロネック デニムブルー",
++      "itemPrice": 5359,
++      "generated": true,
++      "facts": [
++        "デニムジャケット",
++        "レディース",
++        "春秋物",
++        "Gジャン",
++        "切り替え",
++        "衬衫袖"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ デニムジャケット\n✓ レディース\n✓ 春秋物\n✓ Gジャン\n✓ 切り替え\n✓ 衬衫袖\n\n価格：5,359円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100533",
++      "genre": "キッズ・ベビー・マタニティ",
++      "itemName": "水泳バッグ キッズ 子供用 乾湿分離 防水 リュック カートーン ビーチ 大容量 ファスナー付き 立方体 ポリエステル ブルー ピンク",
++      "itemPrice": 2900,
++      "generated": true,
++      "facts": [
++        "水泳バッグ",
++        "キッズ",
++        "子供用",
++        "乾湿分離",
++        "防水",
++        "リュック"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 水泳バッグ\n✓ キッズ\n✓ 子供用\n✓ 乾湿分離\n✓ 防水\n✓ リュック\n\n価格：2,900円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "562637",
++      "genre": "家電",
++      "itemName": "【メーカー純正品】ジャノメミシンJANOME家庭用ミシン『棒定規(キルトステッチ定規)』【ジグザグ振り幅最大7mm用水平全回転釜ミシン専用】ステッチガイド",
++      "itemPrice": 572,
++      "generated": true,
++      "facts": [
++        "メーカー純正品",
++        "ジャノメミシンJANOME家庭用ミシン",
++        "棒定規",
++        "キルトステッチ定規",
++        "ステッチガイド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ メーカー純正品\n✓ ジャノメミシンJANOME家庭用ミシン\n✓ 棒定規\n✓ キルトステッチ定規\n✓ ステッチガイド\n\n価格：572円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101381",
++      "genre": "カタログギフト・チケット",
++      "itemName": "引き出物宅配便セット│引き出物セット 2品セット（ロフト 3800円 Aコース）｜引宅(ヒキタク)(引出物 引菓子 内祝 グルメ 手ぶら 結婚内祝い 結婚式 なびろめ ギフトセット)",
++      "itemPrice": 6489,
++      "generated": true,
++      "facts": [
++        "引き出物宅配便セット│引き出物セット",
++        "2品セット",
++        "ロフト",
++        "3800円",
++        "Aコース",
++        "引宅"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 引き出物宅配便セット│引き出物セット\n✓ 2品セット\n✓ ロフト\n✓ 3800円\n✓ Aコース\n✓ 引宅\n\n価格：6,489円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551177",
++      "genre": "メンズファッション",
++      "itemName": "＼P5倍 当店だけの大還元祭 期間限定 9/19〜9/27／スウェット トレーナー ヒップホップ チカーノ チカーナ chicano chicana ホーミー homies メキシコ ウエッサイ westcoast ブランド アパレル ファッション メンズ レディース アパレル ワンポイント",
++      "itemPrice": 4950,
++      "generated": true,
++      "facts": [
++        "当店だけの大還元祭",
++        "9",
++        "19〜9",
++        "27",
++        "スウェット",
++        "トレーナー"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 当店だけの大還元祭\n✓ 9\n✓ 19〜9\n✓ 27\n✓ スウェット\n✓ トレーナー\n\n価格：4,950円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100227",
++      "genre": "食品",
++      "itemName": "日清 MCTリセッタ(600g×20セット)",
++      "itemPrice": 12003,
++      "generated": true,
++      "facts": [
++        "日清",
++        "MCTリセッタ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 日清\n✓ MCTリセッタ\n\n価格：12,003円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510915",
++      "genre": "ビール・洋酒",
++      "itemName": "デザイン一新／ スラ・ヴィンヤード、ラサ　シラー 2022 赤 750ml／インドワイン",
++      "itemPrice": 3880,
++      "generated": true,
++      "facts": [
++        "デザイン一新",
++        "スラ",
++        "ヴィンヤード、ラサ",
++        "シラー",
++        "2022",
++        "赤"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ デザイン一新\n✓ スラ\n✓ ヴィンヤード、ラサ\n✓ シラー\n✓ 2022\n✓ 赤\n\n価格：3,880円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "564500",
++      "genre": "スマートフォン・タブレット",
++      "itemName": "Galaxy S23 Ultra SC-52D SCG20 用 ケース カバー 手帳型 マグネット式 ピタッと閉まる レザーケース sc52d カード収納 ポケット 006199 野球　イラスト",
++      "itemPrice": 2180,
++      "generated": true,
++      "facts": [
++        "Galaxy",
++        "S23",
++        "Ultra",
++        "SC-52D",
++        "SCG20",
++        "用"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ Galaxy\n✓ S23\n✓ Ultra\n✓ SC-52D\n✓ SCG20\n✓ 用\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "566382",
++      "genre": "おもちゃ",
++      "itemName": "【中古】ポケモンカードゲーム シュバルゴ（Aランク） 【SM10a 031 / 054 U】 強化拡張パック ジージーエンド シングルカード",
++      "itemPrice": 30,
++      "generated": true,
++      "facts": [
++        "中古",
++        "ポケモンカードゲーム",
++        "シュバルゴ",
++        "Aランク",
++        "SM10a",
++        "031"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ ポケモンカードゲーム\n✓ シュバルゴ\n✓ Aランク\n✓ SM10a\n✓ 031\n\n価格：30円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "566382",
++      "genre": "おもちゃ",
++      "itemName": "【中古】(未使用・未開封品)トミカ ハイパーレスキュー ドライブヘッド シンクロ合体シリーズ サポートビークル 03 レスキューヘリコプター",
++      "itemPrice": 19200,
++      "generated": true,
++      "facts": [
++        "中古",
++        "未使用",
++        "未開封品",
++        "トミカ",
++        "ハイパーレスキュー",
++        "ドライブヘッド"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ 未使用\n✓ 未開封品\n✓ トミカ\n✓ ハイパーレスキュー\n✓ ドライブヘッド\n\n価格：19,200円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551167",
++      "genre": "スイーツ・お菓子",
++      "itemName": "ミンティア(MINTIA) カテキンミント 50粒 × 10個 アサヒグループ食品 緑茶風味",
++      "itemPrice": 1528,
++      "generated": true,
++      "facts": [
++        "ミンティア",
++        "MINTIA",
++        "カテキンミント",
++        "50粒",
++        "×",
++        "アサヒグループ食品"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ミンティア\n✓ MINTIA\n✓ カテキンミント\n✓ 50粒\n✓ ×\n✓ アサヒグループ食品\n\n価格：1,528円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "100026",
++      "genre": "パソコン・周辺機器",
++      "itemName": "【中古】【非常に良い】M-K24KLC 大興 Taiko ソルボーネ SOLVONET-M　24内線増設ユニット　ビジネスフォン [オフィス用品]",
++      "itemPrice": 17625,
++      "generated": true,
++      "facts": [
++        "中古",
++        "M-K24KLC",
++        "大興",
++        "Taiko",
++        "ソルボーネ",
++        "SOLVONET-M"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ M-K24KLC\n✓ 大興\n✓ Taiko\n✓ ソルボーネ\n✓ SOLVONET-M\n\n価格：17,625円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "510915",
++      "genre": "ビール・洋酒",
++      "itemName": "《16,500円以上で送料無料》 セッラ モスカ カンノナウ ディ サルデーニャ 2024 Sella Mosca Cannonau di Sardegna 赤ワイン イタリア サルデーニャ",
++      "itemPrice": 1969,
++      "generated": true,
++      "facts": [
++        "16",
++        "セッラ",
++        "モスカ",
++        "カンノナウ",
++        "ディ",
++        "サルデーニャ"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 16\n✓ セッラ\n✓ モスカ\n✓ カンノナウ\n✓ ディ\n✓ サルデーニャ\n\n価格：1,969円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "101381",
++      "genre": "カタログギフト・チケット",
++      "itemName": "カタログギフト 送料無料 uluao (ウルアオ) Jessenia (ヘッセニア)+＜KOGANEAN＞こがねもなか・こいねり・どら各4個 内祝い お祝い 新築 出産 結婚式 快気祝い 引き出物 香典返し 満中陰志 おしゃれ ゴルフコンペ 20000円 2万円コース 結婚祝いギフト お中元 敬老の日",
++      "itemPrice": 21065,
++      "generated": true,
++      "facts": [
++        "カタログギフト",
++        "uluao",
++        "ウルアオ",
++        "Jessenia",
++        "ヘッセニア",
++        "+"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ カタログギフト\n✓ uluao\n✓ ウルアオ\n✓ Jessenia\n✓ ヘッセニア\n✓ +\n\n価格：21,065円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "551169",
++      "genre": "医薬品・コンタクト・介護",
++      "itemName": "コクヨ クリップボード（薄型・静音）A4横 ホワイト ヨハ-US73W 1枚",
++      "itemPrice": 1010,
++      "generated": true,
++      "facts": [
++        "コクヨ",
++        "クリップボード",
++        "薄型",
++        "静音",
++        "A4横",
++        "ホワイト"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ コクヨ\n✓ クリップボード\n✓ 薄型\n✓ 静音\n✓ A4横\n✓ ホワイト\n\n価格：1,010円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "112493",
++      "genre": "楽器・音響機器",
++      "itemName": "【中古】【非常に良い】SUZUKI スズキ マイクケーブル CI-5",
++      "itemPrice": 7480,
++      "generated": true,
++      "facts": [
++        "中古",
++        "SUZUKI",
++        "スズキ",
++        "マイクケーブル",
++        "CI-5"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ 中古\n✓ SUZUKI\n✓ スズキ\n✓ マイクケーブル\n✓ CI-5\n\n価格：7,480円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "565004",
++      "genre": "光回線・モバイル通信",
++      "itemName": "WiFi レンタル 海外 アイスランド sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 9泊10日 wifi アイスランド simカード 10日間 ギガプラン 1日1GB800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アイスランド 10日 ワイファイ",
++      "itemPrice": 8800,
++      "generated": true,
++      "facts": [
++        "WiFi",
++        "レンタル",
++        "海外",
++        "アイスランド",
++        "sim",
++        "内蔵"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ WiFi\n✓ レンタル\n✓ 海外\n✓ アイスランド\n✓ sim\n✓ 内蔵\n\n価格：8,800円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "565004",
++      "genre": "光回線・モバイル通信",
++      "itemName": "MCO HDMIセレクタ フルHD対応 HDS-FH01/BK 1個 ■▼683-7807 【送料都度見積】",
++      "itemPrice": 2002,
++      "generated": true,
++      "facts": [
++        "MCO",
++        "HDMIセレクタ",
++        "フルHD対応",
++        "HDS-FH01",
++        "BK",
++        "■▼683-7807"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ MCO\n✓ HDMIセレクタ\n✓ フルHD対応\n✓ HDS-FH01\n✓ BK\n✓ ■▼683-7807\n\n価格：2,002円\n\n※アフィリエイト広告を利用しています"
++    },
++    {
++      "genreId": "558885",
++      "genre": "靴",
++      "itemName": "ローファー メンズ メンズローファー 靴 スリッポンシューズ 短靴 男性 スエード調 フラットシューズ ビジネスシューズ 黒 灰 通勤 通学 入学式 卒業式 学生靴 防滑底 スクール 外出 ドライビン",
++      "itemPrice": 13072,
++      "generated": true,
++      "facts": [
++        "ローファー",
++        "メンズ",
++        "メンズローファー",
++        "靴",
++        "スリッポンシューズ",
++        "短靴"
++      ],
++      "post": "商品名・説明に記載されている仕様です。\n\n✓ ローファー\n✓ メンズ\n✓ メンズローファー\n✓ 靴\n✓ スリッポンシューズ\n✓ 短靴\n\n価格：13,072円\n\n※アフィリエイト広告を利用しています"
++    }
++  ]
++}
+\ No newline at end of file
+
+diff --git a/tests/room-ai-phase1.test.js b/tests/room-ai-phase1.test.js
+--- a/tests/room-ai-phase1.test.js
++++ b/tests/room-ai-phase1.test.js
+@@ -76,7 +76,8 @@ function run(name,fn){
+       confidence:'high'
+     },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
+     assert.equal(v.sellingPoints[0].valid,true);
+-    assert.equal(v.sellingPoints[0].eligibleForPost,true);
++    assert.equal(v.sellingPoints[0].specLike,false);
++    assert.equal(v.sellingPoints[0].eligibleForPost,false);
+     assert.equal(v.sellingPoints[1].valid,false);
+   });
+ 
+@@ -119,6 +120,48 @@ function run(name,fn){
+     assert.equal(bad.sellingPoints[0].valid,false);
+   });
+ 
++  await run('brand-like transliteration is not accepted as product type',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'RELX リラクス',source:'itemName',evidence:'RELX リラクス'},features:[],sellingPoints:[],confidence:'high'
++    },{itemName:'ウォーターピーリング 美顔器 RELX リラクス 超軽量 70g',itemCaption:''},{imageAvailable:false});
++    assert.equal(v.productType.valid,false);
++    assert.equal(v.productType.brandLikeProductTypeRisk,true);
++    assert.equal(v.mode,'fallback');
++  });
++
++  await run('product type rejects truncation and spec-heavy phrases',()=>{
++    const truncated=validateAiExtraction({
++      productType:{value:'USBハブ Type-C 7in1 HDMI P',source:'itemName',evidence:'USBハブ Type-C 7in1 HDMI P'},features:[],sellingPoints:[],confidence:'high'
++    },{itemName:'USBハブ Type-C 7in1 HDMI PD対応 SDカード',itemCaption:''},{imageAvailable:false});
++    assert.equal(truncated.productType.valid,false);
++    assert.equal(truncated.productType.boundaryValid,false);
++    const specHeavy=validateAiExtraction({
++      productType:{value:'Tシャツ メンズ 綿100% 半袖',source:'itemName',evidence:'Tシャツ メンズ 綿100% 半袖'},features:[],sellingPoints:[],confidence:'high'
++    },{itemName:'Tシャツ メンズ 綿100% 半袖',itemCaption:''},{imageAvailable:false});
++    assert.equal(specHeavy.productType.valid,false);
++    assert.equal(specHeavy.productType.productTypeStructureRisk,true);
++  });
++
++  await run('generic descriptor-only product type is rejected',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'美顔',source:'itemName',evidence:'美顔'},features:[],sellingPoints:[],confidence:'high'
++    },{itemName:'4in1美顔 かっさ プレート 美顔器',itemCaption:''},{imageAvailable:false});
++    assert.equal(v.productType.valid,false);
++    assert.equal(v.productType.genericProductTypeRisk,true);
++    assert.equal(v.mode,'fallback');
++  });
++
++  await run('decorative brackets end a complete grounded selling point',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
++      features:[],
++      sellingPoints:[{text:'充電不要',source:'itemName',evidence:'充電不要'}],
++      confidence:'high'
++    },{itemName:'美顔ローラー 〖充電不要〗 防水仕様',itemCaption:''},{imageAvailable:false});
++    assert.equal(v.sellingPoints[0].boundaryValid,true);
++    assert.equal(v.sellingPoints[0].valid,true);
++  });
++
+   await run('incomplete selling point fragments are rejected',()=>{
+     const v=validateAiExtraction({
+       productType:{value:'USB Cハブ',source:'itemName',evidence:'USB Cハブ'},
+@@ -273,7 +316,7 @@ function run(name,fn){
+     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+   });
+ 
+-  await run('baseball glove high-confidence grounded productType produces fact-only post',()=>{
++  await run('non-allowlisted baseball usage phrase stays out of post facts',()=>{
+     const v=validateAiExtraction({
+       productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
+       features:[{text:'右投げ用',source:'itemName',evidence:'右投げ用'}],
+@@ -282,11 +325,12 @@ function run(name,fn){
+     assert.equal(v.mode,'simple');
+     const text=phase1Post({title:v.productType.value,features:v.features,price:5980});
+     assert.match(text,/^野球グローブ/m);
+-    assert.match(text,/右投げ用/);
++    assert.equal(v.features[0].eligibleForPost,false);
++    assert.doesNotMatch(text,/右投げ用/);
+     assert.doesNotMatch(text,/掃除用手袋/);
+   });
+ 
+-  await run('motorcycle glove high-confidence grounded productType produces fact-only post',()=>{
++  await run('non-allowlisted smartphone compatibility phrase stays out of post facts',()=>{
+     const v=validateAiExtraction({
+       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+       features:[{text:'スマホ対応',source:'itemName',evidence:'スマホ対応'}],
+@@ -295,7 +339,8 @@ function run(name,fn){
+     assert.equal(v.mode,'simple');
+     const text=phase1Post({title:v.productType.value,features:v.features,price:3100});
+     assert.match(text,/^バイクグローブ/m);
+-    assert.match(text,/スマホ対応/);
++    assert.equal(v.features[0].eligibleForPost,false);
++    assert.doesNotMatch(text,/スマホ対応/);
+     assert.doesNotMatch(text,/掃除用手袋/);
+   });
+ 
+@@ -349,18 +394,26 @@ function run(name,fn){
+     assert.ok(v.reasons.includes('critical_invalid_numeric_feature'));
+   });
+ 
+-  await run('invalid claim feature forces whole-product fallback',()=>{
++  await run('invalid claim feature is dropped when multiple grounded facts remain',()=>{
+     const v=validateAiExtraction({
+       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+       features:[
+         {text:'小顔効果',source:'itemCaption',evidence:'小顔'},
+-        {text:'約196g',source:'itemCaption',evidence:'約196g'},
++        {text:'内容量196g',source:'itemCaption',evidence:'内容量196g'},
+         {text:'日本製',source:'itemCaption',evidence:'日本製'}
+-      ],
+-      confidence:'high'
+-    },{itemName:'美顔ローラー',itemCaption:'小顔 約196g 日本製'},{imageAvailable:false});
++      ],confidence:'high'
++    },{itemName:'美顔ローラー',itemCaption:'小顔 内容量196g 日本製'},{imageAvailable:false});
++    assert.equal(v.mode,'simple_partial');
++    assert.ok(v.reasons.includes('invalid_claim_features_dropped'));
++    assert.equal(v.features.filter(x=>x.eligibleForPost).length,2);
++  });
++
++  await run('claim-only extraction still falls back',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
++      features:[{text:'小顔効果',source:'itemCaption',evidence:'小顔'}],confidence:'high'
++    },{itemName:'美顔ローラー',itemCaption:'小顔'},{imageAvailable:false});
+     assert.equal(v.mode,'fallback');
+-    assert.equal(v.featureValidation.criticalInvalidClaim,true);
+     assert.ok(v.reasons.includes('critical_invalid_claim_feature'));
+   });
+ 
+@@ -419,6 +472,9 @@ function run(name,fn){
+     assert.doesNotMatch(src,/max_output_tokens:420/);
+     assert.doesNotMatch(src,/max_output_tokens:700/);
+     assert.ok(SYSTEM_PROMPT.length<360);
++    assert.match(SYSTEM_PROMPT,/confidence=high/);
++    assert.match(SYSTEM_PROMPT,/textとevidenceを同じ完全な連続引用/);
++    assert.match(SYSTEM_PROMPT,/数字・単位も完全一致/);
+     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
+   });
+ 
+@@ -554,6 +610,19 @@ function run(name,fn){
+     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+   });
+ 
++  await run('product type must exist exactly in its declared source',()=>{
++    const v=validateAiExtraction({productType:{value:'美顔ロー roller',source:'itemName',evidence:'美顔ローラー'},features:[],sellingPoints:[],confidence:'high'},{itemName:'美顔ローラー 美顔器',itemCaption:''});
++    assert.equal(v.productType.textEvidenceValid,false);
++    assert.equal(v.productType.valid,false);
++    assert.equal(v.mode,'fallback');
++  });
++
++  await run('shipping language is never eligible for posting',()=>{
++    const v=validateAiExtraction({productType:{value:'かっさ プレート',source:'itemName',evidence:'かっさ プレート'},features:[],sellingPoints:[{text:'当日発送',source:'itemName',evidence:'当日発送'}],confidence:'high'},{itemName:'当日発送 かっさ プレート 収納袋付き',itemCaption:''});
++    assert.equal(v.sellingPoints[0].promoRisk,true);
++    assert.equal(v.sellingPoints[0].eligibleForPost,false);
++  });
++
+   await run('low confidence always falls back',()=>{
+     const v=validateAiExtraction({
+       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
+@@ -588,8 +657,8 @@ function run(name,fn){
+     const handler=createHandler({
+       authorize:async()=>({ok:true,plan:'owner'}),
+       loadCache:async()=>({
+-        prompt_version:'2026-09-24-ai-facts-only-v12',
+-          validation_rule_version:'2026-09-24-ai-facts-v8',
++        prompt_version:'2026-09-24-ai-facts-only-v13',
++          validation_rule_version:'2026-09-24-ai-facts-v9',
+           raw_ai_json:{
+           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
+           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
+@@ -621,7 +690,7 @@ function run(name,fn){
+     assert.match(html,/function resolvedPost\(/);
+     assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
+     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
+-    assert.match(html,/return UrenaviPainCopy\.makeRoomCopy/);
++    assert.match(html,/return neutralRulePost\(item,keyword\)/);
+     assert.match(html,/rule_second_opinion_conflict/);
+     assert.match(html,/mediumHandling:'fallback_fixed'/);
+     assert.match(html,/cacheKeyComponents/);
+@@ -640,11 +709,26 @@ function run(name,fn){
+     assert.match(html,/\.tab\[data-i=/);
+   });
+ 
++  await run('client copy accepts simple_partial but rejects fallback and invalid product type',()=>{
++    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
++    assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
++    assert.match(html,/if\(v\.productType\?\.valid!==true\) return ''/);
++    assert.match(html,/if\(!String\(insight\.productType\|\|''\)\.trim\(\)\) return ''/);
++  });
++
++  await run('validation cache hash includes prompt and rule versions',()=>{
++    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
++    assert.match(src,/VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9'/);
++    const hashBody=(src.match(/function makeInputHash[\s\S]*?\.digest\('hex'\);/)||[])[0]||'';
++    assert.match(hashBody,/PROMPT_VERSION/);
++    assert.match(hashBody,/VALIDATION_RULE_VERSION/);
++  });
++
+   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
+     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+     assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
+     assert.match(html,/function aiSalesInsight\(/);
+-    assert.match(html,/商品内容をGroqで確認中です/);
++    assert.match(html,/商品内容を確認中です/);
+     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
+     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
+   });
+@@ -654,38 +738,47 @@ function run(name,fn){
+     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
+     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
+     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+-    assert.match(apiText,/2026-09-24-ai-facts-only-v12/);
++    assert.match(apiText,/2026-09-24-ai-facts-only-v13/);
+     assert.match(apiText,/cacheVersionMatch/);
+     assert.match(apiText,/sellingPoints/);
+-    assert.match(apiText,/事実抽出のみ/);
+-    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
+-    assert.match(apiText,/途中切れさせない/);
++    assert.match(apiText,/事実だけ抽出/);
++    assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
++    assert.match(apiText,/途中切れ禁止/);
+     assert.match(apiText,/sellingPoints/);
+-    assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
++    assert.match(libText,/eligibleForPost:valid&&specLike&&\(source==='itemName'\|\|source==='itemCaption'\)/);
++    assert.match(libText,/require\('\.\.\/public\/fact-safety\.js'\)/);
+     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
+   });
+ 
+   await run('AI-needed products hide unfinished fallback copy until validation completes',()=>{
+     const fs=require('node:fs'),path=require('node:path');
+     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+-    assert.match(html,/確認が終わると投稿文を表示します/);
+-    assert.match(html,/誤った投稿文は表示していません/);
++    assert.match(html,/if\(s\.state\?\.state==='error'\) return ''/);
++    assert.match(html,/return String\(post\(i,p\)\|\|''\)\.trim\(\)/);
++    assert.doesNotMatch(html,/誤った投稿文は表示していません/);
++    assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
+   });
+ 
+-  await run('AI stays fact-only and ROOM value copy is deterministic from validated facts',()=>{
++  await run('AI stays fact-only and client copy is neutral exact-token output',()=>{
+     const fs=require('node:fs'),path=require('node:path');
+     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
+     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
++    const quality=fs.readFileSync(path.join(__dirname,'../public/room-copy-quality.js'),'utf8');
+     assert.doesNotMatch(apiText,/audienceHook/);
+     assert.doesNotMatch(apiText,/buyerBenefits/);
+     assert.doesNotMatch(apiText,/fitLine/);
+-    assert.match(apiText,/意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止/);
+-    assert.match(html,/const VALUE_RULES=/);
+-    assert.match(html,/function valueFromFacts\(/);
+-    assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
+-    assert.match(html,/着けたままスマホ操作をしやすい/);
+-    assert.match(html,/使わないときは省スペースでしまいやすい/);
++    assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
++    assert.doesNotMatch(html,/valueFromFacts/);
++    assert.doesNotMatch(quality,/VALUE_RULES/);
++    assert.doesNotMatch(quality,/hook:/);
++    assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
++    assert.match(html,/buildNeutralFactPost/);
++    assert.match(quality,/商品名に記載されている仕様です/);
++    assert.match(quality,/sourceTokens\.has\(x\)/);
++    assert.match(quality,/UrenaviFactSafety/);
++    assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
++    assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
+   });
+ 
+   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
+@@ -705,6 +798,42 @@ function run(name,fn){
+   });
+ 
+ 
++  await run('Groq eligibleForPost uses strict spec allowlist',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'商品',source:'itemName',evidence:'商品'},
++      features:[
++        {text:'内容量500ml',source:'itemName',evidence:'内容量500ml'},
++        {text:'USB-C対応',source:'itemName',evidence:'USB-C対応'},
++        {text:'本革',source:'itemName',evidence:'本革'},
++        {text:'ケース',source:'itemName',evidence:'ケース'},
++        {text:'トヨタ',source:'itemName',evidence:'トヨタ'},
++        {text:'防水',source:'itemName',evidence:'防水'}
++      ],sellingPoints:[],confidence:'high'
++    },{itemName:'商品 内容量500ml USB-C対応 本革 ケース トヨタ 防水',itemCaption:''},{imageAvailable:false});
++    const eligible=v.features.filter(x=>x.eligibleForPost).map(x=>x.text);
++    assert.deepEqual(eligible,['内容量500ml','USB-C対応','本革']);
++    for(const x of v.features.filter(x=>['ケース','トヨタ','防水'].includes(x.text))){
++      assert.equal(x.valid,true);
++      assert.equal(x.specLike,false);
++      assert.equal(x.eligibleForPost,false);
++    }
++  });
++
++  await run('Groq material facts reject modified wording in evidence',()=>{
++    const v=validateAiExtraction({
++      productType:{value:'財布',source:'itemName',evidence:'財布'},
++      features:[
++        {text:'レザー',source:'itemName',evidence:'フェイク レザー'},
++        {text:'本革',source:'itemName',evidence:'本革'}
++      ],sellingPoints:[],confidence:'high'
++    },{itemName:'財布 フェイク レザー 本革',itemCaption:''},{imageAvailable:false});
++    const byText=Object.fromEntries(v.features.map(x=>[x.text,x]));
++    assert.equal(byText['レザー'].specLike,false);
++    assert.equal(byText['レザー'].eligibleForPost,false);
++    assert.equal(byText['本革'].specLike,true);
++    assert.equal(byText['本革'].eligibleForPost,true);
++  });
++
+   await run('daily limit blocks AI call',async()=>{
+     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
+     process.env.VERCEL_ENV='preview';
+
+diff --git a/tests/room-copy-regression.test.js b/tests/room-copy-regression.test.js
+--- a/tests/room-copy-regression.test.js
++++ b/tests/room-copy-regression.test.js
+@@ -4,801 +4,120 @@ const fs=require('fs');
+ const path=require('path');
+ 
+ global.window={};
++require(path.join(__dirname,'..','public','fact-safety.js'));
+ require(path.join(__dirname,'..','public','pain-copy.js'));
+ require(path.join(__dirname,'..','public','room-copy-quality.js'));
+ 
+ const api=global.window.UrenaviPainCopy;
++const safety=global.window.UrenaviFactSafety;
+ const fixture=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','regression-products.json'),'utf8'));
+ let failures=0;
+ 
+-function fail(id,msg){
+-  failures++;
+-  console.error('FAIL',id,'-',msg);
+-}
+-function ok(id,msg){
+-  console.log('PASS',id,'-',msg);
++function fail(id,msg){failures++;console.error('FAIL',id,'-',msg);}
++function ok(id,msg){console.log('PASS',id,'-',msg);}
++
++function titleTokens(itemName){
++  return api.titleFactTokens({itemName});
+ }
+ 
+-function assertBalancedSymbols(id,text){
+-  const pairs=[['【','】'],['〖','〗'],['（','）'],['(',')'],['「','」'],['『','』'],['[',']'],['［','］']];
+-  for(const [open,close] of pairs){
+-    let depth=0;
+-    for(const ch of String(text||'')){
+-      if(ch===open) depth++;
+-      else if(ch===close){ depth--; if(depth<0){ fail(id,`unmatched closing bracket ${close}: ${text}`); break; } }
+-    }
+-    if(depth!==0) fail(id,`unmatched bracket pair ${open}${close}: ${text}`);
++function validateStrictCopy(id,item,copy){
++  const source=titleTokens(item.itemName);
++  const tokens=new Set(source);
++  const allowed=safety.filterAllowedTitleFacts(source,source);
++  if(!allowed.length){
++    if(copy!=='') fail(id,'copy must stop when no allowlisted fact exists: '+copy);
++    return;
++  }
++  if(!copy){
++    fail(id,'copy stopped despite allowlisted title fact: '+JSON.stringify(allowed));
++    return;
++  }
++  if(!copy.startsWith('商品名に記載されている仕様です。')) fail(id,'neutral title-source heading missing: '+copy);
++  if(!copy.includes('※アフィリエイト広告を利用しています')) fail(id,'ROOM disclosure missing');
++  if(copy.length>500) fail(id,'copy exceeds 500 chars: '+copy.length);
++  if(/こんな人|向いて|おすすめ|悩み|使いやす|しやすい|選びどころ|暮らし/.test(copy)) fail(id,'inferred audience/use wording leaked: '+copy);
++  const facts=copy.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
++  if(!facts.length) fail(id,'generated copy has no facts');
++  for(const fact of facts){
++    if(!tokens.has(fact)) fail(id,'fact is not an exact title token: '+fact);
++    if(!safety.isAllowedSpecFact(fact)) fail(id,'fact is outside allowlist: '+fact);
+   }
+-  const stars=(String(text||'').match(/★/g)||[]).length;
+-  if(stars%2!==0) fail(id,'isolated ★ remains: '+text);
+ }
+ 
+-const rankVariantById={
+-  'clean-window':0,
+-  'clean-glove':1,
+-  'clean-cloth':4,
+-  'pet-grooming':5
+-};
+-
+ for(const tc of fixture.cases){
+   const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
+   const a=api.analyzeRoomProduct(item,'');
+-  const variant=Object.prototype.hasOwnProperty.call(rankVariantById,tc.id)?rankVariantById[tc.id]:0;
+-  const copy=api.makeRoomCopy(item,'',{variant});
+-  const features=a.facts||[];
+   const e=tc.expect||{};
++  const copy=api.makeRoomCopy(item,'',{variant:0});
+ 
+   if(a.category!==e.category) fail(tc.id,`category expected ${e.category}, got ${a.category}`);
+   else ok(tc.id,'category '+a.category);
+-
+   if(a.usage!==e.usage) fail(tc.id,`usage expected ${e.usage}, got ${a.usage}`);
+   if(Boolean(a.ambiguous)!==Boolean(e.ambiguous)) fail(tc.id,`ambiguous expected ${e.ambiguous}, got ${a.ambiguous}`);
+   if(a.outputMode!==e.outputMode) fail(tc.id,`outputMode expected ${e.outputMode}, got ${a.outputMode}`);
+ 
+-  for(const word of e.forbiddenWords||[]){
+-    if(copy.includes(word)) fail(tc.id,`forbidden word in copy: ${word}`);
+-  }
+-  for(const word of e.expectedFeatures||[]){
+-    if(!features.includes(word)) fail(tc.id,`missing feature: ${word}; got ${JSON.stringify(features)}`);
+-  }
+-  for(const word of e.forbiddenFeatures||[]){
+-    if(features.includes(word)) fail(tc.id,`forbidden feature: ${word}`);
+-  }
+-  if(copy.length>500) fail(tc.id,`copy exceeds 500 chars: ${copy.length}`);
+-  if(!copy.includes('※アフィリエイト広告を利用しています')) fail(tc.id,'ROOM disclosure missing');
+-  assertBalancedSymbols(tc.id,copy);
++  const features=a.facts||[];
++  for(const word of e.expectedFeatures||[]) if(!features.includes(word)) fail(tc.id,`missing analyzer feature: ${word}; got ${JSON.stringify(features)}`);
++  for(const word of e.forbiddenFeatures||[]) if(features.includes(word)) fail(tc.id,`forbidden analyzer feature: ${word}`);
+ 
+-  const riskyInCopy=['楽天1位','ランキング1位','26冠','No.1','ナンバーワン','リフトアップ','小顔効果','痩せる','若返る','治る','改善','必ず','絶対'];
+-  for(const word of riskyInCopy){
+-    if(copy.includes(word)) fail(tc.id,'risk word in copy: '+word);
+-  }
++  validateStrictCopy(tc.id,item,copy);
++  if(api.makeThreadsCopy(item,'',{variant:0})!==copy) fail(tc.id,'Threads route differs from strict ROOM route');
++  if(api.makeInstagramCopy(item,'',{variant:0})!==copy) fail(tc.id,'Instagram route differs from strict ROOM route');
+ 
+   console.log('RESULT',JSON.stringify({
+-    id:tc.id,
+-    itemName:tc.itemName,
+-    category:a.category,
+-    usage:a.usage,
+-    ambiguous:a.ambiguous,
+-    outputMode:a.outputMode,
+-    reason:a.ambiguityReason,
+-    features,
+-    conflicts:a.conflicts,
+-    copy
++    id:tc.id,category:a.category,usage:a.usage,ambiguous:a.ambiguous,outputMode:a.outputMode,
++    allowlisted:safety.filterAllowedTitleFacts(titleTokens(item.itemName),titleTokens(item.itemName)),copy
+   }));
+ }
+ 
+-// A5 validation JSON regression: exact user-provided itemName values must keep promo fragments out and stop risky special-use items.
+-for(const tc of fixture.cases.filter(x=>x.group==='validation-json')){
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  if(a.outputMode!==tc.expect.outputMode) fail(tc.id,`A5 outputMode expected ${tc.expect.outputMode}, got ${a.outputMode}`);
+-  for(const word of tc.expect.forbiddenWords||[]){
+-    if(word && copy.includes(word)) fail(tc.id,`A5 forbidden fragment in copy: ${word}`);
+-  }
+-  const safe=api.buildSafeDisplayName(item,a);
+-  for(const bad of ['限定!','限定！','総合1位','1位6冠','年間ランキング受賞','配布中/','配布中／','＼','★']){
+-    if(safe.includes(bad)) fail(tc.id,`A5 unsafe display fragment: ${bad} in ${safe}`);
+-  }
+-  if(/(?:^|\s)(?:!|！|★|\\|＼|\/|／)+(?:\s|$)/.test(safe)) fail(tc.id,'A5 orphan punctuation remains in safe display name: '+safe);
+-  if(/「\s*」|『\s*』|【\s*】|〖\s*〗/.test(safe)) fail(tc.id,'A5 empty brackets remain in safe display name: '+safe);
+-}
+-
+-// Promo removal preserves word boundaries.
++// Promotion/claim cleanup and classification remain independently guarded.
+ {
+   const cleaned=api.stripPromotionalText('【搬入設置無料】掃除用具入れ ロッカー');
+-  if(cleaned!=='掃除用具入れ ロッカー') fail('spacing','搬入設置無料 removal failed: '+cleaned);
+-  const kept=api.stripPromotionalText('【CAT&DOG】キルティングお散歩バッグM');
+-  if(kept!=='CAT&DOG キルティングお散歩バッグM') fail('spacing','kept bracket content must preserve a word boundary: '+kept);
++  if(cleaned!=='掃除用具入れ ロッカー') fail('spacing','promo cleanup failed: '+cleaned);
+ }
+-
+-// Power Bank synonym and accessory priority regression.
+ for(const id of ['live-battery-rank5-anker-zolo']){
+   const tc=fixture.cases.find(x=>x.id===id);
+   const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+-  if(a.category!=='charging' || a.usage!=='mobile_battery' || a.outputMode!=='full') fail(id,'Power Bank synonym did not resolve to charging.mobile_battery');
++  if(a.category!=='charging'||a.usage!=='mobile_battery'||a.outputMode!=='full') fail(id,'Power Bank synonym classification regressed');
+ }
+ for(const id of ['counter-power-bank-case','counter-powerbank-pouch']){
+   const tc=fixture.cases.find(x=>x.id===id);
+   const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+-  if(a.category!=='accessory' || a.usage!=='mobile_battery_case') fail(id,'Power Bank accessory did not take priority');
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='P2');
+-  const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:0},'',{variant:0});
+-  if(copy.split('\n')[0].trim()==='商品') fail('P2','one-word 商品 fallback is forbidden');
+-  if(!/うんち袋|マナー袋/.test(copy.split('\n')[0])) fail('P2','expected an exact noun from itemName in safe fallback');
++  if(a.category!=='accessory'||a.usage!=='mobile_battery_case') fail(id,'Power Bank accessory priority regressed');
+ }
+ {
+   const tc=fixture.cases.find(x=>x.id==='pet-hygiene-wipe-conflict');
+   const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:0},'');
+-  if(!a.ambiguous || a.ambiguityReason!=='pet_toilet_hygiene_conflict') fail(tc.id,'pet.toilet / pet.hygiene_wipe conflict not detected');
+-}
+-
+-// Second validation batch regression: exact real itemName cases.
+-for(const id of ['P4','C4','S5','B-M3']){
+-  const tc=fixture.cases.find(x=>x.id===id);
+-  const item={itemName:tc.itemName,itemPrice:0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  assertBalancedSymbols(id,copy);
+-  if(a.outputMode!==tc.expect.outputMode) fail(id,`outputMode expected ${tc.expect.outputMode}, got ${a.outputMode}`);
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='B-M3');
+-  const item={itemName:tc.itemName,itemPrice:0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  if(!a.claimRisk || !(a.claimRiskTerms||[]).includes('燃えにくい')) fail('B-M3','燃えにくい must be claimRisk');
+-  if(api.buildSafeDisplayName(item,a)!=='モバイルバッテリー') fail('B-M3','claimRisk battery must use モバイルバッテリー safe title');
+-}
+-for(const id of ['S1','S6']){
+-  const tc=fixture.cases.find(x=>x.id===id);
+-  const item={itemName:tc.itemName,itemPrice:0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  if(a.category!=='storage' || a.usage!=='storage_box' || a.outputMode!=='full' || a.ambiguous) fail(id,`storage family resolution failed: ${a.category}.${a.usage} mode=${a.outputMode} ambiguous=${a.ambiguous}`);
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='S6');
+-  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:0},'');
+-  for(const bad of ['2個組','3個組','4個組']) if((a.facts||[]).includes(bad)) fail('S6','quantity feature must not include '+bad);
+-}
+-
+-// Category-specific prose must not leak unrelated vocabulary.
+-for(const id of ['S1','P1','M3']){
+-  const tc=fixture.cases.find(x=>x.id===id);
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  const firstTwo=copy.split('\n').slice(0,2).join('\n');
+-  if(id==='S1' && /掃除|手入れ|作業|整理を気づいたときに/.test(firstTwo)) fail(id,'storage prose leaked unrelated wording: '+firstTwo);
+-  if(id==='P1' && /掃除|手入れ|作業/.test(firstTwo)) fail(id,'pet.bed prose leaked unrelated wording: '+firstTwo);
+-  if(id==='M3' && /掃除|手入れ|作業/.test(firstTwo)) fail(id,'battery prose leaked unrelated wording: '+firstTwo);
+-}
+-
+-{
+-  const ids=['S1','S2','S3','S4','S5','S6','S8','S9','S10'];
+-  const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
+-  for(let i=0;i<ids.length;i++){
+-    const tc=fixture.cases.find(x=>x.id===ids[i]);
+-    const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'',{variant:i,usedOpenings,usedSeconds});
+-    const lines=copy.split('\n');
+-    openings.push(lines[0]); seconds.push(lines[1]);
+-  }
+-  const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす/;
+-  for(const line of [...openings,...seconds].filter(Boolean)) if(inference.test(line)) fail('storage-search','inference wording leaked: '+line);
+-}
+-
+-{
+-  const p1=fixture.cases.find(x=>x.id==='P1');
+-  const p1Item={itemName:p1.itemName,itemPrice:p1.itemPrice||0};
+-  const p1a=api.analyzeRoomProduct(p1Item,'');
+-  const p1copy=api.makeRoomCopy(p1Item,'',{variant:0});
+-  if(p1a.category!=='pet'||p1a.usage!=='drive_bed'||p1a.outputMode!=='full') fail('P1',`expected pet.drive_bed full for explicit drive-bed title, got ${p1a.category}.${p1a.usage} ${p1a.outputMode}`);
+-  if((p1a.conflicts||[]).length) fail('P1','explicit drive-bed must not carry a false conflict');
+-  for(const bad of ['快眠','安眠','体圧分散']) if(p1copy.includes(bad)) fail('P1','unsupported drive-bed claim: '+bad);
+-
+-  const ids=['P9','P10'];
+-  const usedOpenings=new Set(), usedSeconds=new Set(), openings=[], seconds=[];
+-  for(let i=0;i<ids.length;i++){
+-    const tc=fixture.cases.find(x=>x.id===ids[i]);
+-    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-    const a=api.analyzeRoomProduct(item,'');
+-    const copy=api.makeRoomCopy(item,'',{variant:i,usedOpenings,usedSeconds});
+-    if(a.category!=='pet'||a.usage!=='bed'||a.outputMode!=='full') fail(ids[i],`expected pet.bed full, got ${a.category}.${a.usage} ${a.outputMode}`);
+-    for(const bad of ['快眠','安眠','体圧分散']) if(copy.includes(bad)) fail(ids[i],'unsupported pet-bed claim: '+bad);
+-    openings.push(copy.split('\n')[0]); seconds.push(copy.split('\n')[1]);
+-  }
+-  const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす|お手入れしやす/;
+-  for(const line of [...openings,...seconds].filter(Boolean)) if(inference.test(line)) fail('pet-bed-search','inference wording leaked: '+line);
+-}
+-
+-{
+-  const tc=fixture.cases.find(x=>x.id==='S1');
+-  const copy=api.makeRoomCopy({itemName:tc.itemName,itemPrice:5780},'',{variant:0});
+-  if(!copy.includes('価格：5,780円')) fail('S1','price formatting expected 価格：5,780円');
+-}
+-
+-// Storage furniture / pet drive bed / praise promo / special battery regressions.
+-{
+-  const tc=fixture.cases.find(x=>x.id==='S8');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  if(a.category!=='storage'||a.usage!=='storage_box'||a.outputMode!=='fallback') fail('S8',`expected storage.storage_box fallback, got ${a.category}.${a.usage} ${a.outputMode}`);
+-  if(!(a.conflicts||[]).some(x=>x.usage==='seating_storage')) fail('S8','seating_storage conflict missing');
+-  if(/^受賞/.test(copy)||copy.includes('楽天1位受賞')) fail('S8','award promo remains: '+copy);
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='P8');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  if(a.outputMode!=='fallback') fail('P8','expected fallback');
+-  if(copy.includes('ご好評です')) fail('P8','ご好評です remains in copy');
+-}
+-for(const raw of ['楽天1位受賞 商品A','8冠受賞 商品B','受賞 商品C','ご好評です 商品D','大好評 商品E','当店人気 商品F','大人気 商品G']){
+-  const cleaned=api.stripPromotionalText(raw);
+-  if(/楽天1位受賞|\d+冠受賞|^受賞(?:\s|$)|ご好評です|大好評|当店人気|大人気/.test(cleaned)) fail('promo-cleanup','promo remains: '+raw+' => '+cleaned);
++  if(!a.ambiguous||a.ambiguityReason!=='pet_toilet_hygiene_conflict') fail(tc.id,'pet toilet/hygiene conflict not detected');
+ }
+ {
+   const tc=fixture.cases.find(x=>x.id==='special-battery-electric-blanket');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  if(a.outputMode!=='fallback') fail(tc.id,'電気毛布 battery must fallback');
+-  if(!(a.conflicts||[]).some(x=>x.usage==='special_battery'&&x.phrase==='電気毛布')) fail(tc.id,'電気毛布 special_battery conflict missing');
+-}
+-
+-// Factual-only regression: known full generation must not depend on prose variety.
+-{
+-  const ids=['clean-window','clean-glove','clean-cloth','pet-grooming'];
+-  const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす|お手入れしやす/;
+-  for(const id of ids){
+-    const tc=fixture.cases.find(x=>x.id===id);
+-    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-    const copy=api.makeRoomCopy(item,'',{variant:0});
+-    if(inference.test(copy)) fail(id,'known full inference wording leaked: '+copy);
+-  }
+-}
+-
+-// Legacy template arrays may remain for compatibility, but generation must be factual.
+-{
+-  const tc=fixture.cases.find(x=>x.id==='S1');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const opening=api.groundedOpening(a,item,7,{});
+-  if(/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう/.test(opening)){
+-    fail('factual-grounded-opening','groundedOpening must stay factual: '+opening);
+-  }
+-}
+-
+-// Explicit quantity regression cases.
+-const quantityCases=[
+-  {name:'掃除クロス 10枚入り',must:'10枚入り',mustNot:'10枚セット'},
+-  {name:'掃除クロス 6枚セット',must:'6枚セット'},
+-  {name:'掃除クロス 54枚',mustNot:'54枚セット'},
+-  {name:'モバイルバッテリー 4本ケーブル内蔵',mustNot:'4本セット'},
+-  {name:'取替式 網戸 掃除グッズ〖10〗',mustNot:'10枚セット'}
+-];
+-for(const [idx,q] of quantityCases.entries()){
+-  const item={itemName:q.name,itemPrice:1000};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const f=a.facts||[];
+-  if(q.must && !f.includes(q.must)) fail('quantity-'+idx,`missing ${q.must}: ${JSON.stringify(f)}`);
+-  if(q.mustNot && f.includes(q.mustNot)) fail('quantity-'+idx,`unexpected ${q.mustNot}: ${JSON.stringify(f)}`);
+-}
+-
+-// Legal-safe display names must not contain promo/risk claims.
+-for(const tc of fixture.cases){
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const safe=api.buildSafeDisplayName(item,a);
+-  for(const bad of ['楽天1位','ランキング1位','26冠','半額','SALE','クーポン','リフトアップ','小顔効果','改善']){
+-    if(safe.includes(bad)) fail(tc.id,'unsafe safeDisplayName: '+bad+' in '+safe);
+-  }
+-}
+-
+-// claimRisk/promoRisk regression: both kinds must be absent from ROOM copy.
+-for(const tc of fixture.cases){
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:rankVariantById[tc.id]||0});
+-  for(const term of [...(a.claimRiskTerms||[]),...(a.promoRiskTerms||[])]){
+-    if(term && copy.toLowerCase().includes(String(term).toLowerCase())) fail(tc.id,'risk term leaked into copy: '+term);
+-  }
+-}
+-
+-const byId=id=>fixture.cases.find(x=>x.id===id);
+-for(const id of ['beauty-roller','beauty-kassa','pet-toilet']){
+-  const tc=byId(id);
+   const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+-  if(!a.claimRisk) fail(id,'expected claimRisk=true');
+-}
+-for(const id of ['clean-window','pet-water','pet-bed','battery-cable']){
+-  const tc=byId(id);
+-  const a=api.analyzeRoomProduct({itemName:tc.itemName,itemPrice:tc.itemPrice||0},'');
+-  if(!a.promoRisk) fail(id,'expected promoRisk=true');
+-}
+-{
+-  const tc=byId('battery-cable');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  if(a.claimRisk) fail(tc.id,'promo-only battery unexpectedly claimRisk');
+-  if(api.buildSafeDisplayName(item,a)==='モバイルバッテリー' && !/モバイルバッテリー/.test(tc.itemName)) fail(tc.id,'safe display fallback mismatch');
+-}
+-{
+-  const tc=byId('beauty-roller');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  if(api.buildSafeDisplayName(item,a)!=='美顔ローラー') fail(tc.id,'claimRisk must use safe usage name');
++  if(a.outputMode!=='fallback') fail(tc.id,'special-use battery must remain fallback');
++  if(!(a.conflicts||[]).some(x=>x.usage==='special_battery'&&x.phrase==='電気毛布')) fail(tc.id,'special battery conflict missing');
+ }
+ 
+-// Preview export and fallback UI are static-code guarded as well.
+-const appHtml=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
+-if(!appHtml.includes("fetch('/api/runtime-env'")) fail('preview-export','runtime env endpoint guard missing');
+-if(!appHtml.includes("preview && currentAccessPlan==='owner'")) fail('preview-export','owner+preview guard missing');
+-if(!appHtml.includes('この商品は自動判定の対象外のため、商品名と商品名から確認できる事実だけを表示しています。')) fail('fallback-ui','fallback guidance message missing');
+-if(!appHtml.includes("groundedAnalysis(i).outputMode==='full'")) fail('today-ui','full-output filter missing');
+-if(appHtml.includes('<div id="st" class="muted"></div>\\n')) fail('preview-export','literal \\n in static debug markup');
+-if(!appHtml.includes("debugCopyBtn')?.addEventListener('click',copyDebugValidation)")) fail('preview-export','debug export click handler missing');
+-if(!appHtml.includes('長押しで選択・コピーできます')) fail('preview-export','manual copy guidance missing');
+-if(appHtml.includes('<textarea id="debugJson" readonly')) fail('preview-export','debug textarea must allow manual selection/copy');
+-if(!appHtml.includes("if(ta){\n      ta.value=json;")) fail('preview-export','JSON must be rendered before clipboard attempt');
+-{
+-  const a=api.analyzeRoomProduct({itemName:'ペット用品 便利グッズ',itemPrice:1000},'');
+-  if(a.ambiguous) fail('no-match','no_match must not be reported as ambiguous');
+-  if(a.ambiguityReason!=='no_match') fail('no-match','expected ambiguityReason=no_match, got '+a.ambiguityReason);
+-}
+-if(!appHtml.includes("return 'no_match'")) fail('preview-export','fallbackReason no_match missing');
+-if(!appHtml.includes('topCandidates:Array.isArray(a?.topCandidates)?a.topCandidates:[]')) fail('preview-export','topCandidates missing from validation JSON');
+-if(!appHtml.includes('promoRisk:Boolean(a?.promoRisk)')) fail('preview-export','promoRisk missing from validation JSON');
+-if(!appHtml.includes('claimRisk:Boolean(a?.claimRisk)')) fail('preview-export','claimRisk missing from validation JSON');
+-if(!appHtml.includes('warningRisk:Boolean(a?.warningRisk)')) fail('preview-export','warningRisk missing from validation JSON');
+-if(!appHtml.includes('promoRiskTerms:Array.isArray(a?.promoRiskTerms)?a.promoRiskTerms:[]')) fail('preview-export','promoRiskTerms missing from validation JSON');
+-{
+-  const raw='【リピーター続出】 バイク グローブ 秋 夏 革 本革';
+-  const cleaned=api.stripPromotionalText(raw);
+-  if(/リピーター続出/.test(cleaned)) fail('promo-repeaters','リピーター続出 remains: '+cleaned);
+-  const risk=api.detectLegalRisk(raw);
+-  if(!risk.promoRisk) fail('promo-repeaters','リピーター続出 must set promoRisk');
+-}
+-{
+-  const item={
+-    itemName:'【楽天1位】バイクグローブ バイク レザーグローブ メッシュ 春夏用 メンズ レディース おすすめ 防寒 冬用 最強 本革 レザー ツーリング プレゼント 薄手 コスパ 防水 メッシュ オールシーズン 雨 大きいサイズ 手袋 指 スマホ操作',
+-    itemPrice:2880
+-  };
+-  const a=api.analyzeRoomProduct(item,'バイクグローブ');
+-  const copy=api.makeRoomCopy(item,'バイクグローブ');
+-  if(!(a.conflicts||[]).some(x=>x.usage==='motorcycle_glove')) fail('bike-claim-conflict','motorcycle conflict missing');
+-  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('bike-claim-conflict','cleaning label leaked under claimRisk+conflict: '+copy);
+-  if(!/バイク|レザーグローブ/.test(copy)) fail('bike-claim-conflict','grounded bike identity missing: '+copy);
+-}
+-if(!appHtml.includes('claimRiskTerms:Array.isArray(a?.claimRiskTerms)?a.claimRiskTerms:[]')) fail('preview-export','claimRiskTerms missing from validation JSON');
+-
+-
+-
+-const runtimeEnv=fs.readFileSync(path.join(__dirname,'..','api','runtime-env.js'),'utf8');
+-if(!runtimeEnv.includes("process.env.VERCEL_ENV === 'preview'")) fail('preview-export','VERCEL_ENV preview check missing');
+-for(const forbidden of ['RAKUTEN_ACCESS_KEY','SUPABASE_SERVICE_ROLE_KEY','STRIPE_SECRET_KEY']){
+-  if(runtimeEnv.includes(forbidden)) fail('preview-export','secret reference in runtime-env endpoint: '+forbidden);
+-}
+-
+-// Smoke-check non-ROOM surfaces do not throw after classification engine change.
+-for(const tc of fixture.cases.slice(0,11)){
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  try{
+-    api.makeThreadsCopy(item,'',{variant:0});
+-    api.makeInstagramCopy(item,'',{variant:0});
+-  }catch(err){
+-    fail(tc.id,'SNS smoke error: '+err.message);
+-  }
+-}
+-
+-
+-// Product-specific ROOM copy: the opening must identify the actual product,
+-// and the value statement may only expand a verified title-derived feature conservatively.
+-{
+-  const tc=fixture.cases.find(x=>x.id==='S1');
+-  const item={itemName:tc.itemName,itemPrice:5780};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0,usedOpenings:new Set(),usedSeconds:new Set()});
+-  const first=copy.split('\n')[0];
+-  if(!first.includes(api.buildSafeDisplayName(item,a)) && !first.includes('収納ボックス')) fail('grounded-room-S1','opening must carry product identity: '+first);
+-  for(const fact of a.facts||[]){
+-    if(!item.itemName.includes('折') && fact==='折りたたみ対応') fail('grounded-room-S1','feature was not grounded in title');
+-  }
+-  if(/絶対|必ず|保証|改善|治る|快眠|安眠/.test(copy)) fail('grounded-room-S1','unsupported strong claim in grounded copy: '+copy);
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='live-battery-rank5-anker-zolo');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:2,usedOpenings:new Set(),usedSeconds:new Set()});
+-  const first=copy.split('\n')[0];
+-  if(!/モバイルバッテリー|Power Bank/i.test(first)) fail('grounded-room-battery','battery identity missing from opening: '+first);
+-  for(const fact of a.facts||[]){
+-    if(!copy.includes(fact)) fail('grounded-room-battery','verified fact missing from copy: '+fact);
+-  }
+-}
+-{
+-  const tc=fixture.cases.find(x=>x.id==='P1');
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  if(a.category!=='pet'||a.usage!=='drive_bed'||a.outputMode!=='full') fail('grounded-room-P1','explicit drive-bed must be supported as pet.drive_bed');
+-  if(/快眠|安眠|体圧分散/.test(copy)) fail('grounded-room-P1','unsupported drive-bed benefit leaked: '+copy);
+-  if(!/車|ドライブ/.test(copy)) fail('grounded-room-P1','drive-bed copy must stay grounded in vehicle use: '+copy);
+-}
+-
+-
+-// Step 1: position-aware primary use must keep a main product noun ahead of a later usage scene.
+-{
+-  const cases=[
+-    ['electric-mop-r1','【クーポンで400円オフ】回転モップクリーナー 電動モップ Orage M200 S 軽量 自立 自走式 回転モップ 水拭き コードレス 床拭き 掃除機 網戸 モップ 高速回転 充電式 ジェネリック家電 Orage M200S【1年保証】 ギフトにも','電動モップ','mop'],
+-    ['electric-mop-r3','【クーポンで400円オフ】2026新モデル 回転モップクリーナー 電動モップ Orage M300 軽量 自立 自走式 回転モップ 水拭き コードレス 床拭き 掃除機 網戸 モップ 高速回転 充電式 1人暮らし ジェネリック家電【1年保証】 プレゼント','電動モップ','mop'],
+-    ['electric-mop-r4','電動モップ コードレス 床掃除 油汚れ クレヨン 足跡 フロアモップ フローリングワイパー 軽量 高速振動 掃除 網戸 壁 玄関 水拭きシート対応 パッド不要 LEDライト付 電動フロアワイパー SWD-1 アイリスオーヤマ * [2609SI]','電動モップ','mop'],
+-    ['electric-mop-r6','電動モップ 回転 モップクリーナー コードレス 床掃除 電動 モップ 回転モップ 回転モップクリーナー 回転式 掃除 網戸 水拭き 電動 充電式 交換用 パッド付き 交換パッド 自走式 水噴射 充電式 フローリング 160ml 父の日 プレゼント 珍しい','電動モップ','mop'],
+-    ['window-cleaner-pair','網戸クリーナー モップタイプ 網戸掃除','網戸掃除','window_screen'],
+-    ['window-mop-pair','網戸用モップ 網戸掃除 取替式','網戸掃除','window_screen']
+-  ];
+-  for(const [id,itemName,keyword,usage] of cases){
+-    const a=api.analyzeRoomProduct({itemName,itemPrice:1000},keyword);
+-    if(a.category!=='cleaning'||a.usage!==usage||a.ambiguous) fail(id,`expected cleaning.${usage}, got ${a.category}.${a.usage} ambiguous=${a.ambiguous}`);
+-  }
+-  const fixed=fixture.cases.find(x=>x.id==='clean-window');
+-  const a=api.analyzeRoomProduct({itemName:fixed.itemName,itemPrice:fixed.itemPrice||0},'網戸掃除');
+-  if(a.category!=='cleaning'||a.usage!=='window_screen'||a.ambiguous) fail('clean-window-pair','existing 網戸掃除 fixture must stay window_screen');
+-}
+-
+-// Step 2: mop holders are holders, not mop bodies.
+-for(const id of ['live-cleaning-rank7-mop-holder','C7']){
+-  const tc=fixture.cases.find(x=>x.id===id);
+-  const item={itemName:tc.itemName,itemPrice:tc.itemPrice||0};
+-  const a=api.analyzeRoomProduct(item,'モップハンガー');
+-  const copy=api.makeRoomCopy(item,'モップハンガー',{variant:0});
+-  if(a.category!=='storage'||a.usage!=='cleaning_tool_holder'||a.outputMode!=='fallback'||a.ambiguous) fail(id,'mop holder must be storage.cleaning_tool_holder fallback while generic full is disabled');
+-  if((a.conflicts||[]).length) fail(id,'mop holder must not have cleaning/storage conflict');
+-  if((a.facts||[]).includes('モップタイプ')) fail(id,'mop holder must not expose モップタイプ');
+-  if(/モップを探して|モップでの掃除|コードレスタイプを条件にモップ/.test(copy)) fail(id,'mop holder copy must not describe the holder as a mop: '+copy);
+-}
+-
+-
+-// Step 3-6: fallback is title-only, allowlisted, claim-safe, promo-clean and hides invalid price.
+-{
+-  const samples=[
+-    {id:'fallback-bench',itemName:'収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ クッション付き',itemPrice:0,keyword:'収納ベンチ'},
+-    {id:'fallback-holder',itemName:'モップハンガー RC型 コンパクト 6本掛【tmcp2212】',itemPrice:null,keyword:'モップハンガー'},
+-    {id:'fallback-kitchen',itemName:'キッチンワゴン キャスター付き 3段 天板付き スリム',itemPrice:NaN,keyword:'キッチンワゴン'}
+-  ];
+-  for(const s of samples){
+-    const a=api.analyzeRoomProduct(s,s.keyword);
+-    const copy=api.makeRoomCopy(s,s.keyword,{variant:0});
+-    if(/価格：0円/.test(copy)) fail(s.id,'zero/invalid price must be hidden: '+copy);
+-    if(a.outputMode==='fallback' && /暮らし|快適|助けになりそう|向いていそう|探している人/.test(copy)) fail(s.id,'fallback must not add lifestyle/use explanation: '+copy);
+-    if(s.id==='fallback-bench'&&a.outputMode==='fallback'&&!/2人掛け、幅120、奥行37、高さ40cm/.test(copy)) fail(s.id,'fallback labeled dimensions must stay intact: '+copy);
+-    if(s.id==='fallback-bench'&&a.outputMode==='full'&&!['2人掛け','幅120','奥行37','高さ40cm'].every(x=>copy.includes(x))) fail(s.id,'generic full must preserve grounded dimensions: '+copy);
+-  }
+-}
+-{
+-  const item={itemName:'【20箱セット】 クリロン化成 うんちが臭わない袋 BOS ネコ用 箱型 SSサイズ 200枚入 ボス うんち袋',itemPrice:26980};
+-  const copy=api.makeRoomCopy(item,'うんち袋',{variant:0});
+-  if(/防臭|臭わない|匂わない|臭くない/.test(copy)) fail('fallback-bos','claim terms leaked: '+copy);
+-  if(!/BOS/.test(copy)||!/うんち袋/.test(copy)||!/ネコ用/.test(copy)||!/SSサイズ/.test(copy)||!/200枚入/.test(copy)) fail('fallback-bos','safe BOS facts missing: '+copy);
+-  if(/うんちが\s+袋/.test(copy)) fail('fallback-bos','broken claim removal remains: '+copy);
+-}
+-{
+-  const cleaned=api.stripPromotionalText('P10倍 9/24 9:59迄 セール価格 テラモト モップハンガー');
+-  if(/^\s*(?:9\/24|9:59|迄|価格)/.test(cleaned)) fail('promo-block','orphan promo prefix remains: '+cleaned);
+-  const risk=api.detectLegalRisk('P10倍 9/24 9:59迄 商品');
+-  if(!risk.promoRisk) fail('promo-block','P10倍 must set promoRisk');
+-}
+-{
+-  const item={itemName:'モバイルバッテリー 4本ケーブル内蔵 10000mAh',itemPrice:0};
+-  const copy=api.makeRoomCopy(item,'モバイルバッテリー',{variant:0});
+-  if(/(?:^|[、\n])4本(?:[、\n]|$)/.test(copy)) fail('fallback-cable','4本ケーブル内蔵 must not be reduced to 4本: '+copy);
+-}
+-if(!appHtml.includes('aiHttpStatus:aiRoomResults.get(index)?.status??null')) fail('preview-export','aiHttpStatus missing from validation JSON');
+-if(!appHtml.includes("aiMessage:aiRoomResults.get(index)?.message||null")) fail('preview-export','aiMessage missing from validation JSON');
+-if(!appHtml.includes('AI機能を利用できません。安全のため短文表示です。')) fail('preview-export','missing safe Groq unavailable UI message');
+-if(!appHtml.includes('UrenaviPainCopy.fallbackProductName')) fail('ai-gate-fallback','AI fallback must reuse fallbackProductName/tidyDisplayTitle pipeline');
+-{
+-  const bos={itemName:'【20箱セット】 クリロン化成 うんちが臭わない袋 BOS ネコ用 箱型 SSサイズ 200枚入 ボス うんち袋'};
+-  const name=api.fallbackProductName(bos,api.analyzeRoomProduct(bos,'うんち袋'));
+-  if(!/BOS/.test(name)||!/うんち袋/.test(name)||/うんちが\s+袋/.test(name)) fail('ai-gate-fallback-bos','fallbackProductName broke BOS title: '+name);
+-}
+-{
+-  const bench={itemName:'【P10倍 9/24 9:59迄】 収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 収納ボックス'};
+-  const name=api.fallbackProductName(bench,api.analyzeRoomProduct(bench,'収納ベンチ'));
+-  if(!/収納/.test(name)||/P10倍|9\/24|9:59/.test(name)) fail('ai-gate-fallback-bench','fallbackProductName promo cleanup failed: '+name);
+-}
+-
+-
+-// Generic glove must never become a cleaning glove when the title has a strong non-cleaning context.
+-{
+-  const item={itemName:'バイク グローブ 秋 夏 革 本革 バイク用 グローブ ツーリング スマホ対応',itemPrice:2980};
+-  const a=api.analyzeRoomProduct(item,'バイクグローブ');
+-  const copy=api.makeRoomCopy(item,'バイクグローブ',{variant:0});
+-  if(a.outputMode!=='fallback') fail('bike-glove-context','bike glove must fallback, got '+a.outputMode);
+-  if(!(a.conflicts||[]).some(x=>x.usage==='motorcycle_glove')) fail('bike-glove-context','motorcycle context conflict missing: '+JSON.stringify(a.conflicts));
+-  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('bike-glove-context','cleaning glove wording leaked: '+copy);
+-}
+-{
+-  const item={itemName:'野球 グローブ 軟式 大人 右投げ オールラウンド用 キャッチボール',itemPrice:5980};
+-  const a=api.analyzeRoomProduct(item,'野球グローブ');
+-  const copy=api.makeRoomCopy(item,'野球グローブ',{variant:0});
+-  if(a.outputMode!=='fallback') fail('baseball-glove-context','baseball glove must fallback, got '+a.outputMode);
+-  if(!(a.conflicts||[]).some(x=>x.usage==='baseball_glove')) fail('baseball-glove-context','baseball context conflict missing: '+JSON.stringify(a.conflicts));
+-  if(/掃除用手袋|手袋タイプの掃除/.test(copy)) fail('baseball-glove-context','cleaning glove wording leaked: '+copy);
+-}
+-{
+-  const item={itemName:'お掃除手袋 マイクロファイバー 掃除 手袋 2枚セット',itemPrice:980};
+-  const a=api.analyzeRoomProduct(item,'掃除手袋');
+-  if(a.category!=='cleaning'||a.usage!=='glove'||a.outputMode!=='full') fail('explicit-cleaning-glove','explicit cleaning glove must stay cleaning.glove full: '+JSON.stringify({category:a.category,usage:a.usage,mode:a.outputMode,conflicts:a.conflicts}));
+-  if((a.conflicts||[]).some(x=>x.category==='non_cleaning')) fail('explicit-cleaning-glove','explicit cleaning glove got false non-cleaning conflict');
+-}
+-
+-// Misleading catchcopy/itemCaption must never change title-derived classification or promote fallback to full.
+-for(const tc of fixture.cases){
+-  const base={itemName:tc.itemName,itemPrice:tc.itemPrice||0,catchcopy:'',itemCaption:'',genrePath:'',genreName:''};
+-  const bait={...base,catchcopy:'急速充電 防臭 網戸 収納',itemCaption:'急速充電 防臭 網戸 収納 ペット用品 掃除用具',genrePath:'収納>ペット>掃除',genreName:'防臭 急速充電'};
+-  const a0=api.analyzeRoomProduct(base,tc.searchKeyword||'');
+-  const a1=api.analyzeRoomProduct(bait,tc.searchKeyword||'');
+-  if(a0.category!==a1.category||a0.usage!==a1.usage||a0.outputMode!==a1.outputMode){
+-    fail(tc.id+'-misleading-meta',`metadata changed title-derived result from ${a0.category}.${a0.usage}/${a0.outputMode} to ${a1.category}.${a1.usage}/${a1.outputMode}`);
+-  }
+-}
+-
+-
+-{
+-  const item={itemName:'●送料無料●〖公式BOS-SHOP★驚異の 防臭袋 BOS (ボス)〗 うんちが臭わない袋 BOS ペット用 Lサイズ 90枚入り（袋カラー：水色） ペット いぬ 大人 オムツ ウンチ トイレ 生ゴミ 処分 匂い 対策 エチケット 非常 防災',itemPrice:0};
+-  const copy=api.makeRoomCopy(item,'うんち袋',{variant:0});
+-  if(/うんちが\s+袋/.test(copy)) fail('fallback-bos-live','broken BOS noun remains: '+copy);
+-  if(!/^BOS うんち袋/m.test(copy)||!/ペット用/.test(copy)||!/Lサイズ/.test(copy)||!/90枚入り/.test(copy)) fail('fallback-bos-live','safe BOS facts missing: '+copy);
+-}
+-{
+-  const item={itemName:'美顔ローラー 美顔器 リフトアップ 〖微弱電流〗〖防水仕様〗〖充電不要〗 小顔ローラー メンズ マイクロカレント 美顔器 ローラー 全身用 ローラー 美容グッズ 美容 グッズ 女性 男性 誕生日 レディース メンズ プレゼント ギフト',itemPrice:3980};
+-  const a=api.analyzeRoomProduct(item,'');
+-  const display=api.buildSafeDisplayName(item,a);
+-  const copy=api.makeRoomCopy(item,'',{variant:0});
+-  if(display!=='美顔ローラー') fail('beauty-roller-claim-safe','buildSafeDisplayName must keep safe usage name: '+display);
+-  if(!/^美顔ローラー\n/m.test(copy)) fail('beauty-roller-room-safe','ROOM fallback must start with safe usage name: '+copy);
+-  if(/リフトアップ|小顔/.test(copy)) fail('beauty-roller-room-safe','claim terms leaked: '+copy);
+-}
+-
+-
+-// Error-zero follow-up: multiple distinct early product nouns must fall back.
+-// Same-family storage_box/storage_case must stay non-ambiguous.
+-{
+-  const mixed=fixture.cases.find(x=>x.id==='known-laundry-9');
+-  const a=api.analyzeRoomProduct({itemName:mixed.itemName,itemPrice:mixed.itemPrice||0},'');
+-  if(!a.ambiguous||a.outputMode!=='fallback'||a.ambiguityReason!=='multiple_early_product_nouns'){
+-    fail('known-laundry-9-early-nouns','mixed early product nouns must be ambiguous fallback: '+JSON.stringify(a));
+-  }
+-  const sameFamily={itemName:'収納ボックス 収納ケース 折りたたみ 3個セット',itemPrice:1980};
+-  const b=api.analyzeRoomProduct(sameFamily,'');
+-  if(b.ambiguous||b.category!=='storage'||!['storage_box','storage_case'].includes(b.usage)||b.outputMode!=='full'){
+-    fail('same-family-storage-nouns','storage box/case must remain same-family full: '+JSON.stringify(b));
+-  }
+-}
+-
+-// P2 exact target term: ペット用品 must not produce ペット用.
+-{
+-  const p2=fixture.cases.find(x=>x.id==='P2');
+-  const copy=api.makeRoomCopy({itemName:p2.itemName,itemPrice:p2.itemPrice||0},'',{variant:0});
+-  if(/(?:^|[、\n])ペット用(?:[、\n]|$)/.test(copy)) fail('P2-target-exact','ペット用品 must not be shortened to ペット用: '+copy);
+-  if(!/BOS うんち袋/.test(copy)||!/SSサイズ/.test(copy)||!/200枚入り/.test(copy)) fail('P2-target-exact','safe BOS facts missing: '+copy);
+-}
+-
+-// strongStructuralLead thresholds are temporary/un-calibrated. Lock the boundaries.
+-{
+-  const structural=(gap,ratio)=>gap<20 && ratio>=0.40 && gap>=10;
+-  if(structural(9,0.41)!==false) fail('strong-lead-gap9','gap 9 must not qualify');
+-  if(structural(10,0.41)!==true) fail('strong-lead-gap10','gap 10 must qualify');
+-  if(structural(12,0.41)!==true) fail('strong-lead-gap12','gap 12 must qualify');
+-  if(structural(12,0.39)!==false) fail('strong-lead-pos39','39% must not qualify');
+-  if(structural(12,0.40)!==true) fail('strong-lead-pos40','40% must qualify');
+-  if(structural(12,0.41)!==true) fail('strong-lead-pos41','41% must qualify');
+-}
+-
+-
+-if(!appHtml.includes('id="debugBatchBtn"')) fail('batch-debug-ui','batch validation button missing');
+-for(const keyword of ['ハンディクリーナー','洗濯ネット','ポータブル電源','犬 ベッド','ドライブベッド 犬']){
+-  if(!appHtml.includes("'"+keyword+"'")) fail('batch-debug-keywords','missing fixed batch keyword: '+keyword);
+-}
+-if(!appHtml.includes('async function copyBatchDebugValidation()')) fail('batch-debug-ui','batch validation handler missing');
+-if(!appHtml.includes("searchCount:DEBUG_BATCH_KEYWORDS.length")) fail('batch-debug-json','batch JSON searchCount missing');
+-if(!appHtml.includes('items:buildDebugValidationRowsFor(items,keyword)')) fail('batch-debug-json','batch results must use per-keyword validation rows');
+-if(!appHtml.includes("String(error?.message||'不明なエラー')")) fail('batch-debug-error-handler','batch error handler must reference error variable');
+-
+-
+-{
+-  const batch=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','batch-validation-20260921.json'),'utf8'));
+-  const all=batch.searches.flatMap(s=>s.items.map((itemName,idx)=>({keyword:s.searchKeyword,itemName,rank:idx+1})));
+-  if(all.length!==50) fail('batch-fixture-count','expected 50 actual-search items, got '+all.length);
+-  const targetByKeyword={
+-    'ハンディクリーナー':/ハンディクリーナー|ハンディークリーナー|ハンディ掃除機|小型掃除機/,
+-    '洗濯ネット':/洗濯ネット|ランドリーネット|ブラジャー用洗濯ネット|シャツ用洗濯ネット/,
+-    'ポータブル電源':/ポータブル電源/,
+-    '犬 ベッド':/ドライブベッドキャリー|コーデュラドライブベッド|ドライブベッド|犬用ベッド|ペットベッド|ドッグベッド/,
+-    'ドライブベッド 犬':/ドライブベッドキャリー|コーデュラドライブベッド|ドライブベッド|ドライブボックス/
+-  };
+-  for(const tc of all){
+-    const item={itemName:tc.itemName,itemPrice:1000};
+-    const a=api.analyzeRoomProduct(item,tc.keyword);
+-    const copy=api.makeRoomCopy(item,tc.keyword,{variant:0});
+-    const first=copy.split('\n')[0].trim();
+-    if(a.outputMode==='fallback' && targetByKeyword[tc.keyword].test(tc.itemName) && !targetByKeyword[tc.keyword].test(first)){
+-      fail('batch-'+tc.keyword+'-'+tc.rank,'fallback lost product type: '+first+' <- '+tc.itemName);
+-    }
+-    if(/(?:OFFで\d|^~|^お買い物マラソン$|^楽天1位|^ランキング1位|^P\d+倍$)/.test(first)){
+-      fail('batch-'+tc.keyword+'-'+tc.rank,'promo residue in fallback first line: '+first);
+-    }
+-  }
+-}
+-
+-
+-{
+-  const batch=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures','batch-validation-20260921.json'),'utf8'));
+-  const forbidden=/商品名に書かれた|商品名から確認できる|商品名にある特徴|という表記を重視|用途と特徴を確認|商品名の特徴を手がかり|ペットが休む場所を整える助け|商品名と用途を確認|として掲載されている商品|候補として見ておきたい商品|比較候補に入れやすい商品|犬・猫向け表記ありが/;
+-  const dog=batch.searches.find(x=>x.searchKeyword==='犬 ベッド');
+-  for(let i=0;i<dog.items.length;i++){
+-    const item={itemName:dog.items[i],itemPrice:1000};
+-    const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:i});
+-    if(forbidden.test(copy)) fail('natural-dog-'+(i+1),'internal/mechanical phrasing leaked: '+copy);
+-    const first=copy.split('\n')[0];
+-    if(first.includes('…')) fail('natural-dog-'+(i+1),'opening must not use truncated long title: '+first);
+-    if(/お買い物マラソン|P\d+倍|楽天1位/.test(copy.split('\n').slice(0,2).join(' '))) fail('natural-dog-'+(i+1),'promo residue in opening: '+copy);
+-  }
+-  {
+-    const dog=batch.searches.find(x=>x.searchKeyword==='犬 ベッド');
+-    const full=[];
+-    for(let i=0;i<dog.items.length;i++){
+-      const item={itemName:dog.items[i],itemPrice:1000};
+-      const a=api.analyzeRoomProduct(item,'犬 ベッド');
+-      if(a.outputMode==='full'){
+-        const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:i});
+-        full.push(copy.split('\n')[0]);
+-      }
+-    }
+-    const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす|お手入れしやす/;
+-    for(const line of full) if(inference.test(line)) fail('natural-dog-factual','dog-bed inference leaked: '+line);
+-    const low=dog.items.find(x=>/トゥルースリーパー/.test(x));
+-    if(low){
+-      const item={itemName:low,itemPrice:9800};
+-      const a=api.analyzeRoomProduct(item,'犬 ベッド');
+-      const copy=api.makeRoomCopy(item,'犬 ベッド',{variant:8});
+-      if(!a.facts.some(x=>/低反発/.test(x))) fail('natural-dog-low-rebound','低反発 title fact was not extracted');
+-      if(!/低反発/.test(copy)) fail('natural-dog-low-rebound','低反発 fact missing from generated copy: '+copy);
+-    }
+-  }
+-  for(const id of ['S1','S5','S6','live-battery-rank5-anker-zolo']){
+-    const tc=fixture.cases.find(x=>x.id===id);
+-    const item={itemName:tc.itemName,itemPrice:tc.itemPrice||1000};
+-    const copy=api.makeRoomCopy(item,'',{variant:0});
+-    if(forbidden.test(copy)) fail('natural-'+id,'internal/mechanical phrasing leaked: '+copy);
+-    if(copy.split('\n')[0].includes('…')) fail('natural-'+id,'opening must not use truncated long title: '+copy);
+-  }
+-}
+-
+-
+-{
+-  const cases=[
+-    {name:'washing-net',keyword:'洗濯ネット',itemName:'洗濯ネット ドラム式 乾燥機対応 メッシュ 3枚セット',expect:'laundry.washing_net'},
+-    {name:'portable-power',keyword:'ポータブル電源',itemName:'Jackery ポータブル電源 512Wh リン酸鉄 定格500W コンパクト UPS機能',expect:'charging.portable_power'}
+-  ];
+-  for(const c of cases){
+-    const item={itemName:c.itemName,itemPrice:5980};
+-    const a=api.analyzeRoomProduct(item,c.keyword);
+-    const key=a.category+'.'+a.usage;
+-    if(key!==c.expect || a.outputMode!=='full') fail('new-supported-'+c.name,JSON.stringify({key,mode:a.outputMode,reason:a.ambiguityReason,conflicts:a.conflicts}));
+-    const copy=api.makeRoomCopy(item,c.keyword,{variant:2});
+-    if(copy.split('\n').length<6) fail('new-supported-'+c.name,'still looks like short fallback: '+copy);
+-  }
+-}
+-
+-
+-{
+-  const item={
+-    itemName:'EcoFlow ポータブル電源 ソーラーパネル セット DELTA 3 Classic 1024Wh 160W 軽量両面ソーラーパネル 大容量 家庭用 蓄電池 発電機 ポータブルバッテリー',
+-    itemPrice:160300
+-  };
+-  const a=api.analyzeRoomProduct(item,'ポータブル電源');
+-  if((a.facts||[]).some(x=>/両面/.test(x))) fail('portable-power-bundled-panel','bundled solar-panel sidedness must not be attributed to portable power');
+-  const copy=api.makeRoomCopy(item,'ポータブル電源',{variant:2});
+-  if(/両面/.test(copy)) fail('portable-power-bundled-panel-copy','portable-power copy misattributes bundled solar-panel sidedness: '+copy);
+-}
+-
+-{
+-  const genericCases=[
+-    {name:'humidifier',keyword:'加湿器',itemName:'超音波 加湿器 4L 上から給水 静音 LEDライト'},
+-    {name:'electric-kettle',keyword:'電気ケトル',itemName:'電気ケトル 1.0L 温度調節 保温 コンパクト'},
+-    {name:'usb-hub',keyword:'USBハブ',itemName:'USBハブ Type-C 7in1 HDMI PD対応 SDカード'},
+-    {name:'umbrella',keyword:'折りたたみ傘',itemName:'折りたたみ傘 軽量 晴雨兼用 自動開閉 コンパクト'},
+-    {name:'pet-water',keyword:'ペット給水器',itemName:'ペット給水器 犬 猫 自動給水器 2L USB給電'},
+-    {name:'storage-wagon',keyword:'収納ワゴン',itemName:'収納ワゴン 3段 キャスター付き スリム キッチン'},
+-    {name:'frying-pan',keyword:'フライパン',itemName:'フライパン 26cm IH ガス火対応 食洗機対応'},
+-    {name:'bottle',keyword:'水筒',itemName:'水筒 500ml 保温 保冷 ステンレス ボトル'},
+-    {name:'pillow',keyword:'枕',itemName:'枕 洗える 高さ調整 横向き 寝返り'},
+-    {name:'cutting-board',keyword:'まな板',itemName:'まな板 食洗機対応 軽量 日本製'}
+-  ];
+-  for(const c of genericCases){
+-    const item={itemName:c.itemName,itemPrice:2000};
+-    const a=api.analyzeRoomProduct(item,c.keyword);
+-    const copy=api.makeRoomCopy(item,c.keyword,{variant:1});
+-    if(a.genericEligible||a.outputMode!=='fallback') fail('generic-off-'+c.name,'generic full must stay disabled: '+JSON.stringify(a));
+-    if(/日常で使う|選びやすい|向いていそう/.test(copy)) fail('generic-off-'+c.name,'fallback must not emit generic lifestyle copy: '+copy);
+-  }
+-
+-  const food={itemName:'甲州ワインビーフ【上カルビ焼肉用】500g',itemPrice:6500};
+-  const fa=api.analyzeRoomProduct(food,'上カルビ焼肉用');
+-  const fc=api.makeRoomCopy(food,'上カルビ焼肉用',{variant:0});
+-  if(fa.genericEligible||fa.outputMode!=='fallback') fail('generic-off-food','food search term must not promote unknown item to full');
+-  if(/日常で使う|選びやすい|向いていそう/.test(fc)) fail('generic-off-food-copy','unsafe generic lifestyle copy leaked into food fallback: '+fc);
+-}
+-
+-
+-{
+-  const factualKnown=[
+-    ['cleaning.window_screen','網戸掃除','網戸クリーナー 網戸掃除 取替式'],
+-    ['cleaning.glove','掃除手袋','お掃除手袋 マイクロファイバー'],
+-    ['cleaning.cloth','掃除クロス','お掃除クロス マイクロファイバー 吸水'],
+-    ['cleaning.mop','電動モップ','電動モップ コードレス 充電式'],
+-    ['cleaning.brush','掃除ブラシ','掃除ブラシ 取替式'],
+-    ['storage.storage_box','収納ボックス','収納ボックス 折りたたみ'],
+-    ['storage.storage_case','収納ケース','収納ケース スリム'],
+-    ['charging.mobile_battery','モバイルバッテリー','モバイルバッテリー 10000mAh USB-C'],
+-    ['charging.portable_power','ポータブル電源','ポータブル電源 512Wh リン酸鉄 定格500W'],
+-    ['laundry.washing_net','洗濯ネット','洗濯ネット ドラム式 乾燥機対応 3枚セット'],
+-    ['pet.grooming','毛取りグローブ','ペット用毛取りグローブ 両面タイプ グルーミング手袋 猫犬兼用'],
+-    ['pet.bed','犬用ベッド','犬用ベッド 洗える 滑り止め'],
+-    ['pet.drive_bed','ドライブベッド','ドライブベッド 犬 車 洗える 後部座席'],
+-    ['cleaning.vacuum','ハンディクリーナー','ハンディクリーナー コードレス HEPA']
+-  ];
+-  const inference=/使いやす|便利|手軽|手間|負担|向いて|備えやす|取りかかりやす|選びやす|合わせやす|助けになりそう|短時間|時間を回しやす|コンセント位置|専用の居場所|落ち着ける場所/;
+-  for(const [expected,keyword,itemName] of factualKnown){
+-    const item={itemName,itemPrice:4980};
+-    const a=api.analyzeRoomProduct(item,keyword);
+-    const key=a.category+'.'+a.usage;
+-    const copy=api.makeRoomCopy(item,keyword,{variant:2});
+-    if(key!==expected||a.outputMode!=='full') fail('factual-known-'+expected,'expected '+expected+' full, got '+key+' '+a.outputMode);
+-    if(inference.test(copy)) fail('factual-known-'+expected,'inference wording leaked: '+copy);
+-  }
+-}
+-
+-
+-{
+-  const spanKnown=[
+-    ['cleaning.window_screen','網戸掃除','網戸クリーナー 網戸掃除 取替式'],
+-    ['cleaning.glove','掃除手袋','お掃除手袋 マイクロファイバー'],
+-    ['cleaning.cloth','掃除クロス','お掃除クロス マイクロファイバー 吸水'],
+-    ['cleaning.mop','電動モップ','電動モップ コードレス 充電式 網戸'],
+-    ['cleaning.brush','掃除ブラシ','掃除ブラシ 取替式'],
+-    ['storage.storage_box','収納ボックス','収納ボックス 折りたたみ'],
+-    ['storage.storage_case','収納ケース','収納ケース スリム'],
+-    ['charging.mobile_battery','モバイルバッテリー','モバイルバッテリー 10000mAh USB-C'],
+-    ['charging.portable_power','ポータブル電源','ポータブル電源 512Wh リン酸鉄 定格500W'],
+-    ['laundry.washing_net','洗濯ネット','洗濯ネット ドラム式 乾燥機対応 3枚セット'],
+-    ['pet.grooming','毛取りグローブ','ペット用毛取りグローブ 両面タイプ グルーミング手袋 猫犬兼用'],
+-    ['pet.bed','犬用ベッド','犬用ベッド 洗える 滑り止め'],
+-    ['pet.drive_bed','ドライブベッド','ドライブベッド 犬 車 洗える 後部座席'],
+-    ['cleaning.vacuum','ハンディクリーナー','ハンディクリーナー コードレス HEPA']
+-  ];
+-  for(const [expected,keyword,itemName] of spanKnown){
+-    const item={itemName,itemPrice:4980};
+-    const a=api.analyzeRoomProduct(item,keyword);
+-    const key=a.category+'.'+a.usage;
+-    if(key!==expected||a.outputMode!=='full') fail('span-'+expected,'expected '+expected+' full, got '+key+' '+a.outputMode);
+-    for(const fact of (a.facts||[])){
+-      if(!itemName.includes(fact)) fail('span-'+expected,'generated fact is not an exact itemName span: '+JSON.stringify(fact)+' in '+JSON.stringify(itemName));
+-    }
+-    const copy=api.makeRoomCopy(item,keyword,{variant:0});
+-    const featureLines=copy.split('\n').filter(x=>x.startsWith('✔ ')).map(x=>x.slice(2).trim());
+-    for(const feature of featureLines){
+-      if(!itemName.includes(feature)) fail('span-copy-'+expected,'feature line is not an exact itemName span: '+JSON.stringify(feature)+' in '+JSON.stringify(itemName));
+-    }
++// Strict output examples: generate only explicit allowlisted specifications.
++const strictCases=[
++  {id:'strict-battery',itemName:'モバイルバッテリー 10000mAh USB-C対応 人気 ギフト',itemPrice:2980,want:['USB-C対応'],drop:['10000mAh','人気','ギフト']},
++  {id:'strict-material',itemName:'財布 本革 メンズ ブランド名',itemPrice:5000,want:['本革'],drop:['メンズ','ブランド名']},
++  {id:'strict-count',itemName:'タオル 10枚入り 送料無料',itemPrice:1200,want:['10枚入り'],drop:['送料無料']},
++  {id:'strict-stop',itemName:'ケース 防水 ワンタッチ 人気',itemPrice:1000,want:[],drop:['ケース','防水','ワンタッチ','人気']}
++];
++for(const tc of strictCases){
++  const item={itemName:tc.itemName,itemPrice:tc.itemPrice};
++  const copy=api.makeRoomCopy(item,'');
++  if(tc.want.length===0){
++    if(copy!=='') fail(tc.id,'must stop without allowlisted facts: '+copy);
++    continue;
+   }
++  validateStrictCopy(tc.id,item,copy);
++  for(const x of tc.want) if(!copy.includes('✓ '+x)) fail(tc.id,'missing allowed fact '+x+': '+copy);
++  for(const x of tc.drop) if(copy.includes('✓ '+x)) fail(tc.id,'unsafe/non-spec fact leaked '+x+': '+copy);
+ }
+ 
+ if(failures){
+-  console.error(`ROOM copy regression failures: ${failures}`);
++  console.error('ROOM copy regression failures:',failures);
+   process.exit(1);
+ }
+-console.log(`ROOM copy regression passed: ${fixture.cases.length} fixed cases + ${quantityCases.length} quantity cases`);
++console.log('ROOM copy regression passed');
+
