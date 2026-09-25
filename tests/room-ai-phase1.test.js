@@ -76,7 +76,8 @@ function run(name,fn){
       confidence:'high'
     },{itemName:'収納ベンチ',itemCaption:'折りたたみ式で使わない時はコンパクト収納。大容量収納。'},{imageAvailable:false});
     assert.equal(v.sellingPoints[0].valid,true);
-    assert.equal(v.sellingPoints[0].eligibleForPost,true);
+    assert.equal(v.sellingPoints[0].specLike,false);
+    assert.equal(v.sellingPoints[0].eligibleForPost,false);
     assert.equal(v.sellingPoints[1].valid,false);
   });
 
@@ -117,6 +118,48 @@ function run(name,fn){
     assert.equal(bad.sellingPoints[0].boundaryValid,false);
     assert.equal(bad.sellingPoints[0].truncationRisk,true);
     assert.equal(bad.sellingPoints[0].valid,false);
+  });
+
+  await run('brand-like transliteration is not accepted as product type',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'RELX リラクス',source:'itemName',evidence:'RELX リラクス'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'ウォーターピーリング 美顔器 RELX リラクス 超軽量 70g',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.productType.brandLikeProductTypeRisk,true);
+    assert.equal(v.mode,'fallback');
+  });
+
+  await run('product type rejects truncation and spec-heavy phrases',()=>{
+    const truncated=validateAiExtraction({
+      productType:{value:'USBハブ Type-C 7in1 HDMI P',source:'itemName',evidence:'USBハブ Type-C 7in1 HDMI P'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'USBハブ Type-C 7in1 HDMI PD対応 SDカード',itemCaption:''},{imageAvailable:false});
+    assert.equal(truncated.productType.valid,false);
+    assert.equal(truncated.productType.boundaryValid,false);
+    const specHeavy=validateAiExtraction({
+      productType:{value:'Tシャツ メンズ 綿100% 半袖',source:'itemName',evidence:'Tシャツ メンズ 綿100% 半袖'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'Tシャツ メンズ 綿100% 半袖',itemCaption:''},{imageAvailable:false});
+    assert.equal(specHeavy.productType.valid,false);
+    assert.equal(specHeavy.productType.productTypeStructureRisk,true);
+  });
+
+  await run('generic descriptor-only product type is rejected',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔',source:'itemName',evidence:'美顔'},features:[],sellingPoints:[],confidence:'high'
+    },{itemName:'4in1美顔 かっさ プレート 美顔器',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.productType.genericProductTypeRisk,true);
+    assert.equal(v.mode,'fallback');
+  });
+
+  await run('decorative brackets end a complete grounded selling point',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+      features:[],
+      sellingPoints:[{text:'充電不要',source:'itemName',evidence:'充電不要'}],
+      confidence:'high'
+    },{itemName:'美顔ローラー 〖充電不要〗 防水仕様',itemCaption:''},{imageAvailable:false});
+    assert.equal(v.sellingPoints[0].boundaryValid,true);
+    assert.equal(v.sellingPoints[0].valid,true);
   });
 
   await run('incomplete selling point fragments are rejected',()=>{
@@ -273,7 +316,7 @@ function run(name,fn){
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
-  await run('baseball glove high-confidence grounded productType produces fact-only post',()=>{
+  await run('non-allowlisted baseball usage phrase stays out of post facts',()=>{
     const v=validateAiExtraction({
       productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
       features:[{text:'右投げ用',source:'itemName',evidence:'右投げ用'}],
@@ -282,11 +325,12 @@ function run(name,fn){
     assert.equal(v.mode,'simple');
     const text=phase1Post({title:v.productType.value,features:v.features,price:5980});
     assert.match(text,/^野球グローブ/m);
-    assert.match(text,/右投げ用/);
+    assert.equal(v.features[0].eligibleForPost,false);
+    assert.doesNotMatch(text,/右投げ用/);
     assert.doesNotMatch(text,/掃除用手袋/);
   });
 
-  await run('motorcycle glove high-confidence grounded productType produces fact-only post',()=>{
+  await run('non-allowlisted smartphone compatibility phrase stays out of post facts',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
       features:[{text:'スマホ対応',source:'itemName',evidence:'スマホ対応'}],
@@ -295,7 +339,8 @@ function run(name,fn){
     assert.equal(v.mode,'simple');
     const text=phase1Post({title:v.productType.value,features:v.features,price:3100});
     assert.match(text,/^バイクグローブ/m);
-    assert.match(text,/スマホ対応/);
+    assert.equal(v.features[0].eligibleForPost,false);
+    assert.doesNotMatch(text,/スマホ対応/);
     assert.doesNotMatch(text,/掃除用手袋/);
   });
 
@@ -349,18 +394,26 @@ function run(name,fn){
     assert.ok(v.reasons.includes('critical_invalid_numeric_feature'));
   });
 
-  await run('invalid claim feature forces whole-product fallback',()=>{
+  await run('invalid claim feature is dropped when multiple grounded facts remain',()=>{
     const v=validateAiExtraction({
       productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
       features:[
         {text:'小顔効果',source:'itemCaption',evidence:'小顔'},
-        {text:'約196g',source:'itemCaption',evidence:'約196g'},
+        {text:'内容量196g',source:'itemCaption',evidence:'内容量196g'},
         {text:'日本製',source:'itemCaption',evidence:'日本製'}
-      ],
-      confidence:'high'
-    },{itemName:'美顔ローラー',itemCaption:'小顔 約196g 日本製'},{imageAvailable:false});
+      ],confidence:'high'
+    },{itemName:'美顔ローラー',itemCaption:'小顔 内容量196g 日本製'},{imageAvailable:false});
+    assert.equal(v.mode,'simple_partial');
+    assert.ok(v.reasons.includes('invalid_claim_features_dropped'));
+    assert.equal(v.features.filter(x=>x.eligibleForPost).length,2);
+  });
+
+  await run('claim-only extraction still falls back',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'美顔ローラー',source:'itemName',evidence:'美顔ローラー'},
+      features:[{text:'小顔効果',source:'itemCaption',evidence:'小顔'}],confidence:'high'
+    },{itemName:'美顔ローラー',itemCaption:'小顔'},{imageAvailable:false});
     assert.equal(v.mode,'fallback');
-    assert.equal(v.featureValidation.criticalInvalidClaim,true);
     assert.ok(v.reasons.includes('critical_invalid_claim_feature'));
   });
 
@@ -419,6 +472,9 @@ function run(name,fn){
     assert.doesNotMatch(src,/max_output_tokens:420/);
     assert.doesNotMatch(src,/max_output_tokens:700/);
     assert.ok(SYSTEM_PROMPT.length<360);
+    assert.match(SYSTEM_PROMPT,/confidence=high/);
+    assert.match(SYSTEM_PROMPT,/textとevidenceを同じ完全な連続引用/);
+    assert.match(SYSTEM_PROMPT,/数字・単位も完全一致/);
     assert.doesNotMatch(src,/unknowns:\{type:'array'/);
   });
 
@@ -554,6 +610,19 @@ function run(name,fn){
     if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   });
 
+  await run('product type must exist exactly in its declared source',()=>{
+    const v=validateAiExtraction({productType:{value:'美顔ロー roller',source:'itemName',evidence:'美顔ローラー'},features:[],sellingPoints:[],confidence:'high'},{itemName:'美顔ローラー 美顔器',itemCaption:''});
+    assert.equal(v.productType.textEvidenceValid,false);
+    assert.equal(v.productType.valid,false);
+    assert.equal(v.mode,'fallback');
+  });
+
+  await run('shipping language is never eligible for posting',()=>{
+    const v=validateAiExtraction({productType:{value:'かっさ プレート',source:'itemName',evidence:'かっさ プレート'},features:[],sellingPoints:[{text:'当日発送',source:'itemName',evidence:'当日発送'}],confidence:'high'},{itemName:'当日発送 かっさ プレート 収納袋付き',itemCaption:''});
+    assert.equal(v.sellingPoints[0].promoRisk,true);
+    assert.equal(v.sellingPoints[0].eligibleForPost,false);
+  });
+
   await run('low confidence always falls back',()=>{
     const v=validateAiExtraction({
       productType:{value:'バイクグローブ',source:'itemName',evidence:'バイクグローブ'},
@@ -588,8 +657,8 @@ function run(name,fn){
     const handler=createHandler({
       authorize:async()=>({ok:true,plan:'owner'}),
       loadCache:async()=>({
-        prompt_version:'2026-09-24-ai-facts-only-v12',
-          validation_rule_version:'2026-09-24-ai-facts-v8',
+        prompt_version:'2026-09-24-ai-facts-only-v13',
+          validation_rule_version:'2026-09-24-ai-facts-v9',
           raw_ai_json:{
           productType:{value:'野球グローブ',source:'itemName',evidence:'野球グローブ'},
           features:[],unknowns:[],imageProductTypeHint:null,confidence:'high'
@@ -621,7 +690,7 @@ function run(name,fn){
     assert.match(html,/function resolvedPost\(/);
     assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
     assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
-    assert.match(html,/return UrenaviPainCopy\.makeRoomCopy/);
+    assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/rule_second_opinion_conflict/);
     assert.match(html,/mediumHandling:'fallback_fixed'/);
     assert.match(html,/cacheKeyComponents/);
@@ -640,11 +709,26 @@ function run(name,fn){
     assert.match(html,/\.tab\[data-i=/);
   });
 
+  await run('client copy accepts simple_partial but rejects fallback and invalid product type',()=>{
+    const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
+    assert.match(html,/if\(v\.productType\?\.valid!==true\) return ''/);
+    assert.match(html,/if\(!String\(insight\.productType\|\|''\)\.trim\(\)\) return ''/);
+  });
+
+  await run('validation cache hash includes prompt and rule versions',()=>{
+    const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/room-ai.js'),'utf8');
+    assert.match(src,/VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9'/);
+    const hashBody=(src.match(/function makeInputHash[\s\S]*?\.digest\('hex'\);/)||[])[0]||'';
+    assert.match(hashBody,/PROMPT_VERSION/);
+    assert.match(hashBody,/VALIDATION_RULE_VERSION/);
+  });
+
   await run('AI sales copy is grounded and legacy wrong audience is gated',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function aiSalesInsight\(/);
-    assert.match(html,/商品内容をGroqで確認中です/);
+    assert.match(html,/商品内容を確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
@@ -654,14 +738,15 @@ function run(name,fn){
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const libText=fs.readFileSync(path.join(__dirname,'../lib/room-ai.js'),'utf8');
     const appText=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(apiText,/2026-09-24-ai-facts-only-v12/);
+    assert.match(apiText,/2026-09-24-ai-facts-only-v13/);
     assert.match(apiText,/cacheVersionMatch/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(apiText,/事実抽出のみ/);
-    assert.match(apiText,/text自体も必ず原文に連続して存在する引用/);
-    assert.match(apiText,/途中切れさせない/);
+    assert.match(apiText,/事実だけ抽出/);
+    assert.match(apiText,/textとevidenceを同じ完全な連続引用/);
+    assert.match(apiText,/途中切れ禁止/);
     assert.match(apiText,/sellingPoints/);
-    assert.match(libText,/eligibleForPost:valid&&\(source==='itemName'\|\|source==='itemCaption'\)/);
+    assert.match(libText,/eligibleForPost:valid&&specLike&&\(source==='itemName'\|\|source==='itemCaption'\)/);
+    assert.match(libText,/require\('\.\.\/public\/fact-safety\.js'\)/);
     assert.match(appText,/ルール判定で商品内容を十分に確認できたため、AI使用を節約しています。/);
   });
 
@@ -669,23 +754,31 @@ function run(name,fn){
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
-    assert.match(html,/確認が終わると投稿文を表示します/);
-    assert.match(html,/誤った投稿文は表示していません/);
+    assert.match(html,/if\(s\.state\?\.state==='error'\) return ''/);
+    assert.match(html,/return String\(post\(i,p\)\|\|''\)\.trim\(\)/);
+    assert.doesNotMatch(html,/誤った投稿文は表示していません/);
+    assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
   });
 
-  await run('AI stays fact-only and ROOM value copy is deterministic from validated facts',()=>{
+  await run('AI stays fact-only and client copy is neutral exact-token output',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+    const quality=fs.readFileSync(path.join(__dirname,'../public/room-copy-quality.js'),'utf8');
     assert.doesNotMatch(apiText,/audienceHook/);
     assert.doesNotMatch(apiText,/buyerBenefits/);
     assert.doesNotMatch(apiText,/fitLine/);
-    assert.match(apiText,/意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止/);
-    assert.match(html,/const VALUE_RULES=/);
-    assert.match(html,/function valueFromFacts\(/);
-    assert.match(html,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(html,/着けたままスマホ操作をしやすい/);
-    assert.match(html,/使わないときは省スペースでしまいやすい/);
+    assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
+    assert.doesNotMatch(html,/valueFromFacts/);
+    assert.doesNotMatch(quality,/VALUE_RULES/);
+    assert.doesNotMatch(quality,/hook:/);
+    assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
+    assert.match(html,/buildNeutralFactPost/);
+    assert.match(quality,/商品名に記載されている仕様です/);
+    assert.match(quality,/sourceTokens\.has\(x\)/);
+    assert.match(quality,/UrenaviFactSafety/);
+    assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
+    assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
   });
 
   await run('sales copy uses validated AI facts without obsolete grounded helper path',()=>{
@@ -704,6 +797,42 @@ function run(name,fn){
     assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
   });
 
+
+  await run('Groq eligibleForPost uses strict spec allowlist',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'商品',source:'itemName',evidence:'商品'},
+      features:[
+        {text:'内容量500ml',source:'itemName',evidence:'内容量500ml'},
+        {text:'USB-C対応',source:'itemName',evidence:'USB-C対応'},
+        {text:'本革',source:'itemName',evidence:'本革'},
+        {text:'ケース',source:'itemName',evidence:'ケース'},
+        {text:'トヨタ',source:'itemName',evidence:'トヨタ'},
+        {text:'防水',source:'itemName',evidence:'防水'}
+      ],sellingPoints:[],confidence:'high'
+    },{itemName:'商品 内容量500ml USB-C対応 本革 ケース トヨタ 防水',itemCaption:''},{imageAvailable:false});
+    const eligible=v.features.filter(x=>x.eligibleForPost).map(x=>x.text);
+    assert.deepEqual(eligible,['内容量500ml','USB-C対応','本革']);
+    for(const x of v.features.filter(x=>['ケース','トヨタ','防水'].includes(x.text))){
+      assert.equal(x.valid,true);
+      assert.equal(x.specLike,false);
+      assert.equal(x.eligibleForPost,false);
+    }
+  });
+
+  await run('Groq material facts reject modified wording in evidence',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'財布',source:'itemName',evidence:'財布'},
+      features:[
+        {text:'レザー',source:'itemName',evidence:'フェイク レザー'},
+        {text:'本革',source:'itemName',evidence:'本革'}
+      ],sellingPoints:[],confidence:'high'
+    },{itemName:'財布 フェイク レザー 本革',itemCaption:''},{imageAvailable:false});
+    const byText=Object.fromEntries(v.features.map(x=>[x.text,x]));
+    assert.equal(byText['レザー'].specLike,false);
+    assert.equal(byText['レザー'].eligibleForPost,false);
+    assert.equal(byText['本革'].specLike,true);
+    assert.equal(byText['本革'].eligibleForPost,true);
+  });
 
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;

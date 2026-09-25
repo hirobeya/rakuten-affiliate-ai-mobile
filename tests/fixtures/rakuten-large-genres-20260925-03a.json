@@ -1,0 +1,636 @@
+{
+  "source": "Rakuten Ichiba API",
+  "capturedAt": "2026-09-25",
+  "genres": [
+    {
+      "genreId": "100804",
+      "nameJa": "インテリア・寝具・収納",
+      "items": [
+        {
+          "itemName": "ソファーカバー 冷感 ソファーパッド 夏用 1人 2人 3人掛け ソファー保護カバー 肘付き 肘なし ソファーシーツ ペット対策 長座布団 滑り止め ズレにくい かけるだけ 冷感素材",
+          "itemPrice": 2900,
+          "genreId": "500314",
+          "itemCode": "chiropractic:10079853"
+        },
+        {
+          "itemName": "パナソニック 配線金具【WTF7702F】コンセントプレート 簡易耐火用コンセントプレート ラウンド ベージュ",
+          "itemPrice": 431,
+          "genreId": "566745",
+          "itemCode": "clover8888:10084814"
+        },
+        {
+          "itemName": "＼本日P6倍!300円クーポン／超高密度パイルのフローリング調ラグ フロテックス 200×500cm カーペット マット 畳 カーペット ラグ 獣医師推奨 ペットの足腰にやさしい 滑りにくい 衝撃吸収性 洗える 木目柄 ペット対応 フローリング調",
+          "itemPrice": 131490,
+          "genreId": "551228",
+          "itemCode": "komikomi:10068146"
+        },
+        {
+          "itemName": "【シングルベッド】 収納付き収納ベッド フラップテーブル付き 照明・コンセント・引出し付き シングル 【ベッドフレーム アッシュブラウン色】 （ベッドフレームのみ / マットレス無） マットレス別売り 要組立品 （ ベッド ベッドフレーム 木 ）",
+          "itemPrice": 31970,
+          "genreId": "508180",
+          "itemCode": "a-gallery:10359926"
+        },
+        {
+          "itemName": "ロールスクリーン トーソー TOSO ロールカーテン 防炎 マイテック 小窓 ライネン TR6256〜TR6258 幅30〜50cmX高さ81〜120cmまで",
+          "itemPrice": 19272,
+          "genreId": "205678",
+          "itemCode": "interia-fuji:10680824"
+        },
+        {
+          "itemName": "パール金属 ゾーン レンジ上ラック2段 | ゾーン パール金属 ラック レンジ 2段 上 電子レンジ キッチン収納",
+          "itemPrice": 4697,
+          "genreId": "566197",
+          "itemCode": "first34:23090194"
+        },
+        {
+          "itemName": "川島織物セルコン オーダーカーテン FELTA(フェルタ)▼スタンダード縫製 ヨコ使い ウエイトテープ付【推奨仕様】 レースカーテン 約2倍ヒダ 片開き▼FT7594 防炎 ウォッシャブル【製品幅1510〜2000×製品高さ1210〜1400mm】",
+          "itemPrice": 69696,
+          "genreId": "300667",
+          "itemCode": "d-spazio:10896267"
+        },
+        {
+          "itemName": "ブラインド ニチベイ 15mmスラット 耐水オーダーブラインド セレーノオアシス15 標準タイプ 幅61〜80cmX高さ131〜150cmまで",
+          "itemPrice": 15730,
+          "genreId": "300766",
+          "itemCode": "interia-fuji:10586305"
+        },
+        {
+          "itemName": "ベッド ベット ダブル クイーン D Q ベッドフレーム マットレス付 背もたれ ヘッドレスト 高級 レザー 高級感 デザイン ブラック ホワイト 黒 白 ローベッド フロアベッド 耐久性 傷防止 プレミアムポケットコイルマットレス付き クイーン",
+          "itemPrice": 184999,
+          "genreId": "566179",
+          "itemCode": "aline:10018086"
+        },
+        {
+          "itemName": "パソコンデスク ガラスデスク 幅80/100/120cm 強化ガラス スチール 勉強机 学習机 [ゲーミングデスク ワークデスク 書斎机 PCデスク 事務机 スリム コンパクト 省スペース シンプル おしゃれ 北欧 モダン ホワイト ブラック]",
+          "itemPrice": 63435,
+          "genreId": "205728",
+          "itemCode": "toryounosuketto:10056463"
+        },
+        {
+          "itemName": "座布団 レトロ風 丸形 角型 円座 綿麻 厚手 蒲団 チェアマット 和室 畳 クッション おしゃれ 疲れない 大人 子供 リビング 寝室 書斎 レストラン 在宅 用途 座椅子クッション 椅子用クッ",
+          "itemPrice": 1380,
+          "genreId": "205718",
+          "itemCode": "yume-craft:10008542"
+        },
+        {
+          "itemName": "スーパーエレクターカート UTTカート2型 NUTT1-2S/業務用/新品/送料無料",
+          "itemPrice": 56574,
+          "genreId": "406380",
+          "itemCode": "tenpos2:10172664"
+        },
+        {
+          "itemName": "ベッド セミダブル 海外製ポケットコイルマットレス付き 片面仕様 ホワイト木目調 収納付き 棚付き 日本製フレーム 木製 AJITO アジット[21]",
+          "itemPrice": 53801,
+          "genreId": "508180",
+          "itemCode": "honkeya:10560613"
+        },
+        {
+          "itemName": "ポスター ウォールステッカー シール式ステッカー 飾り 364×515mm B3 写真 フォト 壁 インテリア おしゃれ 剥がせる wall sticker poster 010498 蝶　模様　ピンク",
+          "itemPrice": 1980,
+          "genreId": "553753",
+          "itemCode": "kabekore:10200842"
+        },
+        {
+          "itemName": "アスワン オーダーカーテン オーセンス▼フラット縫製(形態安定加工なし) 約1倍 ヒダなし カーテン エルサム▼ドレープ Grand Harmony[noble]【カーテン幅5650〜7100×カン下寸法600〜1000mm】",
+          "itemPrice": 47547,
+          "genreId": "205738",
+          "itemCode": "d-spazio:12304904"
+        },
+        {
+          "itemName": "玄関マット 屋外 業務用 75×120cm 7ミリ厚 スーパーダスピット オフィス サイズオーダー （ 送料無料 薄い 玄関 マット 屋外マット 屋外用 日本製 砂 土砂 加工 抗菌 防カビ 防藻剤 防炎適合品 砂ホコリ 除去 滑りにくい ） 【3980円以上送料無料】",
+          "itemPrice": 28880,
+          "genreId": "100678",
+          "itemCode": "colorfulbox:10021586"
+        },
+        {
+          "itemName": "MQ2142G・MQ54PE　5段　1061×535mm　メトロマックスQ ISHD0514",
+          "itemPrice": 173250,
+          "genreId": "566197",
+          "itemCode": "wadatoki:11722798"
+        },
+        {
+          "itemName": "DDL-6283ASNANA-GO LED人感センサー付ダウンライト 埋込穴φ75白熱灯60W相当 連動マルチタイプ 温白色 非調光高気密SB形 準耐火構造対応大光電機 照明器具",
+          "itemPrice": 8741,
+          "genreId": "500296",
+          "itemCode": "tss:14511452"
+        },
+        {
+          "itemName": "置物 風水グッズ 金運 開運 インテリア 玄関 オブジェ 雑貨 おしゃれ 部屋 デコレーション 風水 金運アップ 祈願 運気アップ 商売繁盛",
+          "itemPrice": 18339,
+          "genreId": "111384",
+          "itemCode": "legashop:10017627"
+        },
+        {
+          "itemName": "川島織物セルコン オーダーカーテン FELTA(フェルタ)▼スタンダード縫製 下部3ッ巻(100mm) ウエイトバー付属【推奨仕様】 レースカーテン 約2.5倍ヒダ 片開き▼FT7608 防炎 ウォッシャブル【製品幅5巾 2410〜3000×製品高さ1610〜1800mm】",
+          "itemPrice": 39567,
+          "genreId": "300667",
+          "itemCode": "d-spazio:13188412"
+        }
+      ]
+    },
+    {
+      "genreId": "215783",
+      "nameJa": "日用品雑貨・文房具・手芸",
+      "items": [
+        {
+          "itemName": "ブランケット ベビー キッズ 春秋 毛布 お昼寝 安眠 柔らかい コットン 肌触り抜群 出産祝い おくるみ",
+          "itemPrice": 4601,
+          "genreId": "101833",
+          "itemCode": "hanbokhome:10665059"
+        },
+        {
+          "itemName": "【クレイ】クレイ 960-504-800 カードボード ボックス BLACK",
+          "itemPrice": 835,
+          "genreId": "101833",
+          "itemCode": "akibaoo-r:12581409"
+        },
+        {
+          "itemName": "KICHOUSE 耐熱手袋 4枚セット キッチンオーブングローブ ポリエステル製 断熱仕様 軽量設計 17.5×12×1Cm 電子レンジ オーブン作業に適応",
+          "itemPrice": 1078,
+          "genreId": "112779",
+          "itemCode": "stellarshop:10294797"
+        },
+        {
+          "itemName": "ボックスファイル ヨコ型50冊 D140J-E-5",
+          "itemPrice": 8070,
+          "genreId": "301748",
+          "itemCode": "aline:10215811"
+        },
+        {
+          "itemName": "【中古】ナニワトモアレ コミック 全28巻完結セット (ヤングマガジンコミックス)",
+          "itemPrice": 29481,
+          "genreId": "112779",
+          "itemCode": "sofapotato:10729618"
+        },
+        {
+          "itemName": "[エースジーン] ビジネスリュック ガジェタブルWR 13inchPC対応 セットアップ付 55541",
+          "itemPrice": 27720,
+          "genreId": "112779",
+          "itemCode": "inasuteppu:10247668"
+        },
+        {
+          "itemName": "【モチーフビーズ】梅 インディアンアゲート [1粒売り(バラ売り)] 【パワーストーン 天然石 アクセサリー】",
+          "itemPrice": 290,
+          "genreId": "565609",
+          "itemCode": "compass668:10093687"
+        },
+        {
+          "itemName": "LEDキャンプライト充電式吊り下げても明るい ランタン LED キャンプランタン アウトドア キャンプ 災害時用 緊急時用 無段階調光",
+          "itemPrice": 6115,
+          "genreId": "112779",
+          "itemCode": "ariel-store:10106533"
+        },
+        {
+          "itemName": "デニムジャケット レディース 春秋物 Gジャン 切り替え 衬衫袖 コットン ゆったり 通勤 ポロネック デニムブルー",
+          "itemPrice": 5359,
+          "genreId": "112779",
+          "itemCode": "yksakai:10373900"
+        },
+        {
+          "itemName": "印鑑 ハンコ 認印 個人 シャチハタ　ネーム9【 既製品 】 印鑑 / 9.5ミリの浸透印 山川 ←お探しのお名前？/ 【かわいい おしゃれな 手書き文字 印鑑】　 　 楽天市場　ネット通販 ポイント 消化 申請【印鑑とハンコケースの花紋印章】 女性　男性　子供　ギフト",
+          "itemPrice": 1899,
+          "genreId": "216081",
+          "itemCode": "smileweb:10191881"
+        },
+        {
+          "itemName": "DUOFIRE 遮光シート 100%完全遮光フィルム 遮熱シート 断熱シート UVカット 目隠しシート 窓用フィルム (黒+シルバー 1.45x1m)",
+          "itemPrice": 3324,
+          "genreId": "101833",
+          "itemCode": "hitcreations:10199910"
+        },
+        {
+          "itemName": "ベッセル(VESSEL) ビットセット +1・+2・+3・−6 10本組 ホルダー付 BW-15",
+          "itemPrice": 2600,
+          "genreId": "112779",
+          "itemCode": "omichi-store:10400274"
+        },
+        {
+          "itemName": "【まとめ】 製本テープカット版 KS25-A4-W100 【×2セット】",
+          "itemPrice": 5522,
+          "genreId": "101872",
+          "itemCode": "elmon0:10422123"
+        },
+        {
+          "itemName": "PATIKIL ラインストーンリボンブローチピン 優雅な水晶スパークリーボウノットヴィンテージブローチピンファッションラ ペルピンウィメンウェディングパーティー花嫁スーツクローズハット宝石ギフト シルバートーン",
+          "itemPrice": 806,
+          "genreId": "101872",
+          "itemCode": "sotenco:12365347"
+        },
+        {
+          "itemName": "【J-725105】【桜井】アジャスタケース BS90K ブラック【製図用品】",
+          "itemPrice": 5515,
+          "genreId": "301791",
+          "itemCode": "office31:10010580"
+        },
+        {
+          "itemName": "東洋アルチタイト 断熱マット 20A 100枚入 (GW24K ALK/亜鉛引亀甲金網)",
+          "itemPrice": 44800,
+          "genreId": "551722",
+          "itemCode": "minatodenk:10094756"
+        },
+        {
+          "itemName": "キーホルダー 七星てんとう虫 ラインストーン 電気メッキ加工 カラフル 合金 バックチャーム 動物モチーフ",
+          "itemPrice": 4158,
+          "genreId": "112779",
+          "itemCode": "soarsole:10403540"
+        },
+        {
+          "itemName": "【中古】うる星やつらDVD Vol.45",
+          "itemPrice": 3629,
+          "genreId": "112779",
+          "itemCode": "buriruby:11092627"
+        },
+        {
+          "itemName": "Guizzcg Magnetic Case Soft TPU Bumper + Clear Back Slim Shockproof Drop Protection",
+          "itemPrice": 1124,
+          "genreId": "112779",
+          "itemCode": "skylight:10705686"
+        },
+        {
+          "itemName": "（まとめ）ぺんてる 筆ペン XFP5F 極細顔料【×10セット】 (代引不可)",
+          "itemPrice": 5702,
+          "genreId": "101875",
+          "itemCode": "rcmdva:11197090"
+        }
+      ]
+    },
+    {
+      "genreId": "558944",
+      "nameJa": "キッチン用品・食器・調理器具",
+      "items": [
+        {
+          "itemName": "☆ 料理道具 ☆ プロマイスターBCフライパン33cm [ φ330 x 深さ 66 板厚:4.0 ] 【飲食店 レストラン ホテル 厨房 業務用 】",
+          "itemPrice": 16940,
+          "genreId": "215927",
+          "itemCode": "setomono:11444306"
+        },
+        {
+          "itemName": "ライスボックス 密閉米びつ 残量見える 収納ジャー 気密 密閉 / 収納容器 収納ジャー セット ふた付き ガラスシリアルディスペンサー 7.5L 計量 コーヒー豆 キッチン収納 保存容器 キッチン 収納容器 台所保存 穀物収納 小麦粉 5L",
+          "itemPrice": 13824,
+          "genreId": "564982",
+          "itemCode": "vervecollection:10016814"
+        },
+        {
+          "itemName": "茶海 公道杯 耐熱ガラス ピッチャー 高ホウケイ酸ガラス 高透明 湯切れが良い 液だれしにくい ティーサーバー 茶道具 中国茶 台湾茶 お茶 日本茶 紅茶 シンプル モダン 上品 高見え おもてなし 来客用 クリア",
+          "itemPrice": 12940,
+          "genreId": "301240",
+          "itemCode": "celone:10261985"
+        },
+        {
+          "itemName": "シャープ FZ-E75HF 集じんフィルター FZ-F70DF 脱臭フィルター KI-LX75 空気清浄機 フィルター KI-N75YX 交換フィルター KI-P75YX 互換品 1セット",
+          "itemPrice": 5640,
+          "genreId": "559275",
+          "itemCode": "happynight:10461773"
+        },
+        {
+          "itemName": "メラミン ラーメン丼受皿 No.50 クリーム【調理器具 厨房用品 厨房機器 プロ 愛用 販売 なら 名調】",
+          "itemPrice": 855,
+          "genreId": "301512",
+          "itemCode": "meicho:17178255"
+        },
+        {
+          "itemName": "ウルシヤマ金属工業　マジカルユミックエテルナ　蒸し器　23cm【代引不可】",
+          "itemPrice": 6220,
+          "genreId": "568243",
+          "itemCode": "ichibankanshop:11425236"
+        },
+        {
+          "itemName": "TOYGER CEO Separator [CEO Storage専用] 仕切り 6枚入り",
+          "itemPrice": 1343,
+          "genreId": "559275",
+          "itemCode": "sereinserein:10025935"
+        },
+        {
+          "itemName": "箸ぞうくん ナチュラル 取り替え箸先10膳",
+          "itemPrice": 1232,
+          "genreId": "559275",
+          "itemCode": "yoroyorozuya:10025703"
+        },
+        {
+          "itemName": "高儀(Takagi) カトラリーシリーズ キャンプ用品 調理器具 日本製",
+          "itemPrice": 373,
+          "genreId": "559275",
+          "itemCode": "skylight:10422516"
+        },
+        {
+          "itemName": "【まとめ買い10個セット品】【孝義 生抜 イチョウ ENDO G ENDO】【厨房器具 製菓道具 飲食店】 【バレンタイン 手作り】【ECJ】",
+          "itemPrice": 23090,
+          "genreId": "401467",
+          "itemCode": "ecjungle:13763378"
+        },
+        {
+          "itemName": "Lumimi バスタオル 大判 70*140cm 4色4枚セット（グレー、スモーキーブルー、モカブラウン、ピンク） ふわふわ",
+          "itemPrice": 3604,
+          "genreId": "559275",
+          "itemCode": "flowing2:10151983"
+        },
+        {
+          "itemName": "【田中糧機製作所】田中糧機 T 18-8 クッキー抜き型セット NO.2119 動物Aセット 6ヶ入",
+          "itemPrice": 1081,
+          "genreId": "401458",
+          "itemCode": "akibaoo-r:12342221"
+        },
+        {
+          "itemName": "アイデアセキカワ ビタミンジューサー 18-8ステンレス 日本 FZY4001",
+          "itemPrice": 6200,
+          "genreId": "559275",
+          "itemCode": "vision-stores:10159224"
+        },
+        {
+          "itemName": "蒸し器 ホーローウェア 両手鍋 ストウブ 鍋 2.5L スチームクッカー スリッシュ 4点セット 蒸し器付き 陶器",
+          "itemPrice": 27923,
+          "genreId": "567554",
+          "itemCode": "mitsuki-shop-online:10008461"
+        },
+        {
+          "itemName": "ハクバ HAKUBA 木製額縁 フローティングフォトフレーム シエロAZ [ホワイト L/KG/2Lサイズ兼用]",
+          "itemPrice": 3630,
+          "genreId": "559275",
+          "itemCode": "saino:10057741"
+        },
+        {
+          "itemName": "制服 ユニフォーム バー ウェイター 半袖 ホテル セキュリティ オーバー オール スチュワーデス スチュワーデス 制服 スーツ 夏",
+          "itemPrice": 8409,
+          "genreId": "301518",
+          "itemCode": "ito0101:10020047"
+        },
+        {
+          "itemName": "【5個セット】レック AF 油引き ホワイト K-787 (油しき)(代引不可)【送料無料】",
+          "itemPrice": 2506,
+          "genreId": "101858",
+          "itemCode": "rcmdin:11157088"
+        },
+        {
+          "itemName": "JEJアステージ ファボーレヌーヴォチェスト",
+          "itemPrice": 12135,
+          "genreId": "559275",
+          "itemCode": "memorishop:10007795"
+        },
+        {
+          "itemName": "【送料無料】チーズスライサー 多機能 チーズカッター 1CM/2CM ステンレス製 チーズ/バター/豆",
+          "itemPrice": 22500,
+          "genreId": "100796",
+          "itemCode": "and-u-online:10018680"
+        },
+        {
+          "itemName": "スーパーセラミック メタ深皿 9inch【プレート】【皿】",
+          "itemPrice": 1804,
+          "genreId": "566130",
+          "itemCode": "chubo-sohonke:10215608"
+        }
+      ]
+    },
+    {
+      "genreId": "200162",
+      "nameJa": "本・雑誌・コミック",
+      "items": [
+        {
+          "itemName": "【中古】 天文学入門 / 中嶋 浩一 / 丸善 [単行本（ソフトカバー）]【ネコポス発送】",
+          "itemPrice": 328,
+          "genreId": "200503",
+          "itemCode": "mottainaihonpo:11236101"
+        },
+        {
+          "itemName": "【中古】頑張りすぎ地獄から脱出しましたレポ / 永田カビ",
+          "itemPrice": 1099,
+          "genreId": "209212",
+          "itemCode": "renet20:12370282"
+        },
+        {
+          "itemName": "【中古】 一生太らない！食べ方の本新装版 / 牧野直子 / 学研プラス [ムック]【メール便送料無料】",
+          "itemPrice": 295,
+          "genreId": "208790",
+          "itemCode": "furuhon-club:10181415"
+        },
+        {
+          "itemName": "天下人の茶 （幻冬舎時代小説文庫） [ 伊東 潤 ]",
+          "itemPrice": 891,
+          "genreId": "203063",
+          "itemCode": "book:21125016"
+        },
+        {
+          "itemName": "野火、奔る",
+          "itemPrice": 880,
+          "genreId": "203063",
+          "itemCode": "books-ogaki:11029915"
+        },
+        {
+          "itemName": "Harvard University Press paperback Book, The Young Professional's Survival Guide: From Cab Fares to Moral Snares",
+          "itemPrice": 5780,
+          "genreId": "101297",
+          "itemCode": "glomarket:12291232"
+        },
+        {
+          "itemName": "【中古】 トランスクリティーク / 柄谷 行人 / 岩波書店 [文庫]【メール便送料無料】【最短翌日配達対応】",
+          "itemPrice": 1761,
+          "genreId": "203063",
+          "itemCode": "comicset:11700563"
+        },
+        {
+          "itemName": "犬 Majosta paperback Book, Dogs",
+          "itemPrice": 4208,
+          "genreId": "507880",
+          "itemCode": "glomarket:11927234"
+        },
+        {
+          "itemName": "小学6年の漢字",
+          "itemPrice": 1012,
+          "genreId": "208917",
+          "itemCode": "mifsoft:11619376"
+        },
+        {
+          "itemName": "Our Monthly Devotions 【電子書籍】[ Albert A. Lings ]",
+          "itemPrice": 166,
+          "genreId": "507876",
+          "itemCode": "rakutenkobo-ebooks:25884630"
+        },
+        {
+          "itemName": "Querkopf Wilson: Historischer Kriminalroman Bereicherte Ausgabe.【電子書籍】[ Mark Twain ]",
+          "itemPrice": 150,
+          "genreId": "507875",
+          "itemCode": "rakutenkobo-ebooks:16697685"
+        },
+        {
+          "itemName": "Battle-Pieces and Aspects of the War (Annotated) 【電子書籍】[ Herman Melville ]",
+          "itemPrice": 523,
+          "genreId": "507874",
+          "itemCode": "rakutenkobo-ebooks:14925503"
+        },
+        {
+          "itemName": "【中古】モンスタ-ハンタ-オフィシャルアンソロジ-コミックてんこ盛り！ /カプコン（単行本）",
+          "itemPrice": 331,
+          "genreId": "101941",
+          "itemCode": "vaboo:13434468"
+        },
+        {
+          "itemName": "LEC東京リーガルマインド 公認会計士試験 フォーサイト 企業法 テキスト1 2023年合格目標 未使用品 013m4B",
+          "itemPrice": 1169,
+          "genreId": "208678",
+          "itemCode": "booksdream:10977458"
+        },
+        {
+          "itemName": "ペーパーバック、自然な甘味とグルテンフリー: アレルギーに優しいビーガンデザート: グルテン、乳製品、卵、または精製砂糖を含まない 100 のレシピ Sellers Publishing, Inc. Paperback, Naturally Sweet & Gluten-Free: Allergy-Friendly Vegan Dess",
+          "itemPrice": 9744,
+          "genreId": "101297",
+          "itemCode": "glomarket:12041688"
+        },
+        {
+          "itemName": "乙女ゲームの世界で私が悪役令嬢!? そんなのお断りです!【分冊版】　9 【電子書籍】[ 中村　央佳 ]",
+          "itemPrice": 88,
+          "genreId": "101941",
+          "itemCode": "rakutenkobo-ebooks:21649727"
+        },
+        {
+          "itemName": "【中古】密教・コスモスとマンダラ /NHK出版/松長有慶（単行本）",
+          "itemPrice": 398,
+          "genreId": "208947",
+          "itemCode": "vaboo:15648491"
+        },
+        {
+          "itemName": "ダイヤモンド・イン・パラダイス 竹書房 ケヴィン・ライアン ケヴィン・ライアン、富永和子 竹書房文庫 中古 配送費無料9784812424148",
+          "itemPrice": 340,
+          "genreId": "203063",
+          "itemCode": "ebisubooks:10352298"
+        },
+        {
+          "itemName": "臨床精神薬理 28巻1号〈特集〉向精神薬のスイッチングの意義と技法 [ 臨床精神薬理編集員会 ]",
+          "itemPrice": 3630,
+          "genreId": "101290",
+          "itemCode": "book:21431116"
+        },
+        {
+          "itemName": "【最大10万Pt当たる！注文5千円以上&エントリー要 9/20~30限定】パーフェクトアディクション",
+          "itemPrice": 781,
+          "genreId": "209240",
+          "itemCode": "bookfan:12772703"
+        }
+      ]
+    },
+    {
+      "genreId": "101240",
+      "nameJa": "CD・DVD",
+      "items": [
+        {
+          "itemName": "【中古】Facile",
+          "itemPrice": 82124,
+          "genreId": "400041",
+          "itemCode": "2doriem:12832945"
+        },
+        {
+          "itemName": "【新品】1週間以内発送 And yet BiSH moves. ［Blu-ray Disc+2CD+PHOTOBOOK］ 初回生産限定盤",
+          "itemPrice": 13198,
+          "genreId": "553620",
+          "itemCode": "speedwagon:10003509"
+        },
+        {
+          "itemName": "【中古】(非常に良い)アイアンマン2 ブルーレイ+DVDセット [Blu-ray]",
+          "itemPrice": 5480,
+          "genreId": "112960",
+          "itemCode": "kobaco-003:10712644"
+        },
+        {
+          "itemName": "【中古】 べるぜバブ (16巻セット) [レンタル落ち] [DVD]",
+          "itemPrice": 1603,
+          "genreId": "400041",
+          "itemCode": "youing-gaba-hama:10556418"
+        },
+        {
+          "itemName": "【中古】 小関舞 / 涙のTomorrow Yes! 晴れ予報 通常盤A CD / 小関舞 / UP-FRONT WORKS [CD]【宅配便出荷】",
+          "itemPrice": 246,
+          "genreId": "300011",
+          "itemCode": "mottainaihonpo-omatome:13874086"
+        },
+        {
+          "itemName": "【中古】 三銃士 LOSER / NEWS / NEWS / ジェイ・ストーム [CD]【ネコポス発送】",
+          "itemPrice": 295,
+          "genreId": "200542",
+          "itemCode": "mottainaihonpo:13783728"
+        },
+        {
+          "itemName": "【中古】【非常に良い】胡同の理髪師 [DVD] 6g7v4d0",
+          "itemPrice": 16320,
+          "genreId": "112960",
+          "itemCode": "doriem:10951801"
+        },
+        {
+          "itemName": "DVD / 趣味教養 / ネタの笑タイム5〜最高のネタをご覧あれ!〜 / SSBX-2859",
+          "itemPrice": 2937,
+          "genreId": "207505",
+          "itemCode": "onhome:10239176"
+        },
+        {
+          "itemName": "CHO CO PA CO CHO CO QUIN QUIN / Correspondances（完全生産限定盤） [レコード 7inch]",
+          "itemPrice": 2564,
+          "genreId": "300011",
+          "itemCode": "guruguru-ds:13463972"
+        },
+        {
+          "itemName": "aiko／DECADE スタンダードエディション（通常仕様） [DVD]",
+          "itemPrice": 5665,
+          "genreId": "300339",
+          "itemCode": "mifsoft:10060977"
+        },
+        {
+          "itemName": "【中古】天使の3P! 5 [Blu-ray]",
+          "itemPrice": 6690,
+          "genreId": "112960",
+          "itemCode": "mujica-felice:10298909"
+        },
+        {
+          "itemName": "オリジナル・サウンドトラック クイン・メリー/愛と悲しみの生涯[CD] (リマスター拡張盤) [世界3000枚完全限定盤] / サントラ (音楽: ジョン・バリー)",
+          "itemPrice": 4703,
+          "genreId": "508108",
+          "itemCode": "neowing-r:14719778"
+        },
+        {
+          "itemName": "【中古】 blue・・・ (DVD付)",
+          "itemPrice": 11366,
+          "genreId": "112960",
+          "itemCode": "iinex:11330993"
+        },
+        {
+          "itemName": "【中古】(非常に良い)永遠と一日 [DVD]",
+          "itemPrice": 17955,
+          "genreId": "101950",
+          "itemCode": "iinex:11076538"
+        },
+        {
+          "itemName": "【和訳付】2025年 9月号 GQ HONGKONG SEVENTEEN S.COUPS セブンティーン",
+          "itemPrice": 4780,
+          "genreId": "553676",
+          "itemCode": "attojoystore:10001378"
+        },
+        {
+          "itemName": "【中古】【非常に良い】ソラトビデオCOMPLETE 1991-2011 [DVD] wgteh8f",
+          "itemPrice": 9702,
+          "genreId": "112960",
+          "itemCode": "iinex:11466584"
+        },
+        {
+          "itemName": "松任谷由実／Wormhole / Yumi AraI (通常盤) (CD) UPCH-20710 2025/11/18発売 (特典なし)",
+          "itemPrice": 3600,
+          "genreId": "300011",
+          "itemCode": "soundace:10118439"
+        },
+        {
+          "itemName": "【中古】 CD Radioactive/Heartsdales / Heartsdales, Mika Nakashima, GOICHI, VERBAL, CRAZY-A, AI, COYASS / カッティング・エッジ [CD]【ネコポス発送】",
+          "itemPrice": 228,
+          "genreId": "300067",
+          "itemCode": "mottainaihonpo:12544623"
+        },
+        {
+          "itemName": "CHIHIRO / KISS MISS KISS [CD]",
+          "itemPrice": 2421,
+          "genreId": "300011",
+          "itemCode": "guruguru-ds:13122403"
+        },
+        {
+          "itemName": "【中古-非常に良い】 ヘルタースケルター ブルーレイディスク [レンタル落ち]",
+          "itemPrice": 5860,
+          "genreId": "112960",
+          "itemCode": "mujica-felice:11357276"
+        }
+      ]
+    }
+  ]
+}

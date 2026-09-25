@@ -935,7 +935,8 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/room-copy-quality.js?v=20260920-7"></script>
+<script src="/fact-safety.js?v=20260925-1"></script>
+<script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
@@ -2493,10 +2494,15 @@ function aiSalesInsight(item,result){
   const featureRows=(v.features||[])
     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
     .filter(x=>x.source==='itemName'||x.source==='itemCaption');
-  const features=featureRows
-    .map(x=>String(x.text).trim())
+  const localTitleFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[])
+    .map(x=>String(x).trim())
+    .filter(Boolean);
+  const features=[
+    ...featureRows.map(x=>String(x.text).trim()),
+    ...localTitleFacts
+  ]
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,4);
+    .slice(0,6);
   const sellingPoints=(v.sellingPoints||[])
     .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
     .map(x=>String(x.text).trim())
@@ -2509,58 +2515,21 @@ function salesFactCore(value){
   return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
 }
 
-const VALUE_RULES=[
-  {re:/タッチ|スマホ対応|touch/i,hook:'スマホを見るたびに外す手間が気になるなら、ここはチェック。',benefit:'着けたままスマホ操作をしやすい。',label:'スマホ操作'},
-  {re:/面ファスナー|ベルクロ|調整ベルト|アジャスター/i,hook:'フィット感を自分に合わせたいなら、ここはチェック。',benefit:'手首まわりのフィット感を調整しやすい。',label:'フィット調整'},
-  {re:/通気|メッシュ|蒸れ/i,hook:'長時間使うときの蒸れが気になるなら、ここはチェック。',benefit:'通気を考えた仕様を選びやすい。',label:'通気性'},
-  {re:/防風|風を通しにく/i,hook:'走行中の風が気になるなら、ここはチェック。',benefit:'風を受ける場面を考えて選びやすい。',label:'防風'},
-  {re:/防寒|裏起毛|保温/i,hook:'寒い時期にも使いたいなら、ここはチェック。',benefit:'寒い時期の使用を考えた仕様を選びやすい。',label:'防寒'},
-  {re:/折りたたみ|折り畳み/i,hook:'使わないときの置き場所を取りたくないなら、ここはチェック。',benefit:'使わないときは省スペースでしまいやすい。',label:'省スペース'},
-  {re:/軽量|軽い/i,hook:'持ち運びの負担を抑えたいなら、ここはチェック。',benefit:'持ち運びや取り回しの負担を抑えやすい。',label:'軽さ'},
-  {re:/洗える|丸洗い|水洗い|洗濯可/i,hook:'汚れた後のお手入れを簡単にしたいなら、ここはチェック。',benefit:'汚れたときに手入れしやすい。',label:'お手入れ'},
-  {re:/大容量|容量\s*\d|\d+\s*(?:L|ℓ|ml|mL)/i,hook:'まとめて入れられる容量を重視するなら、ここはチェック。',benefit:'収納量を重視して選びやすい。',label:'容量'},
-  {re:/\d+\s*(?:個|枚|本|点|食|包|袋)\s*(?:セット|入|入り)?/i,hook:'まとめ買いのしやすさを重視するなら、ここはチェック。',benefit:'必要な数をまとめて揃えやすい。',label:'セット内容'},
-  {re:/usb[- ]?c|type[- ]?c|急速充電|pd対応/i,hook:'充電まわりをすっきりまとめたいなら、ここはチェック。',benefit:'対応端子や充電仕様を見て選びやすい。',label:'充電対応'},
-  {re:/滑り止め|ノンスリップ|グリップ/i,hook:'持ったときの扱いやすさを重視するなら、ここはチェック。',benefit:'グリップ性を意識して選びやすい。',label:'グリップ'},
-  {re:/クッション|低反発|高反発|厚手/i,hook:'当たりのやわらかさや厚みを重視するなら、ここはチェック。',benefit:'クッション性を比べて選びやすい。',label:'クッション'}
-];
-
-function valueFromFacts(features=[]){
-  const matched=[];
-  for(const fact of features){
-    const text=String(fact||'').trim();
-    const rule=VALUE_RULES.find(r=>r.re.test(text));
-    if(rule&&!matched.some(x=>x.label===rule.label)) matched.push({...rule,fact:text});
-  }
-  return matched.slice(0,2);
-}
-
 function aiPhase1Post(item,result){
   const v=result?.validation;
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
+  if(v.productType?.valid!==true) return '';
 
   const insight=aiSalesInsight(item,result);
-  const values=valueFromFacts(insight.features);
-  if(!values.length) return '';
+  if(!String(insight.productType||'').trim()) return '';
 
-  const lines=[values[0].hook,''];
-  lines.push('✓ '+values[0].benefit);
-  if(values[1]) lines.push('✓ '+values[1].benefit);
-
-  const proof=[...insight.features,...insight.sellingPoints]
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,3);
-  if(proof.length){
-    lines.push('', '根拠になる仕様：'+proof.join('／'));
-  }
-
-  const fitLabels=values.map(x=>x.label).join('と');
-  if(fitLabels) lines.push('',fitLabels+'を重視して'+insight.productType+'を選びたい人に。');
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500);
+  const combinedFacts=[
+    ...(Array.isArray(insight.features)?insight.features:[]),
+    ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
+  ];
+  const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
+  const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
+  return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
 function aiPanelMarkup(item,index){
@@ -2599,7 +2568,7 @@ function updateAiPanel(index){
     return;
   }
   const v=result.data?.validation||{};
-  status.textContent='検証：'+(v.mode==='simple'?'簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
+  status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
   const p=v.productType||{};
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
@@ -2898,29 +2867,29 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
   return 'legacy_'+p;
 }
 
+function neutralRulePost(item,keyword=''){
+  const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+}
+
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
   if(gate.enabled){
     if(gate.status==='fallback') return '';
     if(gate.useLegacy){
       const options={variant:index};
-      if(p==='room'){options.usedOpenings=roomSentenceContext.openings;options.usedSeconds=roomSentenceContext.seconds;}
       if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
       if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-      return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+      return neutralRulePost(item,keyword);
     }
     if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
     return '';
   }
 
   const options={variant:index};
-  if(p==='room'){
-    options.usedOpenings=roomSentenceContext.openings;
-    options.usedSeconds=roomSentenceContext.seconds;
-  }
   if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
   if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-  return UrenaviPainCopy.makeRoomCopy(item,keyword,options);
+  return neutralRulePost(item,keyword);
 }
 
 function post(i,p='room'){
@@ -2949,15 +2918,10 @@ function postReady(i,p='room'){
 function postDisplay(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
-    if(s.state?.state==='error') return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
-    return '商品内容をGroqで確認中です。確認が終わると投稿文を表示します。';
+    if(s.state?.state==='error') return '';
+    return '商品内容を確認中です。';
   }
-  const text=String(post(i,p)||'').trim();
-  if(text) return text;
-  if(s.gate.enabled&&!s.gate.useLegacy&&!s.gate.full){
-    return '商品内容を十分に確認できなかったため、誤った投稿文は表示していません。';
-  }
-  return 'この商品は投稿文を安全に生成できませんでした。楽天の商品ページで用途・仕様を確認してください。';
+  return String(post(i,p)||'').trim();
 }
 
 

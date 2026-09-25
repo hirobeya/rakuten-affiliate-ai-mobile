@@ -933,26 +933,41 @@
     return groundedOpening(a,item,variant,options);
   }
 
+  const FactSafety=(typeof window!=='undefined'&&window.UrenaviFactSafety)||null;
+  const LOCAL_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
+
+  function titleFactTokens(item){
+    return String(item?.itemName||'')
+      .replace(/<[^>]*>/g,' ')
+      .split(LOCAL_SPLIT_RE)
+      .map(x=>String(x||'').trim())
+      .filter(Boolean);
+  }
+
+  function isSafeLocalFactToken(token){
+    return Boolean(FactSafety?.isAllowedSpecFact?.(token));
+  }
+
   function extractFallbackTitleFacts(item){
-    const title=titleOnly(item);
-    const out=[],seen=new Set();
-    const add=(value,index)=>{const v=String(value||'').trim();if(!v||seen.has(v))return;seen.add(v);out.push({value:v,index:Number.isFinite(index)?index:title.indexOf(v)});};
-    const patterns=[
-      /(?:幅|奥行|高さ)\s*\d+(?:\.\d+)?\s*(?:cm|mm|m)?/gi,
-      /\d+\s*本ケーブル内蔵/g,/\d+\s*本掛/g,/\d+\s*人掛け/g,/\d+\s*段/g,
-      /\d+\s*(?:枚|個|袋|箱|組|点)\s*(?:セット|入り|入)/g,
-      /(?:SS|S|M|L|LL|XL|XXL)\s*サイズ/gi,/\b[A-Z]{2,}[A-Z0-9-]*\d[A-Z0-9-]*\b/g
-    ];
-    for(const re of patterns){re.lastIndex=0;let m;while((m=re.exec(title)))add(m[0],m.index);}
-    const targetTerms=['犬用','猫用','ネコ用','ペット用'];
-    for(const word of targetTerms){
-      const re=new RegExp(word+'(?!品|具)','g');
-      const m=re.exec(title);
-      if(m) add(m[0],m.index);
-    }
-    const words=['折りたたみ','折り畳み','折畳','キャスター付き','コードレス','高さ調節','高さ調整','天板付き','引き出し','扉付き','充電式','自立','水拭き','LEDライト付','交換パッド付き','取っ手付き','持ち手付き','メッシュ','スリム','コンパクト'];
-    for(const word of words){const i=title.indexOf(word);if(i>=0)add(word,i);}
-    return out.sort((a,b)=>a.index-b.index).map(x=>x.value).slice(0,6);
+    const tokens=titleFactTokens(item);
+    const filtered=FactSafety?.filterAllowedTitleFacts?.(tokens,tokens)||[];
+    return filtered.slice(0,6);
+  }
+
+  function buildNeutralFactPost(item,facts=[]){
+    const sourceTokens=new Set(titleFactTokens(item));
+    const safeFacts=(Array.isArray(facts)?facts:[])
+      .map(x=>String(x||'').trim())
+      .filter(x=>x&&sourceTokens.has(x)&&isSafeLocalFactToken(x))
+      .filter((x,i,a)=>a.indexOf(x)===i)
+      .slice(0,6);
+    if(!safeFacts.length) return '';
+    const price=Number(item?.itemPrice);
+    const lines=['商品名に記載されている仕様です。',''];
+    for(const fact of safeFacts) lines.push('✓ '+fact);
+    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
   }
 
   function fallbackProductName(item,analysis){
@@ -1198,52 +1213,24 @@
   }
 
   function makeRoomCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,true,a);
-
-    const title=naturalProductIdentity(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    const opening=groundedOpening(a,item,variant,options);
-    if(!opening) return shortFallback(item,true,a);
-    const facts=a.facts.length ? '\n\n商品の特徴👇\n'+a.facts.map(x=>'✔ '+x).join('\n') : '';
-    const price=priceLine(item);
-    const ending='\n\n'+title+(price?'\n'+price:'')+'\n\n※アフィリエイト広告を利用しています';
-    let out=trimCopy(opening+facts+ending,500);
-    out=finalScan(out);
-    if(!validateBody(item,a,out)) return shortFallback(item,true,a);
-    return out;
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeThreadsCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
-    const title=buildSafeDisplayName(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    let out=openingFor(a,item,variant,options);
-    if(a.facts[0]) out+='\n✔ '+a.facts[0];
-    const price=priceLine(item,'');
-    out+='\n\n'+title+(price?'\n'+price:'');
-    out=finalScan(trimCopy(out,360));
-    return validateBody(item,a,out)?out:shortFallback(item);
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeInstagramCopy(item,keyword,options={}){
-    const a=analyze(item,keyword);
-    if(a.ambiguous || !a.supported) return shortFallback(item,false,a);
-    const title=buildSafeDisplayName(item,a);
-    const variant=Number.isFinite(+options.variant)?+options.variant:stableVariant(item?.itemName||'',10);
-    let out=openingFor(a,item,variant);
-    if(a.facts.length) out+='\n\n'+a.facts.map(x=>'✔ '+x).join('\n');
-    const price=priceLine(item);
-    out+='\n\nこんな人に向いていそう👇\n'+a.audience+'\n\n'+title+(price?'\n'+price:'');
-    out=finalScan(trimCopy(out,500));
-    return validateBody(item,a,out)?out:shortFallback(item);
+    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
   }
 
 
   api.detectLegalRisk=detectLegalRisk;
   api.buildSafeDisplayName=buildSafeDisplayName;
+  api.titleFactTokens=titleFactTokens;
+  api.isSafeLocalFactToken=isSafeLocalFactToken;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
+  api.buildNeutralFactPost=buildNeutralFactPost;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;

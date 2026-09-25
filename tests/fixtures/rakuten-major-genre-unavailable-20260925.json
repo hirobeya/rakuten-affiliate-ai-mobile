@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-09-25",
+  "rootGenre": {
+    "genreId": "100000",
+    "nameJa": "百貨店・総合通販・ギフト",
+    "directItemCount": 0,
+    "childGenres": [
+      {
+        "genreId": "100001",
+        "nameJa": "百貨店",
+        "directItemCount": 0
+      },
+      {
+        "genreId": "101972",
+        "nameJa": "スーパー",
+        "directItemCount": 0
+      },
+      {
+        "genreId": "100002",
+        "nameJa": "総合通販・ディスカウント",
+        "directItemCount": 0
+      },
+      {
+        "genreId": "100003",
+        "nameJa": "贈答品・ギフト",
+        "directItemCount": 0
+      },
+      {
+        "genreId": "100004",
+        "nameJa": "輸入雑貨",
+        "directItemCount": 0
+      },
+      {
+        "genreId": "101736",
+        "nameJa": "その他",
+        "directItemCount": 0
+      }
+    ],
+    "note": "Rakuten Ichiba Item Search API returned zero directly assigned items for the root genre and all six direct child genre IDs. No synthetic or cross-genre products were substituted."
+  }
+}

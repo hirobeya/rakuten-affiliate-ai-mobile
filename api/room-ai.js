@@ -12,8 +12,8 @@ const GROQ_MAX_RETRIES=3;
 let groqSerialTail=Promise.resolve();
 let lastGroqStartAt=0;
 const CACHE_TTL_DAYS=90;
-const PROMPT_VERSION='2026-09-24-ai-facts-only-v12';
-const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v8';
+const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
+const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9';
 
 const FEATURE_MAX_CHARS=48;
 const FEATURE_EVIDENCE_MAX_CHARS=72;
@@ -76,7 +76,7 @@ function schemaForCall(hasImage){
   return hasImage?imageSchema:textSchema;
 }
 
-const SYSTEM_PROMPT=`楽天商品の事実抽出のみ。productType=原文にある短い商品種別。features=素材・仕様・対応・サイズ・容量など、原文からそのまま抜き出した完全な連続引用を最大3件。sellingPoints=購入判断に役立つ原文の完結した連続引用を最大2件。全項目source/evidence必須。text自体も必ず原文に連続して存在する引用にする。文字数上限で途中切れさせない。長い場合は別の短い完全な事実を選ぶ。意味拡張・購入後変化・悩み・用途・おすすめ対象の作文は禁止。販促・ランキング・効能・安全・健康・美容・保証・推測は禁止。数字と単位は原文一致。`;
+const SYSTEM_PROMPT=`楽天商品から事実だけ抽出。productType=商品名に完全一致する1〜2語の具体的商品名詞。仕様語・ブランド・型番禁止。表記・空白は原文どおり。明確ならconfidence=high。美顔・美容・ペット・メンズ・レディース・グッズ・用品など属性語単独は禁止し具体名を選ぶ。features=仕様・素材・対応・サイズ・容量・数量・重量・搭載機能を最大3件。sellingPoints=安全な事実を最大2件。features/sellingPointsはtextとevidenceを同じ完全な連続引用。productTypeはvalue=evidence。数字・単位も完全一致。途中切れ禁止。販促・ランキング・配送・効能・安全・健康・美容・保証は禁止。推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止。`;
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
@@ -94,7 +94,9 @@ function makeInputHash({itemCode='',itemName='',imageUrl='',itemCaption=''}) {
       String(itemCode||'').trim(),
       String(itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim(),
       String(imageUrl||'').trim(),
-      normalizeCacheCaption(itemCaption)
+      normalizeCacheCaption(itemCaption),
+      PROMPT_VERSION,
+      VALIDATION_RULE_VERSION
     ].join('\n'))
     .digest('hex');
 }

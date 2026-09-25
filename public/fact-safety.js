@@ -1,0 +1,118 @@
+(function(root,factory){
+  const api=factory();
+  if(typeof module==='object'&&module.exports) module.exports=api;
+  if(root) root.UrenaviFactSafety=api;
+})(typeof window!=='undefined'?window:(typeof globalThis!=='undefined'?globalThis:this),function(){
+  'use strict';
+
+  const PROMO_RE=/楽天(?:市場)?(?:総合)?(?:ランキング)?\s*1位|ランキング|受賞|\d+冠|ご好評です|大好評|当店人気|大人気|クーポン|SALE|セール|OFF|オフ|半額|最安|送料無料|ポイント\d*倍|P\d+倍|当日発送|即日発送|発送/i;
+  const CLAIM_RE=/改善|予防|防止|安全|安心|無害|保証|発火しない|燃えにくい|難燃|抗菌|除菌|殺菌|消臭|防臭|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|引き締め|リフトアップ|治る|痩せる|若返/i;
+
+  const MATERIALS=new Set([
+    '本革','牛革','山羊革','羊革','豚革','合皮','人工皮革','レザー',
+    'コットン','綿','綿100%','綿100％','ポリエステル','ナイロン',
+    'アルミ','アルミニウム','ステンレス','シリコン','TPU','ABS',
+    'ガラス','木製','セラミック'
+  ]);
+
+  const STANDARDS=new Set([
+    'USB-C','USB C','USB-C対応','USB C対応','Type-C','Type C','Type-C対応','Type C対応','HDMI','DisplayPort','PD対応',
+    'Qi','Qi2','Bluetooth','Wi-Fi','WiFi','4K','日本製'
+  ]);
+
+  const NUMERIC_UNIT_RE=/^(?:約)?\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i;
+  const DIMENSION_RE=/^\d+(?:[.,]\d+)?\s*[x×X]\s*\d+(?:[.,]\d+)?(?:\s*[x×X]\s*\d+(?:[.,]\d+)?)?\s*(?:mm|cm|m)$/i;
+  const STRUCTURED_COUNT_RE=/^(?:\d+\s*(?:枚|個|本|袋|箱|組|点|粒|錠|食|包)\s*(?:入|入り|セット|組)|\d+\s*セット)$/i;
+  const MULTIPACK_RE=/^\d+\s*(?:枚|個|本|袋|粒|錠)\s*[x×X]\s*\d+\s*(?:枚|個|本|袋|粒|錠)(?:\s*(?:入|入り|セット))?$/i;
+  const CONTENT_AMOUNT_RE=/^内容量\s*\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|GB|MB|TB)$/i;
+  const MATERIAL_WITH_PERCENT_RE=/^(?:綿|コットン|ポリエステル|ナイロン)\s*100[%％]$/i;
+  const SOURCE_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
+  const MATERIAL_PREFIX_MODIFIERS=new Set(['フェイク']);
+  const MATERIAL_SUFFIX_MODIFIERS=new Set(['調','風','タッチ','柄','ライク','プリント']);
+
+  const normalize=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+  const sourceTokens=s=>String(s||'').replace(/<[^>]*>/g,' ').split(SOURCE_SPLIT_RE).map(normalize).filter(Boolean);
+
+  function isAllowedSpecFact(value){
+    const x=normalize(value);
+    if(!x) return false;
+    if(PROMO_RE.test(x)||CLAIM_RE.test(x)) return false;
+    if(DIMENSION_RE.test(x)||STRUCTURED_COUNT_RE.test(x)||MULTIPACK_RE.test(x)||CONTENT_AMOUNT_RE.test(x)||MATERIAL_WITH_PERCENT_RE.test(x)) return true;
+    if(MATERIALS.has(x)||STANDARDS.has(x)) return true;
+    return false;
+  }
+
+  function numericUnitKey(value){
+    const x=normalize(value);
+    const m=x.match(/^(?:内容量\s*)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
+    return m?String(m[1]||'').toLowerCase():'';
+  }
+
+  function materialOccurrenceIsUnmodified(tokens,index){
+    const prev=normalize(tokens[index-1]||'');
+    const next=normalize(tokens[index+1]||'');
+    return !MATERIAL_PREFIX_MODIFIERS.has(prev)&&!MATERIAL_SUFFIX_MODIFIERS.has(next);
+  }
+
+  function isAllowedSpecFactForEvidence(value,evidence){
+    const x=normalize(value);
+    if(!isAllowedSpecFact(x)) return false;
+    if(!MATERIALS.has(x)) return true;
+    const tokens=sourceTokens(evidence);
+    const matches=[];
+    for(let i=0;i<tokens.length;i++) if(tokens[i]===x) matches.push(i);
+    if(!matches.length) return false;
+    return matches.some(i=>materialOccurrenceIsUnmodified(tokens,i));
+  }
+
+
+  function filterAllowedSpecFacts(values){
+    const input=(Array.isArray(values)?values:[])
+      .map(raw=>({raw:String(raw||'').trim(),norm:normalize(raw)}))
+      .filter(x=>x.raw&&x.norm&&isAllowedSpecFact(x.norm));
+    const byUnit=new Map();
+    for(const x of input){
+      const key=numericUnitKey(x.norm);
+      if(!key) continue;
+      if(!byUnit.has(key)) byUnit.set(key,new Set());
+      byUnit.get(key).add(x.norm.toLowerCase());
+    }
+    const ambiguousUnits=new Set([...byUnit.entries()].filter(([,set])=>set.size>1).map(([key])=>key));
+    const countFacts=input.filter(x=>STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm));
+    const ambiguousCounts=new Set(countFacts.map(x=>x.norm.toLowerCase())).size>1;
+    const dimensionFacts=input.filter(x=>DIMENSION_RE.test(x.norm));
+    const ambiguousDimensions=new Set(dimensionFacts.map(x=>x.norm.toLowerCase())).size>1;
+    const out=[],seen=new Set();
+    for(const x of input){
+      const unit=numericUnitKey(x.norm);
+      if(unit&&ambiguousUnits.has(unit)) continue;
+      if(ambiguousCounts&&(STRUCTURED_COUNT_RE.test(x.norm)||MULTIPACK_RE.test(x.norm))) continue;
+      if(ambiguousDimensions&&DIMENSION_RE.test(x.norm)) continue;
+      const key=x.norm.toLowerCase();
+      if(seen.has(key)) continue;
+      seen.add(key);
+      out.push(x.raw);
+    }
+    return out;
+  }
+
+  function filterAllowedTitleFacts(titleTokens,candidates=titleTokens){
+    const source=(Array.isArray(titleTokens)?titleTokens:[]).map(x=>String(x||'').trim()).filter(Boolean);
+    const sourceNorm=source.map(normalize);
+    const candidateSet=new Set((Array.isArray(candidates)?candidates:[]).map(normalize).filter(Boolean));
+    const accepted=[];
+    for(let i=0;i<source.length;i++){
+      const raw=source[i], x=sourceNorm[i];
+      if(!candidateSet.has(x)||!isAllowedSpecFact(x)) continue;
+      if(MATERIALS.has(x)&&!materialOccurrenceIsUnmodified(sourceNorm,i)) continue;
+      accepted.push(raw);
+    }
+    return filterAllowedSpecFacts(accepted);
+  }
+
+  return {
+    PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
+    NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
+    normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts
+  };
+});
