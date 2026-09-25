@@ -728,7 +728,7 @@ function run(name,fn){
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function aiSalesInsight\(/);
-    assert.match(html,/商品内容をGroqで確認中です/);
+    assert.match(html,/商品内容を確認中です/);
     assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
@@ -754,8 +754,10 @@ function run(name,fn){
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
-    assert.match(html,/確認が終わると投稿文を表示します/);
-    assert.match(html,/誤った投稿文は表示していません/);
+    assert.match(html,/if\(s\.state\?\.state==='error'\) return ''/);
+    assert.match(html,/return String\(post\(i,p\)\|\|''\)\.trim\(\)/);
+    assert.doesNotMatch(html,/誤った投稿文は表示していません/);
+    assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
   });
 
   await run('AI stays fact-only and client copy is neutral exact-token output',()=>{
