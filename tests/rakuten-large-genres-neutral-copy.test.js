@@ -60,17 +60,19 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
         for(const num of nums) assert.ok(title.includes(num),genre.nameJa+' unsupported number/unit: '+num+' <= '+title);
       }
 
-      const post=api.buildNeutralFactPost(item,facts);
+      const post=api.buildGroundedBenefitPost(item,facts);
       const roomPost=api.makeRoomCopy(item,'');
       const threadsPost=api.makeThreadsCopy(item,'');
       const instagramPost=api.makeInstagramCopy(item,'');
-      assert.equal(roomPost,post,genre.nameJa+' ROOM route differs from strict builder');
-      assert.equal(threadsPost,post,genre.nameJa+' Threads route differs from strict builder');
-      assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from strict builder');
+      assert.equal(roomPost,post,genre.nameJa+' ROOM route differs from grounded benefit builder');
+      assert.equal(threadsPost,post,genre.nameJa+' Threads route differs from grounded benefit builder');
+      assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from grounded benefit builder');
       if(post){
         generated++;gGenerated++;
-        assert.match(post,/^商品名に記載されている仕様です。/);
+        assert.match(post,/確認できる仕様👇/);
+        assert.match(post,/商品名には「[^」]+」と明記されています。/);
         assert.match(post,/※アフィリエイト広告を利用しています/);
+        assert.doesNotMatch(post,/絶対|必ず|確実に|改善|治る|痩せる|若返|No\.?\s*1|ナンバーワン/);
         const factLines=post.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
         assert.ok(factLines.length>0,genre.nameJa+' generated post without facts');
         for(const fact of factLines){
