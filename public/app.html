@@ -2527,7 +2527,8 @@ function aiPhase1Post(item,result){
     ...(Array.isArray(insight.features)?insight.features:[]),
     ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
   ];
-  const facts=window.UrenaviFactSafety?.filterAllowedSpecFacts?.(combinedFacts)||[];
+  const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
+  const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
   return window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
