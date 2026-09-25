@@ -23,7 +23,7 @@ function titleTokens(itemName){
 function validateStrictCopy(id,item,copy){
   const source=titleTokens(item.itemName);
   const tokens=new Set(source);
-  const allowed=safety.filterAllowedSpecFacts(source);
+  const allowed=safety.filterAllowedTitleFacts(source,source);
   if(!allowed.length){
     if(copy!=='') fail(id,'copy must stop when no allowlisted fact exists: '+copy);
     return;
@@ -66,7 +66,7 @@ for(const tc of fixture.cases){
 
   console.log('RESULT',JSON.stringify({
     id:tc.id,category:a.category,usage:a.usage,ambiguous:a.ambiguous,outputMode:a.outputMode,
-    allowlisted:safety.filterAllowedSpecFacts(titleTokens(item.itemName)),copy
+    allowlisted:safety.filterAllowedTitleFacts(titleTokens(item.itemName),titleTokens(item.itemName)),copy
   }));
 }
 
