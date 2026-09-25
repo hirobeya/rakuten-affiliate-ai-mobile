@@ -31,6 +31,22 @@ test('only explicit measured specs structured counts standards and materials are
   for(const token of rejected) assert.equal(api.isSafeLocalFactToken(token),false,token);
 });
 
+test('material modifiers are rejected even when separated into adjacent tokens',()=>{
+  const api=load();
+  for(const name of [
+    '財布 フェイク レザー ブラック',
+    'バッグ レザー 調 ブラウン',
+    'ソファ 本革 風 ブラック',
+    '生地 コットン タッチ',
+    'シャツ ナイロン 柄',
+    '靴 レザー ライク',
+    'ポーチ レザー プリント'
+  ]){
+    assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:name})),[],name);
+  }
+  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'財布 本革 ブラック'})),['本革']);
+});
+
 test('ambiguous repeated units and multiple count variants are dropped',()=>{
   const api=load();
   const variants=api.extractFallbackTitleFacts({itemName:'ハーブティー 内容量20g 内容量30g 内容量50g コットン'});
@@ -48,7 +64,7 @@ test('multiple dimension variants are dropped as ambiguous',()=>{
 test('combined Groq and local facts are ambiguity-filtered again before posting',()=>{
   const app=fs.readFileSync('public/app.html','utf8');
   assert.match(app,/combinedFacts=\[/);
-  assert.match(app,/UrenaviFactSafety\?\.filterAllowedSpecFacts\?\.\(combinedFacts\)/);
+  assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
 });
 
 test('all client copy channels use the same neutral safe-fact output',()=>{
