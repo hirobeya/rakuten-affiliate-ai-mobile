@@ -58,5 +58,10 @@
     "api/room-ai.js": {
       "maxDuration": 20
     }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
   }
 }
