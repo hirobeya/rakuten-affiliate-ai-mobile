@@ -26,8 +26,12 @@
   const MULTIPACK_RE=/^\d+\s*(?:枚|個|本|袋|粒|錠)\s*[x×X]\s*\d+\s*(?:枚|個|本|袋|粒|錠)(?:\s*(?:入|入り|セット))?$/i;
   const CONTENT_AMOUNT_RE=/^内容量\s*\d+(?:[.,]\d+)?\s*(?:mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|GB|MB|TB)$/i;
   const MATERIAL_WITH_PERCENT_RE=/^(?:綿|コットン|ポリエステル|ナイロン)\s*100[%％]$/i;
+  const SOURCE_SPLIT_RE=/[\s　【】〖〗（）()「」『』\[\]［］{}｛｝<>＜＞〈〉《》〔〕・／/\\|｜,:：;；!！?？★☆※]+/;
+  const MATERIAL_PREFIX_MODIFIERS=new Set(['フェイク']);
+  const MATERIAL_SUFFIX_MODIFIERS=new Set(['調','風','タッチ','柄','ライク','プリント']);
 
   const normalize=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+  const sourceTokens=s=>String(s||'').replace(/<[^>]*>/g,' ').split(SOURCE_SPLIT_RE).map(normalize).filter(Boolean);
 
   function isAllowedSpecFact(value){
     const x=normalize(value);
@@ -43,6 +47,24 @@
     const m=x.match(/^(?:内容量\s*)?\d+(?:[.,]\d+)?\s*(mAh|Ah|Wh|kWh|W|V|A|Hz|kHz|MHz|GHz|mm|cm|m|mg|g|kg|ml|mL|L|oz|インチ|inch|GB|MB|TB)$/i);
     return m?String(m[1]||'').toLowerCase():'';
   }
+
+  function materialOccurrenceIsUnmodified(tokens,index){
+    const prev=normalize(tokens[index-1]||'');
+    const next=normalize(tokens[index+1]||'');
+    return !MATERIAL_PREFIX_MODIFIERS.has(prev)&&!MATERIAL_SUFFIX_MODIFIERS.has(next);
+  }
+
+  function isAllowedSpecFactForEvidence(value,evidence){
+    const x=normalize(value);
+    if(!isAllowedSpecFact(x)) return false;
+    if(!MATERIALS.has(x)) return true;
+    const tokens=sourceTokens(evidence);
+    const matches=[];
+    for(let i=0;i<tokens.length;i++) if(tokens[i]===x) matches.push(i);
+    if(!matches.length) return false;
+    return matches.some(i=>materialOccurrenceIsUnmodified(tokens,i));
+  }
+
 
   function filterAllowedSpecFacts(values){
     const input=(Array.isArray(values)?values:[])
@@ -74,9 +96,23 @@
     return out;
   }
 
+  function filterAllowedTitleFacts(titleTokens,candidates=titleTokens){
+    const source=(Array.isArray(titleTokens)?titleTokens:[]).map(x=>String(x||'').trim()).filter(Boolean);
+    const sourceNorm=source.map(normalize);
+    const candidateSet=new Set((Array.isArray(candidates)?candidates:[]).map(normalize).filter(Boolean));
+    const accepted=[];
+    for(let i=0;i<source.length;i++){
+      const raw=source[i], x=sourceNorm[i];
+      if(!candidateSet.has(x)||!isAllowedSpecFact(x)) continue;
+      if(MATERIALS.has(x)&&!materialOccurrenceIsUnmodified(sourceNorm,i)) continue;
+      accepted.push(raw);
+    }
+    return filterAllowedSpecFacts(accepted);
+  }
+
   return {
     PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
     NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
-    normalize,isAllowedSpecFact,numericUnitKey,filterAllowedSpecFacts
+    normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts
   };
 });
