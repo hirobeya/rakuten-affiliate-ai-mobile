@@ -954,17 +954,94 @@
     return filtered.slice(0,6);
   }
 
-  function buildNeutralFactPost(item,facts=[]){
+  function safePostFacts(item,facts=[]){
     const sourceTokens=new Set(titleFactTokens(item));
-    const safeFacts=(Array.isArray(facts)?facts:[])
+    return (Array.isArray(facts)?facts:[])
       .map(x=>String(x||'').trim())
       .filter(x=>x&&sourceTokens.has(x)&&isSafeLocalFactToken(x))
       .filter((x,i,a)=>a.indexOf(x)===i)
       .slice(0,6);
+  }
+
+  function groundedBenefitForFact(fact){
+    const x=String(fact||'').trim();
+    if(!x||!FactSafety?.isAllowedSpecFact?.(x)) return null;
+
+    if(FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x)){
+      return {
+        hook:'必要な数をまとめて揃えたいときにチェック。',
+        benefit:'商品名には「'+x+'」と明記されています。セット数や入数を比べながら、必要量に合うか判断しやすい仕様です。'
+      };
+    }
+    if(FactSafety?.DIMENSION_RE?.test(x)){
+      return {
+        hook:'置き場所やサイズ感を確認して選びたいときに。',
+        benefit:'商品名には「'+x+'」と明記されています。設置場所や収納場所に合うか、購入前にサイズを比べる材料になります。'
+      };
+    }
+    if(FactSafety?.CONTENT_AMOUNT_RE?.test(x)){
+      return {
+        hook:'容量を比べて選びたいときに。',
+        benefit:'商品名には「'+x+'」と明記されています。必要な容量に合うかを確認しながら候補を絞りやすい仕様です。'
+      };
+    }
+    if(FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x)){
+      return {
+        hook:'素材を見て選びたいときに。',
+        benefit:'商品名には「'+x+'」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。'
+      };
+    }
+    if(FactSafety?.STANDARDS?.has?.(x)){
+      if(x==='日本製'){
+        return {
+          hook:'生産地の表記も確認して選びたいときに。',
+          benefit:'商品名には「日本製」と明記されています。生産地を比較条件にしたいときの確認材料になります。'
+        };
+      }
+      if(x==='4K'){
+        return {
+          hook:'対応する映像規格を確認して選びたいときに。',
+          benefit:'商品名には「4K」と明記されています。使う機器の対応状況と照らし合わせながら候補を絞れます。'
+        };
+      }
+      return {
+        hook:'接続規格や対応規格を確認して選びたいときに。',
+        benefit:'商品名には「'+x+'」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。'
+      };
+    }
+    return null;
+  }
+
+  function buildNeutralFactPost(item,facts=[]){
+    const safeFacts=safePostFacts(item,facts);
     if(!safeFacts.length) return '';
     const price=Number(item?.itemPrice);
     const lines=['商品名に記載されている仕様です。',''];
     for(const fact of safeFacts) lines.push('✓ '+fact);
+    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
+  }
+
+  function buildGroundedBenefitPost(item,facts=[]){
+    const safeFacts=safePostFacts(item,facts);
+    if(!safeFacts.length) return '';
+
+    const benefits=safeFacts
+      .map(groundedBenefitForFact)
+      .filter(Boolean);
+    if(!benefits.length) return buildNeutralFactPost(item,safeFacts);
+
+    const first=benefits[0];
+    const price=Number(item?.itemPrice);
+    const lines=[first.hook,'',first.benefit];
+
+    if(benefits[1]&&benefits[1].benefit!==first.benefit){
+      lines.push('',benefits[1].benefit);
+    }
+
+    lines.push('','確認できる仕様👇');
+    for(const fact of safeFacts.slice(0,4)) lines.push('✓ '+fact);
     if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     return lines.join('\n').slice(0,500);
@@ -1213,15 +1290,15 @@
   }
 
   function makeRoomCopy(item,keyword,options={}){
-    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeThreadsCopy(item,keyword,options={}){
-    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
   }
 
   function makeInstagramCopy(item,keyword,options={}){
-    return buildNeutralFactPost(item,extractFallbackTitleFacts(item));
+    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
   }
 
 
@@ -1231,6 +1308,8 @@
   api.isSafeLocalFactToken=isSafeLocalFactToken;
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
   api.buildNeutralFactPost=buildNeutralFactPost;
+  api.buildGroundedBenefitPost=buildGroundedBenefitPost;
+  api.groundedBenefitForFact=groundedBenefitForFact;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;
