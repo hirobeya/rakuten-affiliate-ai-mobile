@@ -950,7 +950,7 @@
 
   function extractFallbackTitleFacts(item){
     const tokens=titleFactTokens(item);
-    const filtered=FactSafety?.filterAllowedSpecFacts?.(tokens)||[];
+    const filtered=FactSafety?.filterAllowedTitleFacts?.(tokens,tokens)||[];
     return filtered.slice(0,6);
   }
 
