@@ -32,10 +32,17 @@ function validateStrictCopy(id,item,copy){
     fail(id,'copy stopped despite allowlisted title fact: '+JSON.stringify(allowed));
     return;
   }
-  if(!copy.startsWith('商品名に記載されている仕様です。')) fail(id,'neutral title-source heading missing: '+copy);
+  if(!copy.includes('商品名には「')) fail(id,'grounded source statement missing: '+copy);
+  if(!copy.includes('確認できる仕様👇')) fail(id,'verified facts heading missing: '+copy);
   if(!copy.includes('※アフィリエイト広告を利用しています')) fail(id,'ROOM disclosure missing');
   if(copy.length>500) fail(id,'copy exceeds 500 chars: '+copy.length);
-  if(/こんな人|向いて|おすすめ|悩み|使いやす|しやすい|選びどころ|暮らし/.test(copy)) fail(id,'inferred audience/use wording leaked: '+copy);
+  if(/こんな人|向いて|おすすめ|悩み|選びどころ|暮らし|使うと|使えば|使うことで/.test(copy)) fail(id,'unsupported audience/use wording leaked: '+copy);
+  if(/長持ち|高速|高画質|急速充電|吸水|丈夫|高級|洗い替え/.test(copy)) fail(id,'unsupported benefit claim leaked: '+copy);
+  const quoted=[...copy.matchAll(/商品名には「([^」]+)」と明記されています。/g)].map(x=>x[1]);
+  if(!quoted.length) fail(id,'no grounded quoted fact found');
+  for(const fact of quoted){
+    if(!allowed.includes(fact)) fail(id,'quoted benefit fact is outside allowlist: '+fact);
+  }
   const facts=copy.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
   if(!facts.length) fail(id,'generated copy has no facts');
   for(const fact of facts){
