@@ -55,6 +55,20 @@ test('ambiguous repeated units and multiple count variants are dropped',()=>{
   assert.deepEqual(Array.from(counts),['本革']);
 });
 
+test('material modifiers separated by delimiters are rejected in title context',()=>{
+  const api=load();
+  for(const name of [
+    'バッグ フェイク レザー ブラック',
+    'バッグ レザー 調 ブラック',
+    '生地 コットン 風',
+    'ケース ナイロン プリント'
+  ]){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    assert.equal(facts.length,0,name+' => '+JSON.stringify(facts));
+  }
+  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'バッグ 本革 ブラック'})),['本革']);
+});
+
 test('multiple dimension variants are dropped as ambiguous',()=>{
   const api=load();
   const dims=api.extractFallbackTitleFacts({itemName:'ポスター 61×49.5cm 52×42cm 42×34cm 本革'});
