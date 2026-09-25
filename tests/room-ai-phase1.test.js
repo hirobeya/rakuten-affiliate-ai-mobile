@@ -760,7 +760,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
   });
 
-  await run('AI stays fact-only and client copy is neutral exact-token output',()=>{
+  await run('AI stays fact-only and client benefit copy expands only verified safe facts',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const apiText=fs.readFileSync(path.join(__dirname,'../api/room-ai.js'),'utf8');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
@@ -771,11 +771,12 @@ function run(name,fn){
     assert.match(apiText,/推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止/);
     assert.doesNotMatch(html,/valueFromFacts/);
     assert.doesNotMatch(quality,/VALUE_RULES/);
-    assert.doesNotMatch(quality,/hook:/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(html,/buildNeutralFactPost/);
-    assert.match(quality,/商品名に記載されている仕様です/);
+    assert.match(html,/buildGroundedBenefitPost/);
+    assert.match(quality,/function groundedBenefitForFact/);
+    assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
+    assert.match(quality,/確認できる仕様/);
     assert.match(quality,/UrenaviFactSafety/);
     assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
     assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
