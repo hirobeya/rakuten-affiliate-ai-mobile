@@ -819,6 +819,21 @@ function run(name,fn){
     }
   });
 
+  await run('Groq material facts reject modified wording in evidence',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'財布',source:'itemName',evidence:'財布'},
+      features:[
+        {text:'レザー',source:'itemName',evidence:'フェイク レザー'},
+        {text:'本革',source:'itemName',evidence:'本革'}
+      ],sellingPoints:[],confidence:'high'
+    },{itemName:'財布 フェイク レザー 本革',itemCaption:''},{imageAvailable:false});
+    const byText=Object.fromEntries(v.features.map(x=>[x.text,x]));
+    assert.equal(byText['レザー'].specLike,false);
+    assert.equal(byText['レザー'].eligibleForPost,false);
+    assert.equal(byText['本革'].specLike,true);
+    assert.equal(byText['本革'].eligibleForPost,true);
+  });
+
   await run('daily limit blocks AI call',async()=>{
     const oldEnv=process.env.VERCEL_ENV, oldKey=process.env.GROQ_API_KEY;
     process.env.VERCEL_ENV='preview';
