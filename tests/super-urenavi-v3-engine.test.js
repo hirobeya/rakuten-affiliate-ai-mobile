@@ -104,5 +104,43 @@ function memoryStore(initial=null){
     assert.equal(resumed.groq.totalCalls,1);
   }
 
+  {
+    let p1=0,p2=0;
+    const brokenStore={
+      async loadProduct(){throw new Error('db down');},
+      async saveProduct(){throw new Error('db down');}
+    };
+    const result=await analyzeProductV3({
+      item,store:brokenStore,model:'mock',
+      consumeQuota:async()=>true,
+      callPass1:async()=>{p1++;return {raw:pass1,model:'mock'};},
+      callPass2:async()=>{p2++;return {raw:pass2,model:'mock'};}
+    });
+    assert.equal(result.ok,true);
+    assert.equal(result.source,'pass1+pass2');
+    assert.equal(result.groq.pass1Calls,1);
+    assert.equal(result.groq.pass2Calls,1);
+    assert.equal(p1,1); assert.equal(p2,1);
+  }
+
+  {
+    const partialRow={schema_version:V3_SCHEMA_VERSION,raw_ai_json:{pass1,pass2:null},model:'mock'};
+    let p2=0;
+    const brokenWriteStore={
+      async loadProduct(){return partialRow;},
+      async saveProduct(){throw new Error('write down');}
+    };
+    const result=await analyzeProductV3({
+      item,store:brokenWriteStore,model:'mock',
+      consumeQuota:async()=>true,
+      callPass1:async()=>{throw new Error('pass1 must not run');},
+      callPass2:async()=>{p2++;return {raw:pass2,model:'mock'};}
+    });
+    assert.equal(result.ok,true);
+    assert.equal(result.source,'cache+pass2');
+    assert.equal(result.groq.totalCalls,1);
+    assert.equal(p2,1);
+  }
+
   console.log('super-urenavi-v3-engine.test.js: PASS');
 })().catch(error=>{console.error(error);process.exitCode=1;});
