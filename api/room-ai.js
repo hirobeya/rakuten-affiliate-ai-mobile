@@ -20,6 +20,7 @@ slice(0,520)
 slice(-160)
 retryableJson400
 safeError?.code==='json_validate_failed'
+attempt===0
 cacheVersionMatch
 推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止
 2026-09-24-ai-facts-only-v13
