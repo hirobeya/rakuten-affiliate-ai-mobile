@@ -34,8 +34,8 @@ assert.equal(kettle.attributes.length,4);
 assert.equal(kettle.attributes[2].name,'温度設定範囲');
 assert.equal(kettle.attributes[2].valueType,'range');
 assert.equal(kettle.hooks.length,2);
+assert.equal(kettle.appeals.length,1);
 assert.equal(kettle.appeals[0].needsVerification,true);
-assert.equal(kettle.appeals[1].needsVerification,false);
 
 const socksItem={itemName:'靴下 メンズ 24-28cm 10足セット',itemCaption:'対応サイズ24-28cm'};
 const socks=validateUnderstanding({
@@ -80,7 +80,7 @@ const glove=validateUnderstanding({
   productType:{specific:'バイクグローブ',general:'グローブ',quote:'バイクグローブ'},
   attributes:[{name:'素材',value:'本革',unit:'',qualifier:'',valueType:'text',quote:'本革'}],
   decisionAxes:[{text:'素材',attributeRefs:[0]}],
-  appeals:[{text:'本革',noHassle:'',scene:'',attributeRefs:[0],strength:2}],
+  appeals:[{text:'素材は本革',noHassle:'',scene:'',attributeRefs:[0],strength:2}],
   hooks:[{type:'scene',text:'ツーリングの装備を選ぶとき。'}]
 },gloveItem);
 assert.equal(glove.productType.specific,'バイクグローブ');
