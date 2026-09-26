@@ -34,6 +34,18 @@ function makeStore(overrides={}){
   };
 }
 
+async function withPreviewKey(fn){
+  const oldEnv=process.env.VERCEL_ENV;
+  const oldKey=process.env.GROQ_API_KEY;
+  process.env.VERCEL_ENV='preview';
+  process.env.GROQ_API_KEY='test-key';
+  try{return await fn();}
+  finally{
+    if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
+  }
+}
+
 test('local allowlist resolves exact grounded type without guessing accessories',()=>{
   const hit=resolveLocalUnderstanding({itemName:'温度調節 電気ケトル 1.0L',itemCaption:''});
   assert.equal(hit?.raw?.productType?.value,'電気ケトル');
@@ -51,8 +63,7 @@ test('cached image hint can only promote a type that exists in current source',(
   assert.equal(promoteImageHint({features:[],sellingPoints:[]},'収納ボックス',{itemName:'バイクグローブ',itemCaption:''}),null);
 });
 
-test('router order is product cache then local and local consumes zero Groq quota',async()=>{
-  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+test('router order is product cache then local and local consumes zero Groq quota',async()=>withPreviewKey(async()=>{
   let quota=0,groq=0,saved=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),
@@ -67,11 +78,9 @@ test('router order is product cache then local and local consumes zero Groq quot
   assert.equal(quota,0);
   assert.equal(groq,0);
   assert.equal(saved,1);
-  if(old===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=old;
-});
+}));
 
-test('valid text Groq result stops before image',async()=>{
-  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+test('valid text Groq result stops before image',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -85,11 +94,9 @@ test('valid text Groq result stops before image',async()=>{
   assert.equal(res.body.route.route,'text');
   assert.equal(groq,1);
   assert.equal(imageLoads,0);
-  if(old===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=old;
-});
+}));
 
-test('image cache hit prevents a second Groq call',async()=>{
-  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+test('image cache hit prevents a second Groq call',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -104,11 +111,9 @@ test('image cache hit prevents a second Groq call',async()=>{
   assert.equal(res.body.stages.imageCacheHit,true);
   assert.equal(groq,1);
   assert.equal(imageLoads,0);
-  if(old===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=old;
-});
+}));
 
-test('uncertain text with no image cache escalates to image exactly once',async()=>{
-  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+test('uncertain text with no image cache escalates to image exactly once',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0,imageSaves=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -127,5 +132,4 @@ test('uncertain text with no image cache escalates to image exactly once',async(
   assert.equal(groq,2);
   assert.equal(imageLoads,1);
   assert.equal(imageSaves,1);
-  if(old===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=old;
-});
+}));
