@@ -30,6 +30,14 @@
   const MATERIAL_PREFIX_MODIFIERS=new Set(['フェイク']);
   const MATERIAL_SUFFIX_MODIFIERS=new Set(['調','風','タッチ','柄','ライク','プリント']);
 
+  const UNSUPPORTED_BENEFIT_TERMS=[
+    '安心','快適','便利','時短','手間','負担','ストレス','省スペース',
+    '片付き','片付く','整う','持ち運び','持ち運ぶ','使いやす','選びやす',
+    '置き場所','収納場所','充電する回数','充電の頻度','交換用フィルターを用意',
+    '用途に合わせ','手持ちの機器','お手入れ','蒸れにく','守る','防ぐ','備え','助け',
+    '回数を減ら','頻度を減ら','作業が減','時間を減ら','家事が楽','暮らしが楽','保温'
+  ];
+
   const normalize=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const sourceTokens=s=>String(s||'').replace(/<[^>]*>/g,' ').split(SOURCE_SPLIT_RE).map(normalize).filter(Boolean);
 
@@ -64,7 +72,6 @@
     if(!matches.length) return false;
     return matches.some(i=>materialOccurrenceIsUnmodified(tokens,i));
   }
-
 
   function filterAllowedSpecFacts(values){
     const input=(Array.isArray(values)?values:[])
@@ -110,9 +117,85 @@
     return filterAllowedSpecFacts(accepted);
   }
 
+  function sourceText(item){
+    return [item?.itemName,item?.itemCaption,item?.catchcopy,item?.genrePath,item?.genreName]
+      .filter(Boolean).map(normalize).join(' ');
+  }
+
+  function unsupportedBenefitTerms(text,item){
+    const t=normalize(text),source=sourceText(item);
+    return UNSUPPORTED_BENEFIT_TERMS.filter(term=>t.includes(term)&&!source.includes(term));
+  }
+
+  function safeIdentityLead(item,identity=''){
+    const id=normalize(identity),source=sourceText(item);
+    if(id&&source.includes(id)) return id+'の仕様を確認して選びたい方に。';
+    return '商品名にある仕様を確認して選びたい方に。';
+  }
+
+  function preserveGroundedQuote(line,item){
+    const m=String(line||'').match(/「([^」]{1,120})」/);
+    if(!m) return '';
+    const fact=normalize(m[1]);
+    return fact&&sourceText(item).includes(fact)?'「'+fact+'」と確認できます。':'';
+  }
+
+  function guardUnsupportedBenefitCopy(item,text,{identity=''}={}){
+    const input=String(text||'');
+    if(!input) return '';
+    const lines=input.split('\n');
+    const out=[];
+    let removed=0;
+    for(const line of lines){
+      const hits=unsupportedBenefitTerms(line,item);
+      if(!hits.length){out.push(line);continue;}
+      removed++;
+      const grounded=preserveGroundedQuote(line,item);
+      if(grounded) out.push(grounded);
+    }
+    while(out.length&&!out[0].trim()) out.shift();
+    if(removed&&out.length){
+      const first=normalize(out[0]);
+      if(/^「|^商品名には|^確認できる|^✓|^価格：|^※/.test(first)) out.unshift('',safeIdentityLead(item,identity));
+    }
+    return out.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+  }
+
   return {
     PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
     NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
-    normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts
+    normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts,
+    UNSUPPORTED_BENEFIT_TERMS,unsupportedBenefitTerms,guardUnsupportedBenefitCopy,sourceText
   };
 });
+
+(function(root){
+  'use strict';
+  if(!root||typeof document==='undefined') return;
+  function install(){
+    const api=root.UrenaviPainCopy,safety=root.UrenaviFactSafety;
+    if(!api||!safety||typeof safety.guardUnsupportedBenefitCopy!=='function') return false;
+    const wrap=(name,identityIndex)=>{
+      const original=api[name];
+      if(typeof original!=='function'||original.__unsupportedBenefitGuarded) return false;
+      const wrapped=function(...args){
+        const item=args[0]||{};
+        const identity=identityIndex==null?'':args[identityIndex];
+        return safety.guardUnsupportedBenefitCopy(item,original.apply(this,args),{identity});
+      };
+      wrapped.__unsupportedBenefitGuarded=true;
+      api[name]=wrapped;
+      return true;
+    };
+    let changed=false;
+    changed=wrap('buildValidatedProductPost',1)||changed;
+    changed=wrap('buildGroundedBenefitPost',1)||changed;
+    changed=wrap('makeRoomCopy',null)||changed;
+    changed=wrap('makeThreadsCopy',null)||changed;
+    changed=wrap('makeInstagramCopy',null)||changed;
+    return changed || Boolean(api.buildValidatedProductPost?.__unsupportedBenefitGuarded);
+  }
+  if(install()) return;
+  const timer=setInterval(()=>{if(install()) clearInterval(timer);},25);
+  setTimeout(()=>clearInterval(timer),5000);
+})(typeof window==='undefined'?null:window);
