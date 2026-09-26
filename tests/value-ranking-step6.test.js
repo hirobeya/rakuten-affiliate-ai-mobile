@@ -43,7 +43,7 @@ test('ranked post starts from type situation and uses only source-grounded facts
 test('unsafe type knowledge phrases are not remembered',()=>{
   const ok=safety.rememberTypeKnowledge({
     productType:'商品A',usage:'ranking_only',
-    readerSituations:['必ず安心して使える場面'],decisionAxes:['最強の性能']
+    readerSituations:['必ず安心して使える場面'],decisionAxes:['安心できる性能']
   });
   assert.equal(ok,false);
   assert.equal(safety.getTypeKnowledge('商品A'),null);
