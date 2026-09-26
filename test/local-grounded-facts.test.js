@@ -1,134 +1,192 @@
-'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const fs=require('fs');
-const vm=require('vm');
-const path=require('path');
+const fs=require('node:fs');
+const vm=require('node:vm');
 
 function load(){
-  const ctx={window:{},console,Intl,URL,URLSearchParams,setTimeout,clearTimeout};
-  vm.createContext(ctx);
-  for(const file of ['fact-safety.js','pain-copy.js','product-shadow-v2.js','room-copy-quality.js']){
-    const code=fs.readFileSync(path.join(__dirname,'..','public',file),'utf8');
-    vm.runInContext(code,ctx,{filename:file});
-  }
-  return ctx.window.UrenaviPainCopy;
+  const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
+  const window={document,Intl};
+  const ctx=vm.createContext({window,Intl,console});
+  vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
+  vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
+  vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
+  return window.UrenaviPainCopy;
 }
 
-const api=load();
-
 test('local facts use a strict allowlist instead of exclusion-only tokens',()=>{
-  const item={itemName:'収納ボックス 大容量 ふた付き キャスター付き 完成品 おしゃれ 日本製 幅40cm 2個セット',itemPrice:5000};
+  const api=load();
+  const item={itemName:'商品 コットン 500ml 10枚入り USB-C対応 防水 ギフト 54枚 メンズ ブランド名'};
   const facts=api.extractFallbackTitleFacts(item);
-  assert.ok(facts.includes('日本製'));
-  assert.ok(facts.some(x=>/40cm/.test(x)));
-  assert.ok(facts.some(x=>/2個セット/.test(x)));
-  assert.ok(!facts.some(x=>/大容量|ふた付き|キャスター付き|完成品|おしゃれ/.test(x)));
+  assert.deepEqual(Array.from(facts),['コットン','10枚入り','USB-C対応']);
+  for(const bad of ['商品','500ml','防水','ギフト','54枚','メンズ','ブランド名']){
+    assert.ok(!facts.includes(bad),bad+' leaked '+JSON.stringify(facts));
+  }
 });
 
 test('only explicit measured specs structured counts standards and materials are allowed',()=>{
-  for(const x of ['10cm','2個セット','日本製','綿100%','USB-C']) assert.equal(api.isSafeLocalFactToken(x),true,x);
-  for(const x of ['大容量','防水','急速充電','スマホ対応','使いやすい']) assert.equal(api.isSafeLocalFactToken(x),false,x);
+  const api=load();
+  const accepted=['1.45x1m','10枚入り','2個入','3セット','4本組','2個組','3枚×7袋','USB-C対応','HDMI','本革','コットン','セラミック','日本製','内容量500ml'];
+  const rejected=['500ml','約196g','10000mAh','最大500ml','500ml以上','500ml相当','500mlペットボトル対応','10枚','2個','4本','防水','ワンタッチ','散歩','ドライブ','ギフト','父の日','メンズ','人気色','とらや','トヨタ','ケース','牛カレー','A4','B3','PD','レザー調','本革風','コットンタッチ','フェイクレザー','ナイロン柄'];
+  for(const token of accepted) assert.equal(api.isSafeLocalFactToken(token),true,token);
+  for(const token of rejected) assert.equal(api.isSafeLocalFactToken(token),false,token);
 });
 
 test('material modifiers are rejected even when separated into adjacent tokens',()=>{
-  const item={itemName:'収納ケース 本革 風 PUレザー 調 木製 風 日本製',itemPrice:1000};
-  const facts=api.extractFallbackTitleFacts(item);
-  assert.ok(!facts.includes('本革'));
-  assert.ok(!facts.includes('PUレザー'));
-  assert.ok(!facts.includes('木製'));
-  assert.ok(facts.includes('日本製'));
+  const api=load();
+  for(const name of [
+    '財布 フェイク レザー ブラック',
+    'バッグ レザー 調 ブラウン',
+    'ソファ 本革 風 ブラック',
+    '生地 コットン タッチ',
+    'シャツ ナイロン 柄',
+    '靴 レザー ライク',
+    'ポーチ レザー プリント'
+  ]){
+    assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:name})),[],name);
+  }
+  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'財布 本革 ブラック'})),['本革']);
 });
 
 test('ambiguous repeated units and multiple count variants are dropped',()=>{
-  const item={itemName:'収納ボックス 幅30cm 幅40cm 2個 3個 セット',itemPrice:1000};
-  const facts=api.extractFallbackTitleFacts(item);
-  assert.ok(!facts.some(x=>/30cm|40cm/.test(x)));
+  const api=load();
+  const variants=api.extractFallbackTitleFacts({itemName:'ハーブティー 内容量20g 内容量30g 内容量50g コットン'});
+  assert.deepEqual(Array.from(variants),['コットン']);
+  const counts=api.extractFallbackTitleFacts({itemName:'セット 3枚入り 5枚入り 本革'});
+  assert.deepEqual(Array.from(counts),['本革']);
 });
 
 test('material modifiers separated by delimiters are rejected in title context',()=>{
-  const item={itemName:'収納 本革・風 木製/調 PUレザー（風） 日本製',itemPrice:1000};
-  const facts=api.extractFallbackTitleFacts(item);
-  assert.ok(!facts.includes('本革'));
-  assert.ok(!facts.includes('木製'));
-  assert.ok(!facts.includes('PUレザー'));
-  assert.ok(facts.includes('日本製'));
+  const api=load();
+  for(const name of [
+    'バッグ フェイク レザー ブラック',
+    'バッグ レザー 調 ブラック',
+    '生地 コットン 風',
+    'ケース ナイロン プリント'
+  ]){
+    const facts=api.extractFallbackTitleFacts({itemName:name});
+    assert.equal(facts.length,0,name+' => '+JSON.stringify(facts));
+  }
+  assert.deepEqual(Array.from(api.extractFallbackTitleFacts({itemName:'バッグ 本革 ブラック'})),['本革']);
 });
 
 test('multiple dimension variants are dropped as ambiguous',()=>{
-  const item={itemName:'収納ケース 幅30cm 幅40cm 高さ20cm 高さ25cm 日本製',itemPrice:1000};
-  const facts=api.extractFallbackTitleFacts(item);
-  assert.ok(!facts.some(x=>/30cm|40cm|20cm|25cm/.test(x)));
-  assert.ok(facts.includes('日本製'));
+  const api=load();
+  const dims=api.extractFallbackTitleFacts({itemName:'ポスター 61×49.5cm 52×42cm 42×34cm 本革'});
+  assert.deepEqual(Array.from(dims),['本革']);
 });
 
 test('combined Groq and local facts are ambiguity-filtered again before posting',()=>{
-  const item={itemName:'収納ボックス 幅30cm 幅40cm 日本製',itemPrice:1000};
-  const out=api.buildGroundedBenefitPost(item,['幅30cm','幅40cm','日本製']);
-  assert.doesNotMatch(out,/幅30cm|幅40cm/);
+  const app=fs.readFileSync('public/app.html','utf8');
+  assert.match(app,/combinedFacts=\[/);
+  assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
 });
 
 test('all client copy channels use the same grounded benefit output from safe facts',()=>{
-  const src=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
-  assert.match(src,/buildGroundedBenefitPost/);
-  assert.doesNotMatch(src,/VALUE_RULES\s*=/);
+  const api=load();
+  const item={itemName:'モバイルバッテリー USB-C対応 ブラック 人気 ギフト 10枚入り',itemPrice:1980};
+  const room=api.makeRoomCopy(item,'');
+  const threads=api.makeThreadsCopy(item,'');
+  const instagram=api.makeInstagramCopy(item,'');
+  assert.equal(room,threads);
+  assert.equal(room,instagram);
+  assert.match(room,/モバイルバッテリーを、対応規格まで確認して選びたいなら。/);
+  assert.match(room,/商品名には「(?:10枚入り|USB-C対応)」と明記されています。/);
+  assert.match(room,/確認できる仕様👇/);
+  assert.match(room,/✓ 10枚入り/);
+  assert.match(room,/✓ USB-C対応/);
+  assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
+  assert.match(room,/価格：1,980円/);
+  assert.match(room,/※アフィリエイト広告を利用しています/);
 });
 
 test('neutral builder rejects non-source and non-allowlisted facts',()=>{
-  const item={itemName:'収納ケース 日本製',itemPrice:1000};
-  const out=api.buildNeutralFactPost(item,['日本製','急速充電','999cm']);
-  assert.match(out,/日本製/);
-  assert.doesNotMatch(out,/急速充電|999cm/);
+  const api=load();
+  const item={itemName:'本革 内容量500ml USB-C対応 商品',itemPrice:1000};
+  const out=api.buildNeutralFactPost(item,['本革','内容量500ml','防水','存在しない仕様']);
+  assert.match(out,/✓ 本革/);
+  assert.match(out,/✓ 内容量500ml/);
+  assert.doesNotMatch(out,/防水|存在しない仕様/);
 });
 
 test('client and server share one fact safety module',()=>{
-  const app=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
-  const server=fs.readFileSync(path.join(__dirname,'..','lib','room-ai.js'),'utf8');
+  const quality=fs.readFileSync('public/room-copy-quality.js','utf8');
+  const lib=fs.readFileSync('lib/room-ai.js','utf8');
+  const app=fs.readFileSync('public/app.html','utf8');
   assert.match(app,/fact-safety\.js/);
-  assert.match(server,/fact-safety\.js/);
+  assert.match(quality,/UrenaviFactSafety/);
+  assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
+  assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
+  assert.match(lib,/require\('\.\.\/public\/fact-safety\.js'\)/);
+  assert.doesNotMatch(lib,/const PROMO_RE=\//);
+  assert.doesNotMatch(lib,/const CLAIM_RE=\//);
 });
 
 test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
-  const src=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
-  assert.doesNotMatch(src,/VALUE_RULES\s*=/);
-  assert.doesNotMatch(src,/valueFromFacts\s*\(/);
+  const html=fs.readFileSync('public/app.html','utf8');
+  const quality=fs.readFileSync('public/room-copy-quality.js','utf8');
+  assert.doesNotMatch(html,/valueFromFacts/);
+  assert.doesNotMatch(quality,/VALUE_RULES/);
+  assert.doesNotMatch(quality,/function valueFromFacts\(/);
+  assert.match(html,/buildGroundedBenefitPost/);
+  assert.match(quality,/function buildGroundedBenefitPost/);
+  assert.match(quality,/確認できる仕様/);
 });
 
 test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
-  for(const file of ['fact-safety.js','room-copy-quality.js']){
-    const src=fs.readFileSync(path.join(__dirname,'..','public',file),'utf8');
-    assert.doesNotMatch(src,/\(\?<=[^)]/);
-    assert.doesNotMatch(src,/\(\?<![^)]/);
+  const names=fs.readdirSync('public').filter(x=>x.endsWith('.js')||x==='app.html');
+  for(const name of names){
+    const src=fs.readFileSync('public/'+name,'utf8');
+    assert.ok(!src.includes('(?<'),name+' contains regex lookbehind');
   }
 });
 
 test('grounded benefit copy only expands verified fact types',()=>{
-  const item={itemName:'収納ボックス 日本製 幅40cm 2個セット',itemPrice:2000};
-  const out=api.buildGroundedBenefitPost(item,['日本製','幅40cm','2個セット','防水']);
-  assert.match(out,/日本製|幅40cm|2個セット/);
-  assert.doesNotMatch(out,/防水/);
+  const api=load();
+  const cases=[
+    {item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},must:['10枚入り','必要な数をまとめて揃えたいときにチェック。'],mustNot:['洗い替え','長持ち','吸水']},
+    {item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},must:['HDMI','USB-C対応','ケーブルを、対応規格まで確認して選びたいなら。'],mustNot:['高速','高画質','急速充電']},
+    {item:{itemName:'財布 本革 ブラック',itemPrice:4980},must:['本革','財布を、素材表記まで確認して選びたいなら。'],mustNot:['高級','丈夫','長く使える']}
+  ];
+  for(const c of cases){
+    const out=api.makeRoomCopy(c.item,'');
+    for(const x of c.must) assert.ok(out.includes(x),x+' missing from '+out);
+    for(const x of c.mustNot) assert.ok(!out.includes(x),x+' leaked into '+out);
+  }
 });
 
 test('grounded benefit builder drops facts not present in the source title',()=>{
-  const item={itemName:'収納ボックス 日本製',itemPrice:2000};
-  const out=api.buildGroundedBenefitPost(item,['日本製','幅40cm']);
-  assert.match(out,/日本製/);
-  assert.doesNotMatch(out,/幅40cm/);
+  const api=load();
+  const item={itemName:'財布 本革 ブラック',itemPrice:4980};
+  const out=api.buildGroundedBenefitPost(item,['本革','USB-C対応','10枚入り']);
+  assert.match(out,/本革/);
+  assert.doesNotMatch(out,/USB-C|10枚入り/);
 });
 
 test('contextual product copy uses explicit product noun from title',()=>{
-  const item={itemName:'収納ボックス 日本製 2個セット',itemPrice:2000};
-  const out=api.buildGroundedBenefitPost(item,['日本製','2個セット']);
-  assert.match(out,/収納ボックス/);
+  const api=load();
+  const cases=[
+    {item:{itemName:'猫耳 IDカードケース 日本製 本革 牛革',itemPrice:6490},must:['IDカードケースを、素材や生産地まで確認して選びたいなら。','「日本製」','「本革」','IDカードケースを素材と生産地の両方から見比べたいときの候補です。']},
+    {item:{itemName:'パジャマ メンズ 2点セット コットン',itemPrice:3240},must:['パジャマを、セット内容と素材の両方まで確認して選びたいなら。','「2点セット」','「コットン」']},
+    {item:{itemName:'Calvin Klein ボクサーパンツ 3枚組',itemPrice:6950},must:['ボクサーパンツを、セット内容や入数まで確認して選びたいなら。','「3枚組」']},
+    {item:{itemName:'スクエアボックスプール 80×80×25cm',itemPrice:2331},must:['スクエアボックスプールを、サイズ表記まで確認して選びたいなら。','「80×80×25cm」']},
+    {item:{itemName:'HDMIケーブル USB-C対応',itemPrice:1800},must:['HDMIケーブルを、対応規格まで確認して選びたいなら。','「USB-C対応」']}
+  ];
+  for(const c of cases){
+    const out=api.makeRoomCopy(c.item,'');
+    for(const x of c.must) assert.ok(out.includes(x),x+' missing from '+out);
+    assert.doesNotMatch(out,/高級|丈夫|長持ち|吸水|高画質|急速充電|絶対|必ず|確実に/);
+  }
 });
 
 test('contextual product noun must exist verbatim in title',()=>{
+  const api=load();
   const item={itemName:'商品 本革 日本製',itemPrice:1000};
   const out=api.makeRoomCopy(item,'');
   assert.doesNotMatch(out,/財布|バッグ|IDカードケース|パジャマ|プール/);
 });
 
 test('validated AI copy supports previously unknown product types from grounded source evidence',()=>{
+  const api=load();
   const item={itemName:'髭剃り シェーバー 電気 カミソリ メンズ ポータブル 回転式 6枚刃 防水',itemCaption:'電気シェーバーとして掲載。回転式6枚刃を採用。',itemPrice:3319};
   const out=api.buildValidatedProductPost(item,'電気シェーバー',['回転式6枚刃']);
   assert.match(out,/電気シェーバー/);
@@ -138,6 +196,7 @@ test('validated AI copy supports previously unknown product types from grounded 
 });
 
 test('validated AI copy rejects identity or evidence absent from source',()=>{
+  const api=load();
   const item={itemName:'シェーバー メンズ',itemCaption:'電気シェーバーとして掲載。',itemPrice:1000};
   assert.equal(api.buildValidatedProductPost(item,'掃除機',['急速充電']), '');
   const out=api.buildValidatedProductPost(item,'電気シェーバー',['急速充電']);
@@ -145,7 +204,8 @@ test('validated AI copy rejects identity or evidence absent from source',()=>{
 });
 
 test('client AI path uses validated copy evidence instead of spec-only evidence',()=>{
-  const src=fs.readFileSync(path.join(__dirname,'..','public','app.html'),'utf8');
-  assert.match(src,/eligibleForCopyEvidence/);
-  assert.match(src,/buildValidatedProductPost/);
+  const fs=require('node:fs'),path=require('node:path');
+  const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  assert.match(html,/eligibleForCopyEvidence/);
+  assert.match(html,/buildValidatedProductPost/);
 });
