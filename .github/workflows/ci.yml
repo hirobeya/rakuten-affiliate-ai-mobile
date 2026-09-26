@@ -12,7 +12,6 @@ jobs:
           node-version: '24'
       - run: node --test
   apply-v5:
-    if: github.ref == 'refs/heads/fix-ai-evidence-universal-copy-v5-20260926' && !contains(github.event.head_commit.message, '[v5-applied]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -150,8 +149,8 @@ test('client AI path uses validated copy evidence instead of spec-only evidence'
           s=s.replace(marker,addition+marker,1)
           p.write_text(s)
 
-          # restore normal CI in resulting commit
           Path('.github/workflows/ci.yml').write_text("name: Verify Urenavi\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: '24'\n      - run: node --test\n")
+          Path('.v5-trigger').unlink(missing_ok=True)
           PY
       - name: Verify copy and AI tests
         run: npm run test:copy && npm run test:ai
