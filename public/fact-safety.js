@@ -40,6 +40,8 @@
 
   const normalize=s=>String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const sourceTokens=s=>String(s||'').replace(/<[^>]*>/g,' ').split(SOURCE_SPLIT_RE).map(normalize).filter(Boolean);
+  const TYPE_KNOWLEDGE=new Map();
+  let VALUE_RULES={version:'none',concepts:[]};
 
   function isAllowedSpecFact(value){
     const x=normalize(value);
@@ -122,6 +124,10 @@
       .filter(Boolean).map(normalize).join(' ');
   }
 
+  function aiSourceText(item){
+    return [item?.itemName,item?.itemCaption].filter(Boolean).map(normalize).join(' ');
+  }
+
   function unsupportedBenefitTerms(text,item){
     const t=normalize(text),source=sourceText(item);
     return UNSUPPORTED_BENEFIT_TERMS.filter(term=>t.includes(term)&&!source.includes(term));
@@ -161,19 +167,155 @@
     return out.join('\n').replace(/\n{3,}/g,'\n\n').trim();
   }
 
+  function setValueRankingRules(value){
+    const concepts=Array.isArray(value?.concepts)?value.concepts.filter(x=>x&&typeof x==='object'):[];
+    VALUE_RULES={version:String(value?.version||'unknown'),concepts};
+    return VALUE_RULES;
+  }
+
+  function safeKnowledgeText(value){
+    const x=normalize(value);
+    if(!x||x.length>48||PROMO_RE.test(x)||CLAIM_RE.test(x)||/[0-9０-９]/.test(x)) return '';
+    if(UNSUPPORTED_BENEFIT_TERMS.some(term=>x.includes(term))) return '';
+    return x;
+  }
+
+  function rememberTypeKnowledge(knowledge){
+    const productType=normalize(knowledge?.productType||'');
+    if(!productType||knowledge?.usage!=='ranking_only') return false;
+    const readerSituations=(Array.isArray(knowledge.readerSituations)?knowledge.readerSituations:[]).map(safeKnowledgeText).filter(Boolean).slice(0,3);
+    const decisionAxes=(Array.isArray(knowledge.decisionAxes)?knowledge.decisionAxes:[]).map(safeKnowledgeText).filter(Boolean).slice(0,3);
+    if(!readerSituations.length&&!decisionAxes.length) return false;
+    TYPE_KNOWLEDGE.set(productType.toLocaleLowerCase('ja-JP'),{productType,readerSituations,decisionAxes,usage:'ranking_only'});
+    return true;
+  }
+
+  function getTypeKnowledge(productType){
+    return TYPE_KNOWLEDGE.get(normalize(productType).toLocaleLowerCase('ja-JP'))||null;
+  }
+
+  function patternMatch(pattern,text){
+    if(!pattern) return false;
+    try{return new RegExp(String(pattern),'i').test(text);}catch{return false;}
+  }
+
+  function conceptMatch(concept,fact){
+    const f=normalize(fact);
+    if((concept.factTerms||[]).some(term=>f.toLocaleLowerCase('ja-JP').includes(normalize(term).toLocaleLowerCase('ja-JP')))) return true;
+    if(patternMatch(concept.factPattern,f)||patternMatch(concept.unitPattern,f)) return true;
+    return false;
+  }
+
+  function axisMatch(concept,knowledge){
+    const axes=[...(knowledge?.decisionAxes||[]),...(knowledge?.readerSituations||[])].map(normalize).join(' ');
+    return (concept.axisTerms||[]).some(term=>axes.includes(normalize(term)));
+  }
+
+  function rankCopyFacts(item,facts,knowledge){
+    const source=aiSourceText(item);
+    const safe=(Array.isArray(facts)?facts:[])
+      .map((raw,index)=>({raw:normalize(raw),index}))
+      .filter(x=>x.raw&&x.raw.length<=96&&source.includes(x.raw)&&!PROMO_RE.test(x.raw)&&!CLAIM_RE.test(x.raw))
+      .filter((x,i,a)=>a.findIndex(y=>y.raw===x.raw)===i);
+    const concepts=Array.isArray(VALUE_RULES.concepts)?VALUE_RULES.concepts:[];
+    return safe.map(entry=>{
+      let best=null,bestScore=-1;
+      for(const concept of concepts){
+        if(!conceptMatch(concept,entry.raw)) continue;
+        let score=Number(concept.baseScore)||20;
+        if(axisMatch(concept,knowledge)) score+=55;
+        if(/[0-9０-９]/.test(entry.raw)) score+=8;
+        score+=Math.min(12,Math.floor(entry.raw.length/6));
+        if(score>bestScore){bestScore=score;best=concept;}
+      }
+      if(!best){
+        bestScore=10+Math.min(15,Math.floor(entry.raw.length/5))+(/[0-9０-９]/.test(entry.raw)?6:0);
+      }
+      return {...entry,score:bestScore,concept:best};
+    }).sort((a,b)=>b.score-a.score||a.index-b.index);
+  }
+
+  function knowledgeLead(identity,knowledge){
+    const id=normalize(identity);
+    const situation=(knowledge?.readerSituations||[]).map(safeKnowledgeText).find(Boolean);
+    if(situation) return situation+'で'+id+'を選ぶなら。';
+    const axis=(knowledge?.decisionAxes||[]).map(safeKnowledgeText).find(Boolean);
+    if(axis) return id+'を選ぶとき、'+axis+'を比べたいなら。';
+    return '';
+  }
+
+  function buildRankedTypeKnowledgePost(item,identity,facts=[]){
+    const id=normalize(identity),source=aiSourceText(item),knowledge=getTypeKnowledge(id);
+    if(!knowledge||!id||!source.includes(id)) return '';
+    const ranked=rankCopyFacts(item,facts,knowledge);
+    if(!ranked.length) return '';
+    const lead=knowledgeLead(id,knowledge);
+    if(!lead) return '';
+    const lines=[lead];
+    for(const row of ranked.slice(0,2)){
+      lines.push('','「'+row.raw+'」と確認できます。');
+      const decision=safeKnowledgeText(row.concept?.decisionLine||'');
+      if(decision) lines.push(decision);
+    }
+    lines.push('','確認できるポイント👇');
+    for(const row of ranked.slice(0,3)) lines.push('✓ '+row.raw);
+    const price=Number(item?.itemPrice);
+    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
+  }
+
   return {
     PROMO_RE,CLAIM_RE,MATERIALS,STANDARDS,
     NUMERIC_UNIT_RE,DIMENSION_RE,STRUCTURED_COUNT_RE,MULTIPACK_RE,CONTENT_AMOUNT_RE,MATERIAL_WITH_PERCENT_RE,
     normalize,sourceTokens,isAllowedSpecFact,isAllowedSpecFactForEvidence,numericUnitKey,filterAllowedSpecFacts,filterAllowedTitleFacts,
-    UNSUPPORTED_BENEFIT_TERMS,unsupportedBenefitTerms,guardUnsupportedBenefitCopy,sourceText
+    UNSUPPORTED_BENEFIT_TERMS,unsupportedBenefitTerms,guardUnsupportedBenefitCopy,sourceText,
+    setValueRankingRules,rememberTypeKnowledge,getTypeKnowledge,rankCopyFacts,buildRankedTypeKnowledgePost
   };
 });
 
 (function(root){
   'use strict';
   if(!root||typeof document==='undefined') return;
+  const safety=root.UrenaviFactSafety;
+
+  function captureTypeKnowledge(payload){
+    try{
+      const knowledge=payload?.typeKnowledge?.knowledge;
+      const valid=payload?.validation?.productType?.valid===true;
+      if(valid&&knowledge) safety.rememberTypeKnowledge(knowledge);
+    }catch(_){}
+  }
+
+  function installFetchCapture(){
+    if(typeof root.fetch!=='function'||root.fetch.__urenaviTypeKnowledgeCapture) return;
+    const original=root.fetch.bind(root);
+    const wrapped=async function(input,init){
+      const response=await original(input,init);
+      try{
+        const url=typeof input==='string'?input:String(input?.url||'');
+        if(/\/api\/room-ai(?:\?|$)/.test(url)&&response?.ok){
+          const payload=await response.clone().json();
+          captureTypeKnowledge(payload);
+        }
+      }catch(_){}
+      return response;
+    };
+    wrapped.__urenaviTypeKnowledgeCapture=true;
+    wrapped.__originalFetch=original;
+    root.fetch=wrapped;
+  }
+
+  installFetchCapture();
+  if(typeof root.fetch==='function'){
+    root.fetch('/value-ranking-rules.json',{cache:'no-store'})
+      .then(r=>r.ok?r.json():null)
+      .then(data=>{if(data) safety.setValueRankingRules(data);})
+      .catch(()=>{});
+  }
+
   function install(){
-    const api=root.UrenaviPainCopy,safety=root.UrenaviFactSafety;
+    const api=root.UrenaviPainCopy;
     if(!api||!safety||typeof safety.guardUnsupportedBenefitCopy!=='function') return false;
     const wrap=(name,identityIndex)=>{
       const original=api[name];
@@ -181,7 +323,12 @@
       const wrapped=function(...args){
         const item=args[0]||{};
         const identity=identityIndex==null?'':args[identityIndex];
-        return safety.guardUnsupportedBenefitCopy(item,original.apply(this,args),{identity});
+        let output='';
+        if(name==='buildValidatedProductPost'){
+          output=safety.buildRankedTypeKnowledgePost(item,identity,args[2]||[]);
+        }
+        if(!output) output=original.apply(this,args);
+        return safety.guardUnsupportedBenefitCopy(item,output,{identity});
       };
       wrapped.__unsupportedBenefitGuarded=true;
       api[name]=wrapped;
