@@ -1349,16 +1349,49 @@
     return s.slice(0,max-1).replace(/[、,\s]+$/,'')+'…';
   }
 
+  function genericIdentityFromTitle(item,keyword=''){
+    const exact=exactProductTypeName(item?.itemName||'');
+    if(exact) return exact;
+    const query=groundedQueryIdentity(item,keyword);
+    if(query) return query;
+    const cleaned=stripClaimText(stripPromotionalText(item?.itemName||''));
+    const tokens=cleaned.split(/\\s+/).filter(Boolean);
+    const noise=/^(?:おしゃれ|オシャレ|かわいい|可愛い|人気|おすすめ|プレゼント|ギフト|送料無料|公式|正規品)$/;
+    const chosen=tokens.filter(x=>!noise.test(x)).slice(0,3).join(' ').trim();
+    return chosen.length>=2?chosen.slice(0,48):'';
+  }
+
+  function buildGenericGroundedPost(item,keyword='',variant=0){
+    const identity=genericIdentityFromTitle(item,keyword);
+    if(!identity) return '';
+    const analysis=analyze(item,keyword);
+    const facts=extractGenericGroundedFacts(item,identity);
+    const lines=[genericGroundedOpening(identity,facts,variant,analysis)];
+    const intent=genericIntent(identity,analysis);
+    if(intent?.benefit) lines.push('',intent.benefit+'ための選択肢として確認できます。');
+    if(facts.length){
+      lines.push('','商品名で確認できる特徴👇');
+      for(const fact of facts.slice(0,4)) lines.push('✓ '+fact);
+    }
+    const p=priceLine(item);
+    if(p) lines.push('',p);
+    lines.push('','※アフィリエイト広告を利用しています');
+    return trimCopy(lines.filter(x=>x!==undefined&&x!==null).join('\\n'),500);
+  }
+
   function makeRoomCopy(item,keyword,options={}){
-    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    const strict=buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    return strict||buildGenericGroundedPost(item,keyword,0);
   }
 
   function makeThreadsCopy(item,keyword,options={}){
-    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    const strict=buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    return strict||buildGenericGroundedPost(item,keyword,1);
   }
 
   function makeInstagramCopy(item,keyword,options={}){
-    return buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    const strict=buildGroundedBenefitPost(item,extractFallbackTitleFacts(item));
+    return strict||buildGenericGroundedPost(item,keyword,2);
   }
 
 
@@ -1384,7 +1417,7 @@
   api.gloveNonCleaningConflict=gloveNonCleaningConflict;
   api.groundedQueryIdentity=groundedQueryIdentity;
   api.extractGenericGroundedFacts=extractGenericGroundedFacts;
-  api.genericIntent=genericIntent;
+  api.genericIntent=genericIntent;\n  api.genericIdentityFromTitle=genericIdentityFromTitle;\n  api.buildGenericGroundedPost=buildGenericGroundedPost;
   api.analyzeRoomProduct=analyze;
   api.groundedFeatureSentence=groundedFeatureSentence;
   api.naturalProductIdentity=naturalProductIdentity;
