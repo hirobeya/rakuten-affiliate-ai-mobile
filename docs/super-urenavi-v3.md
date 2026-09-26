@@ -18,7 +18,7 @@ Purpose: create self-relevance through a pain point, scene, feeling, or common s
 - Must not claim product performance.
 - Must not contain unsupported causal claims such as “this makes your morning easier”.
 - Can be vivid and persuasive because it does not assert product facts.
-- Machine guard rejects product-specific numeric/spec/performance claims.
+- Machine guard rejects product-specific numeric/spec/performance claims and malformed/non-natural Japanese.
 
 ### Product layer
 Purpose: explain why this specific product is worth considering.
@@ -30,29 +30,13 @@ Purpose: explain why this specific product is worth considering.
 Triggered only when the user presses Generate.
 
 Expected JSON:
-- productType
-  - specific
-  - general
-  - quote
-- attributes[]
-  - name
-  - value
-  - unit
-  - qualifier
-  - valueType: single | range | options | identifier | text
-  - quote
-- decisionAxes[]
-  - text
-  - attributeRefs[]
-- appeals[]
-  - text
-  - noHassle
-  - scene
-  - attributeRefs[]
-  - strength: 1..3
-- hooks[]
-  - type: question | relatable | failure_avoidance | number | scene
-  - text
+- productType `{ specific, general, quote }`
+- attributes `[{ name, value, unit, qualifier, valueType, quote }]`
+- decisionAxes `[{ text, attributeRefs }]`
+- appeals `[{ text, noHassle, scene, attributeRefs, strength }]`
+- hooks `[{ type, text }]`
+
+`valueType`: `single | range | options | identifier | text`.
 
 Rules:
 - Specific product type is used in customer-facing copy; general type is taxonomy only.
@@ -62,23 +46,32 @@ Rules:
 
 ## Machine validation after pass 1
 No Groq required.
-- quote must be an exact contiguous substring of itemName or itemCaption after normalization.
+- quote must be grounded in itemName or itemCaption after normalization.
 - value must be supported by quote.
-- attributeRefs must resolve.
-- numeric/unit claims in the product layer must originate from referenced attributes.
-- reject unsafe promotional/medical/safety claims when required by existing guards.
-- reject malformed Japanese / obvious mixed-language contamination.
-- detect conflicts: if the same semantic attribute has incompatible source values, do not use that attribute in copy.
-- AI path must not use legacy specLike/ambiguous heuristics as semantic judges.
+- attributeRefs must resolve only to surviving attributes.
+- reject unsafe promotional/medical/safety claims even if the source contains them.
+- reject promotional/claim text as product identity.
+- reject malformed Japanese / obvious mixed-language contamination from reader hooks.
+- detect conflicts: if the same semantic attribute has incompatible values, do not use that attribute in copy.
+- AI path must not use legacy specLike/unit-shape heuristics as semantic judges.
 
 ## Groq pass 2 — inference verification
 Run only for top 2–3 appeals that contain an inference beyond a direct source fact.
 - One batched request.
 - Input only: source quote(s), structured attribute(s), proposed appeal/noHassle/scene.
-- Do not provide pass-1 reasoning or justification text, to reduce confirmation bias.
-- Output: yes/no + short reason per appeal.
-- Reject only the unsupported inferred part when a direct factual statement can remain.
-- Direct source facts that require no inference do not need pass 2.
+- Do not provide pass-1 rationale, reducing confirmation bias.
+- Output: supported + keepDirectFact + short reason per appeal.
+- Meaning-changing inference is rejected; direct grounded fact may remain.
+- Missing verification fails closed for the inferred wording.
+- Direct source facts require no pass 2.
+
+## Groq budget behavior
+- Pass 1 cache miss: at most one Groq request.
+- Pass 2: at most one Groq request and only if qualifying inference exists.
+- Same cached product/source: zero requests after both passes are cached.
+- Pass 1 is saved before pass 2. If pass 2 is blocked by quota/error, a later attempt resumes at pass 2 without repeating pass 1.
+- v3 has no hidden retry loop behind one logical pass.
+- 429/transient failure is never cached as successful knowledge.
 
 ## Expression tools
 Data-driven generic semantic categories only; no product-specific logic.
@@ -94,24 +87,16 @@ Lifestyle conversion requirements:
 2. low dependence on hidden usage conditions,
 3. unlikely to mislead purchase judgment,
 4. assumptions stated in copy.
+
 Never infer battery charge counts, electricity cost, or other condition-heavy conversions without explicit trustworthy inputs.
 
 ## Output tiers
-A. Grounded facts + usable expression tool -> full persuasive copy.
-B. Grounded facts but no safe expression tool -> hook + strongest facts + optional user note slot.
-C. Very sparse facts -> reader hook + product name + price + optional user note slot; no unsupported performance/target-user claims.
-No post is generated only when product identity itself is invalid.
-If Groq quota/availability fails, fall back to local grounded-fact copy.
+A. Grounded facts + independently supported purchase appeal -> full persuasive copy.
+B. Grounded facts but no supported inferred appeal -> reader hook + direct facts.
+C. Valid identity with sparse facts -> reader hook + product identity + price, no invented performance/target-user claim.
+Invalid. No normal product copy when product identity itself is invalid.
 
-## Copy composition
-1. Reader-layer hook or safe lifestyle number.
-2. Strongest product fact + validated purchase relevance.
-3. Second supporting fact when useful.
-4. Safe lifestyle conversion if available.
-5. Optional user-written note field; AI must not fabricate first-person use/testimonial experience.
-6. Price + PR disclosure.
-
-Generate 2–3 hook variants from different hook types. Final copy is never cached.
+Up to three hook variants are produced. Final copy contains `ひとことメモ（実際に使用した場合のみ）`; AI never fabricates first-person usage or testimonials. Final copy is not cached.
 
 ## Cache policy
 - Product understanding key: itemCode + normalized hash(itemName + itemCaption).
@@ -119,64 +104,68 @@ Generate 2–3 hook variants from different hook types. Final copy is never cach
 - Revalidate cached raw output with latest rules on read.
 - Do not include PROMPT_VERSION or VALIDATION_RULE_VERSION in cache keys.
 - Prompt/schema versions are metadata only.
-- Image cache key: normalized image URL without presentation-size params.
-- Image analysis only if text still cannot establish valid product identity.
-- Remove product-type-level knowledge cache from the new v3 path.
-- Cache analyzed-but-unknown for a short negative TTL only.
-- Never cache 429/transient failures.
-
-## Router
-cache -> local -> Groq text -> Groq image
-
-Local can return “certain” only from allowlisted/structured evidence. Groq is never called merely from search/list rendering.
+- Image cache remains separate and is only eligible when text cannot establish valid product identity.
+- Type-level knowledge cache is not used by v3.
+- Cache writes are best effort; a cache outage must not turn a valid generation into a user-facing failure or cause hidden retry storms.
 
 ## Observability
 For every Generate attempt record:
-- route: cache/local/text/image
-- pass1Calls
-- pass2Calls
-- cache hit/miss
-- output tier A/B/C
-- hook type
-- decision axis
-- machine validation result
-- copied/not copied when available
-- elapsed time
+- route/cache status,
+- pass1/pass2/image Groq call counts,
+- output tier A/B/C/invalid,
+- hook type and decision axis,
+- machine validation result,
+- copied/not copied when available,
+- elapsed time.
 
-The purpose is both cost protection and later copy-quality optimization.
+## Evaluation harness
+`public/v3-live-30.html` is explicit-run only and never starts Groq on page load.
+- First button runs 5 products.
+- Second button runs the remaining 25 only after the first check.
+- Search itself does not call v3 Groq.
+- The harness stops on 429.
+- It records tier and actual pass1/pass2 call counts in result JSON.
 
 ## Acceptance tests
 ### Safety
 Human classification: appropriate / not-a-real-spec / meaning-changed.
-Release requirement: meaning-changed = 0.
+Release requirement: **meaning-changed = 0**.
 
 ### Persuasiveness
 Human score per output:
-- hook feels personally relevant,
-- strongest fact is translated into a clear purchase reason,
+- first line feels personally relevant,
+- strongest grounded fact is translated into a clear purchase reason,
 - after reading, the evaluator can state one reason to want/buy the product.
-Numeric lifestyle conversion is a bonus when appropriate, not a mandatory criterion for every category.
+Numeric lifestyle conversion is optional, not mandatory.
 
 ### Coverage
-- 30 live production products.
-- 100 balanced samples from the fixed 780 regression set across 39 genres, including non-numeric categories such as fashion, food, alcohol, daily goods, and gifts.
+- 30 live products.
+- 100 balanced samples from the fixed 780 set across 39 genres, including fashion, food, alcohol, daily goods, and gifts.
 - report A/B/C distribution by genre.
 - report pass1/pass2 Groq call counts separately.
-- compare current Groq model vs a stronger available model on the same 30 items before changing the production model.
+- compare current Groq model vs stronger candidate on same 30 before any model switch.
 
-## Implementation order
-1. Route/pass1/pass2 Groq usage logs and quotas.
-2. Cache adaptation for raw v3 understanding + pass2 verification.
-3. Pass-1 schema + machine validation.
-4. Pass-2 inference verifier.
-5. Data-driven expression tools + A/B/C output tiers.
-6. Final 2–3 copy variants + optional user-note slot.
-7. Copy analytics / copy-rate tracking.
-8. 30 live + balanced 100 evaluation.
+## Current implementation status
+- [x] v3 usage metrics and Groq pass accounting.
+- [x] versionless product cache reuse + raw pass1/pass2 storage + current-rule revalidation.
+- [x] pass-1 schema and machine validator.
+- [x] independent pass-2 verifier with fail-closed inference behavior.
+- [x] two-pass engine with bounded calls, partial-pass resume and cache reuse.
+- [x] A/B/C/invalid composer with 2–3 hooks and blank user note.
+- [x] structured Groq caller with one request per logical pass and no hidden retries.
+- [x] owner-only, preview-only `/api/room-ai-v3`; current production `/api/room-ai` remains unchanged.
+- [x] preview cache namespace isolates v3 tests from legacy production understanding rows.
+- [x] 30-item explicit-run evaluation page with 5-first / remaining-25 safeguards.
+- [ ] generic expression-tools data and safe transforms.
+- [ ] image identity recovery in v3.
+- [ ] real app UI wiring after evaluation.
+- [ ] persisted copy-action analytics and copy-rate aggregation.
+- [ ] live30 + balanced100 human evaluation and model comparison.
 
 ## Release rule
-Do not call v3 complete because it is safe or because CI is green. It is complete only when:
-- meaning-changing errors are zero in the agreed evaluation set,
-- copy quality materially improves over the current baseline,
-- Groq usage remains within sustainable operational limits,
-- production flow remains stable.
+Do not merge/switch production because CI is green. v3 is complete only when:
+- agreed evaluation has meaning-changing errors = 0,
+- persuasion is materially better than the current baseline,
+- Groq usage is sustainable,
+- production flow remains stable,
+- final deployment is READY and canonical production behavior is verified.
