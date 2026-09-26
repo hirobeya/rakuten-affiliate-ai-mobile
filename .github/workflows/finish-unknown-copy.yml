@@ -1,0 +1,40 @@
+name: Finish unknown product copy
+
+on:
+  push:
+    branches:
+      - finish-unknown-copy-20260926
+    paths:
+      - scripts/finish-unknown-copy.js
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: finish-unknown-copy-20260926
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Apply finishing patch
+        run: node scripts/finish-unknown-copy.js
+      - name: Run copy regression
+        run: npm run test:copy
+      - name: Run AI regression
+        run: npm run test:ai
+      - name: Commit patched files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/app.html public/room-copy-quality.js public/live-unknown-10.html tests/live-unknown-10-page.test.js tests/unknown-universal-finish.test.js package.json
+          if git diff --cached --quiet; then
+            echo "No patch changes"
+            exit 0
+          fi
+          git commit -m "Finish grounded unknown product copy"
+          git push origin HEAD:finish-unknown-copy-20260926
