@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ウレナビ 未知商品10件 本番実測</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;margin:0;background:#f6f7f9;color:#171717}.w{max-width:760px;margin:auto;padding:16px}.box{background:#fff;border-radius:16px;padding:14px;margin:12px 0}.go{width:100%;border:0;border-radius:12px;padding:14px;background:#172a4b;color:#fff;font-weight:900;font-size:16px}.go:disabled{opacity:.5}.muted{font-size:12px;color:#666;line-height:1.55}.row{border-top:1px solid #eee;padding:12px 0}.ok{color:#18794e}.ng{color:#b42318}.warn{color:#8a5b00}pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:10px;font-size:11px;line-height:1.45}.pill{display:inline-block;border-radius:999px;background:#eef2f7;padding:4px 8px;font-size:11px;margin:2px}</style>
+</head>
+<body><main class="w">
+<h1>未知商品10件 本番実測</h1>
+<div class="muted">楽天の実検索 → 本番 /api/room-ai → 本番と同じ投稿文ビルダーで10系統を検証します。owner限定。</div>
+<section class="box"><button id="run" class="go">10件を本番実測する</button><div id="status" class="muted" style="margin-top:8px">準備中…</div></section>
+<section id="summary" class="box" style="display:none"></section>
+<section id="results" class="box"></section>
+<section class="box"><button id="copy" class="go" disabled>結果JSONをコピー</button><pre id="json"></pre></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script src="/pain-copy.js?v=20260918-4"></script>
+<script src="/fact-safety.js?v=20260925-1"></script>
+<script src="/room-copy-quality.js?v=20260925-1"></script>
+<script>
+const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+const SUPABASE_KEY='sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
+const KEYWORDS=['電気シェーバー','エアフライヤー','折りたたみ傘','電気ケトル','ネックピロー','ワイヤレスイヤホン','フードプロセッサー','デスクライト','キャリーケース','加湿器'];
+let finalPayload=null;
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function normalize(s){return String(s||'').normalize('NFKC').replace(/\s+/g,' ').trim();}
+function risk(text){return /絶対|必ず|確実|No\.?\s*1|ナンバーワン|一番|最高|最強|治る|治療|改善|若返|痩せ|美白|小顔|リフトアップ|予防|効果|効能|除菌|殺菌|抗菌|消臭|防臭|ランキング|受賞|送料無料|クーポン|SALE|セール|半額|最安|ポイント\d*倍|P\d+倍/i.test(String(text||''));}
+async function session(){const {data,error}=await sb.auth.getSession();if(error)throw error;return data.session;}
+async function ownerGuard(s){const r=await fetch('/api/access?action=status',{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error('契約確認に失敗しました');if(String(d.plan||'')!=='owner')throw new Error('この検証ページはowner限定です');}
+async function searchOne(keyword,s){const q=new URLSearchParams({keyword,sort:'standard'});const r=await fetch('/api/search?'+q,{headers:{Authorization:'Bearer '+s.access_token},cache:'no-store',credentials:'include'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.message||('検索失敗 '+r.status));const items=Array.isArray(d.items)?d.items:[];if(!items.length)throw new Error('検索結果0件');return items[0];}
+async function aiOne(item,s){const image=(item.mediumImageUrls?.[0]||item.smallImageUrls?.[0]||'');const r=await fetch('/api/room-ai',{method:'POST',headers:{Authorization:'Bearer '+s.access_token,'Content-Type':'application/json'},credentials:'include',cache:'no-store',body:JSON.stringify({itemCode:String(item.itemCode||''),itemName:String(item.itemName||''),itemCaption:String(item.itemCaption||'').slice(0,1200),itemPrice:Number(item.itemPrice)||0,imageUrl:typeof image==='string'?image:(image?.imageUrl||''),itemUrl:String(item.itemUrl||'')})});const d=await r.json().catch(()=>({}));return {status:r.status,ok:r.ok,data:d};}
+function build(item,ai){const v=ai?.validation||{};const type=(v.productType?.valid&&v.productType?.value)?String(v.productType.value).trim():'';const facts=[...(v.features||[]),...(v.sellingPoints||[])].filter(x=>x?.eligibleForCopyEvidence&&x?.text&&x?.evidence).map(x=>String(x.text).trim()).filter((x,i,a)=>x&&a.indexOf(x)===i);const post=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,type,facts)||'';return {type,facts,post};}
+function evaluate(item,ai,built){const v=ai?.validation||{};const src=normalize([item.itemName,item.itemCaption].filter(Boolean).join(' '));const typeGrounded=!!built.type&&src.includes(normalize(built.type));const factsGrounded=built.facts.every(x=>src.includes(normalize(x)));const nonblank=!!built.post.trim();const internalLeak=/eligibleFor|validation|unknowns|reason|debug|productType|sellingPoints|fallbackReason/i.test(built.post);const risky=risk(built.post);return {aiMode:v.mode||'',productTypeValid:v.productType?.valid===true,typeGrounded,factsGrounded,nonblank,internalLeak,risky,pass:ai.ok&&v.productType?.valid===true&&typeGrounded&&factsGrounded&&nonblank&&!internalLeak&&!risky};}
+function render(rows){$('results').innerHTML=rows.map((r,i)=>`<div class="row"><strong>${i+1}. ${esc(r.keyword)}</strong> <span class="pill">HTTP ${r.aiStatus}</span> <span class="${r.eval.pass?'ok':'ng'}">${r.eval.pass?'PASS':'FAIL'}</span><div class="muted">${esc(r.itemName)}</div><div>AI商品タイプ：<b>${esc(r.productType||'（なし）')}</b></div><div>根拠：${r.facts.length?r.facts.map(x=>'<span class="pill">'+esc(x)+'</span>').join(''):'（なし）'}</div><pre>${esc(r.post||'（投稿文なし）')}</pre><div class="muted">typeGrounded=${r.eval.typeGrounded} / factsGrounded=${r.eval.factsGrounded} / leak=${r.eval.internalLeak} / risky=${r.eval.risky}</div></div>`).join('');}
+async function run(){const btn=$('run');btn.disabled=true;$('status').textContent='認証確認中…';$('results').innerHTML='';$('summary').style.display='none';$('copy').disabled=true;try{const s=await session();if(!s)throw new Error('本番ウレナビにログインしてから、このページをSafariで開き直してください。');await ownerGuard(s);const rows=[];for(let i=0;i<KEYWORDS.length;i++){const keyword=KEYWORDS[i];$('status').textContent=`${i+1}/10 「${keyword}」を実測中…`;try{const item=await searchOne(keyword,s);const ai=await aiOne(item,s);const built=build(item,ai.data);const ev=evaluate(item,ai,built);rows.push({keyword,itemName:String(item.itemName||''),itemCode:String(item.itemCode||''),itemPrice:Number(item.itemPrice)||0,aiStatus:ai.status,validationMode:ai.data?.validation?.mode||'',productType:built.type,facts:built.facts,post:built.post,eval:ev});}catch(e){rows.push({keyword,itemName:'',itemCode:'',itemPrice:0,aiStatus:null,validationMode:'',productType:'',facts:[],post:'',eval:{pass:false,typeGrounded:false,factsGrounded:false,nonblank:false,internalLeak:false,risky:false},error:String(e.message||e)});}await new Promise(r=>setTimeout(r,800));}
+const passed=rows.filter(x=>x.eval.pass).length;const generated=rows.filter(x=>x.eval.nonblank).length;const grounded=rows.filter(x=>x.eval.typeGrounded&&x.eval.factsGrounded).length;finalPayload={generatedAt:new Date().toISOString(),environment:'production',keywords:KEYWORDS,total:rows.length,passed,generated,grounded,rows};$('summary').style.display='block';$('summary').innerHTML=`<h2>結果</h2><div><b>PASS ${passed}/10</b> ／ 投稿文生成 ${generated}/10 ／ 根拠整合 ${grounded}/10</div>`;render(rows);$('json').textContent=JSON.stringify(finalPayload,null,2);$('copy').disabled=false;$('status').textContent='実測完了';}catch(e){$('status').textContent='停止：'+String(e.message||e);}finally{btn.disabled=false;}}
+$('run').onclick=run;$('copy').onclick=async()=>{if(!finalPayload)return;await navigator.clipboard.writeText(JSON.stringify(finalPayload,null,2));$('copy').textContent='コピーしました';setTimeout(()=>$('copy').textContent='結果JSONをコピー',1500);};
+(async()=>{try{const s=await session();$('status').textContent=s?'ログイン確認済み。実測できます。':'本番ウレナビにログインしてからSafariで開いてください。';if(s)run();}catch(e){$('status').textContent='認証確認エラー';}})();
+</script></body></html>
