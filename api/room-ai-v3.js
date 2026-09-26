@@ -62,10 +62,13 @@ function createHandler(deps={}){
       };
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
-      const apiKey=String(process.env.GROQ_API_KEY||'').trim();
-      if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
       const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
-      const groq=deps.groq||createV3Groq({apiKey,model});
+      let groq=deps.groq;
+      if(!groq){
+        const apiKey=String(process.env.GROQ_API_KEY||'').trim();
+        if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
+        groq=createV3Groq({apiKey,model});
+      }
 
       const analysis=await analyzeProductV3({
         item,store,model,consumeQuota:quotaFn,
