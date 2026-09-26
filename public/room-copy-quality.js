@@ -559,10 +559,18 @@
     'ハンディクリーナー','ハンディークリーナー','ハンディ掃除機','小型掃除機',
     'ポータブル電源',
     '犬用ベッド','ペットベッド','ドッグベッド',
+    'IDカードケース','IDカードホルダー','スマホケース','カードケース',
+    'ボクサーパンツ','ボクサーショーツ','トランクス','ショーツ',
+    'パウンドケーキ','Tシャツ','tシャツ','カットソー','パジャマ',
+    'モバイルバッテリー','Power Bank','パワーバンク','ポータブル電源',
+    'アンテナケーブル','変換ケーブル','HDMIケーブル','USBケーブル','ケーブル',
+    'フラットシューズ','コンフォートシューズ','パンプス','サンダル',
+    'スクエアボックスプール','ビニールプール','プール',
+    '財布','リュック','バッグ','靴下','ソックス','筆ペン',
     '収納ボックス','収納ケース',
     'うんち袋','ウンチ袋','マナー袋','ウェットティッシュ','ウェットシート',
     'ペットシート','キャリーバッグ','ペットバッグ','ペットマット',
-    'フードボウル','ペット食器','給餌器','モバイルバッテリー','パワーバンク'
+    'フードボウル','ペット食器','給餌器'
   ];
 
   function exactProductTypeName(itemName){
@@ -1023,9 +1031,62 @@
     return lines.join('\n').slice(0,500);
   }
 
+  function contextualLeadForProduct(identity,safeFacts){
+    const id=String(identity||'').trim();
+    if(!id) return '';
+    const hasCount=safeFacts.some(x=>FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x));
+    const hasDimension=safeFacts.some(x=>FactSafety?.DIMENSION_RE?.test(x));
+    const hasMaterial=safeFacts.some(x=>FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x));
+    const hasOrigin=safeFacts.includes('日本製');
+    const hasStandard=safeFacts.some(x=>FactSafety?.STANDARDS?.has?.(x)&&x!=='日本製');
+
+    if(hasCount&&hasMaterial) return id+'を、セット内容と素材の両方まで確認して選びたいなら。';
+    if(hasMaterial&&hasOrigin) return id+'を、素材や生産地まで確認して選びたいなら。';
+    if(hasDimension) return id+'を、サイズ表記まで確認して選びたいなら。';
+    if(hasStandard) return id+'を、対応規格まで確認して選びたいなら。';
+    if(hasCount) return id+'を、セット内容や入数まで確認して選びたいなら。';
+    if(hasMaterial) return id+'を、素材表記まで確認して選びたいなら。';
+    if(hasOrigin) return id+'を、生産地まで確認して選びたいなら。';
+    return id+'を、商品名の仕様まで確認して選びたいなら。';
+  }
+
+  function contextualMeaningLine(identity,safeFacts){
+    const id=String(identity||'').trim();
+    if(!id||!safeFacts.length) return '';
+    const first=String(safeFacts[0]||'').trim();
+    const rest=safeFacts.slice(1,3).map(x=>'「'+x+'」').join('・');
+    const evidence='商品名には「'+first+'」と明記されています。'+(rest?'さらに'+rest+'も確認できます。':'');
+    const hasCount=safeFacts.some(x=>FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x));
+    const hasDimension=safeFacts.some(x=>FactSafety?.DIMENSION_RE?.test(x));
+    const hasMaterial=safeFacts.some(x=>FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x));
+    const hasOrigin=safeFacts.includes('日本製');
+    const hasStandard=safeFacts.some(x=>FactSafety?.STANDARDS?.has?.(x)&&x!=='日本製');
+
+    if(hasDimension) return evidence+id+'のサイズを先に見比べたいときの判断材料になります。';
+    if(hasCount&&hasMaterial) return evidence+id+'の枚数・セット内容と素材を一緒に見比べられます。';
+    if(hasMaterial&&hasOrigin) return evidence+id+'を素材と生産地の両方から見比べたいときの候補です。';
+    if(hasStandard) return evidence+id+'が手持ちの機器や使いたい規格に合うか確認する材料になります。';
+    if(hasCount) return evidence+id+'を必要な枚数やセット数で比べたいときに見やすい商品です。';
+    if(hasMaterial) return evidence+id+'を素材から比べたいときに確認しやすい商品です。';
+    if(hasOrigin) return evidence+id+'を生産地も含めて比べたいときの候補です。';
+    return evidence+id+'の仕様を見比べたいときの判断材料になります。';
+  }
   function buildGroundedBenefitPost(item,facts=[]){
     const safeFacts=safePostFacts(item,facts);
     if(!safeFacts.length) return '';
+
+    const identity=exactProductTypeName(item?.itemName||'');
+    const price=Number(item?.itemPrice);
+
+    if(identity){
+      const lead=contextualLeadForProduct(identity,safeFacts);
+      const meaning=contextualMeaningLine(identity,safeFacts);
+      const lines=[lead,'',meaning,'','確認できる仕様👇'];
+      for(const fact of safeFacts.slice(0,4)) lines.push('✓ '+fact);
+      if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
+      lines.push('','※アフィリエイト広告を利用しています');
+      return lines.join('\n').slice(0,500);
+    }
 
     const benefits=safeFacts
       .map(groundedBenefitForFact)
@@ -1033,7 +1094,6 @@
     if(!benefits.length) return buildNeutralFactPost(item,safeFacts);
 
     const first=benefits[0];
-    const price=Number(item?.itemPrice);
     const lines=[first.hook,'',first.benefit];
 
     if(benefits[1]&&benefits[1].benefit!==first.benefit){
@@ -1310,6 +1370,8 @@
   api.buildNeutralFactPost=buildNeutralFactPost;
   api.buildGroundedBenefitPost=buildGroundedBenefitPost;
   api.groundedBenefitForFact=groundedBenefitForFact;
+  api.contextualLeadForProduct=contextualLeadForProduct;
+  api.contextualMeaningLine=contextualMeaningLine;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;
