@@ -64,9 +64,20 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
       const roomPost=api.makeRoomCopy(item,'');
       const threadsPost=api.makeThreadsCopy(item,'');
       const instagramPost=api.makeInstagramCopy(item,'');
-      assert.equal(roomPost,post,genre.nameJa+' ROOM route differs from grounded benefit builder');
-      assert.equal(threadsPost,post,genre.nameJa+' Threads route differs from grounded benefit builder');
-      assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from grounded benefit builder');
+      assert.ok(roomPost,genre.nameJa+' ROOM route must never be blank');
+      assert.ok(threadsPost,genre.nameJa+' Threads route must never be blank');
+      assert.ok(instagramPost,genre.nameJa+' Instagram route must never be blank');
+      for(const routed of [roomPost,threadsPost,instagramPost]){
+        assert.match(routed,/※アフィリエイト広告を利用しています/);
+        assert.doesNotMatch(routed,/絶対|必ず|確実に|改善|治る|痩せる|若返|No\\.?\\s*1|ナンバーワン/);
+      }
+      if(post){
+        assert.equal(roomPost,post,genre.nameJa+' strict ROOM route changed unexpectedly');
+        assert.equal(threadsPost,post,genre.nameJa+' strict Threads route changed unexpectedly');
+        assert.equal(instagramPost,post,genre.nameJa+' strict Instagram route changed unexpectedly');
+      }else{
+        assert.notEqual(roomPost,'',genre.nameJa+' generic fallback missing');
+      }
       if(post){
         generated++;gGenerated++;
         assert.match(post,/確認できる仕様👇/);
