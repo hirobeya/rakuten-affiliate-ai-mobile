@@ -5,7 +5,7 @@
   "scripts": {
     "test:copy": "node tests/room-copy-regression.test.js && node tests/benefit-grounding.test.js && node test/local-grounded-facts.test.js && node tests/rakuten-large-genres-neutral-copy.test.js && node tests/live-unknown-10-page.test.js && node tests/unknown-universal-finish.test.js",
     "vercel-build": "npm run test:copy && npm run test:shadow && npm run test:ai",
-    "test:ai": "node tests/room-ai-phase1.test.js && node tests/ai-route-metrics.test.js",
+    "test:ai": "node tests/room-ai-phase1.test.js && node tests/ai-route-metrics.test.js && node tests/cache-v2.test.js",
     "test:shadow": "node tests/product-shadow-v2.test.js"
   },
   "engines": {
