@@ -1071,6 +1071,46 @@
     if(hasOrigin) return evidence+id+'を生産地も含めて比べたいときの候補です。';
     return evidence+id+'の仕様を見比べたいときの判断材料になります。';
   }
+  const AI_COPY_EVIDENCE_RISK_RE=/(?:絶対|必ず|確実|No\.?\s*1|ナンバーワン|一番|最高|最強|治る|治療|改善|若返|痩せ|美白|小顔|リフトアップ|予防|効果|効能|除菌|殺菌|抗菌|消臭|防臭|ランキング|受賞|送料無料|クーポン|SALE|セール|半額|最安|ポイント\d*倍|P\d+倍)/i;
+
+  function aiCopySource(item){
+    return [item?.itemName,item?.itemCaption]
+      .filter(Boolean)
+      .map(x=>String(x).normalize('NFKC').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim())
+      .join(' ');
+  }
+
+  function validatedAiCopyEvidence(item,facts=[]){
+    const source=aiCopySource(item);
+    return (Array.isArray(facts)?facts:[])
+      .map(x=>String(x||'').normalize('NFKC').replace(/\s+/g,' ').trim())
+      .filter(x=>x&&x.length<=96&&source.includes(x)&&!AI_COPY_EVIDENCE_RISK_RE.test(x))
+      .filter((x,i,a)=>a.indexOf(x)===i)
+      .slice(0,3);
+  }
+
+  function buildValidatedProductPost(item,identity,evidenceFacts=[]){
+    const id=String(identity||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+    const source=aiCopySource(item);
+    if(!id||id.length>32||!source.includes(id)||AI_COPY_EVIDENCE_RISK_RE.test(id)) return '';
+    const facts=validatedAiCopyEvidence(item,evidenceFacts);
+    const price=Number(item?.itemPrice);
+    const lines=[id+'を探しているならチェック。','', '商品名・説明から「'+id+'」として確認できた商品です。'];
+    for(const fact of facts.slice(0,2)){
+      const transformed=groundedBenefitForFact(fact);
+      if(transformed?.benefit) lines.push('',transformed.benefit);
+      else lines.push('','商品説明では「'+fact+'」と確認できます。');
+    }
+    if(!facts.length){
+      lines.push('',id+'として商品情報を確認できています。価格や商品ページの詳細を見比べながら、自分の条件に合うか確認できます。');
+    }else{
+      lines.push('',id+'を選ぶときに、商品ページの情報とあわせて比較したいポイントです。');
+    }
+    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
+    lines.push('','※アフィリエイト広告を利用しています');
+    return lines.join('\n').slice(0,500);
+  }
+
   function buildGroundedBenefitPost(item,facts=[]){
     const safeFacts=safePostFacts(item,facts);
     if(!safeFacts.length) return '';
@@ -1369,6 +1409,8 @@
   api.extractFallbackTitleFacts=extractFallbackTitleFacts;
   api.buildNeutralFactPost=buildNeutralFactPost;
   api.buildGroundedBenefitPost=buildGroundedBenefitPost;
+  api.buildValidatedProductPost=buildValidatedProductPost;
+  api.validatedAiCopyEvidence=validatedAiCopyEvidence;
   api.groundedBenefitForFact=groundedBenefitForFact;
   api.contextualLeadForProduct=contextualLeadForProduct;
   api.contextualMeaningLine=contextualMeaningLine;

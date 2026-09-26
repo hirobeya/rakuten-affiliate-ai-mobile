@@ -799,6 +799,19 @@ function run(name,fn){
   });
 
 
+
+  await run('valid non-spec AI evidence is preserved for copy but not promoted to strict spec fact',()=>{
+    const v=validateAiExtraction({
+      productType:{value:'電気シェーバー',source:'itemCaption',evidence:'電気シェーバー'},
+      features:[{text:'回転式6枚刃',source:'itemCaption',evidence:'回転式6枚刃'}],
+      sellingPoints:[],confidence:'high'
+    },{itemName:'髭剃り シェーバー',itemCaption:'電気シェーバー 回転式6枚刃'},{imageAvailable:false});
+    assert.equal(v.productType.valid,true);
+    assert.equal(v.features[0].valid,true);
+    assert.equal(v.features[0].eligibleForCopyEvidence,true);
+    assert.equal(v.features[0].eligibleForPost,false);
+  });
+
   await run('Groq eligibleForPost uses strict spec allowlist',()=>{
     const v=validateAiExtraction({
       productType:{value:'商品',source:'itemName',evidence:'商品'},

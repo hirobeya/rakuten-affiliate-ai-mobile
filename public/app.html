@@ -2492,7 +2492,7 @@ function aiSalesInsight(item,result){
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
   const featureRows=(v.features||[])
-    .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
+    .filter(x=>x?.eligibleForCopyEvidence&&x?.text&&x?.evidence)
     .filter(x=>x.source==='itemName'||x.source==='itemCaption');
   const localTitleFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[])
     .map(x=>String(x).trim())
@@ -2504,7 +2504,7 @@ function aiSalesInsight(item,result){
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,6);
   const sellingPoints=(v.sellingPoints||[])
-    .filter(x=>x?.eligibleForPost&&x?.text&&x?.evidence)
+    .filter(x=>x?.eligibleForCopyEvidence&&x?.text&&x?.evidence)
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,2);
@@ -2527,6 +2527,8 @@ function aiPhase1Post(item,result){
     ...(Array.isArray(insight.features)?insight.features:[]),
     ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
   ];
+  const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,insight.productType,combinedFacts)||'';
+  if(universalPost) return universalPost;
   const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
   const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
   return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)
