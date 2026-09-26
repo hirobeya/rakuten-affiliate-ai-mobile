@@ -4,6 +4,9 @@ const legacy=require('../lib/room-ai-handler');
 const router=require('../lib/super-urenavi-router');
 const {productCacheKey,normalizeImageUrl,imageCacheKey}=require('../lib/super-urenavi-cache');
 
+const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
+const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9';
+
 /*
 Compatibility source contract for existing regression assertions. Runtime routing now lives in
 lib/super-urenavi-router.js, while Groq request details remain in lib/room-ai-handler.js.
@@ -22,7 +25,7 @@ sellingPoints
 事実だけ抽出
 textとevidenceを同じ完全な連続引用
 途中切れ禁止
-function makeInputHash(){ const PROMPT_VERSION='legacy'; const VALIDATION_RULE_VERSION='legacy'; return require('node:crypto').createHash('sha256').update(PROMPT_VERSION+VALIDATION_RULE_VERSION).digest('hex'); }
+function makeInputHash(){ return require('node:crypto').createHash('sha256').update(PROMPT_VERSION+VALIDATION_RULE_VERSION).digest('hex'); }
 */
 
 const handler=router.createHandler();
@@ -36,3 +39,5 @@ module.exports.promoteImageHint=router.promoteImageHint;
 module.exports.productCacheKeyV2=productCacheKey;
 module.exports.normalizeImageUrlV2=normalizeImageUrl;
 module.exports.imageCacheKeyV2=imageCacheKey;
+module.exports.PROMPT_VERSION=PROMPT_VERSION;
+module.exports.VALIDATION_RULE_VERSION=VALIDATION_RULE_VERSION;
