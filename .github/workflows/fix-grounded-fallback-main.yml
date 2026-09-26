@@ -1,0 +1,35 @@
+name: Fix grounded fallback main path
+
+on:
+  push:
+    branches:
+      - finish-grounded-fallback-main-20260926
+    paths:
+      - scripts/fix-grounded-fallback-main.js
+      - .github/workflows/fix-grounded-fallback-main.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: finish-grounded-fallback-main-20260926
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/fix-grounded-fallback-main.js
+      - run: npm run test:copy
+      - run: npm run test:ai
+      - name: Commit patched files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/app.html tests/room-ai-phase1.test.js
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Wire grounded fallback into production post path"
+          git push origin HEAD:finish-grounded-fallback-main-20260926
