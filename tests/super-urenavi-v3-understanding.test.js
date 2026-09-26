@@ -102,6 +102,19 @@ const conflict=validateUnderstanding({
 assert.equal(conflict.attributes.length,0);
 assert.ok(conflict.reasons.includes('conflicting_attribute_values'));
 
+const promoIdentity=validateUnderstanding({
+  productType:{specific:'送料無料',general:'商品',quote:'送料無料'},
+  attributes:[],decisionAxes:[],appeals:[],hooks:[]
+},{itemName:'送料無料 電気ケトル 0.8L',itemCaption:''});
+assert.equal(promoIdentity.valid,false);
+assert.ok(promoIdentity.reasons.includes('invalid_product_identity'));
+
+const claimIdentity=validateUnderstanding({
+  productType:{specific:'安心',general:'商品',quote:'安心'},
+  attributes:[],decisionAxes:[],appeals:[],hooks:[]
+},{itemName:'安心 電気ケトル',itemCaption:''});
+assert.equal(claimIdentity.valid,false);
+
 assert.equal(appealNeedsVerification({text:'0.8L',noHassle:'',scene:'',attributeRefs:[0]},[{quote:'容量0.8L'}]),false);
 assert.equal(appealNeedsVerification({text:'約3杯分',noHassle:'',scene:'',attributeRefs:[0]},[{quote:'容量0.8L'}]),true);
 
