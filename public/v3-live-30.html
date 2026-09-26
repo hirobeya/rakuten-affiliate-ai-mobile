@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Super Urenavi v3 - 30件評価</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;margin:0;background:#f6f7f8;color:#111}main{max-width:760px;margin:auto;padding:20px}.card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 1px 8px #0001}button{width:100%;padding:14px;border:0;border-radius:12px;font-weight:700;font-size:16px;margin:6px 0}button.primary{background:#111;color:#fff}button:disabled{opacity:.45}pre{white-space:pre-wrap;word-break:break-word;font-size:12px}.ok{color:#087b35}.ng{color:#b42318}.small{font-size:13px;color:#555}.row{display:flex;gap:8px}.row button{flex:1}</style>
+</head>
+<body><main>
+<h1>Super Urenavi v3 30件評価</h1>
+<div class="card">
+<p>このページは<strong>自動実行しません</strong>。ボタンを押した件数だけ実測します。検索ではGroqを使わず、v3投稿生成だけがAI対象です。</p>
+<p class="small">最初は5件で確認し、問題なければ残り25件を実行できます。429が出たらその場で停止します。同じ商品はv3キャッシュが使えれば再実行時のGroqは0です。</p>
+<div class="row"><button id="run5" class="primary">まず5件だけ実測</button><button id="runRest">残り25件を実測</button></div>
+<button id="copy" disabled>結果JSONをコピー</button>
+<div id="status" class="small">待機中</div>
+</div>
+<div id="summary" class="card"></div><div id="rows"></div>
+</main>
+<script>
+'use strict';
+const KEYWORDS=['電気シェーバー','エアフライヤー','折りたたみ傘','電気ケトル','ネックピロー','ワイヤレスイヤホン','フードプロセッサー','デスクライト','キャリーケース','加湿器','掃除機','モバイルバッテリー','収納ボックス','バイクグローブ','ペットベッド','うんち袋','水筒','ドライヤー','ホットサンドメーカー','腕時計','リュック','靴下','ラグ','電動モップ','電気毛布','スマホケース','扇風機','アイロン','フライパン','キッチンスケール'];
+const rows=[];let running=false;
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(body)});let data={};try{data=await r.json();}catch{}return {status:r.status,ok:r.ok,data};}
+async function searchOne(keyword){const r=await api('/api/search',{keyword,page:1});const items=r.data?.items||r.data?.results||[];if(!r.ok||!items.length)throw new Error('search_'+r.status);return items[0];}
+function itemPayload(x){return {itemCode:x.itemCode||x.code||'',itemName:x.itemName||x.name||'',itemCaption:x.itemCaption||x.description||'',itemPrice:Number(x.itemPrice||x.price)||0,imageUrl:x.mediumImageUrls?.[0]?.imageUrl||x.imageUrl||''};}
+async function runRange(start,end){if(running)return;running=true;toggle();let stop=false;try{for(let i=start;i<end&&!stop;i++){const keyword=KEYWORDS[i];$('status').textContent=`${i+1}/30 ${keyword} を実測中`;try{const item=await searchOne(keyword);const p=itemPayload(item);const ai=await api('/api/room-ai-v3',p);const row={index:i+1,keyword,itemName:p.itemName,itemCode:p.itemCode,itemPrice:p.itemPrice,status:ai.status,ok:ai.ok,productType:ai.data?.productType||null,attributes:ai.data?.attributes||[],decisionAxes:ai.data?.decisionAxes||[],verifiedAppeals:ai.data?.verifiedAppeals||[],tier:ai.data?.tier||null,variants:ai.data?.variants||[],groq:ai.data?.groq||null,cacheStatus:ai.data?.cacheStatus||null,pass2Status:ai.data?.pass2Status||null,error:ai.ok?null:(ai.data?.message||'error')};rows[i]=row;if(ai.status===429)stop=true;}catch(e){rows[i]={index:i+1,keyword,ok:false,error:e.message||String(e)};}render();await new Promise(r=>setTimeout(r,350));}}finally{running=false;toggle();$('status').textContent=stop?'AI上限で停止しました':'実測完了';}}
+function toggle(){$('run5').disabled=running;$('runRest').disabled=running;$('copy').disabled=!rows.filter(Boolean).length;}
+function render(){const done=rows.filter(Boolean),ok=done.filter(x=>x.ok),calls=ok.reduce((n,x)=>n+Number(x.groq?.totalCalls||0),0),tiers={A:0,B:0,C:0,invalid:0};ok.forEach(x=>{tiers[x.tier]=(tiers[x.tier]||0)+1;});$('summary').innerHTML=`<strong>完了 ${done.length}/30</strong><br>成功 ${ok.length} / Groq実呼出 ${calls}<br>A ${tiers.A||0} / B ${tiers.B||0} / C ${tiers.C||0} / invalid ${tiers.invalid||0}`;$('rows').innerHTML=done.map(x=>`<div class="card"><strong>${x.index}. ${esc(x.keyword)}</strong> <span class="${x.ok?'ok':'ng'}">${x.ok?'OK':'NG'}</span><br><span class="small">${esc(x.itemName||'')}</span><br><span class="small">tier=${esc(x.tier)} groq=${esc(x.groq?.totalCalls??'-')} cache=${esc(x.cacheStatus||'-')}</span>${x.variants?.[0]?.text?`<pre>${esc(x.variants[0].text)}</pre>`:''}${x.error?`<pre class="ng">${esc(x.error)}</pre>`:''}</div>`).join('');}
+function result(){return {generatedAt:new Date().toISOString(),environment:'preview',purpose:'super_urenavi_v3_live_30',total:KEYWORDS.length,completed:rows.filter(Boolean).length,keywords:KEYWORDS,rows:rows.filter(Boolean)};}
+$('run5').addEventListener('click',()=>runRange(0,5));$('runRest').addEventListener('click',()=>runRange(5,30));$('copy').addEventListener('click',async()=>{const text=JSON.stringify(result(),null,2);try{await navigator.clipboard.writeText(text);$('status').textContent='結果JSONをコピーしました';}catch{$('status').textContent='コピーできませんでした。ブラウザの権限を確認してください';}});render();toggle();
+</script></body></html>
