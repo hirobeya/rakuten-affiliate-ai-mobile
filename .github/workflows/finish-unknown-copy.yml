@@ -6,6 +6,8 @@ on:
       - finish-unknown-copy-20260926
     paths:
       - scripts/finish-unknown-copy.js
+      - test/local-grounded-facts.test.js
+      - .github/workflows/finish-unknown-copy.yml
 
 permissions:
   contents: write
@@ -31,7 +33,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/app.html public/room-copy-quality.js public/live-unknown-10.html tests/live-unknown-10-page.test.js tests/unknown-universal-finish.test.js package.json
+          git add public/app.html public/room-copy-quality.js public/live-unknown-10.html tests/live-unknown-10-page.test.js tests/unknown-universal-finish.test.js test/local-grounded-facts.test.js package.json
           if git diff --cached --quiet; then
             echo "No patch changes"
             exit 0
