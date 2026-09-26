@@ -7,7 +7,7 @@ const path=require('node:path');
 
 const safety=require('../public/fact-safety.js');
 
-global.window={};
+global.window={UrenaviFactSafety:safety};
 require('../public/pain-copy.js');
 require('../public/room-copy-quality.js');
 const api=global.window.UrenaviPainCopy;
@@ -44,7 +44,7 @@ test('verified quote is preserved when an unsupported benefit sentence is remove
   const item={itemName:'ワイヤレスイヤホン 最大60時間再生',itemCaption:''};
   const before='「最大60時間再生」と確認できます。充電する回数をできるだけ減らして使いたいときに比べたい仕様です。';
   const after=guard(item,before,'ワイヤレスイヤホン');
-  assert.equal(after,'ワイヤレスイヤホンの仕様を確認して選びたい方に。\n\n「最大60時間再生」と確認できます。');
+  assert.equal(after,'ワイヤレスイヤホンの仕様を確認して選びたい方に。\n「最大60時間再生」と確認できます。');
 });
 
 function fixtureGenres(){
@@ -79,6 +79,7 @@ test('fixed 780 products have no unsupported benefit after guard and emit before
     }
   }
   assert.ok(total>=700,'expected fixed corpus >=700, got '+total);
+  assert.equal(generated,112,'baseline generated count changed unexpectedly');
   assert.equal(stopped,0,'guard must preserve grounded fact output rather than blanking it');
   console.log('BENEFIT_GUARD_780_DIFF '+JSON.stringify({total,generated,changed,stopped,changedSamples}));
 });
