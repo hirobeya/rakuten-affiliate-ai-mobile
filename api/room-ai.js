@@ -84,6 +84,12 @@ function json(res,status,body){
   return res.status(status).json(body);
 }
 
+function logAiRoute(route,details={}){
+  const payload={route:String(route||'unknown'),...details};
+  console.log('urenavi ai route',JSON.stringify(payload));
+  return payload;
+}
+
 function normalizeCacheCaption(value=''){
   return String(value||'').normalize('NFKC').replace(/\r\n?/g,'\n').replace(/\s+/g,' ').trim();
 }
@@ -382,6 +388,12 @@ function createHandler(deps={}){
           {itemName,itemCaption},
           {imageAvailable:Boolean(cached.image_available)}
         );
+        const route=logAiRoute('cache',{
+          groqCalls:0,
+          cacheStatus:'hit',
+          model:cached.model||DEFAULT_MODEL,
+          mode:validation.mode
+        });
         console.log('room-ai usage',JSON.stringify({
           cacheStatus:'hit',aiCall:false,model:cached.model||DEFAULT_MODEL,mode:validation.mode
         }));
@@ -392,6 +404,7 @@ function createHandler(deps={}){
           promptVersion:cached.prompt_version||PROMPT_VERSION,
           rawAiJson:cached.raw_ai_json,
           validation,
+          route,
           cache:{hit:true,status:'hit',ttlDays:CACHE_TTL_DAYS,inputHash,keyComponents:cacheKeyComponents}
         });
       }
@@ -429,6 +442,16 @@ function createHandler(deps={}){
         console.warn('room-ai cache write unavailable',error?.message||'unknown');
       }
 
+      const routeName=stages?.imageAttempted?'image':'text';
+      const route=logAiRoute(routeName,{
+        groqCalls:stages?.imageAttempted?2:1,
+        cacheStatus,
+        model:ai.model||model,
+        elapsedMs,
+        mode:validation.mode,
+        usage:ai.usage||null,
+        rateLimit:ai.rateLimit||{}
+      });
       console.log('room-ai usage',JSON.stringify({
         cacheStatus,aiCall:true,model:ai.model||model,elapsedMs,usage:ai.usage||null,mode:validation.mode,stages,rateLimit:ai.rateLimit||{}
       }));
@@ -444,6 +467,7 @@ function createHandler(deps={}){
         promptVersion:PROMPT_VERSION,
         rawAiJson:ai.raw,
         validation,
+        route,
         stages,
         rateLimit:ai.rateLimit||{},
         attempts:ai.attempts||1,
@@ -483,6 +507,7 @@ module.exports.makeInputHash=makeInputHash;
 module.exports.normalizeCacheCaption=normalizeCacheCaption;
 module.exports.defaultLoadCache=defaultLoadCache;
 module.exports.defaultSaveCache=defaultSaveCache;
+module.exports.logAiRoute=logAiRoute;
 module.exports.CACHE_TTL_DAYS=CACHE_TTL_DAYS;
 module.exports.SYSTEM_PROMPT=SYSTEM_PROMPT;
 module.exports.schema=textSchema;
