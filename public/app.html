@@ -2515,25 +2515,25 @@ function salesFactCore(value){
   return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
 }
 
+function safeSearchIdentity(item){
+  const q=String(lastSearchKeyword||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+  if(!q||q.length>32||/^(?:商品|グッズ|便利グッズ|生活雑貨|日用品|家電|掃除|収納|ペット|美容|おすすめ|人気|バッグ|ケース|カバー|ブラシ|ローラー|手袋|グローブ|ホルダー|スタンド|シート|ボトル|ベッド|マット|ライト|ケーブル|フィルター|クリーナー|タオル)$/i.test(q)) return '';
+  if(/ランキング|受賞|送料無料|クーポン|SALE|セール|半額|最安|ポイント\d*倍|P\d+倍/i.test(q)) return '';
+  const source=compactGrounded([item?.itemName,item?.itemCaption].filter(Boolean).join(' ')),qc=compactGrounded(q);
+  return qc.length>=3&&source.includes(qc)?q:'';
+}
+
 function aiPhase1Post(item,result){
-  const v=result?.validation;
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
-  if(v.productType?.valid!==true) return '';
-
-  const insight=aiSalesInsight(item,result);
-  if(!String(insight.productType||'').trim()) return '';
-
-  const combinedFacts=[
-    ...(Array.isArray(insight.features)?insight.features:[]),
-    ...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])
-  ];
-  const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,insight.productType,combinedFacts)||'';
+  const v=result?.validation||{},insight=aiSalesInsight(item,result);
+  const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
+  if(!identity) return '';
+  const combinedFacts=[...(Array.isArray(insight.features)?insight.features:[]),...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])];
+  const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,identity,combinedFacts)||'';
   if(universalPost) return universalPost;
+  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
   const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
   const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
-  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)
-    ||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)
-    ||'';
+  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
 }
 
 function aiPanelMarkup(item,index){

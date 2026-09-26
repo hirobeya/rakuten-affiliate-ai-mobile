@@ -709,11 +709,16 @@ function run(name,fn){
     assert.match(html,/\.tab\[data-i=/);
   });
 
-  await run('client copy accepts simple_partial but rejects fallback and invalid product type',()=>{
+  await run('client copy permits only source-grounded fallback identity and keeps strict evidence path',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+    assert.match(html,/function safeSearchIdentity\(item\)/);
+    assert.match(html,/v\.productType\?\.valid===true\?String\(insight\.productType\|\|''\)\.trim\(\):safeSearchIdentity\(item\)/);
+    assert.match(html,/const universalPost=window\.UrenaviPainCopy\?\.buildValidatedProductPost/);
+    assert.match(html,/if\(universalPost\) return universalPost/);
     assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
-    assert.match(html,/if\(v\.productType\?\.valid!==true\) return ''/);
-    assert.match(html,/if\(!String\(insight\.productType\|\|''\)\.trim\(\)\) return ''/);
+    assert.doesNotMatch(html,/if\(v\.productType\?\.valid!==true\) return ''/);
+    assert.match(html,/バッグ\|ケース\|カバー\|ブラシ\|ローラー/);
+    assert.match(html,/source\.includes\(qc\)\?q:''/);
   });
 
   await run('validation cache hash includes prompt and rule versions',()=>{

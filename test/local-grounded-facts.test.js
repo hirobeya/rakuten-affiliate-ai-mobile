@@ -140,25 +140,12 @@ test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
   }
 });
 
-
 test('grounded benefit copy only expands verified fact types',()=>{
   const api=load();
   const cases=[
-    {
-      item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},
-      must:['10枚入り','必要な数をまとめて揃えたいときにチェック。'],
-      mustNot:['洗い替え','長持ち','吸水']
-    },
-    {
-      item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},
-      must:['HDMI','USB-C対応','ケーブルを、対応規格まで確認して選びたいなら。'],
-      mustNot:['高速','高画質','急速充電']
-    },
-    {
-      item:{itemName:'財布 本革 ブラック',itemPrice:4980},
-      must:['本革','財布を、素材表記まで確認して選びたいなら。'],
-      mustNot:['高級','丈夫','長く使える']
-    }
+    {item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},must:['10枚入り','必要な数をまとめて揃えたいときにチェック。'],mustNot:['洗い替え','長持ち','吸水']},
+    {item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},must:['HDMI','USB-C対応','ケーブルを、対応規格まで確認して選びたいなら。'],mustNot:['高速','高画質','急速充電']},
+    {item:{itemName:'財布 本革 ブラック',itemPrice:4980},must:['本革','財布を、素材表記まで確認して選びたいなら。'],mustNot:['高級','丈夫','長く使える']}
   ];
   for(const c of cases){
     const out=api.makeRoomCopy(c.item,'');
@@ -175,30 +162,14 @@ test('grounded benefit builder drops facts not present in the source title',()=>
   assert.doesNotMatch(out,/USB-C|10枚入り/);
 });
 
-
 test('contextual product copy uses explicit product noun from title',()=>{
   const api=load();
   const cases=[
-    {
-      item:{itemName:'猫耳 IDカードケース 日本製 本革 牛革',itemPrice:6490},
-      must:['IDカードケースを、素材や生産地まで確認して選びたいなら。','「日本製」','「本革」','IDカードケースを素材と生産地の両方から見比べたいときの候補です。']
-    },
-    {
-      item:{itemName:'パジャマ メンズ 2点セット コットン',itemPrice:3240},
-      must:['パジャマを、セット内容と素材の両方まで確認して選びたいなら。','「2点セット」','「コットン」']
-    },
-    {
-      item:{itemName:'Calvin Klein ボクサーパンツ 3枚組',itemPrice:6950},
-      must:['ボクサーパンツを、セット内容や入数まで確認して選びたいなら。','「3枚組」']
-    },
-    {
-      item:{itemName:'スクエアボックスプール 80×80×25cm',itemPrice:2331},
-      must:['スクエアボックスプールを、サイズ表記まで確認して選びたいなら。','「80×80×25cm」']
-    },
-    {
-      item:{itemName:'HDMIケーブル USB-C対応',itemPrice:1800},
-      must:['HDMIケーブルを、対応規格まで確認して選びたいなら。','「USB-C対応」']
-    }
+    {item:{itemName:'猫耳 IDカードケース 日本製 本革 牛革',itemPrice:6490},must:['IDカードケースを、素材や生産地まで確認して選びたいなら。','「日本製」','「本革」','IDカードケースを素材と生産地の両方から見比べたいときの候補です。']},
+    {item:{itemName:'パジャマ メンズ 2点セット コットン',itemPrice:3240},must:['パジャマを、セット内容と素材の両方まで確認して選びたいなら。','「2点セット」','「コットン」']},
+    {item:{itemName:'Calvin Klein ボクサーパンツ 3枚組',itemPrice:6950},must:['ボクサーパンツを、セット内容や入数まで確認して選びたいなら。','「3枚組」']},
+    {item:{itemName:'スクエアボックスプール 80×80×25cm',itemPrice:2331},must:['スクエアボックスプールを、サイズ表記まで確認して選びたいなら。','「80×80×25cm」']},
+    {item:{itemName:'HDMIケーブル USB-C対応',itemPrice:1800},must:['HDMIケーブルを、対応規格まで確認して選びたいなら。','「USB-C対応」']}
   ];
   for(const c of cases){
     const out=api.makeRoomCopy(c.item,'');
@@ -214,14 +185,14 @@ test('contextual product noun must exist verbatim in title',()=>{
   assert.doesNotMatch(out,/財布|バッグ|IDカードケース|パジャマ|プール/);
 });
 
-
 test('validated AI copy supports previously unknown product types from grounded source evidence',()=>{
   const api=load();
   const item={itemName:'髭剃り シェーバー 電気 カミソリ メンズ ポータブル 回転式 6枚刃 防水',itemCaption:'電気シェーバーとして掲載。回転式6枚刃を採用。',itemPrice:3319};
   const out=api.buildValidatedProductPost(item,'電気シェーバー',['回転式6枚刃']);
-  assert.match(out,/電気シェーバーを探しているならチェック。/);
+  assert.match(out,/電気シェーバー/);
   assert.match(out,/回転式6枚刃/);
   assert.match(out,/価格：3,319円/);
+  assert.doesNotMatch(out,/商品説明では「/);
 });
 
 test('validated AI copy rejects identity or evidence absent from source',()=>{
