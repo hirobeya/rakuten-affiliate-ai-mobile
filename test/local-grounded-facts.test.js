@@ -213,3 +213,28 @@ test('contextual product noun must exist verbatim in title',()=>{
   const out=api.makeRoomCopy(item,'');
   assert.doesNotMatch(out,/財布|バッグ|IDカードケース|パジャマ|プール/);
 });
+
+
+test('validated AI copy supports previously unknown product types from grounded source evidence',()=>{
+  const api=load();
+  const item={itemName:'髭剃り シェーバー 電気 カミソリ メンズ ポータブル 回転式 6枚刃 防水',itemCaption:'電気シェーバーとして掲載。回転式6枚刃を採用。',itemPrice:3319};
+  const out=api.buildValidatedProductPost(item,'電気シェーバー',['回転式6枚刃']);
+  assert.match(out,/電気シェーバーを探しているならチェック。/);
+  assert.match(out,/回転式6枚刃/);
+  assert.match(out,/価格：3,319円/);
+});
+
+test('validated AI copy rejects identity or evidence absent from source',()=>{
+  const api=load();
+  const item={itemName:'シェーバー メンズ',itemCaption:'電気シェーバーとして掲載。',itemPrice:1000};
+  assert.equal(api.buildValidatedProductPost(item,'掃除機',['急速充電']), '');
+  const out=api.buildValidatedProductPost(item,'電気シェーバー',['急速充電']);
+  assert.doesNotMatch(out,/急速充電/);
+});
+
+test('client AI path uses validated copy evidence instead of spec-only evidence',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  assert.match(html,/eligibleForCopyEvidence/);
+  assert.match(html,/buildValidatedProductPost/);
+});
