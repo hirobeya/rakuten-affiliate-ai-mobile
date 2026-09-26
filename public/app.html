@@ -2840,11 +2840,17 @@ function resolveAiGate(item,index,keyword=''){
   if(second.conflict) reasons.push('rule_second_opinion_conflict');
   const softReasons=new Set(['invalid_features_dropped']);
   const blockingReasons=reasons.filter(x=>!softReasons.has(x));
-  const full=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
+  const validatedFull=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
+  const fallbackIdentity=safeSearchIdentity(item);
+  const groundedFallback=Boolean(fallbackIdentity);
+  const full=validatedFull||groundedFallback;
   return {
     enabled:true,
     status:full?'full':'fallback',
     full,
+    validatedFull,
+    groundedFallback,
+    fallbackIdentity,
     reasons,
     mediumHandling:'fallback_fixed',
     cacheKeyComponents:ai.data?.cache?.keyComponents||{
@@ -2965,7 +2971,8 @@ function today(a){
       audience=aud(i);points=pts(i);
     }else{
       const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=insight.audience;points=insight.benefits;
+      audience=String(insight.productType||'');
+      points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
     return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
       '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
