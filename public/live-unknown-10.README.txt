@@ -1,0 +1,1 @@
+owner限定の本番実測ページです。通常導線からはリンクしません。楽天実検索10系統→/api/room-ai→buildValidatedProductPost→根拠整合/PASS判定を行います。
