@@ -1,0 +1,88 @@
+{
+  "version": "2026-09-26-value-ranking-v1",
+  "concepts": [
+    {
+      "id": "capacity",
+      "axisTerms": ["容量", "量", "何人分", "一度に"],
+      "factTerms": ["容量", "大容量"],
+      "unitPattern": "(?:ml|mL|L|GB|TB)$",
+      "baseScore": 42,
+      "decisionLine": "必要な容量に合うかを比べる判断材料になります。"
+    },
+    {
+      "id": "runtime",
+      "axisTerms": ["使用時間", "稼働時間", "連続使用", "電池持ち", "充電頻度"],
+      "factTerms": ["使用時間", "連続", "最大"],
+      "unitPattern": "(?:時間|分)$",
+      "baseScore": 48,
+      "decisionLine": "使える時間を比べる判断材料になります。"
+    },
+    {
+      "id": "temperature",
+      "axisTerms": ["温度", "温度調整", "加熱温度"],
+      "factTerms": ["温度", "℃", "°C"],
+      "unitPattern": "(?:℃|°C)$",
+      "baseScore": 46,
+      "decisionLine": "温度設定を比べる判断材料になります。"
+    },
+    {
+      "id": "size",
+      "axisTerms": ["サイズ", "大きさ", "寸法", "設置", "スペース"],
+      "factTerms": ["サイズ", "幅", "奥行", "高さ", "長さ"],
+      "unitPattern": "(?:mm|cm|m)$",
+      "baseScore": 44,
+      "decisionLine": "必要な寸法に合うかを確認する材料になります。"
+    },
+    {
+      "id": "weight",
+      "axisTerms": ["重さ", "重量", "携帯性"],
+      "factTerms": ["重量", "重さ", "軽量"],
+      "unitPattern": "(?:g|kg)$",
+      "baseScore": 38,
+      "decisionLine": "重さを比べる判断材料になります。"
+    },
+    {
+      "id": "connectivity",
+      "axisTerms": ["接続", "端子", "対応機器", "接続規格"],
+      "factTerms": ["Bluetooth", "USB", "Type-C", "USB-C", "HDMI", "Wi-Fi", "WiFi", "DisplayPort", "Qi"],
+      "baseScore": 50,
+      "decisionLine": "必要な接続規格かどうかを確認する材料になります。"
+    },
+    {
+      "id": "standard",
+      "axisTerms": ["規格", "基準", "表示"],
+      "factTerms": ["PSE", "JIS", "Ra"],
+      "baseScore": 36,
+      "decisionLine": "規格表記を比べる材料になります。"
+    },
+    {
+      "id": "material",
+      "axisTerms": ["素材", "材質"],
+      "factTerms": ["本革", "牛革", "山羊革", "羊革", "豚革", "コットン", "綿", "ポリエステル", "ナイロン", "アルミ", "アルミニウム", "ステンレス", "シリコン", "TPU", "ABS", "ガラス", "木製", "セラミック", "ポリカーボネート", "グラスファイバー"],
+      "baseScore": 32,
+      "decisionLine": "素材を比べる判断材料になります。"
+    },
+    {
+      "id": "maintenance",
+      "axisTerms": ["手入れ", "メンテナンス", "交換", "洗いやすさ"],
+      "factTerms": ["洗える", "交換不要", "フィルター交換不要", "交換式", "取替式"],
+      "baseScore": 45,
+      "decisionLine": "手入れや交換方法を比べる判断材料になります。"
+    },
+    {
+      "id": "count",
+      "axisTerms": ["数量", "枚数", "個数", "セット内容", "入数"],
+      "factPattern": "\\d+\\s*(?:枚|個|本|袋|箱|組|点|粒|錠|食|包).*(?:入|入り|セット|組)$",
+      "baseScore": 30,
+      "decisionLine": "必要な数量に合うかを確認する材料になります。"
+    },
+    {
+      "id": "power",
+      "axisTerms": ["出力", "電力", "充電性能", "電池容量"],
+      "factTerms": ["出力", "定格", "mAh", "Wh"],
+      "unitPattern": "(?:mAh|Ah|Wh|W|V|A)$",
+      "baseScore": 47,
+      "decisionLine": "必要な電力・容量条件に合うかを比べる材料になります。"
+    }
+  ]
+}
