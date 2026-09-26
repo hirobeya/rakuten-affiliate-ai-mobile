@@ -5,7 +5,7 @@ const {createCacheStore}=require('../lib/super-urenavi-cache');
 const {analyzeProductV3}=require('../lib/super-urenavi-v3-engine');
 const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
-const {logMetric}=require('../lib/super-urenavi-v3-metrics');
+const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -76,19 +76,17 @@ function createHandler(deps={}){
         callPass2:groq.callPass2
       });
       const copy=composeVariants({item,analysis});
-      const metric=logMetric({
+      const metric=logAiUsageMetric({
         route:analysis.source,
         cacheStatus:analysis.cacheStatus,
-        model,
         pass1Calls:analysis.groq.pass1Calls,
         pass2Calls:analysis.groq.pass2Calls,
         imageCalls:0,
         outputTier:copy.tier,
-        hookType:copy.variants[0]?.hookType||'',
-        productTypeValid:analysis.validation?.valid===true,
-        machinePass:analysis.validation?.valid===true,
+        hookType:copy.variants[0]?.hookType||'none',
+        decisionAxis:analysis.validation?.decisionAxes?.[0]?.text||'',
+        machineValidationPassed:analysis.validation?.valid===true,
         copied:false,
-        reason:analysis.pass2Status,
         elapsedMs:Date.now()-started
       });
 
