@@ -1089,23 +1089,47 @@
       .slice(0,3);
   }
 
+  function evidenceValueLead(identity,facts=[]){
+    const id=String(identity||'').trim(),j=(facts||[]).join(' ');
+    if(/フィルター交換不要/.test(j)) return id+'を、交換の手間まで考えて選びたいなら。';
+    if(/最大\s*\d+(?:[.,]\d+)?\s*時間/.test(j)) return id+'を、充電の頻度まで考えて選びたいなら。';
+    if(/温度|保温|℃|°C/.test(j)) return id+'を、温度設定や保温まで見て選びたいなら。';
+    if(/重量|\d+(?:[.,]\d+)?\s*(?:g|kg)/i.test(j)) return id+'を、持ち運ぶときの重さまで比べて選びたいなら。';
+    if(/容量|大容量|\d+(?:[.,]\d+)?\s*(?:L|ml|mL)/.test(j)) return id+'を、容量までしっかり比べて選びたいなら。';
+    if(/幅|奥行|高さ|長さ|サイズ|\d+(?:[.,]\d+)?\s*(?:cm|mm)/.test(j)) return id+'を、置き場所やサイズ感まで確認して選びたいなら。';
+    if(/Bluetooth|USB|Type-C|HDMI|マルチポイント|PSE|JIS|Ra\d+/i.test(j)) return id+'を、接続方法や対応仕様まで確認して選びたいなら。';
+    return id+'を、使い方に合う仕様まで見て選びたいなら。';
+  }
+
+  function evidenceValueLine(fact){
+    const x=String(fact||'').trim();
+    if(!x) return '';
+    if(/フィルター交換不要/.test(x)) return '「'+x+'」と確認できます。交換用フィルターを用意する手間を減らしたい人には注目したいポイントです。';
+    if(/最大\s*\d+(?:[.,]\d+)?\s*時間/.test(x)) return '「'+x+'」と確認できます。充電する回数をできるだけ減らして使いたいときに比べたい仕様です。';
+    if(/\d+\s*段階.*温度|温度.*\d+\s*段階/.test(x)) return '「'+x+'」と確認できます。用途に合わせて温度を選びたい人が見ておきたい仕様です。';
+    if(/\d+(?:[.,]\d+)?\s*時間.*保温|保温.*\d+(?:[.,]\d+)?\s*時間/.test(x)) return '「'+x+'」と確認できます。保温時間を比べて選びたいときの材料になります。';
+    if(/マルチポイント接続/.test(x)) return '「'+x+'」と確認できます。複数端末を使う人が接続方法を比べるときの確認ポイントです。';
+    if(/Bluetooth\s*\d/i.test(x)) return '「'+x+'」と確認できます。手持ちの機器との接続仕様を確認して選びたいときの比較材料になります。';
+    if(/重量|\d+(?:[.,]\d+)?\s*(?:g|kg)/i.test(x)) return '「'+x+'」と確認できます。持ち運ぶときの重さを比べて選びたい人に分かりやすい情報です。';
+    if(/幅|奥行|高さ|長さ|サイズ|\d+(?:[.,]\d+)?\s*(?:cm|mm)/.test(x)) return '「'+x+'」と確認できます。置き場所や収納場所に収まるか、購入前に比べやすい情報です。';
+    if(/容量|大容量|\d+(?:[.,]\d+)?\s*(?:L|ml|mL)/.test(x)) return '「'+x+'」と確認できます。必要な容量に合うかを比べて選びたいときの目安になります。';
+    if(/ステンレス|ポリカーボネート|グラスファイバー|綿|コットン|素材/i.test(x)) return '「'+x+'」と確認できます。素材まで見て選びたい人が比較しやすいポイントです。';
+    if(/クランプ式/.test(x)) return '「'+x+'」と確認できます。設置方法を重視する人が購入前に見ておきたいポイントです。';
+    if(/USB|Type-C|HDMI|PSE|JIS|Ra\d+/i.test(x)) return '「'+x+'」と確認できます。対応規格や仕様を確認してから選びたいときの比較材料になります。';
+    return '「'+x+'」と確認できます。商品を比べるときに見ておきたい具体的な仕様です。';
+  }
+
   function buildValidatedProductPost(item,identity,evidenceFacts=[]){
     const id=String(identity||'').normalize('NFKC').replace(/\s+/g,' ').trim();
     const source=aiCopySource(item);
     if(!id||id.length>32||!source.includes(id)||AI_COPY_EVIDENCE_RISK_RE.test(id)) return '';
-    const facts=validatedAiCopyEvidence(item,evidenceFacts);
-    const price=Number(item?.itemPrice);
-    const lines=[id+'を探しているならチェック。','', '商品名・説明から「'+id+'」として確認できた商品です。'];
-    for(const fact of facts.slice(0,2)){
-      const transformed=groundedBenefitForFact(fact);
-      if(transformed?.benefit) lines.push('',transformed.benefit);
-      else lines.push('','商品説明では「'+fact+'」と確認できます。');
-    }
-    if(!facts.length){
-      lines.push('',id+'として商品情報を確認できています。価格や商品ページの詳細を見比べながら、自分の条件に合うか確認できます。');
-    }else{
-      lines.push('',id+'を選ぶときに、商品ページの情報とあわせて比較したいポイントです。');
-    }
+    const facts=validatedAiCopyEvidence(item,evidenceFacts),price=Number(item?.itemPrice);
+    const lines=[evidenceValueLead(id,facts)];
+    if(facts.length){
+      for(const fact of facts.slice(0,2)) lines.push('',evidenceValueLine(fact));
+      lines.push('','確認できるポイント👇');
+      for(const fact of facts.slice(0,3)) lines.push('✓ '+fact);
+    }else lines.push('',id+'として商品名・説明に記載されています。商品ページの詳細とあわせて、自分の条件に合うか確認できます。');
     if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     return lines.join('\n').slice(0,500);
