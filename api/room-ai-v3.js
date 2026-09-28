@@ -30,10 +30,13 @@ function createHandler(deps={}){
    const analysis=await analyzeProductV3({item,store,model,consumeQuota:quotaFn,callPass1:groq.callPass1,callPass2:groq.callPass2});
    const copy=composeVariants({item,analysis});
    const metric=logAiUsageMetric({route:analysis.source,cacheStatus:analysis.cacheStatus,pass1Calls:analysis.groq.pass1Calls,pass2Calls:analysis.groq.pass2Calls,imageCalls:0,outputTier:copy.tier,hookType:copy.variants[0]?.hookType||'none',decisionAxis:analysis.validation?.decisionAxes?.[0]?.text||'',machineValidationPassed:analysis.validation?.valid===true,copied:false,elapsedMs:Date.now()-started});
-   return json(res,200,{ok:analysis.ok&&copy.quality?.copyReady===true,version:'super-urenavi-v3-preview',model,productType:analysis.validation?.productType||null,attributes:analysis.validation?.attributes||[],decisionAxes:analysis.validation?.decisionAxes||[],verifiedAppeals:analysis.verifiedAppeals||[],qualityGate:analysis.qualityGate||null,copyQuality:copy.quality||null,groq:analysis.groq,cacheStatus:analysis.cacheStatus,pass2Status:analysis.pass2Status,tier:copy.tier,variants:copy.variants,metric});
+   return json(res,200,{ok:analysis.ok&&copy.quality?.copyReady===true,version:'super-urenavi-v3-preview',model,productType:analysis.validation?.productType||null,attributes:analysis.validation?.attributes||[],decisionAxes:analysis.validation?.decisionAxes||[],verifiedAppeals:analysis.verifiedAppeals||[],validationReasons:analysis.validation?.reasons||[],qualityGate:analysis.qualityGate||null,copyQuality:copy.quality||null,groq:analysis.groq,cacheStatus:analysis.cacheStatus,pass2Status:analysis.pass2Status,tier:copy.tier,variants:copy.variants,metric});
   }catch(error){
    const status=error?.status===429?429:502,quotaSource=error?.quotaSource||((status===429&&error?.stage)?'upstream_or_unknown':null);
-   return json(res,status,{message:status===429?(quotaSource==='urenavi'?'Urenavi AI quota reached':'Groq/upstream rate limit reached'):'v3 analysis failed',quotaSource,stage:error?.stage||null,upstreamStatus:error?.status||null,fallback:true});
+   const retryAfterMs=Number(error?.retryAfterMs)||0;if(retryAfterMs>0)res.setHeader('Retry-After',String(Math.ceil(retryAfterMs/1000)));
+   const groq=error?.groq||{pass1Calls:0,pass2Calls:0,totalCalls:0};
+   console.warn('urenavi v3 failed',JSON.stringify({status,stage:error?.stage,quotaSource,groq,retryAfterMs}));
+   return json(res,status,{groq,cacheStatus:error?.cacheStatus||null,retryAfterMs,message:status===429?(quotaSource==='urenavi'?'Urenavi AI quota reached':'Groq/upstream rate limit reached'):'v3 analysis failed',quotaSource,stage:error?.stage||null,upstreamStatus:error?.status||null,fallback:true});
   }
  };
 }
