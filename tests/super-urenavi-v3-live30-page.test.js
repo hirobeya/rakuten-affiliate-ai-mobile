@@ -18,5 +18,6 @@ assert.doesNotMatch(html,/(?:DOMContentLoaded|load|pageshow)[\s\S]{0,180}runRang
 assert.doesNotMatch(html,/setInterval\([^)]*runRange/);
 assert.match(html,/if\(ai\.status===429\)stop=true/);
 assert.match(html,/groq:\s*ai\.data\?\.groq/);
-assert.match(html,/\/api\/room-ai-v3/);
+assert.match(html,/\/api\/v3-eval-search/);
+assert.match(html,/\/api\/v3-eval-ai/);
 console.log('super-urenavi-v3-live30-page.test.js: PASS');
