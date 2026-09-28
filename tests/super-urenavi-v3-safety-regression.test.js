@@ -63,33 +63,31 @@ const alteredQuote=validateUnderstanding({
 assert.equal(alteredQuote.attributes.length,1);
 assert.ok(alteredQuote.reasons.includes('attribute_quote_not_grounded:1'));
 
-// Real-cache regression: the model has returned one-based refs [1..N]. Detectable one-based output
-// must be repaired as one convention, never silently shifted onto the wrong attribute.
 const shaverItem={
  itemName:'電気シェーバー 回転数 7000/RPM 連続稼働時間 60分 商品重量 約92g 防水機能 IPX4',
  itemCaption:''
 };
+const shaverAttrs=[
+ {name:'回転数',value:'7000/RPM',unit:'RPM',qualifier:'',valueType:'single',quote:'回転数 7000/RPM'},
+ {name:'連続稼働時間',value:'60分',unit:'分',qualifier:'',valueType:'single',quote:'連続稼働時間 60分'},
+ {name:'商品重量',value:'約92g',unit:'g',qualifier:'約',valueType:'single',quote:'商品重量 約92g'},
+ {name:'防水機能',value:'IPX4',unit:'',qualifier:'',valueType:'identifier',quote:'防水機能 IPX4'}
+];
 const shaverOneBased=validateUnderstanding({
  productType:{specific:'電気シェーバー',general:'シェーバー',quote:'電気シェーバー'},
- attributes:[
-  {name:'回転数',value:'7000/RPM',unit:'RPM',qualifier:'',valueType:'single',quote:'回転数 7000/RPM'},
-  {name:'連続稼働時間',value:'60分',unit:'分',qualifier:'',valueType:'single',quote:'連続稼働時間 60分'},
-  {name:'商品重量',value:'約92g',unit:'g',qualifier:'約',valueType:'single',quote:'商品重量 約92g'},
-  {name:'防水機能',value:'IPX4',unit:'',qualifier:'',valueType:'identifier',quote:'防水機能 IPX4'}
- ],
+ attributes:shaverAttrs,
  decisionAxes:[{text:'回転数の確認',attributeRefs:[1]}],
  appeals:[
-  {text:'回転数を確認して選べる',noHassle:'',scene:'',attributeRefs:[1],strength:2},
-  {text:'稼働時間を確認して選べる',noHassle:'',scene:'',attributeRefs:[2],strength:2},
-  {text:'重さを確認して選べる',noHassle:'',scene:'',attributeRefs:[3],strength:2},
-  {text:'防水等級を確認して選べる',noHassle:'',scene:'',attributeRefs:[4],strength:2}
+  {text:'回転数7000/RPMを確認して選べる',noHassle:'',scene:'',attributeRefs:[1],strength:2},
+  {text:'連続稼働時間60分を確認して選べる',noHassle:'',scene:'',attributeRefs:[2],strength:2},
+  {text:'商品重量約92gを確認して選べる',noHassle:'',scene:'',attributeRefs:[3],strength:2},
+  {text:'防水機能IPX4を確認して選べる',noHassle:'',scene:'',attributeRefs:[4],strength:2}
  ],hooks:[]
 },shaverItem);
 assert.ok(shaverOneBased.reasons.includes('attribute_refs_one_based_repaired'));
 assert.deepEqual(shaverOneBased.appeals.map(x=>x.attributeRefs),[[0],[1],[2],[3]]);
 assert.equal(shaverOneBased.decisionAxes[0].attributeRefs[0],0);
 
-// Mixed 0-based and 1-based sentinel values in one response are unsafe: drop all referenced claims.
 const mixedRefs=validateUnderstanding({
  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
  attributes:kettleRaw.attributes,
@@ -100,5 +98,16 @@ const mixedRefs=validateUnderstanding({
 assert.ok(mixedRefs.reasons.includes('attribute_refs_mixed_base'));
 assert.equal(mixedRefs.decisionAxes.length,0);
 assert.equal(mixedRefs.appeals.length,0);
+
+// Even when the base is syntactically valid, explicit evidence in the appeal must point at the same attribute.
+const wrongButInRange=validateUnderstanding({
+ productType:{specific:'電気シェーバー',general:'シェーバー',quote:'電気シェーバー'},
+ attributes:shaverAttrs,
+ decisionAxes:[],
+ appeals:[{text:'連続稼働時間60分を確認して選べる',noHassle:'',scene:'',attributeRefs:[2],strength:3}],
+ hooks:[]
+},shaverItem);
+assert.ok(wrongButInRange.reasons.includes('appeal_ref_mismatch'));
+assert.equal(wrongButInRange.appeals.length,0);
 
 console.log('super-urenavi-v3-safety-regression.test.js: PASS');
