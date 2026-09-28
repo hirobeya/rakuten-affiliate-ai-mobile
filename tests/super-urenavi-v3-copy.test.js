@@ -23,6 +23,7 @@ const verifiedAppeals=[{
   verification:{required:true,supported:true,keepDirectFact:true,reason:'supported'}
 }];
 
+// Tier A: only a verified appeal may become persuasive copy, and its source facts stay visible.
 const a=composeVariants({item,analysis:{validation,verifiedAppeals}});
 assert.equal(a.tier,'A');
 assert.equal(a.variants.length,3);
@@ -37,18 +38,25 @@ for(const v of a.variants){
 }
 assert.notEqual(a.variants[0].hook,a.variants[1].hook);
 
+// Tier B: unverified appeal text must never leak into copy. Grounded specs may be used only as decision support.
 const b=composeVariants({item,analysis:{validation,verifiedAppeals:[]}});
 assert.equal(b.tier,'B');
 assert.ok(b.variants.length>=2);
 assert.match(b.variants[0].text,/0.8L/);
+assert.match(b.variants[0].text,/50-100度/);
 assert.doesNotMatch(b.variants[0].text,/沸かしてから冷めるのを待たなくていい/);
+assert.doesNotMatch(b.variants[0].text,/飲み物に合わせて温度を細かく選べる/);
 
+// Tier C: no factual attributes means no invented benefit. Keep the identified product type and neutral decision guidance.
 const c=composeVariants({item:{itemName:'未知の商品名',itemPrice:1200},analysis:{validation:{valid:true,productType:{specific:'雑貨',general:'商品',valid:true},attributes:[],hooks:[]},verifiedAppeals:[]}});
 assert.equal(c.tier,'C');
 assert.equal(c.variants.length,3);
-assert.match(c.variants[0].text,/雑貨の商品情報/);
+assert.match(c.variants[0].text,/雑貨を選ぶとき/);
+assert.match(c.variants[0].text,/自分の使い方に合うか/);
 assert.match(c.variants[0].text,/1,200円/);
+assert.doesNotMatch(c.variants[0].text,/便利|快適|おすすめ|使いやすい/);
 
+// Invalid product identity remains fail-closed: no copy is exposed.
 const invalid=composeVariants({item,analysis:{validation:{valid:false},verifiedAppeals:[]}});
 assert.equal(invalid.tier,'invalid');
 assert.deepEqual(invalid.variants,[]);
