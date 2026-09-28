@@ -7,7 +7,7 @@ function memoryStore(){
   let row=null;
   return {
     async loadProduct(){return row;},
-    async saveProduct(x){row={schema_version:x.schemaVersion,raw_ai_json:x.rawAiJson,model:x.model,resultStatus};}
+    async saveProduct(x){row={schema_version:x.schemaVersion,raw_ai_json:x.rawAiJson,model:x.model,result_status:x.resultStatus};}
   };
 }
 function mockRes(){
