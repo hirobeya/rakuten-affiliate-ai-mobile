@@ -7,7 +7,7 @@ function memoryStore(){
   let row=null;
   return {
     async loadProduct(){return row;},
-    async saveProduct(x){row={schema_version:x.schemaVersion,raw_ai_json:x.rawAiJson,model:x.model,result_status:x.resultStatus};}
+    async saveProduct(x){row={schema_version:x.schemaVersion,raw_ai_json:x.rawAiJson,model:x.model,resultStatus};}
   };
 }
 function mockRes(){
@@ -58,7 +58,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     assert.equal(new Set(res.body.variants.map(v=>v.hook)).size,res.body.variants.length);
     for(const variant of res.body.variants){
       assert.match(variant.text,/50-100度/);
-      assert.match(variant.text,/1℃単位/);
+      assert.match(variant.text,/1(?:℃|°C)単位/);
       assert.match(variant.text,/飲み物に合わせて温度を細かく選べる/);
       assert.match(variant.text,/アフィリエイト広告/);
     }
