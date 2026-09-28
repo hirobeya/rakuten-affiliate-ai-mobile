@@ -54,7 +54,14 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     assert.equal(res.code,200);
     assert.equal(res.body.ok,true);
     assert.equal(res.body.tier,'A');
-    assert.equal(res.body.variants.length,3);
+    assert.ok(res.body.variants.length>=1 && res.body.variants.length<=3);
+    assert.equal(new Set(res.body.variants.map(v=>v.hook)).size,res.body.variants.length);
+    for(const variant of res.body.variants){
+      assert.match(variant.text,/50-100度/);
+      assert.match(variant.text,/1℃単位/);
+      assert.match(variant.text,/飲み物に合わせて温度を細かく選べる/);
+      assert.match(variant.text,/アフィリエイト広告/);
+    }
     assert.equal(res.body.groq.pass1Calls,1);
     assert.equal(res.body.groq.pass2Calls,1);
     assert.equal(p1,1); assert.equal(p2,1);
