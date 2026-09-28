@@ -16,16 +16,13 @@ const checked=validateUnderstanding({
   appeals:[{text:'持ちやすさの判断材料になる',noHassle:'',scene:'腕が疲れにくいケア',attributeRefs:[0],strength:3}],
   hooks:[{type:'scene',text:'健康面も気にせず安心して使いたいとき。'},{type:'scene',text:'手に持つ道具の重さが気になるとき。'}]
 },item);
-
 assert.equal(checked.valid,true);
 assert.equal(checked.decisionAxes.length,0);
 assert.equal(checked.appeals.length,0);
 assert.deepEqual(checked.hooks.map(x=>x.text),['手に持つ道具の重さが気になるとき。']);
 
-// Source fidelity must survive the real validator -> composer path. NFKC is allowed for comparison only,
-// never for customer-facing source evidence.
 const kettleItem={itemName:'電気ケトル 温度調節 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980};
-const kettleValidation=validateUnderstanding({
+const kettleRaw={
  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
  attributes:[
   {name:'温度設定範囲',value:'50-100度',unit:'度',qualifier:'',valueType:'range',quote:'50-100度'},
@@ -34,7 +31,8 @@ const kettleValidation=validateUnderstanding({
  decisionAxes:[{text:'温度設定の細かさ',attributeRefs:[0,1]}],
  appeals:[{text:'飲み物に合わせて温度を細かく選べる',noHassle:'',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
  hooks:[{type:'question',text:'飲み物ごとに、お湯の温度を気にすることありませんか？'}]
-},kettleItem);
+};
+const kettleValidation=validateUnderstanding(kettleRaw,kettleItem);
 assert.equal(kettleValidation.attributes[1].quote,'1℃単位');
 assert.equal(kettleValidation.attributes[1].value,'1℃');
 const verified=kettleValidation.appeals.map(a=>({...a,verification:{required:true,supported:true,keepDirectFact:true,reason:'supported'}}));
@@ -42,5 +40,16 @@ const composed=composeVariants({item:kettleItem,analysis:{validation:kettleValid
 assert.equal(composed.tier,'A');
 assert.match(composed.variants[0].text,/1℃単位/);
 assert.doesNotMatch(composed.variants[0].text,/1°C単位/);
+
+// A visually changed quote is not the source quote. Even NFKC-equivalent substitutions must fail closed.
+const alteredQuote=validateUnderstanding({
+ ...kettleRaw,
+ attributes:[
+  kettleRaw.attributes[0],
+  {...kettleRaw.attributes[1],value:'1°C',unit:'°C',quote:'1°C単位'}
+ ]
+},kettleItem);
+assert.equal(alteredQuote.attributes.length,1);
+assert.ok(alteredQuote.reasons.includes('attribute_quote_not_grounded:1'));
 
 console.log('super-urenavi-v3-safety-regression.test.js: PASS');
