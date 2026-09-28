@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const {readerLayerSafe,validateUnderstanding}=require('../lib/super-urenavi-v3-understanding');
+const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 
 assert.equal(readerLayerSafe('健康面が気になる人にも安心。'),false);
 assert.equal(readerLayerSafe('疲れにくくて長く使えそう。'),false);
@@ -20,4 +21,26 @@ assert.equal(checked.valid,true);
 assert.equal(checked.decisionAxes.length,0);
 assert.equal(checked.appeals.length,0);
 assert.deepEqual(checked.hooks.map(x=>x.text),['手に持つ道具の重さが気になるとき。']);
+
+// Source fidelity must survive the real validator -> composer path. NFKC is allowed for comparison only,
+// never for customer-facing source evidence.
+const kettleItem={itemName:'電気ケトル 温度調節 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980};
+const kettleValidation=validateUnderstanding({
+ productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
+ attributes:[
+  {name:'温度設定範囲',value:'50-100度',unit:'度',qualifier:'',valueType:'range',quote:'50-100度'},
+  {name:'温度設定単位',value:'1℃',unit:'℃',qualifier:'単位',valueType:'single',quote:'1℃単位'}
+ ],
+ decisionAxes:[{text:'温度設定の細かさ',attributeRefs:[0,1]}],
+ appeals:[{text:'飲み物に合わせて温度を細かく選べる',noHassle:'',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
+ hooks:[{type:'question',text:'飲み物ごとに、お湯の温度を気にすることありませんか？'}]
+},kettleItem);
+assert.equal(kettleValidation.attributes[1].quote,'1℃単位');
+assert.equal(kettleValidation.attributes[1].value,'1℃');
+const verified=kettleValidation.appeals.map(a=>({...a,verification:{required:true,supported:true,keepDirectFact:true,reason:'supported'}}));
+const composed=composeVariants({item:kettleItem,analysis:{validation:kettleValidation,verifiedAppeals:verified}});
+assert.equal(composed.tier,'A');
+assert.match(composed.variants[0].text,/1℃単位/);
+assert.doesNotMatch(composed.variants[0].text,/1°C単位/);
+
 console.log('super-urenavi-v3-safety-regression.test.js: PASS');
