@@ -21,6 +21,22 @@ assert.equal(checked.decisionAxes.length,0);
 assert.equal(checked.appeals.length,0);
 assert.deepEqual(checked.hooks.map(x=>x.text),['手に持つ道具の重さが気になるとき。']);
 
+// Historical fryer-style leakage: direct facts must not license health or cleanup claims.
+const fryerItem={itemName:'ノンフライヤー 14L 1400W 50-220℃',itemCaption:'容量14L、消費電力1400W、温度設定50-220℃'};
+const fryerChecked=validateUnderstanding({
+ productType:{specific:'ノンフライヤー',general:'調理家電',quote:'ノンフライヤー'},
+ attributes:[
+  {name:'容量',value:'14L',unit:'L',qualifier:'',valueType:'single',quote:'容量14L'},
+  {name:'温度設定',value:'50-220℃',unit:'℃',qualifier:'',valueType:'range',quote:'温度設定50-220℃'}
+ ],
+ decisionAxes:[{text:'健康的に調理できて掃除も楽か',attributeRefs:[0,1]}],
+ appeals:[{text:'ヘルシーな料理を手軽に作れる',noHassle:'掃除の手間が減る',scene:'健康を気にする食事',attributeRefs:[0,1],strength:3}],
+ hooks:[{type:'question',text:'健康面を気にしながら手軽に料理したくありませんか？'},{type:'scene',text:'料理の温度や量を見比べたいとき。'}]
+},fryerItem);
+assert.equal(fryerChecked.decisionAxes.length,0);
+assert.equal(fryerChecked.appeals.length,0);
+assert.deepEqual(fryerChecked.hooks.map(x=>x.text),['料理の温度や量を見比べたいとき。']);
+
 const kettleItem={itemName:'電気ケトル 温度調節 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980};
 const kettleRaw={
  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
@@ -41,13 +57,10 @@ assert.equal(composed.tier,'A');
 assert.match(composed.variants[0].text,/1℃単位/);
 assert.doesNotMatch(composed.variants[0].text,/1°C単位/);
 
-// A visually changed quote is not the source quote. Even NFKC-equivalent substitutions must fail closed.
+// Unicode-equivalent substitutions are still not literal source evidence.
 const alteredQuote=validateUnderstanding({
  ...kettleRaw,
- attributes:[
-  kettleRaw.attributes[0],
-  {...kettleRaw.attributes[1],value:'1°C',unit:'°C',quote:'1°C単位'}
- ]
+ attributes:[kettleRaw.attributes[0],{...kettleRaw.attributes[1],value:'1°C',unit:'°C',quote:'1°C単位'}]
 },kettleItem);
 assert.equal(alteredQuote.attributes.length,1);
 assert.ok(alteredQuote.reasons.includes('attribute_quote_not_grounded:1'));
