@@ -10,14 +10,15 @@ A successful deployment or HTTP 200 is not the sales gate. The gate is whether r
 - Review identity, factual meaning, customer value, hook relevance, evidence, and repeated-template risk across categories.
 - `needs_value`, empty output, unsupported inference, or generic-only copy is not a pass.
 
-## Current architecture hardening
-- Customer value is judged structurally, not by words such as `時短`, `手間`, or `選べる`.
-- Final saleable copy requires a grounded appeal and `supported=true` verification.
-- Unsupported health, safety, beauty, reassurance, fatigue, hygiene, popularity, ranking, and similar claims are blocked from hooks/appeals/decision axes.
-- Free-form AI decision-axis wording is not reused as a fallback sales claim; fallback leads are built from grounded attribute names.
-- Product evidence quotes must be literal contiguous source text. Unicode-equivalent substitutions such as `℃` -> `°C` are not accepted as source evidence.
-- Customer-facing source symbols are preserved; normalization is for internal comparison only.
-- Historical shaver/fryer leakage patterns are fixed as regression tests.
+## Hardening added on 2026-09-29
+- Replaced keyword-based value detection (`時短`, `手間`, `選べる`, etc.) with structural grounded-value checks.
+- Final saleable copy requires grounded attribute references plus independently verified `supported=true` value.
+- Unsafe health/safety/beauty/reassurance/fatigue/hygiene/promo language is filtered from hooks, scenes, appeals and decision axes.
+- Decision axes must resolve to surviving grounded attributes.
+- Free-form AI decision-axis wording is not reused as a fallback claim; fallback leads use product identity + grounded attribute names.
+- Source evidence must be literal contiguous source text. Unicode-equivalent substitutions such as source `℃` -> AI `°C` are rejected rather than presented as quotations.
+- Customer-facing source symbols are preserved exactly after validation; normalization is only an internal comparison tool outside literal-evidence checks.
+- Historical unsupported-value patterns observed in shaver and air-fryer Preview cache are now regression tests.
 
 ## Groq / cache discipline
 - No Groq call on search/page load.
@@ -32,7 +33,7 @@ Do not change main/Production merely because CI is green. Merge only after:
 2. Meaning-changing factual errors are zero in the evaluation set.
 3. Unsupported customer-value claims are zero.
 4. Openings/body do not collapse into repeated generic templates.
-5. Persuasion is materially useful: the reader can see a concrete reason to consider the product.
+5. Persuasion is materially useful: the reader can state a concrete reason to consider the product.
 6. Groq request behavior remains bounded and cache reuse is verified.
 7. Real authenticated Preview evaluation is completed across product categories.
 
