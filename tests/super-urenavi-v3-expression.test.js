@@ -21,7 +21,7 @@ assert.equal(structuralAppealStrength(value,attributes),true);
 const validation={
   productType:{specific:'電気ケトル',general:'ケトル'},
   attributes,
-  decisionAxes:[{text:'温度設定の細かさ',attributeRefs:[1,2]}],
+  decisionAxes:[{text:'健康に良くて絶対安心な温度設定',attributeRefs:[1,2]}],
   hooks:[]
 };
 const ranked=rankGroundedAttributes(validation,[value]);
@@ -31,6 +31,7 @@ assert.match(evidenceSentence(value,attributes),/1℃単位/);
 const leads=productSpecificLeads(validation,value,3);
 assert.ok(leads.length>=2);
 assert.ok(leads.some(x=>/電気ケトル/.test(x.text)));
-assert.ok(leads.some(x=>/温度設定の細かさ/.test(x.text)));
+assert.ok(leads.some(x=>/温度設定範囲/.test(x.text)));
+assert.ok(leads.every(x=>!/健康|安心/.test(x.text)));
 
 console.log('super-urenavi-v3-expression.test.js: PASS');
