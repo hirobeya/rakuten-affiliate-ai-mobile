@@ -198,3 +198,99 @@
     observer.observe(root.document.body,{childList:true,subtree:true});
   },{once:true});
 })(typeof window==='undefined'?null:window);
+
+/* Preview-only Super Urenavi v3 bridge.
+   This branch is evaluated on Vercel Preview before any production wiring.
+   It preserves the legacy UI contract while keeping the final ROOM copy exactly as composed by v3. */
+(function(root){
+  'use strict';
+  if(!root || typeof root.fetch!=='function' || root.__urenaviV3PreviewBridge) return;
+  const baseFetch=root.fetch.bind(root);
+
+  function isRoomAiRequest(resource){
+    return typeof resource==='string' && (resource==='/api/room-ai' || resource.indexOf('/api/room-ai?')===0);
+  }
+  function sourceFor(body,quote){
+    const q=String(quote||'');
+    if(q && String(body?.itemName||'').includes(q)) return 'itemName';
+    if(q && String(body?.itemCaption||'').includes(q)) return 'itemCaption';
+    return 'itemCaption';
+  }
+  function legacyFromV3(d,body){
+    const productType=d?.productType||{};
+    const attrs=Array.isArray(d?.attributes)?d.attributes:[];
+    const verified=Array.isArray(d?.verifiedAppeals)?d.verifiedAppeals:[];
+    const copy=Array.isArray(d?.variants)?String(d.variants[0]?.text||'').trim():'';
+    const features=attrs.map(a=>({
+      text:String(a?.quote||a?.value||'').trim(),
+      evidence:String(a?.quote||'').trim(),
+      source:sourceFor(body,a?.quote),
+      valid:true,
+      eligibleForPost:true,
+      eligibleForCopyEvidence:true
+    })).filter(x=>x.text&&x.evidence);
+    const sellingPoints=verified.filter(a=>a?.verification?.supported===true).map(a=>({
+      text:String(a?.text||'').trim(),
+      evidence:String(attrs[a?.attributeRefs?.[0]]?.quote||'').trim(),
+      source:sourceFor(body,attrs[a?.attributeRefs?.[0]]?.quote),
+      valid:true,
+      eligibleForPost:false,
+      eligibleForCopyEvidence:false
+    })).filter(x=>x.text);
+    return {
+      ok:d?.ok===true && !!copy,
+      version:d?.version||'super-urenavi-v3-preview',
+      model:d?.model||'',
+      validation:{
+        mode:d?.ok===true&&copy?'simple':'fallback',
+        confidence:d?.ok===true&&copy?'high':'low',
+        imageAvailable:false,
+        productType:{
+          value:String(productType?.specific||productType?.general||'').trim(),
+          source:sourceFor(body,productType?.quote),
+          evidence:String(productType?.quote||'').trim(),
+          valid:productType?.valid===true
+        },
+        features,
+        sellingPoints,
+        unknowns:[],
+        reasons:Array.isArray(d?.validationReasons)?d.validationReasons:[]
+      },
+      _v3Copy:copy,
+      _v3Tier:d?.tier||'',
+      _v3CopyQuality:d?.copyQuality||null,
+      _v3Groq:d?.groq||null,
+      _v3CacheStatus:d?.cacheStatus||null
+    };
+  }
+
+  root.fetch=async function(resource,options){
+    if(!isRoomAiRequest(resource)) return baseFetch(resource,options);
+    let body={};
+    try{body=JSON.parse(options?.body||'{}')||{};}catch{}
+    const response=await baseFetch('/api/room-ai-v3',options);
+    let d={};
+    try{d=await response.clone().json();}catch{}
+    if(!response.ok) return response;
+    const adapted=legacyFromV3(d,body);
+    if(!adapted.ok){
+      const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');
+      return new Response(JSON.stringify({message:'v3 copy quality gate failed',...adapted}),{status:422,statusText:'Unprocessable Entity',headers});
+    }
+    const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');
+    return new Response(JSON.stringify(adapted),{status:200,statusText:'OK',headers});
+  };
+
+  root.addEventListener('DOMContentLoaded',()=>{
+    if(typeof root.aiPhase1Post!=='function' || root.__urenaviV3CopyOverride) return;
+    const legacyAiPhase1Post=root.aiPhase1Post;
+    root.aiPhase1Post=function(item,result){
+      const copy=String(result?._v3Copy||'').trim();
+      if(copy) return copy;
+      return legacyAiPhase1Post.apply(this,arguments);
+    };
+    root.__urenaviV3CopyOverride=true;
+  },{once:true});
+
+  root.__urenaviV3PreviewBridge=true;
+})(typeof window==='undefined'?null:window);
