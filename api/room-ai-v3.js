@@ -70,7 +70,9 @@ function createHandler(deps={}){
    const copy=composeVariants({item,analysis});
    const payload={ok:analysis.ok&&copy.quality?.copyReady===true,version:'super-urenavi-v3-sale',model,productType:analysis.validation?.productType||null,attributes:analysis.validation?.attributes||[],decisionAxes:analysis.validation?.decisionAxes||[],verifiedAppeals:analysis.verifiedAppeals||[],validationReasons:analysis.validation?.reasons||[],qualityGate:analysis.qualityGate||null,copyQuality:copy.quality||null,groq:analysis.groq,imageFallback,cacheStatus:analysis.cacheStatus,tier:copy.tier,variants:copy.variants};
    payload.metric=logAiUsageMetric({route:analysis.source,cacheStatus:analysis.cacheStatus,pass1Calls:analysis.groq.pass1Calls,pass2Calls:0,imageCalls,outputTier:copy.tier,hookType:copy.variants[0]?.hookType||'none',decisionAxis:analysis.validation?.decisionAxes?.[0]?.text||'',machineValidationPassed:analysis.validation?.valid===true,copied:false,elapsedMs:Date.now()-started});
-   return json(res,200,legacyResponse?legacyContract(payload,item):payload);
+   const responsePayload=legacyResponse?legacyContract(payload,item):payload;
+   if(legacyResponse&&!payload.ok)return json(res,422,{message:'sale_copy_quality_gate_failed',...responsePayload});
+   return json(res,200,responsePayload);
   }catch(error){
    const status=error?.status===429?429:502,quotaSource=error?.quotaSource||((status===429&&error?.stage)?'upstream_or_unknown':null),retryAfterMs=Number(error?.retryAfterMs)||0;if(retryAfterMs>0)res.setHeader('Retry-After',String(Math.ceil(retryAfterMs/1000)));
    const groq=error?.groq||{pass1Calls:0,pass2Calls:0,totalCalls:0};console.warn('urenavi v3 failed',JSON.stringify({status,stage:error?.stage,quotaSource,groq,retryAfterMs}));
