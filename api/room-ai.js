@@ -63,9 +63,8 @@ async function runCall({apiKey,model,input,useImage}){
   const ai=await callGroqOnce({apiKey,model,input,imageDataUrl});
   return{ai,usedImage:Boolean(imageDataUrl),imageAttempted:Boolean(useImage)};
 }
-async function runVerifier({apiKey,input,postText}){
-  if(!(await consumeQuota())){const e=new Error('AI daily limit reached');e.status=429;throw e;}
-  return verifyPost({apiKey,sourceText:input.sourceText,postText});
+async function runVerifier({input,postText}){
+  return verifyPost({sourceText:input.sourceText,postText});
 }
 
 module.exports=async function handler(req,res){
@@ -97,8 +96,8 @@ module.exports=async function handler(req,res){
     let final=inspection.final;
     let verifier=null;
     if(raw?.understood===true&&String(final?.post_text||'').trim()){
-      verifier=await runVerifier({apiKey,input,postText:final.post_text});
-      calls+=1;route=`${route}_verified`;
+      verifier=await runVerifier({input,postText:final.post_text});
+      route=`${route}_guarded`;
       final={...final,post_text:verifier.safe?verifier.postText:''};
       inspection.final=final;
     }
