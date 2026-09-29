@@ -12,7 +12,7 @@ test('unsafe shaver inferences are removed but grounded purchase criteria remain
   assert.match(result.postText,/約92g/);
   assert.match(result.postText,/IPX4/);
   assert.match(result.postText,/USB充電/);
-  assert.match(result.postText,/条件に選びたい人/);
+  assert.match(result.postText,/まとめて確認できます/);
   assert.equal(result.raw.grounded_selection,true);
 });
 
@@ -33,7 +33,7 @@ test('already useful safe copy is not padded with fallback boilerplate',async()=
   const post='0.8Lの電気ケトル。\n50〜100℃の範囲を1℃単位で温度設定できます。\n毎回同じ温度設定に合わせたい時に使いやすいです。';
   const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['0.8L','50〜100℃','1℃単位','温度設定']});
   assert.equal(result.raw.grounded_selection,false);
-  assert.doesNotMatch(result.postText,/候補を絞りやすい/);
+  assert.doesNotMatch(result.postText,/まとめて確認できます/);
 });
 
 test('kettle direct benefit cannot smuggle invented family or cookware context',async()=>{
@@ -42,6 +42,14 @@ test('kettle direct benefit cannot smuggle invented family or cookware context',
   const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['電気ケトル 0.8L','50〜100℃','1℃単位','温度設定']});
   assert.doesNotMatch(result.postText,/鍋|家族/);
   assert.match(result.postText,/0.8L|1℃/);
+});
+
+test('best-fit wording is rejected when the source only provides temperature controls',async()=>{
+  const source='電気ケトル 0.8L 50〜100℃ 1℃単位 温度設定 保温\n容量0.8L。50〜100℃の範囲を1℃単位で温度設定できます。';
+  const post='0.8Lの電気ケトルです。\n飲み物ごとに適した温度を選びたい方に。\n毎回同じ温度設定に合わせたい時に使いやすいです。';
+  const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['0.8L','1℃単位','温度設定']});
+  assert.doesNotMatch(result.postText,/適した/);
+  assert.match(result.postText,/毎回同じ温度設定/);
 });
 
 test('long combined shaver fact is decomposed into strict source-grounded spec atoms',()=>{
