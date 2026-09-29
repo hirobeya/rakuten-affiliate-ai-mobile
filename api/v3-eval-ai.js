@@ -17,8 +17,13 @@ function outputText(data){
  return '';
 }
 async function callModel({apiKey,model,input}){
- const reasoning=model.startsWith('openai/gpt-oss-')?{effort:'low'}:{effort:'none'};
- const r=await fetch('https://api.groq.com/openai/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model,reasoning,input:[{role:'system',content:[{type:'input_text',text:systemPrompt(input)}]},{role:'user',content:[{type:'input_text',text:JSON.stringify({itemName:input.itemName,catchcopy:input.catchcopy,description:input.description,itemPrice:input.itemPrice,reviewAverage:input.reviewAverage,reviewCount:input.reviewCount,genreId:input.genreId})}]}],text:{format:{type:'json_schema',name:'urenavi_room_post_v1',strict:true,schema:OUTPUT_SCHEMA}},max_output_tokens:900})});
+ const isOss=model.startsWith('openai/gpt-oss-');
+ const reasoning=isOss?{effort:'low'}:{effort:'none'};
+ const itemJson=JSON.stringify({itemName:input.itemName,catchcopy:input.catchcopy,description:input.description,itemPrice:input.itemPrice,reviewAverage:input.reviewAverage,reviewCount:input.reviewCount,genreId:input.genreId});
+ const apiInput=isOss
+  ?[{role:'user',content:[{type:'input_text',text:`${systemPrompt(input)}\n\n【商品データ】\n${itemJson}`}]}]
+  :[{role:'system',content:[{type:'input_text',text:systemPrompt(input)}]},{role:'user',content:[{type:'input_text',text:itemJson}]}];
+ const r=await fetch('https://api.groq.com/openai/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model,reasoning,input:apiInput,text:{format:{type:'json_schema',name:'urenavi_room_post_v1',strict:true,schema:OUTPUT_SCHEMA}},max_output_tokens:900})});
  const data=await r.json().catch(()=>({}));
  if(!r.ok){const e=new Error(data?.error?.message||`Groq request failed (${r.status})`);e.status=r.status;throw e;}
  const text=outputText(data);if(!text)throw new Error('Groq returned no structured message output');
