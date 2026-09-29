@@ -1,4 +1,5 @@
 'use strict';
+// Preview e2e probe revision: 2026-09-30-quantity-fix
 const {DEFAULT_MODEL,OUTPUT_SCHEMA,prepareInput,systemPrompt,inspectOutput}=require('../lib/room-post-generator-v1');
 const {verifyPost}=require('../lib/room-post-verifier-v1');
 const samples=[
