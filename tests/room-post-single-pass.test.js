@@ -50,6 +50,15 @@ test('foreign-script contamination is removed sentence by sentence',()=>{
   assert.equal(out.removedSentenceCount,1);
 });
 
+test('numeric-unit meaning swaps are rejected and Japanese spacing artifacts are normalized',()=>{
+  const input=gen.prepareInput({itemName:'クッキー抜き型 動物 6個セット',itemCaption:'動物型のクッキー抜き型6個セット。'});
+  const raw={understood:true,product_summary:'クッキー抜き型',facts_used:['6個セット'],post_text:'動物型のクッキー抜き型6個セットで す。6種類そろっています。',hashtags:['#クッキー抜き型']};
+  const out=gen.inspectOutput(raw,input);
+  assert.match(out.final.post_text,/です/);
+  assert.doesNotMatch(out.final.post_text,/6種類/);
+  assert.equal(out.removedSentenceCount,1);
+});
+
 test('sensitive genres add legal-care instruction without blocking generation',()=>{
   const input=gen.prepareInput({itemName:'美容ローラー',genreId:'100939'});
   const prompt=gen.systemPrompt(input);
