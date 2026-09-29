@@ -12,6 +12,14 @@ const samples=[
  {id:'pet-bag',itemCode:'smoke:pet-bag',itemName:'うんち袋 ペット用 200枚入り 箱型',itemCaption:'ペットの散歩やトイレ処理に使える袋。200枚入り。',itemPrice:1680}
 ];
 function memory(){let row=null;return{async loadProduct(){return row;},async saveProduct(x){row={schema_version:x.schemaVersion,raw_ai_json:x.rawAiJson,model:x.model,result_status:x.resultStatus};}};}
+async function runOne(item,groq,model){
+ const started=Date.now();
+ try{
+  const analysis=await analyzeProductV3({item,store:memory(),model,consumeQuota:async()=>true,callPass1:groq.callPass1});
+  const copy=composeVariants({item,analysis});
+  return{id:item.id,itemName:item.itemName,ok:analysis.ok&&copy.quality?.copyReady===true,source:analysis.source,validationValid:analysis.validation?.valid===true,reasons:analysis.validation?.reasons||[],productType:analysis.validation?.productType||null,attributes:analysis.validation?.attributes||[],verifiedAppeals:analysis.verifiedAppeals||[],tier:copy.tier,quality:copy.quality,variants:copy.variants,groq:analysis.groq,elapsedMs:Date.now()-started};
+ }catch(error){return{id:item.id,itemName:item.itemName,ok:false,error:String(error?.message||'failed'),status:error?.status||null,retryAfterMs:Number(error?.retryAfterMs)||0,elapsedMs:Date.now()-started};}
+}
 async function smoke(req,res){
  res.setHeader('Cache-Control','no-store');
  if(process.env.VERCEL_ENV!=='preview')return res.status(404).json({message:'Not found'});
@@ -19,15 +27,10 @@ async function smoke(req,res){
  if(!apiKey)return res.status(503).json({message:'GROQ_API_KEY missing'});
  const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
  const groq=createV3Groq({apiKey,model});
- const results=[];
- for(const item of samples){
-  const started=Date.now();
-  try{
-   const analysis=await analyzeProductV3({item,store:memory(),model,consumeQuota:async()=>true,callPass1:groq.callPass1});
-   const copy=composeVariants({item,analysis});
-   results.push({id:item.id,itemName:item.itemName,ok:analysis.ok&&copy.quality?.copyReady===true,source:analysis.source,validationValid:analysis.validation?.valid===true,reasons:analysis.validation?.reasons||[],productType:analysis.validation?.productType||null,attributes:analysis.validation?.attributes||[],verifiedAppeals:analysis.verifiedAppeals||[],tier:copy.tier,quality:copy.quality,variants:copy.variants,groq:analysis.groq,elapsedMs:Date.now()-started});
-  }catch(error){results.push({id:item.id,itemName:item.itemName,ok:false,error:String(error?.message||'failed'),status:error?.status||null,elapsedMs:Date.now()-started});}
- }
+ const requested=String(req.query?.id||'').trim();
+ const selected=requested?samples.filter(x=>x.id===requested):samples.slice(0,1);
+ if(!selected.length)return res.status(400).json({message:'unknown sample id',allowed:samples.map(x=>x.id)});
+ const results=[];for(const item of selected)results.push(await runOne(item,groq,model));
  return res.status(200).json({temporary:true,model,count:results.length,results});
 }
 module.exports=async function handler(req,res){
