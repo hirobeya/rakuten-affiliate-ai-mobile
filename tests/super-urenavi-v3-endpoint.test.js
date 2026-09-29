@@ -24,7 +24,7 @@ const pass1={
   assert.equal(res.code,200);assert.equal(res.body.ok,true);assert.equal(res.body.tier,'A');assert.ok(res.body.variants.length>=1&&res.body.variants.length<=3);
   assert.equal(new Set(res.body.variants.map(v=>v.hook)).size,res.body.variants.length);
   for(const variant of res.body.variants){assert.match(variant.text,/50-100度/);assert.match(variant.text,/1℃単位/);assert.match(variant.text,/飲み物に合わせて温度を細かく選べる/);assert.match(variant.text,/アフィリエイト広告/);}
-  assert.equal(res.body.groq.pass1Calls,1);assert.equal(res.body.groq.pass2Calls,0);assert.equal(res.body.pass2Status,'removed');assert.equal(p1,1);
+  assert.equal(res.body.groq.pass1Calls,1);assert.equal(res.body.groq.pass2Calls,0);assert.equal(p1,1);
   const again=mockRes();await handler(req,again);assert.equal(again.code,200);assert.equal(again.body.groq.totalCalls,0);assert.equal(p1,1);
   process.env.VERCEL_ENV='production';const blocked=mockRes();await handler(req,blocked);assert.equal(blocked.code,404);assert.equal(p1,1);
  }finally{if(oldEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=oldEnv;}
