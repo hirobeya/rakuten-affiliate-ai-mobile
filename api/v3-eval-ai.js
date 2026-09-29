@@ -13,49 +13,45 @@ const verifyCases={
  kettle:'0.8Lの電気ケトル。\n50〜100℃の範囲を1℃単位で温度設定できるので、飲み物に合わせて細かく温度を調整したい時に便利です。\n温度をきめ細かく決められるので、毎回同じ設定に合わせたいときに使いやすいです。'
 };
 const MODELS=new Set(['qwen/qwen3.8-27b','openai/gpt-oss-20b','openai/gpt-oss-120b']);
+function norm(v=''){return String(v??'').normalize('NFKC').replace(/^#+/,'').replace(/\s+/g,'').toLowerCase();}
+function groundedHashtags(tags,input,summary=''){
+ const source=norm(input?.sourceText||'');const product=norm(summary);const out=[];
+ for(const raw of Array.isArray(tags)?tags:[]){
+  const body=String(raw||'').replace(/^#+/,'').trim();const n=norm(body);if(!n)continue;
+  if(!source.includes(n)&&!(product&&product.includes(n))&&!(product&&n.includes(product)))continue;
+  const tag='#'+body.replace(/\s+/g,'');if(!out.includes(tag))out.push(tag);if(out.length>=5)break;
+ }
+ return out;
+}
 function outputText(data){
  if(typeof data?.output_text==='string'&&data.output_text.trim())return data.output_text;
- for(const out of data?.output||[]){
-  if(out?.type!=='message')continue;
-  for(const c of out?.content||[])if(typeof c?.text==='string'&&c.text.trim())return c.text;
- }
+ for(const out of data?.output||[]){if(out?.type!=='message')continue;for(const c of out?.content||[])if(typeof c?.text==='string'&&c.text.trim())return c.text;}
  return '';
 }
 async function callModel({apiKey,model,input}){
- const isOss=model.startsWith('openai/gpt-oss-');
- const reasoning=isOss?{effort:'low'}:{effort:'none'};
+ const isOss=model.startsWith('openai/gpt-oss-');const reasoning=isOss?{effort:'low'}:{effort:'none'};
  const itemJson=JSON.stringify({itemName:input.itemName,catchcopy:input.catchcopy,description:input.description,itemPrice:input.itemPrice,reviewAverage:input.reviewAverage,reviewCount:input.reviewCount,genreId:input.genreId});
- const apiInput=isOss
-  ?[{role:'user',content:[{type:'input_text',text:`${systemPrompt(input)}\n\n【商品データ】\n${itemJson}`}]}]
-  :[{role:'system',content:[{type:'input_text',text:systemPrompt(input)}]},{role:'user',content:[{type:'input_text',text:itemJson}]}];
+ const apiInput=isOss?[{role:'user',content:[{type:'input_text',text:`${systemPrompt(input)}\n\n【商品データ】\n${itemJson}`}]}]:[{role:'system',content:[{type:'input_text',text:systemPrompt(input)}]},{role:'user',content:[{type:'input_text',text:itemJson}]}];
  const r=await fetch('https://api.groq.com/openai/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model,reasoning,input:apiInput,text:{format:{type:'json_schema',name:'urenavi_room_post_v1',strict:true,schema:OUTPUT_SCHEMA}},max_output_tokens:900})});
- const data=await r.json().catch(()=>({}));
- if(!r.ok){const e=new Error(data?.error?.message||`Groq request failed (${r.status})`);e.status=r.status;throw e;}
- const text=outputText(data);if(!text)throw new Error('Groq returned no structured message output');
- return{raw:JSON.parse(text),usage:data.usage||null};
+ const data=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(data?.error?.message||`Groq request failed (${r.status})`);e.status=r.status;throw e;}
+ const text=outputText(data);if(!text)throw new Error('Groq returned no structured message output');return{raw:JSON.parse(text),usage:data.usage||null};
 }
 module.exports=async function handler(req,res){
  res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type','application/json; charset=utf-8');
- if(process.env.VERCEL_ENV!=='preview')return res.status(404).json({message:'Not found'});
- if(req.method!=='GET')return res.status(405).json({message:'Method not allowed'});
+ if(process.env.VERCEL_ENV!=='preview')return res.status(404).json({message:'Not found'});if(req.method!=='GET')return res.status(405).json({message:'Method not allowed'});
  const id=String(req.query?.id||'kettle');const item=samples.find(x=>x.id===id);if(!item)return res.status(400).json({message:'unknown sample'});
  const apiKey=String(process.env.GROQ_API_KEY||'').trim();if(!apiKey)return res.status(503).json({message:'GROQ_API_KEY missing'});
  const input=prepareInput(item);const started=Date.now();
  try{
   const mode=String(req.query?.mode||'');
-  if(mode==='verify'){
-   const postText=verifyCases[id];if(!postText)return res.status(400).json({message:'no verify case'});
-   const verified=await verifyPost({sourceText:input.sourceText,postText});
-   return res.status(200).json({temporary:true,mode:'verify',id,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},postText,verified});
-  }
-  const requested=String(req.query?.model||'').trim();
-  const configured=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
-  const model=requested&&MODELS.has(requested)?requested:configured;
+  if(mode==='verify'){const postText=verifyCases[id];if(!postText)return res.status(400).json({message:'no verify case'});const verified=await verifyPost({sourceText:input.sourceText,postText});return res.status(200).json({temporary:true,mode:'verify',id,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},postText,verified});}
+  const requested=String(req.query?.model||'').trim();const configured=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;const model=requested&&MODELS.has(requested)?requested:configured;
   const ai=await callModel({apiKey,model,input});const inspection=inspectOutput(ai.raw,input);
   if(mode==='e2e'){
-   const verified=await verifyPost({sourceText:input.sourceText,postText:inspection.final.post_text,factsUsed:inspection.final.facts_used,productSummary:inspection.final.product_summary});
-   const final={...inspection.final,post_text:verified.safe?verified.postText:''};
-   return res.status(200).json({temporary:true,mode:'e2e',id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,preGuard:inspection.final,verified,final});
+   const preGuard={...inspection.final,hashtags:groundedHashtags(inspection.final.hashtags,input,inspection.final.product_summary)};
+   const verified=await verifyPost({sourceText:input.sourceText,postText:preGuard.post_text,factsUsed:preGuard.facts_used,productSummary:preGuard.product_summary});
+   const final={...preGuard,post_text:verified.safe?verified.postText:''};
+   return res.status(200).json({temporary:true,mode:'e2e',id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,preGuard,verified,final});
   }
   return res.status(200).json({temporary:true,id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,final:inspection.final,removedSentenceCount:inspection.removedSentenceCount});
  }catch(error){return res.status(error?.status||502).json({temporary:true,id,error:String(error?.message||'failed'),status:error?.status||null,elapsedMs:Date.now()-started});}
