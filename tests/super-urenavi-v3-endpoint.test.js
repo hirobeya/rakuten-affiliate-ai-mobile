@@ -32,7 +32,6 @@ const pass1={
     {type:'scene',text:'朝の一杯を自分好みにしたいとき。'}
   ]
 };
-const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'supported'}]};
 
 (async()=>{
   const oldEnv=process.env.VERCEL_ENV;
@@ -45,7 +44,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
       consumeQuota:async()=>true,
       groq:{
         callPass1:async()=>{p1++;return {raw:pass1,model:'mock'};},
-        callPass2:async()=>{p2++;return {raw:pass2,model:'mock'};}
+        callPass2:async()=>{p2++;throw new Error('pass2 must not run');}
       }
     });
     const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
@@ -59,24 +58,25 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     for(const variant of res.body.variants){
       assert.match(variant.text,/50-100度/);
       assert.match(variant.text,/1(?:℃|°C)単位/);
-      assert.match(variant.text,/飲み物に合わせて温度を細かく選べる/);
+      assert.match(variant.text,/比較ポイント/);
       assert.match(variant.text,/アフィリエイト広告/);
     }
     assert.equal(res.body.groq.pass1Calls,1);
-    assert.equal(res.body.groq.pass2Calls,1);
-    assert.equal(p1,1); assert.equal(p2,1);
+    assert.equal(res.body.groq.pass2Calls,0);
+    assert.equal(res.body.pass2Status,'not_needed_text_first');
+    assert.equal(p1,1); assert.equal(p2,0);
 
     const again=mockRes();
     await handler(req,again);
     assert.equal(again.code,200);
     assert.equal(again.body.groq.totalCalls,0);
-    assert.equal(p1,1); assert.equal(p2,1);
+    assert.equal(p1,1); assert.equal(p2,0);
 
     process.env.VERCEL_ENV='production';
     const blocked=mockRes();
     await handler(req,blocked);
     assert.equal(blocked.code,404);
-    assert.equal(p1,1); assert.equal(p2,1);
+    assert.equal(p1,1); assert.equal(p2,0);
   }finally{
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
   }
