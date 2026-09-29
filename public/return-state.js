@@ -109,6 +109,18 @@
     if(typeof root.aiTargetDecision==='function'){
       root.aiTargetDecision=function(){return{callAi:true,reasons:['single_pass_generation'],safeFallback:false,fallbackFactCount:0,fallbackFacts:[]};};
     }
+    if(typeof root.resolveAiGate==='function'){
+      root.resolveAiGate=function(item,index){
+        let enabled=true,state=null;
+        try{if(typeof aiGatesFullOutput!=='undefined')enabled=Boolean(aiGatesFullOutput);}catch{}
+        if(!enabled)return{enabled:false,status:'off',full:false,reasons:[]};
+        try{if(typeof aiRoomResults!=='undefined')state=aiRoomResults.get(index);}catch{}
+        if(!state||state.state==='loading'||state.state==='not_run')return{enabled:true,status:'fallback',full:false,reasons:['ai_pending']};
+        if(state.state==='error')return{enabled:true,status:'fallback',full:false,reasons:['ai_error']};
+        const copy=String(state.data?._v3Copy||'').trim();
+        return copy?{enabled:true,status:'full',full:true,useLegacy:false,reasons:[]}:{enabled:true,status:'fallback',full:false,reasons:['no_final_copy']};
+      };
+    }
     if(typeof root.aiPhase1Post==='function'){
       root.aiPhase1Post=function(item,result){return String(result?._v3Copy||'').trim();};
     }
