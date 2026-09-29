@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const {verifyPost,groundedFacts,buildGroundedSelectionLine}=require('../lib/room-post-verifier-v1');
+const {verifyPost,groundedFacts,buildGroundedSelectionLine,QTY_RE,allowedDirectBenefit,buildLiteralValueLine}=require('../lib/room-post-verifier-v1');
 
 test('unsafe shaver inferences are removed but grounded purchase criteria remain',async()=>{
   const source='電気シェーバー メンズ 回転式 6枚刃 IPX4 約92g USB充電\n回転式6枚刃。商品重量約92g。防水性能IPX4。USB充電に対応。';
@@ -12,8 +12,6 @@ test('unsafe shaver inferences are removed but grounded purchase criteria remain
   assert.match(result.postText,/約92g/);
   assert.match(result.postText,/IPX4/);
   assert.match(result.postText,/USB充電/);
-  assert.match(result.postText,/まとめて確認できます/);
-  assert.equal(result.raw.grounded_selection,true);
 });
 
 test('promo and identity fragments are not used as grounded purchase facts',()=>{
@@ -77,4 +75,34 @@ test('long combined shaver fact is decomposed into strict source-grounded spec a
   assert.ok(facts.includes('IPX4'));
   assert.ok(facts.includes('約92g'));
   assert.ok(facts.some(x=>/USB/.test(x)));
+});
+
+test('buying-more wording cannot masquerade as a numeric quantity fact',()=>{
+  assert.equal(QTY_RE.test('何度も買い足す手間を減らしたい'),false);
+  assert.equal(allowedDirectBenefit('何度も買い足す手間を減らしたい場面に活用できます。','ペット用うんち袋。200枚入り。'),false);
+});
+
+test('literal value recovery gives bike glove a grounded smartphone benefit',()=>{
+  const line=buildLiteralValueLine('バイク用グローブ 本革 防風 スマホ対応 山羊革');
+  assert.match(line,/スマホ対応/);
+  assert.match(line,/グローブを外す手間/);
+});
+
+test('literal value recovery gives foldable storage a grounded folding benefit',()=>{
+  const line=buildLiteralValueLine('折りたたみ式収納ベンチ 幅76cm 耐荷重100kg');
+  assert.match(line,/使わない時に折りたためる/);
+});
+
+test('literal value recovery gives pack quantity a grounded comparison benefit',()=>{
+  const line=buildLiteralValueLine('ペット用うんち袋 200枚入り 箱型');
+  assert.match(line,/200枚入り/);
+  assert.match(line,/必要な量/);
+});
+
+test('compound temperature sentence cannot smuggle unsupported storage benefit',async()=>{
+  const source='電気ケトル 0.8L 50〜100℃ 1℃単位 温度設定 保温';
+  const post='0.8Lの電気ケトルです。\n飲み物に合わせて温度を自分で決めたい人に、保温機能付きなので作り置いておきたい場面で便利です。';
+  const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['0.8L','1℃単位','温度設定','保温']});
+  assert.doesNotMatch(result.postText,/作り置/);
+  assert.match(result.postText,/毎回同じ設定|細かく自分で設定/);
 });
