@@ -1,0 +1,36 @@
+'use strict';
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {verifyPost,groundedFacts,buildGroundedSelectionLine}=require('../lib/room-post-verifier-v1');
+
+test('unsafe shaver inferences are removed but grounded purchase criteria remain',async()=>{
+  const source='電気シェーバー メンズ 回転式 6枚刃 IPX4 約92g USB充電\n回転式6枚刃。商品重量約92g。防水性能IPX4。USB充電に対応。';
+  const post='メンズ用の電気シェーバー。\n重量は約92gです。\n約92gなので疲れにくく持ち運びやすいです。\nIPX4なのでシャワー中でも安心です。\nUSB充電なので旅行先でも便利です。';
+  const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気シェーバー',factsUsed:['回転式6枚刃','商品重量約92g','防水性能IPX4','USB充電に対応']});
+  assert.doesNotMatch(result.postText,/疲れ|持ち運びやす|シャワー|安心|旅行先/);
+  assert.match(result.postText,/回転式6枚刃/);
+  assert.match(result.postText,/約92g/);
+  assert.match(result.postText,/IPX4/);
+  assert.match(result.postText,/USB充電/);
+  assert.match(result.postText,/条件に選びたい人/);
+  assert.equal(result.raw.grounded_selection,true);
+});
+
+test('promo and identity fragments are not used as grounded purchase facts',()=>{
+  const source='電気ケトル 0.8L 1℃単位 温度設定 USB充電 送料無料 楽天ランキング1位';
+  const facts=groundedFacts(['電気ケトル','0.8L','1℃単位','温度設定','送料無料','楽天ランキング1位'],source,'電気ケトル');
+  assert.deepEqual(facts,['1℃単位','0.8L','温度設定']);
+});
+
+test('selection fallback requires at least two exact grounded facts',()=>{
+  const line=buildGroundedSelectionLine({sourceText:'収納ボックス 50L',productSummary:'収納ボックス',factsUsed:['50L']});
+  assert.equal(line,'');
+});
+
+test('already useful safe copy is not padded with fallback boilerplate',async()=>{
+  const source='電気ケトル 0.8L 50〜100℃ 1℃単位 温度設定\n容量0.8L。50〜100℃の範囲を1℃単位で温度設定できます。';
+  const post='0.8Lの電気ケトル。\n50〜100℃の範囲を1℃単位で温度設定できます。\n毎回同じ温度設定に合わせたい時に使いやすいです。';
+  const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['0.8L','50〜100℃','1℃単位','温度設定']});
+  assert.equal(result.raw.grounded_selection,false);
+  assert.doesNotMatch(result.postText,/候補を絞りやすい/);
+});
