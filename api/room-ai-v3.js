@@ -45,9 +45,9 @@ function legacyContract(payload,item){
  return{...payload,validation:{mode:payload?.ok&&copy?'simple':'fallback',confidence:payload?.ok&&copy?'high':'low',imageAvailable:Boolean(payload?.imageFallback),productType:{value:compact(productType?.specific||productType?.general),source:sourceFor(item,productType?.quote),evidence:compact(productType?.quote),valid:productType?.valid===true},features,sellingPoints,unknowns:[],reasons:Array.isArray(payload?.validationReasons)?payload.validationReasons:[]},_v3Copy:copy,_v3Tier:payload?.tier||'',_v3CopyQuality:payload?.copyQuality||null,_v3Groq:payload?.groq||null,_v3CacheStatus:payload?.cacheStatus||null};
 }
 function allowedAuth(auth,runtimeEnv,previewOnly){
+ if(runtimeEnv==='production'&&previewOnly)return{ok:false,message:'not_found',status:404};
  if(!auth?.ok)return{ok:false,message:'access_required'};
  if(runtimeEnv==='preview'&&auth.plan!=='owner')return{ok:false,message:'owner_preview_only'};
- if(runtimeEnv==='production'&&previewOnly)return{ok:false,message:'not_found',status:404};
  if(runtimeEnv==='production'&&!['base','pro','owner'].includes(String(auth.plan||'')))return{ok:false,message:'paid_plan_required'};
  return{ok:true};
 }
