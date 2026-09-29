@@ -93,10 +93,10 @@ test('literal value recovery gives foldable storage a grounded folding benefit',
   assert.match(line,/使わない時に折りたためる/);
 });
 
-test('literal value recovery gives pack quantity a grounded comparison benefit',()=>{
+test('literal value recovery turns pack quantity into a direct replenishment benefit',()=>{
   const line=buildLiteralValueLine('ペット用うんち袋 200枚入り 箱型');
   assert.match(line,/200枚入り/);
-  assert.match(line,/必要な量/);
+  assert.match(line,/買い足す回数を減らしたい/);
 });
 
 test('compound temperature sentence cannot smuggle unsupported storage benefit',async()=>{
