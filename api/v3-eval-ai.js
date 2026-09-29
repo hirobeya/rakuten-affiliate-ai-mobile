@@ -8,13 +8,20 @@ const samples=[
  {id:'shaver',itemName:'電気シェーバー メンズ 回転式 6枚刃 IPX4 約92g USB充電',itemCaption:'回転式6枚刃。商品重量約92g。防水性能IPX4。USB充電に対応。',itemPrice:3319,genreId:'100939'}
 ];
 const MODELS=new Set(['qwen/qwen3.8-27b','openai/gpt-oss-20b','openai/gpt-oss-120b']);
-function outputText(data){if(typeof data?.output_text==='string')return data.output_text;for(const out of data?.output||[])for(const c of out?.content||[])if(typeof c?.text==='string')return c.text;return '';}
+function outputText(data){
+ if(typeof data?.output_text==='string'&&data.output_text.trim())return data.output_text;
+ for(const out of data?.output||[]){
+  if(out?.type!=='message')continue;
+  for(const c of out?.content||[])if(typeof c?.text==='string'&&c.text.trim())return c.text;
+ }
+ return '';
+}
 async function callModel({apiKey,model,input}){
  const reasoning=model.startsWith('openai/gpt-oss-')?{effort:'low'}:{effort:'none'};
  const r=await fetch('https://api.groq.com/openai/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model,reasoning,input:[{role:'system',content:[{type:'input_text',text:systemPrompt(input)}]},{role:'user',content:[{type:'input_text',text:JSON.stringify({itemName:input.itemName,catchcopy:input.catchcopy,description:input.description,itemPrice:input.itemPrice,reviewAverage:input.reviewAverage,reviewCount:input.reviewCount,genreId:input.genreId})}]}],text:{format:{type:'json_schema',name:'urenavi_room_post_v1',strict:true,schema:OUTPUT_SCHEMA}},max_output_tokens:900})});
  const data=await r.json().catch(()=>({}));
  if(!r.ok){const e=new Error(data?.error?.message||`Groq request failed (${r.status})`);e.status=r.status;throw e;}
- const text=outputText(data);if(!text)throw new Error('Groq returned no structured output');
+ const text=outputText(data);if(!text)throw new Error('Groq returned no structured message output');
  return{raw:JSON.parse(text),usage:data.usage||null};
 }
 module.exports=async function handler(req,res){
