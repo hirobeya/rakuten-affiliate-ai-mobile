@@ -57,11 +57,21 @@ test('runtime endpoint has one new generator path and no v3 value gate',()=>{
   assert.doesNotMatch(src,/super-urenavi-router/);
 });
 
-test('single-pass prompt permits natural benefits but bans made-up specs',()=>{
+test('single-pass prompt permits direct everyday benefits but bans inferred performance',()=>{
   const p=gen.systemPrompt(gen.prepareInput({itemName:'収納ボックス 50L',itemCaption:'折りたたみ可能'}));
-  assert.match(p,/自然に導ける使用場面や便益/);
-  assert.match(p,/数値、仕様、性能、効果を創作しない/);
+  assert.match(p,/許される便益は一段だけ/);
+  assert.match(p,/数値、仕様、性能、材質の性質、対応範囲、効果を創作・補完しない/);
+  assert.match(p,/92g.*疲れにくい/);
+  assert.match(p,/IPX4.*水洗いできる/);
+  assert.match(p,/1℃単位.*味が安定する/);
   assert.match(p,/比較ポイント/);
+});
+
+test('product summary drops unsupported numeric claims and hashtag cleanup rejects foreign-script noise',()=>{
+  const input=gen.prepareInput({itemName:'電気シェーバー 回転式 6枚刃',itemCaption:'USB充電'});
+  const out=gen.inspectOutput({understood:true,product_summary:'最大20℃の電気シェーバー',facts_used:['6枚刃'],post_text:'6枚刃の電気シェーバーです。',hashtags:['#電気シェーバー','#العنايةの日','#USB充電']},input);
+  assert.equal(out.final.product_summary,'');
+  assert.deepEqual(out.final.hashtags,['#電気シェーバー','#USB充電']);
 });
 
 test('golden fixture stays fixed at 10 categories x 5 products',()=>{
