@@ -60,7 +60,7 @@ async function runCall({apiKey,model,input,useImage}){
     if(image?.available)imageDataUrl=image.dataUrl;
   }
   const ai=await callGroqOnce({apiKey,model,input,imageDataUrl});
-  return{ai,usedImage:Boolean(imageDataUrl)};
+  return{ai,usedImage:Boolean(imageDataUrl),imageAttempted:Boolean(useImage)};
 }
 
 module.exports=async function handler(req,res){
@@ -78,14 +78,14 @@ module.exports=async function handler(req,res){
     const started=Date.now();
     const shortDescription=effectiveTextLength(input)<MIN_DESCRIPTION_CHARS;
     const firstWantsImage=shortDescription&&Boolean(input.imageUrl);
-    let first=await runCall({apiKey,model,input,useImage:firstWantsImage});
+    const first=await runCall({apiKey,model,input,useImage:firstWantsImage});
     let raw=first.ai.raw;
     let calls=1;
     let route=first.usedImage?'image_first':'text';
 
-    if(raw?.understood!==true&&!first.usedImage&&input.imageUrl){
+    if(raw?.understood!==true&&!first.imageAttempted&&input.imageUrl){
       const second=await runCall({apiKey,model,input,useImage:true});
-      raw=second.ai.raw;calls=2;route=second.usedImage?'text_then_image':'text';
+      raw=second.ai.raw;calls=2;route=second.usedImage?'text_then_image':'text_image_unavailable';
     }
 
     const inspection=inspectOutput(raw,input);
@@ -99,13 +99,13 @@ module.exports=async function handler(req,res){
       return json(res,422,{ok:false,understood:false,message:'情報不足のため生成できません',post_text:'',hashtags:[],facts_used:[],_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
     }
     if(!copy){
-      return json(res,422,{ok:false,understood:true,message:'検品後に表示できる投稿文が残りませんでした',post_text:'',hashtags:[],facts_used:final.facts_used,_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
+      return json(res,502,{ok:false,understood:true,message:'AI生成結果に表示できる本文がありません',post_text:'',hashtags:[],facts_used:final.facts_used,_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
     }
 
     return json(res,200,{
       ok:true,understood:true,product_summary:final.product_summary,facts_used:final.facts_used,
       post_text:final.post_text,hashtags:final.hashtags,_v3Copy:copy,copyReady:true,
-      validation:compatibilityValidation(final),rawAiJson:raw,model,route,calls,
+      validation:compatibilityValidation(final),model,route,calls,
       removedSentenceCount:inspection.removedSentenceCount,elapsedMs:Date.now()-started,
       promptVersion:PROMPT_VERSION,descriptionThreshold:MIN_DESCRIPTION_CHARS
     });
