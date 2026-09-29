@@ -7,7 +7,6 @@ const {
   DEFAULT_MODEL,MIN_DESCRIPTION_CHARS,PROMPT_VERSION,
   prepareInput,effectiveTextLength,callGroqOnce,inspectOutput
 }=require('../lib/room-post-generator-v1');
-const {VERIFIER_MODEL,verifyPost}=require('../lib/room-post-verifier-v1');
 
 const DEFAULT_DAILY_LIMIT=200;
 const store=createCacheStore(db);
@@ -58,13 +57,13 @@ function compatibilityValidation(final){
     features:[],sellingPoints:[],unknowns:[],reasons:[]
   };
 }
-async function saveGeneration(input,model,rawResult,inspection,route,verifier){
+async function saveGeneration(input,model,rawResult,inspection,route){
   try{
     await store.saveProduct({
       itemCode:input.itemCode,itemName:input.itemName,
       itemCaption:[input.catchcopy,input.description].filter(Boolean).join('\n'),
-      model,promptVersion:PROMPT_VERSION,schemaVersion:'room_post_single_pass_v1_verified',
-      rawAiJson:{raw_output:rawResult,final_output:inspection.final,removed_sentence_count:inspection.removedSentenceCount,route,verifier},
+      model,promptVersion:PROMPT_VERSION,schemaVersion:'room_post_single_pass_v2',
+      rawAiJson:{raw_output:rawResult,final_output:inspection.final,removed_sentence_count:inspection.removedSentenceCount,route},
       resultStatus:inspection.final?.understood?'ok':'unknown'
     });
   }catch(error){console.warn('room-post log save unavailable',error?.message||'unknown');}
@@ -78,9 +77,6 @@ async function runCall({apiKey,model,input,useImage}){
   }
   const ai=await callGroqOnce({apiKey,model,input,imageDataUrl});
   return{ai,usedImage:Boolean(imageDataUrl),imageAttempted:Boolean(useImage)};
-}
-async function runVerifier({input,postText,factsUsed,productSummary}){
-  return verifyPost({sourceText:input.sourceText,postText,factsUsed,productSummary});
 }
 
 module.exports=async function handler(req,res){
@@ -109,31 +105,25 @@ module.exports=async function handler(req,res){
     }
 
     const inspection=inspectOutput(raw,input);
-    let final={...inspection.final,hashtags:groundedHashtags(inspection.final?.hashtags,input,inspection.final?.product_summary)};
-    let verifier=null;
-    if(raw?.understood===true&&String(final?.post_text||'').trim()){
-      verifier=await runVerifier({input,postText:final.post_text,factsUsed:final.facts_used,productSummary:final.product_summary});
-      route=`${route}_guarded`;
-      final={...final,post_text:verifier.safe?verifier.postText:''};
-    }
+    const final={...inspection.final,hashtags:groundedHashtags(inspection.final?.hashtags,input,inspection.final?.product_summary)};
     inspection.final=final;
     const copy=combinedCopy(final);
     console.log('room-post raw',JSON.stringify({itemCode:input.itemCode,model,route,calls,raw}));
-    console.log('room-post final',JSON.stringify({itemCode:input.itemCode,model,route,calls,removedSentenceCount:inspection.removedSentenceCount,verifier,final}));
-    await saveGeneration(input,model,raw,inspection,route,verifier);
+    console.log('room-post final',JSON.stringify({itemCode:input.itemCode,model,route,calls,removedSentenceCount:inspection.removedSentenceCount,final}));
+    await saveGeneration(input,model,raw,inspection,route);
 
     if(raw?.understood!==true){
       return json(res,422,{ok:false,understood:false,message:'情報不足のため生成できません',post_text:'',hashtags:[],facts_used:[],_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
     }
     if(!copy){
-      return json(res,502,{ok:false,understood:true,message:'事実確認を通過した本文がありません',post_text:'',hashtags:[],facts_used:final.facts_used,_v3Copy:'',copyReady:false,model,route,calls,verifierModel:VERIFIER_MODEL,elapsedMs:Date.now()-started});
+      return json(res,502,{ok:false,understood:true,message:'事実確認を通過した本文がありません',post_text:'',hashtags:[],facts_used:final.facts_used,_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
     }
 
     return json(res,200,{
       ok:true,understood:true,product_summary:final.product_summary,facts_used:final.facts_used,
       post_text:final.post_text,hashtags:final.hashtags,_v3Copy:copy,copyReady:true,
-      validation:compatibilityValidation(final),model,verifierModel:VERIFIER_MODEL,route,calls,
-      removedSentenceCount:inspection.removedSentenceCount,verifierReasons:verifier?.reasons||[],elapsedMs:Date.now()-started,
+      validation:compatibilityValidation(final),model,route,calls,
+      removedSentenceCount:inspection.removedSentenceCount,elapsedMs:Date.now()-started,
       promptVersion:PROMPT_VERSION,descriptionThreshold:MIN_DESCRIPTION_CHARS
     });
   }catch(error){
