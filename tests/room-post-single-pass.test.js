@@ -44,7 +44,8 @@ test('sensitive genres add legal-care instruction without blocking generation',(
   const input=gen.prepareInput({itemName:'美容ローラー',genreId:'100939'});
   const prompt=gen.systemPrompt(input);
   assert.match(prompt,/医療・美容・健康/);
-  assert.match(prompt,/生成/);
+  assert.match(prompt,/断定せず/);
+  assert.match(prompt,/一般的な使用場面/);
 });
 
 test('runtime endpoint has one new generator path and no v3 value gate',()=>{
@@ -61,4 +62,18 @@ test('single-pass prompt permits natural benefits but bans made-up specs',()=>{
   assert.match(p,/自然に導ける使用場面や便益/);
   assert.match(p,/数値、仕様、性能、効果を創作しない/);
   assert.match(p,/比較ポイント/);
+});
+
+test('golden fixture stays fixed at 10 categories x 5 products',()=>{
+  const rows=require('./fixtures/room-post-golden-50.json');
+  assert.equal(rows.length,50);
+  const counts=new Map();for(const row of rows)counts.set(row.category,(counts.get(row.category)||0)+1);
+  assert.equal(counts.size,10);
+  for(const n of counts.values())assert.equal(n,5);
+  assert.ok(rows.some(x=>x.imageOnly));
+  assert.ok(rows.some(x=>x.sensitive));
+  assert.ok(rows.some(x=>x.numericHeavy));
+  assert.ok(rows.some(x=>x.variantRisk));
+  assert.ok(rows.some(x=>x.bundle));
+  assert.ok(rows.some(x=>x.pastFailure));
 });
