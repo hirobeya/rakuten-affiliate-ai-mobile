@@ -40,6 +40,16 @@ test('abstract interchangeable copy is removed',()=>{
   assert.match(out.final.post_text,/スマホ対応/);
 });
 
+test('foreign-script contamination is removed sentence by sentence',()=>{
+  const input=gen.prepareInput({itemName:'収納ベンチ 折りたたみ',itemCaption:'折りたたみ式収納ベンチ。'});
+  const raw={understood:true,product_summary:'収納ベンチ',facts_used:['折りたたみ'],post_text:'折りたたみ式収納ベンチです。コンパクトに хранえる設計です。使わない時はたたんでおけます。',hashtags:['#収納ベンチ']};
+  const out=gen.inspectOutput(raw,input);
+  assert.match(out.final.post_text,/収納ベンチです/);
+  assert.match(out.final.post_text,/たたんでおけます/);
+  assert.doesNotMatch(out.final.post_text,/хран/);
+  assert.equal(out.removedSentenceCount,1);
+});
+
 test('sensitive genres add legal-care instruction without blocking generation',()=>{
   const input=gen.prepareInput({itemName:'美容ローラー',genreId:'100939'});
   const prompt=gen.systemPrompt(input);
