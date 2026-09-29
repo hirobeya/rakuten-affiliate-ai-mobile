@@ -79,8 +79,8 @@ async function runCall({apiKey,model,input,useImage}){
   const ai=await callGroqOnce({apiKey,model,input,imageDataUrl});
   return{ai,usedImage:Boolean(imageDataUrl),imageAttempted:Boolean(useImage)};
 }
-async function runVerifier({input,postText}){
-  return verifyPost({sourceText:input.sourceText,postText});
+async function runVerifier({input,postText,factsUsed,productSummary}){
+  return verifyPost({sourceText:input.sourceText,postText,factsUsed,productSummary});
 }
 
 module.exports=async function handler(req,res){
@@ -112,7 +112,7 @@ module.exports=async function handler(req,res){
     let final={...inspection.final,hashtags:groundedHashtags(inspection.final?.hashtags,input,inspection.final?.product_summary)};
     let verifier=null;
     if(raw?.understood===true&&String(final?.post_text||'').trim()){
-      verifier=await runVerifier({input,postText:final.post_text});
+      verifier=await runVerifier({input,postText:final.post_text,factsUsed:final.facts_used,productSummary:final.product_summary});
       route=`${route}_guarded`;
       final={...final,post_text:verifier.safe?verifier.postText:''};
     }
