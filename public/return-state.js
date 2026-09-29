@@ -27,6 +27,27 @@
   const baseFetch=root.fetch.bind(root);
   root.fetch=function(resource,options){
     if(typeof resource==='string'&&resource.indexOf('/api/search?')===0)resource='/api/search-v2?'+resource.substring('/api/search?'.length);
+    if(typeof resource==='string'&&resource==='/api/room-ai'&&options&&typeof options.body==='string'){
+      try{
+        const body=JSON.parse(options.body);
+        let items=[];
+        try{if(typeof lastSearchItems!=='undefined'&&Array.isArray(lastSearchItems))items=lastSearchItems;}catch{}
+        const item=items.find(x=>(body.itemCode&&String(x?.itemCode||'')===String(body.itemCode))||String(x?.itemName||'')===String(body.itemName||''));
+        if(item){
+          body.catchcopy=String(item?.catchcopy||item?.itemCatchCopy||item?.catchCopy||'');
+          body.description=String(item?.itemDescription||item?.description||item?.itemCaption||body.itemCaption||'');
+          body.reviewAverage=Number(item?.reviewAverage)||0;
+          body.reviewCount=Number(item?.reviewCount)||0;
+          body.genreId=String(item?.genreId||item?.itemGenreId||'');
+          if(!body.imageUrl){
+            const image=[...(item?.mediumImageUrls||[]),...(item?.smallImageUrls||[])].find(Boolean);
+            body.imageUrl=typeof image==='string'?image:String(image?.imageUrl||'');
+          }
+        }
+        options={...options,body:JSON.stringify(body)};
+        delete options.signal;
+      }catch{}
+    }
     return baseFetch(resource,options);
   };
   root.__urenaviIntentSearchPatched=true;
