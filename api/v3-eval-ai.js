@@ -42,15 +42,21 @@ module.exports=async function handler(req,res){
  const apiKey=String(process.env.GROQ_API_KEY||'').trim();if(!apiKey)return res.status(503).json({message:'GROQ_API_KEY missing'});
  const input=prepareInput(item);const started=Date.now();
  try{
-  if(String(req.query?.mode||'')==='verify'){
+  const mode=String(req.query?.mode||'');
+  if(mode==='verify'){
    const postText=verifyCases[id];if(!postText)return res.status(400).json({message:'no verify case'});
-   const verified=await verifyPost({apiKey,sourceText:input.sourceText,postText});
+   const verified=await verifyPost({sourceText:input.sourceText,postText});
    return res.status(200).json({temporary:true,mode:'verify',id,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},postText,verified});
   }
   const requested=String(req.query?.model||'').trim();
   const configured=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
   const model=requested&&MODELS.has(requested)?requested:configured;
   const ai=await callModel({apiKey,model,input});const inspection=inspectOutput(ai.raw,input);
+  if(mode==='e2e'){
+   const verified=await verifyPost({sourceText:input.sourceText,postText:inspection.final.post_text});
+   const final={...inspection.final,post_text:verified.safe?verified.postText:''};
+   return res.status(200).json({temporary:true,mode:'e2e',id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,preGuard:inspection.final,verified,final});
+  }
   return res.status(200).json({temporary:true,id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,final:inspection.final,removedSentenceCount:inspection.removedSentenceCount});
  }catch(error){return res.status(error?.status||502).json({temporary:true,id,error:String(error?.message||'failed'),status:error?.status||null,elapsedMs:Date.now()-started});}
 };
