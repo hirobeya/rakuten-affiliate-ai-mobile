@@ -29,6 +29,22 @@ function accessAllowed(auth,env){
   if(env==='production')return ['base','pro','owner'].includes(String(auth.plan||''));
   return false;
 }
+function norm(v=''){return String(v??'').normalize('NFKC').replace(/^#+/,'').replace(/\s+/g,'').toLowerCase();}
+function groundedHashtags(tags,input,summary=''){
+  const source=norm(input?.sourceText||'');
+  const product=norm(summary);
+  const out=[];
+  for(const raw of Array.isArray(tags)?tags:[]){
+    const body=String(raw||'').replace(/^#+/,'').trim();
+    const n=norm(body);
+    if(!n)continue;
+    if(!source.includes(n)&&!(product&&product.includes(n))&&!(product&&n.includes(product)))continue;
+    const tag='#'+body.replace(/\s+/g,'');
+    if(!out.includes(tag))out.push(tag);
+    if(out.length>=5)break;
+  }
+  return out;
+}
 function combinedCopy(final){
   const post=String(final?.post_text||'').trim();
   const tags=Array.isArray(final?.hashtags)?final.hashtags.filter(Boolean).join(' '):'';
@@ -93,14 +109,14 @@ module.exports=async function handler(req,res){
     }
 
     const inspection=inspectOutput(raw,input);
-    let final=inspection.final;
+    let final={...inspection.final,hashtags:groundedHashtags(inspection.final?.hashtags,input,inspection.final?.product_summary)};
     let verifier=null;
     if(raw?.understood===true&&String(final?.post_text||'').trim()){
       verifier=await runVerifier({input,postText:final.post_text});
       route=`${route}_guarded`;
       final={...final,post_text:verifier.safe?verifier.postText:''};
-      inspection.final=final;
     }
+    inspection.final=final;
     const copy=combinedCopy(final);
     console.log('room-post raw',JSON.stringify({itemCode:input.itemCode,model,route,calls,raw}));
     console.log('room-post final',JSON.stringify({itemCode:input.itemCode,model,route,calls,removedSentenceCount:inspection.removedSentenceCount,verifier,final}));
@@ -133,3 +149,4 @@ module.exports.MIN_DESCRIPTION_CHARS=MIN_DESCRIPTION_CHARS;
 module.exports.PROMPT_VERSION=PROMPT_VERSION;
 module.exports.prepareInput=prepareInput;
 module.exports.inspectOutput=inspectOutput;
+module.exports.groundedHashtags=groundedHashtags;
