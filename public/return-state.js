@@ -78,19 +78,19 @@
   root.addEventListener('DOMContentLoaded',()=>{ensurePwaHead();wrapBootAuth();refreshRankingNote();ensureReturnGuide();const observer=new MutationObserver(()=>{refreshRankingNote();ensureReturnGuide();});observer.observe(root.document.body,{childList:true,subtree:true});},{once:true});
 })(typeof window==='undefined'?null:window);
 
-/* Sale copy bridge: the stable /api/room-ai endpoint now returns the server-approved
-   grounded copy. Never rebuild that copy through the legacy client heuristics. */
+/* Sale copy path: every paid/owner ROOM post goes through /api/room-ai.
+   No local rule gate, no legacy template fallback, no client-side rewriting. */
 (function(root){
   'use strict';
   if(!root||!root.document)return;
   root.addEventListener('DOMContentLoaded',()=>{
-    if(typeof root.aiPhase1Post!=='function'||root.__urenaviSaleCopyOverride)return;
-    const legacyAiPhase1Post=root.aiPhase1Post;
-    root.aiPhase1Post=function(item,result){
-      const copy=String(result?._v3Copy||'').trim();
-      if(copy)return copy;
-      return legacyAiPhase1Post.apply(this,arguments);
-    };
-    root.__urenaviSaleCopyOverride=true;
+    if(root.__urenaviSinglePassSaleCopyInstalled)return;
+    if(typeof root.aiTargetDecision==='function'){
+      root.aiTargetDecision=function(){return{callAi:true,reasons:['single_pass_generation'],safeFallback:false,fallbackFactCount:0,fallbackFacts:[]};};
+    }
+    if(typeof root.aiPhase1Post==='function'){
+      root.aiPhase1Post=function(item,result){return String(result?._v3Copy||'').trim();};
+    }
+    root.__urenaviSinglePassSaleCopyInstalled=true;
   },{once:true});
 })(typeof window==='undefined'?null:window);
