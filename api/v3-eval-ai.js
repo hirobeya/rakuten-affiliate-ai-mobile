@@ -53,7 +53,7 @@ module.exports=async function handler(req,res){
   const model=requested&&MODELS.has(requested)?requested:configured;
   const ai=await callModel({apiKey,model,input});const inspection=inspectOutput(ai.raw,input);
   if(mode==='e2e'){
-   const verified=await verifyPost({sourceText:input.sourceText,postText:inspection.final.post_text});
+   const verified=await verifyPost({sourceText:input.sourceText,postText:inspection.final.post_text,factsUsed:inspection.final.facts_used,productSummary:inspection.final.product_summary});
    const final={...inspection.final,post_text:verified.safe?verified.postText:''};
    return res.status(200).json({temporary:true,mode:'e2e',id,model,elapsedMs:Date.now()-started,input:{itemName:input.itemName,description:input.description},raw:ai.raw,preGuard:inspection.final,verified,final});
   }
