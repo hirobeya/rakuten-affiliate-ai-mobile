@@ -46,9 +46,9 @@ test('kettle direct benefit cannot smuggle invented family or cookware context',
 
 test('best-fit wording is rejected when the source only provides temperature controls',async()=>{
   const source='電気ケトル 0.8L 50〜100℃ 1℃単位 温度設定 保温\n容量0.8L。50〜100℃の範囲を1℃単位で温度設定できます。';
-  const post='0.8Lの電気ケトルです。\n飲み物ごとに適した温度を選びたい方に。\n毎回同じ温度設定に合わせたい時に使いやすいです。';
+  const post='0.8Lの電気ケトルです。\n飲み物ごとに適した温度や適温を選びたい方に。\n毎回同じ温度設定に合わせたい時に使いやすいです。';
   const result=await verifyPost({sourceText:source,postText:post,productSummary:'電気ケトル',factsUsed:['0.8L','1℃単位','温度設定']});
-  assert.doesNotMatch(result.postText,/適した/);
+  assert.doesNotMatch(result.postText,/適した|適温/);
   assert.match(result.postText,/毎回同じ温度設定/);
 });
 
