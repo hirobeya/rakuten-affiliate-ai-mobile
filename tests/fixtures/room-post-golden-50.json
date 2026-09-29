@@ -1,0 +1,61 @@
+[
+  {"id":"storage-1","category":"storage","itemName":"収納ボックス 50L 折りたたみ ふた付き","itemCaption":"容量50L。使わない時は折りたたみ可能。","genreId":"100804"},
+  {"id":"storage-2","category":"storage","itemName":"収納ベンチ 折りたたみ 収納ボックス 耐荷重100kg 幅76cm","itemCaption":"座面下を収納スペースとして使える折りたたみ式収納ベンチ。幅76cm、耐荷重100kg。","genreId":"100804","pastFailure":true},
+  {"id":"storage-3","category":"storage","itemName":"モップハンガー 壁掛け 掃除道具 収納ホルダー","itemCaption":"モップやほうきを壁面にまとめて収納するホルダー。","genreId":"215783","pastFailure":true},
+  {"id":"storage-4","category":"storage","itemName":"衣類収納ケース 引き出し 3段 幅54cm","itemCaption":"3段の引き出し式。幅54cm。衣類収納用。","genreId":"100804"},
+  {"id":"storage-5","category":"storage","itemName":"圧縮袋 衣類用 10枚セット","itemCaption":"衣類用圧縮袋10枚セット。","genreId":"215783"},
+
+  {"id":"kitchen-1","category":"kitchen","itemName":"電気ケトル 0.8L 50-100℃ 1℃単位 温度設定 保温","itemCaption":"容量0.8L。50〜100℃の範囲を1℃単位で温度設定できます。","genreId":"562637","pastFailure":true},
+  {"id":"kitchen-2","category":"kitchen","itemName":"フライパン 26cm IH ガス対応","itemCaption":"直径26cm。IH・ガス火に対応。","genreId":"558944","pastFailure":true},
+  {"id":"kitchen-3","category":"kitchen","itemName":"ノンフライヤー 4.7L 温度調節 タイマー","itemCaption":"容量4.7L。温度調節とタイマー機能を搭載。","genreId":"562637","pastFailure":true},
+  {"id":"kitchen-4","category":"kitchen","itemName":"計量おたま 目盛り付き","itemCaption":"おたま部分に計量用の目盛り付き。","genreId":"558944"},
+  {"id":"kitchen-5","category":"kitchen","itemName":"クッキー抜き型 動物 6個セット","itemCaption":"動物型のクッキー抜き型6個セット。","genreId":"558944"},
+
+  {"id":"power-1","category":"power","itemName":"モバイルバッテリー 10000mAh USB-C 20W","itemCaption":"容量10000mAh。USB-C出力、最大20W。","genreId":"564500"},
+  {"id":"power-2","category":"power","itemName":"ポータブル電源 768Wh 定格出力800W USB-C","itemCaption":"容量768Wh、定格出力800W。USB-Cポート搭載。","genreId":"562637","numericHeavy":true},
+  {"id":"power-3","category":"power","itemName":"空調服用 バッテリー 24V 専用","itemCaption":"空調服用の専用バッテリー。24V。","genreId":"503190","pastFailure":true},
+  {"id":"power-4","category":"power","itemName":"USB-C 充電器 65W 2ポート","itemCaption":"最大65W。USB-Cポート2口。","genreId":"564500"},
+  {"id":"power-5","category":"power","itemName":"モバイルバッテリーケース 収納ポーチ","itemCaption":"モバイルバッテリーやケーブルを収納するポーチ。","genreId":"216131","pastFailure":true},
+
+  {"id":"pet-1","category":"pet","itemName":"犬用 ドライブベッド 車用","itemCaption":"車内で犬が過ごすためのドライブベッド。","genreId":"101213","pastFailure":true},
+  {"id":"pet-2","category":"pet","itemName":"犬 ベッド 洗える Mサイズ","itemCaption":"犬用ベッド。カバーは洗濯可能。Mサイズ。","genreId":"101213"},
+  {"id":"pet-3","category":"pet","itemName":"うんち袋 ペット用 200枚入り 箱型","itemCaption":"ペットの散歩やトイレ処理に使える袋。200枚入り。","genreId":"101213","pastFailure":true},
+  {"id":"pet-4","category":"pet","itemName":"ペットシート ウェットティッシュ付き 50枚","itemCaption":"ペット用シート50枚。ウェットティッシュ付き。","genreId":"101213","pastFailure":true},
+  {"id":"pet-5","category":"pet","itemName":"ペット用 毛取りグローブ 右手用","itemCaption":"ブラッシングしながら抜け毛を集めるペット用グローブ。","genreId":"101213","pastFailure":true},
+
+  {"id":"clean-1","category":"cleaning","itemName":"ハンディクリーナー コードレス 6000Pa","itemCaption":"コードレスのハンディクリーナー。吸引力6000Pa。","genreId":"562637"},
+  {"id":"clean-2","category":"cleaning","itemName":"電動モップ コードレス 回転式","itemCaption":"回転式のコードレス電動モップ。","genreId":"562637","pastFailure":true},
+  {"id":"clean-3","category":"cleaning","itemName":"洗濯ネット 5枚セット","itemCaption":"サイズ違いの洗濯ネット5枚セット。","genreId":"215783"},
+  {"id":"clean-4","category":"cleaning","itemName":"マイクロファイバークロス 12枚","itemCaption":"掃除用マイクロファイバークロス12枚。","genreId":"215783"},
+  {"id":"clean-5","category":"cleaning","itemName":"網戸掃除 ハンディモップ","itemCaption":"網戸の掃除に使うハンディモップ。","genreId":"215783"},
+
+  {"id":"beauty-1","category":"beauty_health","itemName":"電気シェーバー メンズ 回転式 6枚刃 IPX4 約92g USB充電","itemCaption":"回転式6枚刃。商品重量約92g。防水性能IPX4。USB充電に対応。","genreId":"100939","pastFailure":true},
+  {"id":"beauty-2","category":"beauty_health","itemName":"美顔ローラー フェイス用","itemCaption":"顔まわりに転がして使う美容ローラー。","genreId":"100939","sensitive":true},
+  {"id":"beauty-3","category":"beauty_health","itemName":"ウォーターピーリング 超音波","itemCaption":"水を使ってケアするウォーターピーリング機器。","genreId":"100939","sensitive":true},
+  {"id":"beauty-4","category":"beauty_health","itemName":"膝サポーター 固定用","itemCaption":"膝まわりを固定するためのサポーター。","genreId":"551169","sensitive":true},
+  {"id":"beauty-5","category":"beauty_health","itemName":"入れ歯洗浄剤 120錠入","itemCaption":"部分入れ歯・総入れ歯兼用の洗浄剤。120錠入。","genreId":"100938","sensitive":true},
+
+  {"id":"fashion-1","category":"fashion","itemName":"バイク グローブ 本革 防風 スマホ対応 山羊革 メンズ レディース","itemCaption":"山羊革を使用したバイク用グローブ。防風仕様、スマホ対応。","genreId":"503190","pastFailure":true},
+  {"id":"fashion-2","category":"fashion","itemName":"パンプス レディース 本革 フラット","itemCaption":"本革を使用したフラットタイプのパンプス。","genreId":"558885"},
+  {"id":"fashion-3","category":"fashion","itemName":"パジャマ レディース コットン 長袖","itemCaption":"コットン素材の長袖パジャマ。","genreId":"100433"},
+  {"id":"fashion-4","category":"fashion","itemName":"水着 キッズ 長袖 3点セット","itemCaption":"長袖トップス、パンツ、キャップの3点セット。","genreId":"100533"},
+  {"id":"fashion-5","category":"fashion","itemName":"スニーカー メンズ 27cm ブラック","itemCaption":"メンズ向けスニーカー。27cm。","genreId":"558885","variantRisk":true},
+
+  {"id":"electronics-1","category":"electronics","itemName":"Bluetooth CDプレーヤー スピーカー内蔵","itemCaption":"Bluetooth対応。スピーカー内蔵のCDプレーヤー。","genreId":"211742"},
+  {"id":"electronics-2","category":"electronics","itemName":"DisplayPort HDMI 変換ケーブル 1m","itemCaption":"DisplayPortからHDMIへ接続する1mケーブル。","genreId":"211742"},
+  {"id":"electronics-3","category":"electronics","itemName":"WiFi レンタル 14日 50GB","itemCaption":"14日間のレンタルWiFi。データ容量50GB。","genreId":"565004"},
+  {"id":"electronics-4","category":"electronics","itemName":"スマホケース Galaxy S26 Plus 手帳型","itemCaption":"Galaxy S26 Plus対応の手帳型スマホケース。","genreId":"564500","variantRisk":true},
+  {"id":"electronics-5","category":"electronics","itemName":"アンテナケーブル 3m L型 ストレート","itemCaption":"長さ3m。L型-ストレートのアンテナケーブル。","genreId":"211742"},
+
+  {"id":"daily-1","category":"daily_goods","itemName":"BOS うんちが臭わない袋 90枚","itemCaption":"ペットの排泄物処理用袋。90枚入り。","genreId":"101213","pastFailure":true},
+  {"id":"daily-2","category":"daily_goods","itemName":"耐熱手袋 4枚セット 17.5×12×1cm","itemCaption":"キッチン・オーブン作業向けの耐熱手袋4枚セット。サイズ17.5×12×1cm。","genreId":"215783","numericHeavy":true},
+  {"id":"daily-3","category":"daily_goods","itemName":"遮光シート 黒+シルバー 1.45×1m","itemCaption":"窓用遮光シート。サイズ1.45×1m。","genreId":"215783","variantRisk":true},
+  {"id":"daily-4","category":"daily_goods","itemName":"筆ペン 極細顔料 10本セット","itemCaption":"極細タイプの顔料筆ペン10本セット。","genreId":"215783","bundle":true},
+  {"id":"daily-5","category":"daily_goods","itemName":"ウェットティッシュ 80枚×12個","itemCaption":"80枚入りを12個まとめたセット。","genreId":"215783","bundle":true},
+
+  {"id":"edge-1","category":"edge_cases","itemName":"無名ブランド 卓上小物","itemCaption":"","genreId":"100000","imageOnly":true,"imageUrl":"https://example.com/golden-image-1.jpg"},
+  {"id":"edge-2","category":"edge_cases","itemName":"折りたたみ式 携帯用品","itemCaption":"商品説明は画像をご確認ください。","genreId":"100000","imageOnly":true,"imageUrl":"https://example.com/golden-image-2.jpg"},
+  {"id":"edge-3","category":"edge_cases","itemName":"収納用品 M L 2サイズ展開","itemCaption":"MサイズとLサイズがあります。商品ページで選択してください。","genreId":"100804","variantRisk":true},
+  {"id":"edge-4","category":"edge_cases","itemName":"ポータブル電源 1024Wh 1500W 100V 50/60Hz USB-C 100W","itemCaption":"容量1024Wh、定格出力1500W、AC100V 50/60Hz、USB-C最大100W。長い説明文を想定した固定テスト。","genreId":"562637","numericHeavy":true},
+  {"id":"edge-5","category":"edge_cases","itemName":"まとめ売り タオル 20枚セット 5色","itemCaption":"タオル20枚セット。5色の組み合わせ。","genreId":"215783","bundle":true,"variantRisk":true}
+]
