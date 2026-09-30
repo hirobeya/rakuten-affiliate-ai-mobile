@@ -7,7 +7,14 @@ const { buildTokenizer, validateSentence, SECOND_LAYER_WORDS, DICTIONARY_POLICY 
 
 (async () => {
   assert.equal(DICTIONARY_POLICY.dictionary, 'IPADIC');
-  assert.equal(SECOND_LAYER_WORDS.size, 0, 'Layer 2 must remain empty until corpus threshold review is complete');
+
+  const review = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'room-post-layer2-candidate-review-v1.json'), 'utf8'));
+  assert.equal(review.threshold.primaryMetric, 'topGenreCount');
+  assert.equal(review.threshold.minTopGenreCount, 6);
+  assert.deepEqual([...SECOND_LAYER_WORDS].sort(), [...review.selectedWords].sort(), 'Runtime Layer 2 must exactly match the frozen corpus review decision');
+  assert.equal(SECOND_LAYER_WORDS.size, 0, 'Layer 2 remains empty while the one-time candidate review is pending');
+  assert.ok(review.candidatesAtOrAroundThreshold.length >= 18, 'Threshold-adjacent candidate list must be retained for one-time review');
+  assert.ok(review.candidatesAtOrAroundThreshold.every(row => row.decision === 'reject'), 'No provisional candidate may silently enter Layer 2');
 
   const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'grounding-layer2-safety.json'), 'utf8'));
   const tokenizer = await buildTokenizer();
@@ -32,7 +39,7 @@ const { buildTokenizer, validateSentence, SECOND_LAYER_WORDS, DICTIONARY_POLICY 
     assert.equal(actual.violation, 'UNGROUNDED_CONTENT_WORD', `Wrong violation: ${row.name}`);
   }
 
-  console.log('GROUNDING_LAYER2_SAFETY ' + JSON.stringify(results));
+  console.log('GROUNDING_LAYER2_SAFETY ' + JSON.stringify({ reviewStatus: review.status, threshold: review.threshold, results }));
 })().catch((err) => {
   console.error(err);
   process.exitCode = 1;
