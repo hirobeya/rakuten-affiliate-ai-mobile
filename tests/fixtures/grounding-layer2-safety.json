@@ -11,7 +11,7 @@
   "ok": [
     {"name":"temperature-target","inputText":"電気ケトル 50〜100℃ 1℃単位で温度設定","sentence":"温度を1℃単位で設定したい人に"},
     {"name":"wind-target","inputText":"バイクグローブ 防風","sentence":"風が気になる人に"},
-    {"name":"fold-target","inputText":"折りたたみ式ベンチ","sentence":"使わない時はたたんでおきたい人に"}
+    {"name":"fold-target","inputText":"折りたたみ式ベンチ","sentence":"使わない時はたたみたい人に"}
   ],
   "weak": [
     {"name":"weight-only","inputText":"シェーバー 約92g","sentence":"約92gのシェーバーです"},
