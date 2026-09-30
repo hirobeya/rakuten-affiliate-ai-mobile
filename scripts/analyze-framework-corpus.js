@@ -6,14 +6,23 @@ const kuromoji = require('kuromoji');
 
 const FIXTURE_DIR = path.join(__dirname, '..', 'tests', 'fixtures');
 const FILE_RE = /^rakuten-large-genres-20260925-.*\.json$/;
+const TOKENIZER_DICTIONARY = 'kuromoji standard IPADIC';
 
 const FIXED_FRAMEWORK_WORDS = new Set([
-  '人','時','場合','こと','もの','ため','方','向け',
+  '人','時','とき','場合','こと','もの','ため','方','向け',
   'する','いる','ある','なる','できる','使う','探す','選ぶ','欲しい','気になる'
 ]);
 
 const ABSTRACT_EXCLUDES = new Set([
   '便利','おすすめ','魅力','人気','高評価','最強','最高','安心','快適','簡単','楽','おしゃれ'
+]);
+
+// These are not automatically excluded solely because they are frequent.
+// They are flagged because allowing them without source grounding would assert
+// product performance/specification/quality. Final layer-2 admission must also
+// survive the negative-fixture validator test.
+const PERFORMANCE_RISK_TERMS = new Set([
+  '軽量','大容量','防水','静音','収納','高品質','省スペース'
 ]);
 
 const ALLOWED_POS = new Set(['名詞','動詞']);
@@ -34,12 +43,17 @@ function loadCorpus() {
   for (const file of files) {
     const parsed = JSON.parse(fs.readFileSync(path.join(FIXTURE_DIR, file), 'utf8'));
     for (const genre of parsed.genres || []) {
+      // In this fixed corpus each genre record is the top-level Rakuten genre
+      // bucket used to build the fixture. Child item.genreId is never used as
+      // cross-genre evidence because it would inflate genre diversity.
+      const topGenreId = String(genre.genreId || '');
+      const topGenreName = String(genre.nameJa || '');
       for (const item of genre.items || []) {
         const text = normalizeText([item.itemName, item.catchcopy, item.description].filter(Boolean).join(' '));
         docs.push({
           file,
-          parentGenreId: String(genre.genreId || ''),
-          genreName: String(genre.nameJa || ''),
+          topGenreId,
+          topGenreName,
           itemGenreId: String(item.genreId || ''),
           itemCode: String(item.itemCode || ''),
           text,
@@ -73,72 +87,112 @@ function isCandidate(token, term) {
   return true;
 }
 
-function thresholdPass(row, totalDocs, totalGenres, minGenreCount, minDocRate) {
-  return row.genreCount >= minGenreCount && row.docCount / totalDocs >= minDocRate && row.genreCount < totalGenres;
+function thresholdPass(row, minTopGenreCount, minDocRate) {
+  return row.topGenreCount >= minTopGenreCount && row.docRate >= minDocRate;
 }
 
 async function main() {
   const docs = loadCorpus();
   const tokenizer = await buildTokenizer();
   const stats = new Map();
-  const genreSet = new Set(docs.map((d) => d.parentGenreId));
+  const topGenreMap = new Map();
 
   for (const doc of docs) {
-    const seen = new Set();
+    if (!topGenreMap.has(doc.topGenreId)) {
+      topGenreMap.set(doc.topGenreId, { genreId: doc.topGenreId, genre: doc.topGenreName, itemCount: 0 });
+    }
+    topGenreMap.get(doc.topGenreId).itemCount += 1;
+
+    const seen = new Map();
     for (const token of tokenizer.tokenize(doc.text)) {
       const term = baseForm(token);
       if (!isCandidate(token, term)) continue;
-      seen.add(term);
+      if (!seen.has(term)) seen.set(term, new Set());
+      seen.get(term).add(token.pos);
     }
-    for (const term of seen) {
-      if (!stats.has(term)) stats.set(term, { term, docCount: 0, genres: new Set() });
+
+    for (const [term, posSet] of seen) {
+      if (!stats.has(term)) {
+        stats.set(term, { term, docCount: 0, topGenres: new Set(), pos: new Set() });
+      }
       const row = stats.get(term);
       row.docCount += 1;
-      row.genres.add(doc.parentGenreId);
+      row.topGenres.add(doc.topGenreId);
+      for (const pos of posSet) row.pos.add(pos);
     }
   }
 
   const totalDocs = docs.length;
-  const totalGenres = genreSet.size;
+  const totalTopGenres = topGenreMap.size;
   const rows = [...stats.values()].map((row) => ({
     term: row.term,
+    pos: [...row.pos].sort(),
     docCount: row.docCount,
-    docRate: Number((row.docCount / totalDocs).toFixed(4)),
-    genreCount: row.genres.size,
-    genreRate: Number((row.genres.size / totalGenres).toFixed(4)),
-  })).sort((a, b) => b.genreCount - a.genreCount || b.docCount - a.docCount || a.term.localeCompare(b.term, 'ja'));
+    docRate: Number((row.docCount / totalDocs).toFixed(6)),
+    topGenreCount: row.topGenres.size,
+    topGenreRate: Number((row.topGenres.size / totalTopGenres).toFixed(6)),
+    performanceRisk: PERFORMANCE_RISK_TERMS.has(row.term),
+    topGenreIds: [...row.topGenres].sort(),
+  })).sort((a, b) => b.topGenreCount - a.topGenreCount || b.docCount - a.docCount || a.term.localeCompare(b.term, 'ja'));
 
+  const topGenreDistribution = [...topGenreMap.values()]
+    .sort((a, b) => b.itemCount - a.itemCount || a.genreId.localeCompare(b.genreId));
+
+  // Grid is descriptive only. It does not choose the final threshold.
+  // Final threshold must be chosen from the observed distribution, never to
+  // admit a desired individual term.
   const thresholdGrid = [
-    { minGenreCount: 6, minDocRate: 0.01 },
-    { minGenreCount: 8, minDocRate: 0.015 },
-    { minGenreCount: 10, minDocRate: 0.02 },
-    { minGenreCount: 12, minDocRate: 0.025 },
+    { minTopGenreCount: 4, minDocRate: 0 },
+    { minTopGenreCount: 6, minDocRate: 0 },
+    { minTopGenreCount: 8, minDocRate: 0 },
+    { minTopGenreCount: 10, minDocRate: 0 },
+    { minTopGenreCount: 12, minDocRate: 0 },
   ];
 
   const grid = thresholdGrid.map((t) => ({
     ...t,
-    candidateCount: rows.filter((r) => thresholdPass(r, totalDocs, totalGenres, t.minGenreCount, t.minDocRate)).length,
-    top30: rows.filter((r) => thresholdPass(r, totalDocs, totalGenres, t.minGenreCount, t.minDocRate)).slice(0, 30),
+    candidateCount: rows.filter((r) => thresholdPass(r, t.minTopGenreCount, t.minDocRate)).length,
+    boundarySample: rows.filter((r) => Math.abs(r.topGenreCount - t.minTopGenreCount) <= 1).slice(0, 50),
   }));
 
   const report = {
     generatedAt: new Date().toISOString(),
+    tokenizer: {
+      library: 'kuromoji',
+      dictionary: TOKENIZER_DICTIONARY,
+      dictionaryChangePolicy: 'Any dictionary change requires full layer-2 recalculation, all fixture reruns, and the 50-product Groq batch rerun.',
+    },
     corpus: {
       fixturePattern: FILE_RE.source,
       totalDocs,
-      totalParentGenres: totalGenres,
-      note: 'Current fixed 780-style corpus primarily contains itemName; catchcopy/description are used when present. This report must not be represented as full production-input coverage when those fields are absent.',
+      totalTopGenres,
+      note: 'The fixed corpus uses the fixture top-level genre record as the aggregation bucket; item.genreId is intentionally ignored for genre-frequency evidence. Current fixtures primarily contain itemName; catchcopy/description are consumed when present and this limitation must be reported.',
     },
+    topGenreDistribution,
     fixedFrameworkWords: [...FIXED_FRAMEWORK_WORDS],
     abstractExcludes: [...ABSTRACT_EXCLUDES],
+    performanceRiskTerms: [...PERFORMANCE_RISK_TERMS],
+    thresholdPolicy: {
+      primaryMetric: 'topGenreCount',
+      secondaryMetric: 'docRate',
+      rule: 'Choose from the corpus distribution before reviewing individual desired words. A term that asserts performance/specification/quality when absent from input is rejected even if it clears the frequency threshold.',
+    },
     thresholdGrid: grid,
-    top100ByCrossGenreFrequency: rows.slice(0, 100),
+    allCandidates: rows,
   };
 
   const out = path.join(__dirname, '..', 'tests', 'reports', 'framework-corpus-report.json');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, JSON.stringify(report, null, 2));
-  console.log('FRAMEWORK_CORPUS_REPORT ' + JSON.stringify(report));
+
+  // Keep logs compact. Full candidate data is emitted as an artifact by CI.
+  console.log('FRAMEWORK_CORPUS_SUMMARY ' + JSON.stringify({
+    tokenizer: report.tokenizer,
+    corpus: report.corpus,
+    topGenreDistribution,
+    thresholdGrid: grid.map(({ minTopGenreCount, minDocRate, candidateCount }) => ({ minTopGenreCount, minDocRate, candidateCount })),
+    top30Candidates: rows.slice(0, 30),
+  }));
 }
 
 main().catch((err) => {
