@@ -1,0 +1,43 @@
+name: ROOM Post Golden Live 50
+
+on:
+  push:
+    branches:
+      - v3-value-architecture-fix-20260929
+    paths:
+      - '.github/workflows/room-post-golden-live.yml'
+      - 'scripts/room-post-golden.js'
+      - 'lib/room-post-generator-v1.js'
+      - 'lib/room-post-grounding-policy-v1.js'
+      - 'tests/fixtures/room-post-golden-50.json'
+  workflow_dispatch:
+
+jobs:
+  live50:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      URENAVI_GOLDEN_REPEAT: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run live Groq golden 50
+        run: npm run test:golden
+
+      - name: Upload live golden report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: room-post-golden-live-50
+          path: tests/reports/room-post-golden-latest.json
+          if-no-files-found: warn
