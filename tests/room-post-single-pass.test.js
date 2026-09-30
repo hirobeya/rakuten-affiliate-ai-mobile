@@ -59,6 +59,47 @@ test('numeric-unit meaning swaps are rejected and Japanese spacing artifacts are
   assert.equal(out.removedSentenceCount,1);
 });
 
+test('unsupported factual adjectives are removed when absent from source',()=>{
+  const input=gen.prepareInput({itemName:'ポータブル電源 768Wh 定格出力800W USB-C',itemCaption:'容量768Wh、定格出力800W。USB-Cポート搭載。'});
+  const out=gen.inspectOutput({understood:true,product_summary:'ポータブル電源',facts_used:['768Wh'],post_text:'小型のポータブル電源です。容量768Whです。',hashtags:[]},input);
+  assert.doesNotMatch(out.final.post_text,/小型/);
+  assert.match(out.final.post_text,/768Wh/);
+});
+
+test('unsafe riding-phone scene is removed while stopped phone use is allowed',()=>{
+  const input=gen.prepareInput({itemName:'バイク グローブ スマホ対応',itemCaption:'スマホ対応のバイク用グローブ。'});
+  const out=gen.inspectOutput({understood:true,product_summary:'バイク用グローブ',facts_used:['スマホ対応'],post_text:'バイク用グローブです。走行中にスマホを確認できます。停車中にスマホを確認する時、グローブを外す手間を減らせます。',hashtags:[]},input);
+  assert.doesNotMatch(out.final.post_text,/走行中/);
+  assert.match(out.final.post_text,/停車中/);
+});
+
+test('spatial-fit benefit requires explicit installation dimensions, not shoe or cable length',()=>{
+  const shoe=gen.prepareInput({itemName:'スニーカー メンズ 27cm',itemCaption:'メンズ向けスニーカー。27cm。'});
+  const a=gen.inspectOutput({understood:true,product_summary:'スニーカー',facts_used:['27cm'],post_text:'サイズは27cmです。置きたい場所に収まるか確認できます。',hashtags:[]},shoe);
+  assert.match(a.final.post_text,/27cm/);
+  assert.doesNotMatch(a.final.post_text,/置きたい場所/);
+  const cable=gen.prepareInput({itemName:'アンテナケーブル 3m',itemCaption:'長さ3mのアンテナケーブル。'});
+  const b=gen.inspectOutput({understood:true,product_summary:'アンテナケーブル',facts_used:['3m'],post_text:'長さ3mです。使うスペースに収まるか確認できます。',hashtags:[]},cable);
+  assert.doesNotMatch(b.final.post_text,/使うスペース/);
+  const box=gen.prepareInput({itemName:'衣類収納ケース 幅54cm',itemCaption:'幅54cm。衣類収納用。'});
+  const c=gen.inspectOutput({understood:true,product_summary:'衣類収納ケース',facts_used:['幅54cm'],post_text:'幅54cmの衣類収納ケースです。置きたい場所に収まるか確認できます。',hashtags:[]},box);
+  assert.match(c.final.post_text,/置きたい場所/);
+});
+
+test('malformed Japanese and translated vocabulary are removed sentence by sentence',()=>{
+  const input=gen.prepareInput({itemName:'パンプス 本革 フラット',itemCaption:'本革のフラットパンプス。'});
+  const out=gen.inspectOutput({understood:true,product_summary:'パンプス',facts_used:['本革'],post_text:'本革のパンプスです。フラットタイプでです。長度を確認できます。',hashtags:[]},input);
+  assert.equal(out.final.post_text,'本革のパンプスです。');
+  assert.equal(out.removedSentenceCount,2);
+});
+
+test('quantity does not invent consumable or refill-frequency claims',()=>{
+  const input=gen.prepareInput({itemName:'耐熱手袋 4枚セット',itemCaption:'耐熱手袋4枚セット。'});
+  const out=gen.inspectOutput({understood:true,product_summary:'耐熱手袋',facts_used:['4枚セット'],post_text:'耐熱手袋4枚セットです。消耗品なので買い足す回数を減らせます。複数をまとめて用意したい時に使えます。',hashtags:[]},input);
+  assert.doesNotMatch(out.final.post_text,/消耗品|買い足す/);
+  assert.match(out.final.post_text,/まとめて用意/);
+});
+
 test('sensitive genres add legal-care instruction without blocking generation',()=>{
   const input=gen.prepareInput({itemName:'美容ローラー',genreId:'100939'});
   const prompt=gen.systemPrompt(input);
@@ -74,6 +115,12 @@ test('runtime endpoint has one new generator path and no v3 value gate',()=>{
   assert.doesNotMatch(src,/needs_value/);
   assert.doesNotMatch(src,/qualityGate/);
   assert.doesNotMatch(src,/super-urenavi-router/);
+});
+
+test('runtime hashtag grounding blocks invented prefixes or suffixes',()=>{
+  const roomAi=require('../api/room-ai');
+  const input=gen.prepareInput({itemName:'膝サポーター 固定用',itemCaption:'膝まわりを固定するためのサポーター。'});
+  assert.deepEqual(roomAi.groundedHashtags(['#膝サポーター','#Fixed膝サポーター','#固定用'],input,'膝サポーター'),['#膝サポーター','#固定用']);
 });
 
 test('single-pass prompt permits direct everyday benefits but bans inferred performance',()=>{
