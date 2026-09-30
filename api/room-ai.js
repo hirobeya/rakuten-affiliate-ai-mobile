@@ -37,7 +37,7 @@ function groundedHashtags(tags,input,summary=''){
     const body=String(raw||'').replace(/^#+/,'').trim();
     const n=norm(body);
     if(!n)continue;
-    if(!source.includes(n)&&!(product&&product.includes(n))&&!(product&&n.includes(product)))continue;
+    if(!source.includes(n)&&!(product&&n===product))continue;
     const tag='#'+body.replace(/\s+/g,'');
     if(!out.includes(tag))out.push(tag);
     if(out.length>=5)break;
