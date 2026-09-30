@@ -1,0 +1,40 @@
+{
+  "schema": "room_post_layer2_candidate_review_v1",
+  "status": "pending_one_time_human_review",
+  "corpus": {
+    "totalProducts": 780,
+    "topLevelGenres": 39,
+    "productsPerTopLevelGenre": 20,
+    "dictionary": "kuromoji standard IPADIC"
+  },
+  "threshold": {
+    "primaryMetric": "topGenreCount",
+    "minTopGenreCount": 6,
+    "secondaryMetric": "docRate",
+    "minDocRate": 0,
+    "rationale": "The observed distribution has 18 candidates at >=4 top-level genres, then drops to 3 at >=6 and stays at 3 through >=10 before dropping to 2 at >=12. The first stable elbow is therefore 6. This threshold was chosen from the distribution shape, not to admit any desired word."
+  },
+  "admissionRule": "Reject any term if using it for a product whose input does not contain that term could assert or imply that product's performance, specification, quality, capability, material, size, capacity, compatibility, or feature.",
+  "selectedWords": [],
+  "note": "Layer 2 remains empty until the one-time candidate-list review is completed. No term may be hand-added.",
+  "candidatesAtOrAroundThreshold": [
+    {"term":"cm","pos":["名詞"],"docCount":39,"docRate":0.05,"topGenreCount":19,"decision":"reject","reason":"measurement/specification unit; unsafe as ungrounded framework vocabulary"},
+    {"term":"mm","pos":["名詞"],"docCount":46,"docRate":0.058974,"topGenreCount":15,"decision":"reject","reason":"measurement/specification unit; unsafe as ungrounded framework vocabulary"},
+    {"term":"ml","pos":["名詞"],"docCount":43,"docRate":0.055128,"topGenreCount":10,"decision":"reject","reason":"capacity/specification unit; unsafe as ungrounded framework vocabulary"},
+    {"term":"pc","pos":["名詞"],"docCount":8,"docRate":0.010256,"topGenreCount":5,"decision":"reject","reason":"product/domain token, not grammar or neutral connective vocabulary"},
+    {"term":"ml×","pos":["名詞"],"docCount":7,"docRate":0.008974,"topGenreCount":5,"decision":"reject","reason":"measurement/count fragment; unsafe as ungrounded framework vocabulary"},
+    {"term":"uv","pos":["名詞"],"docCount":6,"docRate":0.007692,"topGenreCount":5,"decision":"reject","reason":"performance/specification token; unsafe when absent from input"},
+    {"term":"led","pos":["名詞"],"docCount":5,"docRate":0.00641,"topGenreCount":5,"decision":"reject","reason":"product/specification token; unsafe when absent from input"},
+    {"term":"xl","pos":["名詞"],"docCount":5,"docRate":0.00641,"topGenreCount":5,"decision":"reject","reason":"size/specification token; unsafe when absent from input"},
+    {"term":"black","pos":["名詞"],"docCount":7,"docRate":0.008974,"topGenreCount":4,"decision":"reject","reason":"color/product attribute; unsafe when absent from input"},
+    {"term":"usb","pos":["名詞"],"docCount":7,"docRate":0.008974,"topGenreCount":4,"decision":"reject","reason":"compatibility/specification token; unsafe when absent from input"},
+    {"term":"ct","pos":["名詞"],"docCount":5,"docRate":0.00641,"topGenreCount":4,"decision":"reject","reason":"ambiguous product/domain token, not framework vocabulary"},
+    {"term":"pro","pos":["名詞"],"docCount":5,"docRate":0.00641,"topGenreCount":4,"decision":"reject","reason":"model/marketing token, not framework vocabulary"},
+    {"term":"ac","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"product/specification token; unsafe when absent from input"},
+    {"term":"bk","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"ambiguous model/color fragment, not framework vocabulary"},
+    {"term":"ex","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"ambiguous model fragment, not framework vocabulary"},
+    {"term":"in","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"foreign-language fragment, not Japanese framework vocabulary"},
+    {"term":"off","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"promotion/state token; unsafe as ungrounded framework vocabulary"},
+    {"term":"women","pos":["名詞"],"docCount":4,"docRate":0.005128,"topGenreCount":4,"decision":"reject","reason":"target/audience attribute; unsafe when absent from input"}
+  ]
+}

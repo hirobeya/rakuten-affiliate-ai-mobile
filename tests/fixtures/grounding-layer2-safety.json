@@ -1,0 +1,20 @@
+{
+  "ng": [
+    {"name":"lightweight-carry","inputText":"折りたたみチェア","sentence":"軽量で持ち運べます"},
+    {"name":"large-capacity","inputText":"収納ボックス","sentence":"大容量です"},
+    {"name":"waterproof","inputText":"腕時計","sentence":"防水仕様です"},
+    {"name":"silent","inputText":"扇風機","sentence":"静音設計です"},
+    {"name":"high-quality","inputText":"バッグ","sentence":"高品質な素材です"},
+    {"name":"space-saving","inputText":"ラック","sentence":"省スペースで置けます"},
+    {"name":"storage","inputText":"ベンチ","sentence":"収納できます"}
+  ],
+  "ok": [
+    {"name":"temperature-target","inputText":"電気ケトル 50〜100℃ 1℃単位で温度設定","sentence":"温度を1℃単位で設定したい人に"},
+    {"name":"wind-target","inputText":"バイクグローブ 防風","sentence":"風が気になる人に"},
+    {"name":"fold-target","inputText":"折りたたみ式ベンチ","sentence":"使わない時はたたみたい人に"}
+  ],
+  "weak": [
+    {"name":"weight-only","inputText":"シェーバー 約92g","sentence":"約92gのシェーバーです"},
+    {"name":"ipx-only","inputText":"シェーバー IPX4","sentence":"IPX4のシェーバーです"}
+  ]
+}

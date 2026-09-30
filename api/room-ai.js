@@ -1,46 +1,142 @@
 'use strict';
 
-const legacy=require('../lib/room-ai-handler');
-const router=require('../lib/super-urenavi-router');
-const typeWrapper=require('../lib/super-urenavi-type-wrapper');
-const {productCacheKey,normalizeImageUrl,imageCacheKey}=require('../lib/super-urenavi-cache');
+const {authorize,db}=require('../lib/billing');
+const {createCacheStore}=require('../lib/super-urenavi-cache');
+const {loadImageDataUrl}=require('../lib/room-ai-handler');
+const {
+  DEFAULT_MODEL,MIN_DESCRIPTION_CHARS,PROMPT_VERSION,
+  prepareInput,effectiveTextLength,callGroqOnce,inspectOutput
+}=require('../lib/room-post-generator-v1');
 
-const PROMPT_VERSION='2026-09-24-ai-facts-only-v13';
-const VALIDATION_RULE_VERSION='2026-09-24-ai-facts-v9';
+const DEFAULT_DAILY_LIMIT=200;
+const store=createCacheStore(db);
 
-/*
-Compatibility source contract for existing regression assertions. Runtime routing now lives in
-lib/super-urenavi-router.js, while Groq request details remain in lib/room-ai-handler.js.
-Product-type knowledge is added by lib/super-urenavi-type-wrapper.js without forcing Groq on local routes.
-maxItems:3
-max_output_tokens:Math.max(256,Math.min(400,Number(maxOutputTokens)||320))
-preprocessedCaption.length<=700
-slice(0,520)
-slice(-160)
-retryableJson400
-safeError?.code==='json_validate_failed'
-attempt===0
-cacheVersionMatch
-推測・意味拡張・購入後変化・悩み・おすすめ対象の作文は禁止
-2026-09-24-ai-facts-only-v13
-sellingPoints
-事実だけ抽出
-textとevidenceを同じ完全な連続引用
-途中切れ禁止
-function makeInputHash(){ return require('node:crypto').createHash('sha256').update(PROMPT_VERSION+VALIDATION_RULE_VERSION).digest('hex'); }
-*/
+function json(res,status,body){
+  res.setHeader('Cache-Control','no-store');
+  res.setHeader('Content-Type','application/json; charset=utf-8');
+  return res.status(status).json(body);
+}
+async function consumeQuota(){
+  const raw=Number(process.env.GROQ_ROOM_DAILY_LIMIT||DEFAULT_DAILY_LIMIT);
+  const limit=Number.isSafeInteger(raw)&&raw>0?raw:DEFAULT_DAILY_LIMIT;
+  const result=await db('rpc/urenavi_consume_ai_daily_limit',{method:'POST',body:JSON.stringify({p_limit:limit})});
+  return result===true||result?.allowed===true;
+}
+function accessAllowed(auth,env){
+  if(!auth?.ok)return false;
+  if(env==='preview')return auth.plan==='owner';
+  if(env==='production')return ['base','pro','owner'].includes(String(auth.plan||''));
+  return false;
+}
+function norm(v=''){return String(v??'').normalize('NFKC').replace(/^#+/,'').replace(/\s+/g,'').toLowerCase();}
+function groundedHashtags(tags,input,summary=''){
+  const source=norm(input?.sourceText||'');
+  const product=norm(summary);
+  const out=[];
+  for(const raw of Array.isArray(tags)?tags:[]){
+    const body=String(raw||'').replace(/^#+/,'').trim();
+    const n=norm(body);
+    if(!n)continue;
+    if(!source.includes(n)&&!(product&&n===product))continue;
+    const tag='#'+body.replace(/\s+/g,'');
+    if(!out.includes(tag))out.push(tag);
+    if(out.length>=5)break;
+  }
+  return out;
+}
+function combinedCopy(final){
+  const post=String(final?.post_text||'').trim();
+  const tags=Array.isArray(final?.hashtags)?final.hashtags.filter(Boolean).join(' '):'';
+  return [post,tags].filter(Boolean).join('\n\n').trim();
+}
+function compatibilityValidation(final){
+  return {
+    mode:final?.understood?'simple':'fallback',
+    confidence:final?.understood?'high':'low',
+    productType:{value:String(final?.product_summary||''),source:'ai',evidence:'',valid:final?.understood===true},
+    features:[],sellingPoints:[],unknowns:[],reasons:[]
+  };
+}
+async function saveGeneration(input,model,rawResult,inspection,route){
+  try{
+    await store.saveProduct({
+      itemCode:input.itemCode,itemName:input.itemName,
+      itemCaption:[input.catchcopy,input.description].filter(Boolean).join('\n'),
+      model,promptVersion:PROMPT_VERSION,schemaVersion:'room_post_single_pass_v2',
+      rawAiJson:{raw_output:rawResult,final_output:inspection.final,removed_sentence_count:inspection.removedSentenceCount,route},
+      resultStatus:inspection.final?.understood?'ok':'unknown'
+    });
+  }catch(error){console.warn('room-post log save unavailable',error?.message||'unknown');}
+}
+async function runCall({apiKey,model,input,useImage}){
+  if(!(await consumeQuota())){const e=new Error('AI daily limit reached');e.status=429;throw e;}
+  let imageDataUrl=null;
+  if(useImage&&input.imageUrl){
+    const image=await loadImageDataUrl(input.imageUrl);
+    if(image?.available)imageDataUrl=image.dataUrl;
+  }
+  const ai=await callGroqOnce({apiKey,model,input,imageDataUrl});
+  return{ai,usedImage:Boolean(imageDataUrl),imageAttempted:Boolean(useImage)};
+}
 
-const handler=typeWrapper.createHandler();
+module.exports=async function handler(req,res){
+  if(req.method!=='POST')return json(res,405,{message:'Method not allowed'});
+  const env=String(process.env.VERCEL_ENV||'');
+  if(!['preview','production'].includes(env))return json(res,404,{message:'Not found'});
+  try{
+    const auth=await authorize(req);
+    if(!accessAllowed(auth,env))return json(res,403,{message:env==='preview'?'owner_preview_only':'paid_plan_required'});
+    const input=prepareInput(req.body&&typeof req.body==='object'?req.body:{});
+    if(!input.itemName)return json(res,400,{message:'itemName is required'});
+    const apiKey=String(process.env.GROQ_API_KEY||'').trim();
+    if(!apiKey)return json(res,503,{message:'GROQ_API_KEY is not configured'});
+    const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
+    const started=Date.now();
+    const shortDescription=effectiveTextLength(input)<MIN_DESCRIPTION_CHARS;
+    const firstWantsImage=shortDescription&&Boolean(input.imageUrl);
+    const first=await runCall({apiKey,model,input,useImage:firstWantsImage});
+    let raw=first.ai.raw;
+    let calls=1;
+    let route=first.usedImage?'image_first':'text';
 
-module.exports=handler;
-Object.assign(module.exports,legacy);
-module.exports.handler=handler;
-module.exports.createRouterHandler=router.createHandler;
-module.exports.createTypeKnowledgeHandler=typeWrapper.createHandler;
-module.exports.resolveLocalUnderstanding=router.resolveLocalUnderstanding;
-module.exports.promoteImageHint=router.promoteImageHint;
-module.exports.productCacheKeyV2=productCacheKey;
-module.exports.normalizeImageUrlV2=normalizeImageUrl;
-module.exports.imageCacheKeyV2=imageCacheKey;
+    if(raw?.understood!==true&&!first.imageAttempted&&input.imageUrl){
+      const second=await runCall({apiKey,model,input,useImage:true});
+      raw=second.ai.raw;calls=2;route=second.usedImage?'text_then_image':'text_image_unavailable';
+    }
+
+    const inspection=inspectOutput(raw,input);
+    const final={...inspection.final,hashtags:groundedHashtags(inspection.final?.hashtags,input,inspection.final?.product_summary)};
+    inspection.final=final;
+    const copy=combinedCopy(final);
+    console.log('room-post raw',JSON.stringify({itemCode:input.itemCode,model,route,calls,raw}));
+    console.log('room-post final',JSON.stringify({itemCode:input.itemCode,model,route,calls,removedSentenceCount:inspection.removedSentenceCount,final}));
+    await saveGeneration(input,model,raw,inspection,route);
+
+    if(raw?.understood!==true){
+      return json(res,422,{ok:false,understood:false,message:'情報不足のため生成できません',post_text:'',hashtags:[],facts_used:[],_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
+    }
+    if(!copy){
+      return json(res,502,{ok:false,understood:true,message:'事実確認を通過した本文がありません',post_text:'',hashtags:[],facts_used:final.facts_used,_v3Copy:'',copyReady:false,model,route,calls,elapsedMs:Date.now()-started});
+    }
+
+    return json(res,200,{
+      ok:true,understood:true,product_summary:final.product_summary,facts_used:final.facts_used,
+      post_text:final.post_text,hashtags:final.hashtags,_v3Copy:copy,copyReady:true,
+      validation:compatibilityValidation(final),model,route,calls,
+      removedSentenceCount:inspection.removedSentenceCount,elapsedMs:Date.now()-started,
+      promptVersion:PROMPT_VERSION,descriptionThreshold:MIN_DESCRIPTION_CHARS
+    });
+  }catch(error){
+    const timeout=error?.name==='AbortError'||/timeout|aborted/i.test(String(error?.message||''));
+    const status=error?.status===429?429:timeout?504:502;
+    if(error?.retryAfter)res.setHeader('Retry-After',String(error.retryAfter));
+    console.warn('room-post failed',JSON.stringify({status,message:error?.message||'unknown'}));
+    return json(res,status,{ok:false,copyReady:false,_v3Copy:'',message:status===429?'AIの利用上限に達しました':timeout?'AI生成が時間内に完了しませんでした':'AI生成に失敗しました'});
+  }
+};
+
+module.exports.MIN_DESCRIPTION_CHARS=MIN_DESCRIPTION_CHARS;
 module.exports.PROMPT_VERSION=PROMPT_VERSION;
-module.exports.VALIDATION_RULE_VERSION=VALIDATION_RULE_VERSION;
+module.exports.prepareInput=prepareInput;
+module.exports.inspectOutput=inspectOutput;
+module.exports.groundedHashtags=groundedHashtags;
