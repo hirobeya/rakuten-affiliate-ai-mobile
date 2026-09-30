@@ -41,7 +41,7 @@ async function main(){
   if(fixtures.length!==50)throw new Error(`golden set must contain 50 products, got ${fixtures.length}`);
   const categories=new Map();for(const x of fixtures)categories.set(x.category,(categories.get(x.category)||0)+1);
   if(categories.size!==10||[...categories.values()].some(n=>n!==5))throw new Error('golden set must be 10 categories x 5 products');
-  if(!apiKey){console.log(JSON.stringify({ok:false,message:'GROQ_API_KEY is required for live golden run',count:fixtures.length,categories:Object.fromEntries(categories)},null,2));return;}
+  if(!apiKey){throw new Error('GROQ_API_KEY is required for live golden run');}
   const report={generatedAt:new Date().toISOString(),models,repeat,count:fixtures.length,categories:Object.fromEntries(categories),results:[]};
   for(const model of models){
     for(let index=0;index<fixtures.length;index++){
