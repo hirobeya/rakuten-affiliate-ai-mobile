@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ウレナビ 最小試作</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f6f8;color:#17223b;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.w{max-width:680px;margin:auto;padding:16px 12px 60px}h1{font-size:23px;margin:0}.sub{font-size:12px;color:#687386;line-height:1.6;margin:6px 0 14px}.box,.card{background:#fff;border-radius:18px;padding:14px;margin-top:12px;box-shadow:0 5px 20px #0000000a}textarea{width:100%;min-height:220px;border:1px solid #dfe3e8;border-radius:14px;padding:12px;font-size:15px;line-height:1.55;background:#fff}button{width:100%;min-height:48px;border:0;border-radius:13px;padding:11px 12px;font-size:15px;font-weight:900}.primary{background:#b73727;color:#fff;margin-top:10px}.secondary{background:#172a4b;color:#fff;margin-top:8px}.ghost{background:#eef1f4;color:#344054;margin-top:8px}.muted{font-size:11px;color:#7a8391;line-height:1.55;margin-top:7px}.status{font-size:12px;font-weight:800;line-height:1.55;margin-top:8px}.grid{display:grid;gap:10px}.rank{font-size:11px;font-weight:900;color:#8f2f22}.name{font-size:14px;font-weight:900;line-height:1.45;margin-top:3px}.facts{font-size:11px;line-height:1.55;margin:7px 0 0;padding-left:18px}.reason{background:#f8fbff;border:1px solid #dfeaf6;border-radius:11px;padding:9px;font-size:11px;line-height:1.55;margin-top:8px}.copy{white-space:pre-wrap;background:#fafafa;border:1px solid #e1e5ea;border-radius:12px;padding:11px;font-size:13px;line-height:1.6}.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:11px;padding:9px;font-size:11px;line-height:1.55;margin-top:9px}.hidden{display:none}.time{font-size:12px;font-weight:900;color:#8f2f22;margin-top:8px}
+</style>
+</head>
+<body><main class="w">
+<h1>ウレナビ 最小試作</h1>
+<div class="sub">iPhoneで画像→文字化。その文字だけを使って、候補整理とROOM投稿準備を行います。楽天APIはこの画面では使いません。</div>
+<section class="box">
+<button id="pasteBtn" class="ghost">ショートカットでコピーした文字を貼り付け</button>
+<textarea id="text" placeholder="ランキングページや商品ページからiPhoneで抽出した文字がここに入ります。"></textarea>
+<button id="go" class="primary">候補を整理して投稿準備</button>
+<div id="status" class="status"></div>
+<div id="elapsed" class="time"></div>
+</section>
+<section id="results" class="grid"></section>
+<section id="post" class="box hidden">
+<div class="status" id="recommendation"></div>
+<div id="warnings"></div>
+<div id="copy" class="copy"></div>
+<button id="copyBtn" class="secondary">ROOM投稿文をコピー</button>
+</section>
+<section class="box"><b style="font-size:13px">この試作の役割</b><div class="muted">①スクショを撮る → ②iPhoneショートカットで文字化 → ③この画面へ貼り付け → ④候補整理 → ⑤投稿文コピー。画像そのものは原則ウレナビへ送信しません。</div></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script>
+const SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+const SUPABASE_KEY='sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:localStorage}});
+const $=id=>document.getElementById(id);let started=0;
+async function token(){const {data}=await sb.auth.getSession();const t=data?.session?.access_token;if(!t)throw new Error('先に通常のウレナビでownerログインしてください。');return t}
+function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+$('pasteBtn').onclick=async()=>{try{const t=await navigator.clipboard.readText();if(t)$('text').value=t;$('status').textContent=t?'貼り付けました。':'クリップボードに文字がありません。'}catch{$('status').textContent='貼り付け許可が必要です。長押しして貼り付けても使えます。'}};
+$('go').onclick=async()=>{const text=$('text').value.trim();if(!text)return;$('status').textContent='文字情報だけで候補を整理しています…';$('results').innerHTML='';$('post').classList.add('hidden');$('elapsed').textContent='';started=Date.now();try{const t=await token();const r=await fetch('/api/room-ai',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({mode:'ocr_text',text})});const d=await r.json();if(!r.ok)throw new Error(d.message||'処理できませんでした');for(const c of d.candidates||[]){const el=document.createElement('article');el.className='card';const facts=(c.facts||[]).map(x=>`<li>${esc(x)}</li>`).join('');const reasons=(c.reasons||[]).map(esc).join('・');el.innerHTML=`<div class="rank">候補 ${c.rank}</div><div class="name">${esc(c.productName)}</div><div class="muted">${[c.price,c.rating,c.reviewCount,c.ranking].filter(Boolean).map(esc).join(' ｜ ')}</div>${reasons?`<div class="reason">${reasons}</div>`:''}${facts?`<ul class="facts">${facts}</ul>`:''}`;$('results').appendChild(el)}$('recommendation').textContent=d.recommendationReason||'入力情報の範囲で候補を整理しました。';$('copy').textContent=d.roomCopy||'';$('warnings').innerHTML=(d.warnings||[]).map(x=>`<div class="warn">${esc(x)}</div>`).join('');$('post').classList.remove('hidden');$('status').textContent='投稿準備まで完了しました。';$('elapsed').textContent=`文字貼付→投稿準備：${Math.round((Date.now()-started)/1000)}秒`;}catch(e){$('status').textContent=e.message||'処理できませんでした';}}
+$('copyBtn').onclick=async()=>{const v=$('copy').textContent;if(!v)return;await navigator.clipboard.writeText(v);$('copyBtn').textContent='コピーしました';setTimeout(()=>$('copyBtn').textContent='ROOM投稿文をコピー',1200)};
+</script></body></html>
