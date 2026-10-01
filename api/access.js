@@ -10,15 +10,7 @@ module.exports = async function handler(req,res) {
   res.setHeader('Referrer-Policy','no-referrer');
   try {
     if (req.method === 'POST' && req.query.action === 'upgrade-pro') {
-      const result=await upgradeBaseToPro(req);
-      if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
-      return res.status(result.ok?200:(result.status||409)).json({
-        upgraded:!!result.upgraded,
-        alreadyPro:!!result.alreadyPro,
-        plan:result.plan||'',
-        current_period_end:result.current_period_end||null,
-        message:result.message||''
-      });
+      return res.status(404).json({message:'販売・新規受付は現在停止しています'});
     }
     if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
     if (req.query.action === 'logout') {
@@ -27,7 +19,7 @@ module.exports = async function handler(req,res) {
     }
 
     if (req.query.action === 'pro-billing-status') {
-      return res.status(200).json({configured:!!proConfig()});
+      return res.status(200).json({configured:false});
     }
 
     if (req.query.action === 'status' || req.query.action === 'pro-status') {
@@ -80,28 +72,8 @@ module.exports = async function handler(req,res) {
       return res.status(200).json({approved:true,email:row.email});
     }
 
-    if (req.query.action === 'buy-pro') {
-      const c = proConfig({required:true});
-      const link = await stripeGet('/payment_links/'+encodeURIComponent(c.link));
-      const items = await stripeGet('/payment_links/'+encodeURIComponent(c.link)+'/line_items?limit=10');
-      if (link.livemode !== c.live || !link.active || link.url !== c.url || (items.has_more || items.data?.length!==1) || !items.data?.some(x=>x.quantity===1 && !x.adjustable_quantity?.enabled && x.price?.id===c.price && x.price.unit_amount===1480 && x.price.currency==='jpy' && x.price.recurring?.interval==='month' && x.price.recurring.interval_count===1)) throw new Error('Pro purchase configuration invalid');
-      const appUrl = process.env.URENAVI_APP_URL || (c.live ? 'https://rakuten-affiliate-ai-mobile.vercel.app' : 'https://'+process.env.VERCEL_BRANCH_URL);
-      const destination=new URL(link.after_completion?.redirect?.url || '');
-      if(link.after_completion?.type!=='redirect' || destination.origin!==new URL(appUrl).origin || destination.pathname!=='/api/access' || destination.searchParams.get('action')!=='activate-pro' || destination.searchParams.get('session_id')!=='{CHECKOUT_SESSION_ID}') throw new Error('Pro activation redirect invalid');
-      return res.redirect(302,c.url);
-    }
-
-    if (req.query.action === 'buy') {
-      const c = config();
-      const link = await stripeGet('/payment_links/'+encodeURIComponent(c.link));
-      const items = await stripeGet('/payment_links/'+encodeURIComponent(c.link)+'/line_items?limit=10');
-      if (link.livemode !== c.live || !link.active || link.url !== c.url || (items.has_more || items.data?.length!==1) || !items.data?.some(x=>x.quantity===1 && !x.adjustable_quantity?.enabled && x.price?.id===c.price && x.price.unit_amount===980 && x.price.currency==='jpy' && x.price.recurring?.interval==='month' && x.price.recurring.interval_count===1)) throw new Error('Purchase configuration invalid');
-      const restriction=link.restrictions?.completed_sessions;
-      if (restriction?.limit !== 30 || restriction.count >= 30) throw new Error('Offer unavailable');
-      const appUrl = process.env.URENAVI_APP_URL || (c.live ? 'https://rakuten-affiliate-ai-mobile.vercel.app' : 'https://'+process.env.VERCEL_BRANCH_URL);
-      const destination=new URL(link.after_completion?.redirect?.url || '');
-      if(link.after_completion?.type!=='redirect' || destination.origin!==new URL(appUrl).origin || destination.pathname!=='/api/access' || destination.searchParams.get('action')!=='activate' || destination.searchParams.get('session_id')!=='{CHECKOUT_SESSION_ID}') throw new Error('Activation redirect invalid');
-      return res.redirect(302,c.url);
+    if (req.query.action === 'buy-pro' || req.query.action === 'buy') {
+      return res.status(404).json({message:'販売・新規受付は現在停止しています'});
     }
 
     if (!['activate','activate-pro'].includes(String(req.query.action||''))) return res.status(400).json({message:'Invalid action'});
