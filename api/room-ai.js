@@ -142,6 +142,12 @@ module.exports=async function handler(req,res){
     if(!apiKey)return json(res,503,{message:'GROQ_API_KEY is not configured'});
     const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
 
+    if(req.body?.mode==='ocr_workflow_post'){
+      if(env!=='preview'||auth.plan!=='owner')return json(res,404,{message:'Not found'});
+      const result=await require('../lib/ocr-workflow-post').preparePost({body:req.body,apiKey,model,consumeQuota});
+      return json(res,200,result);
+    }
+
     if(['ocr_text','ocr_workflow'].includes(req.body?.mode)){
       if(env!=='preview'||auth.plan!=='owner')return json(res,404,{message:'Not found'});
       return await runOcrTextMode({res,apiKey,model,text:req.body?.text,workflow:req.body?.mode==='ocr_workflow'});
