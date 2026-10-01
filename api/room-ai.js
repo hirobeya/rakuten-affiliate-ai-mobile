@@ -106,16 +106,17 @@ function sanitizeOcrResult(data){
     warnings:(Array.isArray(data?.warnings)?data.warnings:[]).map(clean).filter(Boolean).slice(0,8)
   };
 }
-async function runOcrTextMode({res,apiKey,model,text}){
+async function runOcrTextMode({res,apiKey,model,text,workflow=false}){
   const input=clean(text);
   if(!input)return json(res,400,{message:'文字情報を貼り付けてください'});
   if(input.length>MAX_OCR_TEXT)return json(res,400,{message:`文字情報は${MAX_OCR_TEXT}文字以内にしてください`});
   if(!(await consumeQuota()))return json(res,429,{message:'AIの無料利用上限に達しました'});
-  const system=`あなたは楽天ROOM投稿準備の補助エンジンです。入力は利用者のiPhoneが画像から抽出した文字列です。\n絶対条件:\n- 入力文字列だけを根拠にする。外部知識で補完しない。\n- 入力にない性能・効能・素材・サイズ・価格・ランキング・レビュー情報を作らない。\n- OCR誤認の可能性がある情報は断定せずwarningsへ入れる。\n- 複数商品がある場合は最大3商品に整理する。\n- 候補比較は価格、評価、レビュー件数、ランキング等、入力に実際にある項目だけを使う。\n- 「売れる」「必ず」「最強」等の断定をしない。\n- ROOM投稿文は選んだ候補について、入力で確認できた事実だけで簡潔に作る。\n- JSON以外を返さない。\n出力JSON schema:\n{"candidates":[{"productName":"","price":"","rating":"","reviewCount":"","ranking":"","reasons":[""],"facts":[""]}],"recommendedIndex":0,"recommendationReason":"","roomCopy":"","warnings":[""]}`;
+  const legacySystem=`あなたは楽天ROOM投稿準備の補助エンジンです。入力は利用者のiPhoneが画像から抽出した文字列です。\n絶対条件:\n- 入力文字列だけを根拠にする。外部知識で補完しない。\n- 入力にない性能・効能・素材・サイズ・価格・ランキング・レビュー情報を作らない。\n- OCR誤認の可能性がある情報は断定せずwarningsへ入れる。\n- 複数商品がある場合は最大3商品に整理する。\n- 候補比較は価格、評価、レビュー件数、ランキング等、入力に実際にある項目だけを使う。\n- 「売れる」「必ず」「最強」等の断定をしない。\n- ROOM投稿文は選んだ候補について、入力で確認できた事実だけで簡潔に作る。\n- JSON以外を返さない。\n出力JSON schema:\n{"candidates":[{"productName":"","price":"","rating":"","reviewCount":"","ranking":"","reasons":[""],"facts":[""]}],"recommendedIndex":0,"recommendationReason":"","roomCopy":"","warnings":[""]}`;
+  const system=`あなたは楽天ROOM投稿準備の補助エンジンです。入力は利用者のiPhoneが画像から抽出した文字列です。\n絶対条件:\n- 入力文字列だけを根拠にする。外部知識で補完しない。\n- 入力にない性能・効能・素材・サイズ・価格・ランキング・レビュー情報を作らない。\n- OCR誤認の可能性がある情報は断定せずwarningsへ入れる。\n- 複数商品がある場合は最大3商品に整理する。各候補のsourceTextはその商品だけの原文範囲を一字一句そのまま引用する。商品名、価格、評価、件数、ランキング、factsもsourceTextからの完全一致引用にする。原文で商品ごとの境界が分からない場合はcandidatesを空にする。factsには販促や効能ではなく仕様の引用を入れる。\n- 候補比較は価格、評価、レビュー件数、ランキング等、入力に実際にある項目だけを使う。\n- 「売れる」「必ず」「最強」等の断定をしない。\n- ROOM投稿文は選んだ候補について、入力で確認できた事実だけで簡潔に作る。\n- JSON以外を返さない。\n出力JSON schema:\n{"candidates":[{"productName":"","sourceText":"","price":"","rating":"","reviewCount":"","ranking":"","reasons":[""],"facts":[""]}],"recommendedIndex":0,"recommendationReason":"","roomCopy":"","warnings":[""]}`;
   const response=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
     headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},
-    body:JSON.stringify({model,temperature:0.1,max_completion_tokens:900,response_format:{type:'json_object'},messages:[{role:'system',content:system},{role:'user',content:input}]}),
+    body:JSON.stringify({model,temperature:0.1,max_completion_tokens:900,response_format:{type:'json_object'},messages:[{role:'system',content:workflow?system:legacySystem},{role:'user',content:input}]}),
     signal:AbortSignal.timeout(20000)
   });
   const data=await response.json().catch(()=>({}));
@@ -125,9 +126,9 @@ async function runOcrTextMode({res,apiKey,model,text}){
   }
   const parsed=parseJson(data?.choices?.[0]?.message?.content||'');
   if(!parsed)return json(res,502,{message:'AIの出力を読み取れませんでした'});
-  const out=sanitizeOcrResult(parsed);
+  const out=workflow?require('../public/ocr-workflow-core').sanitize(parsed,input):sanitizeOcrResult(parsed);
   if(!out.candidates.length&&!out.roomCopy)return json(res,422,{message:'商品情報を十分に読み取れませんでした',warnings:out.warnings});
-  return json(res,200,{ok:true,mode:'ocr_text',...out,model});
+  return json(res,200,{ok:true,mode:workflow?'ocr_workflow':'ocr_text',...out,model});
 }
 
 module.exports=async function handler(req,res){
@@ -141,9 +142,9 @@ module.exports=async function handler(req,res){
     if(!apiKey)return json(res,503,{message:'GROQ_API_KEY is not configured'});
     const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
 
-    if(req.body?.mode==='ocr_text'){
+    if(['ocr_text','ocr_workflow'].includes(req.body?.mode)){
       if(env!=='preview'||auth.plan!=='owner')return json(res,404,{message:'Not found'});
-      return await runOcrTextMode({res,apiKey,model,text:req.body?.text});
+      return await runOcrTextMode({res,apiKey,model,text:req.body?.text,workflow:req.body?.mode==='ocr_workflow'});
     }
 
     const input=prepareInput(req.body&&typeof req.body==='object'?req.body:{});
