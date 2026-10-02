@@ -39,3 +39,14 @@ Draft/Previewのみ。本番反映不可。指定例の文章は改善したが�
 比較データ: `docs/structured-copy-report-20261002.json`。検証画面: `/structured-copy-preview.html`。
 
 過去との完全diff: https://github.com/hirobeya/rakuten-affiliate-ai-mobile/compare/74f9a1f...3fb18811de413448384317f2beead78cd29a2ae3 （コピー関連の6ファイルを確認）。9/26直前との差分: https://github.com/hirobeya/rakuten-affiliate-ai-mobile/compare/4827461401...3fb18811de413448384317f2beead78cd29a2ae3
+
+## オンラインPreview確認
+
+Vercel Preview READY: commit `79441f4fdc09fd9f94e558c2ee5e984715d1aaf0`。検証ページの全15分類をブラウザで選択し、生成あり/ルート一致OKを確認。否定入力 `バイクグローブ 非 スマホ対応 防風ではない レザー 調` は生成停止/ルート一致OK。修正前後のスクリーンショット: `docs/urenavi-copy-preview-20261002.jpg`。
+
+`/app.html` 自体も表示を確認したが、アプリのauthGate（メールリンクによる認証）で停止。ブラウザには本番の認証済み端末情報がなく、検索→実商品AI生成→コピーのE2E確認は完了していない。ログインメールの送信や認証設定の変更はしていない。
+
+Draft PR: https://github.com/hirobeya/rakuten-affiliate-ai-mobile/pull/158
+Preview比較画面: https://rakuten-affiliate-ai-mobile-fulem7slk-hirobeya-6572.vercel.app/structured-copy-preview.html （Vercel認証が必要な場合あり）。
+
+次に必要な検証: 認証済みアプリの実商品データで、A/B層の不足を測定し、意味変換の対応範囲と生成カバレッジを改善する。今回の限定的な仕様辞書のままで「全商品修正完了」とは判定しない。
