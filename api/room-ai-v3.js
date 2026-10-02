@@ -96,6 +96,7 @@ function createHandler(deps={}){
         model,
         productType:analysis.validation?.productType||null,
         validationReasons:analysis.validation?.reasons||[],
+        draftDiagnostics:analysis.raw,
         candidateAppeals:analysis.validation?.appeals||[],
         attributes:analysis.validation?.attributes||[],
         decisionAxes:analysis.validation?.decisionAxes||[],
