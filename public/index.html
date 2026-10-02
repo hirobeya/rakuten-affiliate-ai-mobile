@@ -27,7 +27,7 @@
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"ウレナビ","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://rakuten-affiliate-ai-mobile.vercel.app/","description":"楽天ROOMの商品選びや投稿準備を支援するWebアプリ。現在、提供形態と関連サービスの利用条件を見直しています。"}
 </script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#17223b;background:linear-gradient(145deg,#fff8f2 0%,#fff 50%,#eef4ff 100%);line-height:1.7}.wrap{max-width:860px;margin:0 auto;padding:24px 20px 56px}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:900}.logo{width:42px;height:42px;border-radius:12px;object-fit:cover}.hero{padding:72px 0 48px}.eyebrow{display:inline-block;background:#fff0e7;color:#c74e1e;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px}.hero h1{font-size:clamp(34px,7vw,58px);line-height:1.15;margin:18px 0}.lead{font-size:18px;color:#4d5870}.notice{margin-top:28px;background:#fff;border:1px solid #e3e7ee;border-radius:20px;padding:24px;box-shadow:0 18px 40px #17223b12}.notice h2{margin:0 0 10px;font-size:23px}.notice p{margin:0;color:#596579}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.feature{background:#fff;border:1px solid #e5e9ef;border-radius:16px;padding:18px}.feature b{display:block;margin-bottom:6px}.feature span{font-size:13px;color:#667085}.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;font-size:13px}.links a{color:#39577f;text-decoration:underline;text-underline-offset:3px}.footer{margin-top:54px;font-size:11px;color:#8b93a1}@media(max-width:700px){.features{grid-template-columns:1fr}.hero{padding-top:52px}.lead{font-size:16px}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#17223b;background:linear-gradient(145deg,#fff8f2 0%,#fff 50%,#eef4ff 100%);line-height:1.7}.wrap{max-width:860px;margin:0 auto;padding:24px 20px 56px}.brand{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:900}.logo{width:42px;height:42px;border-radius:12px;object-fit:cover}.hero{padding:72px 0 48px}.eyebrow{display:inline-block;background:#fff0e7;color:#c74e1e;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px}.hero h1{font-size:clamp(34px,7vw,58px);line-height:1.15;margin:18px 0}.lead{font-size:18px;color:#4d5870}.notice{margin-top:28px;background:#fff;border:1px solid #e3e7ee;border-radius:20px;padding:24px;box-shadow:0 18px 40px #17223b12}.notice h2{margin:0 0 10px;font-size:23px}.notice p{margin:0;color:#596579}.loginWrap{margin-top:18px}.loginButton{display:inline-block;background:#172a4b;color:#fff;text-decoration:none;font-weight:900;padding:14px 20px;border-radius:14px;box-shadow:0 10px 24px #17223b20}.loginNote{margin-top:8px;font-size:12px;color:#667085}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.feature{background:#fff;border:1px solid #e5e9ef;border-radius:16px;padding:18px}.feature b{display:block;margin-bottom:6px}.feature span{font-size:13px;color:#667085}.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;font-size:13px}.links a{color:#39577f;text-decoration:underline;text-underline-offset:3px}.footer{margin-top:54px;font-size:11px;color:#8b93a1}@media(max-width:700px){.features{grid-template-columns:1fr}.hero{padding-top:52px}.lead{font-size:16px}.loginButton{display:block;text-align:center;width:100%}}
 </style>
 </head>
 <body>
@@ -40,6 +40,10 @@
     <div class="notice">
       <h2>現在のご案内</h2>
       <p>料金表示・購入受付は非公開にしています。提供形態が確定した後、改めてご案内します。</p>
+      <div class="loginWrap">
+        <a class="loginButton" href="/app.html">利用中の方はこちら</a>
+        <div class="loginNote">既存利用者はこれまでどおりウレナビを開けます。</div>
+      </div>
     </div>
   </section>
   <section class="features" aria-label="ウレナビの機能概要">
