@@ -1,6 +1,6 @@
 {
   "baseline": "3fb18811de413448384317f2beead78cd29a2ae3",
-  "generatedAt": "2026-10-02T01:27:42.009Z",
+  "generatedAt": "2026-10-02T01:28:53.709Z",
   "limits": [
     "No live Rakuten API or Groq generation measured",
     "No visual image facts extracted",
@@ -12,12 +12,12 @@
     "categoryGenerated": 15,
     "corpusTotal": 780,
     "beforeGenerated": 112,
-    "afterGenerated": 248,
-    "afterStopped": 532,
-    "retained": 104,
+    "afterGenerated": 253,
+    "afterStopped": 527,
+    "retained": 109,
     "recovered": 144,
-    "lost": 8,
-    "sourceLabelGenerated": 208
+    "lost": 3,
+    "sourceLabelGenerated": 213
   },
   "lostRows": [
     {
@@ -36,43 +36,8 @@
     },
     {
       "genre": "光回線・モバイル通信",
-      "itemName": "WiFi レンタル 海外 アルゼンチン sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 4泊5日 wifi アルゼンチン simカード 5日間 ギガプラン 1日1GB1600円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アルゼンチン 5日 ワイファイ",
-      "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「WiFi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n商品名には「Wi-Fi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ WiFi\n✓ Wi-Fi\n\n価格：8,800円\n\n※アフィリエイト広告を利用しています",
-      "after": "",
-      "status": "insufficient_evidence"
-    },
-    {
-      "genre": "光回線・モバイル通信",
-      "itemName": "WiFi レンタル 海外 ラオス sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 1泊2日 プラン wifi ラオス simカード 2日間 大容量 1日500MB 1日料金 600円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim ラオス 2日 ワイファイ 空港",
-      "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「WiFi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n商品名には「Wi-Fi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ WiFi\n✓ Wi-Fi\n\n価格：1,320円\n\n※アフィリエイト広告を利用しています",
-      "after": "",
-      "status": "insufficient_evidence"
-    },
-    {
-      "genre": "光回線・モバイル通信",
-      "itemName": "WiFi レンタル 海外 ルーマニア sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 6泊7日 wifi ルーマニア simカード 7日間 ギガプラン 1日1GB 1日800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim ルーマニア 7日 ワイファイ",
-      "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「WiFi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n商品名には「Wi-Fi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ WiFi\n✓ Wi-Fi\n\n価格：6,160円\n\n※アフィリエイト広告を利用しています",
-      "after": "",
-      "status": "insufficient_evidence"
-    },
-    {
-      "genre": "光回線・モバイル通信",
-      "itemName": "WiFi レンタル 海外 アイスランド sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 9泊10日 wifi アイスランド simカード 10日間 ギガプラン 1日1GB800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アイスランド 10日 ワイファイ",
-      "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「WiFi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n商品名には「Wi-Fi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ WiFi\n✓ Wi-Fi\n\n価格：8,800円\n\n※アフィリエイト広告を利用しています",
-      "after": "",
-      "status": "insufficient_evidence"
-    },
-    {
-      "genre": "光回線・モバイル通信",
       "itemName": "【延長専用】安心補償付き SoftBank 無制限 K4 501HW 303ZT E5785 FS030W NA01 WN-CS300FR E5383 T6 無制限 wifi レンタル 延長 専用 14日 ポケットwifi Pocket WiFi レンタルwifi ルーター wi-fi 中継器 wifiレンタル ポケットWiFi ポケットWi-Fi WiFiレンタルどっとこむ",
       "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「WiFi」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ WiFi\n\n価格：4,460円\n\n※アフィリエイト広告を利用しています",
-      "after": "",
-      "status": "insufficient_evidence"
-    },
-    {
-      "genre": "車用品・バイク用品",
-      "itemName": "クロームカバー Ford Bronco 2021-23 Chrome Abs Exteriorハンドルパネルの装飾カバーアクセサリー For Ford Bronco 2021-23 chrome ABS Exterior handle Panel Decor cover Accessories【並行輸入品】",
-      "before": "素材を見て選びたいときに。\n\n商品名には「ABS」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n確認できる仕様👇\n✓ ABS\n\n価格：55,770円\n\n※アフィリエイト広告を利用しています",
       "after": "",
       "status": "insufficient_evidence"
     }

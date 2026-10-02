@@ -62,3 +62,7 @@ console.log('Source label, material role, accessory and combined value regressio
 
 assert.equal(api.makeRoomCopy({itemName:'モバイルバッテリー用ケース USB-C'},''),'');
 assert.equal(api.buildValidatedProductPost({itemName:'モバイルバッテリー用ケース USB-C'},'モバイルバッテリー',['USB-C']),'');
+
+assert.equal(s.extractFacts({itemName:'プリンター WiFi Wi-Fi wifi'}).length,1);
+assert.equal(s.extractFacts({itemName:'収納ラック アルミ アルミニウム'}).length,1);
+assert.equal(s.compose({itemName:'腕時計 腕時計 レザー'}).understanding.identity,'腕時計');

@@ -65,7 +65,7 @@
       // Keep complete original tokens; never cut a word/model/number to fit.
       if(token.length>48) continue;
       if(selected.join(' ').length+token.length>140) return null;
-      selected.push(token);
+      if(!selected.some(x=>x.toLowerCase()===token.toLowerCase())) selected.push(token);
     }
     if(!selected.length) return null;
     const identity=selected.join(' ');
@@ -118,6 +118,8 @@
     if(/^(本革|レザー|山羊革|牛革|羊革|豚革)$/.test(q)) return 'leather';
     if(/^(綿|コットン|綿100%)$/.test(q)) return 'cotton';
     if(/^(折りたたみ|折り畳み)$/.test(q)) return 'fold';
+    if(/^(?:wifi|wi-fi)$/i.test(q)) return 'wifi';
+    if(/^(?:アルミ|アルミニウム)$/.test(q)) return 'aluminium';
     if(/^(USB-C|USB-C対応|Type-C|Type-C対応)$/.test(q)) return 'usb-c';
     if(/^Bluetooth(?: \d+(?:\.\d+)?)?$/.test(q)) return 'bluetooth';
     if(/^(?:重量|幅|奥行|高さ|内容量) /.test(q)) return q.replace(/^(?:重量|幅|奥行|高さ|内容量) /,'').toLowerCase();
