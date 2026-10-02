@@ -18,18 +18,33 @@ function response(payload,{status=200}={}){
     const name=JSON.parse(opts.body).text.format.name;
     if(name==='super_urenavi_v3_understanding'){
       return response({model:'mock',usage:{input_tokens:10,output_tokens:20},output_text:JSON.stringify({
-        productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},attributes:[],decisionAxes:[],appeals:[],hooks:[]
+        productType:{specific:'バイクグローブ',general:'グローブ'},
+        attributes:[
+          {name:'スマホ対応',value:'可能',unit:'',qualifier:'停車中',valueType:'text',quote:'グローブを着けたままスマホを操作'},
+          {name:'防護部',value:'ナックルプロテクター',unit:'',qualifier:'',valueType:'text',quote:'ナックルプロテクター入り'}
+        ],
+        appeals:[{
+          text:'グローブを着けたままスマホを操作できます。',
+          scene:'停車中にスマホを確認する場面',
+          evidenceQuotes:['グローブを着けたままスマホを操作'],
+          strength:3
+        }]
       })});
     }
     return response({model:'mock',usage:{input_tokens:5,output_tokens:5},output_text:JSON.stringify({results:[]})});
   };
   const groq=createV3Groq({apiKey:'test',model:'mock',fetchImpl});
-  const p1=await groq.callPass1({item:{itemName:'電気ケトル',itemCaption:'説明'.repeat(1000),itemPrice:1000}});
-  assert.equal(p1.raw.productType.specific,'電気ケトル');
+  const p1=await groq.callPass1({item:{itemName:'バイクグローブ',itemCaption:'説明'.repeat(1000),itemPrice:1000}});
+  assert.equal(p1.raw.productType.specific,'バイクグローブ');
   assert.equal(p1.raw.productType.quote,p1.raw.productType.specific);
   assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
   assert.equal(calls[0].body.text.format.schema.properties.productType.properties.quote,undefined);
   assert.equal(calls[0].body.text.format.schema.properties.hooks,undefined);
+  assert.equal(calls[0].body.text.format.schema.properties.appeals.items.properties.attributeRefs,undefined);
+  assert.ok(calls[0].body.text.format.schema.properties.appeals.items.properties.evidenceQuotes);
+  assert.deepEqual(p1.raw.appeals[0].attributeRefs,[0],'exact evidence quote must bind to the matching attribute, not an AI ordinal');
+  assert.equal(p1.raw.appeals[0].evidenceQuotes,undefined);
+  assert.equal(p1.raw.attributes[0].value,'グローブを着けたままスマホを操作','non-grounded value labels must normalize to the grounded quote');
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
   assert.equal(calls[0].body.text.format.strict,true);
