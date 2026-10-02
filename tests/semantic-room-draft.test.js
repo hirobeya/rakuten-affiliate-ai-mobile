@@ -52,6 +52,16 @@ for(const text of ['走行中にスマホを操作できるバイクグローブ
 const negative={itemName:'グローブ',itemCaption:'非防水'};
 assert.equal(evaluate(negative,{productType:{specific:'グローブ',general:'手袋'},attributes:[],appeals:[{text:'防水のグローブ。',scene:'雨の日に。',evidenceQuotes:['防水'],strength:3}]}).copy.status,'blocked');
 const normalized=evaluate({itemName:'収納ボックス',itemCaption:'幅３０ｃｍ\n折りたたみ可能'},{productType:{specific:'収納ボックス',general:'収納'},attributes:[],appeals:[{scene:'片付けに。',text:'幅30cmの収納ボックス。',evidenceQuotes:['幅30cm'],strength:3}]});assert.equal(normalized.copy.status,'ready');
+// Natural product names can differ from the original continuous identity quote.
+const named=evaluate({itemName:'グローブ',itemCaption:'バイク用手袋 山羊革'},{productType:{specific:'山羊革グローブ',general:'バイク用手袋',quote:'バイク用手袋'},attributes:[],appeals:[{scene:'バイク用の装備を選ぶなら。',text:'山羊革のグローブ。',evidenceQuotes:['山羊革'],strength:3}]});
+assert.equal(named.copy.status,'ready');
+assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.maxItems,1);
+// Source language is evidence data, not a published claim.
+const sourceRisk={itemName:'収納ボックス',itemCaption:'安心の収納ボックス。折りたたみ可能。'};
+const safeDraft={productType:{specific:'収納ボックス',general:'収納',quote:'収納ボックス'},attributes:[],appeals:[{scene:'使わないときはたたんで片付けたいなら。',text:'折りたためる収納ボックス。',evidenceQuotes:['安心の収納ボックス。折りたたみ可能。'],strength:3}]};
+assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'ready');
+safeDraft.appeals[0].text='安心の収納ボックス。';
+assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'blocked');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
 assert.deepEqual(MODEL_PASS1_SCHEMA.properties.attributes.items.required,['quote']);
 assert.match(SEMANTIC_WRITER_PROMPT,/一度に/);assert.match(PASS2_SYSTEM_PROMPT,/条件の省略/);
