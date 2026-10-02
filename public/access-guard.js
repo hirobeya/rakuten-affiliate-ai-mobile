@@ -4,6 +4,7 @@
   let deviceAllowed=false;
   let deviceEmail='';
   let handoffTimer=null;
+  let handoffPollGeneration=0;
 
   function addPurchaseLink(){
     if(document.getElementById('urenaviPurchaseLink')) return;
@@ -92,16 +93,22 @@
     }catch{return false;}
   }
 
-  function startHandoffPolling(){
-    if(handoffTimer) return;
+  function startHandoffPolling(restart=false){
+    if(handoffTimer&&!restart) return;
+    if(handoffTimer) clearTimeout(handoffTimer);
+    handoffTimer=null;
+    const generation=++handoffPollGeneration;
     const code=localStorage.getItem(HANDOFF_KEY)||'';
     if(!/^[a-f0-9]{64}$/i.test(code)) return;
     const started=Date.now();
     const poll=async()=>{
+      if(generation!==handoffPollGeneration) return;
       try{
         const r=await fetch('/api/access?action=handoff-status&code='+encodeURIComponent(code),{cache:'no-store',credentials:'include'});
+        if(generation!==handoffPollGeneration) return;
         if(r.status===200){
           const d=await r.json().catch(()=>({}));
+          if(generation!==handoffPollGeneration) return;
           deviceAllowed=true;
           deviceEmail=String(d.email||'');
           localStorage.removeItem(HANDOFF_KEY);
@@ -111,6 +118,7 @@
         }
         if(r.status===410){localStorage.removeItem(HANDOFF_KEY);handoffTimer=null;return;}
       }catch{}
+      if(generation!==handoffPollGeneration) return;
       if(Date.now()-started<10*60*1000){handoffTimer=setTimeout(poll,1800);}else{localStorage.removeItem(HANDOFF_KEY);handoffTimer=null;}
     };
     handoffTimer=setTimeout(poll,600);
@@ -186,7 +194,7 @@
     btn.addEventListener('click',()=>{
       const code=randomHandoff();
       localStorage.setItem(HANDOFF_KEY,code);
-      startHandoffPolling();
+      startHandoffPolling(true);
 
       const approveUrl='https://rakuten-affiliate-ai-mobile.vercel.app/api/access?action=handoff-approve&code='+encodeURIComponent(code);
       // A normal link does not depend on popup permission or window.open's
@@ -201,6 +209,16 @@
       approvalLink.textContent='本番で認証を確認する';
       Object.assign(approvalLink.style,{display:'block',padding:'12px',marginTop:'8px',textAlign:'center',fontWeight:'900'});
       msg.append(explanation,approvalLink);
+      if(typeof QRCode==='function'){
+        const qrLabel=document.createElement('div');
+        qrLabel.textContent='スマホで認証するためのQRコード（10分以内）';
+        const qr=document.createElement('div');
+        qr.id='previewOwnerQr';
+        qr.setAttribute('aria-label','Preview認証用QRコード');
+        Object.assign(qr.style,{padding:'16px',background:'#fff',width:'256px',margin:'12px auto'});
+        msg.append(qrLabel,qr);
+        new QRCode(qr,{text:approveUrl,width:256,height:256,correctLevel:QRCode.CorrectLevel.M});
+      }
     });
 
     box.append(title,note,btn,msg);
