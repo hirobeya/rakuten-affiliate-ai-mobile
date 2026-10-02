@@ -37,8 +37,8 @@ function response(payload,{status=200}={}){
   const p1=await groq.callPass1({item:{itemName:'バイクグローブ',itemCaption:'グローブを着けたままスマホを操作 ナックルプロテクター入り '+ '説明'.repeat(1000),itemPrice:1000}});
   assert.equal(p1.raw.productType.specific,'バイクグローブ');
   assert.equal(p1.raw.productType.quote,p1.raw.productType.specific);
-  assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general','quote']);
-  assert.ok(calls[0].body.text.format.schema.properties.productType.properties.quote);
+  assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
+  assert.equal(calls[0].body.text.format.schema.properties.productType.properties.quote,undefined);
   assert.equal(calls[0].body.text.format.schema.properties.hooks,undefined);
   assert.equal(calls[0].body.text.format.schema.properties.appeals.items.properties.attributeRefs,undefined);
   assert.ok(calls[0].body.text.format.schema.properties.appeals.items.properties.evidenceQuotes);
