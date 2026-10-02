@@ -2578,9 +2578,10 @@ function updateAiPanel(index){
   const p=v.productType||{};
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
   if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
-  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
+  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / AI仕様候補の採用可':' / AI仕様候補の採用対象外')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
+  rows.unshift('<div class="aiFact">以下はAI抽出候補の検証結果です。投稿文では、商品名・説明から別途検証した事実も使用します。採用可否は、本文に使われたかどうかを示す表示ではありません。</div>');
   facts.innerHTML=rows.join('');
   copy.textContent=aiPhase1Post(item,result.data);
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
