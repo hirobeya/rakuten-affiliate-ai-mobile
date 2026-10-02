@@ -44,8 +44,8 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
       store:memoryStore(),
       consumeQuota:async()=>true,
       groq:{
-        callPass1:async()=>{p1++;return {raw:pass1,model:'mock'};},
-        callPass2:async()=>{p2++;return {raw:pass2,model:'mock'};}
+        callPass1:async({model})=>{p1++;return {raw:pass1,model};},
+        callPass2:async({model})=>{p2++;return {raw:pass2,model};}
       }
     });
     const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
