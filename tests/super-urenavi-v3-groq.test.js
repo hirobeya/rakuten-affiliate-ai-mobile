@@ -88,6 +88,9 @@ function response(payload,{status=200}={}){
   assert.match(calls[1].body.input[0].content[0].text,/商品原文/);
   assert.match(calls[1].body.input[0].content[0].text,/supported=true/);
 
+  const alternate=createV3Groq({apiKey:'test',model:'openai/gpt-oss-120b',fetchImpl});
+  await alternate.callPass1({item:{itemName:'バイクグローブ'}});
+  assert.equal(calls.at(-1).body.reasoning.effort,'low');
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
     errorCalls++;

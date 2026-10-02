@@ -11,3 +11,5 @@ Final independent verifier must return complete sentence-by-sentence checks with
 Cache identity is derived from the actual writer/verifier schemas and prompts, so obsolete verification cannot be reused after a contract change. Output limits total 960 tokens (writer 500, verifier 460); this is a configured bound, not a measured free-tier throughput claim.
 
 Verification: npm run vercel-build passed locally. semantic-room-draft.test.js covers 17 synthetic categories and adversarial cases with mocked verifier. It does not prove live model accuracy, safety recall, naturalness, or universal product coverage. Live Preview evaluation and CI are separate release gates and must be recorded independently.
+
+Live Qwen run exposed fabricated cleanliness and nonsensical Japanese; its apparent ready result was rejected during editorial review. Preview v3 now selects GPT-OSS 120B (Groq docs list it under Free Plan and strict output models), with low reasoning effort. Existing non-v3 model configuration is untouched. Actual org quotas remain authoritative; no plan upgrade or payment configuration change. Cache reuse additionally requires the selected model to match.

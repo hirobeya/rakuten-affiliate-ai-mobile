@@ -62,7 +62,7 @@ function createHandler(deps={}){
       };
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
-      const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
+      const model=String(process.env.GROQ_ROOM_V3_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       let groq=deps.groq;
       if(!groq){
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
