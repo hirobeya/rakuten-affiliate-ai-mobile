@@ -43,3 +43,19 @@ assert.equal(s.compose({itemName:'美顔ローラー 小顔 リフトアップ'}
 assert.equal(s.compose({itemName:'架空品'},{identity:'掃除機',evidence:['本革']}).text,'');
 assert.doesNotMatch(s.compose({itemName:'バイクグローブ 山羊革'},{evidence:['防風','スマホ対応']}).text,/風対策|スマホ/);
 console.log('Structured copy: 15 categories + 14 adverse/guard cases PASS');
+
+// Unknown product types retain source identity without invented scenes or material roles.
+const unknown=s.compose({itemName:'腕時計 レザー 3個セット'});
+assert.equal(unknown.status,'ok');
+assert.equal(unknown.understanding.method,'source_label');
+assert.equal(unknown.understanding.scene,'');
+assert.doesNotMatch(unknown.text,/レザーを使った|比較|確認できます/);
+for(const e of unknown.understanding.identityEvidence) assert.ok('腕時計 レザー 3個セット'.includes(e.quote));
+assert.match(s.compose({itemName:'プリンター WiFi 1セット'}).text,/プリンター/);
+const combined=s.compose({itemName:'掃除機 コードレス 充電式'});
+assert.equal(combined.values.length,1);
+assert.deepEqual(combined.values[0].factRefs,['コードレス','充電式']);
+assert.doesNotMatch(combined.text,/✓ コードレス|✓ 充電式/);
+assert.doesNotMatch(s.compose({itemName:'Tシャツ 綿100% オールシーズン'}).text,/綿100%を使った/);
+assert.equal(s.compose({itemName:'モバイルバッテリー用ケース USB-C'}).status,'insufficient_evidence');
+console.log('Source label, material role, accessory and combined value regressions PASS');

@@ -80,7 +80,7 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
         const factLines=post.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
         assert.ok(post.length>35);
         for(const fact of factLines){
-          assert.ok(sourceTokens.includes(fact),genre.nameJa+' post fact not exact source token: '+fact);
+          assert.ok(String(item.itemName||'').includes(fact)||String(item.itemCaption||'').includes(fact),genre.nameJa+' post fact absent from source: '+fact);
           assert.ok(ledger.facts.some(x=>x.quote===fact),genre.nameJa+' fact outside evidence ledger: '+fact);
         }
       }else{

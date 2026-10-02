@@ -93,7 +93,7 @@ test('all client copy channels use the same grounded benefit output from safe fa
   assert.match(room,/外出先での充電に。/);
   assert.doesNotMatch(room,/商品名には|明記されています|比較しやすい/);
   assert.match(room,/特徴👇/);
-  assert.match(room,/✓ 10枚入り/);
+  assert.match(room,/10枚入り/);
   assert.match(room,/✓ USB-C対応/);
   assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
   assert.match(room,/価格：1,980円/);

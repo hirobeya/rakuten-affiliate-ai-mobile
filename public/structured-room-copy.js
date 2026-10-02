@@ -4,14 +4,14 @@
   if(root) root.UrenaviStructuredCopy=api;
 })(typeof window!=='undefined'?window:globalThis,function(){
   'use strict';
-  const VERSION='structured-copy-20261002-v1';
+  const VERSION='structured-copy-20261002-v2';
   const normalize=x=>String(x||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
   const split=x=>normalize(x).split(/[\s【】〖〗（）()「」『』\[\]{}・／/\\|｜,:：;；!！?？★☆※。]+/).filter(Boolean);
   const RISK=/ランキング|受賞|楽天.*1位|送料無料|クーポン|半額|最安|SALE|改善|予防|防止|安全|安心|無害|保証|難燃|抗菌|除菌|殺菌|消臭|防臭|臭わない|アレルギー|疲労|痛み|快眠|安眠|健康|小顔|リフトアップ|痩せ|若返|美白|治療|効果|効能|最強|最高|絶対|必ず/i;
   const MODIFIER=/^(?:非|不|未|フェイク|不要|なし|無し|別売|付属|対応しない|非対応|風|調|柄|タッチ|ライク|プリント)$/;
   const BAD_CONTEXT=/非対応|対応不可|対応しない|非防|防.*ではない|非スマホ|非対応|含まない|付属しない|ご購入|購入で|購入時|個目|個から|あたり|当たり|場合|対象外|ではありません|ではない|無し|なし|不要|別売|除く|除外|フェイク/;
   const MATERIALS=['山羊革','牛革','羊革','豚革','本革','レザー','合皮','人工皮革','綿100%','コットン','綿','ポリエステル','ナイロン','ステンレス','シリコン','アルミ','アルミニウム','木製','ガラス','セラミック','ABS','TPU'];
-  const FUNCTIONS=['スマホ対応','防風','防水','撥水','オールシーズン','メッシュ','折りたたみ','折り畳み','収納付き','キャスター付き','コードレス','充電式','洗える','手洗い','IH対応','電子レンジ対応','食洗機対応','USB-C','USB-C対応','Type-C','Type-C対応','HDMI','HDMI対応','PD対応','Bluetooth','Wi-Fi','4K','日本製','冷凍','個包装','レトルト','回転式','長袖','半袖','春夏','秋冬','壁掛け','粘着式','マグネット式','フィルター交換不要'];
+  const FUNCTIONS=['スマホ対応','防風','防水','撥水','オールシーズン','メッシュ','折りたたみ','折り畳み','収納付き','キャスター付き','コードレス','充電式','洗える','手洗い','IH対応','電子レンジ対応','食洗機対応','USB-C','USB-C対応','Type-C','Type-C対応','HDMI','HDMI対応','PD対応','Bluetooth','Wi-Fi','WiFi','wifi','wi-fi','4K','日本製','冷凍','個包装','レトルト','回転式','長袖','半袖','春夏','秋冬','壁掛け','粘着式','マグネット式','フィルター交換不要'];
   const TYPES=[
     {names:['タオル'],scene:'手や体を拭くときに。',domain:'towel'},
     {names:['財布','IDカードケース','HDMIケーブル','ケーブル','スクエアボックスプール'],scene:'',domain:'daily'},
@@ -51,13 +51,34 @@
     }
     return null;
   }
+  const LABEL_NOISE=/^(?:中古|USED|古着|未使用|未開封品|新品|送料無料|送料込|代引不可|直送品|取寄|取寄商品|受注生産品|並行輸入品|ポイント\d+倍|P\d+倍|公式|正規品|限定|大人気|人気|おしゃれ|オシャレ|かわいい|可愛い|非常に良い|新入荷|ワンタッチ|おすすめ|便利|機能|仕様|軽量|高品質|高音質|薄型|コンパクト|スリム|ギフト|プレゼント|メンズ|レディース|男女兼用|ブラック|ホワイト|シルバー|ブルー|ブラウン|ゴールド|赤|黒|白|緑|黄)$/i;
+  function sourceLabel(item,facts=[]){
+    const original=normalize(item?.itemName);
+    // Bracketed promotions are metadata; brackets containing the item itself are preserved.
+    const title=original.replace(/[【\[]([^】\]]*)[】\]]/g,(all,inner)=>RISK.test(inner)||/中古|USED|保証|直送品|取寄|送料無料|送料込|\d+個セット|ポイント/i.test(inner)?' ':' '+inner+' ');
+    const tokens=split(title.replace(/[◆●■□◇]/g,' '));
+    const knownFacts=new Set(facts.map(x=>x.quote));
+    const selected=[];
+    for(const token of tokens){
+      if(!token||LABEL_NOISE.test(token)||RISK.test(token)||BAD_CONTEXT.test(token)||/^\d+(?:個|枚|本|袋|組|食|セット)/.test(token)) continue;
+      if(knownFacts.has(token)||MATERIALS.includes(token)||FUNCTIONS.includes(token)||/^(?:SS|XS|S|M|L|LL|XL|XXL|XXXL|\dXL)$/.test(token)) continue;
+      // Keep complete original tokens; never cut a word/model/number to fit.
+      if(token.length>48) continue;
+      if(selected.join(' ').length+token.length>140) return null;
+      selected.push(token);
+    }
+    if(!selected.length) return null;
+    const identity=selected.join(' ');
+    if(!/[ぁ-んァ-ヶ一-龯A-Za-z]/.test(identity)||/^(?:商品|用品|グッズ|セット|ケース|防水|ワンタッチ)$/.test(identity)) return null;
+    return {identity,scene:'',domain:'unknown',reason:'',method:'source_label',identityEvidence:selected.map(quote=>({quote,source:'itemName'}))};
+  }
   // A: identity and scenes are lexical product definitions, never personal claims or model-written targets.
   function understand(item,identity=''){
     const title=normalize(item?.itemName),compact=title.replace(/\s+/g,'');
     if(identity&&!sourceParts(item).some(x=>x.text.replace(/\s+/g,'').includes(normalize(identity).replace(/\s+/g,'')))) return {identity:'',scene:'',domain:'',reason:'ungrounded_identity'};
     const candidates=[];
     for(const type of TYPES) for(const name of type.names){
-      if(compact.includes(name)&&(!type.requires||type.requires.test(title))&&!(compact.split(name)[1]||'').match(/^(?:用)?(?:ケース|カバー|交換パーツ)/)) candidates.push({...type,name});
+      if((name.length>=3?compact.includes(name):split(title).includes(name)||(name==='袋'&&/(?:うんち|ウンチ)[^\s]{0,12}袋/.test(title)))&&(!type.requires||type.requires.test(title))&&!(compact.split(name)[1]||'').match(/^(?:用)?(?:ケース|カバー|交換パーツ)/)) candidates.push({...type,name});
     }
     const parents={'storage-seat':['storage']};
     candidates.sort((a,b)=>(parents[b.domain]?.length||0)-(parents[a.domain]?.length||0)||b.name.length-a.name.length);
@@ -66,26 +87,29 @@
     // Nested category names are fine, unrelated product types are ambiguous.
     const conflict=[...domains].some(x=>x!==winner?.domain&&!(parents[winner?.domain]||[]).includes(x));
     if(conflict) return {identity:'',scene:'',domain:'',reason:'conflicting_types'};
-    if(winner) return {identity:winner.name,scene:winner.scene,domain:winner.domain,reason:''};
+    if(winner) return {identity:winner.name,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
     const id=normalize(identity);
-    if(id&&!RISK.test(id)&&!BAD_CONTEXT.test(id)&&sourceParts(item).some(x=>x.text.includes(id))) return {identity:id,scene:'',domain:'unknown',reason:''};
-    return {identity:'',scene:'',domain:'',reason:'unknown_type'};
+    if(id&&!RISK.test(id)&&!BAD_CONTEXT.test(id)&&sourceParts(item).some(x=>x.text.includes(id))) return {identity:id,scene:'',domain:'unknown',reason:'',method:'validated_identity'};
+    const label=sourceLabel(item,extractFacts(item));
+    if(label&&TYPES.some(type=>type.names.some(name=>name.length>=3&&compact.includes(name)&&/^(?:用|専用)?(?:ケース|カバー|ポーチ|交換パーツ)/.test(compact.split(name)[1]||'')))) label.domain='accessory';
+    return label||{identity:'',scene:'',domain:'',reason:'unknown_type'};
   }
   // B: every extracted fact carries its exact quote and source. Images are never inferred here.
   function extractFacts(item,evidence=[]){
     const parts=sourceParts(item),out=[];
     const specs=new Set([...MATERIALS,...FUNCTIONS]);
     const numeric=/^(?:内容量)?\d+(?:\.\d+)?(?:mAh|Wh|W|V|A|mm|cm|kg|g|ml|mL|L|GB|インチ)$/;
-    const count=/^\d+(?:枚|個|本|袋|組|食|包|点)(?:入り|入|セット|組)$/;
-    const dimensions=/^\d+(?:\.\d+)?[×xX]\d+(?:\.\d+)?(?:[×xX]\d+(?:\.\d+)?)?(?:cm|mm)$/;
+    const count=/^(?:\d+セット|\d+(?:枚|個|本|袋|組|食|包|点|粒|錠|箱|足)(?:入り|入|セット|組))$/;
+    const dimensions=/^\d+(?:\.\d+)?[×xX]\d+(?:\.\d+)?(?:[×xX]\d+(?:\.\d+)?)?(?:cm|mm|m)$/i;
+    const multipack=/^\d+(?:枚|個|本|袋|粒|錠)[x×X]\d+(?:枚|個|本|袋|粒|錠)(?:入り|入|セット)?$/;
     const specPhrase=/^(?:Bluetooth \d+(?:\.\d+)?|最大\d+時間再生|\d+段階温度調節|\d+時間保温|回転式\d+枚刃|\d+(?:\.\d+)?リットル(?:大容量)?|\d+-\d+度|\d+℃単位|(?:重量|幅|奥行|高さ) \d+(?:\.\d+)?(?:g|kg|mm|cm))$/;
     const sizes=/^(?:XS|S|M|L|LL|XL|XXL|XXXL|[2-5]XL)$/;
     const candidates=[...parts.flatMap(x=>split(x.text)),...evidence.map(x=>typeof x==='object'?x.quote:x)];
     for(const raw of candidates){
       const q=normalize(raw);
-      if(!specs.has(q)&&!numeric.test(q)&&!count.test(q)&&!dimensions.test(q)&&!sizes.test(q)&&!specPhrase.test(q)) continue;
+      if(!specs.has(q)&&!numeric.test(q)&&!count.test(q)&&!dimensions.test(q)&&!sizes.test(q)&&!specPhrase.test(q)&&!multipack.test(q)) continue;
       const match=occurrence(parts,q); if(!match) continue;
-      const kind=MATERIALS.includes(q)?'material':FUNCTIONS.includes(q)?'function':count.test(q)?'count':dimensions.test(q)?'dimension':sizes.test(q)?'size':'numeric';
+      const kind=MATERIALS.includes(q)?'material':FUNCTIONS.includes(q)?'function':count.test(q)||multipack.test(q)?'count':dimensions.test(q)?'dimension':sizes.test(q)?'size':'numeric';
       out.push({...match,kind});
     }
     return dedupeFacts(out);
@@ -119,24 +143,44 @@
   }
   // C: bounded functional entailments, each linked to one fact and a compatible domain.
   function valuesFor(understanding,facts){
-    const out=[];
+    const out=[],taken=new Set(),domain=understanding.domain;
+    const find=q=>facts.find(x=>x.quote===q);
+    const add=(text,rows)=>{if(!rows.length)return;for(const row of rows)taken.add(row.quote);out.push({text,factRef:rows[0].quote,factRefs:rows.map(x=>x.quote),source:rows[0].source});};
+    // Compound sentences use every referenced source fact; no benefits are supplied by a model.
+    if(domain!=='accessory'&&find('コードレス')&&find('充電式')) add('充電して、コードをつながずに使うタイプです。',[find('コードレス'),find('充電式')]);
+    if(['holder','storage'].includes(domain)&&find('壁掛け')&&find('粘着式')) add('粘着式で壁に取り付けるタイプです。',[find('壁掛け'),find('粘着式')]);
     for(const fact of facts){
+      if(taken.has(fact.quote)) continue;
       let text='';
-      if(fact.quote==='スマホ対応'&&understanding.domain==='riding') text='停車中のスマホ操作にも対応。';
-      if(fact.quote==='防風'&&understanding.domain==='riding') text='走行時の風対策にも。';
-      if((fact.quote==='IH対応')&&understanding.domain==='cooking') text='IHでの調理に対応。';
-      if((fact.quote==='食洗機対応')&&understanding.domain==='cooking') text='使用後は食洗機で洗えます。';
-      if(text) out.push({text,factRef:fact.quote,source:fact.source});
+      if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中のスマホ操作にも対応。';
+      if(fact.quote==='防風'&&domain==='riding') text='走行時の風対策にも。';
+      if(fact.quote==='防風'&&domain==='clothing') text='風対策の防風仕様です。';
+      if(fact.quote==='IH対応'&&domain==='cooking') text='IHでの調理に対応。';
+      if(fact.quote==='食洗機対応'&&domain==='cooking') text='使用後は食洗機で洗えます。';
+      if(['折りたたみ','折り畳み'].includes(fact.quote)&&domain!=='accessory') text='使わないときは折りたためます。';
+      if(fact.quote==='キャスター付き'&&['storage','storage-seat'].includes(domain)) text='キャスターで移動できるタイプです。';
+      if(fact.quote==='洗える'&&domain!=='accessory') text='お手入れ時に洗えるタイプです。';
+      if(fact.quote==='充電式'&&domain!=='accessory') text='充電して使うタイプです。';
+      if(fact.quote==='コードレス'&&domain!=='accessory') text='コードをつながずに使うタイプです。';
+      if(fact.quote==='個包装') text='1つずつ包装されています。';
+      if(fact.quote==='オールシーズン'&&['riding','clothing'].includes(domain)) text='オールシーズン仕様です。';
+      if(fact.quote==='壁掛け'&&['holder','storage'].includes(domain)) text='壁に掛けて使うタイプです。';
+      if(fact.quote==='粘着式'&&['holder','storage'].includes(domain)) text='粘着式で取り付けるタイプです。';
+      if(fact.kind==='count') text=fact.quote+(/セット$/.test(fact.quote)?'です。':'のセットです。');
+      if(text) add(text,[fact]);
     }
-    return out;
+    // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
+    return out.slice(0,3);
   }
   function compose(item,{identity='',evidence=[]}={}){
-    const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)),values=valuesFor(understanding,facts);
+    const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
     if(!understanding.identity||!facts.length) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
-    const used=new Set(values.map(x=>x.factRef));
-    const materials=facts.filter(x=>x.kind==='material');
+    const used=new Set(values.flatMap(x=>x.factRefs||[x.factRef]));
+    const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     const lead=understanding.scene;
-    const introduction=materials.length?materials.map(x=>x.quote).join('・')+'を使った'+understanding.identity+'です。':understanding.identity+'です。';
+    const materialLabel=materials.map(x=>x.quote).join('・');
+    const materialJoin=materials.length===1&&/製$/.test(materialLabel)?'の':/100[%％]$/.test(materialLabel)?'素材の':materialLabel.includes('木製')?'仕様の':'を使った';
+    const introduction=materials.length?materialLabel+materialJoin+understanding.identity+'です。':understanding.identity+(understanding.method==='source_label'||understanding.domain==='unknown'?'':'です。');
     for(const x of materials) used.add(x.quote);
     const lines=lead?[lead,'',introduction]:[introduction];
     if(values.length) lines.push(values.map(x=>x.text).join(''));
@@ -148,5 +192,5 @@
     if(text.length>500) return {version:VERSION,understanding,facts,values,text:'',status:'length_overflow'};
     return {version:VERSION,understanding,facts,values,text,status:'ok'};
   }
-  return {VERSION,understand,extractFacts,dedupeFacts,valuesFor,compose,RISK};
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,RISK};
 });
