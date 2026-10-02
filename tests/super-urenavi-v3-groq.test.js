@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createV3Groq,capCaption}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,capCaption,callStructured}=require('../lib/super-urenavi-v3-groq');
 
 function response(payload,{status=200}={}){
   return {
@@ -91,6 +91,12 @@ function response(payload,{status=200}={}){
   const alternate=createV3Groq({apiKey:'test',model:'openai/gpt-oss-120b',fetchImpl});
   await alternate.callPass1({item:{itemName:'バイクグローブ'}});
   assert.equal(calls.at(-1).body.reasoning.effort,'low');
+  const mixed=await callStructured({apiKey:'test',model:'openai/gpt-oss-120b',systemPrompt:'test',userPayload:{},schema:{type:'object'},schemaName:'test',maxOutputTokens:460,fetchImpl:async()=>response({output:[
+    {type:'reasoning',content:[{type:'reasoning_text',text:'Internal reasoning is not JSON'}]},
+    {type:'message',content:[{type:'output_text',text:'{"ok":'},{type:'output_text',text:'true}'}]}
+  ]})});
+  assert.deepEqual(mixed.raw,{ok:true});
+  await assert.rejects(()=>callStructured({apiKey:'test',model:'mock',schema:{},fetchImpl:async()=>response({status:'incomplete',incomplete_details:{reason:'max_output_tokens'},usage:{output_tokens:500},output:[]})}),e=>e.failureReason==='output_budget_exhausted'&&e.usage.output_tokens===500);
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
     errorCalls++;
