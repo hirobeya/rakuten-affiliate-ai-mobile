@@ -46,7 +46,7 @@ for(const [type,quote,scene,text] of cases){
 const item={itemName:'バイクグローブ',itemCaption:'山羊革 ナックルプロテクター 親指と人差し指にタッチ対応素材'};
 const raw={productType:{specific:'バイクグローブ',general:'バイク用装備'},attributes:[{quote:'ナックルプロテクター'},{quote:'山羊革'}],appeals:[{scene:'停車中に地図を確認するなら。',text:'タッチ対応素材のバイクグローブ。停車中にスマホを操作できます。',evidenceQuotes:['親指と人差し指にタッチ対応素材'],strength:3}]};
 let out=evaluate(item,raw);assert.equal(out.copy.status,'ready');assert.deepEqual(out.normalized.appeals[0].attributeRefs,[2]);
-for(const text of ['走行中にスマホを操作できるバイクグローブ。','停車中にスマホを操作できる最強のバイクグローブ。','停車中に500時間スマホを操作できるバイクグローブ。']){
+for(const text of ['走行中にスマホを操作できるバイクグローブ。','停車中にスマホを操作できる最強のバイクグローブ。','停車中に500時間スマホを操作できるバイクグローブ。','停車中にスマホを操作できて疲れにくいバイクグローブ。']){
  const bad=structuredClone(raw);bad.appeals[0].text=text;assert.equal(evaluate(item,bad).copy.status,'blocked',text);
 }
 const negative={itemName:'グローブ',itemCaption:'非防水'};

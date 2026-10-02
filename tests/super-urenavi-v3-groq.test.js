@@ -47,6 +47,7 @@ function response(payload,{status=200}={}){
   assert.equal(p1.raw.attributes[0].value,'グローブを着けたままスマホを操作','non-grounded value labels must normalize to the grounded quote');
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
+  assert.equal(calls[0].body.temperature,0.2);
   assert.equal(calls[0].body.text.format.strict,true);
   assert.equal(calls[0].body.max_output_tokens,900);
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
