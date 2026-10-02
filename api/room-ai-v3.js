@@ -116,6 +116,7 @@ function createHandler(deps={}){
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,
         failureReason:error?.failureReason|| (error?.name==='AbortError'?'upstream_timeout':'analysis_error'),
+        upstreamDiagnostic:error?.safeError?{category:error.safeError.category,code:error.safeError.code,message:String(error.safeError.message||'').replace(/(?:gsk_|sk-)[A-Za-z0-9_-]+/g,'[redacted]').slice(0,500)}:null,
         usage:error?.usage||null,
         fallback:true
       });
