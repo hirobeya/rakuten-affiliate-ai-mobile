@@ -33,14 +33,14 @@ function response(payload,{status=200}={}){
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
   assert.equal(calls[0].body.text.format.strict,true);
-  assert.equal(calls[0].body.max_output_tokens,720);
+  assert.equal(calls[0].body.max_output_tokens,680);
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
   assert.ok(pass1User.itemCaption.length<=1200);
 
   await groq.callPass2({verificationInput:[{verificationIndex:0,appealIndex:0,proposed:{text:'例'},attributes:[]}]});
   assert.equal(calls.length,2);
   assert.equal(calls[1].body.text.format.name,'super_urenavi_v3_verification');
-  assert.equal(calls[1].body.max_output_tokens,320);
+  assert.equal(calls[1].body.max_output_tokens,240);
 
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
