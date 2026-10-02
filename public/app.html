@@ -688,6 +688,7 @@ input,select{
 #proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
 </style>
+<script src="/room-preview-request.js"></script>
 </head>
 
 <body>
@@ -2567,7 +2568,7 @@ function updateAiPanel(index){
   const facts=box.querySelector('.aiFacts');
   const copy=box.querySelector('.aiCopy');
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
+  if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。誤った投稿文を出さないため、この商品の投稿文は表示しません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='skipped'){
     status.textContent=result.reason==='rule_confident'
@@ -2601,13 +2602,20 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?25000:12000);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?110000:12000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch(usePurchasePlan?'/api/room-ai-v3':'/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
-    const d=await r.json().catch(()=>({}));
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
+    let r,d;
+    if(usePurchasePlan){
+      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onPending:()=>{aiRoomResults.set(index,{state:'loading',message:'投稿文を確認中…約1分お待ちください。'});updateAiPanel(index);}});
+      r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
+    }else{
+      r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify(payload)});
+      d=await r.json().catch(()=>({}));
+    }
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');

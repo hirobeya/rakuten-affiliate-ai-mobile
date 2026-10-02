@@ -71,7 +71,7 @@ function createHandler(deps={}){
       }
 
       const analysis=await analyzeProductV3({
-        item,store,model,consumeQuota:quotaFn,
+        item,store,model,consumeQuota:quotaFn,deferPass2:deps.deferPass2!==false,now:deps.now||Date.now,
         callPass1:groq.callPass1,
         callPass2:groq.callPass2
       });
@@ -90,8 +90,10 @@ function createHandler(deps={}){
         elapsedMs:Date.now()-started
       });
 
-      return json(res,200,{
+      return json(res,analysis.pending?202:200,{
         ok:analysis.ok,
+        pending:analysis.pending===true,
+        retryAfterMs:analysis.pending?analysis.retryAfterMs:0,
         version:'super-urenavi-v3-preview',
         model,
         productType:analysis.validation?.productType||null,

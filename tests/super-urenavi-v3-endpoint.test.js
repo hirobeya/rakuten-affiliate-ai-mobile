@@ -40,6 +40,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
   try{
     let p1=0,p2=0;
     const handler=createHandler({
+      deferPass2:false,
       authorize:async()=>({ok:true,plan:'owner'}),
       store:memoryStore(),
       consumeQuota:async()=>true,
