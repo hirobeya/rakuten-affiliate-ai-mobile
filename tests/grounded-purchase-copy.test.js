@@ -55,5 +55,5 @@ for(const change of [
 const negative={itemName:'バイクグローブ 非防水',itemCaption:''};
 assert.equal(composePurchaseCopy({item:negative,analysis:{validation:{...validation,attributes:[{value:'防水',quote:'防水'}]},verifiedAppeals:[{...base,text:'停車中の雨対策になる',attributeRefs:[0]}]}}).status,'blocked');
 assert.equal(new Set(report.map(x=>x.text)).size,rows.length);
-if(process.argv.includes('--report')) fs.writeFileSync('docs/grounded-purchase-contracts-20261002.json',JSON.stringify({scope:'18 synthetic contract cases; 15 requested categories + 3 glove types; model results mocked, no live coverage claim',cases:report},null,2)+'\n');
+if(process.argv.includes('--report')) fs.writeFileSync('docs/grounded-purchase-contracts-20261002.json',JSON.stringify({scope:'Renderer contracts only, not editorial quality approval. 18 synthetic contract cases; 15 requested categories + 3 glove types; model results mocked, no live coverage claim',cases:report},null,2)+'\n');
 console.log('grounded-purchase-copy.test.js: PASS (18 synthetic contracts + adverse cases; not live model evaluation)');
