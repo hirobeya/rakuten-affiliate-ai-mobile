@@ -71,6 +71,8 @@ for(const malformed of [[],checks.slice(1),[...checks,checks[0]],checks.map((c,i
 }
 const navigation=structuredClone(raw);navigation.appeals[0].scene='休憩時に。';navigation.appeals[0].text='停止中にナビ操作ができるバイクグローブ。';
 assert.equal(evaluate(item,navigation).copy.status,'blocked');
+const multilingual=evaluate({itemName:'モバイルバッテリー',itemCaption:'iPhoneとAndroidに対応'},{productType:{specific:'モバイルバッテリー',general:'充電器'},appeals:[{scene:'スマホ用の電源を選ぶときに。',text:'iPhoneとAndroidに対応するモバイルバッテリーです。',evidenceQuotes:['iPhoneとAndroidに対応'],strength:3}]});
+assert.equal(multilingual.copy.status,'ready','legitimate multiple platform names cannot invalidate natural Japanese');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
 assert.equal(MODEL_PASS1_SCHEMA.properties.attributes,undefined);
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.minItems,1);

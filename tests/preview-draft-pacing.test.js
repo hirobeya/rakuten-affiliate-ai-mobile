@@ -22,5 +22,16 @@ const {buildVerificationInput,validateUnderstanding}=(()=>({...require('../lib/s
  assert.equal(client.status,200);assert.equal(calls,2);assert.equal(waited,66000);
  calls=0;await run(item,{fetchImpl:async()=>{calls++;return {status:429,json:async()=>({})};},waitImpl:async()=>{throw Error('must not retry');}});assert.equal(calls,1);
  calls=0;await assert.rejects(()=>run(item,{isCurrent:()=>false,fetchImpl:async()=>{calls++;}}),e=>e.name==='AbortError');assert.equal(calls,0);
+ // Real page double-click while auth is pending must dispatch one search only.
+ const fs=require('node:fs'),vm=require('node:vm');
+ const html=fs.readFileSync(require('node:path').join(__dirname,'../public/purchase-live-regression.html'),'utf8');
+ const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(x=>x.includes('const CASES'));
+ const nodes={};const node=id=>nodes[id]||(nodes[id]={style:{},textContent:'',innerHTML:'',value:'0'});
+ let authCalls=0,searches=0,releaseAuth;
+ const context={document:{getElementById:node},window:{addEventListener(){}},URLSearchParams,setTimeout,Date,RoomPreviewRequest:{run:async()=>{throw Error('no search item should reach AI');}},fetch:async url=>{
+  if(url.startsWith('/api/access')){authCalls++;if(authCalls===2)await new Promise(resolve=>{releaseAuth=resolve;});return {ok:true};}
+  searches++;return {status:200,json:async()=>({items:[]})};
+ }};vm.createContext(context);vm.runInContext(script,context);await new Promise(r=>setTimeout(r,0));
+ const a=context.run([0]),b=context.run([0]);assert.equal(authCalls,2);releaseAuth();await Promise.all([a,b]);assert.equal(searches,1);
  console.log('preview-draft-pacing: PASS (deferred verification, no duplicate writer, cancellation, no 429 retry)');
 })().catch(e=>{console.error(e);process.exitCode=1;});
