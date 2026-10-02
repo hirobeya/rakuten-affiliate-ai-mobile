@@ -102,6 +102,7 @@ function createHandler(deps={}){
         cacheStatus:analysis.cacheStatus,
         pass2Status:analysis.pass2Status,
         tier:copy.tier,
+        quality:copy.quality,
         variants:copy.variants,
         metric
       });

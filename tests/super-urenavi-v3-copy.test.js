@@ -19,7 +19,7 @@ const validation={
   ]
 };
 const verifiedAppeals=[{
-  index:0,text:'飲み物に合わせて温度を細かく選べる',noHassle:'沸かしてから冷めるのを待たなくていい',scene:'',attributeRefs:[1,2],strength:3,
+  index:0,text:'飲み物に合わせて温度を細かく選べる',noHassle:'沸かしてから冷めるのを待たなくていい',scene:'飲み物ごとにお湯の温度を変えたいとき',attributeRefs:[1,2],strength:3,
   verification:{required:true,supported:true,keepDirectFact:true,reason:'supported'}
 }];
 
@@ -29,19 +29,19 @@ assert.equal(a.variants.length,1);
 for(const v of a.variants){
   assert.match(v.text,/50-100度/);
   assert.match(v.text,/1℃単位/);
-  assert.doesNotMatch(v.text,/飲み物に合わせて温度を細かく選べる|商品名には|と確認できます/);
+  assert.match(v.text,/飲み物に合わせて温度を細かく選べる/);
+  assert.doesNotMatch(v.text,/商品名には|と確認できます|冷めるのを待たなくていい/);
   assert.match(v.text,/8,980円/);
   assert.doesNotMatch(v.text,/ひとことメモ/);
   assert.match(v.text,/アフィリエイト広告/);
   assert.doesNotMatch(v.text,/実際に使ってみた|使ってよかった/);
 }
-assert.match(a.variants[0].hook,/お湯を沸かす/);
+assert.match(a.variants[0].hook,/温度を変えたい/);
 
 const b=composeVariants({item,analysis:{validation,verifiedAppeals:[]}});
 assert.equal(b.tier,'B');
-assert.equal(b.variants.length,1);
-assert.match(b.variants[0].text,/0.8L/);
-assert.doesNotMatch(b.variants[0].text,/沸かしてから冷めるのを待たなくていい/);
+assert.equal(b.variants.length,0);
+assert.equal(b.quality.status,'blocked');
 
 const c=composeVariants({item:{itemName:'未知の商品名',itemPrice:1200},analysis:{validation:{valid:true,productType:{specific:'雑貨',general:'商品',valid:true},attributes:[],hooks:[]},verifiedAppeals:[]}});
 assert.equal(c.tier,'C');

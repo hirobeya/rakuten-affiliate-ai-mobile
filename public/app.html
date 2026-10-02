@@ -1006,6 +1006,7 @@ let currentAccessPlan='base';
 let proAvailable=false;
 let debugExportAllowed=false;
 let aiGatesFullOutput=false;
+let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
@@ -2204,6 +2205,7 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
+  usePurchasePlan=debugExportAllowed;
   const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
@@ -2489,6 +2491,7 @@ function specificGroundedProductType(item,aiType){
 }
 
 function aiSalesInsight(item,result){
+  if(result?.version==='super-urenavi-v3-preview') return {productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2525,6 +2528,7 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
+  if(result?.version==='super-urenavi-v3-preview') return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
@@ -2572,6 +2576,12 @@ function updateAiPanel(index){
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
   }
+  if(result.data?.version==='super-urenavi-v3-preview'){
+    const data=result.data;
+    status.textContent=data.quality?.status==='ready'?'商品理解・選ぶ理由・根拠の照合を完了':'選ぶ理由を根拠付きで確認できないため、投稿文を生成していません。';
+    facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
+    copy.textContent=aiPhase1Post(item,data);return;
+  }
   const v=result.data?.validation||{};
   status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
@@ -2590,17 +2600,17 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?25000:12000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
+    const r=await fetch(usePurchasePlan?'/api/room-ai-v3':'/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message,status:r.status});
+      aiRoomResults.set(index,{state:'error',message,status:r.status,upstreamStatus:d.upstreamStatus});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
@@ -2644,6 +2654,7 @@ async function requestAiRoom(item,index,generation){
 }
 
 function aiTargetDecision(item){
+  if(usePurchasePlan) return {callAi:true,reasons:['grounded_purchase_reason_required']};
   const a=groundedAnalysis(item);
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
@@ -2686,6 +2697,10 @@ async function runAiPreview(items){
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
     await requestAiRoom(job.item,job.index,generation);
+    if(usePurchasePlan&&(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429)){
+      for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+      queue.length=0;
+    }
     if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
 }
@@ -2834,6 +2849,10 @@ function resolveAiGate(item,index,keyword=''){
   }
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.data?.version==='super-urenavi-v3-preview') {
+    const full=ai.data.ok===true&&ai.data.quality?.status==='ready'&&Boolean(ai.data.variants?.[0]?.text);
+    return {enabled:true,status:full?'full':'fallback',full,reasons:ai.data.quality?.reasons||['purchase_reason_unconfirmed'],useLegacy:false};
   }
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
