@@ -115,6 +115,8 @@ function createHandler(deps={}){
         message:status===429?'AI daily limit reached':'v3 analysis failed',
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,
+        failureReason:error?.failureReason|| (error?.name==='AbortError'?'upstream_timeout':'analysis_error'),
+        usage:error?.usage||null,
         fallback:true
       });
     }
