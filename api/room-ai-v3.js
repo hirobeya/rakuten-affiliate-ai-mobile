@@ -95,6 +95,8 @@ function createHandler(deps={}){
         version:'super-urenavi-v3-preview',
         model,
         productType:analysis.validation?.productType||null,
+        validationReasons:analysis.validation?.reasons||[],
+        candidateAppeals:analysis.validation?.appeals||[],
         attributes:analysis.validation?.attributes||[],
         decisionAxes:analysis.validation?.decisionAxes||[],
         verifiedAppeals:analysis.verifiedAppeals||[],
