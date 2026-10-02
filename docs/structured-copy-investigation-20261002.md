@@ -65,3 +65,8 @@ Preview比較画面: https://rakuten-affiliate-ai-mobile-fulem7slk-hirobeya-6572
 証拠画像: `docs/urenavi-copy-preview-final-20261002.jpg`。
 
 実商品のログイン後E2E、画像の事実抽出、未知213件の自然な使用場面は未完了。生成数や自動テスト通過だけを根拠に本番反映しない。
+
+## Preview認証導線の確認
+
+`ec760784503192251daa6647399e3ed293e5edcc` のPreviewはREADY。window.openの戻り値による誤った失敗判定を除去し、既存の本番認証確認先を直接リンクとして表示する。認証検証・cookie・権限・APIは変更しない。ユーザーの明示許可後に一時共有URLで画面確認し、直接リンク表示と旧エラー非表示を確認。最新Previewで15分類の生成とルート一致も再確認。ユーザーのChromeでは本番ログイン済み画像を確認したが、クラウドブラウザには引き継がれていない。ログイン後E2Eは引き続き未完了。
+証拠画像: `docs/urenavi-preview-login-fix-20261002.jpg`。
