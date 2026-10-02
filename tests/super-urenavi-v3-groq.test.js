@@ -26,6 +26,10 @@ function response(payload,{status=200}={}){
   const groq=createV3Groq({apiKey:'test',model:'mock',fetchImpl});
   const p1=await groq.callPass1({item:{itemName:'電気ケトル',itemCaption:'説明'.repeat(1000),itemPrice:1000}});
   assert.equal(p1.raw.productType.specific,'電気ケトル');
+  assert.equal(p1.raw.productType.quote,p1.raw.productType.specific);
+  assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
+  assert.equal(calls[0].body.text.format.schema.properties.productType.properties.quote,undefined);
+  assert.equal(calls[0].body.text.format.schema.properties.hooks,undefined);
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
   assert.equal(calls[0].body.text.format.strict,true);
