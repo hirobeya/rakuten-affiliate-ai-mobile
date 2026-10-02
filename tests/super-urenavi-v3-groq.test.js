@@ -37,10 +37,41 @@ function response(payload,{status=200}={}){
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
   assert.ok(pass1User.itemCaption.length<=1200);
 
-  await groq.callPass2({verificationInput:[{verificationIndex:0,appealIndex:0,proposed:{text:'例'},attributes:[]}]});
+  const verificationInput=[{
+    verificationIndex:0,
+    appealIndex:0,
+    proposed:{
+      text:'本革の柔らかさとグリップ力で操作しやすいです。',
+      scene:'長時間のツーリング',
+      noHassle:''
+    },
+    attributes:[{
+      ref:1,
+      name:'プロテクション',
+      value:'ナックルプロテクター入り',
+      unit:'',
+      qualifier:'',
+      quote:'ナックルプロテクター入り'
+    }]
+  }];
+  await groq.callPass2({
+    verificationInput,
+    item:{
+      itemName:'バイク グローブ 本革 山羊革 ナックルプロテクター入り',
+      itemCaption:'本革の柔らかさとグリップ力。スマホ対応。'
+    },
+    validation:{productType:{specific:'バイク グローブ',general:'バイク用グローブ'}}
+  });
   assert.equal(calls.length,2);
   assert.equal(calls[1].body.text.format.name,'super_urenavi_v3_verification');
   assert.equal(calls[1].body.max_output_tokens,240);
+  const pass2User=JSON.parse(calls[1].body.input[1].content[0].text);
+  assert.deepEqual(pass2User.appeals,verificationInput);
+  assert.equal(pass2User.itemName,undefined,'pass2 must not see the full product title');
+  assert.equal(pass2User.itemCaption,undefined,'pass2 must not see the full product description');
+  assert.deepEqual(pass2User.productType,{specific:'バイク グローブ',general:'バイク用グローブ'});
+  assert.match(calls[1].body.input[0].content[0].text,/attributesだけ/);
+  assert.match(calls[1].body.input[0].content[0].text,/supported=false/);
 
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
