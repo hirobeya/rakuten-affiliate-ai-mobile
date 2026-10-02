@@ -1,0 +1,58 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {normalizePass1Raw,MODEL_PASS1_SCHEMA,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
+const {validateUnderstanding}=require('../lib/super-urenavi-v3-understanding');
+const {buildVerificationInput,applyVerification,PASS2_SYSTEM_PROMPT}=require('../lib/super-urenavi-v3-verifier');
+const {composePurchaseCopy}=require('../lib/grounded-purchase-copy');
+const cases=[
+ ['バイクグローブ','親指と人差し指にタッチ対応素材','停車中に地図を確認したいときに。','親指と人差し指にタッチ対応素材を使ったバイクグローブ。停車中は手袋を着けたままスマホを操作できます。'],
+ ['掃除用グローブ','マイクロファイバーで窓を拭く','窓の汚れを拭き取りたいときに。','手にはめて窓を拭く掃除用グローブ。マイクロファイバーで手の動きに沿って拭けます。'],
+ ['野球グローブ','右投げ用','右投げの捕球練習に。','右投げ用の野球グローブ。投げる手に合わせて選べます。'],
+ ['収納ベンチ','座面下に収納スペース','座る場所に収納も欲しいなら。','収納ベンチは座面下に収納スペース付き。座る場所と物をしまう場所をまとめられます。'],
+ ['モップハンガー','モップの柄を挟んで壁に掛ける','モップを床に置きたくないときに。','柄を挟んで壁に掛けるモップハンガー。使った後の置き場所を壁に作れます。'],
+ ['空調服用バッテリー','AB型番のファン専用','AB型番のファンの電源を選ぶなら。','空調服用バッテリーはAB型番のファン専用。対応するファンにつないで使います。'],
+ ['ペット毛取りグローブ','手にはめてペットの抜け毛を取る','ペットの毛のお手入れに。','ペット毛取りグローブは手にはめて抜け毛を取るタイプ。手を動かしながらお手入れできます。'],
+ ['BOS袋','使用済みおむつを入れる袋','使用済みおむつをまとめたいときに。','BOS袋は使用済みおむつを入れる袋。おむつ処理の袋として使えます。'],
+ ['美顔ローラー','顔の上を転がして使用','顔に当てて転がすお手入れに。','顔の上を転がして使う美顔ローラー。ローラー式のお手入れ用品を選びたい方に。'],
+ ['モバイルバッテリー','USB-C接続でスマホを充電','外出先でスマホを充電したいときに。','USB-C接続でスマホを充電できるモバイルバッテリー。外出時の充電用に持ち歩けます。'],
+ ['フライパン','取っ手を取り外せる','調理後は取っ手を外して片付けたいなら。','取っ手を取り外せるフライパン。収納時は取っ手を外せます。'],
+ ['収納ボックス','使わないときは折りたたみ可能','使わない収納用品は小さく片付けたいなら。','収納ボックスは折りたたみ可能。使わないときはたたんで保管できます。'],
+ ['ヘアブラシ','持ち手付き','手で握って髪をとかすときに。','持ち手付きのヘアブラシ。持ち手を握って髪をとかせます。'],
+ ['ペットベッド','カバーを取り外して洗える','ペットの寝床のカバーを洗いたいときに。','ペットベッドはカバーを取り外して洗える仕様。カバーだけを外してお手入れできます。'],
+ ['靴下','10足セット','靴下をまとめて揃えたいなら。','靴下は10足セット。同じセットでまとめて揃えられます。'],
+ ['電気ケトル','50-100度を1℃単位で温度設定','飲み物に合わせてお湯の温度を選びたいなら。','電気ケトルは50-100度を1℃単位で温度設定できます。作る飲み物に合わせて設定を変えられます。'],
+ ['冷凍おにぎり','冷凍のまま電子レンジで温める','電子レンジで食事を準備したいときに。','冷凍おにぎりは冷凍のまま電子レンジで温めるタイプ。食べる分を温めて用意できます。']
+];
+function evaluate(item,raw,supported=true){
+ const normalized=normalizePass1Raw(structuredClone(raw),item);
+ const validation=validateUnderstanding(normalized,item);
+ const input=buildVerificationInput(validation);
+ const results=input.map(x=>({verificationIndex:x.verificationIndex,supported,keepDirectFact:true,reason:'mocked contract; not live factual approval'}));
+ return {normalized,validation,input,copy:composePurchaseCopy({item,analysis:{validation,verifiedAppeals:applyVerification(validation,{results})}})};
+}
+for(const [type,quote,scene,text] of cases){
+ const item={itemName:type,itemCaption:quote};
+ // Evidence need not match any model-produced attribute; server binds to source.
+ const raw={productType:{specific:type,general:type},attributes:[],appeals:[{text,scene,evidenceQuotes:[quote],strength:3}]};
+ const out=evaluate(item,raw);
+ assert.equal(out.copy.status,'ready',type+JSON.stringify(out.copy));
+ assert.equal(out.copy.text,scene.normalize('NFKC')+'\n\n'+text.normalize('NFKC')+'\n\n※アフィリエイト広告を利用しています');
+ assert.equal(out.copy.ledger[0].facts[0].quote,quote.normalize('NFKC'));
+ assert.equal(out.input[0].attributes[0].quote,quote.normalize('NFKC'));
+ assert.equal(evaluate(item,raw,false).copy.status,'blocked');
+ raw.appeals[0].evidenceQuotes.push('原文に存在しない特徴');
+ assert.equal(evaluate(item,raw).copy.status,'blocked','mixed genuine/false evidence must reject entire paragraph');
+}
+const item={itemName:'バイクグローブ',itemCaption:'山羊革 ナックルプロテクター 親指と人差し指にタッチ対応素材'};
+const raw={productType:{specific:'バイクグローブ',general:'バイク用装備'},attributes:[{quote:'ナックルプロテクター'},{quote:'山羊革'}],appeals:[{scene:'停車中に地図を確認するなら。',text:'タッチ対応素材のバイクグローブ。停車中にスマホを操作できます。',evidenceQuotes:['親指と人差し指にタッチ対応素材'],strength:3}]};
+let out=evaluate(item,raw);assert.equal(out.copy.status,'ready');assert.deepEqual(out.normalized.appeals[0].attributeRefs,[2]);
+for(const text of ['走行中にスマホを操作できるバイクグローブ。','停車中にスマホを操作できる最強のバイクグローブ。','停車中に500時間スマホを操作できるバイクグローブ。']){
+ const bad=structuredClone(raw);bad.appeals[0].text=text;assert.equal(evaluate(item,bad).copy.status,'blocked',text);
+}
+const negative={itemName:'グローブ',itemCaption:'非防水'};
+assert.equal(evaluate(negative,{productType:{specific:'グローブ',general:'手袋'},attributes:[],appeals:[{text:'防水のグローブ。',scene:'雨の日に。',evidenceQuotes:['防水'],strength:3}]}).copy.status,'blocked');
+const normalized=evaluate({itemName:'収納ボックス',itemCaption:'幅３０ｃｍ\n折りたたみ可能'},{productType:{specific:'収納ボックス',general:'収納'},attributes:[],appeals:[{scene:'片付けに。',text:'幅30cmの収納ボックス。',evidenceQuotes:['幅30cm'],strength:3}]});assert.equal(normalized.copy.status,'ready');
+assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
+assert.deepEqual(MODEL_PASS1_SCHEMA.properties.attributes.items.required,['quote']);
+assert.match(SEMANTIC_WRITER_PROMPT,/一度に/);assert.match(PASS2_SYSTEM_PROMPT,/条件の省略/);
+console.log('semantic-room-draft: PASS (17 synthetic categories; mock verifier, not live quality approval)');

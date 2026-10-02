@@ -34,7 +34,7 @@ function response(payload,{status=200}={}){
     return response({model:'mock',usage:{input_tokens:5,output_tokens:5},output_text:JSON.stringify({results:[]})});
   };
   const groq=createV3Groq({apiKey:'test',model:'mock',fetchImpl});
-  const p1=await groq.callPass1({item:{itemName:'バイクグローブ',itemCaption:'説明'.repeat(1000),itemPrice:1000}});
+  const p1=await groq.callPass1({item:{itemName:'バイクグローブ',itemCaption:'グローブを着けたままスマホを操作 ナックルプロテクター入り '+ '説明'.repeat(1000),itemPrice:1000}});
   assert.equal(p1.raw.productType.specific,'バイクグローブ');
   assert.equal(p1.raw.productType.quote,p1.raw.productType.specific);
   assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
@@ -82,11 +82,11 @@ function response(payload,{status=200}={}){
   assert.equal(calls[1].body.max_output_tokens,240);
   const pass2User=JSON.parse(calls[1].body.input[1].content[0].text);
   assert.deepEqual(pass2User.appeals,verificationInput);
-  assert.equal(pass2User.itemName,undefined,'pass2 must not see the full product title');
-  assert.equal(pass2User.itemCaption,undefined,'pass2 must not see the full product description');
+  assert.equal(pass2User.itemName,'バイク グローブ 本革 山羊革 ナックルプロテクター入り');
+  assert.equal(pass2User.itemCaption,'本革の柔らかさとグリップ力。スマホ対応。');
   assert.deepEqual(pass2User.productType,{specific:'バイク グローブ',general:'バイク用グローブ'});
-  assert.match(calls[1].body.input[0].content[0].text,/attributesだけ/);
-  assert.match(calls[1].body.input[0].content[0].text,/supported=false/);
+  assert.match(calls[1].body.input[0].content[0].text,/商品原文/);
+  assert.match(calls[1].body.input[0].content[0].text,/supported=true/);
 
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
