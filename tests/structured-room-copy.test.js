@@ -59,3 +59,6 @@ assert.doesNotMatch(combined.text,/✓ コードレス|✓ 充電式/);
 assert.doesNotMatch(s.compose({itemName:'Tシャツ 綿100% オールシーズン'}).text,/綿100%を使った/);
 assert.equal(s.compose({itemName:'モバイルバッテリー用ケース USB-C'}).status,'insufficient_evidence');
 console.log('Source label, material role, accessory and combined value regressions PASS');
+
+assert.equal(api.makeRoomCopy({itemName:'モバイルバッテリー用ケース USB-C'},''),'');
+assert.equal(api.buildValidatedProductPost({itemName:'モバイルバッテリー用ケース USB-C'},'モバイルバッテリー',['USB-C']),'');

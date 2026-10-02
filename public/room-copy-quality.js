@@ -993,7 +993,7 @@
   }
 
   function buildValidatedProductPost(item,identity,evidenceFacts=[]){return structuredPost(item,identity,evidenceFacts);}
-  function buildGroundedBenefitPost(item,facts=[]){return structuredPost(item,exactProductTypeName(item?.itemName||''),facts);}
+  function buildGroundedBenefitPost(item,facts=[]){return structuredPost(item,'',facts);}
   buildValidatedProductPost.__structured=true;
   buildGroundedBenefitPost.__structured=true;
   buildNeutralFactPost.__structured=true;

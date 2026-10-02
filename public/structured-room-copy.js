@@ -88,10 +88,10 @@
     const conflict=[...domains].some(x=>x!==winner?.domain&&!(parents[winner?.domain]||[]).includes(x));
     if(conflict) return {identity:'',scene:'',domain:'',reason:'conflicting_types'};
     if(winner) return {identity:winner.name,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
+    const label=sourceLabel(item,extractFacts(item));
+    if(label&&TYPES.some(type=>type.names.some(name=>name.length>=3&&compact.includes(name)&&/^(?:用|専用)?(?:ケース|カバー|ポーチ|交換パーツ)/.test(compact.split(name)[1]||'')))) {label.domain='accessory';return label;}
     const id=normalize(identity);
     if(id&&!RISK.test(id)&&!BAD_CONTEXT.test(id)&&sourceParts(item).some(x=>x.text.includes(id))) return {identity:id,scene:'',domain:'unknown',reason:'',method:'validated_identity'};
-    const label=sourceLabel(item,extractFacts(item));
-    if(label&&TYPES.some(type=>type.names.some(name=>name.length>=3&&compact.includes(name)&&/^(?:用|専用)?(?:ケース|カバー|ポーチ|交換パーツ)/.test(compact.split(name)[1]||'')))) label.domain='accessory';
     return label||{identity:'',scene:'',domain:'',reason:'unknown_type'};
   }
   // B: every extracted fact carries its exact quote and source. Images are never inferred here.
