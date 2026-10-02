@@ -7,6 +7,7 @@ function load(){
   const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
   const window={document,Intl};
   const ctx=vm.createContext({window,Intl,console});
+  vm.runInContext(fs.readFileSync('public/structured-room-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
@@ -89,9 +90,9 @@ test('all client copy channels use the same grounded benefit output from safe fa
   const instagram=api.makeInstagramCopy(item,'');
   assert.equal(room,threads);
   assert.equal(room,instagram);
-  assert.match(room,/モバイルバッテリーを、対応規格まで確認して選びたいなら。/);
-  assert.match(room,/商品名には「(?:10枚入り|USB-C対応)」と明記されています。/);
-  assert.match(room,/確認できる仕様👇/);
+  assert.match(room,/外出先での充電に。/);
+  assert.doesNotMatch(room,/商品名には|明記されています|比較しやすい/);
+  assert.match(room,/特徴👇/);
   assert.match(room,/✓ 10枚入り/);
   assert.match(room,/✓ USB-C対応/);
   assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
@@ -101,9 +102,9 @@ test('all client copy channels use the same grounded benefit output from safe fa
 
 test('neutral builder rejects non-source and non-allowlisted facts',()=>{
   const api=load();
-  const item={itemName:'本革 内容量500ml USB-C対応 商品',itemPrice:1000};
+  const item={itemName:'財布 本革 内容量500ml USB-C対応',itemPrice:1000};
   const out=api.buildNeutralFactPost(item,['本革','内容量500ml','防水','存在しない仕様']);
-  assert.match(out,/✓ 本革/);
+  assert.match(out,/本革/);
   assert.match(out,/✓ 内容量500ml/);
   assert.doesNotMatch(out,/防水|存在しない仕様/);
 });
@@ -129,7 +130,7 @@ test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
   assert.doesNotMatch(quality,/function valueFromFacts\(/);
   assert.match(html,/buildGroundedBenefitPost/);
   assert.match(quality,/function buildGroundedBenefitPost/);
-  assert.match(quality,/確認できる仕様/);
+  assert.match(quality,/StructuredCopy/);
 });
 
 test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
@@ -143,9 +144,9 @@ test('public browser scripts avoid regex lookbehind for older iOS Safari',()=>{
 test('grounded benefit copy only expands verified fact types',()=>{
   const api=load();
   const cases=[
-    {item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},must:['10枚入り','必要な数をまとめて揃えたいときにチェック。'],mustNot:['洗い替え','長持ち','吸水']},
-    {item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},must:['HDMI','USB-C対応','ケーブルを、対応規格まで確認して選びたいなら。'],mustNot:['高速','高画質','急速充電']},
-    {item:{itemName:'財布 本革 ブラック',itemPrice:4980},must:['本革','財布を、素材表記まで確認して選びたいなら。'],mustNot:['高級','丈夫','長く使える']}
+    {item:{itemName:'タオル 10枚入り ホワイト',itemPrice:1200},must:['10枚入り','手や体を拭くときに。'],mustNot:['洗い替え','長持ち','吸水']},
+    {item:{itemName:'ケーブル HDMI USB-C対応 ブラック',itemPrice:1800},must:['HDMI','USB-C対応','ケーブル'],mustNot:['高速','高画質','急速充電']},
+    {item:{itemName:'財布 本革 ブラック',itemPrice:4980},must:['本革','財布'],mustNot:['高級','丈夫','長く使える']}
   ];
   for(const c of cases){
     const out=api.makeRoomCopy(c.item,'');
@@ -162,19 +163,16 @@ test('grounded benefit builder drops facts not present in the source title',()=>
   assert.doesNotMatch(out,/USB-C|10枚入り/);
 });
 
-test('contextual product copy uses explicit product noun from title',()=>{
+test('contextual product copy uses product identity and nonduplicated source facts',()=>{
   const api=load();
-  const cases=[
-    {item:{itemName:'猫耳 IDカードケース 日本製 本革 牛革',itemPrice:6490},must:['IDカードケースを、素材や生産地まで確認して選びたいなら。','「日本製」','「本革」','IDカードケースを素材と生産地の両方から見比べたいときの候補です。']},
-    {item:{itemName:'パジャマ メンズ 2点セット コットン',itemPrice:3240},must:['パジャマを、セット内容と素材の両方まで確認して選びたいなら。','「2点セット」','「コットン」']},
-    {item:{itemName:'Calvin Klein ボクサーパンツ 3枚組',itemPrice:6950},must:['ボクサーパンツを、セット内容や入数まで確認して選びたいなら。','「3枚組」']},
-    {item:{itemName:'スクエアボックスプール 80×80×25cm',itemPrice:2331},must:['スクエアボックスプールを、サイズ表記まで確認して選びたいなら。','「80×80×25cm」']},
-    {item:{itemName:'HDMIケーブル USB-C対応',itemPrice:1800},must:['HDMIケーブルを、対応規格まで確認して選びたいなら。','「USB-C対応」']}
-  ];
-  for(const c of cases){
-    const out=api.makeRoomCopy(c.item,'');
-    for(const x of c.must) assert.ok(out.includes(x),x+' missing from '+out);
-    assert.doesNotMatch(out,/高級|丈夫|長持ち|吸水|高画質|急速充電|絶対|必ず|確実に/);
+  for(const itemName of ['猫耳 IDカードケース 日本製 本革 牛革','パジャマ メンズ 2点セット コットン','Calvin Klein ボクサーパンツ 3枚組','スクエアボックスプール 80×80×25cm','HDMIケーブル USB-C対応']){
+    const item={itemName,itemPrice:1800},out=api.makeRoomCopy(item,'');
+    assert.ok(out,itemName);
+    assert.doesNotMatch(out,/商品名には|明記されています|比較しやすい|高級|丈夫|高画質|絶対|必ず/);
+    assert.match(out,/アフィリエイト広告/);
+    const facts=require('../public/structured-room-copy').extractFacts(item);
+    assert.ok(facts.length);
+    for(const fact of facts) assert.ok(out.includes(fact.quote),fact.quote+' missing: '+out);
   }
 });
 

@@ -783,10 +783,10 @@ function run(name,fn){
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
     assert.match(html,/buildGroundedBenefitPost/);
-    assert.match(quality,/function groundedBenefitForFact/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
-    assert.match(quality,/確認できる仕様/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/UrenaviFactSafety/);
     assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
     assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);

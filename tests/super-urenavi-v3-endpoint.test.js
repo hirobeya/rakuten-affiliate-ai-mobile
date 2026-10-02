@@ -54,7 +54,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     assert.equal(res.code,200);
     assert.equal(res.body.ok,true);
     assert.equal(res.body.tier,'A');
-    assert.equal(res.body.variants.length,3);
+    assert.equal(res.body.variants.length,1);
     assert.equal(res.body.groq.pass1Calls,1);
     assert.equal(res.body.groq.pass2Calls,1);
     assert.equal(p1,1); assert.equal(p2,1);

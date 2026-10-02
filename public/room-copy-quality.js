@@ -971,106 +971,9 @@
       .slice(0,6);
   }
 
-  function groundedBenefitForFact(fact){
-    const x=String(fact||'').trim();
-    if(!x||!FactSafety?.isAllowedSpecFact?.(x)) return null;
-
-    if(FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x)){
-      return {
-        hook:'必要な数をまとめて揃えたいときにチェック。',
-        benefit:'商品名には「'+x+'」と明記されています。セット数や入数を比べながら、必要量に合うか判断しやすい仕様です。'
-      };
-    }
-    if(FactSafety?.DIMENSION_RE?.test(x)){
-      return {
-        hook:'置き場所やサイズ感を確認して選びたいときに。',
-        benefit:'商品名には「'+x+'」と明記されています。設置場所や収納場所に合うか、購入前にサイズを比べる材料になります。'
-      };
-    }
-    if(FactSafety?.CONTENT_AMOUNT_RE?.test(x)){
-      return {
-        hook:'容量を比べて選びたいときに。',
-        benefit:'商品名には「'+x+'」と明記されています。必要な容量に合うかを確認しながら候補を絞りやすい仕様です。'
-      };
-    }
-    if(FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x)){
-      return {
-        hook:'素材を見て選びたいときに。',
-        benefit:'商品名には「'+x+'」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。'
-      };
-    }
-    if(FactSafety?.STANDARDS?.has?.(x)){
-      if(x==='日本製'){
-        return {
-          hook:'生産地の表記も確認して選びたいときに。',
-          benefit:'商品名には「日本製」と明記されています。生産地を比較条件にしたいときの確認材料になります。'
-        };
-      }
-      if(x==='4K'){
-        return {
-          hook:'対応する映像規格を確認して選びたいときに。',
-          benefit:'商品名には「4K」と明記されています。使う機器の対応状況と照らし合わせながら候補を絞れます。'
-        };
-      }
-      return {
-        hook:'接続規格や対応規格を確認して選びたいときに。',
-        benefit:'商品名には「'+x+'」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。'
-      };
-    }
-    return null;
-  }
-
-  function buildNeutralFactPost(item,facts=[]){
-    const safeFacts=safePostFacts(item,facts);
-    if(!safeFacts.length) return '';
-    const price=Number(item?.itemPrice);
-    const lines=['商品名に記載されている仕様です。',''];
-    for(const fact of safeFacts) lines.push('✓ '+fact);
-    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
-    lines.push('','※アフィリエイト広告を利用しています');
-    return lines.join('\n').slice(0,500);
-  }
-
-  function contextualLeadForProduct(identity,safeFacts){
-    const id=String(identity||'').trim();
-    if(!id) return '';
-    const hasCount=safeFacts.some(x=>FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x));
-    const hasDimension=safeFacts.some(x=>FactSafety?.DIMENSION_RE?.test(x));
-    const hasMaterial=safeFacts.some(x=>FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x));
-    const hasOrigin=safeFacts.includes('日本製');
-    const hasStandard=safeFacts.some(x=>FactSafety?.STANDARDS?.has?.(x)&&x!=='日本製');
-
-    if(hasCount&&hasMaterial) return id+'を、セット内容と素材の両方まで確認して選びたいなら。';
-    if(hasMaterial&&hasOrigin) return id+'を、素材や生産地まで確認して選びたいなら。';
-    if(hasDimension) return id+'を、サイズ表記まで確認して選びたいなら。';
-    if(hasStandard) return id+'を、対応規格まで確認して選びたいなら。';
-    if(hasCount) return id+'を、セット内容や入数まで確認して選びたいなら。';
-    if(hasMaterial) return id+'を、素材表記まで確認して選びたいなら。';
-    if(hasOrigin) return id+'を、生産地まで確認して選びたいなら。';
-    return id+'を、商品名の仕様まで確認して選びたいなら。';
-  }
-
-  function contextualMeaningLine(identity,safeFacts){
-    const id=String(identity||'').trim();
-    if(!id||!safeFacts.length) return '';
-    const first=String(safeFacts[0]||'').trim();
-    const rest=safeFacts.slice(1,3).map(x=>'「'+x+'」').join('・');
-    const evidence='商品名には「'+first+'」と明記されています。'+(rest?'さらに'+rest+'も確認できます。':'');
-    const hasCount=safeFacts.some(x=>FactSafety?.STRUCTURED_COUNT_RE?.test(x)||FactSafety?.MULTIPACK_RE?.test(x));
-    const hasDimension=safeFacts.some(x=>FactSafety?.DIMENSION_RE?.test(x));
-    const hasMaterial=safeFacts.some(x=>FactSafety?.MATERIAL_WITH_PERCENT_RE?.test(x)||FactSafety?.MATERIALS?.has?.(x));
-    const hasOrigin=safeFacts.includes('日本製');
-    const hasStandard=safeFacts.some(x=>FactSafety?.STANDARDS?.has?.(x)&&x!=='日本製');
-
-    if(hasDimension) return evidence+id+'のサイズを先に見比べたいときの判断材料になります。';
-    if(hasCount&&hasMaterial) return evidence+id+'の枚数・セット内容と素材を一緒に見比べられます。';
-    if(hasMaterial&&hasOrigin) return evidence+id+'を素材と生産地の両方から見比べたいときの候補です。';
-    if(hasStandard) return evidence+id+'が手持ちの機器や使いたい規格に合うか確認する材料になります。';
-    if(hasCount) return evidence+id+'を必要な枚数やセット数で比べたいときに見やすい商品です。';
-    if(hasMaterial) return evidence+id+'を素材から比べたいときに確認しやすい商品です。';
-    if(hasOrigin) return evidence+id+'を生産地も含めて比べたいときの候補です。';
-    return evidence+id+'の仕様を見比べたいときの判断材料になります。';
-  }
+  const StructuredCopy=(typeof window!=='undefined'&&window.UrenaviStructuredCopy)||(typeof require==='function'?require('./structured-room-copy.js'):null);
+  function structuredPost(item,identity='',evidence=[]){return StructuredCopy?.compose(item,{identity,evidence}).text||'';}
+  function buildNeutralFactPost(item,facts=[]){return buildGroundedBenefitPost(item,facts);}
   const AI_COPY_EVIDENCE_RISK_RE=/(?:絶対|必ず|確実|No\.?\s*1|ナンバーワン|一番|最高|最強|治る|治療|改善|若返|痩せ|美白|小顔|リフトアップ|予防|効果|効能|除菌|殺菌|抗菌|消臭|防臭|ランキング|受賞|送料無料|クーポン|SALE|セール|半額|最安|ポイント\d*倍|P\d+倍)/i;
 
   function aiCopySource(item){
@@ -1089,87 +992,11 @@
       .slice(0,3);
   }
 
-  function evidenceValueLead(identity,facts=[]){
-    const id=String(identity||'').trim(),j=(facts||[]).join(' ');
-    if(/フィルター交換不要/.test(j)) return id+'を、交換の手間まで考えて選びたいなら。';
-    if(/最大\s*\d+(?:[.,]\d+)?\s*時間/.test(j)) return id+'を、充電の頻度まで考えて選びたいなら。';
-    if(/温度|保温|℃|°C/.test(j)) return id+'を、温度設定や保温まで見て選びたいなら。';
-    if(/重量|\d+(?:[.,]\d+)?\s*(?:g|kg)/i.test(j)) return id+'を、持ち運ぶときの重さまで比べて選びたいなら。';
-    if(/容量|大容量|\d+(?:[.,]\d+)?\s*(?:L|ml|mL)/.test(j)) return id+'を、容量までしっかり比べて選びたいなら。';
-    if(/幅|奥行|高さ|長さ|サイズ|\d+(?:[.,]\d+)?\s*(?:cm|mm)/.test(j)) return id+'を、置き場所やサイズ感まで確認して選びたいなら。';
-    if(/Bluetooth|USB|Type-C|HDMI|マルチポイント|PSE|JIS|Ra\d+/i.test(j)) return id+'を、接続方法や対応仕様まで確認して選びたいなら。';
-    return id+'を、使い方に合う仕様まで見て選びたいなら。';
-  }
-
-  function evidenceValueLine(fact){
-    const x=String(fact||'').trim();
-    if(!x) return '';
-    if(/フィルター交換不要/.test(x)) return '「'+x+'」と確認できます。交換用フィルターを用意する手間を減らしたい人には注目したいポイントです。';
-    if(/最大\s*\d+(?:[.,]\d+)?\s*時間/.test(x)) return '「'+x+'」と確認できます。充電する回数をできるだけ減らして使いたいときに比べたい仕様です。';
-    if(/\d+\s*段階.*温度|温度.*\d+\s*段階/.test(x)) return '「'+x+'」と確認できます。用途に合わせて温度を選びたい人が見ておきたい仕様です。';
-    if(/\d+(?:[.,]\d+)?\s*時間.*保温|保温.*\d+(?:[.,]\d+)?\s*時間/.test(x)) return '「'+x+'」と確認できます。保温時間を比べて選びたいときの材料になります。';
-    if(/マルチポイント接続/.test(x)) return '「'+x+'」と確認できます。複数端末を使う人が接続方法を比べるときの確認ポイントです。';
-    if(/Bluetooth\s*\d/i.test(x)) return '「'+x+'」と確認できます。手持ちの機器との接続仕様を確認して選びたいときの比較材料になります。';
-    if(/重量|\d+(?:[.,]\d+)?\s*(?:g|kg)/i.test(x)) return '「'+x+'」と確認できます。持ち運ぶときの重さを比べて選びたい人に分かりやすい情報です。';
-    if(/幅|奥行|高さ|長さ|サイズ|\d+(?:[.,]\d+)?\s*(?:cm|mm)/.test(x)) return '「'+x+'」と確認できます。置き場所や収納場所に収まるか、購入前に比べやすい情報です。';
-    if(/容量|大容量|\d+(?:[.,]\d+)?\s*(?:L|ml|mL)/.test(x)) return '「'+x+'」と確認できます。必要な容量に合うかを比べて選びたいときの目安になります。';
-    if(/ステンレス|ポリカーボネート|グラスファイバー|綿|コットン|素材/i.test(x)) return '「'+x+'」と確認できます。素材まで見て選びたい人が比較しやすいポイントです。';
-    if(/クランプ式/.test(x)) return '「'+x+'」と確認できます。設置方法を重視する人が購入前に見ておきたいポイントです。';
-    if(/USB|Type-C|HDMI|PSE|JIS|Ra\d+/i.test(x)) return '「'+x+'」と確認できます。対応規格や仕様を確認してから選びたいときの比較材料になります。';
-    return '「'+x+'」と確認できます。商品を比べるときに見ておきたい具体的な仕様です。';
-  }
-
-  function buildValidatedProductPost(item,identity,evidenceFacts=[]){
-    const id=String(identity||'').normalize('NFKC').replace(/\s+/g,' ').trim();
-    const source=aiCopySource(item);
-    if(!id||id.length>32||!source.includes(id)||AI_COPY_EVIDENCE_RISK_RE.test(id)) return '';
-    const facts=validatedAiCopyEvidence(item,evidenceFacts),price=Number(item?.itemPrice);
-    const lines=[evidenceValueLead(id,facts)];
-    if(facts.length){
-      for(const fact of facts.slice(0,2)) lines.push('',evidenceValueLine(fact));
-      lines.push('','確認できるポイント👇');
-      for(const fact of facts.slice(0,3)) lines.push('✓ '+fact);
-    }else lines.push('',id+'として商品名・説明に記載されています。商品ページの詳細とあわせて、自分の条件に合うか確認できます。');
-    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
-    lines.push('','※アフィリエイト広告を利用しています');
-    return lines.join('\n').slice(0,500);
-  }
-
-  function buildGroundedBenefitPost(item,facts=[]){
-    const safeFacts=safePostFacts(item,facts);
-    if(!safeFacts.length) return '';
-
-    const identity=exactProductTypeName(item?.itemName||'');
-    const price=Number(item?.itemPrice);
-
-    if(identity){
-      const lead=contextualLeadForProduct(identity,safeFacts);
-      const meaning=contextualMeaningLine(identity,safeFacts);
-      const lines=[lead,'',meaning,'','確認できる仕様👇'];
-      for(const fact of safeFacts.slice(0,4)) lines.push('✓ '+fact);
-      if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
-      lines.push('','※アフィリエイト広告を利用しています');
-      return lines.join('\n').slice(0,500);
-    }
-
-    const benefits=safeFacts
-      .map(groundedBenefitForFact)
-      .filter(Boolean);
-    if(!benefits.length) return buildNeutralFactPost(item,safeFacts);
-
-    const first=benefits[0];
-    const lines=[first.hook,'',first.benefit];
-
-    if(benefits[1]&&benefits[1].benefit!==first.benefit){
-      lines.push('',benefits[1].benefit);
-    }
-
-    lines.push('','確認できる仕様👇');
-    for(const fact of safeFacts.slice(0,4)) lines.push('✓ '+fact);
-    if(Number.isFinite(price)&&price>0) lines.push('','価格：'+fmt(price)+'円');
-    lines.push('','※アフィリエイト広告を利用しています');
-    return lines.join('\n').slice(0,500);
-  }
+  function buildValidatedProductPost(item,identity,evidenceFacts=[]){return structuredPost(item,identity,evidenceFacts);}
+  function buildGroundedBenefitPost(item,facts=[]){return structuredPost(item,exactProductTypeName(item?.itemName||''),facts);}
+  buildValidatedProductPost.__structured=true;
+  buildGroundedBenefitPost.__structured=true;
+  buildNeutralFactPost.__structured=true;
 
   function fallbackProductName(item,analysis){
     const a=analysis||analyze(item);
@@ -1426,6 +1253,9 @@
   }
 
 
+  makeRoomCopy.__structured=true;
+  makeThreadsCopy.__structured=true;
+  makeInstagramCopy.__structured=true;
   api.detectLegalRisk=detectLegalRisk;
   api.buildSafeDisplayName=buildSafeDisplayName;
   api.titleFactTokens=titleFactTokens;
@@ -1435,9 +1265,6 @@
   api.buildGroundedBenefitPost=buildGroundedBenefitPost;
   api.buildValidatedProductPost=buildValidatedProductPost;
   api.validatedAiCopyEvidence=validatedAiCopyEvidence;
-  api.groundedBenefitForFact=groundedBenefitForFact;
-  api.contextualLeadForProduct=contextualLeadForProduct;
-  api.contextualMeaningLine=contextualMeaningLine;
   api.fallbackProductName=fallbackProductName;
   api.exactProductTypeName=exactProductTypeName;
   api.earlyProductNounSignals=earlyProductNounSignals;

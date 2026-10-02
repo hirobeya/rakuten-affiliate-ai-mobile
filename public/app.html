@@ -935,6 +935,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+<script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
@@ -2879,7 +2880,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 
 function neutralRulePost(item,keyword=''){
   const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  return UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){

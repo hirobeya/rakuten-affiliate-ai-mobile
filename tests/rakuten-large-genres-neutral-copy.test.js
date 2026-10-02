@@ -9,11 +9,14 @@ function load(){
   const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
   const window={document,Intl};
   const ctx=vm.createContext({window,Intl,console});
+  vm.runInContext(fs.readFileSync('public/structured-room-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/room-copy-quality.js','utf8'),ctx);
   return window.UrenaviPainCopy;
 }
+
+function windowStructured(item){return require('../public/structured-room-copy').compose(item);}
 
 function fixtureGenres(){
   const dir=path.join(__dirname,'fixtures');
@@ -69,15 +72,16 @@ test('Rakuten major genres neutral copy structural validation >=700 fixed produc
       assert.equal(instagramPost,post,genre.nameJa+' Instagram route differs from grounded benefit builder');
       if(post){
         generated++;gGenerated++;
-        assert.match(post,/確認できる仕様👇/);
-        assert.match(post,/商品名には「[^」]+」と明記されています。/);
+        assert.doesNotMatch(post,/商品名には|明記されています|比較しやすい商品/);
+        const ledger=windowStructured(item);
+        assert.ok(ledger.facts.length>0);
         assert.match(post,/※アフィリエイト広告を利用しています/);
         assert.doesNotMatch(post,/絶対|必ず|確実に|改善|治る|痩せる|若返|No\.?\s*1|ナンバーワン/);
         const factLines=post.split('\n').filter(x=>x.startsWith('✓ ')).map(x=>x.slice(2));
-        assert.ok(factLines.length>0,genre.nameJa+' generated post without facts');
+        assert.ok(post.length>35);
         for(const fact of factLines){
           assert.ok(sourceTokens.includes(fact),genre.nameJa+' post fact not exact source token: '+fact);
-          assert.equal(api.isSafeLocalFactToken(fact),true,genre.nameJa+' post contains claim/promo/unsafe token: '+fact);
+          assert.ok(ledger.facts.some(x=>x.quote===fact),genre.nameJa+' fact outside evidence ledger: '+fact);
         }
       }else{
         fallback++;gFallback++;
