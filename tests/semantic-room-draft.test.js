@@ -63,6 +63,7 @@ assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'ready');
 safeDraft.appeals[0].text='安心の収納ボックス。';
 assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'blocked');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
-assert.deepEqual(MODEL_PASS1_SCHEMA.properties.attributes.items.required,['quote']);
+assert.equal(MODEL_PASS1_SCHEMA.properties.attributes,undefined);
+assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.minItems,1);
 assert.match(SEMANTIC_WRITER_PROMPT,/一度に/);assert.match(PASS2_SYSTEM_PROMPT,/条件の省略/);
 console.log('semantic-room-draft: PASS (17 synthetic categories; mock verifier, not live quality approval)');
