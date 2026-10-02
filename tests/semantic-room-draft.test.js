@@ -27,7 +27,7 @@ function evaluate(item,raw,supported=true){
  const normalized=normalizePass1Raw(structuredClone(raw),item);
  const validation=validateUnderstanding(normalized,item);
  const input=buildVerificationInput(validation);
- const results=input.map(x=>({verificationIndex:x.verificationIndex,supported,keepDirectFact:true,reason:'mocked contract; not live factual approval'}));
+ const results=input.map(x=>({verificationIndex:x.verificationIndex,supported,keepDirectFact:true,reason:'mocked contract; not live factual approval',checks:(x.sentences||[]).map(sentence=>({sentence,supported,evidenceQuotes:x.attributes.map(a=>a.quote),reason:'mocked'}))}));
  return {normalized,validation,input,copy:composePurchaseCopy({item,analysis:{validation,verifiedAppeals:applyVerification(validation,{results})}})};
 }
 for(const [type,quote,scene,text] of cases){
@@ -62,6 +62,15 @@ const safeDraft={productType:{specific:'収納ボックス',general:'収納',quo
 assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'ready');
 safeDraft.appeals[0].text='安心の収納ボックス。';
 assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'blocked');
+// Whole-paragraph approval cannot bypass missing, rejected or ungrounded sentence checks.
+const proof=evaluate(item,raw), expected=proof.input[0].sentences;
+const checks=expected.map(sentence=>({sentence,supported:true,evidenceQuotes:[item.itemCaption.slice(item.itemCaption.indexOf('親指'))],reason:'mocked'}));
+for(const malformed of [[],checks.slice(1),[...checks,checks[0]],checks.map((c,i)=>i?c:{...c,supported:false}),checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
+ const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'mocked',checks:malformed}]});
+ assert.equal(composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}}).status,'blocked');
+}
+const navigation=structuredClone(raw);navigation.appeals[0].scene='休憩時に。';navigation.appeals[0].text='停止中にナビ操作ができるバイクグローブ。';
+assert.equal(evaluate(item,navigation).copy.status,'blocked');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
 assert.equal(MODEL_PASS1_SCHEMA.properties.attributes,undefined);
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.minItems,1);

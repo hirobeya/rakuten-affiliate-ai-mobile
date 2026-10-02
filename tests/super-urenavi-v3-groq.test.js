@@ -48,7 +48,7 @@ function response(payload,{status=200}={}){
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
   assert.equal(calls[0].body.text.format.strict,true);
-  assert.equal(calls[0].body.max_output_tokens,680);
+  assert.equal(calls[0].body.max_output_tokens,500);
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
   assert.ok(pass1User.itemCaption.length<=1200);
 
@@ -79,7 +79,7 @@ function response(payload,{status=200}={}){
   });
   assert.equal(calls.length,2);
   assert.equal(calls[1].body.text.format.name,'super_urenavi_v3_verification');
-  assert.equal(calls[1].body.max_output_tokens,240);
+  assert.equal(calls[1].body.max_output_tokens,460);
   const pass2User=JSON.parse(calls[1].body.input[1].content[0].text);
   assert.deepEqual(pass2User.appeals,verificationInput);
   assert.equal(pass2User.itemName,'バイク グローブ 本革 山羊革 ナックルプロテクター入り');
