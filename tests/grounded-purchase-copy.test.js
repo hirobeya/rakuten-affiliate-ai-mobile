@@ -47,6 +47,7 @@ const base={text:'停車中のスマホ操作に対応',scene:'停車中にス�
 for(const change of [
  {text:'走行中にスマホ操作ができます',scene:'走行中'},
  {text:'停車中でも快適にスマホ操作'},
+ {text:'スマホ対応',scene:'停車中の快適なスマホ操作に'},
  {text:'停車中に1サイズを選べる',attributeRefs:[1]},
  {text:'商品名にはスマホ対応と明記されています'},
  {text:'停車中にスマホ操作',attributeRefs:[5]},

@@ -2491,7 +2491,7 @@ function specificGroundedProductType(item,aiType){
 }
 
 function aiSalesInsight(item,result){
-  if(result?.version==='super-urenavi-v3-preview') return {productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
+  if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2610,7 +2610,7 @@ async function requestAiRoom(item,index,generation){
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message,status:r.status,upstreamStatus:d.upstreamStatus});
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。':message,status:r.status,upstreamStatus:d.upstreamStatus});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
@@ -2752,7 +2752,7 @@ function analysisGuide(i,index,keyword=''){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
       const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
       return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
-        '<div class="target">'+esc(insight.productType)+'</div>'+
+        '<div class="target">'+esc(usePurchasePlan?insight.scene:insight.productType)+'</div>'+
         '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
     }
     if(gate.useLegacy){
@@ -2763,8 +2763,9 @@ function analysisGuide(i,index,keyword=''){
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
       return '<div class="guide">'+hint+'</div>';
     }
+    if(usePurchasePlan&&aiRoomResults.get(index)?.state==='done') return '<div class="guide"><div class="muted">根拠のある選ぶ理由を確認できないため、投稿文を生成していません。</div></div>';
     if(gate.reasons?.includes('ai_error')){
-      return '<div class="guide"><div class="muted">AI確認に失敗したため、確認できた事実だけを表示しています。</div></div>';
+      return '<div class="guide"><div class="muted">'+(usePurchasePlan?'選ぶ理由を確認できないため、投稿文を生成していません。':'AI確認に失敗したため、確認できた事実だけを表示しています。')+'</div></div>';
     }
     return '<div class="guide"><div class="muted">商品内容をGroqで確認中です。</div></div>';
   }
@@ -2992,12 +2993,12 @@ function today(a){
       audience=aud(i);points=pts(i);
     }else{
       const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=String(insight.productType||'');
+      audience=String((usePurchasePlan?insight.scene:insight.productType)||'');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
     return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
       '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
-      '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(audience)+'</div>'+
+      '<div class="guide"><div class="gt">'+(usePurchasePlan?'使う場面':'狙う相手')+'</div><div class="target">'+esc(audience)+'</div>'+
       '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
   const eligible=fullOutputItems(a);

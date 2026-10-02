@@ -722,7 +722,7 @@ function run(name,fn){
     assert.match(html,/const fallbackIdentity=safeSearchIdentity\(item\)/);
     assert.match(html,/const groundedFallback=Boolean\(fallbackIdentity\)/);
     assert.match(html,/const full=validatedFull\|\|groundedFallback/);
-    assert.match(html,/audience=String\(insight\.productType\|\|''\)/);
+    assert.match(html,/audience=String\(\(usePurchasePlan\?insight\.scene:insight\.productType\)\|\|''\)/);
     assert.match(html,/points=\(insight\.sellingPoints\.length\?insight\.sellingPoints:insight\.features\)\.slice\(0,2\)/);
   });
 
