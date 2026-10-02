@@ -189,13 +189,18 @@
       startHandoffPolling();
 
       const approveUrl='https://rakuten-affiliate-ai-mobile.vercel.app/api/access?action=handoff-approve&code='+encodeURIComponent(code);
-      const win=window.open(approveUrl,'_blank','noopener,noreferrer');
-
-      if(win){
-        msg.textContent='新しいタブで本番の認証確認を開きました。確認後、このPreviewタブへ戻ってください。';
-      }else{
-        msg.textContent='新しいタブを開けませんでした。Safariのポップアップ許可を確認してください。';
-      }
+      // A normal link does not depend on popup permission or window.open's
+      // null return value with noopener. The existing approval/polling guards remain.
+      msg.replaceChildren();
+      const explanation=document.createElement('div');
+      explanation.textContent='下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
+      const approvalLink=document.createElement('a');
+      approvalLink.href=approveUrl;
+      approvalLink.target='_blank';
+      approvalLink.rel='noopener noreferrer';
+      approvalLink.textContent='本番で認証を確認する';
+      Object.assign(approvalLink.style,{display:'block',padding:'12px',marginTop:'8px',textAlign:'center',fontWeight:'900'});
+      msg.append(explanation,approvalLink);
     });
 
     box.append(title,note,btn,msg);
