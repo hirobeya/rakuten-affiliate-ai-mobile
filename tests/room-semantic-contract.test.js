@@ -21,6 +21,10 @@ for(const [type,source,text,ok] of [
  ['グローブ','非防水','防水のグローブです。',false]
 ]){const item={itemName:type,itemCaption:source};const d=draft(type,source,text);if(type==='グローブ')d.sentences[1].quotes=['防水'];assert.equal(c.publication(item,d,review(d)).status,ok?'ready':'blocked',text);}
 const item={itemName:'電気ケトル',itemCaption:'忙しい朝にカップ1杯分が約85秒で沸騰する。'};const d=draft('電気ケトル','カップ1杯分が約85秒で沸騰する','電気ケトルはカップ1杯分を約85秒で沸かせます。','忙しい朝にお湯を用意したいときに。');const r=review(d);r.sentences[0].evidenceQuotes=[item.itemCaption];let out=c.publication(item,d,r);assert.equal(out.status,'ready');assert.equal(out.additionalEvidence.length,1);assert.equal(out.additionalEvidence[0].source,'caption');
+// A complete single sentence still receives every factual and quality check.
+const single={product:d.product,sentences:[{text:'忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。',kinds:['scene','spec','benefit'],quotes:[item.itemCaption]}]};
+assert.equal(c.publication(item,single,review(single)).status,'ready');
+const singleUnclear=review(single);singleUnclear.sentences[0].conditions='unclear';assert.equal(c.publication(item,single,singleUnclear).status,'blocked');
 for(const malformed of [r.sentences.slice(1),[...r.sentences,r.sentences[0]],r.sentences.map((x,i)=>i?x:{...x,part:'unclear'}),r.sentences.map(x=>({...x,evidenceQuotes:['架空の引用']}))])assert.equal(c.publication(item,d,{...r,sentences:malformed}).status,'blocked');
 // Classification does not exempt any of the five questions.
 const bodyItem={itemName:'ペットブラシ',itemCaption:'ペットの体の毛をとかすブラシ'};const body=draft('ペットブラシ',bodyItem.itemCaption,'床に落ちた毛を取れるブラシです。');body.sentences[1].kinds=['scene'];const wrong=review(body);wrong.sentences[1].target='not_supported';assert.equal(c.publication(bodyItem,body,wrong).status,'blocked');
