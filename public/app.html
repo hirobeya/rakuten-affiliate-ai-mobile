@@ -2602,7 +2602,7 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?110000:12000);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?240000:12000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
@@ -2610,7 +2610,7 @@ async function requestAiRoom(item,index,generation){
     const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
     let r,d;
     if(usePurchasePlan){
-      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onPending:()=>{aiRoomResults.set(index,{state:'loading',message:'投稿文を確認中…約1分お待ちください。'});updateAiPanel(index);}});
+      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
       r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
     }else{
       r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify(payload)});

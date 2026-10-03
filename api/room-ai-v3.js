@@ -2,9 +2,8 @@
 
 const {authorize,db}=require('../lib/billing');
 const {createCacheStore}=require('../lib/super-urenavi-cache');
-const {analyzeProductV3}=require('../lib/super-urenavi-v3-engine');
-const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
-const {composeVariants}=require('../lib/super-urenavi-v3-copy');
+const {advance}=require('../lib/room-semantic-engine');
+const {createProvider,DEFAULT_MODEL}=require('../lib/room-semantic-provider');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 
 const DEFAULT_DAILY_LIMIT=200;
@@ -63,54 +62,18 @@ function createHandler(deps={}){
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
       const model=String(process.env.GROQ_ROOM_V3_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
-      let groq=deps.groq;
-      if(!groq){
+      let provider=deps.provider;
+      if(!provider){
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
-        if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
-        groq=createV3Groq({apiKey,model});
+        if(!apiKey)return json(res,503,{message:'GROQ_API_KEY is not configured'});
+        provider=createProvider({apiKey,model});
       }
+      const runKey=body.evaluationRun===undefined?'':String(body.evaluationRun);
+      if(runKey&&!/^[A-Za-z0-9_-]{1,80}$/.test(runKey))return json(res,400,{message:'invalid evaluationRun'});
+      const analysis=await advance({item,store,provider,consumeQuota:quotaFn,runKey,now:deps.now||Date.now});
+      const metric=logAiUsageMetric({route:'semantic_preview',cacheStatus:runKey?'evaluation':'source_cache',pass1Calls:analysis.groq.pass1Calls,pass2Calls:analysis.groq.pass2Calls,imageCalls:0,outputTier:analysis.ok?'A':'C',hookType:'scene',machineValidationPassed:analysis.diagnostics.machine?.ok===true,copied:false,elapsedMs:Date.now()-started});
+      return json(res,analysis.pending?202:200,{...analysis,tier:analysis.ok?'A':'C',metric});
 
-      const analysis=await analyzeProductV3({
-        item,store,model,consumeQuota:quotaFn,deferPass2:deps.deferPass2!==false,now:deps.now||Date.now,
-        callPass1:groq.callPass1,
-        callPass2:groq.callPass2
-      });
-      const copy=composeVariants({item,analysis});
-      const metric=logAiUsageMetric({
-        route:analysis.source,
-        cacheStatus:analysis.cacheStatus,
-        pass1Calls:analysis.groq.pass1Calls,
-        pass2Calls:analysis.groq.pass2Calls,
-        imageCalls:0,
-        outputTier:copy.tier,
-        hookType:copy.variants[0]?.hookType||'none',
-        decisionAxis:analysis.validation?.decisionAxes?.[0]?.text||'',
-        machineValidationPassed:analysis.validation?.valid===true,
-        copied:false,
-        elapsedMs:Date.now()-started
-      });
-
-      return json(res,analysis.pending?202:200,{
-        ok:analysis.ok,
-        pending:analysis.pending===true,
-        retryAfterMs:analysis.pending?analysis.retryAfterMs:0,
-        version:'super-urenavi-v3-preview',
-        model,
-        productType:analysis.validation?.productType||null,
-        validationReasons:analysis.validation?.reasons||[],
-        draftDiagnostics:analysis.raw,
-        candidateAppeals:analysis.validation?.appeals||[],
-        attributes:analysis.validation?.attributes||[],
-        decisionAxes:analysis.validation?.decisionAxes||[],
-        verifiedAppeals:analysis.verifiedAppeals||[],
-        groq:analysis.groq,
-        cacheStatus:analysis.cacheStatus,
-        pass2Status:analysis.pass2Status,
-        tier:copy.tier,
-        quality:copy.quality,
-        variants:copy.variants,
-        metric
-      });
     }catch(error){
       const status=error?.status===429?429:502;
       return json(res,status,{

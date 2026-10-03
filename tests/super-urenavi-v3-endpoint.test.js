@@ -19,20 +19,8 @@ function mockRes(){
   };
 }
 
-const pass1={
-  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
-  attributes:[
-    {name:'温度設定範囲',value:'50-100度',unit:'度',qualifier:'',valueType:'range',quote:'50-100度'},
-    {name:'温度設定単位',value:'1℃',unit:'℃',qualifier:'単位',valueType:'single',quote:'1℃単位'}
-  ],
-  decisionAxes:[{text:'温度設定',attributeRefs:[0,1]}],
-  appeals:[{text:'飲み物に合わせて1℃単位で温度を選べる',noHassle:'温度が下がるのを待たなくていい',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
-  hooks:[
-    {type:'question',text:'飲み物ごとに、お湯の温度を気にすることありませんか？'},
-    {type:'scene',text:'朝の一杯を自分好みにしたいとき。'}
-  ]
-};
-const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'supported'}]};
+const pass1={product:{what:'電気ケトル',acts_on:'沸かすお湯',acts_on_quote:'50-100度を1℃単位で設定できます。'},sentences:[{text:'飲み物ごとにお湯の温度を選びたいときに。',kinds:['scene'],quotes:['50-100度を1℃単位で設定できます。']},{text:'50-100度を1℃単位で設定できる電気ケトル。',kinds:['spec','benefit'],quotes:['50-100度を1℃単位で設定できます。']}]};
+const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sentences.map(s=>({text:s.text,...Object.fromEntries(['target','part','conditions','negation','degree'].map(x=>[x,'supported'])),evidenceQuotes:s.quotes})),quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(x=>[x,'supported']))};
 
 (async()=>{
   const oldEnv=process.env.VERCEL_ENV;
@@ -44,13 +32,13 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
       authorize:async()=>({ok:true,plan:'owner'}),
       store:memoryStore(),
       consumeQuota:async()=>true,
-      groq:{
-        callPass1:async({model})=>{p1++;return {raw:pass1,model};},
-        callPass2:async({model})=>{p2++;return {raw:pass2,model};}
-      }
+      provider:{model:'mock',requiredTokens:()=>0,call:async stage=>{if(stage==='generate'){p1++;return {raw:pass1};}p2++;return {raw:pass2};}}
+
     });
     const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
     const res=mockRes();
+    await handler(req,res);
+    assert.equal(res.code,202);
     await handler(req,res);
     assert.equal(res.code,200);
     assert.equal(res.body.ok,true);
@@ -63,7 +51,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     const again=mockRes();
     await handler(req,again);
     assert.equal(again.code,200);
-    assert.equal(again.body.groq.totalCalls,0);
+    assert.equal(again.body.groq.totalCalls,2); // cumulative stored evaluation calls; cache adds none
     assert.equal(p1,1); assert.equal(p2,1);
 
     process.env.VERCEL_ENV='production';

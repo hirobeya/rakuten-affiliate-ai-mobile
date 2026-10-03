@@ -19,7 +19,7 @@ const {buildVerificationInput,validateUnderstanding}=(()=>({...require('../lib/s
  const rejected=await analyzeProductV3(options);assert.equal(rejected.ok,false);assert.equal(rejected.pending,undefined);assert.equal(p1,1);
  let calls=0,waited=0;
  const client=await run(item,{fetchImpl:async()=>{calls++;return {status:calls===1?202:200,json:async()=>calls===1?{pending:true,retryAfterMs:65000}:{ok:true}};},waitImpl:async ms=>{waited=ms;}});
- assert.equal(client.status,200);assert.equal(calls,2);assert.equal(waited,66000);
+ assert.equal(client.status,200);assert.equal(calls,2);assert.equal(waited,65250);
  calls=0;await run(item,{fetchImpl:async()=>{calls++;return {status:429,json:async()=>({})};},waitImpl:async()=>{throw Error('must not retry');}});assert.equal(calls,1);
  calls=0;await assert.rejects(()=>run(item,{isCurrent:()=>false,fetchImpl:async()=>{calls++;}}),e=>e.name==='AbortError');assert.equal(calls,0);
  // Real page double-click while auth is pending must dispatch one search only.
