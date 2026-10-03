@@ -52,6 +52,11 @@ for(const text of ['走行中にスマホを操作できるバイクグローブ
 const negative={itemName:'グローブ',itemCaption:'非防水'};
 assert.equal(evaluate(negative,{productType:{specific:'グローブ',general:'手袋'},attributes:[],appeals:[{text:'防水のグローブ。',scene:'雨の日に。',evidenceQuotes:['防水'],strength:3}]}).copy.status,'blocked');
 const normalized=evaluate({itemName:'収納ボックス',itemCaption:'幅３０ｃｍ\n折りたたみ可能'},{productType:{specific:'収納ボックス',general:'収納'},attributes:[],appeals:[{scene:'片付けに。',text:'幅30cmの収納ボックス。',evidenceQuotes:['幅30cm'],strength:3}]});assert.equal(normalized.copy.status,'ready');
+for(const [quote,text] of [['幅30cm','幅30mmの収納ボックス。'],['容量10000mAh','容量10000Whのモバイルバッテリー。'],['重量2kg','重量2gの収納ボックス。']]){
+ const x=evaluate({itemName:'収納ボックス',itemCaption:quote},{productType:{specific:'収納ボックス',general:'収納用品'},appeals:[{scene:'収納用品を選ぶなら。',text,evidenceQuotes:[quote],strength:2}]});
+ assert.equal(x.copy.status,'blocked','a mistaken verifier approval cannot change units');
+ assert.deepEqual(x.copy.reasons,['unsupported_measurement']);
+}
 // Natural product names can differ from the original continuous identity quote.
 const named=evaluate({itemName:'グローブ',itemCaption:'バイク用手袋 山羊革'},{productType:{specific:'山羊革グローブ',general:'バイク用手袋',quote:'バイク用手袋'},attributes:[],appeals:[{scene:'バイク用の装備を選ぶなら。',text:'山羊革のグローブ。',evidenceQuotes:['山羊革'],strength:3}]});
 assert.equal(named.copy.status,'ready');
