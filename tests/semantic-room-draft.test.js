@@ -76,6 +76,10 @@ for(const malformed of [[],checks.slice(1),[...checks,checks[0]],checks.map((c,i
 }
 const navigation=structuredClone(raw);navigation.appeals[0].scene='休憩時に。';navigation.appeals[0].text='停止中にナビ操作ができるバイクグローブ。';
 assert.equal(evaluate(item,navigation).copy.status,'blocked');
+const parked=structuredClone(raw);parked.appeals[0].scene='停車してスマホを操作したいときに。';parked.appeals[0].text='タッチ対応素材で手袋をしたままスマホを操作できます。';
+assert.equal(evaluate(item,parked).copy.status,'ready','an explicit parked occasion governs the complementary post');
+parked.appeals[0].text='走行中にスマホを操作できます。';
+assert.equal(evaluate(item,parked).copy.status,'blocked','parked introduction cannot override explicitly unsafe body');
 const multilingual=evaluate({itemName:'モバイルバッテリー',itemCaption:'iPhoneとAndroidに対応'},{productType:{specific:'モバイルバッテリー',general:'充電器'},appeals:[{scene:'スマホ用の電源を選ぶときに。',text:'iPhoneとAndroidに対応するモバイルバッテリーです。',evidenceQuotes:['iPhoneとAndroidに対応'],strength:3}]});
 assert.equal(multilingual.copy.status,'ready','legitimate multiple platform names cannot invalidate natural Japanese');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.items.properties.attributeRefs,undefined);
