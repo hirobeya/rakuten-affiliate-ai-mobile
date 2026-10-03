@@ -2,7 +2,7 @@
 
 const {authorize,db}=require('../lib/billing');
 const {createCacheStore}=require('../lib/super-urenavi-cache');
-const {advance}=require('../lib/room-semantic-engine');
+const {advance,VERSION}=require('../lib/room-semantic-engine');
 const {createProvider,DEFAULT_MODEL,duration}=require('../lib/room-semantic-provider');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 
@@ -70,7 +70,7 @@ function createHandler(deps={}){
       }
       const runKey=body.evaluationRun===undefined?'':String(body.evaluationRun);
       if(runKey&&!/^[A-Za-z0-9_-]{1,80}$/.test(runKey))return json(res,400,{message:'invalid evaluationRun'});
-      const analysis=await advance({item,store,provider,consumeQuota:quotaFn,runKey,now:deps.now||Date.now});
+      const analysis=await advance({item,store,provider,consumeQuota:quotaFn,runKey,now:deps.now||Date.now,readOnly:body.statusOnly===true});
       const metric=logAiUsageMetric({route:'semantic_preview',cacheStatus:runKey?'evaluation':'source_cache',pass1Calls:analysis.groq.pass1Calls,pass2Calls:analysis.groq.pass2Calls,imageCalls:0,outputTier:analysis.ok?'A':'C',hookType:'scene',machineValidationPassed:analysis.diagnostics.machine?.ok===true,copied:false,elapsedMs:Date.now()-started});
       return json(res,analysis.pending?202:200,{...analysis,tier:analysis.ok?'A':'C',metric});
 
@@ -81,6 +81,7 @@ function createHandler(deps={}){
       return json(res,status,{
         message:status===429?(error?.safeError?'AI provider rate limit reached':'AI daily limit reached'):'v3 analysis failed',
         retryAfterMs,
+        version:VERSION,
         rateLimits:error?.rateLimit||null,
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,

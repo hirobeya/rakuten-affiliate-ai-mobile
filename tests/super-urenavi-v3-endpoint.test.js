@@ -37,8 +37,10 @@ const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sent
     });
     const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
     const res=mockRes();
+    await handler({...req,body:{...req.body,statusOnly:true}},res);assert.equal(res.code,202);assert.equal(p1,0);assert.equal(p2,0);
     await handler(req,res);
     assert.equal(res.code,202);
+    await handler({...req,body:{...req.body,statusOnly:true}},res);assert.equal(res.code,202);assert.equal(res.body.phase,'verification');assert.equal(p1,1);assert.equal(p2,0);
     await handler(req,res);
     assert.equal(res.code,200);
     assert.equal(res.body.ok,true);
