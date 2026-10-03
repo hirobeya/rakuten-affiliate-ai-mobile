@@ -2550,7 +2550,7 @@ function aiPanelMarkup(item,index){
   const image=firstImageUrl(item);
   const caption=String(item?.itemCaption||'').slice(0,300);
   return '<section class="aiPreview" data-ai-index="'+index+'">'+
-    '<h4>AI事実抽出版（Preview・owner限定）</h4>'+
+    '<h4>商品理解・投稿文（Preview）</h4>'+
     '<div class="aiStatus">AI分析待ち…</div>'+
     (image!=='#'?'<img class="aiThumb" src="'+esc(image)+'" alt="">':'')+
     '<div class="aiCaption"><strong>itemCaption先頭300文字</strong><br>'+esc(caption||'（説明文なし）')+'</div>'+
@@ -2624,7 +2624,8 @@ async function requestAiRoom(item,index,generation){
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。':message,status:r.status,upstreamStatus:d.upstreamStatus});
+      const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){

@@ -3,7 +3,7 @@
 const {authorize,db}=require('../lib/billing');
 const {createCacheStore}=require('../lib/super-urenavi-cache');
 const {advance}=require('../lib/room-semantic-engine');
-const {createProvider,DEFAULT_MODEL}=require('../lib/room-semantic-provider');
+const {createProvider,DEFAULT_MODEL,duration}=require('../lib/room-semantic-provider');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 
 const DEFAULT_DAILY_LIMIT=200;
@@ -76,8 +76,12 @@ function createHandler(deps={}){
 
     }catch(error){
       const status=error?.status===429?429:502;
+      const retryAfterMs=duration(error?.rateLimit?.['retry-after']);
+      if(retryAfterMs>0)res.setHeader('Retry-After',String(Math.ceil(retryAfterMs/1000)));
       return json(res,status,{
-        message:status===429?'AI daily limit reached':'v3 analysis failed',
+        message:status===429?(error?.safeError?'AI provider rate limit reached':'AI daily limit reached'):'v3 analysis failed',
+        retryAfterMs,
+        rateLimits:error?.rateLimit||null,
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,
         failureReason:error?.failureReason|| (error?.name==='AbortError'?'upstream_timeout':'analysis_error'),

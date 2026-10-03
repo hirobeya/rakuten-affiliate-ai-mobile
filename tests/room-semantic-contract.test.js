@@ -17,6 +17,9 @@ for(const [type,source,text,ok] of [
  ['充電器','約4時間の急速充電で、毎日の準備もスムーズ','約4時間の急速充電で、準備がすぐに完了します。',false],
  ['充電器','約4時間の急速充電で、毎日の準備もスムーズ','約4時間で充電できる充電器です。',true],
  ['掃除手袋','はめてすぐ使えます。洗った後は素早く乾きます。','洗った後すぐに乾く掃除手袋です。',false],
+ ['防風手袋','防風モデル。手首のすき間から風が入りにくくなっています。','手首への風の侵入を防ぎます。',false],
+ ['防風手袋','防風モデル。手首のすき間から風が入りにくくなっています。','手首のすき間から風が入りにくい防風手袋です。',true],
+ ['フライパン','汚れが付きにくいフライパン','汚れを防ぐフライパンです。',false],
  ['防臭袋','防臭袋','一日中ニオイが気にならない防臭袋です。',false],
  ['グローブ','非防水','防水のグローブです。',false]
 ]){const item={itemName:type,itemCaption:source};const d=draft(type,source,text);if(type==='グローブ')d.sentences[1].quotes=['防水'];assert.equal(c.publication(item,d,review(d)).status,ok?'ready':'blocked',text);}

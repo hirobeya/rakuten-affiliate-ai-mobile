@@ -1,0 +1,380 @@
+{
+  "version": "room_contract_152967e08bcb36fe",
+  "status": "rejected_degree_and_blocked_by_free_provider_limit",
+  "acceptedCompletions": 0,
+  "fabricatedPasses": 1,
+  "falseRejectionRate": null,
+  "runs": [
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791060007288_01_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:40:07.288Z",
+      "elapsedMs": 38699,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "verification",
+        "version": "room_contract_152967e08bcb36fe",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材が付いた本革グローブが便利です。\n\n冷え込みや隙間風が気になるときは、前面の大きなベルクロでしっかり固定できる防風モデルが手首まで覆い、風の侵入を防ぎます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "source": "caption",
+                "start": 459,
+                "end": 500,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。",
+                "source": "caption",
+                "start": 383,
+                "end": 417,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "冷え込みや隙間風に強く、10°C前後にも対応",
+                "source": "caption",
+                "start": 417,
+                "end": 439,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+                "source": "caption",
+                "start": 168,
+                "end": 205,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+              "source": "caption",
+              "start": 168,
+              "end": 205,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              [
+                {
+                  "quote": "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10°C前後にも対応",
+                  "source": "caption",
+                  "start": 383,
+                  "end": 439
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。",
+                  "source": "caption",
+                  "start": 383,
+                  "end": 417,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "冷え込みや隙間風に強く、10°C前後にも対応",
+                  "source": "caption",
+                  "start": 417,
+                  "end": 439,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+                  "source": "caption",
+                  "start": 168,
+                  "end": 205,
+                  "approvalEvidence": "added_by_review"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+                "source": "caption",
+                "start": 168,
+                "end": 205,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材が付いた本革グローブが便利です。\n\n冷え込みや隙間風が気になるときは、前面の大きなベルクロでしっかり固定できる防風モデルが手首まで覆い、風の侵入を防ぎます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "本革バイク用グローブ",
+          "general": "ライダーの手"
+        },
+        "groq": {
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "totalCalls": 2
+        },
+        "elapsedMs": 36506,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイク用グローブ",
+              "acts_on": "ライダーの手",
+              "acts_on_quote": "バイク用手袋です"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材が付いた本革グローブが便利です。",
+                "kinds": [
+                  "spec",
+                  "scene"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "冷え込みや隙間風が気になるときは、前面の大きなベルクロでしっかり固定できる防風モデルが手首まで覆い、風の侵入を防ぎます。",
+                "kinds": [
+                  "spec",
+                  "scene"
+                ],
+                "quotes": [
+                  "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材が付いた本革グローブが便利です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ],
+                "reason": "All claims match source; added restriction of stopping is allowed."
+              },
+              {
+                "text": "冷え込みや隙間風が気になるときは、前面の大きなベルクロでしっかり固定できる防風モデルが手首まで覆い、風の侵入を防ぎます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。",
+                  "冷え込みや隙間風に強く、10℃前後にも対応",
+                  "前からしっかり締められるので、手首のすき間から風が入りにくくなっています。"
+                ],
+                "reason": "Claims align with source descriptions of wind protection."
+              }
+            ]
+          },
+          "history": [],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "942",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4236",
+            "x-ratelimit-reset-requests": "1h23m31.2s",
+            "x-ratelimit-reset-tokens": "28.229s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.209463602,
+                "total_time": 2.807285394,
+                "prompt_time": 0.11781085,
+                "total_tokens": 3042,
+                "prompt_tokens": 1757,
+                "completion_time": 2.689474544,
+                "completion_tokens": 1285,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1036
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 3088,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "26.474s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h22m4.8s",
+                "x-ratelimit-remaining-tokens": "4470",
+                "x-ratelimit-remaining-requests": "943"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 0,
+              "elapsedMs": 4613,
+              "usage": {
+                "queue_time": 0.150490633,
+                "prompt_tokens": 1991,
+                "prompt_time": 0.139881028,
+                "completion_tokens": 2003,
+                "completion_time": 4.156766894,
+                "total_tokens": 3994,
+                "total_time": 4.296647922,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1656
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "942",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4236",
+                "x-ratelimit-reset-requests": "1h23m31.2s",
+                "x-ratelimit-reset-tokens": "28.229s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 439,
+                  "quote": "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10°C前後にも対応",
+                  "start": 383,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 6438
+        }
+      },
+      "humanReview": {
+        "reviewer": "assistant_source_review",
+        "qualityPass": false,
+        "fabricatedClaimPassed": true,
+        "reason": "風の侵入を防ぎます、は原文の風が入りにくいより強い。審査追加根拠は実在するが、その程度への引き上げを支えない。",
+        "additionalEvidenceReview": "rejected"
+      }
+    },
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791060046025_01_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:40:46.025Z",
+      "elapsedMs": 2012,
+      "status": 429,
+      "result": {
+        "message": "AI daily limit reached",
+        "stage": "generate",
+        "upstreamStatus": 429,
+        "failureReason": "analysis_error",
+        "upstreamDiagnostic": {
+          "category": "rate_limit",
+          "code": "rate_limit_exceeded",
+          "message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `[organization redacted]` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198264, Requested 3978. Please try again in 16m8.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+        },
+        "failedGeneration": null,
+        "usage": null,
+        "fallback": true
+      },
+      "humanReview": null
+    }
+  ],
+  "nextCommonFix": "Do not infer a prevention result from a feature name or a weaker outcome; select one clearly grounded feature. Preserve retry-after on upstream rate-limit responses. No paid plan enabled."
+}

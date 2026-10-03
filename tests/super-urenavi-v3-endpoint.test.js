@@ -54,6 +54,11 @@ const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sent
     assert.equal(again.body.groq.totalCalls,2); // cumulative stored evaluation calls; cache adds none
     assert.equal(p1,1); assert.equal(p2,1);
 
+    const upstreamLimit=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,provider:{model:'limited',requiredTokens:()=>0,call:async()=>{const e=new Error('provider limit');e.status=429;e.rateLimit={'retry-after':'600'};e.safeError={category:'rate_limit',code:'rate_limit_exceeded',message:'free token limit'};throw e;}}});
+    const rateRes=mockRes();await upstreamLimit(req,rateRes);assert.equal(rateRes.code,429);assert.equal(rateRes.body.message,'AI provider rate limit reached');assert.equal(rateRes.body.retryAfterMs,600000);assert.equal(rateRes.headers['Retry-After'],'600');
+    const dailyLimit=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>false,provider:{model:'local-limit',requiredTokens:()=>0,call:async()=>{throw new Error('must not call provider');}}});
+    const dailyRes=mockRes();await dailyLimit(req,dailyRes);assert.equal(dailyRes.code,429);assert.equal(dailyRes.body.message,'AI daily limit reached');assert.equal(dailyRes.body.retryAfterMs,0);
+
     process.env.VERCEL_ENV='production';
     const blocked=mockRes();
     await handler(req,blocked);
