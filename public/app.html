@@ -2865,7 +2865,7 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  if(ai.data?.version==='super-urenavi-v3-preview') {
+  if(ai.data?.version==='super-urenavi-v3-preview'||String(ai.data?.version||'').startsWith('room_contract_')) {
     const full=ai.data.ok===true&&ai.data.quality?.status==='ready'&&Boolean(ai.data.variants?.[0]?.text);
     return {enabled:true,status:full?'full':'fallback',full,reasons:ai.data.quality?.reasons||['purchase_reason_unconfirmed'],useLegacy:false};
   }

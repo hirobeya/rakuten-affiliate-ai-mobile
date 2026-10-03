@@ -17,5 +17,7 @@ function setup(verdicts){let row=null,clock=0,calls=0,quota=0;const args={item,r
   const before=x.counts();await advance(x.args);assert.deepEqual(x.counts(),before);if(!out.ok)assert.equal(out.quality.text,'');
  }
  const x=setup([true]);const first=await Promise.all([advance(x.args),advance(x.args)]);assert.equal(first[0].pending,true);assert.equal(x.counts().calls,1);
+ const malformed=setup([true]);let errorCalls=0;const normalCall=malformed.args.provider.call;malformed.args.provider.call=async stage=>{errorCalls++;if(errorCalls===1){const e=new Error('invalid JSON');e.status=400;e.safeError={code:'json_validate_failed'};throw e;}return normalCall(stage);};let retry=await advance(malformed.args);assert.equal(retry.phase,'regeneration');assert.equal(retry.groq.totalCalls,1);assert.equal(retry.variants.length,0);for(let i=0;i<3&&retry.pending;i++){malformed.tick();retry=await advance(malformed.args);}assert.equal(retry.ok,true);assert.equal(retry.groq.totalCalls,3);
+ const alwaysBad=setup([]);alwaysBad.args.provider.call=async()=>{const e=new Error('invalid JSON');e.status=400;e.safeError={code:'json_validate_failed'};throw e;};let bad=await advance(alwaysBad.args);alwaysBad.tick();bad=await advance(alwaysBad.args);assert.equal(bad.pending,false);assert.equal(bad.ok,false);assert.equal(bad.groq.totalCalls,2);assert.equal(bad.variants.length,0);
  console.log('room-semantic-engine: PASS (header waits, deduplication, one rewrite, no failed publication)');
 })().catch(e=>{console.error(e);process.exitCode=1;});
