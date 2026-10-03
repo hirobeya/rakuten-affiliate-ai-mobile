@@ -35,3 +35,9 @@ for(const malformed of [r.sentences.slice(1),[...r.sentences,r.sentences[0]],r.s
 // Classification does not exempt any of the five questions.
 const bodyItem={itemName:'ペットブラシ',itemCaption:'ペットの体の毛をとかすブラシ'};const body=draft('ペットブラシ',bodyItem.itemCaption,'床に落ちた毛を取れるブラシです。');body.sentences[1].kinds=['scene'];const wrong=review(body);wrong.sentences[1].target='not_supported';assert.equal(c.publication(bodyItem,body,wrong).status,'blocked');
 console.log('room-semantic-contract: PASS (known counterexamples, source-added proof, no missing-question bypass)');
+
+const reused=review(single);reused.sentences[0].evidenceQuotes=[];const reusedResult=c.publication(item,single,reused);assert.equal(reusedResult.status,'ready');assert.equal(reusedResult.additionalEvidence.length,0);assert.equal(reusedResult.ledger[0][0].approvalEvidence,'generated');
+for(const malformed of [undefined,null,'not an array']){const broken=review(single);broken.sentences[0].evidenceQuotes=malformed;assert.equal(c.publication(item,single,broken).status,'blocked');}
+const missingProof=structuredClone(single);missingProof.sentences[0].quotes=[];assert.equal(c.publication(item,missingProof,review(missingProof)).status,'blocked');
+for(const experience of ['電気ケトルを選びました。','電気ケトルを使っています。','電気ケトルを買ってよかった。']){const fictional=structuredClone(single);fictional.sentences[0].text=experience;assert(c.publication(item,fictional,review(fictional)).reasons.some(r=>r.rule==='fabricated_personal_experience'));}
+const unsupported=structuredClone(single);unsupported.sentences[0].text='一日中ずっと使える電気ケトルです。';const approving=review(unsupported);approving.sentences[0].evidenceQuotes=[];assert.equal(c.publication(item,unsupported,approving).status,'blocked');
