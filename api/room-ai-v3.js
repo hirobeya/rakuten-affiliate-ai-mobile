@@ -82,6 +82,7 @@ function createHandler(deps={}){
         upstreamStatus:error?.status||null,
         failureReason:error?.failureReason|| (error?.name==='AbortError'?'upstream_timeout':'analysis_error'),
         upstreamDiagnostic:error?.safeError?{category:error.safeError.category,code:error.safeError.code,message:String(error.safeError.message||'').replace(/(?:gsk_|sk-)[A-Za-z0-9_-]+/g,'[redacted]').slice(0,500)}:null,
+        failedGeneration:error?.failedGeneration||null,
         usage:error?.usage||null,
         fallback:true
       });
