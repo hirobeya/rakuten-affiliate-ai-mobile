@@ -688,6 +688,7 @@ input,select{
 #proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
 </style>
+<script src="/room-preview-request.js"></script>
 </head>
 
 <body>
@@ -935,6 +936,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+<script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
@@ -1005,6 +1007,7 @@ let currentAccessPlan='base';
 let proAvailable=false;
 let debugExportAllowed=false;
 let aiGatesFullOutput=false;
+let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
@@ -2203,6 +2206,7 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
+  usePurchasePlan=debugExportAllowed;
   const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
@@ -2279,6 +2283,7 @@ function buildDebugValidationRows(){
     aiPhase1:aiRoomResults.get(index)?.data||null,
     aiState:aiRoomResults.get(index)?.state||'not_run',
     aiHttpStatus:aiRoomResults.get(index)?.status??null,
+    aiUpstreamStatus:aiRoomResults.get(index)?.upstreamStatus??null,
     aiMessage:aiRoomResults.get(index)?.message||null,
     humanReview:aiRoomReviews.get(index)||null
   }));
@@ -2488,6 +2493,7 @@ function specificGroundedProductType(item,aiType){
 }
 
 function aiSalesInsight(item,result){
+  if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2524,6 +2530,7 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
+  if(result?.version==='super-urenavi-v3-preview') return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
@@ -2561,7 +2568,7 @@ function updateAiPanel(index){
   const facts=box.querySelector('.aiFacts');
   const copy=box.querySelector('.aiCopy');
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
+  if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。誤った投稿文を出さないため、この商品の投稿文は表示しません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='skipped'){
     status.textContent=result.reason==='rule_confident'
@@ -2571,15 +2578,22 @@ function updateAiPanel(index){
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
   }
+  if(result.data?.version==='super-urenavi-v3-preview'){
+    const data=result.data;
+    status.textContent=data.quality?.status==='ready'?'商品理解・選ぶ理由・根拠の照合を完了':'選ぶ理由を根拠付きで確認できないため、投稿文を生成していません。';
+    facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
+    copy.textContent=aiPhase1Post(item,data);return;
+  }
   const v=result.data?.validation||{};
   status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
   const p=v.productType||{};
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
   if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
-  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
+  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / AI仕様候補の採用可':' / AI仕様候補の採用対象外')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
+  rows.unshift('<div class="aiFact">以下はAI抽出候補の検証結果です。投稿文では、商品名・説明から別途検証した事実も使用します。採用可否は、本文に使われたかどうかを示す表示ではありません。</div>');
   facts.innerHTML=rows.join('');
   copy.textContent=aiPhase1Post(item,result.data);
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
@@ -2588,17 +2602,24 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?110000:12000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
-    const d=await r.json().catch(()=>({}));
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
+    let r,d;
+    if(usePurchasePlan){
+      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onPending:()=>{aiRoomResults.set(index,{state:'loading',message:'投稿文を確認中…約1分お待ちください。'});updateAiPanel(index);}});
+      r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
+    }else{
+      r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify(payload)});
+      d=await r.json().catch(()=>({}));
+    }
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message,status:r.status});
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。':message,status:r.status,upstreamStatus:d.upstreamStatus});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
@@ -2642,6 +2663,7 @@ async function requestAiRoom(item,index,generation){
 }
 
 function aiTargetDecision(item){
+  if(usePurchasePlan) return {callAi:true,reasons:['grounded_purchase_reason_required']};
   const a=groundedAnalysis(item);
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
@@ -2684,6 +2706,10 @@ async function runAiPreview(items){
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
     await requestAiRoom(job.item,job.index,generation);
+    if(usePurchasePlan&&(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429)){
+      for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+      queue.length=0;
+    }
     if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
 }
@@ -2735,7 +2761,7 @@ function analysisGuide(i,index,keyword=''){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
       const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
       return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
-        '<div class="target">'+esc(insight.productType)+'</div>'+
+        '<div class="target">'+esc(usePurchasePlan?insight.scene:insight.productType)+'</div>'+
         '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
     }
     if(gate.useLegacy){
@@ -2746,8 +2772,9 @@ function analysisGuide(i,index,keyword=''){
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
       return '<div class="guide">'+hint+'</div>';
     }
+    if(usePurchasePlan&&aiRoomResults.get(index)?.state==='done') return '<div class="guide"><div class="muted">根拠のある選ぶ理由を確認できないため、投稿文を生成していません。</div></div>';
     if(gate.reasons?.includes('ai_error')){
-      return '<div class="guide"><div class="muted">AI確認に失敗したため、確認できた事実だけを表示しています。</div></div>';
+      return '<div class="guide"><div class="muted">'+(usePurchasePlan?'選ぶ理由を確認できないため、投稿文を生成していません。':'AI確認に失敗したため、確認できた事実だけを表示しています。')+'</div></div>';
     }
     return '<div class="guide"><div class="muted">商品内容をGroqで確認中です。</div></div>';
   }
@@ -2833,6 +2860,10 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
+  if(ai.data?.version==='super-urenavi-v3-preview') {
+    const full=ai.data.ok===true&&ai.data.quality?.status==='ready'&&Boolean(ai.data.variants?.[0]?.text);
+    return {enabled:true,status:full?'full':'fallback',full,reasons:ai.data.quality?.reasons||['purchase_reason_unconfirmed'],useLegacy:false};
+  }
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
   const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
@@ -2879,7 +2910,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 
 function neutralRulePost(item,keyword=''){
   const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  return UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
@@ -2971,12 +3002,12 @@ function today(a){
       audience=aud(i);points=pts(i);
     }else{
       const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=String(insight.productType||'');
+      audience=String((usePurchasePlan?insight.scene:insight.productType)||'');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
     return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
       '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
-      '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(audience)+'</div>'+
+      '<div class="guide"><div class="gt">'+(usePurchasePlan?'使う場面':'狙う相手')+'</div><div class="target">'+esc(audience)+'</div>'+
       '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
   const eligible=fullOutputItems(a);
@@ -4147,7 +4178,8 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
 
 </script>
-<script src="/access-guard.js?v=20260919-2"></script>
+<script src="/vendor/qrcode-1.0.0.min.js"></script>
+<script src="/access-guard.js?v=20261002-qr"></script>
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);

@@ -79,7 +79,10 @@ test('fixed 780 products have no unsupported benefit after guard and emit before
     }
   }
   assert.ok(total>=700,'expected fixed corpus >=700, got '+total);
-  assert.equal(generated,112,'baseline generated count changed unexpectedly');
+  // Generated coverage can legitimately expand as grounded identity/fact handling improves.
+  // Keep the known 112-product floor so this safety test catches coverage regressions
+  // without treating a larger generated count as proof of copy quality.
+  assert.ok(generated>=112,'grounded generated coverage fell below known baseline: '+generated);
   assert.equal(stopped,0,'guard must preserve grounded fact output rather than blanking it');
   console.log('BENEFIT_GUARD_780_DIFF '+JSON.stringify({total,generated,changed,stopped,changedSamples}));
 });

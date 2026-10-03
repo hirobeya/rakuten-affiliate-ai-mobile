@@ -722,7 +722,7 @@ function run(name,fn){
     assert.match(html,/const fallbackIdentity=safeSearchIdentity\(item\)/);
     assert.match(html,/const groundedFallback=Boolean\(fallbackIdentity\)/);
     assert.match(html,/const full=validatedFull\|\|groundedFallback/);
-    assert.match(html,/audience=String\(insight\.productType\|\|''\)/);
+    assert.match(html,/audience=String\(\(usePurchasePlan\?insight\.scene:insight\.productType\)\|\|''\)/);
     assert.match(html,/points=\(insight\.sellingPoints\.length\?insight\.sellingPoints:insight\.features\)\.slice\(0,2\)/);
   });
 
@@ -783,10 +783,10 @@ function run(name,fn){
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
     assert.match(html,/buildGroundedBenefitPost/);
-    assert.match(quality,/function groundedBenefitForFact/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
-    assert.match(quality,/確認できる仕様/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/UrenaviFactSafety/);
     assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
     assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);

@@ -1,0 +1,711 @@
+[
+  {
+    "input": {
+      "category": "バイクグローブ",
+      "itemName": "バイク グローブ 秋 夏 革 本革 バイク用 グローブ バイク 手袋 レザー アメリカン オールシーズン メンズ レディース 男女兼用 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL サイズ Tranform（トランフォーム）",
+      "itemPrice": 3280
+    },
+    "inputKind": "user_supplied_title",
+    "before": "素材を見て選びたいときに。\n\n商品名には「本革」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n商品名には「レザー」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n確認できる仕様👇\n✓ 本革\n✓ レザー\n✓ 山羊革\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+    "after": "バイクに乗るときの手元に。\n\n山羊革を使ったバイク用グローブです。\nオールシーズン仕様です。走行時の風対策にも。停車中のスマホ操作にも対応。\n\n特徴👇\n✓ S\n✓ XXL\n✓ 3XL\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "バイク用グローブ",
+        "scene": "バイクに乗るときの手元に。",
+        "domain": "riding",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "山羊革",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "オールシーズン",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "防風",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "スマホ対応",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "S",
+          "source": "itemName",
+          "kind": "size"
+        },
+        {
+          "quote": "XXL",
+          "source": "itemName",
+          "kind": "size"
+        },
+        {
+          "quote": "3XL",
+          "source": "itemName",
+          "kind": "size"
+        }
+      ],
+      "values": [
+        {
+          "text": "オールシーズン仕様です。",
+          "factRef": "オールシーズン",
+          "factRefs": [
+            "オールシーズン"
+          ],
+          "source": "itemName"
+        },
+        {
+          "text": "走行時の風対策にも。",
+          "factRef": "防風",
+          "factRefs": [
+            "防風"
+          ],
+          "source": "itemName"
+        },
+        {
+          "text": "停車中のスマホ操作にも対応。",
+          "factRef": "スマホ対応",
+          "factRefs": [
+            "スマホ対応"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "バイクに乗るときの手元に。\n\n山羊革を使ったバイク用グローブです。\nオールシーズン仕様です。走行時の風対策にも。停車中のスマホ操作にも対応。\n\n特徴👇\n✓ S\n✓ XXL\n✓ 3XL\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "収納ベンチ",
+      "itemName": "収納ベンチ 収納ボックス 木製 80×40×40cm",
+      "itemPrice": 4980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "収納ボックスを、サイズ表記まで確認して選びたいなら。\n\n商品名には「木製」と明記されています。さらに「80×40×40cm」も確認できます。収納ボックスのサイズを先に見比べたいときの判断材料になります。\n\n確認できる仕様👇\n✓ 木製\n✓ 80×40×40cm\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "座る場所と収納を一緒に用意したいときに。\n\n木製の収納ベンチです。\n\n特徴👇\n✓ 80×40×40cm\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "収納ベンチ",
+        "scene": "座る場所と収納を一緒に用意したいときに。",
+        "domain": "storage-seat",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "木製",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "80×40×40cm",
+          "source": "itemName",
+          "kind": "dimension"
+        }
+      ],
+      "values": [],
+      "text": "座る場所と収納を一緒に用意したいときに。\n\n木製の収納ベンチです。\n\n特徴👇\n✓ 80×40×40cm\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "モップハンガー",
+      "itemName": "モップハンガー 壁掛け 粘着式 ステンレス",
+      "itemPrice": 980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "素材を見て選びたいときに。\n\n商品名には「ステンレス」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n確認できる仕様👇\n✓ ステンレス\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "after": "掃除道具のモップを掛けておく場所に。\n\nステンレスを使ったモップハンガーです。\n粘着式で壁に取り付けるタイプです。\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "モップハンガー",
+        "scene": "掃除道具のモップを掛けておく場所に。",
+        "domain": "holder",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "壁掛け",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "粘着式",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "ステンレス",
+          "source": "itemName",
+          "kind": "material"
+        }
+      ],
+      "values": [
+        {
+          "text": "粘着式で壁に取り付けるタイプです。",
+          "factRef": "壁掛け",
+          "factRefs": [
+            "壁掛け",
+            "粘着式"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "掃除道具のモップを掛けておく場所に。\n\nステンレスを使ったモップハンガーです。\n粘着式で壁に取り付けるタイプです。\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "空調服バッテリー",
+      "itemName": "空調服バッテリー 10000mAh 7.4V USB-C",
+      "itemPrice": 4980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "接続規格や対応規格を確認して選びたいときに。\n\n商品名には「USB-C」と明記されています。手持ちの機器や使いたい接続方法に合うか確認するときの比較材料になります。\n\n確認できる仕様👇\n✓ USB-C\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "空調服に使うバッテリーを探している方に。\n\n空調服バッテリーです。\n\n特徴👇\n✓ 10000mAh\n✓ 7.4V\n✓ USB-C\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "空調服バッテリー",
+        "scene": "空調服に使うバッテリーを探している方に。",
+        "domain": "special-power",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "10000mAh",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "7.4V",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "USB-C",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [],
+      "text": "空調服に使うバッテリーを探している方に。\n\n空調服バッテリーです。\n\n特徴👇\n✓ 10000mAh\n✓ 7.4V\n✓ USB-C\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "ペット毛取りグローブ",
+      "itemName": "ペット用 毛取りグローブ シリコン メッシュ",
+      "itemPrice": 980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "素材を見て選びたいときに。\n\n商品名には「シリコン」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n確認できる仕様👇\n✓ シリコン\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "after": "ペットの毛を取るときに。\n\nシリコンを使った毛取りグローブです。\n\n特徴👇\n✓ メッシュ\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "毛取りグローブ",
+        "scene": "ペットの毛を取るときに。",
+        "domain": "grooming",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "シリコン",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "メッシュ",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [],
+      "text": "ペットの毛を取るときに。\n\nシリコンを使った毛取りグローブです。\n\n特徴👇\n✓ メッシュ\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "BOS袋",
+      "itemName": "うんちが臭わない袋 BOS ネコ用 SS 200枚入 日本製",
+      "itemPrice": 1580
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "必要な数をまとめて揃えたいときにチェック。\n\n商品名には「200枚入」と明記されています。セット数や入数を比べながら、必要量に合うか判断しやすい仕様です。\n\n商品名には「日本製」と明記されています。生産地を比較条件にしたいときの確認材料になります。\n\n確認できる仕様👇\n✓ 200枚入\n✓ 日本製\n\n価格：1,580円\n\n※アフィリエイト広告を利用しています",
+    "after": "ペットの排泄物を入れる袋に。\n\n袋です。\n200枚入のセットです。\n\n特徴👇\n✓ 日本製\n\n価格：1,580円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "袋",
+        "scene": "ペットの排泄物を入れる袋に。",
+        "domain": "pet-bag",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "200枚入",
+          "source": "itemName",
+          "kind": "count"
+        },
+        {
+          "quote": "日本製",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [
+        {
+          "text": "200枚入のセットです。",
+          "factRef": "200枚入",
+          "factRefs": [
+            "200枚入"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "ペットの排泄物を入れる袋に。\n\n袋です。\n200枚入のセットです。\n\n特徴👇\n✓ 日本製\n\n価格：1,580円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "美顔ローラー",
+      "itemName": "美顔ローラー ステンレス 日本製",
+      "itemPrice": 1980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "素材を見て選びたいときに。\n\n商品名には「ステンレス」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n商品名には「日本製」と明記されています。生産地を比較条件にしたいときの確認材料になります。\n\n確認できる仕様👇\n✓ ステンレス\n✓ 日本製\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "顔のお手入れに使うローラーを探している方に。\n\nステンレスを使った美顔ローラーです。\n\n特徴👇\n✓ 日本製\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "美顔ローラー",
+        "scene": "顔のお手入れに使うローラーを探している方に。",
+        "domain": "beauty",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "ステンレス",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "日本製",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [],
+      "text": "顔のお手入れに使うローラーを探している方に。\n\nステンレスを使った美顔ローラーです。\n\n特徴👇\n✓ 日本製\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "モバイルバッテリー",
+      "itemName": "モバイルバッテリー 10000mAh USB-C対応 PD対応",
+      "itemPrice": 2980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "モバイルバッテリーを、対応規格まで確認して選びたいなら。\n\n商品名には「USB-C対応」と明記されています。さらに「PD対応」も確認できます。モバイルバッテリーが手持ちの機器や使いたい規格に合うか確認する材料になります。\n\n確認できる仕様👇\n✓ USB-C対応\n✓ PD対応\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "外出先での充電に。\n\nモバイルバッテリーです。\n\n特徴👇\n✓ 10000mAh\n✓ USB-C対応\n✓ PD対応\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "モバイルバッテリー",
+        "scene": "外出先での充電に。",
+        "domain": "charging",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "10000mAh",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "USB-C対応",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "PD対応",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [],
+      "text": "外出先での充電に。\n\nモバイルバッテリーです。\n\n特徴👇\n✓ 10000mAh\n✓ USB-C対応\n✓ PD対応\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "キッチン用品",
+      "itemName": "フライパン ステンレス IH対応 食洗機対応",
+      "itemPrice": 3980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "素材を見て選びたいときに。\n\n商品名には「ステンレス」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n確認できる仕様👇\n✓ ステンレス\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "キッチンでの調理に。\n\nステンレスを使ったフライパンです。\nIHでの調理に対応。使用後は食洗機で洗えます。\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "フライパン",
+        "scene": "キッチンでの調理に。",
+        "domain": "cooking",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "ステンレス",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "IH対応",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "食洗機対応",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [
+        {
+          "text": "IHでの調理に対応。",
+          "factRef": "IH対応",
+          "factRefs": [
+            "IH対応"
+          ],
+          "source": "itemName"
+        },
+        {
+          "text": "使用後は食洗機で洗えます。",
+          "factRef": "食洗機対応",
+          "factRefs": [
+            "食洗機対応"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "キッチンでの調理に。\n\nステンレスを使ったフライパンです。\nIHでの調理に対応。使用後は食洗機で洗えます。\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "収納用品",
+      "itemName": "収納ボックス 折りたたみ キャスター付き 50×30×30cm",
+      "itemPrice": 1980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "収納ボックスを、サイズ表記まで確認して選びたいなら。\n\n商品名には「50×30×30cm」と明記されています。収納ボックスのサイズを先に見比べたいときの判断材料になります。\n\n確認できる仕様👇\n✓ 50×30×30cm\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "ものを入れる収納を用意したいときに。\n\n収納ボックスです。\n使わないときは折りたためます。キャスターで移動できるタイプです。\n\n特徴👇\n✓ 50×30×30cm\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "収納ボックス",
+        "scene": "ものを入れる収納を用意したいときに。",
+        "domain": "storage",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "折りたたみ",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "キャスター付き",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "50×30×30cm",
+          "source": "itemName",
+          "kind": "dimension"
+        }
+      ],
+      "values": [
+        {
+          "text": "使わないときは折りたためます。",
+          "factRef": "折りたたみ",
+          "factRefs": [
+            "折りたたみ"
+          ],
+          "source": "itemName"
+        },
+        {
+          "text": "キャスターで移動できるタイプです。",
+          "factRef": "キャスター付き",
+          "factRefs": [
+            "キャスター付き"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "ものを入れる収納を用意したいときに。\n\n収納ボックスです。\n使わないときは折りたためます。キャスターで移動できるタイプです。\n\n特徴👇\n✓ 50×30×30cm\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "美容雑貨",
+      "itemName": "ヘアブラシ 木製 日本製",
+      "itemPrice": 1280
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "素材を見て選びたいときに。\n\n商品名には「木製」と明記されています。素材表記を確認しながら、自分の希望に合うか比較しやすい商品です。\n\n商品名には「日本製」と明記されています。生産地を比較条件にしたいときの確認材料になります。\n\n確認できる仕様👇\n✓ 木製\n✓ 日本製\n\n価格：1,280円\n\n※アフィリエイト広告を利用しています",
+    "after": "日々のお手入れに使う道具に。\n\n木製のヘアブラシです。\n\n特徴👇\n✓ 日本製\n\n価格：1,280円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "ヘアブラシ",
+        "scene": "日々のお手入れに使う道具に。",
+        "domain": "beauty",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "木製",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "日本製",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [],
+      "text": "日々のお手入れに使う道具に。\n\n木製のヘアブラシです。\n\n特徴👇\n✓ 日本製\n\n価格：1,280円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "ペット用品",
+      "itemName": "犬用ベッド コットン 洗える",
+      "itemPrice": 3980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "犬用ベッドを、素材表記まで確認して選びたいなら。\n\n商品名には「コットン」と明記されています。犬用ベッドを素材から比べたいときに確認しやすい商品です。\n\n確認できる仕様👇\n✓ コットン\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+    "after": "ペットが過ごす場所に。\n\nコットンを使った犬用ベッドです。\nお手入れ時に洗えるタイプです。\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "犬用ベッド",
+        "scene": "ペットが過ごす場所に。",
+        "domain": "pet",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "コットン",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "洗える",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [
+        {
+          "text": "お手入れ時に洗えるタイプです。",
+          "factRef": "洗える",
+          "factRefs": [
+            "洗える"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "ペットが過ごす場所に。\n\nコットンを使った犬用ベッドです。\nお手入れ時に洗えるタイプです。\n\n価格：3,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "衣類",
+      "itemName": "Tシャツ 綿100% 半袖 S M L XL",
+      "itemPrice": 1480
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "Tシャツを、素材表記まで確認して選びたいなら。\n\n商品名には「綿100%」と明記されています。Tシャツを素材から比べたいときに確認しやすい商品です。\n\n確認できる仕様👇\n✓ 綿100%\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+    "after": "日々の着替えに。\n\n綿100%素材のTシャツです。\n\n特徴👇\n✓ 半袖\n✓ S\n✓ M\n✓ L\n✓ XL\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "Tシャツ",
+        "scene": "日々の着替えに。",
+        "domain": "clothing",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "綿100%",
+          "source": "itemName",
+          "kind": "material"
+        },
+        {
+          "quote": "半袖",
+          "source": "itemName",
+          "kind": "function"
+        },
+        {
+          "quote": "S",
+          "source": "itemName",
+          "kind": "size"
+        },
+        {
+          "quote": "M",
+          "source": "itemName",
+          "kind": "size"
+        },
+        {
+          "quote": "L",
+          "source": "itemName",
+          "kind": "size"
+        },
+        {
+          "quote": "XL",
+          "source": "itemName",
+          "kind": "size"
+        }
+      ],
+      "values": [],
+      "text": "日々の着替えに。\n\n綿100%素材のTシャツです。\n\n特徴👇\n✓ 半袖\n✓ S\n✓ M\n✓ L\n✓ XL\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "家電",
+      "itemName": "電気ケトル 1.0L 7段階温度調節 4時間保温",
+      "itemPrice": 4980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "",
+    "after": "お湯を沸かすときに。\n\n電気ケトルです。\n\n特徴👇\n✓ 1.0L\n✓ 7段階温度調節\n✓ 4時間保温\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "電気ケトル",
+        "scene": "お湯を沸かすときに。",
+        "domain": "kettle",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "1.0L",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "7段階温度調節",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "4時間保温",
+          "source": "itemName",
+          "kind": "numeric"
+        }
+      ],
+      "values": [],
+      "text": "お湯を沸かすときに。\n\n電気ケトルです。\n\n特徴👇\n✓ 1.0L\n✓ 7段階温度調節\n✓ 4時間保温\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  },
+  {
+    "input": {
+      "category": "食品",
+      "itemName": "レトルトカレー 200g 3食入り 個包装",
+      "itemPrice": 980
+    },
+    "inputKind": "synthetic_contract_fixture",
+    "before": "必要な数をまとめて揃えたいときにチェック。\n\n商品名には「3食入り」と明記されています。セット数や入数を比べながら、必要量に合うか判断しやすい仕様です。\n\n確認できる仕様👇\n✓ 3食入り\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "after": "レトルトカレーです。\n3食入りのセットです。1つずつ包装されています。\n\n特徴👇\n✓ 200g\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+    "ledger": {
+      "version": "structured-copy-20261002-v2",
+      "understanding": {
+        "identity": "レトルトカレー",
+        "scene": "",
+        "domain": "food",
+        "reason": "",
+        "method": "type_definition"
+      },
+      "facts": [
+        {
+          "quote": "200g",
+          "source": "itemName",
+          "kind": "numeric"
+        },
+        {
+          "quote": "3食入り",
+          "source": "itemName",
+          "kind": "count"
+        },
+        {
+          "quote": "個包装",
+          "source": "itemName",
+          "kind": "function"
+        }
+      ],
+      "values": [
+        {
+          "text": "3食入りのセットです。",
+          "factRef": "3食入り",
+          "factRefs": [
+            "3食入り"
+          ],
+          "source": "itemName"
+        },
+        {
+          "text": "1つずつ包装されています。",
+          "factRef": "個包装",
+          "factRefs": [
+            "個包装"
+          ],
+          "source": "itemName"
+        }
+      ],
+      "text": "レトルトカレーです。\n3食入りのセットです。1つずつ包装されています。\n\n特徴👇\n✓ 200g\n\n価格：980円\n\n※アフィリエイト広告を利用しています",
+      "status": "ok"
+    }
+  }
+]

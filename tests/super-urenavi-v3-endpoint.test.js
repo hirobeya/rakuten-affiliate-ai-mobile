@@ -26,7 +26,7 @@ const pass1={
     {name:'温度設定単位',value:'1℃',unit:'℃',qualifier:'単位',valueType:'single',quote:'1℃単位'}
   ],
   decisionAxes:[{text:'温度設定',attributeRefs:[0,1]}],
-  appeals:[{text:'飲み物に合わせて温度を細かく選べる',noHassle:'温度が下がるのを待たなくていい',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
+  appeals:[{text:'飲み物に合わせて1℃単位で温度を選べる',noHassle:'温度が下がるのを待たなくていい',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
   hooks:[
     {type:'question',text:'飲み物ごとに、お湯の温度を気にすることありませんか？'},
     {type:'scene',text:'朝の一杯を自分好みにしたいとき。'}
@@ -40,12 +40,13 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
   try{
     let p1=0,p2=0;
     const handler=createHandler({
+      deferPass2:false,
       authorize:async()=>({ok:true,plan:'owner'}),
       store:memoryStore(),
       consumeQuota:async()=>true,
       groq:{
-        callPass1:async()=>{p1++;return {raw:pass1,model:'mock'};},
-        callPass2:async()=>{p2++;return {raw:pass2,model:'mock'};}
+        callPass1:async({model})=>{p1++;return {raw:pass1,model};},
+        callPass2:async({model})=>{p2++;return {raw:pass2,model};}
       }
     });
     const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
@@ -54,7 +55,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     assert.equal(res.code,200);
     assert.equal(res.body.ok,true);
     assert.equal(res.body.tier,'A');
-    assert.equal(res.body.variants.length,3);
+    assert.equal(res.body.variants.length,1);
     assert.equal(res.body.groq.pass1Calls,1);
     assert.equal(res.body.groq.pass2Calls,1);
     assert.equal(p1,1); assert.equal(p2,1);

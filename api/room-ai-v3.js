@@ -62,7 +62,7 @@ function createHandler(deps={}){
       };
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
-      const model=String(process.env.GROQ_ROOM_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
+      const model=String(process.env.GROQ_ROOM_V3_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       let groq=deps.groq;
       if(!groq){
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
@@ -71,7 +71,7 @@ function createHandler(deps={}){
       }
 
       const analysis=await analyzeProductV3({
-        item,store,model,consumeQuota:quotaFn,
+        item,store,model,consumeQuota:quotaFn,deferPass2:deps.deferPass2!==false,now:deps.now||Date.now,
         callPass1:groq.callPass1,
         callPass2:groq.callPass2
       });
@@ -90,11 +90,16 @@ function createHandler(deps={}){
         elapsedMs:Date.now()-started
       });
 
-      return json(res,200,{
+      return json(res,analysis.pending?202:200,{
         ok:analysis.ok,
+        pending:analysis.pending===true,
+        retryAfterMs:analysis.pending?analysis.retryAfterMs:0,
         version:'super-urenavi-v3-preview',
         model,
         productType:analysis.validation?.productType||null,
+        validationReasons:analysis.validation?.reasons||[],
+        draftDiagnostics:analysis.raw,
+        candidateAppeals:analysis.validation?.appeals||[],
         attributes:analysis.validation?.attributes||[],
         decisionAxes:analysis.validation?.decisionAxes||[],
         verifiedAppeals:analysis.verifiedAppeals||[],
@@ -102,6 +107,7 @@ function createHandler(deps={}){
         cacheStatus:analysis.cacheStatus,
         pass2Status:analysis.pass2Status,
         tier:copy.tier,
+        quality:copy.quality,
         variants:copy.variants,
         metric
       });
@@ -111,6 +117,9 @@ function createHandler(deps={}){
         message:status===429?'AI daily limit reached':'v3 analysis failed',
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,
+        failureReason:error?.failureReason|| (error?.name==='AbortError'?'upstream_timeout':'analysis_error'),
+        upstreamDiagnostic:error?.safeError?{category:error.safeError.category,code:error.safeError.code,message:String(error.safeError.message||'').replace(/(?:gsk_|sk-)[A-Za-z0-9_-]+/g,'[redacted]').slice(0,500)}:null,
+        usage:error?.usage||null,
         fallback:true
       });
     }
