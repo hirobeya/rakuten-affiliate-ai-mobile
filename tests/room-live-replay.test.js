@@ -3,8 +3,10 @@ const assert=require('node:assert/strict');
 const {inspect,publication}=require('../lib/room-semantic-contract');
 const baseline=require('../docs/room-fixed-evaluation-20261004-in-progress.json').runs;
 const limited=require('../docs/room-rate-limit-evaluation-20261004.json').runs;
+const whitespace=require('../docs/room-whitespace-interrupted-draft-20261004.json');
 // Replay recorded live failures to protect the server veto. This does not
 // evaluate a fresh model run, naturalness, or completion across 17 categories.
+assert.equal(inspect(whitespace.item,whitespace.draft).ok,true,'a real correctly sourced draft does not fail because of Japanese sentence-boundary whitespace');
 for(const r of baseline.filter(r=>r.fixtureId==='01')){
  assert.equal(publication(r.item,r.result.diagnostics.draft,r.result.diagnostics.review).status,'ready','previously grounded glove outputs remain usable');
 }

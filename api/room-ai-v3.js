@@ -47,6 +47,7 @@ function createHandler(deps={}){
     if(runtimeEnv!=='preview') return json(res,404,{message:'Not found'});
 
     const started=Date.now();
+    let activeModel=null;
     try{
       const auth=await authorizeFn(req);
       if(!auth?.ok || auth.plan!=='owner') return json(res,403,{message:'owner_preview_only'});
@@ -61,16 +62,20 @@ function createHandler(deps={}){
       };
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
-      const model=String(process.env.GROQ_ROOM_V3_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
+      const runKey=body.evaluationRun===undefined?'':String(body.evaluationRun);
+      if(runKey&&!/^[A-Za-z0-9_-]{1,80}$/.test(runKey))return json(res,400,{message:'invalid evaluationRun'});
+      const evaluationModel=body.evaluationModel;
+      if(evaluationModel!==undefined&&(!runKey||!['openai/gpt-oss-120b','openai/gpt-oss-20b'].includes(evaluationModel)))return json(res,400,{message:'invalid evaluationModel'});
+      const model=evaluationModel||String(process.env.GROQ_ROOM_V3_MODEL||DEFAULT_MODEL).trim()||DEFAULT_MODEL;
       let provider=deps.provider;
       if(!provider){
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
         if(!apiKey)return json(res,503,{message:'GROQ_API_KEY is not configured'});
-        provider=createProvider({apiKey,model});
+        provider=(deps.createProvider||createProvider)({apiKey,model});
       }
-      const runKey=body.evaluationRun===undefined?'':String(body.evaluationRun);
-      if(runKey&&!/^[A-Za-z0-9_-]{1,80}$/.test(runKey))return json(res,400,{message:'invalid evaluationRun'});
+      activeModel=provider.model;
       const analysis=await advance({item,store,provider,consumeQuota:quotaFn,runKey,now:deps.now||Date.now,readOnly:body.statusOnly===true});
+      if(body.statusOnly===true)return json(res,analysis.pending?202:200,analysis);
       const metric=logAiUsageMetric({route:'semantic_preview',cacheStatus:runKey?'evaluation':'source_cache',pass1Calls:analysis.groq.pass1Calls,pass2Calls:analysis.groq.pass2Calls,imageCalls:0,outputTier:analysis.ok?'A':'C',hookType:'scene',machineValidationPassed:analysis.diagnostics.machine?.ok===true,copied:false,elapsedMs:Date.now()-started});
       return json(res,analysis.pending?202:200,{...analysis,tier:analysis.ok?'A':'C',metric});
 
@@ -82,6 +87,7 @@ function createHandler(deps={}){
         message:status===429?(error?.safeError?'AI provider rate limit reached':'AI daily limit reached'):'v3 analysis failed',
         retryAfterMs,
         version:VERSION,
+        model:activeModel,
         rateLimits:error?.rateLimit||null,
         stage:error?.stage||null,
         upstreamStatus:error?.status||null,

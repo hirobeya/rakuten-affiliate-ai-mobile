@@ -24,6 +24,7 @@ const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sent
 
 (async()=>{
   const oldEnv=process.env.VERCEL_ENV;
+  const oldKey=process.env.GROQ_API_KEY;
   process.env.VERCEL_ENV='preview';
   try{
     let p1=0,p2=0;
@@ -50,6 +51,12 @@ const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sent
     assert.equal(res.body.groq.pass2Calls,1);
     assert.equal(p1,1); assert.equal(p2,1);
 
+    const invalidModel=mockRes();await handler({...req,body:{...req.body,evaluationRun:'test',evaluationModel:'unapproved-model'}},invalidModel);assert.equal(invalidModel.code,400);
+    const normalOverride=mockRes();await handler({...req,body:{...req.body,evaluationModel:'openai/gpt-oss-20b'}},normalOverride);assert.equal(normalOverride.code,400);
+    process.env.GROQ_API_KEY='unit-test-placeholder';let selectedModel;
+    const comparison=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>{throw new Error('read-only must not consume quota');},createProvider:({model})=>{selectedModel=model;return {model,requiredTokens:()=>0,call:async()=>{throw new Error('read-only must not call AI');}};}});
+    const modelRes=mockRes();await comparison({...req,body:{...req.body,evaluationRun:'comparison',evaluationModel:'openai/gpt-oss-20b',statusOnly:true}},modelRes);assert.equal(modelRes.code,202);assert.equal(selectedModel,'openai/gpt-oss-20b');assert.equal(modelRes.body.model,selectedModel);
+
     const again=mockRes();
     await handler(req,again);
     assert.equal(again.code,200);
@@ -68,6 +75,7 @@ const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sent
     assert.equal(p1,1); assert.equal(p2,1);
   }finally{
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
+    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   }
   console.log('super-urenavi-v3-endpoint.test.js: PASS');
 })().catch(error=>{console.error(error);process.exitCode=1;});
