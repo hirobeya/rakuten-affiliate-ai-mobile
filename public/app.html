@@ -2493,6 +2493,7 @@ function specificGroundedProductType(item,aiType){
 }
 
 function aiSalesInsight(item,result){
+  if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?{productType:result.productType?.specific||'',scene:'',features:[],sellingPoints:result.diagnostics?.draft?.sentences?.map(s=>s.text)||[],featureRows:[]}:{productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
   if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
@@ -2530,6 +2531,7 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
+  if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
   if(result?.version==='super-urenavi-v3-preview') return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
@@ -2577,6 +2579,9 @@ function updateAiPanel(index){
     facts.textContent='';
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
+  }
+  if(String(result.data?.version||'').startsWith('room_contract_')){
+    const data=result.data;status.textContent=data.ok&&data.quality?.status==='ready'?'投稿文の内容確認が完了しました':'投稿文を完成できませんでした。';facts.textContent='';copy.textContent=aiPhase1Post(item,data);return;
   }
   if(result.data?.version==='super-urenavi-v3-preview'){
     const data=result.data;
