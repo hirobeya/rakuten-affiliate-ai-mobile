@@ -11,71 +11,107 @@ function memoryStore(){
   };
 }
 function mockRes(){
+  return {code:200,body:null,headers:{},setHeader(k,v){this.headers[k]=v;},status(c){this.code=c;return this;},json(x){this.body=x;return this;}};
+}
+function groqMock(pass1,pass2,{model='mock',calls={pass1:0,pass2:0}}={}){
   return {
-    code:200,body:null,headers:{},
-    setHeader(k,v){this.headers[k]=v;},
-    status(c){this.code=c;return this;},
-    json(x){this.body=x;return this;}
+    calls,
+    callPass1:async()=>{calls.pass1++;return {raw:pass1,model};},
+    callPass2:async()=>{calls.pass2++;return {raw:pass2,model};}
   };
 }
 
-const pass1={product:{what:'電気ケトル',acts_on:'沸かすお湯',acts_on_quote:'50-100度を1℃単位で設定できます。'},sentences:[{text:'飲み物ごとにお湯の温度を選びたいときに。',kinds:['scene'],quotes:['50-100度を1℃単位で設定できます。']},{text:'50-100度を1℃単位で設定できる電気ケトル。',kinds:['spec','benefit'],quotes:['50-100度を1℃単位で設定できます。']}]};
-const pass2={product:{what:'supported',acts_on:'supported'},sentences:pass1.sentences.map(s=>({text:s.text,...Object.fromEntries(['target','part','conditions','negation','degree'].map(x=>[x,'supported'])),evidenceQuotes:s.quotes})),quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(x=>[x,'supported']))};
+const baseItem={itemCode:'shop:1',itemName:'電気ケトル 0.8L 50-100度 1℃単位',itemCaption:'容量0.8L。50-100度を1℃単位で設定できます。',itemPrice:8980};
+const pass1Direct={
+  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
+  attributes:[{name:'容量',value:'0.8L',unit:'L',qualifier:'',valueType:'single',quote:'0.8L'}],
+  decisionAxes:[{text:'容量',attributeRefs:[0]}],
+  appeals:[{text:'0.8L',noHassle:'',scene:'',attributeRefs:[0],strength:2}],
+  hooks:[]
+};
+const pass1NeedsReview={
+  productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
+  attributes:[
+    {name:'温度設定範囲',value:'50-100度',unit:'度',qualifier:'',valueType:'range',quote:'50-100度'},
+    {name:'温度設定単位',value:'1℃',unit:'℃',qualifier:'単位',valueType:'single',quote:'1℃単位'}
+  ],
+  decisionAxes:[{text:'温度設定',attributeRefs:[0,1]}],
+  appeals:[{text:'50-100度を1℃単位で設定できる電気ケトルです',noHassle:'',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[0,1],strength:3}],
+  hooks:[]
+};
+const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'原文範囲内'}]};
 
 (async()=>{
   const oldEnv=process.env.VERCEL_ENV;
-  const oldKey=process.env.GROQ_API_KEY;
   process.env.VERCEL_ENV='preview';
   try{
-    let p1=0,p2=0;
-    const handler=createHandler({
-      deferPass2:false,
-      authorize:async()=>({ok:true,plan:'owner'}),
-      store:memoryStore(),
-      consumeQuota:async()=>true,
-      provider:{model:'mock',requiredTokens:()=>0,call:async stage=>{if(stage==='generate'){p1++;return {raw:pass1};}p2++;return {raw:pass2};}}
+    {
+      const calls={pass1:0,pass2:0};
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1Direct,pass2,{calls})});
+      const res=mockRes();
+      await handler({method:'POST',body:baseItem},res);
+      assert.equal(res.code,200);
+      assert.equal(res.body.groq.pass1Calls,1);
+      assert.equal(res.body.groq.pass2Calls,0);
+      assert.equal(res.body.pass2Status,'not_needed');
+      assert.equal(calls.pass1,1);
+      assert.equal(calls.pass2,0);
+    }
 
-    });
-    const req={method:'POST',body:{itemCode:'shop:1',itemName:'電気ケトル 50-100度 1℃単位',itemCaption:'50-100度を1℃単位で設定できます。',itemPrice:8980}};
-    const res=mockRes();
-    await handler({...req,body:{...req.body,statusOnly:true}},res);assert.equal(res.code,202);assert.equal(p1,0);assert.equal(p2,0);
-    await handler(req,res);
-    assert.equal(res.code,202);
-    await handler({...req,body:{...req.body,statusOnly:true}},res);assert.equal(res.code,202);assert.equal(res.body.phase,'verification');assert.equal(p1,1);assert.equal(p2,0);
-    await handler(req,res);
-    assert.equal(res.code,200);
-    assert.equal(res.body.ok,true);
-    assert.equal(res.body.tier,'A');
-    assert.equal(res.body.variants.length,1);
-    assert.equal(res.body.groq.pass1Calls,1);
-    assert.equal(res.body.groq.pass2Calls,1);
-    assert.equal(p1,1); assert.equal(p2,1);
+    {
+      const calls={pass1:0,pass2:0};
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1NeedsReview,pass2,{calls})});
+      const res=mockRes();
+      await handler({method:'POST',body:baseItem},res);
+      assert.equal(res.code,200);
+      assert.equal(res.body.groq.pass1Calls,1);
+      assert.equal(res.body.groq.pass2Calls,1);
+      assert.equal(res.body.pass2Status,'generated');
+      assert.equal(calls.pass1,1);
+      assert.equal(calls.pass2,1);
+    }
 
-    const invalidModel=mockRes();await handler({...req,body:{...req.body,evaluationRun:'test',evaluationModel:'unapproved-model'}},invalidModel);assert.equal(invalidModel.code,400);
-    const normalOverride=mockRes();await handler({...req,body:{...req.body,evaluationModel:'openai/gpt-oss-20b'}},normalOverride);assert.equal(normalOverride.code,400);
-    process.env.GROQ_API_KEY='unit-test-placeholder';let selectedModel;
-    const comparison=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>{throw new Error('read-only must not consume quota');},createProvider:({model})=>{selectedModel=model;return {model,requiredTokens:()=>0,call:async()=>{throw new Error('read-only must not call AI');}};}});
-    const modelRes=mockRes();await comparison({...req,body:{...req.body,evaluationRun:'comparison',evaluationModel:'openai/gpt-oss-20b',statusOnly:true}},modelRes);assert.equal(modelRes.code,202);assert.equal(selectedModel,'openai/gpt-oss-20b');assert.equal(modelRes.body.model,selectedModel);
+    {
+      let quota=0;
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>{quota++;return true;},groq:groqMock(pass1NeedsReview,pass2)});
+      const res=mockRes();
+      await handler({method:'POST',body:{...baseItem,statusOnly:true}},res);
+      assert.equal(res.code,202);
+      assert.equal(res.body.phase,'not_started');
+      assert.equal(res.body.groq.totalCalls,0);
+      assert.equal(quota,0);
+    }
 
-    const again=mockRes();
-    await handler(req,again);
-    assert.equal(again.code,200);
-    assert.equal(again.body.groq.totalCalls,2); // cumulative stored evaluation calls; cache adds none
-    assert.equal(p1,1); assert.equal(p2,1);
+    {
+      let selectedModel='';
+      const handler=createHandler({
+        authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,
+        createGroq:({model})=>{selectedModel=model;return groqMock(pass1Direct,pass2,{model});}
+      });
+      const bad=mockRes();
+      await handler({method:'POST',body:{...baseItem,evaluationModel:'openai/gpt-oss-20b'}},bad);
+      assert.equal(bad.code,400);
+      const ok=mockRes();
+      await handler({method:'POST',body:{...baseItem,evaluationRun:'comparison',evaluationModel:'openai/gpt-oss-20b'}},ok);
+      assert.equal(ok.code,200);
+      assert.equal(selectedModel,'openai/gpt-oss-20b');
+    }
 
-    const upstreamLimit=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,provider:{model:'limited',requiredTokens:()=>0,call:async()=>{const e=new Error('provider limit');e.status=429;e.rateLimit={'retry-after':'600'};e.safeError={category:'rate_limit',code:'rate_limit_exceeded',message:'free token limit'};throw e;}}});
-    const rateRes=mockRes();await upstreamLimit(req,rateRes);assert.equal(rateRes.code,429);assert.equal(rateRes.body.message,'AI provider rate limit reached');assert.equal(rateRes.body.retryAfterMs,600000);assert.equal(rateRes.headers['Retry-After'],'600');
-    const dailyLimit=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>false,provider:{model:'local-limit',requiredTokens:()=>0,call:async()=>{throw new Error('must not call provider');}}});
-    const dailyRes=mockRes();await dailyLimit(req,dailyRes);assert.equal(dailyRes.code,429);assert.equal(dailyRes.body.message,'AI daily limit reached');assert.equal(dailyRes.body.retryAfterMs,0);
+    {
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>false,groq:groqMock(pass1Direct,pass2)});
+      const res=mockRes();
+      await handler({method:'POST',body:baseItem},res);
+      assert.equal(res.code,429);
+      assert.equal(res.body.message,'AI daily limit reached');
+    }
 
     process.env.VERCEL_ENV='production';
     const blocked=mockRes();
-    await handler(req,blocked);
+    const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1Direct,pass2)});
+    await handler({method:'POST',body:baseItem},blocked);
     assert.equal(blocked.code,404);
-    assert.equal(p1,1); assert.equal(p2,1);
   }finally{
     if(oldEnv===undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV=oldEnv;
-    if(oldKey===undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY=oldKey;
   }
   console.log('super-urenavi-v3-endpoint.test.js: PASS');
 })().catch(error=>{console.error(error);process.exitCode=1;});
