@@ -82,8 +82,9 @@ function createHandler(deps={}){
       let groq=deps.groq;
       if(!groq){
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
-        if(!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
-        groq=(deps.createGroq||createV3Groq)({apiKey,model});
+        const factory=deps.createGroq||createV3Groq;
+        if(!deps.createGroq&&!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
+        groq=factory({apiKey,model});
       }
 
       const analysis=await analyzeProductV3({
