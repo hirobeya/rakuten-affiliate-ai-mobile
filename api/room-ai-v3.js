@@ -1,17 +1,23 @@
 'use strict';
 
 const {authorize,db}=require('../lib/billing');
+const {validateAiExtraction}=require('../lib/room-ai');
 const {createCacheStore}=require('../lib/super-urenavi-cache');
 const {analyzeProductV3}=require('../lib/super-urenavi-v3-engine');
 const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
+const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
 const EVALUATION_MODELS=new Set(['openai/gpt-oss-120b','openai/gpt-oss-20b']);
+
+function normalize(value=''){
+  return String(value||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+}
 
 function json(res,status,body){
   res.setHeader('Cache-Control','no-store');
@@ -39,29 +45,132 @@ async function consumeQuota(stage){
   return allowed;
 }
 
+function accessoryScoped(title,value){
+  const t=normalize(title),v=normalize(value);
+  const at=t.indexOf(v);
+  if(at<0) return true;
+  const before=t.slice(Math.max(0,at-10),at);
+  const after=t.slice(at+v.length,Math.min(t.length,at+v.length+14));
+  return /(?:交換用|替え)\s*$/.test(before)
+    || /^\s*(?:用|専用)\s*(?:ケース|カバー|ポーチ|ホルダー|フィルター|アダプター|ケーブル|交換|替え)/.test(after);
+}
+
+function sharedTypeSuffixes(){
+  const types=(localTypeData.productTypes||[]).map(normalize).filter(Boolean);
+  const out=new Set();
+  for(let i=0;i<types.length;i++){
+    for(let j=i+1;j<types.length;j++){
+      const a=[...types[i]],b=[...types[j]];
+      let n=0;
+      while(n<a.length&&n<b.length&&a[a.length-1-n]===b[b.length-1-n]) n++;
+      if(n>=4) out.add(a.slice(a.length-n).join(''));
+    }
+  }
+  return [...out].sort((a,b)=>b.length-a.length);
+}
+
+const TYPE_SUFFIXES=sharedTypeSuffixes();
+
+function validateLiteralIdentity(item,value){
+  const title=normalize(item?.itemName),identity=normalize(value);
+  if(!identity||!title.includes(identity)||accessoryScoped(title,identity)) return null;
+  const raw={productType:{value:identity,source:'itemName',evidence:identity},features:[],sellingPoints:[],confidence:'high'};
+  const validation=validateAiExtraction(raw,{itemName:title,itemCaption:item?.itemCaption||''},{imageAvailable:false});
+  if(validation?.productType?.valid!==true||!['simple','simple_partial'].includes(validation.mode)) return null;
+  return {raw,validation,version:(localTypeData.version||'local-types')+'-literal-source'};
+}
+
+function resolveLiteralIdentity(item){
+  const title=normalize(item?.itemName);
+  if(!title) return null;
+  const known=(localTypeData.productTypes||[])
+    .map(normalize).filter(Boolean)
+    .map(type=>({type,at:title.indexOf(type)}))
+    .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
+    .sort((a,b)=>a.at-b.at||b.type.length-a.type.length);
+
+  // When the conservative dictionary resolver rejects a title only because multiple
+  // concrete product nouns are present, the leading source noun is allowed if it is
+  // itself an exact, independently valid product type. No synonym is invented.
+  for(const hit of known){
+    const validated=validateLiteralIdentity(item,hit.type);
+    if(validated) return validated;
+  }
+
+  // For unseen wording such as "パソコンスタンド", derive only the noun ending
+  // from suffixes that already occur in multiple known product types. The candidate
+  // itself must be a contiguous title token and pass the same product-type validator.
+  const tokens=title.split(/[\s,，、。!！?？()（）【】\[\]・\/／]+/).map(normalize).filter(Boolean);
+  for(const token of tokens){
+    if(token.length<4||token.length>24) continue;
+    if(!TYPE_SUFFIXES.some(suffix=>token.endsWith(suffix)&&token.length>suffix.length)) continue;
+    const validated=validateLiteralIdentity(item,token);
+    if(validated) return validated;
+  }
+  return null;
+}
+
+function extractLiteralSpecs(item){
+  const parts=[{source:'itemName',text:normalize(item?.itemName)},{source:'itemCaption',text:normalize(item?.itemCaption)}].filter(x=>x.text);
+  const out=[];
+  const patterns=[
+    /\d+(?:\.\d+)?\s*(?:~|〜|～|-)\s*\d+(?:\.\d+)?\s*(?:mAh|Ah|Wh|W|V|A|mm|cm|kg|g|ml|mL|L|GB|インチ)/gi,
+    /\d+(?:\.\d+)?\s*(?:mm|cm|m)[×xX]\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:[×xX]\d+(?:\.\d+)?\s*(?:mm|cm|m))?/gi,
+    /\d+(?:\.\d+)?\s*(?:mAh|Ah|Wh|W|V|A|mm|cm|kg|mg|g|ml|mL|L|GB|インチ)/gi,
+    /\d+(?:枚|個|本|袋|組|点|粒|錠|箱|足)(?:入り|入|セット|組)?/g
+  ];
+  for(const part of parts){
+    for(const re of patterns){
+      re.lastIndex=0;
+      let match;
+      while((match=re.exec(part.text))){
+        const quote=normalize(match[0]);
+        if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
+        out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote)?'count':'numeric'});
+      }
+    }
+  }
+  return out.slice(0,6);
+}
+
+function neutralLiteralText(identity,facts,itemPrice){
+  const rows=[identity];
+  if(facts.length){
+    rows.push('', '特徴👇');
+    for(const fact of facts.slice(0,3)) rows.push('✓ '+fact.quote);
+  }
+  if(Number(itemPrice)>0) rows.push('', '価格：'+Number(itemPrice).toLocaleString('ja-JP')+'円');
+  rows.push('', '※アフィリエイト広告を利用しています');
+  return rows.join('\n');
+}
+
 function localZeroCall(item){
-  const local=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
+  const local=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption})||resolveLiteralIdentity(item);
   const identity=String(local?.raw?.productType?.value||'').trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
 
   const copy=structured.compose(item,{identity});
   const understanding=copy?.understanding||{};
-  const method=String(understanding?.method||'');
-  if(copy?.status!=='ok' || !['type_definition','validated_identity'].includes(method)) return null;
-  if(String(understanding.identity||'').trim()!==identity) return null;
-  if(!String(copy.text||'').trim() || structured.RISK.test(copy.text)) return null;
+  const structuredMethod=String(understanding?.method||'');
+  const structuredIdentity=String(understanding?.identity||'').trim();
+  const structuredSafe=copy?.status==='ok'
+    && ['type_definition','validated_identity'].includes(structuredMethod)
+    && structuredIdentity===identity
+    && String(copy.text||'').trim()
+    && !structured.RISK.test(copy.text);
 
-  const facts=Array.isArray(copy.facts)?copy.facts:[];
+  const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
+  const literalFacts=extractLiteralSpecs(item);
+  const facts=[];
+  for(const fact of [...structuredFacts,...literalFacts]){
+    if(!fact?.quote||facts.some(x=>normalize(x.quote).toLowerCase()===normalize(fact.quote).toLowerCase())) continue;
+    facts.push(fact);
+  }
   if(!facts.length) return null;
 
-  // Category-independent zero-call rule:
-  // 1) product identity must already be independently validated from the source title;
-  // 2) every published fact must be an exact source-grounded fact extracted by structured copy;
-  // 3) optional explanatory sentences are kept only when they retain explicit fact references.
-  // No benefit, outcome, audience or use case is invented here.
-  const groundedValues=(Array.isArray(copy.values)?copy.values:[]).filter(v=>
+  const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
-  );
+  ):[];
   const directAppeals=groundedValues.length?groundedValues:facts.slice(0,3).map(f=>({
     text:'仕様：'+f.quote,
     factRef:f.quote,
@@ -70,21 +179,27 @@ function localZeroCall(item){
   }));
   if(!directAppeals.length) return null;
 
-  const hook=String(understanding.scene||'').trim()||identity;
-  const hookType=String(understanding.scene||'').trim()?'scene':'identity';
-  const variant={index:1,hookType,hook,text:copy.text};
+  // Rich wording is allowed only when structured copy independently understands the
+  // product. Otherwise publish a neutral identity + exact-spec copy, with no inferred
+  // benefit, outcome, audience or use case.
+  const useStructuredText=structuredSafe&&structuredFacts.length>0;
+  const text=useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice);
+  if(!String(text||'').trim()||structured.RISK.test(text)) return null;
+  const hook=useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity;
+  const hookType=hook===identity?'identity':'scene';
+  const variant={index:1,hookType,hook,text};
   return {
     ok:true,pending:false,retryAfterMs:0,phase:'local',
     version:'super-urenavi-v3-conditional-preview',model:'local',
-    productType:{specific:identity,general:understanding.domain||identity,quote:identity,valid:true},
+    productType:{specific:identity,general:(structuredSafe&&understanding.domain)||identity,quote:identity,valid:true},
     attributes:facts.map((f,index)=>({name:f.kind||'fact',value:f.quote,unit:'',qualifier:'',valueType:'text',quote:f.quote,sourceIndex:index})),
     decisionAxes:[],
     verifiedAppeals:directAppeals.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0&&hookType==='scene'?hook:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
     groq:{pass1Calls:0,pass2Calls:0,totalCalls:0},
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
-    quality:{status:'ready',text:copy.text,reasons:[]},
+    quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:copy.version,method,factCount:facts.length,valueCount:groundedValues.length}
+    local:{route:'local',version:local.version||copy?.version||'literal-source',method:useStructuredText?structuredMethod:'literal_source',factCount:facts.length,valueCount:groundedValues.length}
   };
 }
 
@@ -131,10 +246,6 @@ function createHandler(deps={}){
         });
       }
 
-      // Normal Preview requests may finish without Groq only when two independent
-      // deterministic paths agree on identity and structured copy has at least one
-      // grounded source fact. Evaluation runs deliberately bypass this route so
-      // model comparisons remain actual model measurements.
       if(!runKey && typeof localFn==='function'){
         const localResult=localFn(item);
         if(localResult){
@@ -218,3 +329,5 @@ module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
+module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
+module.exports.extractLiteralSpecs=extractLiteralSpecs;
