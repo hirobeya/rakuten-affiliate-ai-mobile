@@ -1,6 +1,7 @@
 'use strict';
 
 const test=require('node:test');
+const assert=require('node:assert/strict');
 const unseen=require('./fixtures/room-unseen-products.json');
 const {localZeroCall}=require('../api/room-ai-v3');
 
@@ -15,6 +16,15 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
       text:result?.quality?.text||null
     };
   });
+
+  // Generic safety regressions discovered by the untouched reviewed set:
+  // u02 has a related-product 150kg value in the caption; the current item is about 80kg.
+  // u03 contains H1,375mm in a noisy caption and must never publish a sliced "375mm" fact.
+  const storageBench=rows.find(x=>x.id==='u02');
+  const mopHanger=rows.find(x=>x.id==='u03');
+  assert.ok(!String(storageBench?.text||'').includes('150kg'));
+  assert.ok(!String(mopHanger?.text||'').includes('375mm'));
+
   const zeroCallCount=rows.filter(x=>x.zeroCall).length;
   const report={
     total:rows.length,
