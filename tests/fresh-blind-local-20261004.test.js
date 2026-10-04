@@ -31,14 +31,22 @@ const items=[
   }
 ];
 
-test('first blind failures are fixed by one category-independent grounded rule',()=>{
+test('first blind regressions remain safe after tighter zero-call fact boundary',()=>{
   const results=items.map(item=>({id:item.id,result:localZeroCall(item)}));
   console.log('FRESH_BLIND_LOCAL_20261004_REGRESSION '+JSON.stringify(results));
-  for(const row of results){
-    assert.ok(row.result,row.id+' should now use the zero-call route');
+
+  // These two still contain independently bounded facts in the title.
+  for(const row of results.slice(0,2)){
+    assert.ok(row.result,row.id+' should keep the safe zero-call route');
     assert.equal(row.result.groq.totalCalls,0);
     assert.equal(row.result.quality.status,'ready');
     assert.ok(row.result.attributes.length>=1);
     assert.ok(row.result.quality.text.includes(row.result.productType.specific));
   }
+
+  // "11.6~13.3インチノートPC" attaches the numeric unit directly to a noun.
+  // The stricter generic boundary deliberately defers this semantic attachment to AI
+  // rather than weakening the guard that blocks cases such as "5gプロペラ".
+  const laptop=results[2];
+  assert.equal(laptop.result,null,'noun-attached numeric specification should safely defer to AI');
 });
