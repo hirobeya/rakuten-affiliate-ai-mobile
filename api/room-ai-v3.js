@@ -8,7 +8,7 @@ const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
-const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
+const {repeatedLiteralIdentity,leadingCompoundIdentity}=require('../lib/repeated-literal-identity');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
@@ -207,11 +207,21 @@ function localZeroCall(item){
     if(literalAt>=0&&(ruleAt<0||literalAt<ruleAt)) local=literalLocal;
   }
 
-  const sourceIdentity=String(local?.raw?.productType?.value||'').trim();
-  const identity=String(local?.canonicalIdentity||sourceIdentity).trim();
-  const identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
+  let sourceIdentity=String(local?.raw?.productType?.value||'').trim();
+  let identity=String(local?.canonicalIdentity||sourceIdentity).trim();
+  let identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
-  if(hasCompetingCompoundIdentity(title,identity)) return null;
+  if(hasCompetingCompoundIdentity(title,identity)){
+    const rescue=leadingCompoundIdentity(item);
+    const rescueSource=String(rescue?.raw?.productType?.value||'').trim();
+    const rescueIdentity=String(rescue?.canonicalIdentity||rescueSource).trim();
+    const rescueQuote=String(rescue?.raw?.productType?.evidence||rescueSource).trim();
+    if(!rescueIdentity || rescue?.validation?.productType?.valid!==true || hasCompetingCompoundIdentity(title,rescueIdentity)) return null;
+    local=rescue;
+    sourceIdentity=rescueSource;
+    identity=rescueIdentity;
+    identityQuote=rescueQuote;
+  }
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
