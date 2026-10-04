@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createV3Groq,capCaption,callStructured}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,capCaption,callStructured,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
 
 function response(payload,{status=200}={}){
   return {
@@ -12,6 +12,11 @@ function response(payload,{status=200}={}){
 }
 
 (async()=>{
+  assert.match(SEMANTIC_WRITER_PROMPT,/natural, complete Japanese sentence/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/verbatim, character-for-character/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/do NOT force copying/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/negation, conditions, exclusions, degree/i);
+
   const calls=[];
   const fetchImpl=async(url,opts)=>{
     calls.push({url,body:JSON.parse(opts.body)});
