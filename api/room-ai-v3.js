@@ -80,21 +80,56 @@ function validateLiteralIdentity(item,value){
   return {raw,validation,version:(localTypeData.version||'local-types')+'-literal-source'};
 }
 
+function separatedKnownIdentity(item){
+  const title=normalize(item?.itemName);
+  if(!title) return null;
+  const hits=[];
+  for(const canonical of (localTypeData.productTypes||[]).map(normalize).filter(Boolean)){
+    const chars=[...canonical];
+    if(chars.length<4) continue;
+    const escaped=chars.map(ch=>ch.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    const re=new RegExp(escaped.join('\\s*'),'g');
+    let match;
+    while((match=re.exec(title))){
+      const source=normalize(match[0]);
+      if(!/\s/.test(source)) break;
+      const validated=validateLiteralIdentity(item,source);
+      if(validated){
+        validated.canonicalIdentity=canonical;
+        validated.matchIndex=match.index;
+        hits.push(validated);
+      }
+      if(!match[0].length) re.lastIndex++;
+    }
+  }
+  return hits.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0]||null;
+}
+
 function resolveLiteralIdentity(item){
   const title=normalize(item?.itemName);
   if(!title) return null;
+  const candidates=[];
+  const separated=separatedKnownIdentity(item);
+  if(separated) candidates.push(separated);
+
   const known=(localTypeData.productTypes||[])
     .map(normalize).filter(Boolean)
     .map(type=>({type,at:title.indexOf(type)}))
     .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
     .sort((a,b)=>a.at-b.at||b.type.length-a.type.length);
 
-  // When the conservative dictionary resolver rejects a title only because multiple
-  // concrete product nouns are present, the leading source noun is allowed if it is
-  // itself an exact, independently valid product type. No synonym is invented.
+  // Exact and whitespace-separated spellings are compared by source position. This
+  // prevents a later generic noun from overriding an earlier, more specific product
+  // identity while keeping every accepted identity grounded in the title text.
   for(const hit of known){
     const validated=validateLiteralIdentity(item,hit.type);
-    if(validated) return validated;
+    if(!validated) continue;
+    validated.canonicalIdentity=hit.type;
+    validated.matchIndex=hit.at;
+    candidates.push(validated);
+  }
+  if(candidates.length){
+    return candidates.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0];
   }
 
   // For unseen wording such as "パソコンスタンド", derive only the noun ending
@@ -157,8 +192,21 @@ function neutralLiteralText(identity,facts,itemPrice){
 }
 
 function localZeroCall(item){
-  const local=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption})||resolveLiteralIdentity(item);
-  const identity=String(local?.raw?.productType?.value||'').trim();
+  const title=normalize(item?.itemName);
+  const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
+  const literalLocal=resolveLiteralIdentity(item);
+  let local=ruleLocal||literalLocal;
+
+  if(ruleLocal&&literalLocal){
+    const ruleEvidence=normalize(ruleLocal?.raw?.productType?.evidence||ruleLocal?.raw?.productType?.value);
+    const ruleAt=ruleEvidence?title.indexOf(ruleEvidence):-1;
+    const literalAt=Number.isInteger(literalLocal.matchIndex)?literalLocal.matchIndex:title.indexOf(normalize(literalLocal?.raw?.productType?.evidence||literalLocal?.raw?.productType?.value));
+    if(literalAt>=0&&(ruleAt<0||literalAt<ruleAt)) local=literalLocal;
+  }
+
+  const sourceIdentity=String(local?.raw?.productType?.value||'').trim();
+  const identity=String(local?.canonicalIdentity||sourceIdentity).trim();
+  const identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
 
   // Rich local copy is also title-only. The full caption remains available to the AI
@@ -207,7 +255,7 @@ function localZeroCall(item){
   return {
     ok:true,pending:false,retryAfterMs:0,phase:'local',
     version:'super-urenavi-v3-conditional-preview',model:'local',
-    productType:{specific:identity,general:(structuredSafe&&understanding.domain)||identity,quote:identity,valid:true},
+    productType:{specific:identity,general:(structuredSafe&&understanding.domain)||identity,quote:identityQuote,valid:true},
     attributes:facts.map((f,index)=>({name:f.kind||'fact',value:f.quote,unit:'',qualifier:'',valueType:'text',quote:f.quote,sourceIndex:index})),
     decisionAxes:[],
     verifiedAppeals:directAppeals.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0&&hookType==='scene'?hook:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
