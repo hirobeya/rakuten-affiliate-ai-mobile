@@ -19,9 +19,13 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
 
   // Generic safety regressions discovered by the untouched reviewed set:
   // u02 has a related-product 150kg value in the caption; the current item is about 80kg.
+  // Its title also says "収納 ベンチ" before the later "収納ボックス", so the earlier
+  // grounded product identity must win without adding a product-specific branch.
   // u03 contains H1,375mm in a noisy caption and must never publish a sliced "375mm" fact.
   const storageBench=rows.find(x=>x.id==='u02');
   const mopHanger=rows.find(x=>x.id==='u03');
+  assert.equal(storageBench?.productType,'収納ベンチ');
+  assert.ok(String(storageBench?.text||'').startsWith('収納ベンチ'));
   assert.ok(!String(storageBench?.text||'').includes('150kg'));
   assert.ok(!String(mopHanger?.text||'').includes('375mm'));
 
