@@ -9,6 +9,7 @@ const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity,leadingCompoundIdentity}=require('../lib/repeated-literal-identity');
+const {selectLocalIdentity}=require('../lib/local-identity-arbitrator');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
@@ -197,31 +198,22 @@ function localZeroCall(item){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
   const literalLocal=resolveLiteralIdentity(item);
-  const repeatedLocal=(!ruleLocal&&!literalLocal)?repeatedLiteralIdentity(item):null;
-  let local=ruleLocal||literalLocal||repeatedLocal;
+  const repeatedLocal=repeatedLiteralIdentity(item);
+  let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
 
-  if(ruleLocal&&literalLocal){
-    const ruleEvidence=normalize(ruleLocal?.raw?.productType?.evidence||ruleLocal?.raw?.productType?.value);
-    const ruleAt=ruleEvidence?title.indexOf(ruleEvidence):-1;
-    const literalAt=Number.isInteger(literalLocal.matchIndex)?literalLocal.matchIndex:title.indexOf(normalize(literalLocal?.raw?.productType?.evidence||literalLocal?.raw?.productType?.value));
-    if(literalAt>=0&&(ruleAt<0||literalAt<ruleAt)) local=literalLocal;
+  if(!local){
+    const rescue=leadingCompoundIdentity(item);
+    if(rescue?.validation?.productType?.valid===true){
+      const rescueIdentity=String(rescue?.canonicalIdentity||rescue?.raw?.productType?.value||'').trim();
+      if(rescueIdentity&&!hasCompetingCompoundIdentity(title,rescueIdentity)) local=rescue;
+    }
   }
 
   let sourceIdentity=String(local?.raw?.productType?.value||'').trim();
   let identity=String(local?.canonicalIdentity||sourceIdentity).trim();
   let identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
-  if(hasCompetingCompoundIdentity(title,identity)){
-    const rescue=leadingCompoundIdentity(item);
-    const rescueSource=String(rescue?.raw?.productType?.value||'').trim();
-    const rescueIdentity=String(rescue?.canonicalIdentity||rescueSource).trim();
-    const rescueQuote=String(rescue?.raw?.productType?.evidence||rescueSource).trim();
-    if(!rescueIdentity || rescue?.validation?.productType?.valid!==true || hasCompetingCompoundIdentity(title,rescueIdentity)) return null;
-    local=rescue;
-    sourceIdentity=rescueSource;
-    identity=rescueIdentity;
-    identityQuote=rescueQuote;
-  }
+  if(hasCompetingCompoundIdentity(title,identity)) return null;
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
@@ -292,7 +284,7 @@ function localZeroCall(item){
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null}
+    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null,arbitration:local.arbitration||null}
   };
 }
 
