@@ -70,3 +70,26 @@ test('generic two-character prefix with weak repetition never promotes an unknow
   const out=repeatedLiteralIdentity(item);
   assert.ok(!out||out.canonicalIdentity!=='電動鉛筆削り');
 });
+
+test('two independent later tokens can support different parts of a specific leading identity',()=>{
+  const item={
+    itemName:'電動鉛筆削り えんぴつシャープナー 2削り穴 電池式 自動オフ 電動 小型 安全 小学生 色鉛筆 デッサン',
+    itemCaption:''
+  };
+  const out=repeatedLiteralIdentity(item);
+  assert.ok(out);
+  assert.equal(out.canonicalIdentity,'電動鉛筆削り');
+  assert.equal(out.identityHypothesis?.method,'distributed_leading_support');
+  assert.ok(out.identityHypothesis?.supportSegments.includes('電動'));
+  assert.ok(out.identityHypothesis?.supportSegments.includes('鉛筆'));
+  assert.ok(out.identityHypothesis?.coverage>=0.5);
+});
+
+test('company-like leading names are never promoted by distributed support',()=>{
+  const item={
+    itemName:'山崎実業 山崎 収納ラック 実業 ホワイト 収納',
+    itemCaption:''
+  };
+  const out=repeatedLiteralIdentity(item);
+  assert.ok(!out||out.canonicalIdentity!=='山崎実業');
+});
