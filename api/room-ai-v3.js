@@ -111,7 +111,10 @@ function resolveLiteralIdentity(item){
 }
 
 function extractLiteralSpecs(item){
-  const parts=[{source:'itemName',text:normalize(item?.itemName)},{source:'itemCaption',text:normalize(item?.itemCaption)}].filter(x=>x.text);
+  // Zero-call publication is intentionally stricter than AI analysis. Rakuten captions
+  // frequently contain related-product carousels and alternative specs, so a local
+  // publication fact must come from the product title itself. Caption facts go to Groq.
+  const parts=[{source:'itemName',text:normalize(item?.itemName)}].filter(x=>x.text);
   const out=[];
   const patterns=[
     /\d+(?:\.\d+)?\s*(?:~|〜|～|-)\s*\d+(?:\.\d+)?\s*(?:mAh|Ah|Wh|W|V|A|mm|cm|kg|g|ml|mL|L|GB|インチ)/gi,
@@ -125,6 +128,13 @@ function extractLiteralSpecs(item){
       let match;
       while((match=re.exec(part.text))){
         const quote=normalize(match[0]);
+        const start=match.index;
+        const end=start+match[0].length;
+        const before=part.text.slice(Math.max(0,start-1),start);
+        const after=part.text.slice(end,end+1);
+        // Never publish a numeric suffix cut from a larger number (H1,375mm), a
+        // component cut from a dimension, or a count cut from a compound word (12本掛).
+        if(/[0-9０-９.,，×xX]$/.test(before)||/^[0-9０-９A-Za-zぁ-んァ-ヶ一-龯×xX]/.test(after)) continue;
         if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
         out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote)?'count':'numeric'});
       }
@@ -149,7 +159,11 @@ function localZeroCall(item){
   const identity=String(local?.raw?.productType?.value||'').trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
 
-  const copy=structured.compose(item,{identity});
+  // Rich local copy is also title-only. The full caption remains available to the AI
+  // fallback, but never gets a zero-call publication path where related products could
+  // be mistaken for the current product.
+  const titleOnlyItem={...item,itemCaption:''};
+  const copy=structured.compose(titleOnlyItem,{identity});
   const understanding=copy?.understanding||{};
   const structuredMethod=String(understanding?.method||'');
   const structuredIdentity=String(understanding?.identity||'').trim();
@@ -160,7 +174,7 @@ function localZeroCall(item){
     && !structured.RISK.test(copy.text);
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
-  const literalFacts=extractLiteralSpecs(item);
+  const literalFacts=extractLiteralSpecs(titleOnlyItem);
   const facts=[];
   for(const fact of [...structuredFacts,...literalFacts]){
     if(!fact?.quote||facts.some(x=>normalize(x.quote).toLowerCase()===normalize(fact.quote).toLowerCase())) continue;
