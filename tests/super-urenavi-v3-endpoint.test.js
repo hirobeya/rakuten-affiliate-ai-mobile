@@ -74,7 +74,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
 
     {
       const calls={pass1:0,pass2:0};
-      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1Direct,pass2,{calls})});
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,localZeroCall:()=>null,groq:groqMock(pass1Direct,pass2,{calls})});
       const res=mockRes();
       await handler({method:'POST',body:baseItem},res);
       assert.equal(res.code,200);
@@ -87,7 +87,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
 
     {
       const calls={pass1:0,pass2:0};
-      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1NeedsReview,pass2,{calls})});
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,localZeroCall:()=>null,groq:groqMock(pass1NeedsReview,pass2,{calls})});
       const res=mockRes();
       await handler({method:'POST',body:baseItem},res);
       assert.equal(res.code,200);
