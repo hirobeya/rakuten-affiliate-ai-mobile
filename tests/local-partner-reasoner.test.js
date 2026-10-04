@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
-const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy}=require('../lib/local-generic-reasoner');
+const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile}=require('../lib/local-generic-reasoner');
 
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
@@ -163,4 +163,44 @@ test('extendable wording avoids awkward double specification while preserving ex
   assert.equal(candidate.body,'伸縮式の自撮り棒です。');
   const embedded=candidateFromFact({quote:'伸縮'},'伸縮ラック');
   assert.equal(embedded.body,'伸縮ラックです。');
+});
+
+test('explicit capacity label gives an unknown product a safe semantic axis without exaggeration',()=>{
+  const source='保存コンテナ 容量 10L 透明';
+  const out=composeGenericLocalCopy({identity:'保存コンテナ',facts:[{quote:'容量 10L'}],itemName:source});
+  assert.ok(out);
+  assert.equal(out.axis,'容量');
+  assert.match(out.text,/容量まで見て選ぶなら/);
+  assert.match(out.text,/容量 10L表記の保存コンテナ/);
+  assert.doesNotMatch(out.text,/大容量|たっぷり|たくさん入る/);
+});
+
+test('explicit dimension label gives semantic size meaning but no use-case claim',()=>{
+  const source='折りたたみ踏み台 高さ 39cm アルミ';
+  const out=composeGenericLocalCopy({identity:'折りたたみ踏み台',facts:[{quote:'高さ 39cm'}],itemName:source});
+  assert.ok(out);
+  assert.equal(out.axis,'サイズ');
+  assert.match(out.text,/サイズまで見て選ぶなら/);
+  assert.doesNotMatch(out.text,/高い所|届きやす|乗りやす|安全/);
+});
+
+test('explicit weight label is understood as weight but never turned into portability',()=>{
+  const source='測定器 重量 1.2kg ブラック';
+  const out=composeGenericLocalCopy({identity:'測定器',facts:[{quote:'重量 1.2kg'}],itemName:source});
+  assert.ok(out);
+  assert.equal(out.axis,'重量');
+  assert.match(out.text,/重さまで見て選ぶなら/);
+  assert.doesNotMatch(out.text,/軽い|軽量|持ち運び|携帯/);
+});
+
+test('semantic profile records dominant meaning and evidence breadth for unknown products',()=>{
+  const identity='テストライト';
+  const source='テストライト 角度調整 リモコン付き USB-C';
+  const candidates=['角度調整','リモコン付き','USB-C'].map(quote=>candidateFromFact({quote},identity)).filter(Boolean);
+  const profile=semanticProfile(candidates,{source,identity});
+  assert.equal(profile.status,'clear');
+  assert.equal(profile.dominantFamily,'adjustability');
+  assert.ok(profile.secondaryFamilies.includes('control'));
+  assert.equal(profile.evidenceCount,3);
+  assert.ok(profile.breadth>=2);
 });
