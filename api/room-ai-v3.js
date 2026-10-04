@@ -6,6 +6,8 @@ const {analyzeProductV3}=require('../lib/super-urenavi-v3-engine');
 const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
+const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
+const structured=require('../public/structured-room-copy');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -37,11 +39,43 @@ async function consumeQuota(stage){
   return allowed;
 }
 
+function localZeroCall(item){
+  const local=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
+  const identity=String(local?.raw?.productType?.value||'').trim();
+  if(!identity || local?.validation?.productType?.valid!==true) return null;
+
+  const copy=structured.compose(item,{identity});
+  const understanding=copy?.understanding||{};
+  if(copy?.status!=='ok' || understanding?.method!=='type_definition') return null;
+  if(String(understanding.identity||'').trim()!==identity) return null;
+  if(!String(understanding.scene||'').trim()) return null;
+  if(!Array.isArray(copy.values) || copy.values.length<1) return null;
+  if(!copy.values.some(v=>String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length)) return null;
+  if(!String(copy.text||'').trim() || structured.RISK.test(copy.text)) return null;
+
+  const facts=Array.isArray(copy.facts)?copy.facts:[];
+  const variant={index:1,hookType:'scene',hook:understanding.scene,text:copy.text};
+  return {
+    ok:true,pending:false,retryAfterMs:0,phase:'local',
+    version:'super-urenavi-v3-conditional-preview',model:'local',
+    productType:{specific:identity,general:understanding.domain||identity,quote:identity,valid:true},
+    attributes:facts.map((f,index)=>({name:f.kind||'fact',value:f.quote,unit:'',qualifier:'',valueType:'text',quote:f.quote,sourceIndex:index})),
+    decisionAxes:[],
+    verifiedAppeals:copy.values.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0?understanding.scene:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
+    groq:{pass1Calls:0,pass2Calls:0,totalCalls:0},
+    cacheStatus:'local',pass2Status:'not_needed',tier:'A',
+    quality:{status:'ready',text:copy.text,reasons:[]},
+    variants:[variant],
+    local:{route:'local',version:copy.version,method:understanding.method,factCount:facts.length,valueCount:copy.values.length}
+  };
+}
+
 function createHandler(deps={}){
   const authorizeFn=deps.authorize||authorize;
   const baseStore=deps.store||createCacheStore(db);
   const store=deps.namespaced===false?baseStore:namespacedStore(baseStore);
   const quotaFn=deps.consumeQuota||consumeQuota;
+  const localFn=deps.localZeroCall===undefined?localZeroCall:deps.localZeroCall;
 
   return async function handler(req,res){
     if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
@@ -79,12 +113,28 @@ function createHandler(deps={}){
         });
       }
 
+      // Normal Preview requests may finish without Groq only when two independent
+      // deterministic paths agree on identity and structured copy has at least one
+      // grounded functional sentence. Evaluation runs deliberately bypass this route
+      // so model comparisons remain actual model measurements.
+      if(!runKey && typeof localFn==='function'){
+        const localResult=localFn(item);
+        if(localResult){
+          localResult.metric=logAiUsageMetric({
+            route:'local',cacheStatus:'local',pass1Calls:0,pass2Calls:0,imageCalls:0,
+            outputTier:localResult.tier,hookType:'scene',decisionAxis:'',
+            machineValidationPassed:true,copied:false,elapsedMs:Date.now()-started
+          });
+          return json(res,200,localResult);
+        }
+      }
+
       let groq=deps.groq;
       if(!groq){
+        const createGroq=deps.createGroq||createV3Groq;
         const apiKey=String(process.env.GROQ_API_KEY||'').trim();
-        const factory=deps.createGroq||createV3Groq;
-        if(!deps.createGroq&&!apiKey) return json(res,503,{message:'GROQ_API_KEY is not configured'});
-        groq=factory({apiKey,model});
+        if(!apiKey && !deps.createGroq) return json(res,503,{message:'GROQ_API_KEY is not configured'});
+        groq=createGroq({apiKey,model});
       }
 
       const analysis=await analyzeProductV3({
@@ -149,3 +199,4 @@ function createHandler(deps={}){
 module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
+module.exports.localZeroCall=localZeroCall;
