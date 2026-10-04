@@ -3,18 +3,29 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 
-test('electric kettle turns exact capacity into a purchase-intent angle without inventing speed',()=>{
+test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
   const out=composeLocalPartnerCopy({itemName:title,identity:'電気ケトル',itemPrice:3759});
   assert.ok(out);
   assert.equal(out.quote,'1.2L');
-  assert.match(out.text,/使う量や容量を見て選びたいとき/);
+  assert.match(out.text,/飲み物や調理用のお湯を沸かしたいとき、容量も見て選ぶなら/);
   assert.match(out.text,/1\.2L容量の電気ケトル/);
   assert.doesNotMatch(out.text,/速|スピード|すぐ沸/);
   assert.equal(out.generic,false);
+  assert.equal(out.hookType,'product_scene');
 });
 
-test('motorcycle glove uses parked smartphone intent and never driving operation',()=>{
+test('mobile battery combines real product scene with capacity choice and never invents charge count',()=>{
+  const title='モバイルバッテリー 23600mAh USB-C ブラック';
+  const out=composeLocalPartnerCopy({itemName:title,identity:'モバイルバッテリー'});
+  assert.ok(out);
+  assert.equal(out.quote,'23600mAh');
+  assert.match(out.text,/外出先で機器を充電したいとき、容量も見て選ぶなら/);
+  assert.match(out.text,/23600mAh容量のモバイルバッテリー/);
+  assert.doesNotMatch(out.text,/\d+回充電|何回|フル充電|急速/);
+});
+
+test('motorcycle glove preserves parked smartphone safety intent over generic riding scene',()=>{
   const title='バイクグローブ 夏用 メッシュ ライディンググローブ スマホ対応 バイク 手袋';
   const out=composeLocalPartnerCopy({itemName:title,identity:'バイクグローブ'});
   assert.ok(out);
@@ -22,6 +33,7 @@ test('motorcycle glove uses parked smartphone intent and never driving operation
   assert.match(out.text,/停車中/);
   assert.doesNotMatch(out.text,/走行中|運転中/);
   assert.equal(out.generic,false);
+  assert.equal(out.hookType,'scene');
 });
 
 test('component weight such as 5g propeller is not promoted into a product benefit',()=>{
