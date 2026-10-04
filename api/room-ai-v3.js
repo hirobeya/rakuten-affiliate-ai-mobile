@@ -10,6 +10,7 @@ const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
+const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 
@@ -162,9 +163,6 @@ function extractLiteralSpecs(item){
         const after=part.text.slice(end,end+1);
         const isCount=/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote);
         if(/[0-9０-９A-Za-z.,，_+×xX-]$/.test(before)||/^[0-9０-９A-Za-z×xX]/.test(after)) continue;
-        // A bare number+unit immediately attached to a Japanese noun is usually a
-        // component/model phrase (e.g. "5gプロペラ"), not a publishable product spec.
-        // Ambiguous cases are intentionally left for Groq instead of being sliced.
         if(/^[ぁ-んァ-ヶ一-龯]/.test(after)) continue;
         if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
         out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':isCount?'count':'numeric'});
@@ -228,6 +226,7 @@ function localZeroCall(item){
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
+  const partnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,identity,itemPrice:item.itemPrice});
   const facts=[];
   const semanticFactKeys=new Set();
   for(const fact of [...structuredFacts,...literalFacts]){
@@ -239,43 +238,51 @@ function localZeroCall(item){
     if(volume) semanticFactKeys.add(volume);
     facts.push(fact);
   }
+  if(partnerCopy?.quote){
+    const exact='exact:'+normalize(partnerCopy.quote).toLowerCase();
+    if(!semanticFactKeys.has(exact)){
+      semanticFactKeys.add(exact);
+      facts.unshift({quote:partnerCopy.quote,source:'itemName',kind:'partner_signal'});
+    }
+  }
   if(!facts.length) return null;
-  // A zero-call post must contain at least one decision-useful fact. Origin alone is
-  // safe metadata but too weak to complete a ROOM post; let Groq inspect the caption.
   if(facts.every(f=>/^(?:日本製)$/.test(normalize(f.quote)))) return null;
 
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
-  const directAppeals=groundedValues.length?groundedValues:facts.slice(0,3).map(f=>({
+  const directAppeals=partnerCopy?[{
+    text:partnerCopy.hook+'。'+partnerCopy.quote,
+    factRef:partnerCopy.quote,
+    factRefs:[partnerCopy.quote],
+    source:'itemName'
+  }]:(groundedValues.length?groundedValues:facts.slice(0,3).map(f=>({
     text:'仕様：'+f.quote,
     factRef:f.quote,
     factRefs:[f.quote],
     source:f.source
-  }));
+  })));
   if(!directAppeals.length) return null;
 
-  const useStructuredText=structuredSafe&&structuredFacts.length>0;
-  let text=useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice);
-  // Structured text may contain two equivalent volume spellings even after fact
-  // deduplication. If so, fall back to the neutral text generated from deduped facts.
+  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0;
+  let text=partnerCopy?.text||(useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice));
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   if(!String(text||'').trim()||structured.RISK.test(text)) return null;
-  const hook=useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity;
-  const hookType=hook===identity?'identity':'scene';
+  const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
+  const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};
   return {
     ok:true,pending:false,retryAfterMs:0,phase:'local',
     version:'super-urenavi-v3-conditional-preview',model:'local',
     productType:{specific:identity,general:(structuredSafe&&understanding.domain)||identity,quote:identityQuote,valid:true},
     attributes:facts.map((f,index)=>({name:f.kind||'fact',value:f.quote,unit:'',qualifier:'',valueType:'text',quote:f.quote,sourceIndex:index})),
-    decisionAxes:[],
-    verifiedAppeals:directAppeals.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0&&hookType==='scene'?hook:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
+    decisionAxes:partnerCopy?.axisHints||[],
+    verifiedAppeals:directAppeals.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0&&hookType==='scene'?hook:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:partnerCopy?'local_partner_grounded_angle':'local_grounded_fact'}})),
     groq:{pass1Calls:0,pass2Calls:0,totalCalls:0},
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:local.version||copy?.version||'literal-source',method:useStructuredText?structuredMethod:'literal_source',factCount:facts.length,valueCount:groundedValues.length}
+    local:{route:'local',version:partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null}
   };
 }
 
