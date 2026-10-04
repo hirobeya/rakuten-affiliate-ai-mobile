@@ -31,10 +31,14 @@ function json(res,status,body){
 
 function namespacedStore(base){
   const keyArgs=x=>({...x,itemCode:PREVIEW_NAMESPACE+String(x?.itemCode||'')});
-  return {
+  const out={
     loadProduct:x=>base.loadProduct(keyArgs(x)),
     saveProduct:x=>base.saveProduct(keyArgs(x))
   };
+  if(typeof base.loadTypeKnowledge==='function') out.loadTypeKnowledge=x=>base.loadTypeKnowledge(x);
+  if(typeof base.saveTypeKnowledge==='function') out.saveTypeKnowledge=x=>base.saveTypeKnowledge(x);
+  if(typeof base.findTypeIdentityInTitle==='function') out.findTypeIdentityInTitle=x=>base.findTypeIdentityInTitle(x);
+  return out;
 }
 
 async function consumeQuota(stage){
@@ -194,7 +198,7 @@ function neutralLiteralText(identity,facts,itemPrice){
   return rows.join('\n');
 }
 
-function localZeroCall(item){
+function localZeroCall(item,learnedIdentity=''){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
   const literalLocal=resolveLiteralIdentity(item);
@@ -206,6 +210,17 @@ function localZeroCall(item){
     if(rescue?.validation?.productType?.valid===true){
       const rescueIdentity=String(rescue?.canonicalIdentity||rescue?.raw?.productType?.value||'').trim();
       if(rescueIdentity&&!hasCompetingCompoundIdentity(title,rescueIdentity)) local=rescue;
+    }
+  }
+
+  if(!local&&normalize(learnedIdentity)){
+    const learned=validateLiteralIdentity(item,learnedIdentity);
+    if(learned){
+      learned.canonicalIdentity=normalize(learnedIdentity);
+      learned.matchIndex=title.indexOf(learned.canonicalIdentity);
+      learned.identityHypothesis={method:'learned_verified_type',supportCount:1};
+      learned.version='2026-10-05-learned-verified-type-v1';
+      local=learned;
     }
   }
 
@@ -284,8 +299,31 @@ function localZeroCall(item){
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null,arbitration:local.arbitration||null}
+    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null,arbitration:local.arbitration||null,learnedIdentity:local?.identityHypothesis?.method==='learned_verified_type'?identity:null}
   };
+}
+
+async function rememberValidatedIdentity(store,analysis,model=''){
+  const type=normalize(analysis?.validation?.productType?.specific||'');
+  if(!analysis?.ok||analysis?.validation?.productType?.valid!==true||[...type].length<4) return {status:'skipped',productType:''};
+  if(typeof store?.loadTypeKnowledge!=='function'||typeof store?.saveTypeKnowledge!=='function') return {status:'unsupported',productType:type};
+  try{
+    const existing=await store.loadTypeKnowledge(type);
+    const identityOnly=existing?.validation_status==='pending'&&existing?.raw_ai_json?.identityLearned===true;
+    if(existing?.validation_status==='valid'||identityOnly) return {status:'hit',productType:type};
+    await store.saveTypeKnowledge({
+      productType:type,
+      model:String(model||''),
+      promptVersion:'2026-10-05-v3-verified-identity-v1',
+      schemaVersion:'product_type_identity_v1',
+      rawAiJson:{productType:type,identityLearned:true,source:'v3_verified_product'},
+      validationStatus:'pending'
+    });
+    return {status:'stored',productType:type};
+  }catch(error){
+    console.warn('super-urenavi-v3 learned identity unavailable',error?.message||'unknown');
+    return {status:'unavailable',productType:type};
+  }
 }
 
 function createHandler(deps={}){
@@ -294,6 +332,8 @@ function createHandler(deps={}){
   const store=deps.namespaced===false?baseStore:namespacedStore(baseStore);
   const quotaFn=deps.consumeQuota||consumeQuota;
   const localFn=deps.localZeroCall===undefined?localZeroCall:deps.localZeroCall;
+  const analyzeFn=deps.analyzeProductV3||analyzeProductV3;
+  const composeFn=deps.composeVariants||composeVariants;
 
   return async function handler(req,res){
     if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
@@ -332,8 +372,14 @@ function createHandler(deps={}){
       }
 
       if(!runKey && typeof localFn==='function'){
-        const localResult=localFn(item);
+        let learnedIdentity='';
+        let localResult=localFn(item);
+        if(!localResult&&typeof store.findTypeIdentityInTitle==='function'){
+          try{learnedIdentity=await store.findTypeIdentityInTitle(item.itemName);}catch(error){console.warn('super-urenavi-v3 learned identity lookup unavailable',error?.message||'unknown');}
+          if(learnedIdentity) localResult=localFn(item,learnedIdentity);
+        }
         if(localResult){
+          if(learnedIdentity&&localResult.local) localResult.local.learnedIdentity=learnedIdentity;
           localResult.metric=logAiUsageMetric({
             route:'local',cacheStatus:'local',pass1Calls:0,pass2Calls:0,imageCalls:0,
             outputTier:localResult.tier,hookType:localResult.variants?.[0]?.hookType||'none',decisionAxis:'',
@@ -351,13 +397,14 @@ function createHandler(deps={}){
         groq=createGroq({apiKey,model});
       }
 
-      const analysis=await analyzeProductV3({
+      const analysis=await analyzeFn({
         item,store,model,consumeQuota:quotaFn,
         callPass1:groq.callPass1,
         callPass2:groq.callPass2,
         deferPass2:false
       });
-      const copy=composeVariants({item,analysis});
+      const learnedIdentity=runKey?{status:'skipped',productType:''}:await rememberValidatedIdentity(store,analysis,model);
+      const copy=composeFn({item,analysis});
       const metric=logAiUsageMetric({
         route:analysis.source,
         cacheStatus:analysis.cacheStatus,
@@ -389,6 +436,7 @@ function createHandler(deps={}){
         tier:copy.tier,
         quality:{status:copy.tier==='A'?'ready':'blocked',text:copy.variants[0]?.text||'',reasons:copy.reasons||[]},
         variants:copy.variants,
+        learnedIdentity,
         metric
       });
     }catch(error){
@@ -416,3 +464,4 @@ module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
+module.exports.rememberValidatedIdentity=rememberValidatedIdentity;
