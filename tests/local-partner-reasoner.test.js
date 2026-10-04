@@ -2,6 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
+const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy}=require('../lib/local-generic-reasoner');
 
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
@@ -84,6 +85,9 @@ test('unknown exact identity combines explicit extendable structure with exact r
   assert.match(out.text,/長さを変えて使いたいなら/);
   assert.match(out.text,/伸縮式で、最大130cm表記の自撮り棒/);
   assert.doesNotMatch(out.text,/集合写真|遠くから|映える|撮影が楽|撮りやす/);
+  assert.equal(out.decision.meaningBundle.family,'adjustability');
+  assert.equal(out.decision.meaningBundle.evidenceCount,2);
+  assert.equal(out.decision.hypothesisStatus,'clear');
 });
 
 test('explicit height adjustment becomes a natural generic decision axis without inventing comfort',()=>{
@@ -110,4 +114,31 @@ test('negated or excluded purchase feature is never promoted',()=>{
   assert.notEqual(out.quote,'高さ調整');
   assert.notEqual(out.quote,'リモコン');
   assert.doesNotMatch(out.text,/高さを変えて使いたい|操作方法まで見て選ぶ/);
+});
+
+test('family hypotheses compare different meanings instead of only individual facts',()=>{
+  const identity='自撮り棒';
+  const source='自撮り棒 伸縮式 最大130cm 三脚一体型 Bluetooth';
+  const facts=['伸縮式','最大130cm','三脚一体型','Bluetooth'].map(quote=>({quote}));
+  const candidates=facts.map(f=>candidateFromFact(f,identity)).filter(Boolean);
+  const result=resolveCompetingHypotheses(candidates,{source,identity});
+  assert.equal(result.status,'clear');
+  assert.equal(result.winner.family,'adjustability');
+  assert.equal(result.winner.supportCount,2);
+  assert.ok(result.hypotheses.some(x=>x.family==='installation'));
+  assert.ok(result.hypotheses.some(x=>x.family==='control'));
+});
+
+test('near-tied different meaning families defer when neither has stronger evidence',()=>{
+  const identity='テストスタンド';
+  const source='テストスタンド リモコン付き 三脚一体型';
+  const candidates=[
+    {quote:'リモコン付き',axis:'操作方法',hook:'操作方法まで見て選ぶなら',body:'リモコン付きのテストスタンドです。',score:10,kind:'signal'},
+    {quote:'三脚一体型',axis:'設置・構造',hook:'置き方や設置方法まで見て選ぶなら',body:'三脚一体型のテストスタンドです。',score:10,kind:'signal'}
+  ];
+  const result=resolveCompetingHypotheses(candidates,{source,identity});
+  assert.equal(result.status,'close');
+  assert.ok(result.margin<2);
+  const out=composeGenericLocalCopy({identity,facts:[{quote:'リモコン付き'},{quote:'三脚一体型'}],itemName:source});
+  assert.equal(out,null);
 });
