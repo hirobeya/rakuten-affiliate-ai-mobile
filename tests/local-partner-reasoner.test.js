@@ -142,3 +142,25 @@ test('near-tied different meaning families defer when neither has stronger evide
   const out=composeGenericLocalCopy({identity,facts:[{quote:'リモコン付き'},{quote:'三脚一体型'}],itemName:source});
   assert.equal(out,null);
 });
+
+test('folding wording avoids repeating a feature already present in product identity',()=>{
+  const candidate=candidateFromFact({quote:'折りたたみ'},'折りたたみチェア');
+  assert.ok(candidate);
+  assert.equal(candidate.body,'折りたたみチェアです。');
+  assert.doesNotMatch(candidate.body,/折りたたみ仕様の折りたたみ/);
+});
+
+test('material wording uses natural Japanese grammar without changing evidence',()=>{
+  assert.equal(candidateFromFact({quote:'木製'},'女優サロンブラシ').body,'木製の女優サロンブラシです。');
+  assert.equal(candidateFromFact({quote:'ステンレス'},'包丁スタンド').body,'ステンレス製の包丁スタンドです。');
+  assert.equal(candidateFromFact({quote:'メッシュ'},'チェアベルト').body,'メッシュ素材のチェアベルトです。');
+  assert.equal(candidateFromFact({quote:'本革'},'バイクグローブ').body,'本革を使ったバイクグローブです。');
+});
+
+test('extendable wording avoids awkward double specification while preserving exact feature',()=>{
+  const candidate=candidateFromFact({quote:'伸縮式'},'自撮り棒');
+  assert.ok(candidate);
+  assert.equal(candidate.body,'伸縮式の自撮り棒です。');
+  const embedded=candidateFromFact({quote:'伸縮'},'伸縮ラック');
+  assert.equal(embedded.body,'伸縮ラックです。');
+});
