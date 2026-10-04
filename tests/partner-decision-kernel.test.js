@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {selectBestCandidate,shouldPublish,evaluateCandidate,scoreCandidate,clichePenalty,axisFamily,purchaseImpactBonus}=require('../lib/partner-decision-kernel');
+const {selectBestCandidate,shouldPublish,evaluateCandidate,scoreCandidate,clichePenalty,axisFamily,purchaseImpactBonus,writingQuality}=require('../lib/partner-decision-kernel');
 
 test('concrete grounded purchase axis outranks weak generic numeric angle',()=>{
   const source='包丁スタンド ステンレス 食洗機対応 日本製 20cm';
@@ -109,6 +109,7 @@ test('independent range evidence reinforces extendable structure when ranking se
   assert.equal(best.decision.confidence,'high');
   assert.equal(best.decision.alternatives.length,3);
   assert.equal(best.decision.alternatives[0].quote,'伸縮');
+  assert.ok(best.decision.diversityFamilies.length>=2);
 });
 
 test('direct adjustment beats connector detail for an unknown adjustable light',()=>{
@@ -122,6 +123,42 @@ test('direct adjustment beats connector detail for an unknown adjustable light',
   assert.ok(best);
   assert.equal(best.quote,'角度調整');
   assert.equal(best.decision.family,'adjustability');
-  assert.ok(best.decision.persuasionScore>best.decision.runnerUpScore);
+  assert.ok(best.decision.totalScore>best.decision.runnerUpScore);
   assert.equal(best.decision.safetyScore,100);
+  assert.ok(best.decision.writingQualityScore>=80);
+});
+
+test('writing self-score detects tautology and cliche without changing safety evidence',()=>{
+  const context={identity:'折りたたみチェア'};
+  const awkward={quote:'折りたたみ',axis:'収納形態',hook:'毎日をもっと快適に',body:'折りたたみ仕様の折りたたみチェアです。'};
+  const natural={quote:'折りたたみ',axis:'収納形態',hook:'折りたためる形で選びたいなら',body:'折りたたみできるチェアです。'};
+  const a=writingQuality(awkward,context);
+  const b=writingQuality(natural,context);
+  assert.ok(a.reasons.includes('cliche'));
+  assert.ok(a.reasons.includes('tautology'));
+  assert.ok(b.score>a.score);
+});
+
+test('diverse alternatives preserve different purchase families instead of three near-duplicates',()=>{
+  const source='自撮り棒 伸縮 最大130cm 三脚一体型 Bluetooth';
+  const candidates=[
+    {quote:'伸縮',axis:'可変構造',hook:'長さを変えて使いたいなら',body:'伸縮仕様の自撮り棒です。',score:11,kind:'signal'},
+    {quote:'最大130cm',axis:'可変範囲',hook:'長さの上限も見て選ぶなら',body:'最大130cm表記の自撮り棒です。',score:10,kind:'numeric'},
+    {quote:'三脚一体型',axis:'設置・構造',hook:'置いて使える構造で選ぶなら',body:'三脚一体型の自撮り棒です。',score:9,kind:'signal'},
+    {quote:'Bluetooth',axis:'接続方式',hook:'接続方式も見て選ぶなら',body:'Bluetooth表記の自撮り棒です。',score:8,kind:'signal'}
+  ];
+  const best=selectBestCandidate(candidates,{source,identity:'自撮り棒'});
+  assert.ok(best);
+  assert.equal(best.decision.alternatives[0].family,'adjustability');
+  assert.ok(best.decision.alternatives.some(x=>x.family==='installation'));
+  assert.ok(best.decision.alternatives.some(x=>x.family==='control'));
+});
+
+test('very poor writing quality is withheld even when the quoted fact is grounded',()=>{
+  const source='バッグ 防水';
+  const bad={quote:'防水',axis:'仕様',hook:'毎日をもっと快適に'.repeat(4),body:'防水仕様の商品です。'.repeat(8),score:20,kind:'signal'};
+  const assessed=evaluateCandidate(bad,{source,identity:'バッグ'});
+  assert.equal(assessed.safetyScore,100);
+  assert.ok(assessed.writingQuality.score<50);
+  assert.equal(assessed.publishable,false);
 });
