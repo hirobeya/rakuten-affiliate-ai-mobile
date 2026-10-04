@@ -46,16 +46,17 @@ test('semantic paraphrase still requires pass2',()=>{
   assert.equal(needsPass2(validation,target),true);
 });
 
-test('positive fragment cut from negative sentence cannot skip pass2',()=>{
+test('positive claim inverted from negative source cannot skip pass2',()=>{
   const target={itemCode:'negative',itemName:'ポーチ',itemCaption:'このポーチは防水ではありません。雨天では使用しないでください。',itemPrice:0};
   const raw={
     semanticDraft:true,
     productType:{specific:'ポーチ',general:'収納用品',quote:'ポーチ'},
     attributes:[{name:'原文根拠1',value:'防水',unit:'',qualifier:'',valueType:'text',quote:'このポーチは防水ではありません。'}],
     decisionAxes:[],hooks:[],
-    appeals:[{text:'防水',noHassle:'',scene:'雨天では使用しないでください。',attributeRefs:[0],strength:3}]
+    appeals:[{text:'防水です。',noHassle:'',scene:'雨天では使用しないでください。',attributeRefs:[0],strength:3}]
   };
   const validation=validateUnderstanding(raw,target);
+  assert.equal(validation.valid,true);
   assert.equal(canSkipPass2WithExactProof(validation,target),false);
   assert.equal(needsPass2(validation,target),true);
 });
