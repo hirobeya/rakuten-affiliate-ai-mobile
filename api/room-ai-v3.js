@@ -46,27 +46,45 @@ function localZeroCall(item){
 
   const copy=structured.compose(item,{identity});
   const understanding=copy?.understanding||{};
-  if(copy?.status!=='ok' || understanding?.method!=='type_definition') return null;
+  const method=String(understanding?.method||'');
+  if(copy?.status!=='ok' || !['type_definition','validated_identity'].includes(method)) return null;
   if(String(understanding.identity||'').trim()!==identity) return null;
-  if(!String(understanding.scene||'').trim()) return null;
-  if(!Array.isArray(copy.values) || copy.values.length<1) return null;
-  if(!copy.values.some(v=>String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length)) return null;
   if(!String(copy.text||'').trim() || structured.RISK.test(copy.text)) return null;
 
   const facts=Array.isArray(copy.facts)?copy.facts:[];
-  const variant={index:1,hookType:'scene',hook:understanding.scene,text:copy.text};
+  if(!facts.length) return null;
+
+  // Category-independent zero-call rule:
+  // 1) product identity must already be independently validated from the source title;
+  // 2) every published fact must be an exact source-grounded fact extracted by structured copy;
+  // 3) optional explanatory sentences are kept only when they retain explicit fact references.
+  // No benefit, outcome, audience or use case is invented here.
+  const groundedValues=(Array.isArray(copy.values)?copy.values:[]).filter(v=>
+    String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
+  );
+  const directAppeals=groundedValues.length?groundedValues:facts.slice(0,3).map(f=>({
+    text:'仕様：'+f.quote,
+    factRef:f.quote,
+    factRefs:[f.quote],
+    source:f.source
+  }));
+  if(!directAppeals.length) return null;
+
+  const hook=String(understanding.scene||'').trim()||identity;
+  const hookType=String(understanding.scene||'').trim()?'scene':'identity';
+  const variant={index:1,hookType,hook,text:copy.text};
   return {
     ok:true,pending:false,retryAfterMs:0,phase:'local',
     version:'super-urenavi-v3-conditional-preview',model:'local',
     productType:{specific:identity,general:understanding.domain||identity,quote:identity,valid:true},
     attributes:facts.map((f,index)=>({name:f.kind||'fact',value:f.quote,unit:'',qualifier:'',valueType:'text',quote:f.quote,sourceIndex:index})),
     decisionAxes:[],
-    verifiedAppeals:copy.values.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0?understanding.scene:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
+    verifiedAppeals:directAppeals.map((v,index)=>({index,text:v.text,noHassle:'',scene:index===0&&hookType==='scene'?hook:'',attributeRefs:[],strength:index===0?3:2,verification:{required:false,supported:true,keepDirectFact:true,reason:'local_grounded_fact'}})),
     groq:{pass1Calls:0,pass2Calls:0,totalCalls:0},
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text:copy.text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:copy.version,method:understanding.method,factCount:facts.length,valueCount:copy.values.length}
+    local:{route:'local',version:copy.version,method,factCount:facts.length,valueCount:groundedValues.length}
   };
 }
 
@@ -115,14 +133,14 @@ function createHandler(deps={}){
 
       // Normal Preview requests may finish without Groq only when two independent
       // deterministic paths agree on identity and structured copy has at least one
-      // grounded functional sentence. Evaluation runs deliberately bypass this route
-      // so model comparisons remain actual model measurements.
+      // grounded source fact. Evaluation runs deliberately bypass this route so
+      // model comparisons remain actual model measurements.
       if(!runKey && typeof localFn==='function'){
         const localResult=localFn(item);
         if(localResult){
           localResult.metric=logAiUsageMetric({
             route:'local',cacheStatus:'local',pass1Calls:0,pass2Calls:0,imageCalls:0,
-            outputTier:localResult.tier,hookType:'scene',decisionAxis:'',
+            outputTier:localResult.tier,hookType:localResult.variants?.[0]?.hookType||'none',decisionAxis:'',
             machineValidationPassed:true,copied:false,elapsedMs:Date.now()-started
           });
           return json(res,200,localResult);
