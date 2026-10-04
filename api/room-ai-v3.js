@@ -78,9 +78,27 @@ function createHandler(deps={}){
   const localFn=deps.localZeroCall===undefined?localZeroCall:deps.localZeroCall;
 
   return async function handler(req,res){
-    if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
     const runtimeEnv=String(process.env.VERCEL_ENV||'');
     if(runtimeEnv!=='preview') return json(res,404,{message:'Not found'});
+
+    // Temporary fixed-data Preview diagnostic. It cannot call Groq or consume quota.
+    if(req.method==='GET' && String(req.query?.diagnostic||'')==='local-zero'){
+      const item={
+        itemCode:'diagnostic:electric-mop',
+        itemName:'電動モップ 充電式 コードレス',
+        itemCaption:'充電式。コードレスの電動モップです。',
+        itemPrice:4680,
+        imageUrl:''
+      };
+      const result=typeof localFn==='function'?localFn(item):null;
+      return json(res,result?200:422,{
+        diagnostic:'local-zero',
+        groqQuotaConsumed:false,
+        result
+      });
+    }
+
+    if(req.method!=='POST') return json(res,405,{message:'Method not allowed'});
 
     const started=Date.now();
     let activeModel=null;
