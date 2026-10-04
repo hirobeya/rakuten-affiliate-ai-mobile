@@ -35,7 +35,6 @@ test('first blind regressions remain safe after tighter zero-call fact boundary'
   const results=items.map(item=>({id:item.id,result:localZeroCall(item)}));
   console.log('FRESH_BLIND_LOCAL_20261004_REGRESSION '+JSON.stringify(results));
 
-  // These two still contain independently bounded facts in the title.
   for(const row of results.slice(0,2)){
     assert.ok(row.result,row.id+' should keep the safe zero-call route');
     assert.equal(row.result.groq.totalCalls,0);
@@ -44,9 +43,14 @@ test('first blind regressions remain safe after tighter zero-call fact boundary'
     assert.ok(row.result.quality.text.includes(row.result.productType.specific));
   }
 
-  // "11.6~13.3インチノートPC" attaches the numeric unit directly to a noun.
-  // The stricter generic boundary deliberately defers this semantic attachment to AI
-  // rather than weakening the guard that blocks cases such as "5gプロペラ".
+  // The attached range in "11.6~13.3インチノートPC" is still semantically
+  // ambiguous and must never be sliced into a standalone product specification.
+  // A separate exact title fact, "折りたたみ", is independently grounded and can
+  // now complete the local post without weakening that numeric boundary.
   const laptop=results[2];
-  assert.equal(laptop.result,null,'noun-attached numeric specification should safely defer to AI');
+  assert.ok(laptop.result,'independent exact folding fact should allow safe zero-call completion');
+  assert.equal(laptop.result.groq.totalCalls,0);
+  assert.equal(laptop.result.productType.specific,'パソコンスタンド');
+  assert.match(laptop.result.quality.text,/折りたたみ仕様のパソコンスタンド/);
+  assert.doesNotMatch(laptop.result.quality.text,/11\.6|13\.3|11\.6\s*[~〜～-]\s*13\.3|インチノートPC/);
 });
