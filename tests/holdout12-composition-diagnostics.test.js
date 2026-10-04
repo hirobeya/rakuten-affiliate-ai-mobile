@@ -3,8 +3,11 @@ const test=require('node:test');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
 const {evidenceBackedLeadingIdentity,scoreCandidate,tokens,operatorSupports}=require('../lib/local-semantic-composer');
+const {selectLocalIdentity}=require('../lib/local-identity-arbitrator');
+const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const {resolveLiteralIdentity,localZeroCall}=require('../api/room-ai-v3');
 const {safeTitleFacts}=require('../lib/local-generic-reasoner');
+const structured=require('../public/structured-room-copy');
 
 const items=[
   {id:'h12-03',itemName:'センサー式ゴミ箱 自動開閉 充電式 15L ダストボックス ふた付き キッチン リビング',itemCaption:'',itemPrice:0},
@@ -28,10 +31,19 @@ test('diagnose remaining holdout12 composition misses without changing productio
     const literal=resolveLiteralIdentity(item);
     const repeated=repeatedLiteralIdentity(item);
     const semantic=evidenceBackedLeadingIdentity(item);
+    const selected=selectLocalIdentity({title:item.itemName,ruleLocal:rule,literalLocal:literal,repeatedLocal:repeated,semanticLocal:semantic});
+    const selectedIdentity=identity(selected);
+    const structuredCopy=selectedIdentity?structured.compose({...item,itemCaption:''},{identity:selectedIdentity}):null;
+    const partner=selectedIdentity?composeLocalPartnerCopy({itemName:item.itemName,identity:selectedIdentity,itemPrice:item.itemPrice}):null;
     const final=localZeroCall(item);
     return {
       id:item.id,
-      rule:identity(rule),literal:identity(literal),repeated:identity(repeated),semantic:identity(semantic),final:final?.productType?.specific||null,
+      rule:identity(rule),literal:identity(literal),repeated:identity(repeated),semantic:identity(semantic),selected:selectedIdentity,
+      arbitration:selected?.arbitration||null,
+      structuredStatus:structuredCopy?.status||null,structuredIdentity:structuredCopy?.understanding?.identity||null,
+      structuredMethod:structuredCopy?.understanding?.method||null,structuredFacts:(structuredCopy?.facts||[]).map(x=>x.quote),
+      partner:partner?{quote:partner.quote,axisHints:partner.axisHints,text:partner.text}:null,
+      final:final?.productType?.specific||null,
       facts:facts.map(x=>x.quote),operators,candidates
     };
   });
