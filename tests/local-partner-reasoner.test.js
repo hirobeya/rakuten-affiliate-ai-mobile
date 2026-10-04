@@ -31,3 +31,8 @@ test('generic glove has no active partner knowledge and cannot guess the use',()
   const title='グローブ 手袋 ブラック 男女兼用';
   assert.equal(composeLocalPartnerCopy({itemName:title,identity:'グローブ'}),null);
 });
+
+test('resolved storage bench identity cannot borrow storage-box partner knowledge',()=>{
+  const title='鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ 90cm 収納ボックス 工具箱';
+  assert.equal(composeLocalPartnerCopy({itemName:title,identity:'収納ベンチ'}),null);
+});
