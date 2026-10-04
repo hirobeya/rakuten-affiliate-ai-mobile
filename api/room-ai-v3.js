@@ -9,6 +9,7 @@ const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
+const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 
@@ -212,6 +213,7 @@ function localZeroCall(item){
   const identity=String(local?.canonicalIdentity||sourceIdentity).trim();
   const identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
+  if(hasCompetingCompoundIdentity(title,identity)) return null;
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
