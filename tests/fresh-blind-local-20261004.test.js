@@ -1,5 +1,6 @@
 'use strict';
 
+const assert=require('node:assert/strict');
 const test=require('node:test');
 const {localZeroCall}=require('../api/room-ai-v3');
 
@@ -30,7 +31,14 @@ const items=[
   }
 ];
 
-test('blind fresh products - record current local route without modifying logic',()=>{
+test('first blind failures are fixed by one category-independent grounded rule',()=>{
   const results=items.map(item=>({id:item.id,result:localZeroCall(item)}));
-  console.log('FRESH_BLIND_LOCAL_20261004 '+JSON.stringify(results));
+  console.log('FRESH_BLIND_LOCAL_20261004_REGRESSION '+JSON.stringify(results));
+  for(const row of results){
+    assert.ok(row.result,row.id+' should now use the zero-call route');
+    assert.equal(row.result.groq.totalCalls,0);
+    assert.equal(row.result.quality.status,'ready');
+    assert.ok(row.result.attributes.length>=1);
+    assert.ok(row.result.quality.text.includes(row.result.productType.specific));
+  }
 });
