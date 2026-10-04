@@ -132,11 +132,13 @@ function extractLiteralSpecs(item){
         const end=start+match[0].length;
         const before=part.text.slice(Math.max(0,start-1),start);
         const after=part.text.slice(end,end+1);
+        const isCount=/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote);
         // Never publish a numeric suffix cut from a larger number (H1,375mm), a
         // component cut from a dimension, or a count cut from a compound word (12本掛).
-        if(/[0-9０-９.,，×xX]$/.test(before)||/^[0-9０-９A-Za-zぁ-んァ-ヶ一-龯×xX]/.test(after)) continue;
+        if(/[0-9０-９.,，×xX]$/.test(before)||/^[0-9０-９A-Za-z×xX]/.test(after)) continue;
+        if(isCount&&/^[ぁ-んァ-ヶ一-龯]/.test(after)) continue;
         if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
-        out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote)?'count':'numeric'});
+        out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':isCount?'count':'numeric'});
       }
     }
   }
