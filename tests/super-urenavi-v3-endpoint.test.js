@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createHandler}=require('../api/room-ai-v3');
+const {createHandler,localZeroCall}=require('../api/room-ai-v3');
 
 function memoryStore(){
   let row=null;
@@ -22,6 +22,7 @@ function groqMock(pass1,pass2,{model='mock',calls={pass1:0,pass2:0}}={}){
 }
 
 const baseItem={itemCode:'shop:1',itemName:'電気ケトル 0.8L 50-100度 1℃単位',itemCaption:'容量0.8L。50-100度を1℃単位で設定できます。',itemPrice:8980};
+const bikeItem={itemCode:'bike:1',itemName:'本革 バイクグローブ スマホ対応 防風 オールシーズン',itemCaption:'バイクグローブ。スマホ対応。防風。オールシーズン。',itemPrice:2980};
 const pass1Direct={
   productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
   attributes:[{name:'容量',value:'0.8L',unit:'L',qualifier:'',valueType:'single',quote:'0.8L'}],
@@ -45,6 +46,32 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
   const oldEnv=process.env.VERCEL_ENV;
   process.env.VERCEL_ENV='preview';
   try{
+    {
+      const local=localZeroCall(bikeItem);
+      assert.ok(local);
+      assert.equal(local.model,'local');
+      assert.equal(local.groq.totalCalls,0);
+      assert.equal(local.pass2Status,'not_needed');
+      assert.match(local.quality.text,/停車中/);
+      assert.match(local.quality.text,/スマホ/);
+    }
+
+    {
+      let quota=0,groq=0;
+      const handler=createHandler({
+        authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),
+        consumeQuota:async()=>{quota++;return true;},
+        groq:{callPass1:async()=>{groq++;throw new Error('Groq must not run on local route');},callPass2:async()=>{groq++;throw new Error('Groq must not run on local route');}}
+      });
+      const res=mockRes();
+      await handler({method:'POST',body:bikeItem},res);
+      assert.equal(res.code,200);
+      assert.equal(res.body.model,'local');
+      assert.equal(res.body.groq.totalCalls,0);
+      assert.equal(quota,0);
+      assert.equal(groq,0);
+    }
+
     {
       const calls={pass1:0,pass2:0};
       const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,groq:groqMock(pass1Direct,pass2,{calls})});
@@ -98,7 +125,23 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     }
 
     {
-      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>false,groq:groqMock(pass1Direct,pass2)});
+      // Evaluation runs must bypass the zero-Groq shortcut so a requested model is really measured.
+      let localCalls=0,aiCalls=0;
+      const handler=createHandler({
+        authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,
+        localZeroCall:()=>{localCalls++;return {ok:true,groq:{pass1Calls:0,pass2Calls:0,totalCalls:0}};},
+        groq:{callPass1:async()=>{aiCalls++;return {raw:pass1Direct,model:'mock'};},callPass2:async()=>{aiCalls++;return {raw:pass2,model:'mock'};}}
+      });
+      const res=mockRes();
+      await handler({method:'POST',body:{...baseItem,evaluationRun:'force_ai'}},res);
+      assert.equal(res.code,200);
+      assert.equal(localCalls,0);
+      assert.equal(aiCalls,1);
+      assert.equal(res.body.groq.pass1Calls,1);
+    }
+
+    {
+      const handler=createHandler({authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>false,groq:groqMock(pass1Direct,pass2),localZeroCall:()=>null});
       const res=mockRes();
       await handler({method:'POST',body:baseItem},res);
       assert.equal(res.code,429);
