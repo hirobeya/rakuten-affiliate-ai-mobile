@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
-const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile}=require('../lib/local-generic-reasoner');
+const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile,safeTitleFacts,composeGenericFromTitle}=require('../lib/local-generic-reasoner');
 
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
@@ -203,4 +203,21 @@ test('semantic profile records dominant meaning and evidence breadth for unknown
   assert.ok(profile.secondaryFamilies.includes('control'));
   assert.equal(profile.evidenceCount,3);
   assert.ok(profile.breadth>=2);
+});
+
+test('standalone rechargeable wording is a safe generic power-source choice axis',()=>{
+  const title='卓上クリーナー 充電式 消しゴム USB デスク掃除機 ミニクリーナー';
+  const facts=safeTitleFacts(title);
+  assert.ok(facts.some(x=>x.quote==='充電式'));
+  const out=composeGenericFromTitle({itemName:title,identity:'卓上クリーナー'});
+  assert.ok(out);
+  assert.equal(out.axis,'電源方式');
+  assert.match(out.text,/電源方式まで見て選ぶなら/);
+  assert.match(out.text,/充電式の卓上クリーナー/);
+});
+
+test('rechargeable wording attached to an accessory is not promoted to whole-product power source',()=>{
+  const title='卓上クリーナー 充電式バッテリー付属 デスク掃除機';
+  const facts=safeTitleFacts(title);
+  assert.ok(!facts.some(x=>x.quote==='充電式'));
 });
