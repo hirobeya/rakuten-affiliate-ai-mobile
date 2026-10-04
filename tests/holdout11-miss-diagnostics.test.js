@@ -2,7 +2,7 @@
 const test=require('node:test');
 const {localZeroCall,resolveLiteralIdentity,extractLiteralSpecs}=require('../api/room-ai-v3');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
-const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
+const {repeatedLiteralIdentity,leadingCompoundIdentity}=require('../lib/repeated-literal-identity');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
 const structured=require('../public/structured-room-copy');
 
@@ -24,21 +24,29 @@ test('diagnose holdout11 local misses after frozen first run',()=>{
     const rule=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
     const literal=resolveLiteralIdentity(item);
     const repeated=(!rule&&!literal)?repeatedLiteralIdentity(item):null;
+    const leading=leadingCompoundIdentity(item);
     const chosen=rule||literal||repeated;
     const identity=identityOf(chosen);
+    const leadingIdentity=identityOf(leading);
     const conflict=identity?hasCompetingCompoundIdentity(item.itemName,identity):false;
+    const leadingConflict=leadingIdentity?hasCompetingCompoundIdentity(item.itemName,leadingIdentity):null;
     const copy=identity?structured.compose(item,{identity}):null;
     const specs=extractLiteralSpecs(item).map(x=>x.quote);
     const result=localZeroCall(item);
     return {
       id:item.id,category:item.category,
       ruleIdentity:identityOf(rule),literalIdentity:identityOf(literal),repeatedIdentity:identityOf(repeated),chosenIdentity:identity,
+      leadingIdentity,
+      leadingHypothesis:leading?.identityHypothesis||null,
+      leadingValidationMode:leading?.validation?.mode||null,
+      leadingConflict,
       conflict,specs,
       structuredStatus:copy?.status||null,
       structuredMethod:copy?.understanding?.method||null,
       structuredIdentity:copy?.understanding?.identity||null,
       structuredFacts:Array.isArray(copy?.facts)?copy.facts.map(x=>x.quote):[],
-      zeroCall:Boolean(result)
+      zeroCall:Boolean(result),
+      finalIdentity:result?.productType?.specific||null
     };
   });
   console.log('HOLDOUT11_LOCAL_MISS_DIAGNOSTICS '+JSON.stringify(rows));
