@@ -52,7 +52,7 @@ test('unknown exact identity can turn a literal structural fact into a safe purc
   assert.ok(out);
   assert.equal(out.generic,true);
   assert.equal(out.quote,'食洗機対応');
-  assert.match(out.text,/お手入れ方法も確認/);
+  assert.match(out.text,/食洗機対応で選びたいなら/);
   assert.match(out.text,/食洗機対応の包丁スタンド/);
 });
 
@@ -62,31 +62,32 @@ test('bare gram value defers when its semantic role is not proven',()=>{
   assert.equal(out,null);
 });
 
-test('unknown exact identity converts explicit extendable structure into a purchase reason',()=>{
+test('unknown exact identity combines explicit extendable structure with exact range naturally',()=>{
   const title='自撮り棒 伸縮式 三脚一体型 最大130cm ブラック';
   const out=composeLocalPartnerCopy({itemName:title,identity:'自撮り棒'});
   assert.ok(out);
   assert.equal(out.generic,true);
   assert.equal(out.quote,'伸縮式');
-  assert.match(out.text,/長さを変えて使いたいとき/);
-  assert.match(out.text,/伸縮式仕様の自撮り棒/);
-  assert.doesNotMatch(out.text,/集合写真|遠くから|映える|撮影が楽/);
+  assert.equal(out.supportQuote,'最大130cm');
+  assert.match(out.text,/長さを変えて使いたいなら/);
+  assert.match(out.text,/伸縮式で、最大130cm表記の自撮り棒/);
+  assert.doesNotMatch(out.text,/集合写真|遠くから|映える|撮影が楽|撮りやす/);
 });
 
-test('explicit height adjustment becomes a generic decision axis without inventing comfort',()=>{
+test('explicit height adjustment becomes a natural generic decision axis without inventing comfort',()=>{
   const title='ノートPCスタンド 高さ調整 アルミ 折りたたみ';
   const out=composeLocalPartnerCopy({itemName:title,identity:'ノートPCスタンド'});
   assert.ok(out);
   assert.equal(out.quote,'高さ調整');
-  assert.match(out.text,/高さを変えて使いたいとき/);
+  assert.match(out.text,/高さを変えて使いたいなら/);
   assert.doesNotMatch(out.text,/姿勢|疲れ|快適|肩こり/);
 });
 
-test('remote feature produces only a choice axis, not an invented usage outcome',()=>{
+test('remote feature remains a choice axis and never invents a usage outcome',()=>{
   const title='LEDライト リモコン付き 角度調整 USB-C';
   const out=composeLocalPartnerCopy({itemName:title,identity:'LEDライト'});
   assert.ok(out);
-  assert.match(out.text,/角度を変えて使いたいとき|リモコンの有無も確認して選びたいとき/);
+  assert.match(out.text,/角度を変えて使いたいなら|操作方法まで見て選ぶなら/);
   assert.doesNotMatch(out.text,/離れた場所から簡単|手元で楽々|便利/);
 });
 
@@ -96,5 +97,5 @@ test('negated or excluded purchase feature is never promoted',()=>{
   assert.ok(out);
   assert.notEqual(out.quote,'高さ調整');
   assert.notEqual(out.quote,'リモコン');
-  assert.doesNotMatch(out.text,/高さを変えて使いたい|リモコンの有無/);
+  assert.doesNotMatch(out.text,/高さを変えて使いたい|操作方法まで見て選ぶ/);
 });
