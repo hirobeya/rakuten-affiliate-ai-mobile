@@ -31,6 +31,7 @@ test('diagnose holdout11 local misses after frozen first run',()=>{
     const conflict=identity?hasCompetingCompoundIdentity(item.itemName,identity):false;
     const leadingConflict=leadingIdentity?hasCompetingCompoundIdentity(item.itemName,leadingIdentity):null;
     const copy=identity?structured.compose(item,{identity}):null;
+    const leadingCopy=leadingIdentity?structured.compose(item,{identity:leadingIdentity}):null;
     const specs=extractLiteralSpecs(item).map(x=>x.quote);
     const result=localZeroCall(item);
     return {
@@ -40,6 +41,10 @@ test('diagnose holdout11 local misses after frozen first run',()=>{
       leadingHypothesis:leading?.identityHypothesis||null,
       leadingValidationMode:leading?.validation?.mode||null,
       leadingConflict,
+      leadingStructuredStatus:leadingCopy?.status||null,
+      leadingStructuredMethod:leadingCopy?.understanding?.method||null,
+      leadingStructuredIdentity:leadingCopy?.understanding?.identity||null,
+      leadingStructuredFacts:Array.isArray(leadingCopy?.facts)?leadingCopy.facts.map(x=>x.quote):[],
       conflict,specs,
       structuredStatus:copy?.status||null,
       structuredMethod:copy?.understanding?.method||null,
