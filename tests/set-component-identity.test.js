@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {setComponentScoped,repeatedLiteralIdentity,repeatedSupport}=require('../lib/repeated-literal-identity');
+const {setComponentScoped,repeatedLiteralIdentity,repeatedSupport,leadingStemFamily}=require('../lib/repeated-literal-identity');
 
 test('component listed inside starter kit cannot become whole-product identity',()=>{
   const item={
@@ -32,4 +32,41 @@ test('independent repeated title support outranks a longer suffix supported only
   assert.equal(out.canonicalIdentity,'ハンディファン');
   assert.equal(out.identityHypothesis?.method,'repeated_title_support');
   assert.equal(out.identityHypothesis?.supportCount,3);
+});
+
+test('three independent expressions sharing a three-character leading stem can support the leading whole-product identity',()=>{
+  const item={
+    itemName:'水切りラック 折りたたみ 水切りかご 水切りマット シリコン キッチン 伸縮',
+    itemCaption:''
+  };
+  const out=repeatedLiteralIdentity(item);
+  assert.ok(out);
+  assert.equal(out.canonicalIdentity,'水切りラック');
+  assert.equal(out.identityHypothesis?.method,'leading_stem_family');
+  assert.equal(out.identityHypothesis?.sharedPrefix,'水切り');
+  assert.ok(out.identityHypothesis?.supportCount>=3);
+});
+
+test('a short two-character stem needs four independent expressions before it can support the leading identity',()=>{
+  const item={
+    itemName:'毛玉クリーナー 毛玉取り 毛玉取り機 毛玉取り器 5段階調整',
+    itemCaption:''
+  };
+  const out=repeatedLiteralIdentity(item);
+  assert.ok(out);
+  assert.equal(out.canonicalIdentity,'毛玉クリーナー');
+  assert.equal(out.identityHypothesis?.method,'leading_stem_family');
+  assert.equal(out.identityHypothesis?.sharedPrefix,'毛玉');
+  assert.ok(out.identityHypothesis?.supportCount>=4);
+});
+
+test('generic two-character prefix with weak repetition never promotes an unknown leading product',()=>{
+  const item={
+    itemName:'電動鉛筆削り えんぴつシャープナー 電動 小型 学校 オフィス',
+    itemCaption:''
+  };
+  const stem=leadingStemFamily(item,item.itemName,item.itemCaption,item.itemName.split(/\s+/),new Set());
+  assert.equal(stem,null);
+  const out=repeatedLiteralIdentity(item);
+  assert.ok(!out||out.canonicalIdentity!=='電動鉛筆削り');
 });
