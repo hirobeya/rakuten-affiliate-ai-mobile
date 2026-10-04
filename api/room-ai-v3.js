@@ -119,9 +119,6 @@ function resolveLiteralIdentity(item){
     .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
     .sort((a,b)=>a.at-b.at||b.type.length-a.type.length);
 
-  // Exact and whitespace-separated spellings are compared by source position. This
-  // prevents a later generic noun from overriding an earlier, more specific product
-  // identity while keeping every accepted identity grounded in the title text.
   for(const hit of known){
     const validated=validateLiteralIdentity(item,hit.type);
     if(!validated) continue;
@@ -133,9 +130,6 @@ function resolveLiteralIdentity(item){
     return candidates.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0];
   }
 
-  // For unseen wording such as "パソコンスタンド", derive only the noun ending
-  // from suffixes that already occur in multiple known product types. The candidate
-  // itself must be a contiguous title token and pass the same product-type validator.
   const tokens=title.split(/[\s,，、。!！?？()（）【】\[\]・\/／]+/).map(normalize).filter(Boolean);
   for(const token of tokens){
     if(token.length<4||token.length>24) continue;
@@ -147,9 +141,6 @@ function resolveLiteralIdentity(item){
 }
 
 function extractLiteralSpecs(item){
-  // Zero-call publication is intentionally stricter than AI analysis. Rakuten captions
-  // frequently contain related-product carousels and alternative specs, so a local
-  // publication fact must come from the product title itself. Caption facts go to Groq.
   const parts=[{source:'itemName',text:normalize(item?.itemName)}].filter(x=>x.text);
   const out=[];
   const patterns=[
@@ -169,16 +160,27 @@ function extractLiteralSpecs(item){
         const before=part.text.slice(Math.max(0,start-1),start);
         const after=part.text.slice(end,end+1);
         const isCount=/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote);
-        // Never publish a numeric suffix cut from a larger number/model (H1,375mm,
-        // WVA-M630L), a component cut from a dimension, or a count cut from a word.
         if(/[0-9０-９A-Za-z.,，_+×xX-]$/.test(before)||/^[0-9０-９A-Za-z×xX]/.test(after)) continue;
-        if(isCount&&/^[ぁ-んァ-ヶ一-龯]/.test(after)) continue;
+        // A bare number+unit immediately attached to a Japanese noun is usually a
+        // component/model phrase (e.g. "5gプロペラ"), not a publishable product spec.
+        // Ambiguous cases are intentionally left for Groq instead of being sliced.
+        if(/^[ぁ-んァ-ヶ一-龯]/.test(after)) continue;
         if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
         out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':isCount?'count':'numeric'});
       }
     }
   }
   return out.slice(0,6);
+}
+
+function equivalentVolumeKey(value){
+  const m=normalize(value).match(/^(\d+(?:\.\d+)?)\s*(ml|mL|L)$/i);
+  if(!m) return '';
+  const amount=Number(m[1]);
+  if(!Number.isFinite(amount)) return '';
+  const unit=m[2].toLowerCase();
+  const ml=unit==='l'?amount*1000:amount;
+  return 'volume_ml:'+String(Math.round(ml*1000)/1000);
 }
 
 function neutralLiteralText(identity,facts,itemPrice){
@@ -211,9 +213,6 @@ function localZeroCall(item){
   const identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
 
-  // Rich local copy is also title-only. The full caption remains available to the AI
-  // fallback, but never gets a zero-call publication path where related products could
-  // be mistaken for the current product.
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
   const understanding=copy?.understanding||{};
@@ -228,11 +227,20 @@ function localZeroCall(item){
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
   const facts=[];
+  const semanticFactKeys=new Set();
   for(const fact of [...structuredFacts,...literalFacts]){
-    if(!fact?.quote||facts.some(x=>normalize(x.quote).toLowerCase()===normalize(fact.quote).toLowerCase())) continue;
+    if(!fact?.quote) continue;
+    const exact='exact:'+normalize(fact.quote).toLowerCase();
+    const volume=equivalentVolumeKey(fact.quote);
+    if(semanticFactKeys.has(exact)||(volume&&semanticFactKeys.has(volume))) continue;
+    semanticFactKeys.add(exact);
+    if(volume) semanticFactKeys.add(volume);
     facts.push(fact);
   }
   if(!facts.length) return null;
+  // A zero-call post must contain at least one decision-useful fact. Origin alone is
+  // safe metadata but too weak to complete a ROOM post; let Groq inspect the caption.
+  if(facts.every(f=>/^(?:日本製)$/.test(normalize(f.quote)))) return null;
 
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
@@ -245,11 +253,11 @@ function localZeroCall(item){
   }));
   if(!directAppeals.length) return null;
 
-  // Rich wording is allowed only when structured copy independently understands the
-  // product. Otherwise publish a neutral identity + exact-spec copy, with no inferred
-  // benefit, outcome, audience or use case.
   const useStructuredText=structuredSafe&&structuredFacts.length>0;
-  const text=useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice);
+  let text=useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice);
+  // Structured text may contain two equivalent volume spellings even after fact
+  // deduplication. If so, fall back to the neutral text generated from deduped facts.
+  if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   if(!String(text||'').trim()||structured.RISK.test(text)) return null;
   const hook=useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity;
   const hookType=hook===identity?'identity':'scene';
