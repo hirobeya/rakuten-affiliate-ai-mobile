@@ -17,6 +17,20 @@ test('already-specific compound is not blocked by its shorter noun',()=>{
   assert.equal(hasCompetingCompoundIdentity('モバイルバッテリー バッテリー容量 10000mAh','モバイルバッテリー'),false);
 });
 
+test('later descriptive prefix ending in the same leading identity is supporting repetition, not conflict',()=>{
+  assert.equal(hasCompetingCompoundIdentity(
+    'キッチンペーパーホルダー 片手でカット おしゃれ 片手で切れるキッチンペーパーホルダー タワー',
+    'キッチンペーパーホルダー'
+  ),false);
+});
+
+test('identity-plus-accessory suffix is still treated as a competing compound',()=>{
+  assert.equal(hasCompetingCompoundIdentity(
+    '収納ベンチ 折りたたみ 収納ベンチカバー 防水',
+    '収納ベンチ'
+  ),true);
+});
+
 test('holdout8 pet carrier no longer publishes generic carry-case identity locally',()=>{
   const result=localZeroCall({
     itemCode:'identity-conflict:pet-carry',
