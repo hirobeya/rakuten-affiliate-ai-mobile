@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {selectBestCandidate,shouldPublish,scoreCandidate,clichePenalty,axisFamily,purchaseImpactBonus}=require('../lib/partner-decision-kernel');
+const {selectBestCandidate,shouldPublish,evaluateCandidate,scoreCandidate,clichePenalty,axisFamily,purchaseImpactBonus}=require('../lib/partner-decision-kernel');
 
 test('concrete grounded purchase axis outranks weak generic numeric angle',()=>{
   const source='包丁スタンド ステンレス 食洗機対応 日本製 20cm';
@@ -14,14 +14,34 @@ test('concrete grounded purchase axis outranks weak generic numeric angle',()=>{
   assert.ok(best);
   assert.equal(best.quote,'食洗機対応');
   assert.equal(best.decision.confidence,'high');
+  assert.equal(best.decision.safetyScore,100);
+  assert.equal(best.decision.safetyConfidence,'high');
   assert.equal(shouldPublish(best),true);
   assert.ok(best.decision.principles.includes('compare_multiple_candidates'));
+  assert.ok(best.decision.principles.includes('safety_before_persuasion'));
 });
 
 test('candidate absent from source is never publishable',()=>{
   const candidate={quote:'防水',axis:'仕様',hook:'使う環境に関わる仕様も確認して選びたいとき',body:'防水仕様の商品です。',score:8,kind:'signal'};
   assert.equal(scoreCandidate(candidate,{source:'撥水 バッグ',identity:'バッグ'}),-Infinity);
   assert.equal(selectBestCandidate([candidate],{source:'撥水 バッグ',identity:'バッグ'}),null);
+});
+
+test('unsupported persuasive wording is blocked by safety before persuasion can matter',()=>{
+  const candidate={quote:'急速充電',axis:'出力',hook:'充電切れの不安をなくしたいとき',body:'これ一つですぐ充電できるモバイルバッテリーです。',score:99,kind:'signal'};
+  const assessed=evaluateCandidate(candidate,{source:'モバイルバッテリー 10000mAh USB-C',identity:'モバイルバッテリー'});
+  assert.equal(assessed.safetyScore,0);
+  assert.equal(assessed.safetyConfidence,'blocked');
+  assert.equal(assessed.persuasionScore,-Infinity);
+  assert.equal(assessed.publishable,false);
+});
+
+test('grounded candidate gets full safety even when persuasion is modest',()=>{
+  const candidate={quote:'日本製',axis:'生産情報',hook:'生産情報も確認して選びたいとき',body:'日本製の収納ボックスです。',score:3,kind:'signal'};
+  const assessed=evaluateCandidate(candidate,{source:'収納ボックス 日本製',identity:'収納ボックス'});
+  assert.equal(assessed.safetyScore,100);
+  assert.equal(assessed.safetyConfidence,'high');
+  assert.ok(Number.isFinite(assessed.persuasionScore));
 });
 
 test('negated candidate is vetoed even when the word exists in source',()=>{
@@ -35,6 +55,7 @@ test('weak numeric-only angle is withheld when confidence is low',()=>{
     {quote:'0.1g',axis:'数値仕様',hook:'数値仕様も確認して選びたいとき',body:'0.1g表記のキッチンスケールです。',score:4,kind:'numeric'}
   ],{source,identity:'キッチンスケール'});
   assert.ok(best);
+  assert.equal(best.decision.safetyScore,100);
   assert.equal(best.decision.confidence,'low');
   assert.equal(shouldPublish(best),false);
 });
@@ -86,6 +107,8 @@ test('independent range evidence reinforces extendable structure when ranking se
   assert.equal(best.decision.family,'adjustability');
   assert.equal(best.decision.corroborationBonus,2);
   assert.equal(best.decision.confidence,'high');
+  assert.equal(best.decision.alternatives.length,3);
+  assert.equal(best.decision.alternatives[0].quote,'伸縮');
 });
 
 test('direct adjustment beats connector detail for an unknown adjustable light',()=>{
@@ -99,5 +122,6 @@ test('direct adjustment beats connector detail for an unknown adjustable light',
   assert.ok(best);
   assert.equal(best.quote,'角度調整');
   assert.equal(best.decision.family,'adjustability');
-  assert.ok(best.decision.score>best.decision.runnerUpScore);
+  assert.ok(best.decision.persuasionScore>best.decision.runnerUpScore);
+  assert.equal(best.decision.safetyScore,100);
 });
