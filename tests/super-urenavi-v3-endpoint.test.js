@@ -22,7 +22,7 @@ function groqMock(pass1,pass2,{model='mock',calls={pass1:0,pass2:0}}={}){
 }
 
 const baseItem={itemCode:'shop:1',itemName:'電気ケトル 0.8L 50-100度 1℃単位',itemCaption:'容量0.8L。50-100度を1℃単位で設定できます。',itemPrice:8980};
-const bikeItem={itemCode:'bike:1',itemName:'本革 バイクグローブ スマホ対応 防風 オールシーズン',itemCaption:'バイクグローブ。スマホ対応。防風。オールシーズン。',itemPrice:2980};
+const localItem={itemCode:'mop:1',itemName:'電動モップ 充電式 コードレス',itemCaption:'充電式の電動モップ。コードレス。',itemPrice:4980};
 const pass1Direct={
   productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},
   attributes:[{name:'容量',value:'0.8L',unit:'L',qualifier:'',valueType:'single',quote:'0.8L'}],
@@ -47,13 +47,13 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
   process.env.VERCEL_ENV='preview';
   try{
     {
-      const local=localZeroCall(bikeItem);
+      const local=localZeroCall(localItem);
       assert.ok(local);
       assert.equal(local.model,'local');
       assert.equal(local.groq.totalCalls,0);
       assert.equal(local.pass2Status,'not_needed');
-      assert.match(local.quality.text,/停車中/);
-      assert.match(local.quality.text,/スマホ/);
+      assert.match(local.quality.text,/電動モップ/);
+      assert.match(local.quality.text,/コードをつながずに使う/);
     }
 
     {
@@ -64,7 +64,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
         groq:{callPass1:async()=>{groq++;throw new Error('Groq must not run on local route');},callPass2:async()=>{groq++;throw new Error('Groq must not run on local route');}}
       });
       const res=mockRes();
-      await handler({method:'POST',body:bikeItem},res);
+      await handler({method:'POST',body:localItem},res);
       assert.equal(res.code,200);
       assert.equal(res.body.model,'local');
       assert.equal(res.body.groq.totalCalls,0);
@@ -125,7 +125,6 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     }
 
     {
-      // Evaluation runs must bypass the zero-Groq shortcut so a requested model is really measured.
       let localCalls=0,aiCalls=0;
       const handler=createHandler({
         authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),consumeQuota:async()=>true,
