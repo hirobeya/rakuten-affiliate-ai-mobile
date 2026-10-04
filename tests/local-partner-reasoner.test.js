@@ -56,13 +56,8 @@ test('unknown exact identity can turn a literal structural fact into a safe purc
   assert.match(out.text,/食洗機対応の包丁スタンド/);
 });
 
-test('bare gram value stays a neutral numeric specification without guessing its meaning',()=>{
+test('bare gram value defers when its semantic role is not proven',()=>{
   const title='キッチンスケール 0.1g デジタル 計量器';
   const out=composeLocalPartnerCopy({itemName:title,identity:'キッチンスケール'});
-  assert.ok(out);
-  assert.equal(out.generic,true);
-  assert.equal(out.quote,'0.1g');
-  assert.match(out.text,/数値仕様も確認/);
-  assert.match(out.text,/0\.1g表記のキッチンスケール/);
-  assert.doesNotMatch(out.text,/重さや内容量|本体重量|内容量/);
+  assert.equal(out,null);
 });
