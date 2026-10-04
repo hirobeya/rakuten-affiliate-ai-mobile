@@ -8,6 +8,7 @@ const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
+const {repeatedLiteralIdentity}=require('../lib/repeated-literal-identity');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 
@@ -168,9 +169,9 @@ function extractLiteralSpecs(item){
         const before=part.text.slice(Math.max(0,start-1),start);
         const after=part.text.slice(end,end+1);
         const isCount=/枚|個|本|袋|組|点|粒|錠|箱|足/.test(quote);
-        // Never publish a numeric suffix cut from a larger number (H1,375mm), a
-        // component cut from a dimension, or a count cut from a compound word (12本掛).
-        if(/[0-9０-９.,，×xX]$/.test(before)||/^[0-9０-９A-Za-z×xX]/.test(after)) continue;
+        // Never publish a numeric suffix cut from a larger number/model (H1,375mm,
+        // WVA-M630L), a component cut from a dimension, or a count cut from a word.
+        if(/[0-9０-９A-Za-z.,，_+×xX-]$/.test(before)||/^[0-9０-９A-Za-z×xX]/.test(after)) continue;
         if(isCount&&/^[ぁ-んァ-ヶ一-龯]/.test(after)) continue;
         if(!quote||out.some(x=>x.quote.toLowerCase()===quote.toLowerCase())) continue;
         out.push({quote,source:part.source,kind:/[×xX]/.test(quote)?'dimension':isCount?'count':'numeric'});
@@ -195,7 +196,8 @@ function localZeroCall(item){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
   const literalLocal=resolveLiteralIdentity(item);
-  let local=ruleLocal||literalLocal;
+  const repeatedLocal=(!ruleLocal&&!literalLocal)?repeatedLiteralIdentity(item):null;
+  let local=ruleLocal||literalLocal||repeatedLocal;
 
   if(ruleLocal&&literalLocal){
     const ruleEvidence=normalize(ruleLocal?.raw?.productType?.evidence||ruleLocal?.raw?.productType?.value);
