@@ -458,7 +458,7 @@ function createHandler(deps={}){
   };
 }
 
-module.exports=require('../lib/room-semantic-handler').createHandler();
+module.exports=createHandler();
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;

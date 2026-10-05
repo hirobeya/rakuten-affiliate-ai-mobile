@@ -872,8 +872,6 @@ input,select{
   <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
   <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
   <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
-  <label for="debugExtraKeywords">追加検証キーワード（任意、カンマ区切り・最大3件）</label>
-  <input id="debugExtraKeywords" type="text" maxlength="300" autocomplete="off">
   <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
   <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
 </div>
@@ -2323,12 +2321,10 @@ async function copyBatchDebugValidation(){
     return;
   }
   if(btn?.disabled) return;
-  const extras=String(document.getElementById('debugExtraKeywords')?.value||'').split(/[,、]/).map(x=>x.trim().slice(0,100)).filter(Boolean).slice(0,3);
-  const keywords=[...new Set([...DEBUG_BATCH_KEYWORDS,...extras])];
 
   btn.disabled=true;
-  btn.textContent=`${keywords.length}件を検証中…`;
-  if(meta) meta.textContent=`${keywords.length}つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。`;
+  btn.textContent='5件を検証中…';
+  if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
 
   let session=null;
   try{
@@ -2340,41 +2336,19 @@ async function copyBatchDebugValidation(){
 
     const selectedSort=String($('#sort')?.value||'').trim()||'standard';
     const searches=[];
-    let previousBatch=null;
-    try{const parsed=JSON.parse(ta?.value||'{}');if(parsed.batch===true)previousBatch=parsed;}catch{}
 
-    for(let index=0;index<keywords.length;index++){
-      const keyword=keywords[index];
-      btn.textContent=`${index+1}/${keywords.length} 検証中…`;
+    for(let index=0;index<DEBUG_BATCH_KEYWORDS.length;index++){
+      const keyword=DEBUG_BATCH_KEYWORDS[index];
+      btn.textContent=`${index+1}/${DEBUG_BATCH_KEYWORDS.length} 検証中…`;
       if(meta) meta.textContent=`「${keyword}」を検索しています。`;
       try{
         const items=await debugSearchOne(keyword,session,selectedSort);
-        // Measure one representative per search through the same production-of-copy path.
-        const item=items[0];
-        const rows=buildDebugValidationRowsFor(item?[item]:[],keyword);
-        if(item){
-          const payload={itemCode:String(item.itemCode||''),itemName:String(item.itemName||''),itemCaption:String(item.itemCaption||'').slice(0,12000),itemPrice:Number(item.itemPrice)||0};
-          const result=await RoomPreviewRequest.run(payload,{
-            headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},
-            waitForRateLimit:true,
-            notBefore:(()=>{const old=previousBatch?.searches?.find(s=>s.searchKeyword===keyword)?.items?.find(i=>i.itemCode===payload.itemCode&&i.itemName===payload.itemName&&i.itemCaption===payload.itemCaption);const time=Date.parse(previousBatch?.generatedAt||'');const delay=Number(old?.aiPhase1?.retryAfterMs);return old?.aiHttpStatus===429&&old?.aiPhase1?.rateLimitDiagnostic?.source==='upstream'&&Number.isFinite(time)&&delay>0&&delay<=86400000?time+delay+250:0;})(),
-            onPending:(delay,phase)=>{if(meta)meta.textContent=phase==='rate_limit'?`「${keyword}」は利用制限で待機中。${new Date(Date.now()+delay+250).toLocaleTimeString('ja-JP')}以降に同じ処理を再開します。`:`「${keyword}」の内容を検証しています。`;},
-            onResponse:response=>{
-              const data=response.data;
-              const partial={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiHttpStatus:response.status,apiCallCount:response.requestCount,llmCallCount:response.llmCallCount};
-              if(ta)ta.value=JSON.stringify({batch:true,inProgress:true,searchCount:keywords.length,generatedAt:new Date().toISOString(),searches:[...searches,{searchKeyword:keyword,sort:selectedSort,count:1,searchResultCount:items.length,error:null,items:[partial]}]},null,2);
-            }
-          });
-          const data=result.data;
-          rows[0]={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiState:result.status===200?'done':'error',aiHttpStatus:result.status,aiMessage:data.message||null,apiCallCount:result.requestCount,llmCallCount:result.llmCallCount,aiGate:{enabled:true,status:data.ok&&data.quality?.status==='ready'?'ready':'blocked',full:Boolean(data.ok&&data.quality?.status==='ready'),reasons:data.quality?.reasons||[]},resolvedPost:{mediaTemplate:'verified_semantic_post'}};
-        }
         searches.push({
           searchKeyword:keyword,
           sort:selectedSort,
-          count:rows.length,
-          searchResultCount:items.length,
+          count:items.length,
           error:null,
-          items:rows
+          items:buildDebugValidationRowsFor(items,keyword)
         });
       }catch(error){
         searches.push({
@@ -2385,12 +2359,12 @@ async function copyBatchDebugValidation(){
           items:[]
         });
       }
-      if(index<keywords.length-1) await new Promise(resolve=>setTimeout(resolve,350));
+      if(index<DEBUG_BATCH_KEYWORDS.length-1) await new Promise(resolve=>setTimeout(resolve,350));
     }
 
     const payload={
       batch:true,
-      searchCount:keywords.length,
+      searchCount:DEBUG_BATCH_KEYWORDS.length,
       generatedAt:new Date().toISOString(),
       searches
     };
@@ -2398,7 +2372,7 @@ async function copyBatchDebugValidation(){
     if(ta){ta.value=json;ta.scrollTop=0;}
     const okCount=searches.filter(x=>!x.error).length;
     const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
-    if(meta) meta.textContent=`${okCount}/${keywords.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
+    if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
 
     try{
       if(navigator.clipboard?.writeText){
@@ -2520,7 +2494,7 @@ function specificGroundedProductType(item,aiType){
 
 function aiSalesInsight(item,result){
   if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?{productType:result.productType?.specific||'',scene:'',features:[],sellingPoints:result.diagnostics?.draft?.sentences?.map(s=>s.text)||[],featureRows:[]}:{productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
-  if(result?.version==='super-urenavi-v3-preview'||result?.version==='super-urenavi-v3-conditional-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
+  if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
