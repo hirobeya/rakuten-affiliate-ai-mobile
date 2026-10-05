@@ -2343,12 +2343,22 @@ async function copyBatchDebugValidation(){
       if(meta) meta.textContent=`「${keyword}」を検索しています。`;
       try{
         const items=await debugSearchOne(keyword,session,selectedSort);
+        // Measure one representative per search through the same production-of-copy path.
+        const item=items[0];
+        const rows=buildDebugValidationRowsFor(item?[item]:[],keyword);
+        if(item){
+          const payload={itemCode:String(item.itemCode||''),itemName:String(item.itemName||''),itemCaption:String(item.itemCaption||'').slice(0,12000),itemPrice:Number(item.itemPrice)||0};
+          const result=await RoomPreviewRequest.run(payload,{headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token}});
+          const data=result.data;
+          rows[0]={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiState:result.status===200?'done':'error',aiHttpStatus:result.status,aiMessage:data.message||null,apiCallCount:result.requestCount,aiGate:{enabled:true,status:data.ok&&data.quality?.status==='ready'?'ready':'blocked',full:Boolean(data.ok&&data.quality?.status==='ready'),reasons:data.quality?.reasons||[]},resolvedPost:{mediaTemplate:'verified_semantic_post'}};
+        }
         searches.push({
           searchKeyword:keyword,
           sort:selectedSort,
-          count:items.length,
+          count:rows.length,
+          searchResultCount:items.length,
           error:null,
-          items:buildDebugValidationRowsFor(items,keyword)
+          items:rows
         });
       }catch(error){
         searches.push({
@@ -2494,7 +2504,7 @@ function specificGroundedProductType(item,aiType){
 
 function aiSalesInsight(item,result){
   if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?{productType:result.productType?.specific||'',scene:'',features:[],sellingPoints:result.diagnostics?.draft?.sentences?.map(s=>s.text)||[],featureRows:[]}:{productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
-  if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
+  if(result?.version==='super-urenavi-v3-preview'||result?.version==='super-urenavi-v3-conditional-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
