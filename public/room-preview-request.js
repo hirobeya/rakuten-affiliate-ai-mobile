@@ -4,13 +4,14 @@
   const active=()=>!signal?.aborted&&isCurrent();
   const cancelled=()=>{const e=new Error('Generation cancelled');e.name='AbortError';return e;};
   const wait=waitImpl|| (async ms=>{const until=Date.now()+ms;while(Date.now()<until){if(!active())throw cancelled();await new Promise(r=>setTimeout(r,Math.min(1000,until-Date.now())));}});
-  let requestCount=0;
+  let requestCount=0,llmCallCount=0;
   for(let step=0;step<32;step++){
    if(!active())throw cancelled();
    onRequest(++requestCount);
    const response=await fetchImpl('/api/room-ai-v3',{method:'POST',headers,credentials:'include',signal,body:JSON.stringify(item)});
    const data=await response.json().catch(()=>({}));
-   if(response.status!==202||data.pending!==true)return {status:response.status,data,requestCount};
+   if(Number.isSafeInteger(data.requestLlmCalls)&&data.requestLlmCalls>=0)llmCallCount+=data.requestLlmCalls;
+   if(response.status!==202||data.pending!==true)return {status:response.status,data,requestCount,llmCallCount};
    if(step===31)throw new Error('Preview pipeline did not finish');
    onStage(data.phase);
    const delay=Number(data.retryAfterMs);

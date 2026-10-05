@@ -2354,7 +2354,7 @@ async function copyBatchDebugValidation(){
           const payload={itemCode:String(item.itemCode||''),itemName:String(item.itemName||''),itemCaption:String(item.itemCaption||'').slice(0,12000),itemPrice:Number(item.itemPrice)||0};
           const result=await RoomPreviewRequest.run(payload,{headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token}});
           const data=result.data;
-          rows[0]={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiState:result.status===200?'done':'error',aiHttpStatus:result.status,aiMessage:data.message||null,apiCallCount:result.requestCount,aiGate:{enabled:true,status:data.ok&&data.quality?.status==='ready'?'ready':'blocked',full:Boolean(data.ok&&data.quality?.status==='ready'),reasons:data.quality?.reasons||[]},resolvedPost:{mediaTemplate:'verified_semantic_post'}};
+          rows[0]={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiState:result.status===200?'done':'error',aiHttpStatus:result.status,aiMessage:data.message||null,apiCallCount:result.requestCount,llmCallCount:result.llmCallCount,aiGate:{enabled:true,status:data.ok&&data.quality?.status==='ready'?'ready':'blocked',full:Boolean(data.ok&&data.quality?.status==='ready'),reasons:data.quality?.reasons||[]},resolvedPost:{mediaTemplate:'verified_semantic_post'}};
         }
         searches.push({
           searchKeyword:keyword,

@@ -1,5 +1,15 @@
 'use strict';
 const assert=require('node:assert/strict');const c=require('../lib/room-semantic-contract');
+// Restrictions outside the selected quote reach the semantic reviewer without a keyword rule.
+for(const [name,caption,quote,restriction] of [
+ ['車用掃除機','車内マットの砂を吸い取れます。付属ノズルを装着して使用してください。フィルターは洗えます。','車内マットの砂を吸い取れます。','付属ノズルを装着して使用してください。'],
+ ['園芸用ノズル','給水ホースに接続して使用してください。庭の水やりに使えます。凍結時は使用しないでください。','庭の水やりに使えます。','給水ホースに接続して使用してください。']
+]){
+ const item={itemName:name,itemCaption:caption};const proof=c.bind(item,quote);const context=c.sourceContext(item,proof);
+ assert(context.context.includes(restriction));assert.equal(context.context,caption.slice(context.contextStart,context.contextEnd));assert(context.context.includes(quote));
+ const draft={product:{what:name,acts_on:'対象',acts_on_quote:quote},sentences:[{text:name+'を使いたいときに。',kinds:['scene'],quotes:[quote]}]};
+ assert.deepEqual(c.inspect(item,draft).contexts[0][0],context);
+}
 const spacedSource={itemName:'掃除用品',itemCaption:'汚れに直接使えます。 水洗いできます。'};
 const spacedQuote=c.bind(spacedSource,'汚れに直接使えます。水洗いできます。');assert(spacedQuote);assert.equal(spacedQuote.quote,spacedSource.itemCaption);assert.equal(spacedQuote.start,0);assert.equal(spacedQuote.end,spacedSource.itemCaption.length);
 assert.equal(c.bind({itemName:'tool',itemCaption:'not waterproof'},'notwaterproof'),null);assert.equal(c.bind({itemName:'tool',itemCaption:'5 000 mAh'},'5000mAh'),null);
