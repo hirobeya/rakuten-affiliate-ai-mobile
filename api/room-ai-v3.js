@@ -444,6 +444,7 @@ function createHandler(deps={}){
       const retryAfterMs=Number(error?.retryAfterMs)||0;
       if(retryAfterMs>0) res.setHeader('Retry-After',String(Math.ceil(retryAfterMs/1000)));
       return json(res,status,{
+        ok:false,pending:false,
         message:status===429?(error?.safeError?'AI provider rate limit reached':'AI daily limit reached'):'v3 analysis failed',
         retryAfterMs,
         version:'super-urenavi-v3-conditional-preview',

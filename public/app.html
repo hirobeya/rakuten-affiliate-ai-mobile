@@ -2712,7 +2712,7 @@ async function runAiPreview(items){
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
     await requestAiRoom(job.item,job.index,generation);
-    if(usePurchasePlan&&(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429)){
+    if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
       for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
       queue.length=0;
     }
