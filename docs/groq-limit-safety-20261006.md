@@ -8,7 +8,7 @@ GitHub HEAD: 5f7e7691c570e16ed9b6e3bb3f7e8f9b34038fe2。
 PR #159: open / draft / merged=false。
 Deployment dpl_353oHkREfp8uC1UpvnjzPmtKvBfe: READY、target=null、同じSHA。
 復元基準ba53847d1ab7173096e871560ba1fdce97c5057cとの差は.vercel-preview-triggerのみ。
-今回のブラウザはログイン画面。以前のownerセッションは利用できなかった。
+初回表示はログイン画面だったが、後でowner認証が復元した。認証値の入力・変更は行っていない。
 
 ## 現在の通信経路
 
@@ -33,7 +33,13 @@ node --test tests/groq-rate-limit-safety.test.js tests/v3-learned-identity-reuse
 既存商品種別知識・wrapperテストを含む再利用関連テストも成功。
 git diff --check成功。
 
-実Groq通信: 未検証。指定8商品それぞれの実通信回数: 未検証。実429の画面挙動: 未検証。文章品質: 品質未検証。理由は現在のブラウザにowner認証がないため。今回の過去の429記録を新しい実測PASSとして使わない。
+実測コードSHA: 22670ab28acb21f50ae7494ee9fbc17ef44cd661。Deployment dpl_G3UTPgsqDsp3T51EDnqxYQ6vjtC8はREADY、target=null。
+owner認証復元後、2026-10-06 01:53(JST)に通常画面でハンディクリーナー検索を実行。ueno-mono:10000006はphase=local/model=local/Groq totalCalls=0。次の商品hg-store:10000214も0。
+3番目の商品で上流429。画面は約20分待機、投稿文未完成と表示し、4〜10番目は停止・error/429。新しい操作なしに再試行しない。
+Vercel runtimeログで16:53:19Z/16:53:21Zのlocal0通信と16:53:22Zの429を確認。この429処理は既存部分キャッシュのpass2のみquota通過。callStructuredは1fetchで例外終了し、UIから後続API呼び出しなし。16:54:20Zまでの取得ログで16:53:22Z以降の/api/room-ai-v3呼び出しはなし。この観測時間を超えた実待機は未検証。
+再読み込み時の保存検索復元による先行処理も同Deployment上のログに存在する。16:53:10Zの429はpass1/pass2のquota通過。これを手動検索16:53:22Zの処理と混同しない。
+実verified identityキャッシュ再利用0回: 未検証(既存モックテストのみ成功)。
+指定商品の残り7件(洗濯ネット、ポータブル電源、犬ベッド、犬用ドライブベッド、バイクグローブ、抱き枕、電源セット)はGroq制限継続のため未検証。推測でPASSにしない。文章品質: 品質未検証。
 
 ## 範囲外問題の記録
 
@@ -44,4 +50,4 @@ git diff --check成功。
 
 ## 判定
 
-ローカルのモック検証と既存検証は成功。実通信を含めたGroq制限対応の最終完了判定は保留。文章品質完成、merge可とは判定しない。PR #159 Draft維持。
+ローカルのモック検証と既存検証は成功。実Previewでもlocal0通信、429失敗表示、残り商品停止、観測時間内の自動再試行なしを確認。指定8商品全体、実verified identity再利用、同時リクエスト重複対策の完了判定は保留。文章品質完成、merge可とは判定しない。PR #159 Draft維持。
