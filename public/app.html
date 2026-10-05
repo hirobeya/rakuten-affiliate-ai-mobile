@@ -872,6 +872,8 @@ input,select{
   <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
   <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
   <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
+  <label for="debugExtraKeywords">追加検証キーワード（任意、カンマ区切り・最大3件）</label>
+  <input id="debugExtraKeywords" type="text" maxlength="300" autocomplete="off">
   <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
   <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
 </div>
@@ -2321,10 +2323,12 @@ async function copyBatchDebugValidation(){
     return;
   }
   if(btn?.disabled) return;
+  const extras=String(document.getElementById('debugExtraKeywords')?.value||'').split(/[,、]/).map(x=>x.trim().slice(0,100)).filter(Boolean).slice(0,3);
+  const keywords=[...new Set([...DEBUG_BATCH_KEYWORDS,...extras])];
 
   btn.disabled=true;
-  btn.textContent='5件を検証中…';
-  if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
+  btn.textContent=`${keywords.length}件を検証中…`;
+  if(meta) meta.textContent=`${keywords.length}つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。`;
 
   let session=null;
   try{
@@ -2337,9 +2341,9 @@ async function copyBatchDebugValidation(){
     const selectedSort=String($('#sort')?.value||'').trim()||'standard';
     const searches=[];
 
-    for(let index=0;index<DEBUG_BATCH_KEYWORDS.length;index++){
-      const keyword=DEBUG_BATCH_KEYWORDS[index];
-      btn.textContent=`${index+1}/${DEBUG_BATCH_KEYWORDS.length} 検証中…`;
+    for(let index=0;index<keywords.length;index++){
+      const keyword=keywords[index];
+      btn.textContent=`${index+1}/${keywords.length} 検証中…`;
       if(meta) meta.textContent=`「${keyword}」を検索しています。`;
       try{
         const items=await debugSearchOne(keyword,session,selectedSort);
@@ -2369,12 +2373,12 @@ async function copyBatchDebugValidation(){
           items:[]
         });
       }
-      if(index<DEBUG_BATCH_KEYWORDS.length-1) await new Promise(resolve=>setTimeout(resolve,350));
+      if(index<keywords.length-1) await new Promise(resolve=>setTimeout(resolve,350));
     }
 
     const payload={
       batch:true,
-      searchCount:DEBUG_BATCH_KEYWORDS.length,
+      searchCount:keywords.length,
       generatedAt:new Date().toISOString(),
       searches
     };
@@ -2382,7 +2386,7 @@ async function copyBatchDebugValidation(){
     if(ta){ta.value=json;ta.scrollTop=0;}
     const okCount=searches.filter(x=>!x.error).length;
     const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
-    if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
+    if(meta) meta.textContent=`${okCount}/${keywords.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
 
     try{
       if(navigator.clipboard?.writeText){
