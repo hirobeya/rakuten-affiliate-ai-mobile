@@ -2340,6 +2340,8 @@ async function copyBatchDebugValidation(){
 
     const selectedSort=String($('#sort')?.value||'').trim()||'standard';
     const searches=[];
+    let previousBatch=null;
+    try{const parsed=JSON.parse(ta?.value||'{}');if(parsed.batch===true)previousBatch=parsed;}catch{}
 
     for(let index=0;index<keywords.length;index++){
       const keyword=keywords[index];
@@ -2355,6 +2357,7 @@ async function copyBatchDebugValidation(){
           const result=await RoomPreviewRequest.run(payload,{
             headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},
             waitForRateLimit:true,
+            notBefore:(()=>{const old=previousBatch?.searches?.find(s=>s.searchKeyword===keyword)?.items?.find(i=>i.itemCode===payload.itemCode&&i.itemName===payload.itemName&&i.itemCaption===payload.itemCaption);const time=Date.parse(previousBatch?.generatedAt||'');const delay=Number(old?.aiPhase1?.retryAfterMs);return old?.aiHttpStatus===429&&old?.aiPhase1?.rateLimitDiagnostic?.source==='upstream'&&Number.isFinite(time)&&delay>0&&delay<=86400000?time+delay+250:0;})(),
             onPending:(delay,phase)=>{if(meta)meta.textContent=phase==='rate_limit'?`「${keyword}」は利用制限で待機中。${new Date(Date.now()+delay+250).toLocaleTimeString('ja-JP')}以降に同じ処理を再開します。`:`「${keyword}」の内容を検証しています。`;},
             onResponse:response=>{
               const data=response.data;

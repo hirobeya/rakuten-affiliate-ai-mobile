@@ -1,10 +1,12 @@
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.RoomPreviewRequest=factory();})(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
- async function run(item,{headers={'Content-Type':'application/json'},signal,isCurrent=()=>true,onPending=()=>{},onStage=()=>{},onRequest=()=>{},onResponse=()=>{},waitForRateLimit=false,fetchImpl=fetch,waitImpl=null}={}){
+ async function run(item,{headers={'Content-Type':'application/json'},signal,isCurrent=()=>true,onPending=()=>{},onStage=()=>{},onRequest=()=>{},onResponse=()=>{},waitForRateLimit=false,notBefore=0,fetchImpl=fetch,waitImpl=null}={}){
   const active=()=>!signal?.aborted&&isCurrent();
   const cancelled=()=>{const e=new Error('Generation cancelled');e.name='AbortError';return e;};
   const wait=waitImpl|| (async ms=>{const until=Date.now()+ms;while(Date.now()<until){if(!active())throw cancelled();await new Promise(r=>setTimeout(r,Math.min(1000,until-Date.now())));}});
   let requestCount=0,llmCallCount=0;
+  const initialDelay=Number(notBefore)-Date.now();
+  if(initialDelay>0&&initialDelay<=86400000){onPending(initialDelay,'rate_limit');await wait(initialDelay+250);}
   for(let step=0;step<32;step++){
    if(!active())throw cancelled();
    onRequest(++requestCount);
