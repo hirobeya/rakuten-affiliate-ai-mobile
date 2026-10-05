@@ -2352,7 +2352,16 @@ async function copyBatchDebugValidation(){
         const rows=buildDebugValidationRowsFor(item?[item]:[],keyword);
         if(item){
           const payload={itemCode:String(item.itemCode||''),itemName:String(item.itemName||''),itemCaption:String(item.itemCaption||'').slice(0,12000),itemPrice:Number(item.itemPrice)||0};
-          const result=await RoomPreviewRequest.run(payload,{headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token}});
+          const result=await RoomPreviewRequest.run(payload,{
+            headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},
+            waitForRateLimit:true,
+            onPending:(delay,phase)=>{if(meta)meta.textContent=phase==='rate_limit'?`「${keyword}」は利用制限で待機中。${new Date(Date.now()+delay+250).toLocaleTimeString('ja-JP')}以降に同じ処理を再開します。`:`「${keyword}」の内容を検証しています。`;},
+            onResponse:response=>{
+              const data=response.data;
+              const partial={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiHttpStatus:response.status,apiCallCount:response.requestCount,llmCallCount:response.llmCallCount};
+              if(ta)ta.value=JSON.stringify({batch:true,inProgress:true,searchCount:keywords.length,generatedAt:new Date().toISOString(),searches:[...searches,{searchKeyword:keyword,sort:selectedSort,count:1,searchResultCount:items.length,error:null,items:[partial]}]},null,2);
+            }
+          });
           const data=result.data;
           rows[0]={...rows[0],itemCode:payload.itemCode,itemCaption:payload.itemCaption,generatedCopy:aiPhase1Post(item,data),aiPhase1:data,aiState:result.status===200?'done':'error',aiHttpStatus:result.status,aiMessage:data.message||null,apiCallCount:result.requestCount,llmCallCount:result.llmCallCount,aiGate:{enabled:true,status:data.ok&&data.quality?.status==='ready'?'ready':'blocked',full:Boolean(data.ok&&data.quality?.status==='ready'),reasons:data.quality?.reasons||[]},resolvedPost:{mediaTemplate:'verified_semantic_post'}};
         }
