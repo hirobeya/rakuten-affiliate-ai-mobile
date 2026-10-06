@@ -18,8 +18,8 @@ const {buildVerificationInput,validateUnderstanding}=(()=>({...require('../lib/s
  row.raw_ai_json.pass2=null;row.result_status='ok';options.callPass2=async()=>{p2++;return {raw:{results:[]},model:'mock'};};
  const rejected=await analyzeProductV3(options);assert.equal(rejected.ok,false);assert.equal(rejected.pending,undefined);assert.equal(p1,1);
  let calls=0,waited=0;
- const client=await run(item,{fetchImpl:async()=>{calls++;return {status:calls===1?202:200,json:async()=>calls===1?{pending:true,retryAfterMs:65000}:{ok:true}};},waitImpl:async ms=>{waited=ms;}});
- assert.equal(client.status,200);assert.equal(calls,2);assert.equal(waited,65250);
+ const client=await run(item,{fetchImpl:async()=>{calls++;return {status:202,json:async()=>({pending:true,retryAfterMs:65000})};},waitImpl:async ms=>{waited=ms;}});
+ assert.equal(client.status,202);assert.equal(calls,1);assert.equal(waited,0);
  calls=0;await run(item,{fetchImpl:async()=>{calls++;return {status:429,json:async()=>({})};},waitImpl:async()=>{throw Error('must not retry');}});assert.equal(calls,1);
  calls=0;await assert.rejects(()=>run(item,{isCurrent:()=>false,fetchImpl:async()=>{calls++;}}),e=>e.name==='AbortError');assert.equal(calls,0);
  // Real page double-click while auth is pending must dispatch one search only.
@@ -33,5 +33,5 @@ const {buildVerificationInput,validateUnderstanding}=(()=>({...require('../lib/s
   searches++;return {status:200,json:async()=>({items:[]})};
  }};vm.createContext(context);vm.runInContext(script,context);await new Promise(r=>setTimeout(r,0));
  const a=context.run([0]),b=context.run([0]);assert.equal(authCalls,2);releaseAuth();await Promise.all([a,b]);assert.equal(searches,1);
- console.log('preview-draft-pacing: PASS (deferred verification, no duplicate writer, cancellation, no 429 retry)');
+ console.log('preview-draft-pacing: PASS (deferred engine isolated, single-shot client, cancellation, no retry)');
 })().catch(e=>{console.error(e);process.exitCode=1;});
