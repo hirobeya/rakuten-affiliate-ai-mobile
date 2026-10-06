@@ -267,7 +267,7 @@ function localZeroCall(item,learnedIdentity=''){
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const partnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,identity,itemPrice:item.itemPrice});
+  const partnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
   const facts=[];
   const semanticFactKeys=new Set();
   for(const fact of [...structuredFacts,...literalFacts]){
@@ -283,7 +283,7 @@ function localZeroCall(item,learnedIdentity=''){
     const exact='exact:'+normalize(partnerCopy.quote).toLowerCase();
     if(!semanticFactKeys.has(exact)){
       semanticFactKeys.add(exact);
-      facts.unshift({quote:partnerCopy.quote,source:'itemName',kind:'partner_signal'});
+      facts.unshift({quote:partnerCopy.quote,source:partnerCopy.source||'itemName',kind:'partner_signal'});
     }
   }
   if(!facts.length) return null;
@@ -300,7 +300,7 @@ function localZeroCall(item,learnedIdentity=''){
     text:partnerCopy.hook+'。'+partnerCopy.quote,
     factRef:partnerCopy.quote,
     factRefs:[partnerCopy.quote],
-    source:'itemName'
+    source:partnerCopy?.source||'itemName'
   }]:(groundedValues.length?groundedValues:facts.slice(0,3).map(f=>({
     text:'仕様：'+f.quote,
     factRef:f.quote,
