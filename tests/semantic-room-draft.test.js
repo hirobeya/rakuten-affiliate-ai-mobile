@@ -73,9 +73,19 @@ assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'blocked');
 // Whole-paragraph approval cannot bypass missing, rejected or ungrounded sentence checks.
 const proof=evaluate(item,raw), expected=proof.input[0].sentences;
 const checks=expected.map(sentence=>({sentence,supported:true,evidenceQuotes:[item.itemCaption.slice(item.itemCaption.indexOf('親指'))],reason:'mocked'}));
-for(const malformed of [[],checks.slice(1),[...checks,checks[0]],checks.map((c,i)=>i?c:{...c,supported:false}),checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
+for(const malformed of [[],checks.slice(1),[...checks,checks[0]],checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
  const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'mocked',checks:malformed}]});
  assert.equal(composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}}).status,'blocked');
+}
+// An unsupported scene no longer destroys a separately grounded body. The scene
+// is removed and the renderer falls back to a grounded identity-only opening.
+{
+ const sceneRejected=checks.map((c,i)=>i?c:{...c,supported:false,evidenceQuotes:[]});
+ const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:false,keepDirectFact:true,reason:'scene unsupported',checks:sceneRejected}]});
+ const copy=composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}});
+ assert.equal(copy.status,'ready');
+ assert.equal(verifiedAppeals[0].scene,'');
+ assert.match(copy.text,/を選ぶなら。/);
 }
 const navigation=structuredClone(raw);navigation.appeals[0].scene='休憩時に。';navigation.appeals[0].text='停止中にナビ操作ができるバイクグローブ。';
 assert.equal(evaluate(item,navigation).copy.status,'blocked');
