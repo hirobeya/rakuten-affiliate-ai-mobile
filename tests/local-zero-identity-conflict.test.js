@@ -40,3 +40,18 @@ test('holdout8 pet carrier no longer publishes generic carry-case identity local
   });
   assert.equal(result,null);
 });
+
+
+test('leading standalone identity may be repeated inside a later descriptive product name',()=>{
+  assert.equal(hasCompetingCompoundIdentity(
+    '洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式',
+    '洗濯ネット'
+  ),false);
+});
+
+test('leading standalone identity still rejects a later accessory compound',()=>{
+  assert.equal(hasCompetingCompoundIdentity(
+    '収納ベンチ 折りたたみ 収納ベンチカバー 防水',
+    '収納ベンチ'
+  ),true);
+});
