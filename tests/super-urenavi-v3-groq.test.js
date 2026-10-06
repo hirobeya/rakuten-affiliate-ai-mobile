@@ -88,11 +88,13 @@ function response(payload,{status=200}={}){
   assert.equal(calls[1].body.max_output_tokens,900);
   const pass2User=JSON.parse(calls[1].body.input[1].content[0].text);
   assert.deepEqual(pass2User.appeals,verificationInput);
-  assert.equal(pass2User.itemName,'バイク グローブ 本革 山羊革 ナックルプロテクター入り');
-  assert.equal(pass2User.itemCaption,'本革の柔らかさとグリップ力。スマホ対応。');
+  assert.equal(pass2User.itemName,undefined);
+  assert.equal(pass2User.itemCaption,undefined);
   assert.deepEqual(pass2User.productType,{specific:'バイク グローブ',general:'バイク用グローブ'});
-  assert.match(calls[1].body.input[0].content[0].text,/商品原文/);
-  assert.match(calls[1].body.input[0].content[0].text,/supported=true/);
+  assert.match(calls[1].body.input[0].content[0].text,/添付されたattributes\.quote/);
+  assert.match(calls[1].body.input[0].content[0].text,/入力外の引用を新しく持ち込んではいけません/);
+  assert.match(SEMANTIC_WRITER_PROMPT,/STRICT EVIDENCE SCOPE/);
+  assert.match(SEMANTIC_WRITER_PROMPT,/A fact appearing elsewhere in itemName\/itemCaption is NOT allowed/);
 
   const alternate=createV3Groq({apiKey:'test',model:'openai/gpt-oss-120b',fetchImpl});
   await alternate.callPass1({item:{itemName:'バイクグローブ'}});
