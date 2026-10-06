@@ -701,7 +701,8 @@ function run(name,fn){
     assert.match(html,/insufficient_grounded_facts/);
     assert.match(html,/rule_conflict/);
     assert.doesNotMatch(html,/weak_single_candidate/);
-    assert.match(html,/setTimeout\(r,750\)/);
+    assert.match(html,/Number\(result\?\.data\?\.nextDelayMs\)\|\|750/);
+    assert.match(html,/Groqの利用枠を守るため約/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
