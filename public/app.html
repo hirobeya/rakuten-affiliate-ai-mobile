@@ -1011,6 +1011,7 @@ let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
+let aiQueueRunning=false;
 
 
 function setAuthMessage(
@@ -2406,6 +2407,13 @@ async function copyDebugValidation(){
 
   let json='';
   try{
+    const progress=activeAiProgress();
+    if(progress.pending>0){
+      if(meta) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。最終結果になるまでJSONはコピーできません。`;
+      if(btn) btn.textContent='AI確認完了まで待ってください';
+      setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
+      return;
+    }
     const currentKeyword=k.value.trim();
     if(currentKeyword!==lastSearchKeyword){
       if(meta) meta.textContent='検索キーワードが前回の検索結果と一致していません。もう一度「商品を探して評価する」を押してからJSONを作成してください。';
@@ -2695,28 +2703,72 @@ function aiTargetDecision(item){
   };
 }
 
-async function runAiPreview(items){
-  if(!aiGatesFullOutput) return;
-  const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+function activeAiProgress(){
+  const items=Array.isArray(lastSearchItems)?lastSearchItems:[];
+  let required=0,done=0,pending=0,failed=0;
+  items.forEach((item,index)=>{
+    const target=aiTargetDecision(item);
+    if(!target.callAi) return;
+    required++;
+    const state=aiRoomResults.get(index)?.state;
+    if(state==='done') done++;
+    else if(state==='error') failed++;
+    else pending++;
+  });
+  return {required,done,pending,failed,finished:required>0&&pending===0};
+}
+
+function resumeActiveAiQueue(){
+  if(!aiGatesFullOutput||aiQueueRunning||!lastSearchItems.length) return;
+  const progress=activeAiProgress();
+  if(progress.pending<=0) return;
+  const hasActive=lastSearchItems.some((item,index)=>{
+    if(!aiTargetDecision(item).callAi) return false;
+    return aiRoomResults.get(index)?.state==='loading';
+  });
+  if(hasActive) void runAiPreview(lastSearchItems,{resume:true});
+}
+
+async function runAiPreview(items,{resume=false}={}){
+  if(!aiGatesFullOutput||aiQueueRunning) return;
+  const generation=resume?aiRunGeneration:++aiRunGeneration;
+  if(!resume){
+    aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+    (Array.isArray(items)?items:[]).forEach((item,index)=>{
+      const target=aiTargetDecision(item);
+      if(target.callAi) aiRoomResults.set(index,{state:'loading',target,auto:true});
+      else{
+        aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
+        updateAiPanel(index);
+      }
+    });
+  }
   const queue=[];
   (Array.isArray(items)?items:[]).forEach((item,index)=>{
     const target=aiTargetDecision(item);
-    if(target.callAi){
-      aiRoomResults.set(index,{state:'loading',target,auto:true});
-      queue.push({item,index});
-    }else{
-      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
-      updateAiPanel(index);
-    }
+    if(!target.callAi) return;
+    const state=aiRoomResults.get(index)?.state;
+    if(state==='loading'||!state) queue.push({item,index});
   });
-  while(queue.length&&generation===aiRunGeneration){
-    const job=queue.shift();
-    await requestAiRoom(job.item,job.index,generation);
-    if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
-      for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
-      queue.length=0;
+  aiQueueRunning=true;
+  try{
+    while(queue.length&&generation===aiRunGeneration){
+      const job=queue.shift();
+      await requestAiRoom(job.item,job.index,generation);
+      if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+        queue.length=0;
+      }
+      const progress=activeAiProgress();
+      const meta=document.getElementById('debugJsonMeta');
+      if(meta&&progress.pending>0) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。完了するまで検証JSONはコピーできません。`;
+      if(queue.length) await new Promise(r=>setTimeout(r,750));
     }
-    if(queue.length) await new Promise(r=>setTimeout(r,750));
+  }finally{
+    aiQueueRunning=false;
+    const progress=activeAiProgress();
+    const meta=document.getElementById('debugJsonMeta');
+    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`AI確認完了：${progress.done}/${progress.required}件成功、${progress.failed}件停止。検証JSONを作成できます。`;
   }
 }
 
@@ -4184,10 +4236,13 @@ document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('chan
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);
-window.addEventListener('pageshow',()=>{if(!document.hidden) void bootAuth();});
+window.addEventListener('pageshow',()=>{if(!document.hidden){void bootAuth();setTimeout(resumeActiveAiQueue,500);}});
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden) saveSearchState();
-  else void bootAuth();
+  else{
+    void bootAuth();
+    setTimeout(resumeActiveAiQueue,500);
+  }
 });
 document.addEventListener('click',e=>{if(e.target.closest?.('a.roomLink')) saveSearchState();},true);
 setInterval(()=>{if(!document.hidden) void bootAuth();},60000);
