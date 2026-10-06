@@ -4,7 +4,7 @@ const {authorize,db}=require('../lib/billing');
 const {validateAiExtraction}=require('../lib/room-ai');
 const {createCacheStore}=require('../lib/super-urenavi-cache');
 const {analyzeProductV3}=require('../lib/super-urenavi-v3-engine');
-const {createV3Groq,DEFAULT_MODEL}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,DEFAULT_MODEL,nextSafeDelayMs}=require('../lib/super-urenavi-v3-groq');
 const {composeVariants}=require('../lib/super-urenavi-v3-copy');
 const {logAiUsageMetric}=require('../lib/super-urenavi-v3-metrics');
 const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
@@ -460,6 +460,8 @@ function createHandler(deps={}){
         reasons:ready?[]:[...(Array.isArray(publication.reasons)?publication.reasons:[]),...(analysis.ok===true?[]:['analysis_not_ready'])]
       };
 
+      const nextDelayMs=nextSafeDelayMs(analysis.rateLimit||{},analysis.usage||{});
+
       return json(res,200,{
         ok:ready,
         pending:false,
@@ -472,6 +474,7 @@ function createHandler(deps={}){
         decisionAxes:analysis.validation?.decisionAxes||[],
         verifiedAppeals:analysis.verifiedAppeals||[],
         groq:analysis.groq,
+        nextDelayMs,
         cacheStatus:analysis.cacheStatus,
         pass2Status:analysis.pass2Status,
         tier:copy.tier,
