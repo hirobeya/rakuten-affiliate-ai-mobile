@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
-const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile,safeTitleFacts,composeGenericFromTitle}=require('../lib/local-generic-reasoner');
+const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile,safeTitleFacts,composeGenericFromTitle,safeCaptionCandidates,composeGenericFromSources}=require('../lib/local-generic-reasoner');
 
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
@@ -223,4 +223,34 @@ test('rechargeable wording attached to an accessory is not promoted to whole-pro
   const title='卓上クリーナー 充電式バッテリー付属 デスク掃除機';
   const facts=safeTitleFacts(title);
   assert.ok(!facts.some(x=>x.quote==='充電式'));
+});
+
+test('caption-grounded generic reasoning works across unknown product types without category registration',()=>{
+  const itemName='洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式';
+  const itemCaption='【本体サイズ】内径約700mm。【商品説明】シングルサイズの布団が入る大容量サイズです。口が大きく開くので寝具等の大物でも出し入れがしやすいロングファスナーを使用しています。';
+  const out=composeGenericFromSources({itemName,itemCaption,identity:'ふくらむ洗濯ネット特大70'});
+  assert.ok(out);
+  assert.equal(out.source,'itemCaption');
+  assert.match(out.text,/ふくらむ洗濯ネット特大70/);
+  assert.match(out.text,/シングルサイズの布団|出し入れがしやすいロングファスナー/);
+});
+
+test('caption-grounded reasoning rejects unrelated cross-sell text',()=>{
+  const itemName='ブラジャー 洗濯ネット 型崩れ防止 ドラム式 乾燥機対応';
+  const itemCaption='商品説明 ドラム式OK!! ブラジャーの型崩れを防ぐ洗濯ネットです。今、シール集めが大ブーム！あふれるコレクションをかわいく整理できる専用バインダーが登場しました！';
+  const candidates=safeCaptionCandidates({itemName,itemCaption,identity:'洗濯ネット'});
+  assert.ok(candidates.length>0);
+  assert.ok(candidates.every(x=>!/シール|バインダー/.test(x.quote)));
+  const out=composeGenericFromSources({itemName,itemCaption,identity:'洗濯ネット'});
+  assert.ok(out);
+  assert.doesNotMatch(out.text,/シール|バインダー/);
+});
+
+test('weak unrelated caption does not force local publication',()=>{
+  const out=composeGenericFromSources({
+    itemName:'洗濯ネット シリコン',
+    itemCaption:'かわいいシールを整理する専用バインダーです。',
+    identity:'洗濯ネット'
+  });
+  assert.equal(out,null);
 });
