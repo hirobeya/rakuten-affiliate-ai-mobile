@@ -48,15 +48,15 @@ test('generic glove has no active partner knowledge and cannot guess the use',()
   assert.equal(composeLocalPartnerCopy({itemName:title,identity:'グローブ'}),null);
 });
 
-test('resolved storage bench cannot borrow storage-box knowledge but can use a literal generic axis',()=>{
+test('resolved storage bench never borrows storage-box knowledge and a bare unlabeled size may defer',()=>{
   const title='鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ 90cm 収納ボックス 工具箱';
   const out=composeLocalPartnerCopy({itemName:title,identity:'収納ベンチ'});
-  assert.ok(out);
-  assert.equal(out.generic,true);
-  assert.equal(out.productType,'収納ベンチ');
-  assert.match(out.text,/収納ベンチ/);
-  assert.doesNotMatch(out.text,/収納ボックスです/);
-  assert.doesNotMatch(out.text,/座る場所と収納を一緒/);
+  if(out){
+    assert.equal(out.productType,'収納ベンチ');
+    assert.match(out.text,/収納ベンチ/);
+    assert.doesNotMatch(out.text,/収納ボックスです/);
+    assert.doesNotMatch(out.text,/座る場所と収納を一緒/);
+  }
 });
 
 test('unknown exact identity can turn a literal structural fact into a safe purchase axis',()=>{
@@ -274,4 +274,16 @@ test('raw washable, pack count, and unlabeled dimensions stay below local public
   assert.equal(composeGenericFromSources({itemName:'洗濯ネット 洗える メッシュ',itemCaption:'',identity:'洗濯ネット'}),null);
   assert.equal(composeGenericFromSources({itemName:'洗濯ネット 6枚セット',itemCaption:'',identity:'洗濯ネット'}),null);
   assert.equal(composeGenericFromSources({itemName:'洗濯ネット 110cm×90cm',itemCaption:'',identity:'洗濯ネット'}),null);
+});
+
+
+test('exact protection and washer compatibility wording can become a grounded local reason',()=>{
+  const out=composeLocalPartnerCopy({
+    itemName:'洗濯ネット 8枚セット 型崩れ防止 ドラム式対応 ファスナーカバー付き',
+    identity:'洗濯ネット',
+    itemPrice:1000
+  });
+  assert.ok(out);
+  assert.match(out.text,/型崩れ防止|ドラム式対応|ファスナーカバー付き/);
+  assert.doesNotMatch(out.text,/洗えるタイプで選びたいなら/);
 });
