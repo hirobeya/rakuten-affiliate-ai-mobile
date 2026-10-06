@@ -146,3 +146,16 @@ test('restored search results never auto-run V3 AI',()=>{
   assert.match(html,/current\?\.state==='restored'/);
   assert.match(html,/前回の検索結果です。AI再確認は自動実行していません。/);
 });
+
+
+test('mobile AI queue blocks premature debug export and can resume unfinished active work',()=>{
+  const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  assert.match(html,/let aiQueueRunning=false;/);
+  assert.match(html,/function activeAiProgress\(\)/);
+  assert.match(html,/function resumeActiveAiQueue\(\)/);
+  assert.match(html,/runAiPreview\(lastSearchItems,\{resume:true\}\)/);
+  assert.match(html,/if\(progress\.pending>0\)\{/);
+  assert.match(html,/最終結果になるまでJSONはコピーできません/);
+  assert.match(html,/setTimeout\(resumeActiveAiQueue,500\)/);
+  assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)/);
+});
