@@ -2492,9 +2492,19 @@ function specificGroundedProductType(item,aiType){
   return base;
 }
 
+function isV3PreviewResult(result){
+  return String(result?.version||'').startsWith('super-urenavi-v3-');
+}
+
+function readyV3Post(result){
+  if(!isV3PreviewResult(result)) return '';
+  if(result?.ok!==true || result?.quality?.status!=='ready') return '';
+  return String(result?.variants?.[0]?.text||'').trim();
+}
+
 function aiSalesInsight(item,result){
-  if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?{productType:result.productType?.specific||'',scene:'',features:[],sellingPoints:result.diagnostics?.draft?.sentences?.map(s=>s.text)||[],featureRows:[]}:{productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
-  if(String(result?.version||'').startsWith('super-urenavi-v3-')) return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
+  if(isV3PreviewResult(result)) return {scene:String(result.quality?.ledger?.[0]?.scene||''),productType:String(result.productType?.specific||''),features:(result.attributes||[]).map(x=>String(x?.quote||'')).filter(Boolean),sellingPoints:(result.quality?.ledger||[]).map(x=>String(x?.text||'')).filter(Boolean),featureRows:[]};
+  if(String(result?.version||'').startsWith('room_contract_')) return {productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2515,7 +2525,7 @@ function aiSalesInsight(item,result){
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,2);
-  return {productType,features,sellingPoints,featureRows};
+  return {productType,scene:'',features,sellingPoints,featureRows};
 }
 
 function salesFactCore(value){
@@ -2531,8 +2541,8 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
-  if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
-  if(result?.version==='super-urenavi-v3-preview') return result.ok&&result.quality?.status==='ready'?String(result.variants?.[0]?.text||''):'';
+  if(isV3PreviewResult(result)) return readyV3Post(result);
+  if(String(result?.version||'').startsWith('room_contract_')) return '';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
@@ -2580,10 +2590,7 @@ function updateAiPanel(index){
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
   }
-  if(String(result.data?.version||'').startsWith('room_contract_')){
-    const data=result.data;status.textContent=data.ok&&data.quality?.status==='ready'?'投稿文の内容確認が完了しました':'投稿文を完成できませんでした。';facts.textContent='';copy.textContent=aiPhase1Post(item,data);return;
-  }
-  if(String(result.data?.version||'').startsWith('super-urenavi-v3-')){
+  if(isV3PreviewResult(result.data)){
     const data=result.data;
     status.textContent=data.quality?.status==='ready'?'商品理解・選ぶ理由・根拠の照合を完了':'選ぶ理由を根拠付きで確認できないため、投稿文を生成していません。';
     facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
@@ -2766,8 +2773,9 @@ function analysisGuide(i,index,keyword=''){
     if(gate.full&&!gate.useLegacy){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
       const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
+      const focus=usePurchasePlan?(insight.scene||insight.productType||'商品内容を確認済み'):(insight.productType||'商品内容を確認済み');
       return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
-        '<div class="target">'+esc(usePurchasePlan?insight.scene:insight.productType)+'</div>'+
+        '<div class="target">'+esc(focus)+'</div>'+
         '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
     }
     if(gate.useLegacy){
@@ -2866,9 +2874,12 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  if(String(ai.data?.version||'').startsWith('super-urenavi-v3-')||String(ai.data?.version||'').startsWith('room_contract_')) {
-    const full=ai.data.ok===true&&ai.data.quality?.status==='ready'&&Boolean(ai.data.variants?.[0]?.text);
-    return {enabled:true,status:full?'full':'fallback',full,reasons:ai.data.quality?.reasons||['purchase_reason_unconfirmed'],useLegacy:false};
+  if(isV3PreviewResult(ai.data)) {
+    const full=Boolean(readyV3Post(ai.data));
+    return {enabled:true,status:full?'full':'fallback',full,reasons:full?[]:(ai.data?.quality?.reasons||['purchase_reason_unconfirmed']),useLegacy:false};
+  }
+  if(usePurchasePlan){
+    return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
@@ -3008,7 +3019,7 @@ function today(a){
       audience=aud(i);points=pts(i);
     }else{
       const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=String((usePurchasePlan?insight.scene:insight.productType)||'');
+      audience=String((usePurchasePlan?(insight.scene||insight.productType):insight.productType)||'商品内容を確認済み');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
     return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
