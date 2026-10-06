@@ -254,3 +254,24 @@ test('weak unrelated caption does not force local publication',()=>{
   });
   assert.equal(out,null);
 });
+
+
+test('noisy commerce metadata caption never becomes a ROOM purchase reason',()=>{
+  const itemName='ブラジャー ネット ブラ 洗濯ネット 型崩れ防止 ドラム式 乾燥機対応 旅行';
+  const itemCaption='商品情報商品名ブラジャーネット内容量 選べる 2色 ブルー ホワイト 商品説明 ・型崩れ無し!!・ドラム式OK!! 関連キーワード 洗濯ネット 下着';
+  const out=composeGenericFromSources({itemName,itemCaption,identity:'洗濯ネット',itemPrice:1380});
+  if(out) assert.doesNotMatch(out.text,/商品情報商品名|内容量 選べる|関連キーワード/);
+});
+
+test('numbered explanatory prose is not copied verbatim as a local purchase reason',()=>{
+  const itemName='洗濯ネット 8枚セット 丈夫 細かい網目 絡まり防止 形崩れ防止';
+  const itemCaption='2. 他の衣類を傷つけない ファスナーのついた服を洗濯ネットに入れずに洗濯すると、他の衣類に引っ掛かり傷つけてしまう心配があります。';
+  const out=composeGenericFromSources({itemName,itemCaption,identity:'洗濯ネット',itemPrice:1000});
+  if(out) assert.doesNotMatch(out.text,/^2[.．]|2\. 他の衣類/m);
+});
+
+test('raw washable, pack count, and unlabeled dimensions stay below local publication threshold',()=>{
+  assert.equal(composeGenericFromSources({itemName:'洗濯ネット 洗える メッシュ',itemCaption:'',identity:'洗濯ネット'}),null);
+  assert.equal(composeGenericFromSources({itemName:'洗濯ネット 6枚セット',itemCaption:'',identity:'洗濯ネット'}),null);
+  assert.equal(composeGenericFromSources({itemName:'洗濯ネット 110cm×90cm',itemCaption:'',identity:'洗濯ネット'}),null);
+});
