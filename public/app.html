@@ -2762,7 +2762,13 @@ async function runAiPreview(items,{resume=false}={}){
       const progress=activeAiProgress();
       const meta=document.getElementById('debugJsonMeta');
       if(meta&&progress.pending>0) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。完了するまで検証JSONはコピーできません。`;
-      if(queue.length) await new Promise(r=>setTimeout(r,750));
+      if(queue.length){
+        const result=aiRoomResults.get(job.index);
+        const nextDelay=Math.max(750,Math.min(120000,Number(result?.data?.nextDelayMs)||750));
+        const meta=document.getElementById('debugJsonMeta');
+        if(meta&&nextDelay>1500) meta.textContent=`Groqの利用枠を守るため約${Math.ceil(nextDelay/1000)}秒待って次の商品を確認します。`;
+        await new Promise(r=>setTimeout(r,nextDelay));
+      }
     }
   }finally{
     aiQueueRunning=false;
