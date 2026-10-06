@@ -434,7 +434,7 @@ function createHandler(deps={}){
         cacheStatus:analysis.cacheStatus,
         pass2Status:analysis.pass2Status,
         tier:copy.tier,
-        quality:{status:copy.tier==='A'?'ready':'blocked',text:copy.variants[0]?.text||'',reasons:copy.reasons||[]},
+        quality:{status:(copy.quality?.status==='ready'&&Boolean(copy.variants[0]?.text))?'ready':'blocked',text:copy.variants[0]?.text||'',reasons:copy.quality?.reasons||[]},
         variants:copy.variants,
         learnedIdentity,
         metric
