@@ -47,3 +47,19 @@ test('grounded caption purchase reason completes locally with zero Groq calls',(
   assert.equal(result.local.method,'partner_reasoning');
   assert.match(result.quality.text,/布団|ロングファスナー/);
 });
+
+
+test('bare count or size facts cannot complete a local ROOM post',()=>{
+  assert.equal(localZeroCall({
+    itemCode:'quality:count-only',
+    itemName:'洗濯ネット 6枚セット',
+    itemCaption:'',
+    itemPrice:1000
+  }),null);
+  assert.equal(localZeroCall({
+    itemCode:'quality:size-only',
+    itemName:'洗濯ネット 110cm×90cm',
+    itemCaption:'',
+    itemPrice:700
+  }),null);
+});
