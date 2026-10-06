@@ -32,3 +32,18 @@ test('equivalent volume spellings are published only once',()=>{
   const text=result.quality.text;
   assert.equal((text.match(/1\.2L/g)||[]).length+(text.match(/1200ml/g)||[]).length,1);
 });
+
+
+test('grounded caption purchase reason completes locally with zero Groq calls',()=>{
+  const result=localZeroCall({
+    itemCode:'quality:caption-grounded',
+    itemName:'洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式',
+    itemCaption:'シングルサイズの布団が入る大容量サイズです。口が大きく開くので寝具等の大物でも出し入れがしやすいロングファスナーを使用しています。',
+    itemPrice:1680
+  });
+  assert.ok(result);
+  assert.equal(result.groq.totalCalls,0);
+  assert.equal(result.quality.status,'ready');
+  assert.equal(result.local.method,'partner_reasoning');
+  assert.match(result.quality.text,/布団|ロングファスナー/);
+});
