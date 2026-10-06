@@ -52,7 +52,7 @@ test('one UI operation stops remaining products after 429 in either route',async
  const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');const start=html.indexOf('async function runAiPreview('),end=html.indexOf('\nasync function ensureAiForItem(',start);
  for(const usePurchasePlan of [true,false]){
   let calls=0;
-  const ctx={usePurchasePlan,aiGatesFullOutput:true,aiRunGeneration:0,Map,aiTargetDecision:()=>({callAi:true}),updateAiPanel(){},requestAiRoom:async(_item,index)=>{calls++;ctx.aiRoomResults.set(index,{state:'error',status:429});},setTimeout(){throw Error('must not schedule continuation');}};
+  const ctx={usePurchasePlan,aiGatesFullOutput:true,aiRunGeneration:0,aiQueueRunning:false,lastSearchItems:[],document:{getElementById(){return null;}},Map,aiTargetDecision:()=>({callAi:true}),updateAiPanel(){},requestAiRoom:async(_item,index)=>{calls++;ctx.aiRoomResults.set(index,{state:'error',status:429});},setTimeout(){throw Error('must not schedule continuation');}};
   vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);await ctx.runAiPreview([{}, {}, {}]);assert.equal(calls,1);assert.equal(ctx.aiRoomResults.get(1).state,'error');
  }
 });
