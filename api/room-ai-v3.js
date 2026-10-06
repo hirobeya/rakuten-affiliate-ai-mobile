@@ -198,6 +198,28 @@ function neutralLiteralText(identity,facts,itemPrice){
   return rows.join('\n');
 }
 
+function weakStructuredFact(fact={}){
+  const kind=String(fact?.kind||'');
+  const quote=normalize(fact?.quote);
+  if(['count','dimension','size','material','numeric'].includes(kind)) return true;
+  if(kind==='function'&&['洗える','手洗い','メッシュ'].includes(quote)) return true;
+  return false;
+}
+
+function hasStrongStructuredReason(values=[],facts=[]){
+  const rows=Array.isArray(values)?values:[];
+  const sourceFacts=Array.isArray(facts)?facts:[];
+  if(!rows.length||!sourceFacts.length) return false;
+  return rows.some(value=>{
+    const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
+    if(!refs.length) return false;
+    return refs.some(ref=>{
+      const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
+      return fact&&!weakStructuredFact(fact);
+    });
+  });
+}
+
 function resolveIdentityHint(item,learnedIdentity=''){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item?.itemName,itemCaption:item?.itemCaption});
@@ -292,7 +314,7 @@ function localZeroCall(item,learnedIdentity=''){
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
-  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&groundedValues.length>0;
+  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&groundedValues.length>0&&hasStrongStructuredReason(groundedValues,structuredFacts);
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
