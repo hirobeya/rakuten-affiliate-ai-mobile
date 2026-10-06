@@ -136,3 +136,13 @@ test('stale legacy generatedCopy is never a publication source in active V3 Prev
   assert.match(html,/if\(gate\.full\) return aiPhase1Post\(item,aiRoomResults\.get\(index\)\?\.data\);/);
   assert.doesNotMatch(html,/item\?\.generatedCopy|item\.generatedCopy/);
 });
+
+
+test('restored search results never auto-run V3 AI',()=>{
+  const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  assert.match(html,/render\(state\.items,\{autoAi:false,restored:true\}\)/);
+  assert.match(html,/if\(aiGatesFullOutput&&autoAi\)\{\s*runAiPreview\(a\);/);
+  assert.match(html,/ai\.state==='restored'/);
+  assert.match(html,/current\?\.state==='restored'/);
+  assert.match(html,/前回の検索結果です。AI再確認は自動実行していません。/);
+});
