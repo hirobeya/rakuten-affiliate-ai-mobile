@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict');
 const {normalizePass1Raw,MODEL_PASS1_SCHEMA,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
 const {validateUnderstanding}=require('../lib/super-urenavi-v3-understanding');
-const {buildVerificationInput,applyVerification,PASS2_SYSTEM_PROMPT}=require('../lib/super-urenavi-v3-verifier');
+const {buildVerificationInput,applyVerification,draftSentences,PASS2_SYSTEM_PROMPT}=require('../lib/super-urenavi-v3-verifier');
 const {composePurchaseCopy}=require('../lib/grounded-purchase-copy');
 const cases=[
  ['バイクグローブ','親指と人差し指にタッチ対応素材','停車中に地図を確認したいときに。','親指と人差し指にタッチ対応素材を使ったバイクグローブ。停車中は手袋を着けたままスマホを操作できます。'],
@@ -73,19 +73,20 @@ assert.equal(evaluate(sourceRisk,safeDraft).copy.status,'blocked');
 // Whole-paragraph approval cannot bypass missing, rejected or ungrounded sentence checks.
 const proof=evaluate(item,raw), expected=proof.input[0].sentences;
 const checks=expected.map(sentence=>({sentence,supported:true,evidenceQuotes:[item.itemCaption.slice(item.itemCaption.indexOf('親指'))],reason:'mocked'}));
-const bodySentence=String(proof.validation.appeals[0].text||'').trim();
-const sceneSentence=String(proof.validation.appeals[0].scene||'').trim();
-const withoutBody=checks.filter(c=>String(c.sentence||'').trim()!==bodySentence);
-const duplicateBody=[...checks,...checks.filter(c=>String(c.sentence||'').trim()===bodySentence)];
+const sceneExpected=draftSentences({scene:proof.validation.appeals[0].scene});
+const bodyExpected=draftSentences({text:proof.validation.appeals[0].text,noHassle:proof.validation.appeals[0].noHassle});
+const withoutBody=checks.filter(c=>!bodyExpected.includes(String(c.sentence||'').trim()));
+const oneBody=checks.find(c=>bodyExpected.includes(String(c.sentence||'').trim()));
+const duplicateBody=oneBody?[...checks,oneBody]:checks;
 for(const malformed of [[],withoutBody,duplicateBody,checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
  const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'mocked',checks:malformed}]});
  assert.equal(composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}}).status,'blocked');
 }
 // Scene-only verification defects no longer destroy a separately grounded body.
 for(const sceneChecks of [
- checks.filter(c=>String(c.sentence||'').trim()!==sceneSentence),
- [...checks,...checks.filter(c=>String(c.sentence||'').trim()===sceneSentence)],
- checks.map(c=>String(c.sentence||'').trim()===sceneSentence?{...c,supported:false,evidenceQuotes:[]}:c)
+ checks.filter(c=>!sceneExpected.includes(String(c.sentence||'').trim())),
+ [...checks,...checks.filter(c=>sceneExpected.includes(String(c.sentence||'').trim()))],
+ checks.map(c=>sceneExpected.includes(String(c.sentence||'').trim())?{...c,supported:false,evidenceQuotes:[]}:c)
 ]){
  const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:false,keepDirectFact:true,reason:'scene unsupported',checks:sceneChecks}]});
  const copy=composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}});
