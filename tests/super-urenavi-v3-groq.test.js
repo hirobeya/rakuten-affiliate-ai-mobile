@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createV3Groq,cleanGenerationTitle,capCaption,callStructured,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,cleanGenerationTitle,capCaption,callStructured,SEMANTIC_WRITER_PROMPT,parseResetDurationMs,nextSafeDelayMs}=require('../lib/super-urenavi-v3-groq');
 
 function response(payload,{status=200}={}){
   return {
@@ -12,6 +12,27 @@ function response(payload,{status=200}={}){
 }
 
 (async()=>{
+  assert.equal(parseResetDurationMs('1m30s'),90000);
+  assert.equal(parseResetDurationMs('2.5s'),2500);
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'20',
+    'x-ratelimit-reset-requests':'60s',
+    'x-ratelimit-remaining-tokens':'9000',
+    'x-ratelimit-reset-tokens':'60s'
+  },{output_tokens:200}),3000,'budget-aware pacing spreads request budget');
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'0',
+    'x-ratelimit-reset-requests':'42s',
+    'x-ratelimit-remaining-tokens':'9000',
+    'x-ratelimit-reset-tokens':'60s'
+  },{output_tokens:200}),42500,'empty request bucket waits for reset');
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'20',
+    'x-ratelimit-reset-requests':'60s',
+    'x-ratelimit-remaining-tokens':'150',
+    'x-ratelimit-reset-tokens':'17s'
+  },{output_tokens:200}),17500,'low token budget waits for token reset');
+
   assert.match(SEMANTIC_WRITER_PROMPT,/natural, complete Japanese sentence/i);
   assert.match(SEMANTIC_WRITER_PROMPT,/verbatim, character-for-character/i);
   assert.match(SEMANTIC_WRITER_PROMPT,/do NOT force copying/i);
