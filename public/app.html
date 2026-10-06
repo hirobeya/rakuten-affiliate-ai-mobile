@@ -1091,7 +1091,7 @@ function restoreSearchState(email){
     if(!state) return;
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
     lastSearchKeyword=String(state.fields?.k||'').trim();
-    render(state.items);
+    render(state.items,{autoAi:false,restored:true});
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
@@ -2569,6 +2569,7 @@ function updateAiPanel(index){
   const copy=box.querySelector('.aiCopy');
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
+  if(result.state==='restored'){status.textContent=result.message||'前回の検索結果です。AI再確認は行っていません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。誤った投稿文を出さないため、この商品の投稿文は表示しません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='skipped'){
     status.textContent=result.reason==='rule_confident'
@@ -2722,7 +2723,7 @@ async function runAiPreview(items){
 async function ensureAiForItem(index){
   if(!aiGatesFullOutput) return;
   const current=aiRoomResults.get(index);
-  if(current?.state==='done'||current?.state==='loading'||current?.reason==='rule_confident') return;
+  if(current?.state==='done'||current?.state==='loading'||current?.state==='restored'||current?.reason==='rule_confident') return;
   const item=lastSearchItems[index];
   if(!item) return;
   const target=current?.target||aiTargetDecision(item);
@@ -2778,6 +2779,7 @@ function analysisGuide(i,index,keyword=''){
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
       return '<div class="guide">'+hint+'</div>';
     }
+    if(gate.reasons?.includes('restored_not_run')) return '<div class="guide"><div class="muted">前回の検索結果です。AI再確認は自動実行していません。最新の投稿文を作る場合は、もう一度検索してください。</div></div>';
     if(usePurchasePlan&&aiRoomResults.get(index)?.state==='done') return '<div class="guide"><div class="muted">根拠のある選ぶ理由を確認できないため、投稿文を生成していません。</div></div>';
     if(gate.reasons?.includes('ai_error')){
       return '<div class="guide"><div class="muted">'+(usePurchasePlan?'選ぶ理由を確認できないため、投稿文を生成していません。':'AI確認に失敗したため、確認できた事実だけを表示しています。')+'</div></div>';
@@ -2835,6 +2837,9 @@ function resolveAiGate(item,index,keyword=''){
   const ai=aiRoomResults.get(index);
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(ai.state==='restored'){
+    return {enabled:true,status:'fallback',full:false,reasons:['restored_not_run'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   if(ai.state==='skipped'&&ai.reason==='rule_confident'){
     return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
@@ -2947,7 +2952,7 @@ function postReady(i,p='room'){
 function postDisplay(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
-    if(s.state?.state==='error') return '';
+    if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
   return String(post(i,p)||'').trim();
@@ -3200,11 +3205,17 @@ function compare(
 
 
 function render(
-  a
+  a,
+  {autoAi=true,restored=false}={}
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
   aiRoomResults=new Map();
+  if(restored){
+    lastSearchItems.forEach((item,index)=>{
+      aiRoomResults.set(index,{state:'restored',message:'前回の検索結果です。AI再確認は自動実行しません。'});
+    });
+  }
   aiRoomReviews=new Map();
   aiRunGeneration++;
   postCache=new Map();
@@ -3615,8 +3626,10 @@ function render(
 
   }
 
-  if(aiGatesFullOutput){
+  if(aiGatesFullOutput&&autoAi){
     runAiPreview(a);
+  }else if(restored){
+    lastSearchItems.forEach((_,index)=>updateAiPanel(index));
   }
 
 }
