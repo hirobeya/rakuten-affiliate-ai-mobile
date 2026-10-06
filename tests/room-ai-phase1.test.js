@@ -806,8 +806,10 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
-    assert.match(html,/商品ページで確認できるポイント/);
-    assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
+    assert.match(html,/function readyV3Post\(result\)/);
+    assert.doesNotMatch(html,/function aiSafeFallbackPost\(/);
+    assert.doesNotMatch(html,/function aiSafeTitle\(/);
+    assert.doesNotMatch(html,/function salesFactCore\(/);
   });
 
 
