@@ -2470,14 +2470,6 @@ function firstImageUrl(item){
   return '#';
 }
 
-function aiSafeTitle(item){
-  try{
-    const a=groundedAnalysis(item);
-    if(UrenaviPainCopy.buildSafeDisplayName) return UrenaviPainCopy.buildSafeDisplayName(item,a);
-  }catch{}
-  return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
-}
-
 function compactGrounded(value){
   return String(value||'').normalize('NFKC').replace(/[\s\-‐‑–—\/／]+/g,'').toLowerCase();
 }
@@ -2526,10 +2518,6 @@ function aiSalesInsight(item,result){
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,2);
   return {productType,scene:'',features,sellingPoints,featureRows};
-}
-
-function salesFactCore(value){
-  return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
 }
 
 function safeSearchIdentity(item){
@@ -2819,30 +2807,6 @@ function lexicalProductLabel(item){
   }catch{}
   return String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim().slice(0,90)||'商品名を確認してください';
 }
-
-function aiSafeFallbackPost(item,result=null){
-  const aiType=(result?.validation?.productType?.valid&&result.validation.productType.value)?String(result.validation.productType.value):'';
-  const title=specificGroundedProductType(item,aiType);
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  const safePoints=((result?.validation?.sellingPoints)||[])
-    .filter(x=>x?.eligibleForPost&&x?.text)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,2);
-  const facts=((result?.validation?.features)||[])
-    .filter(x=>x?.eligibleForPost&&x?.text)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,4);
-  const lines=[title];
-  if(safePoints.length) lines.push('',...safePoints.map(x=>'・'+x));
-  if(facts.length) lines.push('','商品ページで確認できるポイント👇',...facts.map(x=>'✔ '+x));
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500).trim();
-}
-
 
 function ruleSecondOpinion(item,validation,keyword=''){
   const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
