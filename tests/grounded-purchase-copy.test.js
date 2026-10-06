@@ -58,3 +58,33 @@ assert.equal(composePurchaseCopy({item:negative,analysis:{validation:{...validat
 assert.equal(new Set(report.map(x=>x.text)).size,rows.length);
 if(process.argv.includes('--report')) fs.writeFileSync('docs/grounded-purchase-contracts-20261002.json',JSON.stringify({scope:'Renderer contracts only, not editorial quality approval. 18 synthetic contract cases; 15 requested categories + 3 glove types; model results mocked, no live coverage claim',cases:report},null,2)+'\n');
 console.log('grounded-purchase-copy.test.js: PASS (18 synthetic contracts + adverse cases; not live model evaluation)');
+
+
+{
+  const item={itemName:'ブラジャー用洗濯ネット',itemCaption:'型崩れを防ぐ。ドラム式対応。'};
+  const validation={
+    valid:true,
+    semanticDraft:true,
+    productType:{specific:'ブラジャー用洗濯ネット',quote:'ブラジャー用洗濯ネット'},
+    attributes:[
+      {quote:'型崩れを防ぐ',value:'型崩れを防ぐ'},
+      {quote:'ドラム式対応',value:'ドラム式対応'}
+    ],
+    appeals:[{
+      index:0,
+      text:'ブラジャー用洗濯ネットは型崩れを防ぎ、ドラム式でも使えます。',
+      noHassle:'',
+      scene:'',
+      attributeRefs:[0,1],
+      strength:3
+    }]
+  };
+  const verifiedAppeals=[{
+    ...validation.appeals[0],
+    verification:{required:true,supported:true,keepDirectFact:true,reason:'verified_text_scene_dropped'}
+  }];
+  const result=composePurchaseCopy({item,analysis:{validation,verifiedAppeals}});
+  assert.equal(result.status,'ready','verified semantic body remains publishable when unsafe scene is dropped');
+  assert.match(result.text,/ブラジャー用洗濯ネットを選ぶなら。/);
+  assert.match(result.text,/型崩れを防ぎ、ドラム式でも使えます。/);
+}
