@@ -57,9 +57,12 @@ for(const [quote,text] of [['幅30cm','幅30mmの収納ボックス。'],['容�
  assert.equal(x.copy.status,'blocked','a mistaken verifier approval cannot change units');
  assert.deepEqual(x.copy.reasons,['unsupported_measurement']);
 }
-// Natural product names can differ from the original continuous identity quote.
-const named=evaluate({itemName:'グローブ',itemCaption:'バイク用手袋 山羊革'},{productType:{specific:'山羊革グローブ',general:'バイク用手袋',quote:'バイク用手袋'},attributes:[],appeals:[{scene:'バイク用の装備を選ぶなら。',text:'山羊革のグローブ。',evidenceQuotes:['山羊革'],strength:3}]});
-assert.equal(named.copy.status,'ready');
+// Runtime product identity must come from grounded/local identity, not an AI-composed material+product name.
+const inventedName=evaluate({itemName:'グローブ',itemCaption:'バイク用手袋 山羊革'},{productType:{specific:'山羊革グローブ',general:'バイク用手袋',quote:'バイク用手袋'},attributes:[],appeals:[{scene:'バイク用の装備を選ぶなら。',text:'山羊革のグローブ。',evidenceQuotes:['山羊革'],strength:3}]});
+assert.equal(inventedName.copy.status,'blocked');
+const groundedName=evaluate({itemName:'グローブ',itemCaption:'バイク用手袋 山羊革',identityHint:'グローブ'},{productType:{specific:'山羊革グローブ',general:'バイク用手袋',quote:'バイク用手袋'},attributes:[],appeals:[{scene:'バイク用の装備を選ぶなら。',text:'山羊革のグローブ。',evidenceQuotes:['山羊革'],strength:3}]});
+assert.equal(groundedName.validation.productType.specific,'グローブ');
+assert.equal(groundedName.copy.status,'ready');
 assert.equal(MODEL_PASS1_SCHEMA.properties.appeals.maxItems,1);
 // Source language is evidence data, not a published claim.
 const sourceRisk={itemName:'収納ボックス',itemCaption:'安心の収納ボックス。折りたたみ可能。'};
