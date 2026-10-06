@@ -2494,7 +2494,7 @@ function specificGroundedProductType(item,aiType){
 
 function aiSalesInsight(item,result){
   if(String(result?.version||'').startsWith('room_contract_')) return result.ok&&result.quality?.status==='ready'?{productType:result.productType?.specific||'',scene:'',features:[],sellingPoints:result.diagnostics?.draft?.sentences?.map(s=>s.text)||[],featureRows:[]}:{productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
-  if(result?.version==='super-urenavi-v3-preview') return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
+  if(String(result?.version||'').startsWith('super-urenavi-v3-')) return {scene:result.quality?.ledger?.[0]?.scene||'',productType:result.productType?.specific||'',features:(result.attributes||[]).map(x=>x.quote),sellingPoints:(result.quality?.ledger||[]).map(x=>x.text),featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2583,7 +2583,7 @@ function updateAiPanel(index){
   if(String(result.data?.version||'').startsWith('room_contract_')){
     const data=result.data;status.textContent=data.ok&&data.quality?.status==='ready'?'投稿文の内容確認が完了しました':'投稿文を完成できませんでした。';facts.textContent='';copy.textContent=aiPhase1Post(item,data);return;
   }
-  if(result.data?.version==='super-urenavi-v3-preview'){
+  if(String(result.data?.version||'').startsWith('super-urenavi-v3-')){
     const data=result.data;
     status.textContent=data.quality?.status==='ready'?'商品理解・選ぶ理由・根拠の照合を完了':'選ぶ理由を根拠付きで確認できないため、投稿文を生成していません。';
     facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
@@ -2866,7 +2866,7 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  if(ai.data?.version==='super-urenavi-v3-preview'||String(ai.data?.version||'').startsWith('room_contract_')) {
+  if(String(ai.data?.version||'').startsWith('super-urenavi-v3-')||String(ai.data?.version||'').startsWith('room_contract_')) {
     const full=ai.data.ok===true&&ai.data.quality?.status==='ready'&&Boolean(ai.data.variants?.[0]?.text);
     return {enabled:true,status:full?'full':'fallback',full,reasons:ai.data.quality?.reasons||['purchase_reason_unconfirmed'],useLegacy:false};
   }
