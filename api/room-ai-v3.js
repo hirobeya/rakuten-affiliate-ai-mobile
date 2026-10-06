@@ -198,6 +198,30 @@ function neutralLiteralText(identity,facts,itemPrice){
   return rows.join('\n');
 }
 
+function resolveIdentityHint(item,learnedIdentity=''){
+  const title=normalize(item?.itemName);
+  const ruleLocal=resolveLocalUnderstanding({itemName:item?.itemName,itemCaption:item?.itemCaption});
+  const literalLocal=resolveLiteralIdentity(item);
+  const repeatedLocal=repeatedLiteralIdentity(item);
+  let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
+  if(!local){
+    const rescue=leadingCompoundIdentity(item);
+    if(rescue?.validation?.productType?.valid===true){
+      const rescueIdentity=String(rescue?.canonicalIdentity||rescue?.raw?.productType?.value||'').trim();
+      if(rescueIdentity&&!hasCompetingCompoundIdentity(title,rescueIdentity)) local=rescue;
+    }
+  }
+  if(!local&&normalize(learnedIdentity)){
+    const learned=validateLiteralIdentity(item,learnedIdentity);
+    if(learned) local={...learned,canonicalIdentity:normalize(learnedIdentity)};
+  }
+  const sourceIdentity=String(local?.raw?.productType?.value||'').trim();
+  const identity=String(local?.canonicalIdentity||sourceIdentity).trim();
+  if(!identity||local?.validation?.productType?.valid!==true) return '';
+  if(hasCompetingCompoundIdentity(title,identity)) return '';
+  return identity;
+}
+
 function localZeroCall(item,learnedIdentity=''){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
@@ -400,6 +424,7 @@ function createHandler(deps={}){
         groq=createGroq({apiKey,model});
       }
 
+      item.identityHint=resolveIdentityHint(item);
       const analysis=await analyzeFn({
         item,store,model,consumeQuota:quotaFn,
         callPass1:groq.callPass1,
@@ -480,5 +505,6 @@ module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
+module.exports.resolveIdentityHint=resolveIdentityHint;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
 module.exports.rememberValidatedIdentity=rememberValidatedIdentity;
