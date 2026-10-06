@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createV3Groq,capCaption,callStructured,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,cleanGenerationTitle,capCaption,callStructured,SEMANTIC_WRITER_PROMPT}=require('../lib/super-urenavi-v3-groq');
 
 function response(payload,{status=200}={}){
   return {
@@ -39,9 +39,9 @@ function response(payload,{status=200}={}){
     return response({model:'mock',usage:{input_tokens:5,output_tokens:5},output_text:JSON.stringify({results:[]})});
   };
   const groq=createV3Groq({apiKey:'test',model:'mock',fetchImpl});
-  const p1=await groq.callPass1({item:{itemName:'バイクグローブ',itemCaption:'グローブを着けたままスマホを操作 ナックルプロテクター入り '+ '説明'.repeat(1000),itemPrice:1000}});
+  const p1=await groq.callPass1({item:{itemName:'【楽天1位】 バイクグローブ セール',identityHint:'バイクグローブ',itemCaption:'グローブを着けたままスマホを操作 ナックルプロテクター入り '+ '説明'.repeat(1000),itemPrice:1000}});
   assert.equal(p1.raw.productType.specific,'バイクグローブ');
-  assert.equal(p1.raw.productType.quote,p1.raw.productType.specific);
+  assert.equal(p1.raw.productType.quote,'バイクグローブ');
   assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
   assert.equal(calls[0].body.text.format.schema.properties.productType.properties.quote,undefined);
   assert.equal(calls[0].body.text.format.schema.properties.hooks,undefined);
@@ -56,7 +56,12 @@ function response(payload,{status=200}={}){
   assert.equal(calls[0].body.text.format.strict,true);
   assert.equal(calls[0].body.max_output_tokens,900);
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
+  assert.equal(pass1User.productIdentityHint,'バイクグローブ');
+  assert.equal(pass1User.itemName,undefined);
+  assert.equal(pass1User.itemTitleEvidence,'バイクグローブ');
   assert.ok(pass1User.itemCaption.length<=1200);
+  assert.equal(cleanGenerationTitle('【楽天1位】 洗濯ネット セール 送料無料'),'洗濯ネット');
+  assert.match(SEMANTIC_WRITER_PROMPT,/productIdentityHint is non-empty, use it exactly/);
 
   const verificationInput=[{
     verificationIndex:0,
