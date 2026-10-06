@@ -2596,6 +2596,10 @@ function updateAiPanel(index){
     facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
     copy.textContent=aiPhase1Post(item,data);return;
   }
+  if(usePurchasePlan){
+    status.textContent='現在のPreview契約と一致しない応答を停止しました。';
+    facts.textContent='';copy.textContent='';return;
+  }
   const v=result.data?.validation||{};
   status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
@@ -2877,6 +2881,9 @@ function resolveAiGate(item,index,keyword=''){
   if(isV3PreviewResult(ai.data)) {
     const full=Boolean(readyV3Post(ai.data));
     return {enabled:true,status:full?'full':'fallback',full,reasons:full?[]:(ai.data?.quality?.reasons||['purchase_reason_unconfirmed']),useLegacy:false};
+  }
+  if(String(ai.data?.version||'').startsWith('room_contract_')){
+    return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   if(usePurchasePlan){
     return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
