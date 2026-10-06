@@ -107,13 +107,16 @@ test('remote feature remains a choice axis and never invents a usage outcome',()
   assert.doesNotMatch(out.text,/離れた場所から簡単|手元で楽々|便利/);
 });
 
-test('negated or excluded purchase feature is never promoted',()=>{
+test('negated or excluded purchase feature is never promoted and weak material alone defers',()=>{
   const title='タブレットスタンド 高さ調整非対応 リモコン別売 アルミ';
   const out=composeLocalPartnerCopy({itemName:title,identity:'タブレットスタンド'});
-  assert.ok(out);
-  assert.notEqual(out.quote,'高さ調整');
-  assert.notEqual(out.quote,'リモコン');
-  assert.doesNotMatch(out.text,/高さを変えて使いたい|操作方法まで見て選ぶ/);
+  assert.equal(out,null);
+});
+
+test('standalone material, washable wording, and pack count do not complete a purchase-reason post',()=>{
+  assert.equal(composeLocalPartnerCopy({itemName:'洗濯ネット シリコン',identity:'洗濯ネット'}),null);
+  assert.equal(composeLocalPartnerCopy({itemName:'洗濯ネット 洗える',identity:'洗濯ネット'}),null);
+  assert.equal(composeLocalPartnerCopy({itemName:'洗濯ネット 8枚セット',identity:'洗濯ネット'}),null);
 });
 
 test('family hypotheses compare different meanings instead of only individual facts',()=>{
