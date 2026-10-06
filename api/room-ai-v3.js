@@ -419,8 +419,21 @@ function createHandler(deps={}){
         elapsedMs:Date.now()-started
       });
 
+      const publication=copy.quality&&typeof copy.quality==='object'
+        ?copy.quality
+        :{status:'blocked',text:'',reasons:['copy_quality_missing'],ledger:[]};
+      const ready=analysis.ok===true
+        && publication.status==='ready'
+        && Boolean(String(copy.variants?.[0]?.text||'').trim());
+      const quality={
+        ...publication,
+        status:ready?'ready':'blocked',
+        text:ready?String(copy.variants[0].text):'',
+        reasons:ready?[]:[...(Array.isArray(publication.reasons)?publication.reasons:[]),...(analysis.ok===true?[]:['analysis_not_ready'])]
+      };
+
       return json(res,200,{
-        ok:analysis.ok,
+        ok:ready,
         pending:false,
         retryAfterMs:0,
         phase:analysis.pass2Status==='generated'?'verification':'generation',
@@ -434,8 +447,8 @@ function createHandler(deps={}){
         cacheStatus:analysis.cacheStatus,
         pass2Status:analysis.pass2Status,
         tier:copy.tier,
-        quality:{status:(copy.quality?.status==='ready'&&Boolean(copy.variants[0]?.text))?'ready':'blocked',text:copy.variants[0]?.text||'',reasons:copy.quality?.reasons||[]},
-        variants:copy.variants,
+        quality,
+        variants:ready?copy.variants:[],
         learnedIdentity,
         metric
       });
