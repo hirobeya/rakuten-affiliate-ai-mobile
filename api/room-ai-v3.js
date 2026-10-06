@@ -268,6 +268,10 @@ function localZeroCall(item,learnedIdentity=''){
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
+  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&groundedValues.length>0;
+  // Exact facts alone are not a finished ROOM post. Local completion requires
+  // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
+  if(!partnerCopy&&!useStructuredText) return null;
   const directAppeals=partnerCopy?[{
     text:partnerCopy.hook+'。'+partnerCopy.quote,
     factRef:partnerCopy.quote,
@@ -281,7 +285,6 @@ function localZeroCall(item,learnedIdentity=''){
   })));
   if(!directAppeals.length) return null;
 
-  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0;
   let text=partnerCopy?.text||(useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice));
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   if(!String(text||'').trim()||structured.RISK.test(text)) return null;
