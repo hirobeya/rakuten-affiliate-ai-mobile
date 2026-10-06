@@ -51,13 +51,10 @@ test('rememberValidatedIdentity stores only a verified concrete AI identity and 
   assert.equal(rejected.status,'skipped');
 });
 
-test('learned identity can complete a grounded zero-call post but never turns an accessory into the whole product',()=>{
+test('learned identity never lowers the purchase-reason threshold or turns an accessory into the whole product',()=>{
   const item={itemName:'卓上アイスメーカー 家庭用 1.5L 120W コンパクト',itemCaption:'',itemPrice:0};
   const learned=roomV3.localZeroCall(item,'卓上アイスメーカー');
-  assert.ok(learned);
-  assert.equal(learned.productType.specific,'卓上アイスメーカー');
-  assert.equal(learned.groq.totalCalls,0);
-  assert.match(learned.quality.text,/1\.5L|120W/);
+  assert.equal(learned,null);
 
   const accessory=roomV3.localZeroCall({itemName:'卓上アイスメーカー用 交換フィルター 2個入り',itemCaption:'',itemPrice:0},'卓上アイスメーカー');
   assert.equal(accessory,null);
