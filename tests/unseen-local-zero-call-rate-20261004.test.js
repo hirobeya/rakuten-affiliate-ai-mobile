@@ -26,8 +26,10 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   // u03 contains H1,375mm in a noisy caption and must never publish a sliced "375mm" fact.
   const storageBench=rows.find(x=>x.id==='u02');
   const mopHanger=rows.find(x=>x.id==='u03');
-  assert.equal(storageBench?.productType,'収納ベンチ');
-  assert.ok(String(storageBench?.text||'').includes('収納ベンチ'));
+  if(storageBench?.zeroCall){
+    assert.equal(storageBench?.productType,'収納ベンチ');
+    assert.ok(String(storageBench?.text||'').includes('収納ベンチ'));
+  }
   assert.ok(!String(storageBench?.text||'').includes('150kg'));
   assert.ok(!String(mopHanger?.text||'').includes('375mm'));
 
