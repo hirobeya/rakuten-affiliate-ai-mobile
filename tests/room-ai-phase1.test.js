@@ -282,7 +282,7 @@ function run(name,fn){
     assert.match(html,/\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
     assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
     assert.match(html,/if\(!aiGatesFullOutput\|\|generation!==aiRunGeneration\) return/);
-    assert.match(html,/async function runAiPreview\(items\)\{\n  if\(!aiGatesFullOutput\) return/);
+    assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)\{\n  if\(!aiGatesFullOutput\|\|aiQueueRunning\) return/);
   });
 
   await run('Preview owner mock invokes one AI request and validates output',async()=>{
