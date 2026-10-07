@@ -187,6 +187,15 @@ test('explicit dimension label gives semantic size meaning but no use-case claim
   assert.doesNotMatch(out.text,/高い所|届きやす|乗りやす|安全/);
 });
 
+test('local partner path defers when the only generic purchase angle is size',()=>{
+  const out=composeLocalPartnerCopy({
+    itemName:'ケーブルボックス 高さ37cm 木製',
+    itemCaption:'',
+    identity:'ケーブルボックス'
+  });
+  assert.equal(out,null);
+});
+
 test('explicit weight label is understood as weight but never turned into portability',()=>{
   const source='測定器 重量 1.2kg ブラック';
   const out=composeGenericLocalCopy({identity:'測定器',facts:[{quote:'重量 1.2kg'}],itemName:source});
