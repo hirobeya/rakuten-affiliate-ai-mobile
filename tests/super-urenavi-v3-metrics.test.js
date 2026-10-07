@@ -19,6 +19,15 @@ assert.equal(metric.hookType,'question');
 assert.equal(metric.machineValidationPassed,true);
 assert.equal(metric.copied,false);
 
+const pass1Route=buildAiUsageMetric({route:'pass1',pass1Calls:1,pass2Calls:0});
+assert.equal(pass1Route.route,'text');
+const pass12Route=buildAiUsageMetric({route:'pass1+pass2',pass1Calls:1,pass2Calls:1});
+assert.equal(pass12Route.route,'text');
+const resumedRoute=buildAiUsageMetric({route:'cache+pass2',pass1Calls:0,pass2Calls:1});
+assert.equal(resumedRoute.route,'text');
+const pendingCacheRoute=buildAiUsageMetric({route:'cache_pending',pass1Calls:0,pass2Calls:0});
+assert.equal(pendingCacheRoute.route,'cache');
+
 const safe=buildAiUsageMetric({route:'bogus',pass1Calls:-2,pass2Calls:'x',imageCalls:3.2});
 assert.equal(safe.route,'unknown');
 assert.equal(safe.pass1Calls,0);
