@@ -187,6 +187,13 @@ test('explicit dimension label gives semantic size meaning but no use-case claim
   assert.doesNotMatch(out.text,/高い所|届きやす|乗りやす|安全/);
 });
 
+test('size-only generic copy remains semantic but cannot finish the local publish path',()=>{
+  const semantic=composeGenericLocalCopy({identity:'収納ケース',facts:[{quote:'高さ 37cm',source:'itemName'}],itemName:'収納ケース 高さ 37cm'});
+  assert.ok(semantic);
+  assert.equal(semantic.axis,'サイズ');
+  assert.equal(composeLocalPartnerCopy({itemName:'収納ケース 高さ 37cm',identity:'収納ケース'}),null);
+});
+
 test('explicit weight label is understood as weight but never turned into portability',()=>{
   const source='測定器 重量 1.2kg ブラック';
   const out=composeGenericLocalCopy({identity:'測定器',facts:[{quote:'重量 1.2kg'}],itemName:source});
