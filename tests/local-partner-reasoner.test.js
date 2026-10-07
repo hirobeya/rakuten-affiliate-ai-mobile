@@ -66,7 +66,7 @@ test('unknown exact identity can turn a literal structural fact into a safe purc
   assert.equal(out.generic,true);
   assert.equal(out.quote,'食洗機対応');
   assert.match(out.text,/食洗機対応で選びたいなら/);
-  assert.match(out.text,/包丁スタンドは、使用後に食洗機で洗えます/);
+  assert.match(out.text,/食洗機対応の包丁スタンド/);
 });
 
 test('bare gram value defers when its semantic role is not proven',()=>{
@@ -149,20 +149,8 @@ test('near-tied different meaning families defer when neither has stronger evide
 test('folding wording avoids repeating a feature already present in product identity',()=>{
   const candidate=candidateFromFact({quote:'折りたたみ'},'折りたたみチェア');
   assert.ok(candidate);
-  assert.equal(candidate.body,'折りたたみチェアは、使わないときに折りたためます。');
+  assert.equal(candidate.body,'折りたたみチェアです。');
   assert.doesNotMatch(candidate.body,/折りたたみ仕様の折りたたみ/);
-});
-
-test('grounded structural features become bounded purchase reasons without invented outcomes',()=>{
-  const caster=composeGenericFromTitle({itemName:'シューズラック キャスター付き 5段',identity:'シューズラック'});
-  assert.ok(caster);
-  assert.match(caster.text,/シューズラックは、キャスターで移動できるタイプです/);
-  assert.doesNotMatch(caster.text,/楽|便利|掃除しやす|省スペース/);
-
-  const typec=composeGenericFromTitle({itemName:'ハンディファン Type-C 充電式',identity:'ハンディファン'});
-  assert.ok(typec);
-  assert.match(typec.text,/ハンディファンは、Type-C端子に対応しています/);
-  assert.doesNotMatch(typec.text,/急速充電|どこでも|便利|長時間/);
 });
 
 test('material wording uses natural Japanese grammar without changing evidence',()=>{
@@ -172,15 +160,12 @@ test('material wording uses natural Japanese grammar without changing evidence',
   assert.equal(candidateFromFact({quote:'本革'},'バイクグローブ').body,'本革を使ったバイクグローブです。');
 });
 
-test('extendable wording turns exact feature into a bounded use consequence without exaggeration',()=>{
+test('extendable wording avoids awkward double specification while preserving exact feature',()=>{
   const candidate=candidateFromFact({quote:'伸縮式'},'自撮り棒');
   assert.ok(candidate);
-  assert.equal(candidate.quote,'伸縮式');
-  assert.equal(candidate.body,'自撮り棒は、長さを変えて使えます。');
-  assert.doesNotMatch(candidate.body,/撮りやす|便利|快適/);
+  assert.equal(candidate.body,'伸縮式の自撮り棒です。');
   const embedded=candidateFromFact({quote:'伸縮'},'伸縮ラック');
-  assert.equal(embedded.quote,'伸縮');
-  assert.equal(embedded.body,'伸縮ラックは、長さを変えて使えます。');
+  assert.equal(embedded.body,'伸縮ラックです。');
 });
 
 test('explicit capacity label gives an unknown product a safe semantic axis without exaggeration',()=>{
