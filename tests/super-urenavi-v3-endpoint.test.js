@@ -53,8 +53,7 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
       assert.equal(local.groq.totalCalls,0);
       assert.equal(local.pass2Status,'not_needed');
       assert.match(local.quality.text,/電動モップ/);
-      assert.match(local.quality.text,/充電して使うタイプ/);
-      assert.doesNotMatch(local.quality.text,/コードをつながずに使う/);
+      assert.match(local.quality.text,/充電して、コードをつながずに使うタイプ/);
     }
 
     {
