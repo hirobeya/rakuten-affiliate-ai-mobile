@@ -2,9 +2,14 @@
 
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {localZeroCall}=require('../api/room-ai-v3');
+const {localZeroCall,resolveIdentityHint}=require('../api/room-ai-v3');
+const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 
 function assertLocalReady(item,label){
+  const identity=resolveIdentityHint(item);
+  assert.ok(identity,label+' should resolve a safe local identity');
+  const partner=composeLocalPartnerCopy({itemName:item.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  assert.ok(partner,label+' should resolve a grounded local purchase reason');
   const result=localZeroCall(item);
   assert.ok(result,label+' should complete locally');
   assert.equal(result.groq.totalCalls,0,label+' should use zero Groq calls');
