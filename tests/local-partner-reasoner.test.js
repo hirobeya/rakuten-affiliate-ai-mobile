@@ -232,6 +232,21 @@ test('rechargeable wording attached to an accessory is not promoted to whole-pro
   assert.ok(!facts.some(x=>x.quote==='充電式'));
 });
 
+
+test('standalone connector and caster restatements do not finish generic local copy',()=>{
+  assert.equal(composeGenericFromTitle({itemName:'ハンディファン Type-C',identity:'ハンディファン'}),null);
+  assert.equal(composeGenericFromTitle({itemName:'シューズラック キャスター付き',identity:'シューズラック'}),null);
+});
+
+test('meaningful generic operators remain available',()=>{
+  const folding=composeGenericFromTitle({itemName:'パソコンスタンド 折りたたみ',identity:'パソコンスタンド'});
+  assert.ok(folding);
+  assert.equal(folding.axis,'収納形態');
+  const dishwasher=composeGenericFromTitle({itemName:'包丁スタンド 食洗機対応',identity:'包丁スタンド'});
+  assert.ok(dishwasher);
+  assert.equal(dishwasher.axis,'お手入れ');
+});
+
 test('caption-grounded generic reasoning works across unknown product types without category registration',()=>{
   const itemName='洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式';
   const itemCaption='【本体サイズ】内径約700mm。【商品説明】シングルサイズの布団が入る大容量サイズです。口が大きく開くので寝具等の大物でも出し入れがしやすいロングファスナーを使用しています。';
