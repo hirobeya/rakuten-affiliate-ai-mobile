@@ -101,3 +101,38 @@ console.log('super-urenavi-v3-verifier.test.js: PASS');
   assert.equal(verified[0].verification.supported,true,'checks, not contradictory top-level flag, decide semantic support');
   assert.equal(verified[0].scene,'シングルサイズの布団を洗いたいとき');
 }
+
+
+{
+  const semantic={
+    semanticDraft:true,
+    attributes:[
+      {name:'容量',value:'シングルサイズの布団が入る大容量サイズです。',quote:'シングルサイズの布団が入る大容量サイズです。'},
+      {name:'サイズ',value:'内径約700mm',quote:'内径約700mm'}
+    ],
+    appeals:[{
+      index:0,
+      text:'ふくらむ洗濯ネット特大70は内径約700mmでシングルサイズの布団が入ります。大容量で一度にたくさん洗えます。',
+      noHassle:'',
+      scene:'シングルサイズの布団を洗濯機でまとめて洗いたいとき',
+      attributeRefs:[0,1],
+      strength:2,
+      needsVerification:true
+    }]
+  };
+  const verified=applyVerification(semantic,{results:[{
+    verificationIndex:0,
+    supported:false,
+    keepDirectFact:false,
+    reason:'one sentence overreaches',
+    checks:[
+      {sentence:'シングルサイズの布団を洗濯機でまとめて洗いたいとき',supported:false,evidenceQuotes:[],reason:'scene unsupported'},
+      {sentence:'ふくらむ洗濯ネット特大70は内径約700mmでシングルサイズの布団が入ります。',supported:true,evidenceQuotes:['シングルサイズの布団が入る大容量サイズです。','内径約700mm'],reason:'supported'},
+      {sentence:'大容量で一度にたくさん洗えます。',supported:false,evidenceQuotes:[],reason:'overreach'}
+    ]
+  }]});
+  assert.equal(verified[0].verification.supported,true,'keeps supported body sentence when a later semantic sentence overreaches');
+  assert.equal(verified[0].scene,'');
+  assert.equal(verified[0].text,'ふくらむ洗濯ネット特大70は内径約700mmでシングルサイズの布団が入ります。');
+  assert.equal(verified[0].verification.reason,'verified_text_partial');
+}
