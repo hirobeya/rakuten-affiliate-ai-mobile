@@ -223,6 +223,13 @@ test('semantic profile records dominant meaning and evidence breadth for unknown
   assert.ok(profile.breadth>=2);
 });
 
+test('standalone battery-powered wording alone does not finish local copy',()=>{
+  assert.equal(
+    composeLocalPartnerCopy({itemName:'センサーライト 電池式',identity:'センサーライト'}),
+    null
+  );
+});
+
 test('standalone rechargeable wording alone does not finish generic local copy',()=>{
   const title='卓上クリーナー 充電式 消しゴム USB デスク掃除機 ミニクリーナー';
   const facts=safeTitleFacts(title);
