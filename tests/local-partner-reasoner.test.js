@@ -16,6 +16,14 @@ test('electric kettle combines product scene and capacity choice without inventi
   assert.equal(out.hookType,'product_scene');
 });
 
+
+test('known folding signal avoids repeating folding already inside product identity',()=>{
+  const out=composeLocalPartnerCopy({itemName:'日傘 折りたたみ 折りたたみ傘',identity:'折りたたみ傘'});
+  assert.ok(out);
+  assert.match(out.text,/折りたたみ傘です/);
+  assert.doesNotMatch(out.text,/折りたたみ仕様の折りたたみ傘/);
+});
+
 test('mobile battery combines real product scene with capacity choice and never invents charge count',()=>{
   const title='モバイルバッテリー 23600mAh USB-C ブラック';
   const out=composeLocalPartnerCopy({itemName:title,identity:'モバイルバッテリー'});
