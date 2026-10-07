@@ -222,18 +222,19 @@ function identityAlreadyStatesFact(identity='',quote=''){
   return (variants[q]||[]).some(v=>id.includes(v));
 }
 
+function structuredValueHasStrongReason(value={},facts=[],identity=''){
+  const sourceFacts=Array.isArray(facts)?facts:[];
+  const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
+  if(!refs.length||!sourceFacts.length) return false;
+  return refs.some(ref=>{
+    const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
+    return fact&&!weakStructuredFact(fact)&&!identityAlreadyStatesFact(identity,fact.quote);
+  });
+}
+
 function hasStrongStructuredReason(values=[],facts=[],identity=''){
   const rows=Array.isArray(values)?values:[];
-  const sourceFacts=Array.isArray(facts)?facts:[];
-  if(!rows.length||!sourceFacts.length) return false;
-  return rows.some(value=>{
-    const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
-    if(!refs.length) return false;
-    return refs.some(ref=>{
-      const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
-      return fact&&!weakStructuredFact(fact)&&!identityAlreadyStatesFact(identity,fact.quote);
-    });
-  });
+  return rows.some(value=>structuredValueHasStrongReason(value,facts,identity));
 }
 
 const LOCAL_PARTNER_ALLOWED_PREVENTION=[
@@ -373,7 +374,13 @@ function localZeroCall(item,learnedIdentity=''){
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
   const selectedGroundedValues=groundedValues.filter(v=>String(copy?.text||'').includes(String(v?.text||'').trim()));
-  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&selectedGroundedValues.length>0&&hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
+  const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structuredValueHasStrongReason(v,structuredFacts,identity));
+  const useStructuredText=!partnerCopy
+    && structuredSafe
+    && structuredFacts.length>0
+    && selectedGroundedValues.length>0
+    && !hasWeakStructuredPiggyback
+    && hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
