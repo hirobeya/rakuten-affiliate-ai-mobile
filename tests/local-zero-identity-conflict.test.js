@@ -31,6 +31,20 @@ test('identity-plus-accessory suffix is still treated as a competing compound',(
   ),true);
 });
 
+test('earlier same-stem whole-product role blocks a later known synonym role',()=>{
+  assert.equal(hasCompetingCompoundIdentity(
+    '自転車 スマホホルダー バイク ワンタッチ スマホスタンド iPhone android',
+    'スマホスタンド'
+  ),true);
+  const result=localZeroCall({
+    itemCode:'identity-conflict:phone-holder',
+    itemName:'自転車 スマホホルダー バイク ワンタッチ 簡単 自動ロック スマホスタンド iPhone android 360度 防水',
+    itemCaption:'',
+    itemPrice:0
+  });
+  assert.equal(result,null);
+});
+
 test('holdout8 pet carrier no longer publishes generic carry-case identity locally',()=>{
   const result=localZeroCall({
     itemCode:'identity-conflict:pet-carry',
