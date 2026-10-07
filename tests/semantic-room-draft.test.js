@@ -78,9 +78,21 @@ const bodyExpected=draftSentences({text:proof.validation.appeals[0].text,noHassl
 const withoutBody=checks.filter(c=>!bodyExpected.includes(String(c.sentence||'').trim()));
 const oneBody=checks.find(c=>bodyExpected.includes(String(c.sentence||'').trim()));
 const duplicateBody=oneBody?[...checks,oneBody]:checks;
-for(const malformed of [[],withoutBody,duplicateBody,checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
+for(const malformed of [[],withoutBody,checks.map(c=>({...c,evidenceQuotes:['架空の根拠']}))]){
  const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'mocked',checks:malformed}]});
  assert.equal(composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}}).status,'blocked');
+}
+// A duplicated check only invalidates that sentence; another independently grounded
+// body sentence may still survive the sentence-level salvage path.
+{
+ const verifiedAppeals=applyVerification(proof.validation,{results:[{verificationIndex:0,supported:false,keepDirectFact:true,reason:'duplicate body check',checks:duplicateBody}]});
+ const copy=composePurchaseCopy({item,analysis:{validation:proof.validation,verifiedAppeals}});
+ if(verifiedAppeals[0].verification.supported){
+   assert.equal(copy.status,'ready');
+   assert.ok(verifiedAppeals[0].text.length>0);
+ }else{
+   assert.equal(copy.status,'blocked');
+ }
 }
 // Scene-only verification defects no longer destroy a separately grounded body.
 for(const sceneChecks of [
