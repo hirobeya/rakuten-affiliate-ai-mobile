@@ -265,6 +265,18 @@ test('step adjustment requires an explicit adjustment target before local comple
   assert.match(targeted.text,/風量3段階調節/);
 });
 
+
+test('weak bare environmental fact cannot borrow unrelated numeric support',()=>{
+  const out=composeGenericFromTitle({
+    itemName:'自動泡ソープディスペンサー 充電式 300ml 防水',
+    identity:'自動泡ソープディスペンサー'
+  });
+  assert.ok(out);
+  assert.equal(out.quote,'充電式');
+  assert.match(out.text,/充電して使う|コードをつながずに使う/);
+  assert.doesNotMatch(out.text,/防水仕様の自動泡ソープディスペンサー/);
+});
+
 test('caption-grounded generic reasoning works across unknown product types without category registration',()=>{
   const itemName='洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式';
   const itemCaption='【本体サイズ】内径約700mm。【商品説明】シングルサイズの布団が入る大容量サイズです。口が大きく開くので寝具等の大物でも出し入れがしやすいロングファスナーを使用しています。';
