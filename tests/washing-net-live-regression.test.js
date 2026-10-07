@@ -91,6 +91,18 @@ test('live washing-net rank8 does not publish pack-count-only copy',()=>{
   assert.match(r.quality.text,/形崩れ防止/);
 });
 
+
+
+test('live washing-net rank9 completes locally from direct capacity evidence',()=>{
+  const r=assertLocalReady({
+    itemCode:'live:washing-net:9',
+    itemName:'★楽天1位★ 洗濯ネット 特大 布団 布団用 毛布 ランドリー ネット バッグ 洗濯 洗濯袋 ダイヤ ランドリーバック 大型 毛布 羽毛 こたつ布団 敷パッド カーテン ぬいぐるみ 特大サイズ 大きい カーペット 寝具 冬服 マット まとめ 丸洗い',
+    itemCaption:'商品名 洗濯ネット 特大 布団用 大 ランドリー ネット バッグ 洗濯袋。細目網は傷みやすい生地やデリケートな衣類に適しており、引っかかりやほつれを防ぎます。粗目網は布団や毛布など比較的丈夫な衣類の洗濯に適しています。【特大サイズ】110cm×90cmという特大サイズの洗濯ネットは、布団やカーテン、毛布やたくさんの衣類を包み込むことができます。',
+    itemPrice:1780
+  },'rank9');
+  assert.match(r.quality.text,/110cm×90cm|布団|毛布|包み込む|引っかかり|ほつれ/);
+});
+
 test('live washing-net rank10 can complete locally from explicit deformation-prevention title fact',()=>{
   const r=assertLocalReady({
     itemCode:'live:washing-net:10',
