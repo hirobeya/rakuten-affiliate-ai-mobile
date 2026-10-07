@@ -257,6 +257,26 @@ test('caption-grounded generic reasoning works across unknown product types with
   assert.match(out.text,/シングルサイズの布団|出し入れがしやすいロングファスナー/);
 });
 
+
+test('caption capacity wording distinguishes storage amount from neutral product capacity',()=>{
+  const power=composeGenericFromSources({
+    itemName:'ポータブル電源 286Wh',
+    itemCaption:'容量 286Wh。定格出力 600W。',
+    identity:'ポータブル電源'
+  });
+  assert.ok(power);
+  assert.match(power.text,/容量まで見て選ぶなら/);
+  assert.doesNotMatch(power.text,/入る量や容量/);
+
+  const storage=composeGenericFromSources({
+    itemName:'洗濯ネット 大容量 布団用',
+    itemCaption:'シングルサイズの布団が入る大容量サイズです。',
+    identity:'洗濯ネット'
+  });
+  assert.ok(storage);
+  assert.match(storage.text,/入る量や容量まで見て選ぶなら/);
+});
+
 test('caption-grounded reasoning rejects unrelated cross-sell text',()=>{
   const itemName='ブラジャー 洗濯ネット 型崩れ防止 ドラム式 乾燥機対応';
   const itemCaption='商品説明 ドラム式OK!! ブラジャーの型崩れを防ぐ洗濯ネットです。今、シール集めが大ブーム！あふれるコレクションをかわいく整理できる専用バインダーが登場しました！';
