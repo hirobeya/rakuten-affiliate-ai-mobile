@@ -172,12 +172,15 @@ test('material wording uses natural Japanese grammar without changing evidence',
   assert.equal(candidateFromFact({quote:'本革'},'バイクグローブ').body,'本革を使ったバイクグローブです。');
 });
 
-test('extendable wording avoids awkward double specification while preserving exact feature',()=>{
+test('extendable wording turns exact feature into a bounded use consequence without exaggeration',()=>{
   const candidate=candidateFromFact({quote:'伸縮式'},'自撮り棒');
   assert.ok(candidate);
-  assert.equal(candidate.body,'伸縮式の自撮り棒です。');
+  assert.equal(candidate.quote,'伸縮式');
+  assert.equal(candidate.body,'自撮り棒は、長さを変えて使えます。');
+  assert.doesNotMatch(candidate.body,/撮りやす|便利|快適/);
   const embedded=candidateFromFact({quote:'伸縮'},'伸縮ラック');
-  assert.equal(embedded.body,'伸縮ラックです。');
+  assert.equal(embedded.quote,'伸縮');
+  assert.equal(embedded.body,'伸縮ラックは、長さを変えて使えます。');
 });
 
 test('explicit capacity label gives an unknown product a safe semantic axis without exaggeration',()=>{
