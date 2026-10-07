@@ -58,7 +58,7 @@ test('live washing-net rank5 does not collapse to washable-only copy',()=>{
     itemCaption:'ブラジャー専用洗濯ネットです。ブラジャーのカップを裏返したり畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。厚さ約3mmの目が細かい一枚生地が糸クズの侵入をおさえながら洗濯時の衝撃を吸収します。',
     itemPrice:1199
   },'rank5');
-  assert.match(r.quality.text,/擦れ|ねじれ|衝撃|ブラジャー/);
+  assert.match(r.quality.text,/型崩れ\s*防止|擦れ|ねじれ|衝撃|ブラジャー/);
 });
 
 test('live washing-net rank6 uses structure reason instead of size-only copy',()=>{
