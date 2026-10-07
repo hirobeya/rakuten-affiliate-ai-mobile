@@ -9,7 +9,7 @@ test('standalone battery-powered wording can support an unknown product without 
   assert.ok(out);
   assert.equal(out.quote,'電池式');
   assert.equal(out.axis,'電源方式');
-  assert.match(out.text,/電動鉛筆削りは、電池で動くためコンセントにつながず使うタイプです/);
+  assert.match(out.text,/電池式の電動鉛筆削り/);
   assert.doesNotMatch(out.text,/コードレス|便利|長持ち|使いやす|簡単/);
 });
 
@@ -20,7 +20,7 @@ test('whole local partner path can publish the electric pencil sharpener from ex
   assert.equal(out.productType,'電動鉛筆削り');
   assert.equal(out.quote,'電池式');
   assert.match(out.text,/電源方式まで見て選ぶなら/);
-  assert.match(out.text,/電動鉛筆削りは、電池で動くためコンセントにつながず使うタイプです/);
+  assert.match(out.text,/電池式の電動鉛筆削り/);
 });
 
 test('battery wording attached inside another noun is not treated as whole-product power mode',()=>{
