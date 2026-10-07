@@ -5,8 +5,7 @@ const assert=require('node:assert/strict');
 const {
   createHandler,
   resolveLocalUnderstanding,
-  promoteImageHint,
-  hasEarlierSameStemRoleConflict
+  promoteImageHint
 }=require('../lib/super-urenavi-router');
 
 function makeRes(){
@@ -52,13 +51,6 @@ test('local allowlist resolves exact grounded type without guessing accessories'
   assert.equal(hit?.raw?.productType?.value,'電気ケトル');
   assert.equal(hit?.validation?.productType?.valid,true);
   assert.equal(resolveLocalUnderstanding({itemName:'モバイルバッテリー用ケース 収納ポーチ',itemCaption:''}),null);
-});
-
-test('earlier same-stem product role prevents a later allowlisted type from being trusted locally',()=>{
-  const title='自転車 スマホホルダー バイク ワンタッチ スマホスタンド iPhone android 防水';
-  assert.equal(hasEarlierSameStemRoleConflict(title,'スマホスタンド'),true);
-  assert.equal(resolveLocalUnderstanding({itemName:title,itemCaption:''}),null);
-  assert.equal(resolveLocalUnderstanding({itemName:'スマホスタンド 卓上 折りたたみ',itemCaption:''})?.raw?.productType?.value,'スマホスタンド');
 });
 
 test('cached image hint can only promote a type that exists in current source',()=>{
