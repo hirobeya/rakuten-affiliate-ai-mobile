@@ -51,7 +51,7 @@ test('first blind regressions remain safe after tighter zero-call fact boundary'
   assert.ok(laptop.result,'independent exact folding fact should allow safe zero-call completion');
   assert.equal(laptop.result.groq.totalCalls,0);
   assert.equal(laptop.result.productType.specific,'パソコンスタンド');
-  assert.match(laptop.result.quality.text,/パソコンスタンドは、使わないときに折りたためます/);
+  assert.match(laptop.result.quality.text,/折りたたみできるパソコンスタンド/);
   assert.doesNotMatch(laptop.result.quality.text,/折りたたみ仕様のパソコンスタンド/);
   assert.doesNotMatch(laptop.result.quality.text,/11\.6|13\.3|11\.6\s*[~〜～-]\s*13\.3|インチノートPC/);
 });
