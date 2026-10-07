@@ -259,7 +259,7 @@ function resolveIdentityHint(item,learnedIdentity=''){
   const sourceIdentity=String(local?.raw?.productType?.value||'').trim();
   const identity=String(local?.canonicalIdentity||sourceIdentity).trim();
   if(!identity||local?.validation?.productType?.valid!==true) return '';
-  if(hasCompetingCompoundIdentity(title,identity)) return '';
+  if(!local?.arbitration&&hasCompetingCompoundIdentity(title,identity)) return '';
   return identity;
 }
 
@@ -293,7 +293,7 @@ function localZeroCall(item,learnedIdentity=''){
   let identity=String(local?.canonicalIdentity||sourceIdentity).trim();
   let identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(!identity || local?.validation?.productType?.valid!==true) return null;
-  if(hasCompetingCompoundIdentity(title,identity)) return null;
+  if(!local?.arbitration&&hasCompetingCompoundIdentity(title,identity)) return null;
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
