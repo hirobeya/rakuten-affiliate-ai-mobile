@@ -13,7 +13,8 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
       category:row.category,
       zeroCall:Boolean(result),
       productType:result?.productType?.specific||null,
-      text:result?.quality?.text||null
+      text:result?.quality?.text||null,
+      arbitration:result?.local?.arbitration||null
     };
   });
 
