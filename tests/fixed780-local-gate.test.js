@@ -2,7 +2,9 @@
 
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {localZeroCall}=require('../api/room-ai-v3');
+const {localZeroCall,resolveIdentityHint}=require('../api/room-ai-v3');
+const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
+const structured=require('../public/structured-room-copy');
 
 const sources=[
   require('./fixtures/rakuten-large-genres-20260925-01.json'),
@@ -45,9 +47,24 @@ test('fixed 780 local gate keeps thin local completions at zero',()=>{
   assert.equal(items.length,780);
 
   const rows=[];
+  const deferredReasons={};
+  const bump=reason=>{deferredReasons[reason]=(deferredReasons[reason]||0)+1;};
   for(const item of items){
     const result=localZeroCall(item);
-    if(!result) continue;
+    if(!result){
+      const identity=resolveIdentityHint(item);
+      if(!identity){bump('identity_unresolved');continue;}
+      const partner=composeLocalPartnerCopy({itemName:item.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+      if(partner){bump('partner_guarded_or_conflicting');continue;}
+      const copy=structured.compose({...item,itemCaption:''},{identity});
+      if(copy?.status!=='ok'){bump('structured_not_ready');continue;}
+      const facts=Array.isArray(copy?.facts)?copy.facts:[];
+      const values=Array.isArray(copy?.values)?copy.values:[];
+      if(!facts.length){bump('no_structured_facts');continue;}
+      if(!values.length){bump('facts_without_purchase_value');continue;}
+      bump('structured_value_deferred_by_quality_gate');
+      continue;
+    }
     const flags=suspiciousLocalText(result);
     rows.push({
       category:item.category,
@@ -72,6 +89,7 @@ test('fixed 780 local gate keeps thin local completions at zero',()=>{
     groqNeeded:items.length-rows.length,
     localRate:Number((rows.length/items.length).toFixed(4)),
     byMethod,
+    deferredReasons,
     suspiciousCount:suspicious.length,
     suspicious:suspicious.slice(0,20)
   }));
