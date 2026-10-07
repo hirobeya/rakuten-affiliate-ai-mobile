@@ -223,15 +223,11 @@ test('semantic profile records dominant meaning and evidence breadth for unknown
   assert.ok(profile.breadth>=2);
 });
 
-test('standalone rechargeable wording is a safe generic power-source choice axis',()=>{
+test('standalone rechargeable wording alone does not finish generic local copy',()=>{
   const title='卓上クリーナー 充電式 消しゴム USB デスク掃除機 ミニクリーナー';
   const facts=safeTitleFacts(title);
   assert.ok(facts.some(x=>x.quote==='充電式'));
-  const out=composeGenericFromTitle({itemName:title,identity:'卓上クリーナー'});
-  assert.ok(out);
-  assert.equal(out.axis,'電源方式');
-  assert.match(out.text,/電源方式まで見て選ぶなら/);
-  assert.match(out.text,/充電式の卓上クリーナー/);
+  assert.equal(composeGenericFromTitle({itemName:title,identity:'卓上クリーナー'}),null);
 });
 
 test('rechargeable wording attached to an accessory is not promoted to whole-product power source',()=>{
@@ -271,19 +267,30 @@ test('weak bare environmental fact cannot borrow unrelated numeric support',()=>
     itemName:'自動泡ソープディスペンサー 充電式 300ml 防水',
     identity:'自動泡ソープディスペンサー'
   });
-  assert.ok(out);
-  assert.equal(out.quote,'充電式');
-  assert.match(out.text,/充電して使う|コードをつながずに使う/);
-  assert.doesNotMatch(out.text,/防水仕様の自動泡ソープディスペンサー/);
+  assert.equal(out,null);
 });
 
 
-test('rechargeable generic copy stays source-grounded without assuming cordless operation',()=>{
-  const out=composeGenericFromTitle({itemName:'電動ワインデキャンタ 充電式 Type-C',identity:'電動ワインデキャンタ'});
+test('rechargeable plus connector wording still does not finish without same-axis power support',()=>{
+  assert.equal(
+    composeGenericFromTitle({itemName:'電動ワインデキャンタ 充電式 Type-C',identity:'電動ワインデキャンタ'}),
+    null
+  );
+});
+
+test('rechargeable generic copy can finish when independently corroborated on the same power axis',()=>{
+  const out=composeGenericLocalCopy({
+    identity:'テスト機器',
+    itemName:'テスト機器 充電式 USB給電',
+    facts:[{quote:'充電式',source:'itemName'}],
+    extraCandidates:[{
+      quote:'USB給電',source:'itemName',axis:'電源方式',hook:'電源方式まで見て選ぶなら',
+      body:'USB給電表記のテスト機器です。',score:9,kind:'signal'
+    }]
+  });
   assert.ok(out);
-  assert.equal(out.quote,'充電式');
-  assert.match(out.text,/充電して使うタイプ/);
-  assert.doesNotMatch(out.text,/コードをつながず/);
+  assert.equal(out.axis,'電源方式');
+  assert.match(out.text,/電源方式まで見て選ぶなら/);
 });
 
 test('caption-grounded generic reasoning works across unknown product types without category registration',()=>{
