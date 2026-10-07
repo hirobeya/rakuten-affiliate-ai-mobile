@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {chooseAngle,composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
+const {chooseAngle,composeLocalPartnerCopy,explicitStepAdjustment}=require('../lib/local-partner-reasoner');
 const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile,safeTitleFacts,composeGenericFromTitle,safeCaptionCandidates,composeGenericFromSources}=require('../lib/local-generic-reasoner');
 
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
@@ -257,9 +257,9 @@ test('meaningful generic operators remain available',()=>{
 
 
 test('step adjustment requires an explicit adjustment target before local completion',()=>{
-  assert.equal(composeLocalPartnerCopy({itemName:'自動泡ソープディスペンサー 充電式 300ml 3段階調節 防水',identity:'自動泡ソープディスペンサー'}),null);
+  assert.equal(explicitStepAdjustment('自動泡ソープディスペンサー 充電式 300ml 3段階調節 防水','自動泡ソープディスペンサー'),null);
 
-  const targeted=composeLocalPartnerCopy({itemName:'卓上ファン 風量3段階調節 USB',identity:'卓上ファン'});
+  const targeted=explicitStepAdjustment('卓上ファン 風量3段階調節 USB','卓上ファン');
   assert.ok(targeted);
   assert.equal(targeted.quote,'風量3段階調節');
   assert.match(targeted.text,/風量3段階調節/);
