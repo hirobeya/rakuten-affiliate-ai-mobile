@@ -65,6 +65,25 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
       });
       assert.equal(rechargeOnly,null);
     }
+    {
+      const crossSourceConflict=localZeroCall({
+        itemCode:'circulator-conflict:1',
+        itemName:'サーキュレーター コードレス 充電式 洗える',
+        itemCaption:'2mのロングコードを備えています。',
+        itemPrice:0
+      });
+      assert.equal(crossSourceConflict,null);
+    }
+
+    {
+      const negatedFeature=localZeroCall({
+        itemCode:'fold-conflict:1',
+        itemName:'靴乾燥機 折りたたみ タイマー付き',
+        itemCaption:'折りたたみ非対応のモデルです。',
+        itemPrice:0
+      });
+      assert.equal(negatedFeature,null);
+    }
 
     {
       let quota=0,groq=0;
