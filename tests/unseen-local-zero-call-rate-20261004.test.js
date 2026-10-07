@@ -26,7 +26,6 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   // the resolved identity rather than forcing every post to start with the product noun.
   // u03 contains H1,375mm in a noisy caption and must never publish a sliced "375mm" fact.
   const mobileBattery=rows.find(x=>x.id==='u08');
-  console.log('UNSEEN_U08_DIAGNOSTIC '+JSON.stringify(mobileBattery));
   assert.equal(mobileBattery?.productType,'モバイルバッテリー');
   assert.ok(!String(mobileBattery?.text||'').includes('スマホ充電器'));
 
