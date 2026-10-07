@@ -231,24 +231,8 @@ function localPartnerTextSafe(item,partnerCopy,text){
 
   let probe=String(text||'');
   const canonicalQuote=quote.replace(/\s+/g,'');
-  for(const term of LOCAL_PARTNER_ALLOWED_PREVENTION){
-    if(canonicalQuote===term){
-      const flexible=[...term].map(ch=>ch.replace(/[.*+?^$(){}|[\]\\]/g,'\\function hasStrongStructuredReason(values=[],facts=[]){
-  const rows=Array.isArray(values)?values:[];
-  const sourceFacts=Array.isArray(facts)?facts:[];
-  if(!rows.length||!sourceFacts.length) return false;
-  return rows.some(value=>{
-    const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
-    if(!refs.length) return false;
-    return refs.some(ref=>{
-      const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
-      return fact&&!weakStructuredFact(fact);
-    });
-  });
-}
-')).join('\\s*');
-      probe=probe.replace(new RegExp(flexible,'gi'),'');
-    }
+  if(LOCAL_PARTNER_ALLOWED_PREVENTION.includes(canonicalQuote)){
+    probe=probe.split(quote).join('');
   }
   return !structured.RISK.test(probe);
 }
