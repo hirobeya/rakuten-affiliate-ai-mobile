@@ -364,7 +364,8 @@ function localZeroCall(item,learnedIdentity=''){
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
-  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&groundedValues.length>0&&hasStrongStructuredReason(groundedValues,structuredFacts);
+  const selectedGroundedValues=groundedValues.filter(v=>String(copy?.text||'').includes(String(v?.text||'').trim()));
+  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&selectedGroundedValues.length>0&&hasStrongStructuredReason(selectedGroundedValues,structuredFacts);
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
