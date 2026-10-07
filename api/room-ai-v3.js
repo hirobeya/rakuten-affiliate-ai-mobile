@@ -240,6 +240,30 @@ const LOCAL_PARTNER_ALLOWED_PREVENTION=[
   '型崩れ防止','形崩れ防止','絡まり防止','色移り防止','毛玉防止','シワ防止'
 ];
 
+function regexEscape(value=''){
+  return String(value||'').replace(/[.*+?^$(){}|[\]\\]/g,'\\function localPartnerTextSafe(item,partnerCopy,text){');
+}
+
+function hasCrossSourceFactConflict(item={},facts=[]){
+  const title=normalize(item?.itemName);
+  const caption=normalize(item?.itemCaption);
+  if(!title||!caption) return false;
+
+  const rows=Array.isArray(facts)?facts:[];
+  for(const fact of rows){
+    const quote=normalize(fact?.quote);
+    if(!quote) continue;
+    const escaped=regexEscape(quote);
+    const negated=new RegExp(`(?:非|不|未)\\s*${escaped}|${escaped}\\s*(?:ではない|ではありません|非対応|対象外|なし|無し|不要)`,'i');
+    if((title.includes(quote)&&negated.test(caption))||(caption.includes(quote)&&negated.test(title))) return true;
+  }
+
+  const explicitCord=/(?:電源|AC)?コード(?:長)?\s*[:：]?\s*\d+(?:\.\d+)?\s*(?:m|cm)|\d+(?:\.\d+)?\s*(?:m|cm)\s*の(?:ロング)?コード|ロングコード/i;
+  if((/コードレス/i.test(title)&&explicitCord.test(caption))||(/コードレス/i.test(caption)&&explicitCord.test(title))) return true;
+
+  return false;
+}
+
 function localPartnerTextSafe(item,partnerCopy,text){
   const source=normalize([item?.itemName,item?.itemCaption].filter(Boolean).join(' '));
   const quote=normalize(partnerCopy?.quote);
@@ -342,6 +366,7 @@ function localZeroCall(item,learnedIdentity=''){
     }
   }
   if(!facts.length) return null;
+  if(hasCrossSourceFactConflict(item,facts)) return null;
   if(facts.every(f=>/^(?:日本製)$/.test(normalize(f.quote)))) return null;
 
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
