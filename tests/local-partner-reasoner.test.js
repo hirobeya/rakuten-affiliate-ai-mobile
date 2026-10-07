@@ -277,6 +277,15 @@ test('weak bare environmental fact cannot borrow unrelated numeric support',()=>
   assert.doesNotMatch(out.text,/防水仕様の自動泡ソープディスペンサー/);
 });
 
+
+test('rechargeable generic copy stays source-grounded without assuming cordless operation',()=>{
+  const out=composeGenericFromTitle({itemName:'電動ワインデキャンタ 充電式 Type-C',identity:'電動ワインデキャンタ'});
+  assert.ok(out);
+  assert.equal(out.quote,'充電式');
+  assert.match(out.text,/充電して使うタイプ/);
+  assert.doesNotMatch(out.text,/コードをつながず/);
+});
+
 test('caption-grounded generic reasoning works across unknown product types without category registration',()=>{
   const itemName='洗濯ネット ふくらむ洗濯ネット特大70 大容量 布団 毛布 70cm ドラム式';
   const itemCaption='【本体サイズ】内径約700mm。【商品説明】シングルサイズの布団が入る大容量サイズです。口が大きく開くので寝具等の大物でも出し入れがしやすいロングファスナーを使用しています。';
