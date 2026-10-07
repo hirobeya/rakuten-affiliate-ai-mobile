@@ -57,6 +57,16 @@ const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,re
     }
 
     {
+      const rechargeOnly=localZeroCall({
+        itemCode:'sensor-bin:1',
+        itemName:'センサー式ゴミ箱 自動開閉 充電式 15L ダストボックス ふた付き キッチン リビング',
+        itemCaption:'',
+        itemPrice:0
+      });
+      assert.equal(rechargeOnly,null);
+    }
+
+    {
       let quota=0,groq=0;
       const handler=createHandler({
         authorize:async()=>({ok:true,plan:'owner'}),store:memoryStore(),
