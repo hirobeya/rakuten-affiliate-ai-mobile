@@ -204,7 +204,7 @@ function weakStructuredFact(fact={}){
   if(['count','dimension','size','material','numeric'].includes(kind)) return true;
   if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote)) return true;
   if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote)) return true;
-  if(kind==='function'&&['洗える','手洗い','メッシュ'].includes(quote)) return true;
+  if(kind==='function'&&['洗える','手洗い','メッシュ','充電式'].includes(quote)) return true;
   return false;
 }
 
