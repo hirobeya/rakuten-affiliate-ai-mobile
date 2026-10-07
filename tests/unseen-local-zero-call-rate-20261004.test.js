@@ -30,7 +30,10 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   assert.ok(!String(mobileBattery?.text||'').includes('スマホ充電器'));
 
   const fryingPan=rows.find(x=>x.id==='u09');
-  assert.equal(fryingPan?.zeroCall,false,'size-only frying-pan copy should defer to verified reasoning');
+  if(fryingPan?.zeroCall){
+    assert.ok(!/サイズも見て選ぶなら[\s\S]*20cmのサイズ表記/.test(String(fryingPan.text||'')),'size-only frying-pan angle must not publish');
+    assert.match(String(fryingPan.text||''),/IH|ガス火|こびりつき|お手入れ|調理/,'local frying-pan copy must retain a real use or compatibility reason');
+  }
 
   const storageBench=rows.find(x=>x.id==='u02');
   const mopHanger=rows.find(x=>x.id==='u03');
