@@ -29,6 +29,9 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   assert.equal(mobileBattery?.productType,'モバイルバッテリー');
   assert.ok(!String(mobileBattery?.text||'').includes('スマホ充電器'));
 
+  const fryingPan=rows.find(x=>x.id==='u09');
+  assert.equal(fryingPan?.zeroCall,false,'size-only frying-pan copy should defer to verified reasoning');
+
   const storageBench=rows.find(x=>x.id==='u02');
   const mopHanger=rows.find(x=>x.id==='u03');
   if(storageBench?.zeroCall){
