@@ -241,7 +241,7 @@ const LOCAL_PARTNER_ALLOWED_PREVENTION=[
 ];
 
 function regexEscape(value=''){
-  return String(value||'').replace(/[.*+?^$(){}|[\]\\]/g,'\\function localPartnerTextSafe(item,partnerCopy,text){');
+  return String(value||'').replace(/[.*+?^$(){}|[\]\\]/g,'\\$&');
 }
 
 function hasCrossSourceFactConflict(item={},facts=[]){
