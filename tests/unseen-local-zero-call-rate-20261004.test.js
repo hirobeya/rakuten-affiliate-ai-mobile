@@ -33,6 +33,10 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   assert.ok(!String(storageBench?.text||'').includes('150kg'));
   assert.ok(!String(mopHanger?.text||'').includes('375mm'));
 
+  // u12 registration metadata must never become ROOM copy.
+  const petBed=rows.find(x=>x.id==='u12');
+  assert.ok(!/登録番号|登録第?\s*\d+号|第\s*\d+号/.test(String(petBed?.text||'')));
+
   const zeroCallCount=rows.filter(x=>x.zeroCall).length;
   const report={
     total:rows.length,
