@@ -220,6 +220,39 @@ function hasStrongStructuredReason(values=[],facts=[]){
   });
 }
 
+const LOCAL_PARTNER_ALLOWED_PREVENTION=[
+  '型崩れ防止','形崩れ防止','絡まり防止','色移り防止','毛玉防止','シワ防止'
+];
+
+function localPartnerTextSafe(item,partnerCopy,text){
+  const source=normalize([item?.itemName,item?.itemCaption].filter(Boolean).join(' '));
+  const quote=normalize(partnerCopy?.quote);
+  if(!source||!quote||!source.includes(quote)) return false;
+
+  let probe=String(text||'');
+  const canonicalQuote=quote.replace(/\s+/g,'');
+  for(const term of LOCAL_PARTNER_ALLOWED_PREVENTION){
+    if(canonicalQuote===term){
+      const flexible=[...term].map(ch=>ch.replace(/[.*+?^$(){}|[\]\\]/g,'\\function hasStrongStructuredReason(values=[],facts=[]){
+  const rows=Array.isArray(values)?values:[];
+  const sourceFacts=Array.isArray(facts)?facts:[];
+  if(!rows.length||!sourceFacts.length) return false;
+  return rows.some(value=>{
+    const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
+    if(!refs.length) return false;
+    return refs.some(ref=>{
+      const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
+      return fact&&!weakStructuredFact(fact);
+    });
+  });
+}
+')).join('\\s*');
+      probe=probe.replace(new RegExp(flexible,'gi'),'');
+    }
+  }
+  return !structured.RISK.test(probe);
+}
+
 function resolveIdentityHint(item,learnedIdentity=''){
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item?.itemName,itemCaption:item?.itemCaption});
@@ -333,7 +366,8 @@ function localZeroCall(item,learnedIdentity=''){
 
   let text=partnerCopy?.text||(useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice));
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
-  if(!String(text||'').trim()||structured.RISK.test(text)) return null;
+  const textSafe=partnerCopy?localPartnerTextSafe(item,partnerCopy,text):!structured.RISK.test(text);
+  if(!String(text||'').trim()||!textSafe) return null;
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};
