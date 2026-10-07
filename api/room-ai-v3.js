@@ -208,7 +208,21 @@ function weakStructuredFact(fact={}){
   return false;
 }
 
-function hasStrongStructuredReason(values=[],facts=[]){
+function identityAlreadyStatesFact(identity='',quote=''){
+  const id=normalize(identity).toLocaleLowerCase('ja-JP');
+  const q=normalize(quote).toLocaleLowerCase('ja-JP');
+  if(!id||!q) return false;
+  if(id.includes(q)) return true;
+  const variants={
+    '折りたたみ':['折り畳み'],
+    '折り畳み':['折りたたみ'],
+    '伸縮式':['伸縮'],
+    '伸縮':['伸縮式']
+  };
+  return (variants[q]||[]).some(v=>id.includes(v));
+}
+
+function hasStrongStructuredReason(values=[],facts=[],identity=''){
   const rows=Array.isArray(values)?values:[];
   const sourceFacts=Array.isArray(facts)?facts:[];
   if(!rows.length||!sourceFacts.length) return false;
@@ -217,7 +231,7 @@ function hasStrongStructuredReason(values=[],facts=[]){
     if(!refs.length) return false;
     return refs.some(ref=>{
       const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
-      return fact&&!weakStructuredFact(fact);
+      return fact&&!weakStructuredFact(fact)&&!identityAlreadyStatesFact(identity,fact.quote);
     });
   });
 }
@@ -334,7 +348,7 @@ function localZeroCall(item,learnedIdentity=''){
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
   const selectedGroundedValues=groundedValues.filter(v=>String(copy?.text||'').includes(String(v?.text||'').trim()));
-  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&selectedGroundedValues.length>0&&hasStrongStructuredReason(selectedGroundedValues,structuredFacts);
+  const useStructuredText=!partnerCopy&&structuredSafe&&structuredFacts.length>0&&selectedGroundedValues.length>0&&hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
