@@ -154,6 +154,17 @@ test('near-tied different meaning families defer when neither has stronger evide
   assert.equal(out,null);
 });
 
+test('identity-only feature restatement cannot finish local generic copy',()=>{
+  assert.equal(
+    composeGenericFromTitle({itemName:'折りたたみチェア 折りたたみ コンパクト',identity:'折りたたみチェア'}),
+    null
+  );
+  assert.equal(
+    composeGenericFromTitle({itemName:'折りたたみバケツ 折り畳み 10L',identity:'折りたたみバケツ'}),
+    null
+  );
+});
+
 test('folding wording avoids repeating a feature already present in product identity',()=>{
   const candidate=candidateFromFact({quote:'折りたたみ'},'折りたたみチェア');
   assert.ok(candidate);
