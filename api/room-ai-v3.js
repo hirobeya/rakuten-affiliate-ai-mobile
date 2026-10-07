@@ -113,27 +113,6 @@ function separatedKnownIdentity(item){
   return hits.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0]||null;
 }
 
-function exactKnownWholeIdentity(item){
-  const title=normalize(item?.itemName);
-  if(!title) return null;
-  const candidates=(localTypeData.productTypes||[])
-    .map(normalize).filter(Boolean)
-    .map(type=>({type,at:title.indexOf(type)}))
-    .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
-    .filter(x=>!hasCompetingCompoundIdentity(title,x.type))
-    .sort((a,b)=>a.at-b.at||b.type.length-a.type.length);
-  const hit=candidates[0];
-  if(!hit) return null;
-  return {
-    raw:{productType:{value:hit.type,source:'itemName',evidence:hit.type},features:[],sellingPoints:[],confidence:'high'},
-    validation:{productType:{value:hit.type,valid:true},mode:'simple'},
-    canonicalIdentity:hit.type,
-    matchIndex:hit.at,
-    version:(localTypeData.version||'local-types')+'-exact-known-whole',
-    identityHypothesis:{method:'exact_known_whole',supportCount:1}
-  };
-}
-
 function resolveLiteralIdentity(item){
   const title=normalize(item?.itemName);
   if(!title) return null;
@@ -266,11 +245,6 @@ function resolveIdentityHint(item,learnedIdentity=''){
   const literalLocal=resolveLiteralIdentity(item);
   const repeatedLocal=repeatedLiteralIdentity(item);
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
-  const exactKnown=exactKnownWholeIdentity(item);
-  if(exactKnown){
-    const selectedIdentity=normalize(local?.canonicalIdentity||local?.raw?.productType?.value);
-    if(!selectedIdentity || selectedIdentity!==normalize(exactKnown.canonicalIdentity)) local=exactKnown;
-  }
   if(!local){
     const rescue=leadingCompoundIdentity(item);
     if(rescue?.validation?.productType?.valid===true){
@@ -295,11 +269,6 @@ function localZeroCall(item,learnedIdentity=''){
   const literalLocal=resolveLiteralIdentity(item);
   const repeatedLocal=repeatedLiteralIdentity(item);
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
-  const exactKnown=exactKnownWholeIdentity(item);
-  if(exactKnown){
-    const selectedIdentity=normalize(local?.canonicalIdentity||local?.raw?.productType?.value);
-    if(!selectedIdentity || selectedIdentity!==normalize(exactKnown.canonicalIdentity)) local=exactKnown;
-  }
 
   if(!local){
     const rescue=leadingCompoundIdentity(item);
@@ -582,7 +551,6 @@ module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
-module.exports.exactKnownWholeIdentity=exactKnownWholeIdentity;
 module.exports.resolveIdentityHint=resolveIdentityHint;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
 module.exports.rememberValidatedIdentity=rememberValidatedIdentity;
