@@ -1,0 +1,12 @@
+{
+  "version": "2026-10-04-partner-derived-v1",
+  "source": "past_product_understanding_exact_title_review",
+  "types": [
+    {"productType":"キッチンスケール","status":"active","actsOn":"食材や調味料などの重さ","situations":["料理や計量で重さを量りたいとき"],"decisionAxes":["最小表示","最大計量","風袋引き","表示単位","本体サイズ"],"blockedInferences":["最小表示から測定精度を保証しない","細かく量れることから健康・栄養効果を作らない"]},
+    {"productType":"カールアイロン","status":"active","actsOn":"髪のスタイリング","situations":["髪をカールさせて整えたいとき"],"decisionAxes":["バレル径","温度範囲","温度設定","本体重量","コード仕様"],"blockedInferences":["温度設定から髪へのダメージ軽減を断定しない","バレル径から仕上がりを保証しない"]},
+    {"productType":"リュック","status":"active","actsOn":"荷物の持ち運び","situations":["通勤・通学・旅行などで荷物を持ち運びたいとき"],"decisionAxes":["容量","本体サイズ","本体重量","PC収納サイズ","開閉・収納構造","持ち方"],"blockedInferences":["軽量から疲れにくいと断定しない","撥水から完全防水へ意味を広げない"]},
+    {"productType":"扇風機","status":"active","actsOn":"室内の空気を動かす用途","situations":["室内で風を送りたいとき"],"decisionAxes":["羽根サイズ","風量段階","首振り","タイマー","リモコン","消費電力"],"blockedInferences":["風量や首振りから部屋全体が必ず涼しくなると断定しない","熱中症予防など健康効果を作らない"]},
+    {"productType":"電気毛布","status":"active","actsOn":"寝具や身体の周囲を温める用途","situations":["就寝時や休憩時に暖かさを調整したいとき"],"decisionAxes":["本体サイズ","温度段階","タイマー","洗濯可能な範囲","消費電力"],"blockedInferences":["暖かさから睡眠改善や健康効果を作らない","消費電力だけから電気代を断定しない","洗える対象部位を本体全体へ広げない"]},
+    {"productType":"靴下","status":"active","actsOn":"足を覆う衣類","situations":["普段着や仕事用などで履く靴下を選びたいとき"],"decisionAxes":["サイズ","素材","丈","セット数量","色","機能表記"],"blockedInferences":["抗菌・防臭加工から臭いが発生しないと保証しない","素材から履き心地や疲労軽減を原文なしに断定しない"]}
+  ]
+}

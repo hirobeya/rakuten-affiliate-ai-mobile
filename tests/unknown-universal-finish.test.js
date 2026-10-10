@@ -11,6 +11,6 @@ const cases=[
 ['kettle',{itemName:'電気ケトル 1.0L 7段階温度調節 4時間保温',itemCaption:'電気ケトル 1.0L 7段階温度調節 4時間保温',itemPrice:4980},'電気ケトル',['7段階温度調節','4時間保温'],/温度を選びたい|保温時間/],
 ['unknown',{itemName:'架空ツールX 重量 260g 幅 30cm',itemCaption:'架空ツールX 重量 260g 幅 30cm',itemPrice:1700},'架空ツールX',['重量 260g','幅 30cm'],/持ち運ぶときの重さ|置き場所/]
 ];
-for(const [name,item,id,facts,want] of cases){const post=api.buildValidatedProductPost(item,id,facts);assert.ok(post,name+' blank');assert.match(post,want);assert.doesNotMatch(post,/商品説明では「|絶対|必ず|確実に|ランキング|受賞/);}
+for(const [name,item,id,facts,want] of cases){const post=api.buildValidatedProductPost(item,id,facts);assert.ok(post,name+' blank');assert.doesNotMatch(post,/商品名には|明記されています|比較しやすい/);for(const fact of facts) assert.ok(post.includes(fact),name+' lost '+fact);assert.doesNotMatch(post,/商品説明では「|絶対|必ず|確実に|ランキング|受賞/);}
 assert.equal(api.buildValidatedProductPost({itemName:'別の商品',itemCaption:'重量 100g'},'存在しない商品',['重量 100g']),'');
 console.log('unknown universal finish: PASS');

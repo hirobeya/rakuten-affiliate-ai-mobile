@@ -323,6 +323,7 @@
       const wrapped=function(...args){
         const item=args[0]||{};
         const identity=identityIndex==null?'':args[identityIndex];
+        if(original.__structured===true) return original.apply(this,args);
         let output='';
         if(name==='buildValidatedProductPost'){
           output=safety.buildRankedTypeKnowledgePost(item,identity,args[2]||[]);

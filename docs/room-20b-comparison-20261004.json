@@ -1,0 +1,911 @@
+{
+  "status": "incomplete_1_of_3",
+  "contract": "room_contract_f368e1e91ffed48f",
+  "model": "openai/gpt-oss-20b",
+  "records": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791062909788_01_1",
+      "run": 1,
+      "startedAt": "2026-10-03T21:28:29.788Z",
+      "elapsedMs": 10357,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_f368e1e91ffed48f",
+        "model": "openai/gpt-oss-20b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "invalid_structured_output",
+              "sentence": null,
+              "detail": "generate returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field."
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "バイク用グローブ",
+          "general": "手"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 8484,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バイク用グローブ",
+              "acts_on": "手",
+              "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+            },
+            "sentences": [
+              {
+                "text": "手首の前側に大きく移したベルクロで風を防ぎ、前からしっかり締められるので、手首のすき間から風が入りにくくなります。",
+                "kinds": [
+                  "benefit"
+                ],
+                "quotes": [
+                  "ベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。"
+                ]
+              },
+              {
+                "text": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "kinds": [
+                  "benefit"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バイク用グローブ",
+                  "acts_on": "手",
+                  "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+                },
+                "sentences": [
+                  {
+                    "text": "手首の前側に大きく移したベルクロで風を防ぎ、前からしっかり締められるので、手首のすき間から風が入りにくくなります。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "ベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。"
+                    ]
+                  },
+                  {
+                    "text": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsupported_prevention_result",
+                  "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。",
+                  "sentence": 0
+                },
+                {
+                  "rule": "unsafe_operation",
+                  "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。",
+                  "sentence": null
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "バイク用グローブ",
+                  "acts_on": "手",
+                  "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+                },
+                "sentences": [
+                  {
+                    "text": "手首の前側に大きく移したベルクロで風を防ぎ、前からしっかり締められるので、手首のすき間から風が入りにくくなります。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "ベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。"
+                    ]
+                  },
+                  {
+                    "text": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "invalid_structured_output",
+                  "sentence": null,
+                  "detail": "generate returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field."
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "2561",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "40.792s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.099567894,
+                "total_time": 1.9183542409999998,
+                "prompt_time": 0.135404508,
+                "total_tokens": 3426,
+                "prompt_tokens": 1777,
+                "completion_time": 1.7829497330000001,
+                "completion_tokens": 1649,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1400
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2092,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "16.147s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1m26.4s",
+                "x-ratelimit-remaining-tokens": "5847",
+                "x-ratelimit-remaining-requests": "999"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 3669,
+              "usage": null,
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "998",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "2561",
+                "x-ratelimit-reset-requests": "2m52.8s",
+                "x-ratelimit-reset-tokens": "40.792s"
+              },
+              "error": "invalid_structured_output"
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 205,
+                  "quote": "ベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+                  "start": 145,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": [
+              {
+                "rule": "unsupported_prevention_result",
+                "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。",
+                "sentence": 0
+              },
+              {
+                "rule": "unsafe_operation",
+                "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。",
+                "sentence": null
+              }
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 5066
+        }
+      },
+      "humanReview": null,
+      "assistantSourceReview": {
+        "reviewer": "assistant_source_review",
+        "result": "blocked",
+        "notes": "完成数に含めない。3回目は原文外引用に加え架空の選びました。"
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791062920194_01_2",
+      "run": 2,
+      "startedAt": "2026-10-03T21:28:40.194Z",
+      "elapsedMs": 88654,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_f368e1e91ffed48f",
+        "model": "openai/gpt-oss-20b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "停車中にスマホを操作したいとき、親指と人差し指にタッチ対応素材を採用したバイク用手袋が便利です。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "source": "caption",
+                "start": 459,
+                "end": 500,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "スマホ対応&フィット感の調整が可能",
+                "source": "caption",
+                "start": 441,
+                "end": 458,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "スマホ対応&フィット感の調整が可能",
+              "source": "caption",
+              "start": 441,
+              "end": 458,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "スマホ対応&フィット感の調整が可能",
+                  "source": "caption",
+                  "start": 441,
+                  "end": 458,
+                  "approvalEvidence": "added_by_review"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "スマホ対応&フィット感の調整が可能",
+                "source": "caption",
+                "start": 441,
+                "end": 458,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "停車中にスマホを操作したいとき、親指と人差し指にタッチ対応素材を採用したバイク用手袋が便利です。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "バイク用手袋",
+          "general": "手"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 87291,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バイク用手袋",
+              "acts_on": "手",
+              "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、親指と人差し指にタッチ対応素材を採用したバイク用手袋が便利です。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "reason": "supported",
+              "room_style": "supported",
+              "scene": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、親指と人差し指にタッチ対応素材を採用したバイク用手袋が便利です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "スマホ対応&フィット感の調整が可能"
+                ],
+                "reason": "Matches source description of touch-compatible gloves."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バイク用手袋",
+                  "acts_on": "手",
+                  "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+                },
+                "sentences": [
+                  {
+                    "text": "スマホを操作したいとき、親指と人差し指にタッチ対応素材を採用したバイク用手袋が便利です。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsafe_operation",
+                  "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。",
+                  "sentence": null
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5869",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "15.982s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.241388937,
+                "total_time": 1.304560061,
+                "prompt_time": 0.088882356,
+                "total_tokens": 2910,
+                "prompt_tokens": 1777,
+                "completion_time": 1.215677705,
+                "completion_tokens": 1133,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 986
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 1594,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "51.982s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "4m19.2s",
+                "x-ratelimit-remaining-tokens": "1069",
+                "x-ratelimit-remaining-requests": "997"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.140091255,
+                "total_time": 1.562779839,
+                "prompt_time": 0.114670579,
+                "total_tokens": 3286,
+                "prompt_tokens": 1974,
+                "completion_time": 1.44810926,
+                "completion_tokens": 1312,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1161
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2018,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "24.315s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "5m45.6s",
+                "x-ratelimit-remaining-tokens": "4758",
+                "x-ratelimit-remaining-requests": "996"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 1549,
+              "usage": {
+                "queue_time": 0.050530469,
+                "prompt_tokens": 1893,
+                "prompt_time": 0.131812546,
+                "completion_tokens": 1099,
+                "completion_time": 1.197526058,
+                "total_tokens": 2992,
+                "total_time": 1.329338604,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 911
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "995",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5869",
+                "x-ratelimit-reset-requests": "7m12s",
+                "x-ratelimit-reset-tokens": "15.982s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 4151
+        }
+      },
+      "humanReview": null,
+      "assistantSourceReview": {
+        "reviewer": "assistant_source_review",
+        "result": "pass",
+        "notes": "停車中のタッチ操作・対象・引用・自然な使用意図を確認。審査追加見出しも原文一致。"
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791063008908_01_3",
+      "run": 3,
+      "startedAt": "2026-10-03T21:30:08.908Z",
+      "elapsedMs": 44228,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_f368e1e91ffed48f",
+        "model": "openai/gpt-oss-20b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "review_evidence_not_in_source",
+              "sentence": 0
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "バイク用本革グローブ",
+          "general": "手"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 42677,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バイク用本革グローブ",
+              "acts_on": "手",
+              "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+            },
+            "sentences": [
+              {
+                "text": "長時間のツーリングでも、山羊革の柔らかさと高いグリップ力を備えたバイク用本革グローブを選びました。",
+                "kinds": [
+                  "benefit"
+                ],
+                "quotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "reason": "supported",
+              "room_style": "supported",
+              "scene": "supported"
+            },
+            "sentences": [
+              {
+                "text": "長時間のツーリングでも、山羊革の柔らかさと高いグリップ力を備えたバイク用本革グローブを選びました。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "長時間のツーリングでも快適な操作をサポート。"
+                ],
+                "reason": "All claims directly supported by source."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バイク用本革グローブ",
+                  "acts_on": "手",
+                  "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+                },
+                "sentences": [
+                  {
+                    "text": "長時間のツーリングでも快適な操作をサポートするため、山羊革の柔らかさと高いグリップ力を兼ね備えたバイク用本革グローブを選びました。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsupported_result",
+                  "detail": "快適",
+                  "sentence": 0
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "バイク用本革グローブ",
+                  "acts_on": "手",
+                  "acts_on_quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。"
+                },
+                "sentences": [
+                  {
+                    "text": "長時間のツーリングでも、山羊革の柔らかさと高いグリップ力を備えたバイク用本革グローブを選びました。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "identity": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "reason": "supported",
+                  "room_style": "supported",
+                  "scene": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "長時間のツーリングでも、山羊革の柔らかさと高いグリップ力を備えたバイク用本革グローブを選びました。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "supported",
+                    "evidenceQuotes": [
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                      "長時間のツーリングでも快適な操作をサポート。"
+                    ],
+                    "reason": "All claims directly supported by source."
+                  }
+                ]
+              },
+              "failures": [
+                {
+                  "rule": "review_evidence_not_in_source",
+                  "sentence": 0
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "992",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "1790",
+            "x-ratelimit-reset-requests": "11m31.2s",
+            "x-ratelimit-reset-tokens": "46.575s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.063251703,
+                "total_time": 1.431738278,
+                "prompt_time": 0.106965562,
+                "total_tokens": 2948,
+                "prompt_tokens": 1777,
+                "completion_time": 1.324772716,
+                "completion_tokens": 1171,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1015
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 1538,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "33.644s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "8m38.4s",
+                "x-ratelimit-remaining-tokens": "3514",
+                "x-ratelimit-remaining-requests": "994"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.063301439,
+                "total_time": 1.418222254,
+                "prompt_time": 0.107235715,
+                "total_tokens": 3135,
+                "prompt_tokens": 1943,
+                "completion_time": 1.310986539,
+                "completion_tokens": 1192,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1048
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 1809,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "20.13s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "10m4.8s",
+                "x-ratelimit-remaining-tokens": "5316",
+                "x-ratelimit-remaining-requests": "993"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 1465,
+              "usage": {
+                "queue_time": 0.170114418,
+                "prompt_tokens": 1894,
+                "prompt_time": 0.121609233,
+                "completion_tokens": 926,
+                "completion_time": 1.016156862,
+                "total_tokens": 2820,
+                "total_time": 1.137766095,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 743
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "992",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "1790",
+                "x-ratelimit-reset-requests": "11m31.2s",
+                "x-ratelimit-reset-tokens": "46.575s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 244,
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "start": 218,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 3025
+        }
+      },
+      "humanReview": null,
+      "assistantSourceReview": {
+        "reviewer": "assistant_source_review",
+        "result": "blocked",
+        "notes": "完成数に含めない。3回目は原文外引用に加え架空の選びました。"
+      }
+    }
+  ]
+}

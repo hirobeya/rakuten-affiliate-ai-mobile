@@ -16,8 +16,8 @@ const pass1={
     {name:'温度設定単位',value:'1℃',unit:'℃',qualifier:'単位',valueType:'single',quote:'1℃単位'}
   ],
   decisionAxes:[{text:'温度設定',attributeRefs:[1,2]}],
-  appeals:[{text:'飲み物に合わせて温度を細かく選べる',noHassle:'沸かした後に温度が下がるのを待たなくていい',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[1,2],strength:3}],
-  hooks:[{type:'question',text:'飲み物ごとに、お湯の温度を気にすることありませんか？'}]
+  appeals:[{text:'50-100度を1℃単位で設定できる電気ケトルです',noHassle:'',scene:'飲み物ごとに温度を変えたいとき',attributeRefs:[1,2],strength:3}],
+  hooks:[]
 };
 const pass2={results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'温度設定範囲と単位から無理なく言える'}]};
 
@@ -49,6 +49,7 @@ function memoryStore(initial=null){
     assert.deepEqual(quota,['pass1','pass2']);
     assert.equal(p1,1); assert.equal(p2,1);
     assert.equal(store.get().schema_version,V3_SCHEMA_VERSION);
+    assert.equal(store.get().result_status,'ok');
 
     quota.length=0;
     const second=await analyzeProductV3({
@@ -124,7 +125,7 @@ function memoryStore(initial=null){
   }
 
   {
-    const partialRow={schema_version:V3_SCHEMA_VERSION,raw_ai_json:{pass1,pass2:null},model:'mock'};
+    const partialRow={schema_version:V3_SCHEMA_VERSION,result_status:'ok',raw_ai_json:{pass1,pass2:null},model:'mock'};
     let p2=0;
     const brokenWriteStore={
       async loadProduct(){return partialRow;},

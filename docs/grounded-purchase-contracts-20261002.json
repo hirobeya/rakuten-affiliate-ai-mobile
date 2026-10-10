@@ -1,0 +1,527 @@
+{
+  "scope": "Renderer contracts only, not editorial quality approval. 18 synthetic contract cases; 15 requested categories + 3 glove types; model results mocked, no live coverage claim",
+  "cases": [
+    {
+      "category": "バイクグローブ",
+      "item": {
+        "itemName": "バイクグローブ",
+        "itemCaption": "スマホ対応。山羊革 防風 オールシーズン",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "停車中にスマホを操作するとき。\n\nバイクグローブです。停車中のスマホ操作にも対応しています。\n\n特徴👇\n✓ 山羊革 防風 オールシーズン\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "停車中にスマホを操作するとき",
+          "text": "停車中のスマホ操作にも対応しています",
+          "facts": [
+            {
+              "quote": "スマホ対応",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "収納ベンチ",
+      "item": {
+        "itemName": "収納ベンチ",
+        "itemCaption": "座面下に収納スペース。幅80cm 木製",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "腰掛ける場所に収納もまとめたいとき。\n\n収納ベンチです。座面下のスペースに物を収納できます。\n\n特徴👇\n✓ 幅80cm 木製\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "腰掛ける場所に収納もまとめたいとき",
+          "text": "座面下のスペースに物を収納できます",
+          "facts": [
+            {
+              "quote": "座面下に収納スペース",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "モップハンガー",
+      "item": {
+        "itemName": "モップハンガー",
+        "itemCaption": "モップの柄を挟んで壁に掛ける。粘着式 壁面取り付け",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "モップを壁に掛けて収納するとき。\n\nモップハンガーです。柄を挟んでモップを壁に収納できます。\n\n特徴👇\n✓ 粘着式 壁面取り付け\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "モップを壁に掛けて収納するとき",
+          "text": "柄を挟んでモップを壁に収納できます",
+          "facts": [
+            {
+              "quote": "モップの柄を挟んで壁に掛ける",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "空調服バッテリー",
+      "item": {
+        "itemName": "空調服用バッテリー",
+        "itemCaption": "対応ファン専用の電源。対応型番AB専用 充電器付属",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "対応する空調服のファンに電源をつなぐとき。\n\n空調服用バッテリーです。対応ファンの電源として使うバッテリーです。\n\n特徴👇\n✓ 対応型番AB専用 充電器付属\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "対応する空調服のファンに電源をつなぐとき",
+          "text": "対応ファンの電源として使うバッテリーです",
+          "facts": [
+            {
+              "quote": "対応ファン専用の電源",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "ペット毛取りグローブ",
+      "item": {
+        "itemName": "ペット毛取りグローブ",
+        "itemCaption": "手にはめてペットの抜け毛を取る。シリコン製 左右セット",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "ペットの抜け毛を取るとき。\n\nペット毛取りグローブです。手にはめてペットの毛を取れます。\n\n特徴👇\n✓ シリコン製 左右セット\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "ペットの抜け毛を取るとき",
+          "text": "手にはめてペットの毛を取れます",
+          "facts": [
+            {
+              "quote": "手にはめてペットの抜け毛を取る",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "BOS袋",
+      "item": {
+        "itemName": "BOS袋",
+        "itemCaption": "使用済みおむつを入れる袋。袋100枚入り Sサイズ",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "使用済みおむつを袋に入れるとき。\n\nBOS袋です。おむつの処理用に使う袋です。\n\n特徴👇\n✓ 袋100枚入り Sサイズ\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "使用済みおむつを袋に入れるとき",
+          "text": "おむつの処理用に使う袋です",
+          "facts": [
+            {
+              "quote": "使用済みおむつを入れる袋",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "美顔ローラー",
+      "item": {
+        "itemName": "美顔ローラー",
+        "itemCaption": "顔の上を転がして使用。持ち手付き ステンレス製",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "顔の上でローラーを転がすとき。\n\n美顔ローラーです。顔に当てて転がすタイプのローラーです。\n\n特徴👇\n✓ 持ち手付き ステンレス製\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "顔の上でローラーを転がすとき",
+          "text": "顔に当てて転がすタイプのローラーです",
+          "facts": [
+            {
+              "quote": "顔の上を転がして使用",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "モバイルバッテリー",
+      "item": {
+        "itemName": "モバイルバッテリー",
+        "itemCaption": "USB-C接続でスマホを充電。容量10000mAh USB-C",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "スマホをUSB-Cで充電するとき。\n\nモバイルバッテリーです。USB-Cで接続してスマホを充電できます。\n\n特徴👇\n✓ 容量10000mAh USB-C\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "スマホをUSB-Cで充電するとき",
+          "text": "USB-Cで接続してスマホを充電できます",
+          "facts": [
+            {
+              "quote": "USB-C接続でスマホを充電",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "キッチン用品",
+      "item": {
+        "itemName": "計量スプーン",
+        "itemCaption": "大さじと小さじを計量。ステンレス製 食洗機対応",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "調味料を大さじや小さじで量るとき。\n\n計量スプーンです。大さじと小さじの分量を量れます。\n\n特徴👇\n✓ ステンレス製 食洗機対応\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "調味料を大さじや小さじで量るとき",
+          "text": "大さじと小さじの分量を量れます",
+          "facts": [
+            {
+              "quote": "大さじと小さじを計量",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "収納用品",
+      "item": {
+        "itemName": "収納ボックス",
+        "itemCaption": "折りたたみ式。幅30cm フタ付き",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "収納ボックスを使わず片付けるとき。\n\n収納ボックスです。使わないときは折りたたんで収納できます。\n\n特徴👇\n✓ 幅30cm フタ付き\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "収納ボックスを使わず片付けるとき",
+          "text": "使わないときは折りたたんで収納できます",
+          "facts": [
+            {
+              "quote": "折りたたみ式",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "美容雑貨",
+      "item": {
+        "itemName": "化粧ポーチ",
+        "itemCaption": "ブラシを分けて収納する仕切り。ファスナー付き 横幅20cm",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "メイクブラシを分けて持ち歩くとき。\n\n化粧ポーチです。仕切りでブラシを分けて収納できます。\n\n特徴👇\n✓ ファスナー付き 横幅20cm\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "メイクブラシを分けて持ち歩くとき",
+          "text": "仕切りでブラシを分けて収納できます",
+          "facts": [
+            {
+              "quote": "ブラシを分けて収納する仕切り",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "ペット用品",
+      "item": {
+        "itemName": "ペット用給水器",
+        "itemCaption": "水を入れるボトルと飲み口が一体。容量300ml 飲み口付き",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "ペットにボトルから水を飲ませるとき。\n\nペット用給水器です。ボトルと飲み口が一体になっています。\n\n特徴👇\n✓ 容量300ml 飲み口付き\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "ペットにボトルから水を飲ませるとき",
+          "text": "ボトルと飲み口が一体になっています",
+          "facts": [
+            {
+              "quote": "水を入れるボトルと飲み口が一体",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "衣類",
+      "item": {
+        "itemName": "レインコート",
+        "itemCaption": "フード付き。ポリエステル製 サイズMとL",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "フードのあるレインコートを着るとき。\n\nレインコートです。頭にもかぶれるフードが付いています。\n\n特徴👇\n✓ ポリエステル製 サイズMとL\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "フードのあるレインコートを着るとき",
+          "text": "頭にもかぶれるフードが付いています",
+          "facts": [
+            {
+              "quote": "フード付き",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "家電",
+      "item": {
+        "itemName": "コードレス掃除機",
+        "itemCaption": "充電式でコンセントにつながず掃除。充電器付属 重量1.5kg",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "コンセントにつながず床を掃除するとき。\n\nコードレス掃除機です。充電してコードをつながず掃除できます。\n\n特徴👇\n✓ 充電器付属 重量1.5kg\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "コンセントにつながず床を掃除するとき",
+          "text": "充電してコードをつながず掃除できます",
+          "facts": [
+            {
+              "quote": "充電式でコンセントにつながず掃除",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "食品",
+      "item": {
+        "itemName": "冷凍おにぎり",
+        "itemCaption": "電子レンジで温めて食べる。冷凍保存 6個入り",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "電子レンジでおにぎりを温めるとき。\n\n冷凍おにぎりです。冷凍のまま電子レンジで温めて食べられます。\n\n特徴👇\n✓ 冷凍保存 6個入り\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "電子レンジでおにぎりを温めるとき",
+          "text": "冷凍のまま電子レンジで温めて食べられます",
+          "facts": [
+            {
+              "quote": "電子レンジで温めて食べる",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "掃除グローブ",
+      "item": {
+        "itemName": "掃除用グローブ",
+        "itemCaption": "手にはめて窓を拭く。左右セット マイクロファイバー",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "窓を手にはめたグローブで拭くとき。\n\n手にはめて窓を拭ける掃除用グローブです。\n\n特徴👇\n✓ 左右セット マイクロファイバー\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "窓を手にはめたグローブで拭くとき",
+          "text": "手にはめて窓を拭ける掃除用グローブです",
+          "facts": [
+            {
+              "quote": "手にはめて窓を拭く",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "野球グローブ",
+      "item": {
+        "itemName": "野球グローブ",
+        "itemCaption": "右投げ用。合成皮革 サイズM",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "右投げ用の野球グローブを選ぶとき。\n\n右投げ用として使う野球グローブです。\n\n特徴👇\n✓ 合成皮革 サイズM\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "右投げ用の野球グローブを選ぶとき",
+          "text": "右投げ用として使う野球グローブです",
+          "facts": [
+            {
+              "quote": "右投げ用",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    },
+    {
+      "category": "作業グローブ",
+      "item": {
+        "itemName": "作業用グローブ",
+        "itemCaption": "園芸作業用。綿製 サイズM",
+        "itemPrice": 3280
+      },
+      "verification": "mocked, not live",
+      "text": "園芸で手袋を着けて作業するとき。\n\n作業用グローブです。園芸作業に使うグローブです。\n\n特徴👇\n✓ 綿製 サイズM\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        {
+          "role": "primary_reason",
+          "scene": "園芸で手袋を着けて作業するとき",
+          "text": "園芸作業に使うグローブです",
+          "facts": [
+            {
+              "quote": "園芸作業用",
+              "source": "itemCaption"
+            }
+          ],
+          "verification": {
+            "required": true,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "synthetic contract"
+          }
+        }
+      ]
+    }
+  ]
+}

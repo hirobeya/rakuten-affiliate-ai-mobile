@@ -1,0 +1,5115 @@
+{
+  "version": "room_contract_b0e01fc37608a6ee",
+  "status": "rejected_development_baseline_stopped",
+  "runs": [
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791057974368_01_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:06:14.368Z",
+      "elapsedMs": 53315,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "停車中にスマホのナビを確認したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。\n\n山羊革の柔らかさと高いグリップ力で、長時間のツーリングでも安定した操作感が得られます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "source": "caption",
+                "start": 459,
+                "end": 500,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                "source": "caption",
+                "start": 218,
+                "end": 244,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                "source": "caption",
+                "start": 255,
+                "end": 287,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+              "source": "caption",
+              "start": 255,
+              "end": 287,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 244
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 244,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "source": "caption",
+                  "start": 255,
+                  "end": 287,
+                  "approvalEvidence": "added_by_review"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                "source": "caption",
+                "start": 255,
+                "end": 287,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "停車中にスマホのナビを確認したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。\n\n山羊革の柔らかさと高いグリップ力で、長時間のツーリングでも安定した操作感が得られます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "本革バイクグローブ",
+          "general": "スマートフォン"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 52122,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイクグローブ",
+              "acts_on": "スマートフォン",
+              "acts_on_quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホのナビを確認したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                "kinds": [
+                  "scene"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "山羊革の柔らかさと高いグリップ力で、長時間のツーリングでも安定した操作感が得られます。",
+                "kinds": [
+                  "benefit"
+                ],
+                "quotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホのナビを確認したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ],
+                "reason": "Source states gloves allow smartphone operation while worn."
+              },
+              {
+                "text": "山羊革の柔らかさと高いグリップ力で、長時間のツーリングでも安定した操作感が得られます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                ],
+                "reason": "Source mentions softness, grip, and comfort during long tours."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "本革バイクグローブ",
+                  "acts_on": "スマートフォン",
+                  "acts_on_quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホのナビを確認したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                    "kinds": [
+                      "scene"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "タッチ対応素材は本革の柔らかさと高いグリップ力を保ちつつ、長時間のツーリングでも快適にスマホ操作が可能です。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsupported_result",
+                  "detail": "快適",
+                  "sentence": 1
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5626",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "17.805s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.038790773,
+                "total_time": 2.695553856,
+                "prompt_time": 0.073467725,
+                "total_tokens": 2779,
+                "prompt_tokens": 1541,
+                "completion_time": 2.622086131,
+                "completion_tokens": 1238,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 970
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2799,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "14.827s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "11m31.2s",
+                "x-ratelimit-remaining-tokens": "6023",
+                "x-ratelimit-remaining-requests": "992"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.177513238,
+                "total_time": 2.190276011,
+                "prompt_time": 0.08965619,
+                "total_tokens": 2813,
+                "prompt_tokens": 1819,
+                "completion_time": 2.100619821,
+                "completion_tokens": 994,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 766
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2509,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "38.505s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "12m57.599s",
+                "x-ratelimit-remaining-tokens": "2866",
+                "x-ratelimit-remaining-requests": "991"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 3537,
+              "usage": {
+                "queue_time": 0.299941598,
+                "prompt_tokens": 1894,
+                "prompt_time": 0.105221622,
+                "completion_tokens": 1532,
+                "completion_time": 3.205641625,
+                "total_tokens": 3426,
+                "total_time": 3.310863247,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1138
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "990",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5626",
+                "x-ratelimit-reset-requests": "14m24s",
+                "x-ratelimit-reset-tokens": "17.805s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 244,
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "start": 218,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5274
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791058027690_01_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:07:07.690Z",
+      "elapsedMs": 47329,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "verification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "停車中にスマホを操作したいとき、タッチ対応素材でグローブをはずさずに操作できます。\n\n本革の柔らかさと高いグリップ力で、長時間ツーリングでも快適にハンドル操作ができます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "source": "caption",
+                "start": 459,
+                "end": 500,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                "source": "caption",
+                "start": 218,
+                "end": 287,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 287
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 287,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": []
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "停車中にスマホを操作したいとき、タッチ対応素材でグローブをはずさずに操作できます。\n\n本革の柔らかさと高いグリップ力で、長時間ツーリングでも快適にハンドル操作ができます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "本革バイクグローブ",
+          "general": "バイクのハンドル操作"
+        },
+        "groq": {
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "totalCalls": 2
+        },
+        "elapsedMs": 45536,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイクグローブ",
+              "acts_on": "バイクのハンドル操作",
+              "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、タッチ対応素材でグローブをはずさずに操作できます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "本革の柔らかさと高いグリップ力で、長時間ツーリングでも快適にハンドル操作ができます。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、タッチ対応素材でグローブをはずさずに操作できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ],
+                "reason": "Condition added is stricter but allowed; other aspects match source."
+              },
+              {
+                "text": "本革の柔らかさと高いグリップ力で、長時間ツーリングでも快適にハンドル操作ができます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                ],
+                "reason": "All claims directly supported by source."
+              }
+            ]
+          },
+          "history": [],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "988",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5175",
+            "x-ratelimit-reset-requests": "17m16.8s",
+            "x-ratelimit-reset-tokens": "21.187s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.285575897,
+                "total_time": 3.586682555,
+                "prompt_time": 0.11327668,
+                "total_tokens": 3197,
+                "prompt_tokens": 1541,
+                "completion_time": 3.473405875,
+                "completion_tokens": 1656,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1404
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 4150,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "35.377s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "15m50.4s",
+                "x-ratelimit-remaining-tokens": "3283",
+                "x-ratelimit-remaining-requests": "989"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 0,
+              "elapsedMs": 3945,
+              "usage": {
+                "queue_time": 0.206635581,
+                "prompt_tokens": 1918,
+                "prompt_time": 0.077529369,
+                "completion_tokens": 1703,
+                "completion_time": 3.566546165,
+                "total_tokens": 3621,
+                "total_time": 3.6440755339999997,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1311
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "988",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5175",
+                "x-ratelimit-reset-requests": "17m16.8s",
+                "x-ratelimit-reset-tokens": "21.187s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 287,
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "start": 218,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5447
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791058075041_01_3",
+      "run": 3,
+      "startedAt": "2026-10-03T20:07:55.041Z",
+      "elapsedMs": 58485,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "verification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "停車中にスマホを操作したいとき、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。\n\n長時間のツーリングでも手になじむ柔らかい山羊革が、快適な操作感を保ちます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                "source": "caption",
+                "start": 459,
+                "end": 500,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                "source": "caption",
+                "start": 218,
+                "end": 287,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 287
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 287,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": []
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "停車中にスマホを操作したいとき、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。\n\n長時間のツーリングでも手になじむ柔らかい山羊革が、快適な操作感を保ちます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "本革バイクグローブ",
+          "general": "手"
+        },
+        "groq": {
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "totalCalls": 2
+        },
+        "elapsedMs": 57562,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイクグローブ",
+              "acts_on": "手",
+              "acts_on_quote": "手になじみ、長時間のツーリングでも快適な操作をサポートする"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "長時間のツーリングでも手になじむ柔らかい山羊革が、快適な操作感を保ちます。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいとき、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ],
+                "reason": "Touch material enables smartphone use without removing gloves."
+              },
+              {
+                "text": "長時間のツーリングでも手になじむ柔らかい山羊革が、快適な操作感を保ちます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                ],
+                "reason": "Soft goat leather conforms to hand for comfortable long rides."
+              }
+            ]
+          },
+          "history": [],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "986",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4429",
+            "x-ratelimit-reset-requests": "20m9.6s",
+            "x-ratelimit-reset-tokens": "26.782s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.207382634,
+                "total_time": 2.602474507,
+                "prompt_time": 0.066019626,
+                "total_tokens": 2740,
+                "prompt_tokens": 1541,
+                "completion_time": 2.536454881,
+                "completion_tokens": 1199,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 950
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2855,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "48.81s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "18m43.2s",
+                "x-ratelimit-remaining-tokens": "1492",
+                "x-ratelimit-remaining-requests": "987"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 0,
+              "elapsedMs": 4433,
+              "usage": {
+                "queue_time": 0.215890772,
+                "prompt_tokens": 1915,
+                "prompt_time": 0.199759502,
+                "completion_tokens": 1692,
+                "completion_time": 3.519500695,
+                "total_tokens": 3607,
+                "total_time": 3.719260197,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1295
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "986",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4429",
+                "x-ratelimit-reset-requests": "20m9.6s",
+                "x-ratelimit-reset-tokens": "26.782s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 287,
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+                  "start": 218,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5475
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "02",
+      "category": "収納ベンチ",
+      "set": "development",
+      "item": {
+        "itemCode": "e-kurashi:10019512",
+        "itemName": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+        "itemCaption": "山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング",
+        "itemPrice": 15999
+      },
+      "evaluationRun": "fixed_1791058454536_02_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:14:14.536Z",
+      "elapsedMs": 7614,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "number_without_evidence",
+              "sentence": 1,
+              "detail": ""
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "収納ベンチ 2人掛け",
+          "general": "リビングの収納"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 6243,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "収納ベンチ 2人掛け",
+              "acts_on": "リビングの収納",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "座部を上げると内部に物を収納でき、リビングの散らかりをすっきり片付けられます。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能"
+                ]
+              },
+              {
+                "text": "本体サイズは幅120×奥行37×高さ40cmで、2人掛けでもコンパクトに設置でき、ソファ感覚で活用できます。",
+                "kinds": [
+                  "spec",
+                  "scene"
+                ],
+                "quotes": [
+                  "本体サイズ 幅120×奥行37×高さ40cm"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "収納ベンチ 2人掛け",
+                  "acts_on": "リビングの収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げると内部に物を収納でき、リビングの散らかりをすっきり片付けられます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能"
+                    ]
+                  },
+                  {
+                    "text": "本体サイズは幅120×奥行37×高さ40cmで、2人掛けでもコンパクトに設置でき、ソファ感覚で活用できます。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "本体サイズ 幅120×奥行37×高さ40cm"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "number_without_evidence",
+                  "detail": "",
+                  "sentence": 1
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "収納ベンチ 2人掛け",
+                  "acts_on": "リビングの収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げると内部に物を収納でき、リビングの散らかりをすっきり片付けられます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能"
+                    ]
+                  },
+                  {
+                    "text": "本体サイズは幅120×奥行37×高さ40cmで、2人掛けでもコンパクトに設置でき、ソファ感覚で活用できます。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "本体サイズ 幅120×奥行37×高さ40cm"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "number_without_evidence",
+                  "sentence": 1,
+                  "detail": ""
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "987",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4141",
+            "x-ratelimit-reset-requests": "18m43.2s",
+            "x-ratelimit-reset-tokens": "28.942s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.085534387,
+                "total_time": 1.619587946,
+                "prompt_time": 0.072011385,
+                "total_tokens": 2205,
+                "prompt_tokens": 1460,
+                "completion_time": 1.547576561,
+                "completion_tokens": 745,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 551
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 1781,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "14.069s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "17m16.8s",
+                "x-ratelimit-remaining-tokens": "6124",
+                "x-ratelimit-remaining-requests": "988"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2582,
+              "usage": {
+                "queue_time": 0.398043404,
+                "prompt_tokens": 1663,
+                "prompt_time": 0.222525301,
+                "completion_tokens": 907,
+                "completion_time": 1.9050332779999999,
+                "total_tokens": 2570,
+                "total_time": 2.127558579,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 713
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "987",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4141",
+                "x-ratelimit-reset-requests": "18m43.2s",
+                "x-ratelimit-reset-tokens": "28.942s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "number_without_evidence",
+                "sentence": 1,
+                "detail": ""
+              }
+            ],
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167
+                }
+              ],
+              [
+                {
+                  "quote": "本体サイズ 幅120×奥行37×高さ40cm",
+                  "source": "caption",
+                  "start": 22,
+                  "end": 44
+                }
+              ]
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 3956
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "02",
+      "category": "収納ベンチ",
+      "set": "development",
+      "item": {
+        "itemCode": "e-kurashi:10019512",
+        "itemName": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+        "itemCaption": "山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング",
+        "itemPrice": 15999
+      },
+      "evaluationRun": "fixed_1791058462162_02_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:14:22.162Z",
+      "elapsedMs": 50810,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "measurement_without_evidence",
+              "sentence": 1,
+              "detail": ""
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "2人掛け 収納ベンチ",
+          "general": "リビングの小物収納"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 49018,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "2人掛け 収納ベンチ",
+              "acts_on": "リビングの小物収納",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "座部を上げるだけで内部に収納でき、リビングの小物をすっきり片付けられます。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              },
+              {
+                "text": "幅120cmの本体サイズでゆったり2人が座れ、ソファ感覚でくつろげます。",
+                "kinds": [
+                  "scene",
+                  "spec"
+                ],
+                "quotes": [
+                  "本体サイズ 幅120×奥行37×高さ40cm",
+                  "ゆったり2人掛けできてソファ感覚で活躍"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "2人掛け 収納ベンチ",
+                  "acts_on": "リビングの小物収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げるだけで内部に収納でき、リビングの小物をすっきり片付けられます。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  },
+                  {
+                    "text": "幅120cmでゆったり2人が座れ、ソファ感覚でくつろげるデザインです。",
+                    "kinds": [
+                      "scene",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "ゆったり2人掛けできてソファ感覚で活躍",
+                      "本体サイズ 幅120×奥行37×高さ40cm"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "detail": "",
+                  "sentence": 1
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "2人掛け 収納ベンチ",
+                  "acts_on": "リビングの小物収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げるだけで内部に収納でき、リビングの小物をすっきり片付けられます。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  },
+                  {
+                    "text": "幅120cmの本体サイズでゆったり2人が座れ、ソファ感覚でくつろげます。",
+                    "kinds": [
+                      "scene",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "本体サイズ 幅120×奥行37×高さ40cm",
+                      "ゆったり2人掛けできてソファ感覚で活躍"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "sentence": 1,
+                  "detail": ""
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "985",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5486",
+            "x-ratelimit-reset-requests": "21m36s",
+            "x-ratelimit-reset-tokens": "18.854s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.31020575,
+                "total_time": 2.209163845,
+                "prompt_time": 0.086359902,
+                "total_tokens": 2469,
+                "prompt_tokens": 1460,
+                "completion_time": 2.122803943,
+                "completion_tokens": 1009,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 794
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2578,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "42.33s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "20m9.6s",
+                "x-ratelimit-remaining-tokens": "2356",
+                "x-ratelimit-remaining-requests": "986"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2600,
+              "usage": {
+                "queue_time": 0.204782771,
+                "prompt_tokens": 1684,
+                "prompt_time": 0.086006505,
+                "completion_tokens": 1079,
+                "completion_time": 2.246923492,
+                "total_tokens": 2763,
+                "total_time": 2.332929997,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 812
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "985",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5486",
+                "x-ratelimit-reset-requests": "21m36s",
+                "x-ratelimit-reset-tokens": "18.854s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "measurement_without_evidence",
+                "sentence": 1,
+                "detail": ""
+              }
+            ],
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167
+                },
+                {
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "source": "caption",
+                  "start": 217,
+                  "end": 239
+                }
+              ],
+              [
+                {
+                  "quote": "本体サイズ 幅120×奥行37×高さ40cm",
+                  "source": "caption",
+                  "start": 22,
+                  "end": 44
+                },
+                {
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "source": "caption",
+                  "start": 168,
+                  "end": 187
+                }
+              ]
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 4040
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "02",
+      "category": "収納ベンチ",
+      "set": "development",
+      "item": {
+        "itemCode": "e-kurashi:10019512",
+        "itemName": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+        "itemCaption": "山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング",
+        "itemPrice": 15999
+      },
+      "evaluationRun": "fixed_1791058512984_02_3",
+      "run": 3,
+      "startedAt": "2026-10-03T20:15:12.984Z",
+      "elapsedMs": 45553,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "2人でゆったり座りながら、座面下の収納に小物を入れられます。\n\n幅112×奥行29×深さ28cmの広い収納部があるので、ブランケットや雑誌をすっきり整理できます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "source": "caption",
+                "start": 168,
+                "end": 187,
+                "approvalEvidence": "added_by_review"
+              },
+              {
+                "quote": "座部を上げると、内部に物を収納可能",
+                "source": "caption",
+                "start": 150,
+                "end": 167,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                "source": "caption",
+                "start": 217,
+                "end": 239,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+              "source": "caption",
+              "start": 168,
+              "end": 187,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "収納ベンチ 2人掛け",
+                  "source": "name",
+                  "start": 0,
+                  "end": 10
+                },
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167
+                }
+              ],
+              [
+                {
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "source": "caption",
+                  "start": 217,
+                  "end": 239
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "source": "caption",
+                  "start": 168,
+                  "end": 187,
+                  "approvalEvidence": "added_by_review"
+                },
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "source": "caption",
+                  "start": 217,
+                  "end": 239,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "source": "caption",
+                "start": 168,
+                "end": 187,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "2人でゆったり座りながら、座面下の収納に小物を入れられます。\n\n幅112×奥行29×深さ28cmの広い収納部があるので、ブランケットや雑誌をすっきり整理できます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "収納ベンチ 2人掛け",
+          "general": "座面下"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 44137,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "収納ベンチ 2人掛け",
+              "acts_on": "座面下",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "2人でゆったり座りながら、座面下の収納に小物を入れられます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "収納ベンチ 2人掛け",
+                  "座部を上げると、内部に物を収納可能"
+                ]
+              },
+              {
+                "text": "幅112×奥行29×深さ28cmの広い収納部があるので、ブランケットや雑誌をすっきり整理できます。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "2人でゆったり座りながら、座面下の収納に小物を入れられます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "ゆったり2人掛けできてソファ感覚で活躍",
+                  "座部を上げると、内部に物を収納可能"
+                ],
+                "reason": "The source states the bench seats two people and has under‑seat storage."
+              },
+              {
+                "text": "幅112×奥行29×深さ28cmの広い収納部があるので、ブランケットや雑誌をすっきり整理できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ],
+                "reason": "Dimensions are given in the source; storage can hold blankets, magazines."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "収納ベンチ 2人掛け",
+                  "acts_on": "座面下",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "2人でゆったり座りながら、座面下の収納に小物を入れられます。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能"
+                    ]
+                  },
+                  {
+                    "text": "幅112×奥行29×深さ28cmの広い収納部があるので、ブランケットや雑誌をすっきり整理できます。",
+                    "kinds": [
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "number_without_evidence",
+                  "detail": "",
+                  "sentence": 0
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3340",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "34.95s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.087131918,
+                "total_time": 2.249254986,
+                "prompt_time": 0.081481846,
+                "total_tokens": 2488,
+                "prompt_tokens": 1460,
+                "completion_time": 2.16777314,
+                "completion_tokens": 1028,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 847
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2422,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "31.417s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "23m2.4s",
+                "x-ratelimit-remaining-tokens": "3811",
+                "x-ratelimit-remaining-requests": "984"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.191934032,
+                "total_time": 1.986906721,
+                "prompt_time": 0.388151236,
+                "total_tokens": 2413,
+                "prompt_tokens": 1650,
+                "completion_time": 1.5987554849999999,
+                "completion_tokens": 763,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 523
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2322,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "15.562s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "24m28.8s",
+                "x-ratelimit-remaining-tokens": "5925",
+                "x-ratelimit-remaining-requests": "983"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 2966,
+              "usage": {
+                "queue_time": 0.293274298,
+                "prompt_tokens": 1784,
+                "prompt_time": 0.147333642,
+                "completion_tokens": 1162,
+                "completion_time": 2.454447885,
+                "total_tokens": 2946,
+                "total_time": 2.601781527,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 801
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "982",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "3340",
+                "x-ratelimit-reset-requests": "25m55.199s",
+                "x-ratelimit-reset-tokens": "34.95s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 10,
+                  "quote": "収納ベンチ 2人掛け",
+                  "start": 0,
+                  "source": "name"
+                },
+                {
+                  "end": 167,
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "start": 150,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 239,
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "start": 217,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5208
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "03",
+      "category": "モップハンガー",
+      "set": "development",
+      "item": {
+        "itemCode": "supplyshop:10028516",
+        "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+        "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+        "itemPrice": 26566
+      },
+      "evaluationRun": "fixed_1791058558554_03_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:15:58.554Z",
+      "elapsedMs": 50020,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "measurement_without_evidence",
+              "sentence": 0,
+              "detail": ""
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "モップハンガー RC型 コンパクト 6本掛",
+          "general": "モップや掃除用具"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 49095,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "モップハンガー RC型 コンパクト 6本掛",
+              "acts_on": "モップや掃除用具",
+              "acts_on_quote": "仕様：6本掛け"
+            },
+            "sentences": [
+              {
+                "text": "幅536mm、奥行505mmのコンパクトサイズなので、狭い倉庫でも置きやすいです。",
+                "kinds": [
+                  "spec",
+                  "scene"
+                ],
+                "quotes": [
+                  "●外寸（幅）[mm]：536●外寸（奥）[mm]：505"
+                ]
+              },
+              {
+                "text": "キャスター付きで移動が楽なので、掃除用具を使う場所へ簡単に持ち運べます。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "付属品：キャスター付"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "モップハンガー RC型 コンパクト 6本掛",
+                  "acts_on": "モップや掃除用具",
+                  "acts_on_quote": "6本掛け"
+                },
+                "sentences": [
+                  {
+                    "text": "幅536mm、奥行505mmとコンパクトなので、狭い倉庫でも置きやすいです。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "外寸（幅）[mm]：536",
+                      "外寸（奥）[mm]：505"
+                    ]
+                  },
+                  {
+                    "text": "キャスター付きで移動が楽なので、掃除用具を使う場所へ簡単に持ち運べます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "付属品：キャスター付"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "detail": "",
+                  "sentence": 0
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "モップハンガー RC型 コンパクト 6本掛",
+                  "acts_on": "モップや掃除用具",
+                  "acts_on_quote": "仕様：6本掛け"
+                },
+                "sentences": [
+                  {
+                    "text": "幅536mm、奥行505mmのコンパクトサイズなので、狭い倉庫でも置きやすいです。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "●外寸（幅）[mm]：536●外寸（奥）[mm]：505"
+                    ]
+                  },
+                  {
+                    "text": "キャスター付きで移動が楽なので、掃除用具を使う場所へ簡単に持ち運べます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "付属品：キャスター付"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "sentence": 0,
+                  "detail": ""
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "980",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5725",
+            "x-ratelimit-reset-requests": "28m48s",
+            "x-ratelimit-reset-tokens": "17.062s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.247695971,
+                "total_time": 2.117562092,
+                "prompt_time": 0.048276748,
+                "total_tokens": 2049,
+                "prompt_tokens": 1062,
+                "completion_time": 2.069285344,
+                "completion_tokens": 987,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 811
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2699,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "41.737s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "27m21.6s",
+                "x-ratelimit-remaining-tokens": "2435",
+                "x-ratelimit-remaining-requests": "981"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2342,
+              "usage": {
+                "queue_time": 0.178094553,
+                "prompt_tokens": 1247,
+                "prompt_time": 0.051608209,
+                "completion_tokens": 968,
+                "completion_time": 2.009243569,
+                "total_tokens": 2215,
+                "total_time": 2.060851778,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 749
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "980",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5725",
+                "x-ratelimit-reset-requests": "28m48s",
+                "x-ratelimit-reset-tokens": "17.062s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "measurement_without_evidence",
+                "sentence": 0,
+                "detail": ""
+              }
+            ],
+            "flags": [
+              {
+                "sentence": 1,
+                "rule": "scope_or_exclusion",
+                "quotes": [
+                  {
+                    "quote": "付属品:キャスター付",
+                    "source": "caption",
+                    "start": 53,
+                    "end": 63
+                  }
+                ]
+              },
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "●外寸(幅)[mm]:536●外寸(奥)[mm]:505",
+                  "source": "caption",
+                  "start": 0,
+                  "end": 28
+                }
+              ],
+              [
+                {
+                  "quote": "付属品:キャスター付",
+                  "source": "caption",
+                  "start": 53,
+                  "end": 63
+                }
+              ]
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 3721
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "03",
+      "category": "モップハンガー",
+      "set": "development",
+      "item": {
+        "itemCode": "supplyshop:10028516",
+        "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+        "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+        "itemPrice": 26566
+      },
+      "evaluationRun": "fixed_1791058608591_03_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:16:48.591Z",
+      "elapsedMs": 7996,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "measurement_without_evidence",
+              "sentence": 0,
+              "detail": ""
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "モップハンガー",
+          "general": "モップ"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 7023,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "モップハンガー",
+              "acts_on": "モップ",
+              "acts_on_quote": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】"
+            },
+            "sentences": [
+              {
+                "text": "幅が536mm、奥行きが505mmとコンパクトなので、狭い作業場でも置きやすいです。",
+                "kinds": [
+                  "spec",
+                  "scene"
+                ],
+                "quotes": [
+                  "外寸（幅）[mm]：536",
+                  "外寸（奥）[mm]：505"
+                ]
+              },
+              {
+                "text": "6本まで掛けられるので、複数のモップを一括管理できます。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "仕様：6本掛け"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "モップハンガー",
+                  "acts_on": "モップ",
+                  "acts_on_quote": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】"
+                },
+                "sentences": [
+                  {
+                    "text": "幅が536mmとコンパクトなので、狭い作業場でも置きやすいです。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "外寸（幅）[mm]：536"
+                    ]
+                  },
+                  {
+                    "text": "6本まで掛けられるので、複数のモップを一括管理できます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "仕様：6本掛け"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "detail": "",
+                  "sentence": 0
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "モップハンガー",
+                  "acts_on": "モップ",
+                  "acts_on_quote": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】"
+                },
+                "sentences": [
+                  {
+                    "text": "幅が536mm、奥行きが505mmとコンパクトなので、狭い作業場でも置きやすいです。",
+                    "kinds": [
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "外寸（幅）[mm]：536",
+                      "外寸（奥）[mm]：505"
+                    ]
+                  },
+                  {
+                    "text": "6本まで掛けられるので、複数のモップを一括管理できます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "仕様：6本掛け"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "sentence": 0,
+                  "detail": ""
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "978",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "2683",
+            "x-ratelimit-reset-requests": "31m40.8s",
+            "x-ratelimit-reset-tokens": "39.877s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.145548942,
+                "total_time": 1.443114171,
+                "prompt_time": 0.049567285,
+                "total_tokens": 1727,
+                "prompt_tokens": 1062,
+                "completion_time": 1.393546886,
+                "completion_tokens": 665,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 509
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 1627,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "28.027s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "30m14.4s",
+                "x-ratelimit-remaining-tokens": "4263",
+                "x-ratelimit-remaining-requests": "979"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2641,
+              "usage": {
+                "queue_time": 0.49413705,
+                "prompt_tokens": 1227,
+                "prompt_time": 0.185411754,
+                "completion_tokens": 924,
+                "completion_time": 1.9192731840000001,
+                "total_tokens": 2151,
+                "total_time": 2.104684938,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 750
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "978",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "2683",
+                "x-ratelimit-reset-requests": "31m40.8s",
+                "x-ratelimit-reset-tokens": "39.877s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "measurement_without_evidence",
+                "sentence": 0,
+                "detail": ""
+              }
+            ],
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "外寸(幅)[mm]:536",
+                  "source": "caption",
+                  "start": 1,
+                  "end": 14
+                },
+                {
+                  "quote": "外寸(奥)[mm]:505",
+                  "source": "caption",
+                  "start": 15,
+                  "end": 28
+                }
+              ],
+              [
+                {
+                  "quote": "仕様:6本掛け",
+                  "source": "caption",
+                  "start": 98,
+                  "end": 105
+                }
+              ]
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 4402
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "03",
+      "category": "モップハンガー",
+      "set": "development",
+      "item": {
+        "itemCode": "supplyshop:10028516",
+        "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+        "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+        "itemPrice": 26566
+      },
+      "evaluationRun": "fixed_1791058616606_03_3",
+      "run": 3,
+      "startedAt": "2026-10-03T20:16:56.606Z",
+      "elapsedMs": 58732,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "degree_not_supported",
+              "sentence": 0,
+              "detail": "Benefit claim not directly stated in source"
+            },
+            {
+              "rule": "degree_not_supported",
+              "sentence": 1,
+              "detail": "Efficiency claim not directly stated in source"
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "コンパクトモップハンガー",
+          "general": "モップや掃除用具"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 57871,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "コンパクトモップハンガー",
+              "acts_on": "モップや掃除用具",
+              "acts_on_quote": "仕様：6本掛け"
+            },
+            "sentences": [
+              {
+                "text": "外寸（幅）[mm]：536とコンパクトなので、狭い場所でもすっきり設置できます。",
+                "kinds": [
+                  "spec"
+                ],
+                "quotes": [
+                  "外寸（幅）[mm]：536"
+                ]
+              },
+              {
+                "text": "6本同時に掛けられるので、モップや掃除用具をまとめて収納でき作業効率が上がります。",
+                "kinds": [
+                  "benefit"
+                ],
+                "quotes": [
+                  "仕様：6本掛け"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "外寸（幅）[mm]：536とコンパクトなので、狭い場所でもすっきり設置できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "外寸（幅）[mm]：536"
+                ],
+                "reason": "Benefit claim not directly stated in source"
+              },
+              {
+                "text": "6本同時に掛けられるので、モップや掃除用具をまとめて収納でき作業効率が上がります。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "仕様：6本掛け"
+                ],
+                "reason": "Efficiency claim not directly stated in source"
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "コンパクトモップハンガー",
+                  "acts_on": "モップや掃除用具",
+                  "acts_on_quote": "仕様：6本掛け"
+                },
+                "sentences": [
+                  {
+                    "text": "幅が536mmとコンパクトなので、狭い場所でもすっきり設置できます。",
+                    "kinds": [
+                      "spec"
+                    ],
+                    "quotes": [
+                      "外寸（幅）[mm]：536"
+                    ]
+                  },
+                  {
+                    "text": "6本同時に掛けられるので、モップや掃除用具をまとめて収納でき作業効率が上がります。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "仕様：6本掛け"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "measurement_without_evidence",
+                  "detail": "",
+                  "sentence": 0
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "コンパクトモップハンガー",
+                  "acts_on": "モップや掃除用具",
+                  "acts_on_quote": "仕様：6本掛け"
+                },
+                "sentences": [
+                  {
+                    "text": "外寸（幅）[mm]：536とコンパクトなので、狭い場所でもすっきり設置できます。",
+                    "kinds": [
+                      "spec"
+                    ],
+                    "quotes": [
+                      "外寸（幅）[mm]：536"
+                    ]
+                  },
+                  {
+                    "text": "6本同時に掛けられるので、モップや掃除用具をまとめて収納でき作業効率が上がります。",
+                    "kinds": [
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "仕様：6本掛け"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "identity": "supported",
+                  "reason": "supported",
+                  "scene": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "room_style": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "外寸（幅）[mm]：536とコンパクトなので、狭い場所でもすっきり設置できます。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "外寸（幅）[mm]：536"
+                    ],
+                    "reason": "Benefit claim not directly stated in source"
+                  },
+                  {
+                    "text": "6本同時に掛けられるので、モップや掃除用具をまとめて収納でき作業効率が上がります。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "仕様：6本掛け"
+                    ],
+                    "reason": "Efficiency claim not directly stated in source"
+                  }
+                ]
+              },
+              "failures": [
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 0,
+                  "detail": "Benefit claim not directly stated in source"
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 1,
+                  "detail": "Efficiency claim not directly stated in source"
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "975",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4039",
+            "x-ratelimit-reset-requests": "36m0s",
+            "x-ratelimit-reset-tokens": "29.707s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.087514404,
+                "total_time": 1.534440353,
+                "prompt_time": 0.071880331,
+                "total_tokens": 1757,
+                "prompt_tokens": 1062,
+                "completion_time": 1.462560022,
+                "completion_tokens": 695,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 540
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 1717,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "47.497s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "33m7.2s",
+                "x-ratelimit-remaining-tokens": "1667",
+                "x-ratelimit-remaining-requests": "977"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.087889559,
+                "total_time": 1.398750731,
+                "prompt_time": 0.056792017,
+                "total_tokens": 1871,
+                "prompt_tokens": 1226,
+                "completion_time": 1.341958714,
+                "completion_tokens": 645,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 484
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 1573,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "15.997s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "34m33.6s",
+                "x-ratelimit-remaining-tokens": "5867",
+                "x-ratelimit-remaining-requests": "976"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 3568,
+              "usage": {
+                "queue_time": 0.173911975,
+                "prompt_tokens": 1348,
+                "prompt_time": 0.0556328,
+                "completion_tokens": 1598,
+                "completion_time": 3.31077885,
+                "total_tokens": 2946,
+                "total_time": 3.36641165,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1279
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "975",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4039",
+                "x-ratelimit-reset-requests": "36m0s",
+                "x-ratelimit-reset-tokens": "29.707s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 14,
+                  "quote": "外寸(幅)[mm]:536",
+                  "start": 1,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 105,
+                  "quote": "仕様:6本掛け",
+                  "start": 98,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 4964
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "04",
+      "category": "空調服バッテリー",
+      "set": "development",
+      "item": {
+        "itemCode": "worktk:10014552",
+        "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+        "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+        "itemPrice": 19305
+      },
+      "evaluationRun": "fixed_1791058675359_04_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:17:55.359Z",
+      "elapsedMs": 101412,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "conditions_not_supported",
+              "sentence": 0,
+              "detail": "Claims wind volume and suitability for summer work."
+            },
+            {
+              "rule": "degree_not_supported",
+              "sentence": 0,
+              "detail": "Claims wind volume and suitability for summer work."
+            },
+            {
+              "rule": "conditions_not_supported",
+              "sentence": 1,
+              "detail": "Claims rapid charge enables quick reuse and smooth preparation."
+            },
+            {
+              "rule": "degree_not_supported",
+              "sentence": 1,
+              "detail": "Claims rapid charge enables quick reuse and smooth preparation."
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "バートル 空調作業服用ファンバッテリーセット",
+          "general": "空調作業服のファンユニット"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "totalCalls": 4
+        },
+        "elapsedMs": 100013,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バートル 空調作業服用ファンバッテリーセット",
+              "acts_on": "空調作業服のファンユニット",
+              "acts_on_quote": "ファンユニット リチウムイオンバッテリー"
+            },
+            "sentences": [
+              {
+                "text": "夏の作業で強力な風が欲しいときは、最大毎秒120Lの風量を出すAC10ファンが最適です。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                ]
+              },
+              {
+                "text": "約4時間の急速充電で、長時間の作業でもすぐに再使用でき、準備がスムーズです。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "夏の作業で強力な風が欲しいときは、最大毎秒120Lの風量を出すAC10ファンが最適です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "not_supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                ],
+                "reason": "Claims wind volume and suitability for summer work."
+              },
+              {
+                "text": "約4時間の急速充電で、長時間の作業でもすぐに再使用でき、準備がスムーズです。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "not_supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ"
+                ],
+                "reason": "Claims rapid charge enables quick reuse and smooth preparation."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バートル 空調服用ファンバッテリーセット",
+                  "acts_on": "空調作業服のファンユニット",
+                  "acts_on_quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の作業で強力な風が欲しいときは、最大毎秒120Lの風量を出すAC10ファンが最適です。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                    ]
+                  },
+                  {
+                    "text": "約4時間の急速充電で、長時間の作業でもすぐに再使用できるので、準備がスムーズです。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "invalid_structured_output",
+                  "detail": "verify returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field.",
+                  "sentence": null
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "バートル 空調作業服用ファンバッテリーセット",
+                  "acts_on": "空調作業服のファンユニット",
+                  "acts_on_quote": "ファンユニット リチウムイオンバッテリー"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の作業で強力な風が欲しいときは、最大毎秒120Lの風量を出すAC10ファンが最適です。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                    ]
+                  },
+                  {
+                    "text": "約4時間の急速充電で、長時間の作業でもすぐに再使用でき、準備がスムーズです。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "identity": "supported",
+                  "reason": "supported",
+                  "scene": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "room_style": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の作業で強力な風が欲しいときは、最大毎秒120Lの風量を出すAC10ファンが最適です。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "not_supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                    ],
+                    "reason": "Claims wind volume and suitability for summer work."
+                  },
+                  {
+                    "text": "約4時間の急速充電で、長時間の作業でもすぐに再使用でき、準備がスムーズです。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "not_supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ"
+                    ],
+                    "reason": "Claims rapid charge enables quick reuse and smooth preparation."
+                  }
+                ]
+              },
+              "failures": [
+                {
+                  "rule": "conditions_not_supported",
+                  "sentence": 0,
+                  "detail": "Claims wind volume and suitability for summer work."
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 0,
+                  "detail": "Claims wind volume and suitability for summer work."
+                },
+                {
+                  "rule": "conditions_not_supported",
+                  "sentence": 1,
+                  "detail": "Claims rapid charge enables quick reuse and smooth preparation."
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 1,
+                  "detail": "Claims rapid charge enables quick reuse and smooth preparation."
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5258",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "20.565s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.210170349,
+                "total_time": 2.173306766,
+                "prompt_time": 0.221777723,
+                "total_tokens": 2429,
+                "prompt_tokens": 1497,
+                "completion_time": 1.9515290429999999,
+                "completion_tokens": 932,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 715
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2565,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "44.707s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "37m26.4s",
+                "x-ratelimit-remaining-tokens": "2039",
+                "x-ratelimit-remaining-requests": "974"
+              }
+            },
+            {
+              "error": "invalid_structured_output",
+              "stage": "verify",
+              "usage": null,
+              "attempt": 0,
+              "elapsedMs": 3122,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "20.782s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "38m52.8s",
+                "x-ratelimit-remaining-tokens": "5229",
+                "x-ratelimit-remaining-requests": "973"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.145138804,
+                "total_time": 1.888704058,
+                "prompt_time": 0.07148937,
+                "total_tokens": 2622,
+                "prompt_tokens": 1746,
+                "completion_time": 1.817214688,
+                "completion_tokens": 876,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 663
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2134,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "36.765s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "40m19.2s",
+                "x-ratelimit-remaining-tokens": "3098",
+                "x-ratelimit-remaining-requests": "972"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 4170,
+              "usage": {
+                "queue_time": 0.180663447,
+                "prompt_tokens": 1835,
+                "prompt_time": 0.077765317,
+                "completion_tokens": 1807,
+                "completion_time": 3.781936299,
+                "total_tokens": 3642,
+                "total_time": 3.8597016159999997,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1550
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "971",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5258",
+                "x-ratelimit-reset-requests": "41m45.6s",
+                "x-ratelimit-reset-tokens": "20.565s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 94,
+                  "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "start": 68,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 116,
+                  "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "start": 95,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "imageCalls": 0,
+          "totalGroqCalls": 4,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5995
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "04",
+      "category": "空調服バッテリー",
+      "set": "development",
+      "item": {
+        "itemCode": "worktk:10014552",
+        "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+        "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+        "itemPrice": 19305
+      },
+      "evaluationRun": "fixed_1791058776792_04_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:19:36.792Z",
+      "elapsedMs": 102069,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、最大毎秒120Lの圧倒的な風量を直接受けられます。\n\n約4時間の急速充電で、作業前の準備がすぐに完了します。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                "source": "caption",
+                "start": 68,
+                "end": 94,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "ファンユニット リチウムイオンバッテリー",
+                "source": "caption",
+                "start": 140,
+                "end": 160,
+                "approvalEvidence": "added_by_review"
+              }
+            ],
+            [
+              {
+                "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                "source": "caption",
+                "start": 95,
+                "end": 116,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "ファンユニット リチウムイオンバッテリー",
+              "source": "caption",
+              "start": 140,
+              "end": 160,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "source": "caption",
+                  "start": 68,
+                  "end": 94
+                }
+              ],
+              [
+                {
+                  "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "source": "caption",
+                  "start": 95,
+                  "end": 116
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "source": "caption",
+                  "start": 68,
+                  "end": 94,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "ファンユニット リチウムイオンバッテリー",
+                  "source": "caption",
+                  "start": 140,
+                  "end": 160,
+                  "approvalEvidence": "added_by_review"
+                }
+              ],
+              [
+                {
+                  "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "source": "caption",
+                  "start": 95,
+                  "end": 116,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "ファンユニット リチウムイオンバッテリー",
+                "source": "caption",
+                "start": 140,
+                "end": 160,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、最大毎秒120Lの圧倒的な風量を直接受けられます。\n\n約4時間の急速充電で、作業前の準備がすぐに完了します。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "バートル 空調服用ファンバッテリーセット",
+          "general": "空調作業服のファンユニット"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "totalCalls": 4
+        },
+        "elapsedMs": 100719,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バートル 空調服用ファンバッテリーセット",
+              "acts_on": "空調作業服のファンユニット",
+              "acts_on_quote": "空調 服 バッテリー ファンセット"
+            },
+            "sentences": [
+              {
+                "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、最大毎秒120Lの圧倒的な風量を直接受けられます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                ]
+              },
+              {
+                "text": "約4時間の急速充電で、作業前の準備がすぐに完了します。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、最大毎秒120Lの圧倒的な風量を直接受けられます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "ファンユニット リチウムイオンバッテリー"
+                ],
+                "reason": "Spec of wind volume and fan unit matches claim."
+              },
+              {
+                "text": "約4時間の急速充電で、作業前の準備がすぐに完了します。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ"
+                ],
+                "reason": "Rapid‑charge time and smooth prep are stated."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バートル 空調服用ファンバッテリーセット",
+                  "acts_on": "空調作業服のファンユニット",
+                  "acts_on_quote": "空調 服 バッテリー ファンセット"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、強力な風を直接受けられます。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ"
+                    ]
+                  },
+                  {
+                    "text": "約4時間の急速充電で、長時間の作業でもすぐに電源が確保できます。",
+                    "kinds": [
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "scene": "supported",
+                  "reason": "supported",
+                  "natural": "supported",
+                  "identity": "supported",
+                  "room_style": "supported",
+                  "non_redundant": "supported"
+                },
+                "sentences": [
+                  {
+                    "part": "supported",
+                    "text": "夏の屋外作業で涼しさが欲しいときに、AC10シリーズのファンユニットを装着すれば、強力な風を直接受けられます。",
+                    "degree": "supported",
+                    "reason": "Fan unit provides strong airflow as described.",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                      "夏の必須装備 それがBURTLE AIRCRAFT!!"
+                    ]
+                  },
+                  {
+                    "part": "supported",
+                    "text": "約4時間の急速充電で、長時間の作業でもすぐに電源が確保できます。",
+                    "degree": "not_supported",
+                    "reason": "Fast charging claimed, but long‑work duration not stated.",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ"
+                    ]
+                  }
+                ]
+              },
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "degree_not_supported",
+                  "detail": "Fast charging claimed, but long‑work duration not stated.",
+                  "sentence": 1
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "967",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5808",
+            "x-ratelimit-reset-requests": "47m31.2s",
+            "x-ratelimit-reset-tokens": "16.44s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.085503511,
+                "total_time": 2.8038386969999998,
+                "prompt_time": 0.265015956,
+                "total_tokens": 2718,
+                "prompt_tokens": 1497,
+                "completion_time": 2.538822741,
+                "completion_tokens": 1221,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1010
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2958,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "40.05s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "43m12s",
+                "x-ratelimit-remaining-tokens": "2660",
+                "x-ratelimit-remaining-requests": "970"
+              }
+            },
+            {
+              "stage": "verify",
+              "usage": {
+                "queue_time": 0.144840919,
+                "total_time": 3.241806623,
+                "prompt_time": 0.086572328,
+                "total_tokens": 3349,
+                "prompt_tokens": 1833,
+                "completion_time": 3.155234295,
+                "completion_tokens": 1516,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1241
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 4050,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "20.737s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "44m38.4s",
+                "x-ratelimit-remaining-tokens": "5235",
+                "x-ratelimit-remaining-requests": "969"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.088046788,
+                "total_time": 1.926442878,
+                "prompt_time": 0.152551421,
+                "total_tokens": 2530,
+                "prompt_tokens": 1728,
+                "completion_time": 1.773891457,
+                "completion_tokens": 802,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 584
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2111,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "42.255s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "46m4.8s",
+                "x-ratelimit-remaining-tokens": "2366",
+                "x-ratelimit-remaining-requests": "968"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 3423,
+              "usage": {
+                "queue_time": 0.088147694,
+                "prompt_tokens": 1840,
+                "prompt_time": 0.085761998,
+                "completion_tokens": 1535,
+                "completion_time": 3.187427044,
+                "total_tokens": 3375,
+                "total_time": 3.273189042,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1254
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "967",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5808",
+                "x-ratelimit-reset-requests": "47m31.2s",
+                "x-ratelimit-reset-tokens": "16.44s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 94,
+                  "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "start": 68,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 116,
+                  "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "start": 95,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "imageCalls": 0,
+          "totalGroqCalls": 4,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5232
+        }
+      },
+      "humanReview": {
+        "reviewer": "assistant_source_review",
+        "fabricatedClaimPassed": true,
+        "qualityPass": false,
+        "reason": "約4時間の急速充電から準備がすぐに完了、へ即時性を追加。"
+      }
+    },
+    {
+      "fixtureId": "04",
+      "category": "空調服バッテリー",
+      "set": "development",
+      "item": {
+        "itemCode": "worktk:10014552",
+        "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+        "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+        "itemPrice": 19305
+      },
+      "evaluationRun": "fixed_1791058878885_04_3",
+      "run": 3,
+      "startedAt": "2026-10-03T20:21:18.885Z",
+      "elapsedMs": 109676,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "degree_not_supported",
+              "sentence": 0,
+              "detail": "Spec matches fan model; effectiveness claim not in source."
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "バートル 空調服用ファンバッテリーセット",
+          "general": "空調作業服のファンユニット"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "totalCalls": 4
+        },
+        "elapsedMs": 108147,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "バートル 空調服用ファンバッテリーセット",
+              "acts_on": "空調作業服のファンユニット",
+              "acts_on_quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+            },
+            "sentences": [
+              {
+                "text": "夏の屋外作業で涼しさを求めるとき、最大毎秒120Lの風量を放つAC10シリーズのファンが効果的です。",
+                "kinds": [
+                  "scene",
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "バートル AC10＋AC10-1 ファンバッテリーセット"
+                ]
+              },
+              {
+                "text": "約4時間の急速充電でバッテリーを短時間で補充でき、作業前の準備がスムーズです。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "バッテリー容量／5.600mAh(80.64Wh)"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "夏の屋外作業で涼しさを求めるとき、最大毎秒120Lの風量を放つAC10シリーズのファンが効果的です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "バートル AC10＋AC10-1 ファンバッテリーセット"
+                ],
+                "reason": "Spec matches fan model; effectiveness claim not in source."
+              },
+              {
+                "text": "約4時間の急速充電でバッテリーを短時間で補充でき、作業前の準備がスムーズです。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "バッテリー容量／5.600mAh(80.64Wh)"
+                ],
+                "reason": "Charging time and smooth prep stated in source."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "バートル 空調服用ファンバッテリーセット",
+                  "acts_on": "空調作業服のファンユニット",
+                  "acts_on_quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の屋外作業で涼しく作業したいときに、最大毎秒120Lの風量を放つAC10シリーズのファンが即効の冷却を提供します。",
+                    "kinds": [
+                      "scene",
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                      "バートル AC10＋AC10-1 ファンバッテリーセット"
+                    ]
+                  },
+                  {
+                    "text": "約4時間の急速充電でバッテリーをすぐに補充でき、長時間の作業でも途切れずに使用できます。",
+                    "kinds": [
+                      "benefit",
+                      "spec",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ",
+                      "バッテリー容量／5.600mAh(80.64Wh)"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "scene": "supported",
+                  "reason": "supported",
+                  "natural": "supported",
+                  "identity": "supported",
+                  "room_style": "supported",
+                  "non_redundant": "supported"
+                },
+                "sentences": [
+                  {
+                    "part": "supported",
+                    "text": "夏の屋外作業で涼しく作業したいときに、最大毎秒120Lの風量を放つAC10シリーズのファンが即効の冷却を提供します。",
+                    "degree": "not_supported",
+                    "reason": "Target and part match source; degree claim of \"即効の冷却\" exceeds source.",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                      "バートル AC10＋AC10-1 ファンバッテリーセット"
+                    ]
+                  },
+                  {
+                    "part": "supported",
+                    "text": "約4時間の急速充電でバッテリーをすぐに補充でき、長時間の作業でも途切れずに使用できます。",
+                    "degree": "not_supported",
+                    "reason": "Target and part align; claim of uninterrupted long‑time use not directly stated.",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ",
+                      "バッテリー容量／5.600mAh(80.64Wh)"
+                    ]
+                  }
+                ]
+              },
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "degree_not_supported",
+                  "detail": "Target and part match source; degree claim of \"即効の冷却\" exceeds source.",
+                  "sentence": 0
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "detail": "Target and part align; claim of uninterrupted long‑time use not directly stated.",
+                  "sentence": 1
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "バートル 空調服用ファンバッテリーセット",
+                  "acts_on": "空調作業服のファンユニット",
+                  "acts_on_quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の屋外作業で涼しさを求めるとき、最大毎秒120Lの風量を放つAC10シリーズのファンが効果的です。",
+                    "kinds": [
+                      "scene",
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                      "バートル AC10＋AC10-1 ファンバッテリーセット"
+                    ]
+                  },
+                  {
+                    "text": "約4時間の急速充電でバッテリーを短時間で補充でき、作業前の準備がスムーズです。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ",
+                      "バッテリー容量／5.600mAh(80.64Wh)"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "quality": {
+                  "identity": "supported",
+                  "reason": "supported",
+                  "scene": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "room_style": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "夏の屋外作業で涼しさを求めるとき、最大毎秒120Lの風量を放つAC10シリーズのファンが効果的です。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                      "バートル AC10＋AC10-1 ファンバッテリーセット"
+                    ],
+                    "reason": "Spec matches fan model; effectiveness claim not in source."
+                  },
+                  {
+                    "text": "約4時間の急速充電でバッテリーを短時間で補充でき、作業前の準備がスムーズです。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "supported",
+                    "evidenceQuotes": [
+                      "約4時間の急速充電で、毎日の準備もスムーズ",
+                      "バッテリー容量／5.600mAh(80.64Wh)"
+                    ],
+                    "reason": "Charging time and smooth prep stated in source."
+                  }
+                ]
+              },
+              "failures": [
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 0,
+                  "detail": "Spec matches fan model; effectiveness claim not in source."
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "963",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5762",
+            "x-ratelimit-reset-requests": "53m16.799s",
+            "x-ratelimit-reset-tokens": "16.785s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.037861383,
+                "total_time": 2.9195931870000003,
+                "prompt_time": 0.049352929,
+                "total_tokens": 2683,
+                "prompt_tokens": 1497,
+                "completion_time": 2.870240258,
+                "completion_tokens": 1186,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 920
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 3007,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "39.802s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "48m57.6s",
+                "x-ratelimit-remaining-tokens": "2693",
+                "x-ratelimit-remaining-requests": "966"
+              }
+            },
+            {
+              "stage": "verify",
+              "usage": {
+                "queue_time": 0.088688005,
+                "total_time": 3.788460914,
+                "prompt_time": 0.096704478,
+                "total_tokens": 3665,
+                "prompt_tokens": 1888,
+                "completion_time": 3.691756436,
+                "completion_tokens": 1777,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1360
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 3992,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "23.317s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "50m24s",
+                "x-ratelimit-remaining-tokens": "4891",
+                "x-ratelimit-remaining-requests": "965"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.178106753,
+                "total_time": 3.018413857,
+                "prompt_time": 0.093982583,
+                "total_tokens": 2882,
+                "prompt_tokens": 1818,
+                "completion_time": 2.924431274,
+                "completion_tokens": 1064,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 806
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 3431,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "25.005s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "51m50.399s",
+                "x-ratelimit-remaining-tokens": "4666",
+                "x-ratelimit-remaining-requests": "964"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 3210,
+              "usage": {
+                "queue_time": 0.287682411,
+                "prompt_tokens": 1880,
+                "prompt_time": 0.158200228,
+                "completion_tokens": 1285,
+                "completion_time": 2.709523139,
+                "total_tokens": 3165,
+                "total_time": 2.867723367,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 987
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "963",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5762",
+                "x-ratelimit-reset-requests": "53m16.799s",
+                "x-ratelimit-reset-tokens": "16.785s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 94,
+                  "quote": "最大毎秒120Lの圧倒的な風量を放つAC10シリーズ",
+                  "start": 68,
+                  "source": "caption"
+                },
+                {
+                  "end": 33,
+                  "quote": "バートル AC10+AC10-1 ファンバッテリーセット",
+                  "start": 5,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 116,
+                  "quote": "約4時間の急速充電で、毎日の準備もスムーズ",
+                  "start": 95,
+                  "source": "caption"
+                },
+                {
+                  "end": 286,
+                  "quote": "バッテリー容量/5.600mAh(80.64Wh)",
+                  "start": 261,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "imageCalls": 0,
+          "totalGroqCalls": 4,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5449
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "05",
+      "category": "ペット毛取りグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "wishsun:10000100",
+        "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+        "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取",
+        "itemPrice": 1299
+      },
+      "evaluationRun": "fixed_1791058988598_05_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:23:08.598Z",
+      "elapsedMs": 73279,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "抜け毛が気になるときは、手のひらに259本の柔らかいシリコンが付いたグローブで撫でるだけで、短い毛でもしっかり取れます。\n\nメッシュ構造で手が蒸れず、通気性と軽量性を備えているため、入浴後すぐに乾かして次のケアに使えます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                "source": "caption",
+                "start": 617,
+                "end": 693,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」",
+                "source": "caption",
+                "start": 499,
+                "end": 533,
+                "approvalEvidence": "added_by_review"
+              },
+              {
+                "quote": "短くても細くても徹底的に取り除けます",
+                "source": "caption",
+                "start": 584,
+                "end": 602,
+                "approvalEvidence": "added_by_review"
+              }
+            ],
+            [
+              {
+                "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                "source": "caption",
+                "start": 953,
+                "end": 998,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。",
+                "source": "caption",
+                "start": 998,
+                "end": 1027,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [
+            {
+              "quote": "抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」",
+              "source": "caption",
+              "start": 499,
+              "end": 533,
+              "approvalEvidence": "added_by_review"
+            },
+            {
+              "quote": "短くても細くても徹底的に取り除けます",
+              "source": "caption",
+              "start": 584,
+              "end": 602,
+              "approvalEvidence": "added_by_review"
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [
+              {
+                "sentence": 0,
+                "rule": "scope_or_exclusion",
+                "quotes": [
+                  {
+                    "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                    "source": "caption",
+                    "start": 617,
+                    "end": 693
+                  }
+                ]
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "source": "caption",
+                  "start": 617,
+                  "end": 693
+                }
+              ],
+              [
+                {
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。",
+                  "source": "caption",
+                  "start": 953,
+                  "end": 1027
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "source": "caption",
+                  "start": 617,
+                  "end": 693,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」",
+                  "source": "caption",
+                  "start": 499,
+                  "end": 533,
+                  "approvalEvidence": "added_by_review"
+                },
+                {
+                  "quote": "短くても細くても徹底的に取り除けます",
+                  "source": "caption",
+                  "start": 584,
+                  "end": 602,
+                  "approvalEvidence": "added_by_review"
+                }
+              ],
+              [
+                {
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                  "source": "caption",
+                  "start": 953,
+                  "end": 998,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。",
+                  "source": "caption",
+                  "start": 998,
+                  "end": 1027,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": [
+              {
+                "quote": "抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」",
+                "source": "caption",
+                "start": 499,
+                "end": 533,
+                "approvalEvidence": "added_by_review"
+              },
+              {
+                "quote": "短くても細くても徹底的に取り除けます",
+                "source": "caption",
+                "start": 584,
+                "end": 602,
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "抜け毛が気になるときは、手のひらに259本の柔らかいシリコンが付いたグローブで撫でるだけで、短い毛でもしっかり取れます。\n\nメッシュ構造で手が蒸れず、通気性と軽量性を備えているため、入浴後すぐに乾かして次のケアに使えます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "ペット用グルーミンググローブ",
+          "general": "猫、犬、うさぎ、馬などの抜け毛"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 71888,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "ペット用グルーミンググローブ",
+              "acts_on": "猫、犬、うさぎ、馬などの抜け毛",
+              "acts_on_quote": "【適用対象】：猫、犬、うさぎ、馬など"
+            },
+            "sentences": [
+              {
+                "text": "抜け毛が気になるときは、手のひらに259本の柔らかいシリコンが付いたグローブで撫でるだけで、短い毛でもしっかり取れます。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！"
+                ]
+              },
+              {
+                "text": "メッシュ構造で手が蒸れず、通気性と軽量性を備えているため、入浴後すぐに乾かして次のケアに使えます。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "抜け毛が気になるときは、手のひらに259本の柔らかいシリコンが付いたグローブで撫でるだけで、短い毛でもしっかり取れます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！",
+                  "抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」",
+                  "短くても細くても徹底的に取り除けます"
+                ],
+                "reason": "All claims about target, part, condition, and performance match source."
+              },
+              {
+                "text": "メッシュ構造で手が蒸れず、通気性と軽量性を備えているため、入浴後すぐに乾かして次のケアに使えます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                  "通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。"
+                ],
+                "reason": "Feature description and usage condition are directly supported by source."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "ペット用グルーミンググローブ",
+                  "acts_on": "猫、犬、うさぎ、馬などの抜け毛",
+                  "acts_on_quote": "【適用対象】：猫、犬、うさぎ、馬など"
+                },
+                "sentences": [
+                  {
+                    "text": "抜け毛が気になるときは、手のひらに259本のシリコンが付いたグローブで撫でるだけで、短い毛でもしっかり取れます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！"
+                    ]
+                  },
+                  {
+                    "text": "メッシュ構造で手が蒸れず、軽くてすぐ乾くので、入浴やシャワー後のグルーミングも快適です。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsupported_result",
+                  "detail": "快適",
+                  "sentence": 1
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "960",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3807",
+            "x-ratelimit-reset-requests": "57m36s",
+            "x-ratelimit-reset-tokens": "31.447s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.185520287,
+                "total_time": 5.80826426,
+                "prompt_time": 1.099299648,
+                "total_tokens": 3284,
+                "prompt_tokens": 1875,
+                "completion_time": 4.708964612,
+                "completion_tokens": 1409,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1094
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 6037,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "35.077s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "54m43.2s",
+                "x-ratelimit-remaining-tokens": "3323",
+                "x-ratelimit-remaining-requests": "962"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.088197346,
+                "total_time": 2.972917882,
+                "prompt_time": 0.12474972,
+                "total_tokens": 3284,
+                "prompt_tokens": 2200,
+                "completion_time": 2.848168162,
+                "completion_tokens": 1084,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 761
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 3141,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "20.452s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "56m9.6s",
+                "x-ratelimit-remaining-tokens": "5273",
+                "x-ratelimit-remaining-requests": "961"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 4247,
+              "usage": {
+                "queue_time": 0.088306062,
+                "prompt_tokens": 2416,
+                "prompt_time": 0.105975281,
+                "completion_tokens": 1876,
+                "completion_time": 3.908220008,
+                "total_tokens": 4292,
+                "total_time": 4.014195289,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1359
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "960",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "3807",
+                "x-ratelimit-reset-requests": "57m36s",
+                "x-ratelimit-reset-tokens": "31.447s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [
+              {
+                "rule": "scope_or_exclusion",
+                "quotes": [
+                  {
+                    "end": 693,
+                    "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                    "start": 617,
+                    "source": "caption"
+                  }
+                ],
+                "sentence": 0
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 693,
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "start": 617,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 1027,
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。",
+                  "start": 953,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5753
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "05",
+      "category": "ペット毛取りグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "wishsun:10000100",
+        "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+        "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取",
+        "itemPrice": 1299
+      },
+      "evaluationRun": "fixed_1791059061907_05_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:24:21.907Z",
+      "elapsedMs": 87762,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_b0e01fc37608a6ee",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "抜け毛をしっかり取り除きたいときは、手のひらに259本の柔らかいシリコンが毛をキャッチします。\n\n5本指の手のひら型で、メッシュ構造により手が蒸れずに使用できます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                "source": "caption",
+                "start": 617,
+                "end": 693,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                "source": "caption",
+                "start": 1058,
+                "end": 1087,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                "source": "caption",
+                "start": 801,
+                "end": 864,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                "source": "caption",
+                "start": 953,
+                "end": 998,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [
+              {
+                "sentence": 0,
+                "rule": "scope_or_exclusion",
+                "quotes": [
+                  {
+                    "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                    "source": "caption",
+                    "start": 617,
+                    "end": 693
+                  },
+                  {
+                    "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                    "source": "caption",
+                    "start": 1058,
+                    "end": 1087
+                  }
+                ]
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "source": "caption",
+                  "start": 617,
+                  "end": 693
+                },
+                {
+                  "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                  "source": "caption",
+                  "start": 1058,
+                  "end": 1087
+                }
+              ],
+              [
+                {
+                  "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                  "source": "caption",
+                  "start": 801,
+                  "end": 864
+                },
+                {
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                  "source": "caption",
+                  "start": 953,
+                  "end": 998
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "source": "caption",
+                  "start": 617,
+                  "end": 693,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                  "source": "caption",
+                  "start": 1058,
+                  "end": 1087,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                  "source": "caption",
+                  "start": 801,
+                  "end": 864,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                  "source": "caption",
+                  "start": 953,
+                  "end": 998,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": []
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "抜け毛をしっかり取り除きたいときは、手のひらに259本の柔らかいシリコンが毛をキャッチします。\n\n5本指の手のひら型で、メッシュ構造により手が蒸れずに使用できます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "ペット用グルーミンググローブ",
+          "general": "猫・犬・うさぎなどの抜け毛"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 86323,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "ペット用グルーミンググローブ",
+              "acts_on": "猫・犬・うさぎなどの抜け毛",
+              "acts_on_quote": "【適用対象】：猫、犬、うさぎ、馬など"
+            },
+            "sentences": [
+              {
+                "text": "抜け毛をしっかり取り除きたいときは、手のひらに259本の柔らかいシリコンが毛をキャッチします。",
+                "kinds": [
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！",
+                  "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！"
+                ]
+              },
+              {
+                "text": "5本指の手のひら型で、メッシュ構造により手が蒸れずに使用できます。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                  "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "抜け毛をしっかり取り除きたいときは、手のひらに259本の柔らかいシリコンが毛をキャッチします。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！",
+                  "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！"
+                ],
+                "reason": "Source states palm has 259 silicone that catches hair, removing shedding."
+              },
+              {
+                "text": "5本指の手のひら型で、メッシュ構造により手が蒸れずに使用できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                  "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。"
+                ],
+                "reason": "Source confirms 5‑finger palm shape and mesh prevents hand from steaming."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "ペット用グルーミンググローブ",
+                  "acts_on": "猫・犬・うさぎなどの抜け毛",
+                  "acts_on_quote": "【適用対象】：猫、犬、うさぎ、馬など"
+                },
+                "sentences": [
+                  {
+                    "text": "抜け毛をしっかり取り除きたいときは、手のひらに259本の柔らかいシリコンが毛をキャッチしてくれます。",
+                    "kinds": [
+                      "benefit",
+                      "scene"
+                    ],
+                    "quotes": [
+                      "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！",
+                      "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！"
+                    ]
+                  },
+                  {
+                    "text": "5本指の手のひら型で扱いやすく、メッシュ構造なので手が蒸れず快適に使えます。",
+                    "kinds": [
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                      "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "unsupported_result",
+                  "detail": "快適",
+                  "sentence": 1
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "957",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3602",
+            "x-ratelimit-reset-requests": "1h1m55.2s",
+            "x-ratelimit-reset-tokens": "32.985s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.245197622,
+                "total_time": 4.167574118,
+                "prompt_time": 0.051239818,
+                "total_tokens": 3493,
+                "prompt_tokens": 1875,
+                "completion_time": 4.1163343,
+                "completion_tokens": 1618,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1271
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 4472,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "48.15s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "59m2.4s",
+                "x-ratelimit-remaining-tokens": "1580",
+                "x-ratelimit-remaining-requests": "959"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.155176365,
+                "total_time": 2.750735787,
+                "prompt_time": 0.122626078,
+                "total_tokens": 3499,
+                "prompt_tokens": 2232,
+                "completion_time": 2.628109709,
+                "completion_tokens": 1267,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 929
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 3302,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "20.572s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h0m28.8s",
+                "x-ratelimit-remaining-tokens": "5257",
+                "x-ratelimit-remaining-requests": "958"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 5332,
+              "usage": {
+                "queue_time": 0.266410734,
+                "prompt_tokens": 2476,
+                "prompt_time": 0.14959122,
+                "completion_tokens": 2221,
+                "completion_time": 4.604850512,
+                "total_tokens": 4697,
+                "total_time": 4.754441732,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1732
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "957",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "3602",
+                "x-ratelimit-reset-requests": "1h1m55.2s",
+                "x-ratelimit-reset-tokens": "32.985s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [
+              {
+                "rule": "scope_or_exclusion",
+                "quotes": [
+                  {
+                    "end": 693,
+                    "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                    "start": 617,
+                    "source": "caption"
+                  },
+                  {
+                    "end": 1087,
+                    "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                    "start": 1058,
+                    "source": "caption"
+                  }
+                ],
+                "sentence": 0
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 693,
+                  "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも!",
+                  "start": 617,
+                  "source": "caption"
+                },
+                {
+                  "end": 1087,
+                  "quote": "しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに!",
+                  "start": 1058,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 864,
+                  "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+                  "start": 801,
+                  "source": "caption"
+                },
+                {
+                  "end": 998,
+                  "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。",
+                  "start": 953,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 7382
+        }
+      },
+      "humanReview": null
+    }
+  ],
+  "knownFabricatedPasses": 1,
+  "pendingCommonFixes": [
+    "dimension unit table/chained dimensions",
+    "unsupported immediate outcomes",
+    "writer and reviewer distinguish usage wishes from asserted effects"
+  ],
+  "stopReason": "Confirmed fabricated immediate completion; remaining measurements deferred to repaired common contract."
+}

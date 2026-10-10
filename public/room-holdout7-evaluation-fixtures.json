@@ -1,0 +1,132 @@
+[
+  {
+    "id":"h7-01",
+    "set":"holdout7-live-20261004",
+    "category":"電子体温計",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:omron:MC-688",
+      "itemName":"オムロン OMRON 公式 電子体温計 脇下 脇 わき 予測式 MC-688 けんおんくん 体温計 日本製 送料無料",
+      "itemCaption":"約15秒のスピード検温。大きな文字で、測定結果がみやすい。前回値メモリ付き。持ち運びに便利な収納ケース付き。",
+      "itemPrice":2200,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-02",
+    "set":"holdout7-live-20261004",
+    "category":"モニターアーム",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:cofo:CM-AP1B",
+      "itemName":"COFO モニターアーム 1画面 17～40インチ COFO無重力モニターアームPro シングル マットブラック CM-AP1B",
+      "itemCaption":"ダブルメカニカルスプリング内蔵で2.5〜14kgのモニターに幅広く対応。VESA規格は75×75mmと100×100mmに対応。推奨対応モニターサイズは17-40インチです。",
+      "itemPrice":21980,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-03",
+    "set":"holdout7-live-20261004",
+    "category":"自動給餌器",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:karikari:V2C-Plus",
+      "itemName":"獣医師監修 自動給餌器 スマホ操作 カメラ付き 5gプロペラ付き カリカリマシーンV2C Plus 猫 犬 自動餌やり機 給餌器",
+      "itemCaption":"カメラ付き自動給餌器。スマホで遠隔操作し、ペットの様子を見守り、会話や給餌が可能。猫・犬の留守番に。",
+      "itemPrice":19800,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-04",
+    "set":"holdout7-live-20261004",
+    "category":"サーキュレーター",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:altinor:air-afn-1",
+      "itemName":"ALTINOR アルティノル DC サーキュレーター コードレス 充電式 扇風機 卓上 静音 小型 衣類乾燥 部屋干し 360度 洗える 分解 丸洗い",
+      "itemCaption":"静音性と省エネ性に優れたDCモーターを搭載し、送風で換気や衣類乾燥にも使えるサーキュレーターです。2mのロングコードを備えています。",
+      "itemPrice":6940,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-05",
+    "set":"holdout7-live-20261004",
+    "category":"分別ダストワゴン",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:yamazaki:tower-dust-wagon",
+      "itemName":"山崎実業 tower 蓋付き目隠し分別ダストワゴン 45L 2分別 3分別 スリム キャスター ゴミ袋 レジ袋",
+      "itemCaption":"キャスターとハンドル付き。キャスターにはストッパーが付いています。底面にレジ袋・ゴミ袋をストックできます。",
+      "itemPrice":8980,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-06",
+    "set":"holdout7-live-20261004",
+    "category":"電気ケトル",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:tfal:KO5901JP",
+      "itemName":"T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml",
+      "itemCaption":"1.2Lの使いやすい大容量ケトル。ハイパワー1200Wでスピード沸騰。両側に湯量を確認できる窓があります。もしもの時のために転倒お湯もれロックを備えています。",
+      "itemPrice":3759,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-07",
+    "set":"holdout7-live-20261004",
+    "category":"レインコート",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:aetonyx:AX-20",
+      "itemName":"回転フード レインコート レディース 自転車対応 透湿 防水 AX-20 三層構造生地 反射帯 フード付き",
+      "itemCaption":"着丈は110cm、115cm、120cm、125cmから選べます。前面に三角マチが付いています。取り外し可能なフードは前部分が透明で、回転フード仕様です。コンパクトに収納できる収納袋付きです。",
+      "itemPrice":9790,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-08",
+    "set":"holdout7-live-20261004",
+    "category":"バックパック",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:northface:NM72302",
+      "itemName":"THE NORTH FACE ザ・ノース・フェイス ホットショット 27L ブラック NM72302 バックパック リュック",
+      "itemCaption":"メインコンパートメントは大きく開閉するパネルローディングタイプ。15インチまでのノート型PC専用スリーブとハイドレーション用のスリーブポケット付き。容量は27Lです。",
+      "itemPrice":16890,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-09",
+    "set":"holdout7-live-20261004",
+    "category":"衣類乾燥除湿機",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:sharp:CV-T71-W",
+      "itemName":"シャープ SHARP CV-T71-W 衣類乾燥除湿機 コンプレッサー式 ホワイト プラズマクラスター7000",
+      "itemCaption":"コンパクトタイプの衣類乾燥除湿機です。除湿能力は50Hzで6.3L/日、60Hzで7.1L/日です。切タイマーは2時間、4時間、6時間に設定できます。",
+      "itemPrice":29800,
+      "imageUrl":""
+    }
+  },
+  {
+    "id":"h7-10",
+    "set":"holdout7-live-20261004",
+    "category":"低めの枕",
+    "categoryChecked":true,
+    "item":{
+      "itemCode":"holdout7:taiyo:HTKH-001",
+      "itemName":"子ヒツジのいらない枕 枕 低め 洗える枕 低い枕 低反発枕 高反発枕",
+      "itemCaption":"子ども向けで開発した子ヒツジのいらない枕は、大人でも使用できます。普段枕を使用しない方や、低めの枕が好きな方に向けた商品です。",
+      "itemPrice":12800,
+      "imageUrl":""
+    }
+  }
+]

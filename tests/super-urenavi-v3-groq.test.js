@@ -1,7 +1,7 @@
 'use strict';
 
 const assert=require('node:assert/strict');
-const {createV3Groq,capCaption}=require('../lib/super-urenavi-v3-groq');
+const {createV3Groq,cleanGenerationTitle,capCaption,callStructured,SEMANTIC_WRITER_PROMPT,parseResetDurationMs,nextSafeDelayMs}=require('../lib/super-urenavi-v3-groq');
 
 function response(payload,{status=200}={}){
   return {
@@ -12,32 +12,125 @@ function response(payload,{status=200}={}){
 }
 
 (async()=>{
+  assert.equal(parseResetDurationMs('1m30s'),90000);
+  assert.equal(parseResetDurationMs('2.5s'),2500);
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'20',
+    'x-ratelimit-reset-requests':'60s',
+    'x-ratelimit-remaining-tokens':'9000',
+    'x-ratelimit-reset-tokens':'60s'
+  },{output_tokens:200}),3000,'budget-aware pacing spreads request budget');
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'0',
+    'x-ratelimit-reset-requests':'42s',
+    'x-ratelimit-remaining-tokens':'9000',
+    'x-ratelimit-reset-tokens':'60s'
+  },{output_tokens:200}),42500,'empty request bucket waits for reset');
+  assert.equal(nextSafeDelayMs({
+    'x-ratelimit-remaining-requests':'20',
+    'x-ratelimit-reset-requests':'60s',
+    'x-ratelimit-remaining-tokens':'150',
+    'x-ratelimit-reset-tokens':'17s'
+  },{output_tokens:200}),17500,'low token budget waits for token reset');
+
+  assert.match(SEMANTIC_WRITER_PROMPT,/natural, complete Japanese sentence/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/verbatim, character-for-character/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/do NOT force copying/i);
+  assert.match(SEMANTIC_WRITER_PROMPT,/negation, conditions, exclusions, degree/i);
+
   const calls=[];
   const fetchImpl=async(url,opts)=>{
     calls.push({url,body:JSON.parse(opts.body)});
     const name=JSON.parse(opts.body).text.format.name;
     if(name==='super_urenavi_v3_understanding'){
       return response({model:'mock',usage:{input_tokens:10,output_tokens:20},output_text:JSON.stringify({
-        productType:{specific:'電気ケトル',general:'ケトル',quote:'電気ケトル'},attributes:[],decisionAxes:[],appeals:[],hooks:[]
+        productType:{specific:'バイクグローブ',general:'グローブ'},
+        attributes:[
+          {name:'スマホ対応',value:'可能',unit:'',qualifier:'停車中',valueType:'text',quote:'グローブを着けたままスマホを操作'},
+          {name:'防護部',value:'ナックルプロテクター',unit:'',qualifier:'',valueType:'text',quote:'ナックルプロテクター入り'}
+        ],
+        appeals:[{
+          text:'グローブを着けたままスマホを操作できます。',
+          scene:'停車中にスマホを確認する場面',
+          evidenceQuotes:['グローブを着けたままスマホを操作'],
+          strength:3
+        }]
       })});
     }
     return response({model:'mock',usage:{input_tokens:5,output_tokens:5},output_text:JSON.stringify({results:[]})});
   };
   const groq=createV3Groq({apiKey:'test',model:'mock',fetchImpl});
-  const p1=await groq.callPass1({item:{itemName:'電気ケトル',itemCaption:'説明'.repeat(1000),itemPrice:1000}});
-  assert.equal(p1.raw.productType.specific,'電気ケトル');
+  const p1=await groq.callPass1({item:{itemName:'【楽天1位】 バイクグローブ セール',identityHint:'バイクグローブ',itemCaption:'グローブを着けたままスマホを操作 ナックルプロテクター入り '+ '説明'.repeat(1000),itemPrice:1000}});
+  assert.equal(p1.raw.productType.specific,'バイクグローブ');
+  assert.equal(p1.raw.productType.quote,'バイクグローブ');
+  assert.deepEqual(calls[0].body.text.format.schema.properties.productType.required,['specific','general']);
+  assert.equal(calls[0].body.text.format.schema.properties.productType.properties.quote,undefined);
+  assert.equal(calls[0].body.text.format.schema.properties.hooks,undefined);
+  assert.equal(calls[0].body.text.format.schema.properties.appeals.items.properties.attributeRefs,undefined);
+  assert.ok(calls[0].body.text.format.schema.properties.appeals.items.properties.evidenceQuotes);
+  assert.deepEqual(p1.raw.appeals[0].attributeRefs,[0],'exact evidence quote must bind to the matching attribute, not an AI ordinal');
+  assert.equal(p1.raw.appeals[0].evidenceQuotes,undefined);
+  assert.equal(p1.raw.attributes[0].value,'グローブを着けたままスマホを操作','non-grounded value labels must normalize to the grounded quote');
   assert.equal(calls.length,1);
   assert.equal(calls[0].body.reasoning.effort,'none');
+  assert.equal(calls[0].body.temperature,0.2);
   assert.equal(calls[0].body.text.format.strict,true);
-  assert.equal(calls[0].body.max_output_tokens,720);
+  assert.equal(calls[0].body.max_output_tokens,900);
   const pass1User=JSON.parse(calls[0].body.input[1].content[0].text);
+  assert.equal(pass1User.productIdentityHint,'バイクグローブ');
+  assert.equal(pass1User.itemName,undefined);
+  assert.equal(pass1User.itemTitleEvidence,'バイクグローブ');
   assert.ok(pass1User.itemCaption.length<=1200);
+  assert.equal(cleanGenerationTitle('【楽天1位】 洗濯ネット セール 送料無料'),'洗濯ネット');
+  assert.match(SEMANTIC_WRITER_PROMPT,/productIdentityHint is non-empty, use it exactly/);
 
-  await groq.callPass2({verificationInput:[{verificationIndex:0,appealIndex:0,proposed:{text:'例'},attributes:[]}]});
+  const verificationInput=[{
+    verificationIndex:0,
+    appealIndex:0,
+    proposed:{
+      text:'本革の柔らかさとグリップ力で操作しやすいです。',
+      scene:'長時間のツーリング',
+      noHassle:''
+    },
+    attributes:[{
+      ref:1,
+      name:'プロテクション',
+      value:'ナックルプロテクター入り',
+      unit:'',
+      qualifier:'',
+      quote:'ナックルプロテクター入り'
+    }]
+  }];
+  await groq.callPass2({
+    verificationInput,
+    item:{
+      itemName:'バイク グローブ 本革 山羊革 ナックルプロテクター入り',
+      itemCaption:'本革の柔らかさとグリップ力。スマホ対応。'
+    },
+    validation:{productType:{specific:'バイク グローブ',general:'バイク用グローブ'}}
+  });
   assert.equal(calls.length,2);
   assert.equal(calls[1].body.text.format.name,'super_urenavi_v3_verification');
-  assert.equal(calls[1].body.max_output_tokens,320);
+  assert.equal(calls[1].body.max_output_tokens,900);
+  const pass2User=JSON.parse(calls[1].body.input[1].content[0].text);
+  assert.deepEqual(pass2User.appeals,verificationInput);
+  assert.equal(pass2User.itemName,undefined);
+  assert.equal(pass2User.itemCaption,undefined);
+  assert.deepEqual(pass2User.productType,{specific:'バイク グローブ',general:'バイク用グローブ'});
+  assert.match(calls[1].body.input[0].content[0].text,/添付されたattributes\.quote/);
+  assert.match(calls[1].body.input[0].content[0].text,/入力外の引用を新しく持ち込んではいけません/);
+  assert.match(SEMANTIC_WRITER_PROMPT,/STRICT EVIDENCE SCOPE/);
+  assert.match(SEMANTIC_WRITER_PROMPT,/A fact appearing elsewhere in itemName\/itemCaption is NOT allowed/);
 
+  const alternate=createV3Groq({apiKey:'test',model:'openai/gpt-oss-120b',fetchImpl});
+  await alternate.callPass1({item:{itemName:'バイクグローブ'}});
+  assert.equal(calls.at(-1).body.reasoning.effort,'low');
+  const mixed=await callStructured({apiKey:'test',model:'openai/gpt-oss-120b',systemPrompt:'test',userPayload:{},schema:{type:'object'},schemaName:'test',maxOutputTokens:460,fetchImpl:async()=>response({output:[
+    {type:'reasoning',content:[{type:'reasoning_text',text:'Internal reasoning is not JSON'}]},
+    {type:'message',content:[{type:'output_text',text:'{"ok":'},{type:'output_text',text:'true}'}]}
+  ]})});
+  assert.deepEqual(mixed.raw,{ok:true});
+  await assert.rejects(()=>callStructured({apiKey:'test',model:'mock',schema:{},fetchImpl:async()=>response({status:'incomplete',incomplete_details:{reason:'max_output_tokens'},usage:{output_tokens:500},output:[]})}),e=>e.failureReason==='output_budget_exhausted'&&e.usage.output_tokens===500);
   let errorCalls=0;
   const failing=createV3Groq({apiKey:'test',model:'mock',fetchImpl:async()=>{
     errorCalls++;

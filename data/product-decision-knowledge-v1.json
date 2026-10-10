@@ -1,0 +1,30 @@
+{
+  "version": "2026-10-04-partner-decision-v1",
+  "usage": "ranking_and_reasoning_context_only",
+  "types": [
+    {"productType":"グローブ","status":"needs_specific_type","actsOn":"手","situations":[],"decisionAxes":[],"blockedInferences":["用途を特定せず掃除・バイク・スポーツ向けと決めない"]},
+    {"productType":"バイクグローブ","status":"active","actsOn":"ライダーの手","situations":["バイクに乗るとき","ツーリング時"],"decisionAxes":["素材","フィット感","通気性","スマホ対応","保護構造"],"blockedInferences":["柔らかさから疲労軽減を作らない","グリップ力から安定した操作結果を作らない","スマホ操作を書く場合は停車中に限定する"]},
+    {"productType":"電気シェーバー","status":"active","actsOn":"ひげ・ムダ毛","situations":["身支度で毛を整えたいとき"],"decisionAxes":["刃・ヘッド構造","対応部位","水洗い対応","電源方式","本体重量"],"blockedInferences":["肌への安全性や刺激の少なさを原文なしに断定しない","脱毛効果を作らない"]},
+    {"productType":"ノンフライヤー","status":"active","actsOn":"食材","situations":["揚げ物系の調理をしたいとき","複数の調理方法を一台で使いたいとき"],"decisionAxes":["容量","温度範囲","時間設定","対応調理","手入れ方法"],"blockedInferences":["油を使わないことから健康効果を作らない","時短を原文なしに断定しない"]},
+    {"productType":"折りたたみ傘","status":"active","actsOn":"雨や日差しから身を覆う用途","situations":["外出時に傘を持ち歩きたいとき"],"decisionAxes":["親骨サイズ","折りたたみ時サイズ","重量","開閉方式","骨構造"],"blockedInferences":["小型から必ずバッグに入ると断定しない","丈夫さを構造だけから保証しない"]},
+    {"productType":"電気ケトル","status":"active","actsOn":"水","situations":["飲み物や調理用のお湯を沸かしたいとき"],"decisionAxes":["容量","温度設定","保温機能","注ぎ口形状","消費電力"],"blockedInferences":["消費電力から沸騰速度を推定しない","細口から注ぎやすさを保証しない"]},
+    {"productType":"ネックピロー","status":"active","actsOn":"首まわりを支える用途","situations":["移動中や休憩時に首を支えたいとき"],"decisionAxes":["形状","素材","重量","収納方法","洗濯可能な部位"],"blockedInferences":["柔らかさから疲労軽減を作らない","洗える部位を本体全体へ拡張しない"]},
+    {"productType":"完全ワイヤレスイヤホン","status":"active","actsOn":"音声再生・通話","situations":["移動中や作業中に音声を聞きたいとき"],"decisionAxes":["再生時間","接続方式","装着方式","ノイズ制御","対応コーデック・機器"],"blockedInferences":["高音質表記から具体的な音質結果を作らない","低遅延からゲームで必ず有利と断定しない"]},
+    {"productType":"フードプロセッサー","status":"active","actsOn":"食材","situations":["刻む・混ぜるなどの下ごしらえをしたいとき"],"decisionAxes":["容量","対応作業","刃・アタッチメント","容器素材","手入れ方法"],"blockedInferences":["高出力から時短を断定しない","業務用表現から耐久性を保証しない"]},
+    {"productType":"デスクライト","status":"active","actsOn":"手元・机上を照らす用途","situations":["読書や作業で手元を照らしたいとき"],"decisionAxes":["明るさ","調光・調色","設置方式","可動範囲","電源方式"],"blockedInferences":["自然光や演色性から目の負担軽減を断定しない","可動範囲から狭い場所に必ず置けると断定しない"]},
+    {"productType":"スーツケース","status":"active","actsOn":"旅行・出張の荷物","situations":["旅行や出張で荷物を運びたいとき"],"decisionAxes":["容量","本体サイズ","重量","キャスター","開閉・収納構造"],"blockedInferences":["静音表記から周囲に迷惑をかけないと保証しない","軽量から持ち運びが必ず楽と断定しない"]},
+    {"productType":"加湿器","status":"active","actsOn":"室内の空気へ水分を加える用途","situations":["室内を加湿したいとき"],"decisionAxes":["方式","タンク容量","加湿量","運転時間","給水・手入れ方法"],"blockedInferences":["加湿から健康改善を作らない","除菌表現から空間全体の安全性を保証しない"]},
+    {"productType":"掃除機","status":"active","actsOn":"床・家具などのごみやほこり","situations":["室内のごみやほこりを吸い取りたいとき"],"decisionAxes":["集じん方式","電源方式","本体重量","付属ノズル","ごみ捨て方法"],"blockedInferences":["吸引力表現から全てのごみを取れると断定しない","軽量から疲れにくいと断定しない"]},
+    {"productType":"モバイルバッテリー","status":"active","actsOn":"対応する電子機器への給電","situations":["外出先で機器を充電したいとき"],"decisionAxes":["容量","出力","端子","ケーブル内蔵有無","本体重量"],"blockedInferences":["容量だけから充電回数を断定しない","高出力から全機器の急速充電を保証しない"]},
+    {"productType":"収納ボックス","status":"active","actsOn":"物の収納","situations":["物をまとめて収納したいとき"],"decisionAxes":["容量・寸法","開閉方式","積み重ね","キャスター","折りたたみ"],"blockedInferences":["収納できることから部屋が片付くと結果を断定しない","寸法から特定の隙間に入ると断定しない"]},
+    {"productType":"ペットベッド","status":"active","actsOn":"ペットが休む場所","situations":["犬や猫の休む場所を用意したいとき"],"decisionAxes":["サイズ","形状","素材","カバー構造","洗濯可能な部位"],"blockedInferences":["高反発などから体への改善効果を作らない","カバー洗濯可を本体丸洗いへ拡張しない"]},
+    {"productType":"うんち袋","status":"active","actsOn":"ペットの排泄物","situations":["散歩や外出時に排泄物を処理したいとき"],"decisionAxes":["枚数","袋サイズ","処理方法","色・透けにくさ","携帯方法"],"blockedInferences":["防臭表現から臭いが完全に消えると保証しない","流せる条件を省略しない"]},
+    {"productType":"水筒","status":"active","actsOn":"飲料の持ち運び","situations":["飲み物を持ち歩きたいとき"],"decisionAxes":["容量","重量","保温・保冷対応","飲み口","炭酸対応"],"blockedInferences":["保温保冷から具体的な持続時間を原文なしに作らない","軽量から持ち運びが楽と断定しない"]},
+    {"productType":"ヘアードライヤー","status":"active","actsOn":"髪を乾かす用途","situations":["洗髪後などに髪を乾かしたいとき"],"decisionAxes":["風量","本体重量","温度・モード","付属ノズル","電源・サイズ"],"blockedInferences":["大風量から乾燥時間短縮を断定しない","イオン等から髪質改善を原文以上に広げない"]},
+    {"productType":"ワッフル&ホットサンドベーカー","status":"active","actsOn":"パンや生地などの加熱調理","situations":["ホットサンドやワッフルを作りたいとき"],"decisionAxes":["対応プレート","タイマー","本体サイズ","プレート着脱","手入れ方法"],"blockedInferences":["タイマーから失敗しないと保証しない","プレート種類から料理の幅が必ず広がると断定しない"]},
+    {"productType":"腕時計","status":"active","actsOn":"時刻確認・腕への装着","situations":["日常や外出時に時刻を確認したいとき"],"decisionAxes":["駆動方式","防水仕様","ケース・バンド素材","サイズ・重量","表示方式"],"blockedInferences":["電波やソーラーから手間が不要と断定しない","防水仕様の等級を超えて用途を広げない"]},
+    {"productType":"ラグ","status":"active","actsOn":"床に敷く用途","situations":["部屋の床に敷物を置きたいとき"],"decisionAxes":["サイズ","素材","毛足・厚み","床暖房対応","洗濯・手入れ"],"blockedInferences":["厚みから衝撃吸収を作らない","素材から暖かさや快適さを原文なしに断定しない"]},
+    {"productType":"電動モップ","status":"active","actsOn":"床の拭き掃除","situations":["床を拭き掃除したいとき"],"decisionAxes":["回転・振動方式","電源方式","タンク容量","パッド構造","本体重量"],"blockedInferences":["電動から掃除が楽・時短になると断定しない","重量から疲労度を推定しない"]},
+    {"productType":"フライパン","status":"active","actsOn":"食材の加熱調理","situations":["焼く・炒める調理をしたいとき"],"decisionAxes":["サイズ","素材・コーティング","IH対応","深さ","重量"],"blockedInferences":["コーティングから焦げ付かないと保証しない","軽量から調理が楽と断定しない"]}
+  ]
+}
