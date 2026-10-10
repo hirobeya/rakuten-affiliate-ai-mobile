@@ -4108,6 +4108,11 @@ let proVisibleCandidateItems=[];
 function proOpenCandidate(index){
   const item=proVisibleCandidateItems[index];
   if(!item||!item.itemName)return;
+  // A Pro-selected item is a new search context. Never reuse the previous
+  // normal-search keyword when determining the product identity or audience.
+  const keyword=String(proEl('proProductKeyword')?.value||'').trim();
+  k.value=keyword;
+  lastSearchKeyword=keyword;
   setAppScreen('normal');
   render([item],{autoAi:false});
   const results=document.getElementById('res');
