@@ -129,6 +129,38 @@ test('ready V3 response preserves publication ledger and exactly one rendered va
 });
 
 
+test('V3 blocks a display variant different from verified publication text',async()=>{
+  const old=process.env.VERCEL_ENV;
+  process.env.VERCEL_ENV='preview';
+  try{
+    const handler=roomV3.createHandler({
+      authorize:async()=>({ok:true,plan:'owner'}),namespaced:false,
+      store:{loadProduct:async()=>null,saveProduct:async()=>{}},
+      groq:{callPass1(){},callPass2(){}},
+      analyzeProductV3:async()=>({
+        ok:true,source:'pass1+pass2',cacheStatus:'miss',
+        validation:{valid:true,productType:{valid:true,specific:'洗濯ネット'},attributes:[],decisionAxes:[]},
+        verifiedAppeals:[],pass2Status:'generated',
+        groq:{pass1Calls:1,pass2Calls:1,totalCalls:2}
+      }),
+      composeVariants:()=>({
+        tier:'A',variants:[{index:1,hookType:'scene',text:'根拠が確認されていない別の本文'}],
+        quality:{status:'ready',text:'検証済みの正しい本文',reasons:[],ledger:[]}
+      })
+    });
+    const res=response();
+    await handler({method:'POST',body:{evaluationRun:'mismatch-guard',itemName:'洗濯ネット'}},res);
+    assert.equal(res.code,200);
+    assert.equal(res.body.ok,false);
+    assert.equal(res.body.quality.status,'blocked');
+    assert.equal(res.body.quality.text,'');
+    assert.deepEqual(res.body.variants,[]);
+  }finally{
+    if(old===undefined)delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV=old;
+  }
+});
+
 test('stale legacy generatedCopy is never a publication source in active V3 Preview',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function readyV3Post\(result\)/);
