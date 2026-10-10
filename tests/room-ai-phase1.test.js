@@ -282,7 +282,7 @@ function run(name,fn){
     assert.match(html,/\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
     assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
     assert.match(html,/if\(!aiGatesFullOutput\|\|generation!==aiRunGeneration\) return/);
-    assert.match(html,/async function runAiPreview\(items\)\{\n  if\(!aiGatesFullOutput\) return/);
+    assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)\{\n  if\(!aiGatesFullOutput\|\|aiQueueRunning\) return/);
   });
 
   await run('Preview owner mock invokes one AI request and validates output',async()=>{
@@ -701,7 +701,8 @@ function run(name,fn){
     assert.match(html,/insufficient_grounded_facts/);
     assert.match(html,/rule_conflict/);
     assert.doesNotMatch(html,/weak_single_candidate/);
-    assert.match(html,/setTimeout\(r,750\)/);
+    assert.match(html,/Number\(result\?\.data\?\.nextDelayMs\)\|\|750/);
+    assert.match(html,/Groqの利用枠を守るため約/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
@@ -722,7 +723,9 @@ function run(name,fn){
     assert.match(html,/const fallbackIdentity=safeSearchIdentity\(item\)/);
     assert.match(html,/const groundedFallback=Boolean\(fallbackIdentity\)/);
     assert.match(html,/const full=validatedFull\|\|groundedFallback/);
-    assert.match(html,/audience=String\(insight\.productType\|\|''\)/);
+    assert.match(html,/audience=String\(\(usePurchasePlan\?\(insight\.scene\|\|insight\.productType\):insight\.productType\)\|\|'商品内容を確認済み'\)/);
+    assert.match(html,/unexpected_ai_contract/);
+    assert.match(html,/function readyV3Post\(result\)/);
     assert.match(html,/points=\(insight\.sellingPoints\.length\?insight\.sellingPoints:insight\.features\)\.slice\(0,2\)/);
   });
 
@@ -739,7 +742,7 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedTitleFeatures\(/);
     assert.match(html,/function aiSalesInsight\(/);
     assert.match(html,/商品内容を確認中です/);
-    assert.match(html,/if\(aiGatesFullOutput\)\{\n    runAiPreview\(a\);/);
+    assert.match(html,/if\(aiGatesFullOutput&&autoAi\)\{\n    runAiPreview\(a\);/);
     assert.doesNotMatch(html,/debugExportAllowed && new URLSearchParams\(location\.search\)/);
   });
 
@@ -764,7 +767,7 @@ function run(name,fn){
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
-    assert.match(html,/if\(s\.state\?\.state==='error'\) return ''/);
+    assert.match(html,/if\(s\.state\?\.state==='error'\|\|s\.state\?\.state==='restored'\) return ''/);
     assert.match(html,/return String\(post\(i,p\)\|\|''\)\.trim\(\)/);
     assert.doesNotMatch(html,/誤った投稿文は表示していません/);
     assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
@@ -783,10 +786,10 @@ function run(name,fn){
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
     assert.match(html,/buildGroundedBenefitPost/);
-    assert.match(quality,/function groundedBenefitForFact/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
-    assert.match(quality,/確認できる仕様/);
+    assert.match(quality,/StructuredCopy/);
     assert.match(quality,/UrenaviFactSafety/);
     assert.doesNotMatch(quality,/const SERVER_CLAIM_RE=/);
     assert.doesNotMatch(quality,/const SERVER_PROMO_RE=/);
@@ -804,8 +807,10 @@ function run(name,fn){
     assert.doesNotMatch(html,/function groundedBenefitLines\(/);
     assert.match(html,/insight\.sellingPoints/);
     assert.match(html,/この商品の選びどころ/);
-    assert.match(html,/商品ページで確認できるポイント/);
-    assert.match(html,/function aiSafeFallbackPost\(item,result=null\)/);
+    assert.match(html,/function readyV3Post\(result\)/);
+    assert.doesNotMatch(html,/function aiSafeFallbackPost\(/);
+    assert.doesNotMatch(html,/function aiSafeTitle\(/);
+    assert.doesNotMatch(html,/function salesFactCore\(/);
   });
 
 

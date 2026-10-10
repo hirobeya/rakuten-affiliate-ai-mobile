@@ -1,0 +1,42 @@
+[
+  {
+    "id":"h8-01","category":"キッチンスケール","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:elecom:HCS-KSA01","itemName":"キッチンスケール 0.1g おしゃれ エレコム 公式店 HCS-KSA01 はかり デジタル クッキングスケール 計量器 コンパクト","itemCaption":"計測範囲は0～3,000g。自動電源オフは約2分。寸法は幅約120mm×奥行約170mm×高さ約30mm。単4形乾電池×3本で使用します。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-02","category":"折りたたみチェア","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:daysunny:20260607z04","itemName":"折りたたみチェア アウトドアチェア 軽量 コンパクト 収納袋付き キャンプ用椅子 背もたれ付き サイドポケット付き","itemCaption":"使用時は高さ約65cm、座面高さ約35cm、座面約39×39cm。収納時は約65×12×12cm。重量は約1.15kg、耐荷重目安は約100kgです。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-03","category":"水切りマット","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:qandq:towel-066","itemName":"水切りマット 食器乾燥マット 吸水速乾マット キッチン ワッフル マイクロファイバー 30x30cm 40x40cm","itemCaption":"ワッフル構造とマイクロファイバー素材を採用した水切りマット。サイズは30x30cmと40x40cmです。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-04","category":"ペットキャリー","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:illumina:Pets-carry","itemName":"ペットキャリー リュック 2匹 3WAY 猫 犬 バッグ キャリーケース カート連結 大容量 折りたたみ 洗える メッシュ","itemCaption":"組み立て時は縦30cm×横50cm×高さ33cm、折り畳み時は縦30cm×横50cm×高さ10cm。側面と上部にメッシュ生地を使用し、中敷は取り外して洗濯できます。10kgまで対応。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-05","category":"ヘアドライヤー","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:dfresh:n_hair_dryer","itemName":"マイナスイオン ドライヤー 大風量 軽量 折りたたみ ヘアドライヤー 3モード","itemCaption":"風速15.5m/s、風量2.45m3/min。70℃、51℃、27℃の3モード。重量は469gで、折りたたみに対応しています。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-06","category":"シューズラック","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:tounei:974202","itemName":"シューズラック スリム 省スペース 靴収納ラック 斜め 2段 3段 4段 5段 6段 キャスター付き 薄型 縦型","itemCaption":"靴を斜めに並べる収納方式。幅約28.5cm×奥行き約26cmのスリム設計です。カラーはホワイトとグレー。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-07","category":"電動ミル","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:acelit:407557-pot2","itemName":"電動ミル 2本セット ソルト ペッパー スパイスミル コードレス USB充電式 粗さ調整 セラミック","itemCaption":"塩と胡椒を挽ける電動ミル。USB充電式でType-Cケーブルが付属します。2本セットです。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-08","category":"包丁スタンド","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:ikkyu:4511515046040","itemName":"包丁スタンド 日本製 燕三条製 ステンレス 横置き 収納 食洗機対応 包丁2本収納","itemCaption":"包丁2本を収納できる据え置き型の包丁スタンド。左右どちらからでも出し入れできる横入れタイプ。ステンレス製で食洗機に対応しています。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-09","category":"ホットサンドメーカー","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:iris:574702","itemName":"アイリスオーヤマ ホットサンドメーカー ガス火専用 NGHS-DG ダブル 直火 フッ素加工 同時調理","itemCaption":"ガス火専用のダブルタイプ。特殊構造の蝶番で上から押さえる設計です。ホットサンドを2つに分けて同時に調理できます。","itemPrice":0,"imageUrl":""}
+  },
+  {
+    "id":"h8-10","category":"ハンディファン","set":"holdout8","categoryChecked":true,
+    "item":{"itemCode":"holdout8:yamaei:g4692","itemName":"ハンディファン 携帯扇風機 超軽量110g 100段階風量調節 3000mAh 液晶表示 Type-C充電 コードレス 卓上 手持ち","itemCaption":"サイズは約94×51×39mm、重量は約110g。Type-C充電。バッテリー容量は1500mAh・3000mAhの仕様があり、風量は100段階で調整できます。","itemPrice":0,"imageUrl":""}
+  }
+]

@@ -1,0 +1,1781 @@
+{
+  "version": "room_contract_c6c133433999a560",
+  "status": "rejected_completion_threshold",
+  "reason": "Glove 0/3 completed; two-sentence minimum and non-actionable failure feedback removed through category-independent changes.",
+  "runs": [
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791059400256_01_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:30:00.256Z",
+      "elapsedMs": 46206,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_c6c133433999a560",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "degree_not_supported",
+              "sentence": 1,
+              "detail": "「防げます」は風を完全に防止する保証で、原文は「強く」だけ"
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "本革バイクグローブ",
+          "general": "バイクのハンドル操作"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 44128,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイクグローブ",
+              "acts_on": "バイクのハンドル操作",
+              "acts_on_quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                "kinds": [
+                  "scene",
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "寒い日や風が強いときは、停車中に防風モデルのベルクロで手首をしっかり固定し、隙間風を防げます。",
+                "kinds": [
+                  "scene",
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ],
+                "reason": "スマホ操作が可能という仕様をそのまま述べている"
+              },
+              {
+                "text": "寒い日や風が強いときは、停車中に防風モデルのベルクロで手首をしっかり固定し、隙間風を防げます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                ],
+                "reason": "「防げます」は風を完全に防止する保証で、原文は「強く」だけ"
+              }
+            ],
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            }
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "本革バイクグローブ",
+                  "acts_on": "バイクのハンドル操作",
+                  "acts_on_quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "スマホを操作したいときは、親指と人差し指にタッチ対応素材があるので、グローブをはずさずに操作できます。",
+                    "kinds": [
+                      "scene",
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "寒い日や風が強いときは、防風モデルのベルクロが手首前側に大きく配置され、しっかり締められるのですき間風を防げます。",
+                    "kinds": [
+                      "scene",
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "防風モデルのベルクロを手首の前側に移し、大きくしました。前からしっかり締められるので、手首のすき間から風が入りにくくなっています。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "quote_not_in_source",
+                  "detail": "防風モデルのベルクロを手首の前側に移し、大きくしました。前からしっかり締められるので、手首のすき間から風が入りにくくなっています。",
+                  "sentence": 1
+                },
+                {
+                  "rule": "unsafe_operation",
+                  "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。",
+                  "sentence": null
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "本革バイクグローブ",
+                  "acts_on": "バイクのハンドル操作",
+                  "acts_on_quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                    "kinds": [
+                      "scene",
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "寒い日や風が強いときは、停車中に防風モデルのベルクロで手首をしっかり固定し、隙間風を防げます。",
+                    "kinds": [
+                      "scene",
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホを操作したいときは、親指と人差し指のタッチ対応素材でグローブを外さずに操作できます。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "supported",
+                    "evidenceQuotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ],
+                    "reason": "スマホ操作が可能という仕様をそのまま述べている"
+                  },
+                  {
+                    "text": "寒い日や風が強いときは、停車中に防風モデルのベルクロで手首をしっかり固定し、隙間風を防げます。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                    ],
+                    "reason": "「防げます」は風を完全に防止する保証で、原文は「強く」だけ"
+                  }
+                ],
+                "quality": {
+                  "identity": "supported",
+                  "reason": "supported",
+                  "scene": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "room_style": "supported"
+                }
+              },
+              "failures": [
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 1,
+                  "detail": "「防げます」は風を完全に防止する保証で、原文は「強く」だけ"
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "955",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3342",
+            "x-ratelimit-reset-requests": "1h4m48s",
+            "x-ratelimit-reset-tokens": "34.935s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.101305946,
+                "total_time": 3.261769707,
+                "prompt_time": 0.090468307,
+                "total_tokens": 3111,
+                "prompt_tokens": 1624,
+                "completion_time": 3.1713014,
+                "completion_tokens": 1487,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1183
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 3439,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "28.837s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h1m55.2s",
+                "x-ratelimit-remaining-tokens": "4155",
+                "x-ratelimit-remaining-requests": "957"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.264400601,
+                "total_time": 1.8448831540000001,
+                "prompt_time": 0.106624004,
+                "total_tokens": 2866,
+                "prompt_tokens": 2040,
+                "completion_time": 1.73825915,
+                "completion_tokens": 826,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 480
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2198,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "18.045s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h3m21.6s",
+                "x-ratelimit-remaining-tokens": "5594",
+                "x-ratelimit-remaining-requests": "956"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 4019,
+              "usage": {
+                "queue_time": 0.101450594,
+                "prompt_tokens": 2039,
+                "prompt_time": 0.09467846,
+                "completion_tokens": 1773,
+                "completion_time": 3.741236531,
+                "total_tokens": 3812,
+                "total_time": 3.835914991,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1447
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "955",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "3342",
+                "x-ratelimit-reset-requests": "1h4m48s",
+                "x-ratelimit-reset-tokens": "34.935s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 500,
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "start": 459,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 439,
+                  "quote": "防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10°C前後にも対応",
+                  "start": 383,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5899
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791059446499_01_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:30:46.500Z",
+      "elapsedMs": 94261,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_c6c133433999a560",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "prohibited_expression",
+              "sentence": 1,
+              "detail": ""
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "本革バイク用スマホ対応グローブ",
+          "general": "バイクのハンドル操作とスマートフォン操作"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "totalCalls": 3
+        },
+        "elapsedMs": 92387,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイク用スマホ対応グローブ",
+              "acts_on": "バイクのハンドル操作とスマートフォン操作",
+              "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホのナビや音楽を操作したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                "kinds": [
+                  "scene"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "長時間のツーリングでも、拳と指の関節をナックルプロテクターがしっかりガードしてくれるので安心です。",
+                "kinds": [
+                  "benefit",
+                  "spec"
+                ],
+                "quotes": [
+                  "拳と指の関節は、ナックルプロテクターでしっかりガードします。",
+                  "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "本革バイク用スマホ対応グローブ",
+                  "acts_on": "バイクのハンドル操作とスマートフォン操作",
+                  "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホのナビや音楽を操作したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                    "kinds": [
+                      "scene"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "タッチ対応素材は本革の柔らかさを保ちつつ、指先の感覚を損なわないので、操作感が自然です。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "invalid_structured_output",
+                  "detail": "verify returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field.",
+                  "sentence": null
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "本革バイク用スマホ対応グローブ",
+                  "acts_on": "バイクのハンドル操作とスマートフォン操作",
+                  "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホのナビや音楽を操作したいとき、指先のタッチ対応素材でグローブを外さずに操作できます。",
+                    "kinds": [
+                      "scene"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "長時間のツーリングでも、拳と指の関節をナックルプロテクターがしっかりガードしてくれるので安心です。",
+                    "kinds": [
+                      "benefit",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "拳と指の関節は、ナックルプロテクターでしっかりガードします。",
+                      "本革(山羊革)ならではの柔らかさと、高いグリップ力。"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "prohibited_expression",
+                  "sentence": 1,
+                  "detail": ""
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "952",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4299",
+            "x-ratelimit-reset-requests": "1h9m7.2s",
+            "x-ratelimit-reset-tokens": "27.757s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.143182376,
+                "total_time": 3.056417557,
+                "prompt_time": 0.073364864,
+                "total_tokens": 3059,
+                "prompt_tokens": 1624,
+                "completion_time": 2.983052693,
+                "completion_tokens": 1435,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1116
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 3261,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "15.284s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h6m14.4s",
+                "x-ratelimit-remaining-tokens": "5962",
+                "x-ratelimit-remaining-requests": "954"
+              }
+            },
+            {
+              "error": "invalid_structured_output",
+              "stage": "verify",
+              "usage": null,
+              "attempt": 0,
+              "elapsedMs": 5459,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "35.295s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h7m40.8s",
+                "x-ratelimit-remaining-tokens": "3294",
+                "x-ratelimit-remaining-requests": "953"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2494,
+              "usage": {
+                "queue_time": 0.245868325,
+                "prompt_tokens": 1928,
+                "prompt_time": 0.228264376,
+                "completion_tokens": 890,
+                "completion_time": 1.9653891030000001,
+                "total_tokens": 2818,
+                "total_time": 2.193653479,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 627
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "952",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4299",
+                "x-ratelimit-reset-requests": "1h9m7.2s",
+                "x-ratelimit-reset-tokens": "27.757s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "prohibited_expression",
+                "sentence": 1,
+                "detail": ""
+              }
+            ],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              [
+                {
+                  "quote": "拳と指の関節は、ナックルプロテクターでしっかりガードします。",
+                  "source": "caption",
+                  "start": 288,
+                  "end": 318
+                },
+                {
+                  "quote": "本革(山羊革)ならではの柔らかさと、高いグリップ力。",
+                  "source": "caption",
+                  "start": 218,
+                  "end": 244
+                }
+              ]
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 3,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 3672
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "01",
+      "category": "バイクグローブ",
+      "set": "development",
+      "item": {
+        "itemCode": "pasoro:10001354",
+        "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+        "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+        "itemPrice": 3280
+      },
+      "evaluationRun": "fixed_1791059540794_01_3",
+      "run": 3,
+      "startedAt": "2026-10-03T20:32:20.794Z",
+      "elapsedMs": 44718,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_c6c133433999a560",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "quote_not_in_source",
+              "sentence": 1,
+              "detail": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+            },
+            {
+              "rule": "number_without_evidence",
+              "sentence": 1,
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "sentence": 1,
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "本革バイクグローブ",
+          "general": "バイクの操作"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "totalCalls": 2
+        },
+        "elapsedMs": 43757,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "本革バイクグローブ",
+              "acts_on": "バイクの操作",
+              "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+            },
+            "sentences": [
+              {
+                "text": "停車中にスマホのナビを操作したいとき、タッチ対応素材でグローブを外さずに操作できます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                ]
+              },
+              {
+                "text": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定され、10℃前後の寒さでも隙間風が入りにくいです。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "本革バイクグローブ",
+                  "acts_on": "バイクの操作",
+                  "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホのナビを操作したいとき、タッチ対応素材でグローブをはずさずに使えます。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定でき、10℃前後の寒さでも風が入りにくいです。",
+                    "kinds": [
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "quote_not_in_source",
+                  "detail": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応",
+                  "sentence": 1
+                },
+                {
+                  "rule": "number_without_evidence",
+                  "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                  "sentence": 1
+                },
+                {
+                  "rule": "measurement_without_evidence",
+                  "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                  "sentence": 1
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "本革バイクグローブ",
+                  "acts_on": "バイクの操作",
+                  "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。"
+                },
+                "sentences": [
+                  {
+                    "text": "停車中にスマホのナビを操作したいとき、タッチ対応素材でグローブを外さずに操作できます。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+                    ]
+                  },
+                  {
+                    "text": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定され、10℃前後の寒さでも隙間風が入りにくいです。",
+                    "kinds": [
+                      "spec",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                    ]
+                  }
+                ]
+              },
+              "review": null,
+              "failures": [
+                {
+                  "rule": "quote_not_in_source",
+                  "sentence": 1,
+                  "detail": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+                },
+                {
+                  "rule": "number_without_evidence",
+                  "sentence": 1,
+                  "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+                },
+                {
+                  "rule": "measurement_without_evidence",
+                  "sentence": 1,
+                  "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "950",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5519",
+            "x-ratelimit-reset-requests": "1h12m0s",
+            "x-ratelimit-reset-tokens": "18.607s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.100681785,
+                "total_time": 2.727783352,
+                "prompt_time": 0.160122987,
+                "total_tokens": 2851,
+                "prompt_tokens": 1624,
+                "completion_time": 2.567660365,
+                "completion_tokens": 1227,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 969
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2913,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "36.135s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h10m33.6s",
+                "x-ratelimit-remaining-tokens": "3182",
+                "x-ratelimit-remaining-requests": "951"
+              }
+            },
+            {
+              "stage": "generate",
+              "attempt": 1,
+              "elapsedMs": 2812,
+              "usage": {
+                "queue_time": 0.135089992,
+                "prompt_tokens": 2056,
+                "prompt_time": 0.121716893,
+                "completion_tokens": 1178,
+                "completion_time": 2.478205712,
+                "total_tokens": 3234,
+                "total_time": 2.599922605,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 919
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "950",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "5519",
+                "x-ratelimit-reset-requests": "1h12m0s",
+                "x-ratelimit-reset-tokens": "18.607s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": false,
+            "failures": [
+              {
+                "rule": "quote_not_in_source",
+                "sentence": 1,
+                "detail": "防風モデルは手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応"
+              },
+              {
+                "rule": "number_without_evidence",
+                "sentence": 1,
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "sentence": 1,
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+              }
+            ],
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "quote": "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。",
+                  "source": "caption",
+                  "start": 459,
+                  "end": 500
+                }
+              ],
+              []
+            ]
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 0,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": false,
+          "copied": false,
+          "elapsedMs": 3842
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "02",
+      "category": "収納ベンチ",
+      "set": "development",
+      "item": {
+        "itemCode": "e-kurashi:10019512",
+        "itemName": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+        "itemCaption": "山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング",
+        "itemPrice": 15999
+      },
+      "evaluationRun": "fixed_1791059585554_02_1",
+      "run": 1,
+      "startedAt": "2026-10-03T20:33:05.554Z",
+      "elapsedMs": 62489,
+      "status": 200,
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "verification",
+        "version": "room_contract_c6c133433999a560",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "ready",
+          "reasons": [],
+          "text": "リビングで2人がゆったり座れるので、ソファ感覚でくつろげます。\n\n座部を持ち上げると内部に幅112奥行29深さ28cmの収納スペースが出て、荷物をすっきり隠せます。\n\n※アフィリエイト広告を利用しています",
+          "ledger": [
+            [
+              {
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "source": "caption",
+                "start": 168,
+                "end": 187,
+                "approvalEvidence": "generated"
+              }
+            ],
+            [
+              {
+                "quote": "座部を上げると、内部に物を収納可能",
+                "source": "caption",
+                "start": 150,
+                "end": 167,
+                "approvalEvidence": "generated"
+              },
+              {
+                "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                "source": "caption",
+                "start": 217,
+                "end": 239,
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "additionalEvidence": [],
+          "machine": {
+            "ok": true,
+            "failures": [],
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "source": "caption",
+                  "start": 168,
+                  "end": 187
+                }
+              ],
+              [
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167
+                },
+                {
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "source": "caption",
+                  "start": 217,
+                  "end": 239
+                }
+              ]
+            ]
+          },
+          "review": {
+            "ok": true,
+            "failures": [],
+            "evidence": [
+              [
+                {
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "source": "caption",
+                  "start": 168,
+                  "end": 187,
+                  "approvalEvidence": "generated"
+                }
+              ],
+              [
+                {
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "source": "caption",
+                  "start": 150,
+                  "end": 167,
+                  "approvalEvidence": "generated"
+                },
+                {
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "source": "caption",
+                  "start": 217,
+                  "end": 239,
+                  "approvalEvidence": "generated"
+                }
+              ]
+            ],
+            "additionalEvidence": []
+          }
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "text": "リビングで2人がゆったり座れるので、ソファ感覚でくつろげます。\n\n座部を持ち上げると内部に幅112奥行29深さ28cmの収納スペースが出て、荷物をすっきり隠せます。\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "productType": {
+          "specific": "2人掛け 収納ベンチ",
+          "general": "座る人と収納したい物"
+        },
+        "groq": {
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "totalCalls": 2
+        },
+        "elapsedMs": 61578,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "2人掛け 収納ベンチ",
+              "acts_on": "座る人と収納したい物",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "リビングで2人がゆったり座れるので、ソファ感覚でくつろげます。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "ゆったり2人掛けできてソファ感覚で活躍"
+                ]
+              },
+              {
+                "text": "座部を持ち上げると内部に幅112奥行29深さ28cmの収納スペースが出て、荷物をすっきり隠せます。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "リビングで2人がゆったり座れるので、ソファ感覚でくつろげます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "ゆったり2人掛けできてソファ感覚で活躍"
+                ],
+                "reason": "Matches source claim of spacious two‑person seating with sofa feel."
+              },
+              {
+                "text": "座部を持ち上げると内部に幅112奥行29深さ28cmの収納スペースが出て、荷物をすっきり隠せます。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "supported",
+                "evidenceQuotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ],
+                "reason": "Accurately reflects lift‑up seat storage dimensions and capability."
+              }
+            ]
+          },
+          "history": [],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "948",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4687",
+            "x-ratelimit-reset-requests": "1h14m52.8s",
+            "x-ratelimit-reset-tokens": "24.847s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.144006834,
+                "total_time": 6.750639487,
+                "prompt_time": 0.575392097,
+                "total_tokens": 2689,
+                "prompt_tokens": 1543,
+                "completion_time": 6.17524739,
+                "completion_tokens": 1146,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 937
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 6937,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "48.51s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h13m26.4s",
+                "x-ratelimit-remaining-tokens": "1532",
+                "x-ratelimit-remaining-requests": "949"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 0,
+              "elapsedMs": 3284,
+              "usage": {
+                "queue_time": 0.007475433,
+                "prompt_tokens": 1878,
+                "prompt_time": 0.086628174,
+                "completion_tokens": 1479,
+                "completion_time": 3.113458857,
+                "total_tokens": 3357,
+                "total_time": 3.200087031,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1116
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "948",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4687",
+                "x-ratelimit-reset-requests": "1h14m52.8s",
+                "x-ratelimit-reset-tokens": "24.847s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [
+              {
+                "rule": "scene_needs_review"
+              }
+            ],
+            "bindings": [
+              [
+                {
+                  "end": 187,
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "start": 168,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 167,
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "start": 150,
+                  "source": "caption"
+                },
+                {
+                  "end": 239,
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "start": 217,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "A",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 1,
+          "pass2Calls": 1,
+          "imageCalls": 0,
+          "totalGroqCalls": 2,
+          "cacheStatus": "evaluation",
+          "outputTier": "A",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 5688
+        }
+      },
+      "humanReview": null
+    },
+    {
+      "fixtureId": "02",
+      "category": "収納ベンチ",
+      "set": "development",
+      "item": {
+        "itemCode": "e-kurashi:10019512",
+        "itemName": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+        "itemCaption": "山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング",
+        "itemPrice": 15999
+      },
+      "evaluationRun": "fixed_1791059648081_02_2",
+      "run": 2,
+      "startedAt": "2026-10-03T20:34:08.081Z",
+      "elapsedMs": 113146,
+      "status": 200,
+      "result": {
+        "ok": false,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "reverification",
+        "version": "room_contract_c6c133433999a560",
+        "model": "openai/gpt-oss-120b",
+        "quality": {
+          "status": "blocked",
+          "text": "",
+          "reasons": [
+            {
+              "rule": "product_not_supported",
+              "sentence": null
+            },
+            {
+              "rule": "conditions_not_supported",
+              "sentence": 0,
+              "detail": "Storage function confirmed; benefit claim not supported."
+            },
+            {
+              "rule": "degree_not_supported",
+              "sentence": 0,
+              "detail": "Storage function confirmed; benefit claim not supported."
+            },
+            {
+              "rule": "degree_not_supported",
+              "sentence": 1,
+              "detail": "Dimensions and sofa use confirmed; ease claim not supported."
+            }
+          ],
+          "ledger": []
+        },
+        "variants": [],
+        "productType": {
+          "specific": "収納ベンチ 2人掛け",
+          "general": "リビングの収納"
+        },
+        "groq": {
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "totalCalls": 4
+        },
+        "elapsedMs": 110917,
+        "diagnostics": {
+          "draft": {
+            "product": {
+              "what": "収納ベンチ 2人掛け",
+              "acts_on": "リビングの収納",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                "kinds": [
+                  "scene",
+                  "benefit"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              },
+              {
+                "text": "幅120cmの幅で2人がゆったり座れ、来客時にソファ代わりに使えるのでリビングの座席確保が楽です。",
+                "kinds": [
+                  "scene",
+                  "spec"
+                ],
+                "quotes": [
+                  "幅120×奥行37×高さ40cm",
+                  "ゆったり2人掛けできてソファ感覚で活躍"
+                ]
+              }
+            ]
+          },
+          "review": {
+            "product": {
+              "what": "supported",
+              "acts_on": "not_supported"
+            },
+            "quality": {
+              "identity": "supported",
+              "reason": "supported",
+              "scene": "supported",
+              "natural": "supported",
+              "non_redundant": "supported",
+              "room_style": "supported"
+            },
+            "sentences": [
+              {
+                "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "not_supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ],
+                "reason": "Storage function confirmed; benefit claim not supported."
+              },
+              {
+                "text": "幅120cmの幅で2人がゆったり座れ、来客時にソファ代わりに使えるのでリビングの座席確保が楽です。",
+                "target": "supported",
+                "part": "supported",
+                "conditions": "supported",
+                "negation": "supported",
+                "degree": "not_supported",
+                "evidenceQuotes": [
+                  "幅120×奥行37×高さ40cm",
+                  "ゆったり2人掛けできてソファ感覚で活躍"
+                ],
+                "reason": "Dimensions and sofa use confirmed; ease claim not supported."
+              }
+            ]
+          },
+          "history": [
+            {
+              "draft": {
+                "product": {
+                  "what": "2人掛け 収納ベンチ",
+                  "acts_on": "リビングの収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  },
+                  {
+                    "text": "幅120cmの広さで2人がゆったり座れるので、来客時にソファ代わりとしても活用できます。",
+                    "kinds": [
+                      "scene",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "幅120×奥行37×高さ40cm",
+                      "ゆったり2人掛けできてソファ感覚で活躍"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "not_supported"
+                },
+                "quality": {
+                  "scene": "supported",
+                  "reason": "supported",
+                  "natural": "supported",
+                  "identity": "supported",
+                  "room_style": "supported",
+                  "non_redundant": "supported"
+                },
+                "sentences": [
+                  {
+                    "part": "supported",
+                    "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                    "degree": "supported",
+                    "reason": "座部を上げて収納できる点を活用した便利さを示す",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  },
+                  {
+                    "part": "supported",
+                    "text": "幅120cmの広さで2人がゆったり座れるので、来客時にソファ代わりとしても活用できます。",
+                    "degree": "supported",
+                    "reason": "サイズと2人掛け快適さでソファ代わり利用を示す",
+                    "target": "supported",
+                    "negation": "supported",
+                    "conditions": "supported",
+                    "evidenceQuotes": [
+                      "幅120×奥行37×高さ40cm",
+                      "ゆったり2人掛けできてソファ感覚で活躍"
+                    ]
+                  }
+                ]
+              },
+              "attempt": 0,
+              "failures": [
+                {
+                  "rule": "product_not_supported",
+                  "sentence": null
+                }
+              ]
+            },
+            {
+              "attempt": 1,
+              "draft": {
+                "product": {
+                  "what": "収納ベンチ 2人掛け",
+                  "acts_on": "リビングの収納",
+                  "acts_on_quote": "座部を上げると、内部に物を収納可能"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                    "kinds": [
+                      "scene",
+                      "benefit"
+                    ],
+                    "quotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ]
+                  },
+                  {
+                    "text": "幅120cmの幅で2人がゆったり座れ、来客時にソファ代わりに使えるのでリビングの座席確保が楽です。",
+                    "kinds": [
+                      "scene",
+                      "spec"
+                    ],
+                    "quotes": [
+                      "幅120×奥行37×高さ40cm",
+                      "ゆったり2人掛けできてソファ感覚で活躍"
+                    ]
+                  }
+                ]
+              },
+              "review": {
+                "product": {
+                  "what": "supported",
+                  "acts_on": "not_supported"
+                },
+                "quality": {
+                  "identity": "supported",
+                  "reason": "supported",
+                  "scene": "supported",
+                  "natural": "supported",
+                  "non_redundant": "supported",
+                  "room_style": "supported"
+                },
+                "sentences": [
+                  {
+                    "text": "座部を上げると内部に物を収納できるので、リビングで小物をすっきり片付けたいときに便利です。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "not_supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "座部を上げると、内部に物を収納可能",
+                      "収納部内寸：幅112 奥行29 深さ28cm"
+                    ],
+                    "reason": "Storage function confirmed; benefit claim not supported."
+                  },
+                  {
+                    "text": "幅120cmの幅で2人がゆったり座れ、来客時にソファ代わりに使えるのでリビングの座席確保が楽です。",
+                    "target": "supported",
+                    "part": "supported",
+                    "conditions": "supported",
+                    "negation": "supported",
+                    "degree": "not_supported",
+                    "evidenceQuotes": [
+                      "幅120×奥行37×高さ40cm",
+                      "ゆったり2人掛けできてソファ感覚で活躍"
+                    ],
+                    "reason": "Dimensions and sofa use confirmed; ease claim not supported."
+                  }
+                ]
+              },
+              "failures": [
+                {
+                  "rule": "product_not_supported",
+                  "sentence": null
+                },
+                {
+                  "rule": "conditions_not_supported",
+                  "sentence": 0,
+                  "detail": "Storage function confirmed; benefit claim not supported."
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 0,
+                  "detail": "Storage function confirmed; benefit claim not supported."
+                },
+                {
+                  "rule": "degree_not_supported",
+                  "sentence": 1,
+                  "detail": "Dimensions and sofa use confirmed; ease claim not supported."
+                }
+              ]
+            }
+          ],
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "944",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4080",
+            "x-ratelimit-reset-requests": "1h20m38.4s",
+            "x-ratelimit-reset-tokens": "29.4s"
+          },
+          "calls": [
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.088701254,
+                "total_time": 2.777075151,
+                "prompt_time": 0.087533556,
+                "total_tokens": 2830,
+                "prompt_tokens": 1543,
+                "completion_time": 2.689541595,
+                "completion_tokens": 1287,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1016
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 2913,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "42.525s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h16m19.2s",
+                "x-ratelimit-remaining-tokens": "2330",
+                "x-ratelimit-remaining-requests": "947"
+              }
+            },
+            {
+              "stage": "verify",
+              "usage": {
+                "queue_time": 0.069978807,
+                "total_time": 4.336975956,
+                "prompt_time": 0.092061114,
+                "total_tokens": 3912,
+                "prompt_tokens": 1881,
+                "completion_time": 4.244914842,
+                "completion_tokens": 2031,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1736
+                }
+              },
+              "attempt": 0,
+              "elapsedMs": 4495,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "22.942s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h17m45.6s",
+                "x-ratelimit-remaining-tokens": "4941",
+                "x-ratelimit-remaining-requests": "946"
+              }
+            },
+            {
+              "stage": "generate",
+              "usage": {
+                "queue_time": 0.247703374,
+                "total_time": 2.002343604,
+                "prompt_time": 0.163562515,
+                "total_tokens": 2568,
+                "prompt_tokens": 1769,
+                "completion_time": 1.838781089,
+                "completion_tokens": 799,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "completion_tokens_details": {
+                  "reasoning_tokens": 571
+                }
+              },
+              "attempt": 1,
+              "elapsedMs": 2309,
+              "rateLimits": {
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-reset-tokens": "47.032s",
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-reset-requests": "1h19m12s",
+                "x-ratelimit-remaining-tokens": "1729",
+                "x-ratelimit-remaining-requests": "945"
+              }
+            },
+            {
+              "stage": "verify",
+              "attempt": 1,
+              "elapsedMs": 5297,
+              "usage": {
+                "queue_time": 0.210489255,
+                "prompt_tokens": 1889,
+                "prompt_time": 0.103283675,
+                "completion_tokens": 1740,
+                "completion_time": 4.605989873,
+                "total_tokens": 3629,
+                "total_time": 4.709273548,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 1452
+                }
+              },
+              "rateLimits": {
+                "x-ratelimit-limit-requests": "1000",
+                "x-ratelimit-remaining-requests": "944",
+                "x-ratelimit-limit-tokens": "8000",
+                "x-ratelimit-remaining-tokens": "4080",
+                "x-ratelimit-reset-requests": "1h20m38.4s",
+                "x-ratelimit-reset-tokens": "29.4s"
+              }
+            }
+          ],
+          "machine": {
+            "ok": true,
+            "flags": [],
+            "bindings": [
+              [
+                {
+                  "end": 167,
+                  "quote": "座部を上げると、内部に物を収納可能",
+                  "start": 150,
+                  "source": "caption"
+                },
+                {
+                  "end": 239,
+                  "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                  "start": 217,
+                  "source": "caption"
+                }
+              ],
+              [
+                {
+                  "end": 44,
+                  "quote": "幅120×奥行37×高さ40cm",
+                  "start": 28,
+                  "source": "caption"
+                },
+                {
+                  "end": 187,
+                  "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                  "start": 168,
+                  "source": "caption"
+                }
+              ]
+            ],
+            "failures": []
+          }
+        },
+        "tier": "C",
+        "metric": {
+          "schema": "super_urenavi_v3_usage_v1",
+          "route": "unknown",
+          "pass1Calls": 2,
+          "pass2Calls": 2,
+          "imageCalls": 0,
+          "totalGroqCalls": 4,
+          "cacheStatus": "evaluation",
+          "outputTier": "C",
+          "hookType": "scene",
+          "decisionAxis": "",
+          "machineValidationPassed": true,
+          "copied": false,
+          "elapsedMs": 7539
+        }
+      },
+      "humanReview": null
+    }
+  ]
+}

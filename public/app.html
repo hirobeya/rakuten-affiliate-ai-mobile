@@ -688,6 +688,7 @@ input,select{
 #proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
 </style>
+<script src="/room-preview-request.js"></script>
 </head>
 
 <body>
@@ -935,6 +936,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+<script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
@@ -1005,9 +1007,11 @@ let currentAccessPlan='base';
 let proAvailable=false;
 let debugExportAllowed=false;
 let aiGatesFullOutput=false;
+let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
+let aiQueueRunning=false;
 
 
 function setAuthMessage(
@@ -1088,7 +1092,7 @@ function restoreSearchState(email){
     if(!state) return;
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
     lastSearchKeyword=String(state.fields?.k||'').trim();
-    render(state.items);
+    render(state.items,{autoAi:false,restored:true});
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
@@ -2203,6 +2207,7 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
+  usePurchasePlan=debugExportAllowed;
   const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
@@ -2279,6 +2284,7 @@ function buildDebugValidationRows(){
     aiPhase1:aiRoomResults.get(index)?.data||null,
     aiState:aiRoomResults.get(index)?.state||'not_run',
     aiHttpStatus:aiRoomResults.get(index)?.status??null,
+    aiUpstreamStatus:aiRoomResults.get(index)?.upstreamStatus??null,
     aiMessage:aiRoomResults.get(index)?.message||null,
     humanReview:aiRoomReviews.get(index)||null
   }));
@@ -2401,6 +2407,13 @@ async function copyDebugValidation(){
 
   let json='';
   try{
+    const progress=activeAiProgress();
+    if(progress.pending>0){
+      if(meta) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。最終結果になるまでJSONはコピーできません。`;
+      if(btn) btn.textContent='AI確認完了まで待ってください';
+      setTimeout(()=>{if(btn) btn.textContent='検証JSONを作成してコピー';},2200);
+      return;
+    }
     const currentKeyword=k.value.trim();
     if(currentKeyword!==lastSearchKeyword){
       if(meta) meta.textContent='検索キーワードが前回の検索結果と一致していません。もう一度「商品を探して評価する」を押してからJSONを作成してください。';
@@ -2465,14 +2478,6 @@ function firstImageUrl(item){
   return '#';
 }
 
-function aiSafeTitle(item){
-  try{
-    const a=groundedAnalysis(item);
-    if(UrenaviPainCopy.buildSafeDisplayName) return UrenaviPainCopy.buildSafeDisplayName(item,a);
-  }catch{}
-  return String(item?.itemName||'').slice(0,48).trim()||'商品名を確認してください';
-}
-
 function compactGrounded(value){
   return String(value||'').normalize('NFKC').replace(/[\s\-‐‑–—\/／]+/g,'').toLowerCase();
 }
@@ -2487,7 +2492,19 @@ function specificGroundedProductType(item,aiType){
   return base;
 }
 
+function isV3PreviewResult(result){
+  return String(result?.version||'').startsWith('super-urenavi-v3-');
+}
+
+function readyV3Post(result){
+  if(!isV3PreviewResult(result)) return '';
+  if(result?.ok!==true || result?.quality?.status!=='ready') return '';
+  return String(result?.variants?.[0]?.text||'').trim();
+}
+
 function aiSalesInsight(item,result){
+  if(isV3PreviewResult(result)) return {scene:String(result.quality?.ledger?.[0]?.scene||''),productType:String(result.productType?.specific||''),features:(result.attributes||[]).map(x=>String(x?.quote||'')).filter(Boolean),sellingPoints:(result.quality?.ledger||[]).map(x=>String(x?.text||'')).filter(Boolean),featureRows:[]};
+  if(String(result?.version||'').startsWith('room_contract_')) return {productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2508,11 +2525,7 @@ function aiSalesInsight(item,result){
     .map(x=>String(x.text).trim())
     .filter((x,i,a)=>x&&a.indexOf(x)===i)
     .slice(0,2);
-  return {productType,features,sellingPoints,featureRows};
-}
-
-function salesFactCore(value){
-  return String(value||'').normalize('NFKC').replace(/[「」『』"'。、，,.・/／\\\s]/g,'').toLowerCase();
+  return {productType,scene:'',features,sellingPoints,featureRows};
 }
 
 function safeSearchIdentity(item){
@@ -2524,6 +2537,8 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
+  if(isV3PreviewResult(result)) return readyV3Post(result);
+  if(String(result?.version||'').startsWith('room_contract_')) return '';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
@@ -2541,7 +2556,7 @@ function aiPanelMarkup(item,index){
   const image=firstImageUrl(item);
   const caption=String(item?.itemCaption||'').slice(0,300);
   return '<section class="aiPreview" data-ai-index="'+index+'">'+
-    '<h4>AI事実抽出版（Preview・owner限定）</h4>'+
+    '<h4>商品理解・投稿文（Preview）</h4>'+
     '<div class="aiStatus">AI分析待ち…</div>'+
     (image!=='#'?'<img class="aiThumb" src="'+esc(image)+'" alt="">':'')+
     '<div class="aiCaption"><strong>itemCaption先頭300文字</strong><br>'+esc(caption||'（説明文なし）')+'</div>'+
@@ -2561,7 +2576,8 @@ function updateAiPanel(index){
   const facts=box.querySelector('.aiFacts');
   const copy=box.querySelector('.aiCopy');
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
-  if(result.state==='loading'){status.textContent='AI分析中…';facts.textContent='';copy.textContent='';return;}
+  if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
+  if(result.state==='restored'){status.textContent=result.message||'前回の検索結果です。AI再確認は行っていません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='error'){status.textContent=result.message||'AI分析に失敗しました。誤った投稿文を出さないため、この商品の投稿文は表示しません。';facts.textContent='';copy.textContent='';return;}
   if(result.state==='skipped'){
     status.textContent=result.reason==='rule_confident'
@@ -2571,15 +2587,26 @@ function updateAiPanel(index){
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
   }
+  if(isV3PreviewResult(result.data)){
+    const data=result.data;
+    status.textContent=data.quality?.status==='ready'?'商品理解・選ぶ理由・根拠の照合を完了':'選ぶ理由を根拠付きで確認できないため、投稿文を生成していません。';
+    facts.innerHTML=(data.quality?.ledger||[]).map(row=>'<div class="aiFact"><strong>'+esc(row.role==='primary_reason'?'主な選ぶ理由':'補足の理由')+'</strong><br>'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
+    copy.textContent=aiPhase1Post(item,data);return;
+  }
+  if(usePurchasePlan){
+    status.textContent='現在のPreview契約と一致しない応答を停止しました。';
+    facts.textContent='';copy.textContent='';return;
+  }
   const v=result.data?.validation||{};
   status.textContent='検証：'+(v.mode==='simple'?'簡素文':v.mode==='simple_partial'?'一部除外後の簡素文':'短文')+' / confidence: '+(v.confidence||'low')+' / 画像: '+(v.imageAvailable?'あり':'なし');
   const rows=[];
   const p=v.productType||{};
   rows.push('<div class="aiFact"><strong>productType:</strong> '+esc(p.value||'（不明）')+'<br>source: '+esc(p.source||'')+'<br>evidence: '+esc(p.evidence||'')+'<br>検証: '+(p.valid?'PASS':'FAIL → 見出しはsafeDisplayName')+'</div>');
   if(v.imageProductTypeHint) rows.push('<div class="aiFact"><strong>画像判定:</strong> '+esc(v.imageProductTypeHint)+(v.imageConflict?'（不一致 → 短文）':'')+'</div>');
-  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / 投稿使用可':' / 投稿未使用')+'</div>');
+  for(const ft of v.features||[]) rows.push('<div class="aiFact"><strong>feature:</strong> '+esc(ft.text||'')+'<br>source: '+esc(ft.source||'')+'<br>evidence: '+esc(ft.evidence||'')+'<br>検証: '+(ft.valid?'PASS':'FAIL')+(ft.eligibleForPost?' / AI仕様候補の採用可':' / AI仕様候補の採用対象外')+'</div>');
   if((v.unknowns||[]).length) rows.push('<div class="aiFact"><strong>unknowns:</strong> '+esc(v.unknowns.join(' / '))+'</div>');
   if((v.reasons||[]).length) rows.push('<div class="aiFact"><strong>短文化理由:</strong> '+esc(v.reasons.join(', '))+'</div>');
+  rows.unshift('<div class="aiFact">以下はAI抽出候補の検証結果です。投稿文では、商品名・説明から別途検証した事実も使用します。採用可否は、本文に使われたかどうかを示す表示ではありません。</div>');
   facts.innerHTML=rows.join('');
   copy.textContent=aiPhase1Post(item,result.data);
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
@@ -2588,17 +2615,25 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?240000:12000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
-    const d=await r.json().catch(()=>({}));
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
+    let r,d;
+    if(usePurchasePlan){
+      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
+      r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
+    }else{
+      r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify(payload)});
+      d=await r.json().catch(()=>({}));
+    }
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
-      aiRoomResults.set(index,{state:'error',message,status:r.status});
+      const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
@@ -2642,6 +2677,7 @@ async function requestAiRoom(item,index,generation){
 }
 
 function aiTargetDecision(item){
+  if(usePurchasePlan) return {callAi:true,reasons:['grounded_purchase_reason_required']};
   const a=groundedAnalysis(item);
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
@@ -2667,31 +2703,85 @@ function aiTargetDecision(item){
   };
 }
 
-async function runAiPreview(items){
-  if(!aiGatesFullOutput) return;
-  const generation=++aiRunGeneration;aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+function activeAiProgress(){
+  const items=Array.isArray(lastSearchItems)?lastSearchItems:[];
+  let required=0,done=0,pending=0,failed=0;
+  items.forEach((item,index)=>{
+    const target=aiTargetDecision(item);
+    if(!target.callAi) return;
+    required++;
+    const state=aiRoomResults.get(index)?.state;
+    if(state==='done') done++;
+    else if(state==='error') failed++;
+    else pending++;
+  });
+  return {required,done,pending,failed,finished:required>0&&pending===0};
+}
+
+function resumeActiveAiQueue(){
+  if(!aiGatesFullOutput||aiQueueRunning||!lastSearchItems.length) return;
+  const progress=activeAiProgress();
+  if(progress.pending<=0) return;
+  const hasActive=lastSearchItems.some((item,index)=>{
+    if(!aiTargetDecision(item).callAi) return false;
+    return aiRoomResults.get(index)?.state==='loading';
+  });
+  if(hasActive) void runAiPreview(lastSearchItems,{resume:true});
+}
+
+async function runAiPreview(items,{resume=false}={}){
+  if(!aiGatesFullOutput||aiQueueRunning) return;
+  const generation=resume?aiRunGeneration:++aiRunGeneration;
+  if(!resume){
+    aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+    (Array.isArray(items)?items:[]).forEach((item,index)=>{
+      const target=aiTargetDecision(item);
+      if(target.callAi) aiRoomResults.set(index,{state:'loading',target,auto:true});
+      else{
+        aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
+        updateAiPanel(index);
+      }
+    });
+  }
   const queue=[];
   (Array.isArray(items)?items:[]).forEach((item,index)=>{
     const target=aiTargetDecision(item);
-    if(target.callAi){
-      aiRoomResults.set(index,{state:'loading',target,auto:true});
-      queue.push({item,index});
-    }else{
-      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
-      updateAiPanel(index);
-    }
+    if(!target.callAi) return;
+    const state=aiRoomResults.get(index)?.state;
+    if(state==='loading'||!state) queue.push({item,index});
   });
-  while(queue.length&&generation===aiRunGeneration){
-    const job=queue.shift();
-    await requestAiRoom(job.item,job.index,generation);
-    if(queue.length) await new Promise(r=>setTimeout(r,750));
+  aiQueueRunning=true;
+  try{
+    while(queue.length&&generation===aiRunGeneration){
+      const job=queue.shift();
+      await requestAiRoom(job.item,job.index,generation);
+      if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+        queue.length=0;
+      }
+      const progress=activeAiProgress();
+      const meta=document.getElementById('debugJsonMeta');
+      if(meta&&progress.pending>0) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。完了するまで検証JSONはコピーできません。`;
+      if(queue.length){
+        const result=aiRoomResults.get(job.index);
+        const nextDelay=Math.max(750,Math.min(120000,Number(result?.data?.nextDelayMs)||750));
+        const meta=document.getElementById('debugJsonMeta');
+        if(meta&&nextDelay>1500) meta.textContent=`Groqの利用枠を守るため約${Math.ceil(nextDelay/1000)}秒待って次の商品を確認します。`;
+        await new Promise(r=>setTimeout(r,nextDelay));
+      }
+    }
+  }finally{
+    aiQueueRunning=false;
+    const progress=activeAiProgress();
+    const meta=document.getElementById('debugJsonMeta');
+    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`AI確認完了：${progress.done}/${progress.required}件成功、${progress.failed}件停止。検証JSONを作成できます。`;
   }
 }
 
 async function ensureAiForItem(index){
   if(!aiGatesFullOutput) return;
   const current=aiRoomResults.get(index);
-  if(current?.state==='done'||current?.state==='loading'||current?.reason==='rule_confident') return;
+  if(current?.state==='done'||current?.state==='loading'||current?.state==='restored'||current?.reason==='rule_confident') return;
   const item=lastSearchItems[index];
   if(!item) return;
   const target=current?.target||aiTargetDecision(item);
@@ -2734,8 +2824,9 @@ function analysisGuide(i,index,keyword=''){
     if(gate.full&&!gate.useLegacy){
       const insight=aiSalesInsight(i,aiRoomResults.get(index)?.data);
       const points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
+      const focus=usePurchasePlan?(insight.scene||insight.productType||'商品内容を確認済み'):(insight.productType||'商品内容を確認済み');
       return '<div class="guide"><div class="gt">この商品の選びどころ</div>'+
-        '<div class="target">'+esc(insight.productType)+'</div>'+
+        '<div class="target">'+esc(focus)+'</div>'+
         '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div>';
     }
     if(gate.useLegacy){
@@ -2746,8 +2837,10 @@ function analysisGuide(i,index,keyword=''){
       if(a.outputMode==='full') return '<div class="guide"><div class="gt">この商品は誰に・何を刺す？</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul>'+hint+'</div>';
       return '<div class="guide">'+hint+'</div>';
     }
+    if(gate.reasons?.includes('restored_not_run')) return '<div class="guide"><div class="muted">前回の検索結果です。AI再確認は自動実行していません。最新の投稿文を作る場合は、もう一度検索してください。</div></div>';
+    if(usePurchasePlan&&aiRoomResults.get(index)?.state==='done') return '<div class="guide"><div class="muted">根拠のある選ぶ理由を確認できないため、投稿文を生成していません。</div></div>';
     if(gate.reasons?.includes('ai_error')){
-      return '<div class="guide"><div class="muted">AI確認に失敗したため、確認できた事実だけを表示しています。</div></div>';
+      return '<div class="guide"><div class="muted">'+(usePurchasePlan?'選ぶ理由を確認できないため、投稿文を生成していません。':'AI確認に失敗したため、確認できた事実だけを表示しています。')+'</div></div>';
     }
     return '<div class="guide"><div class="muted">商品内容をGroqで確認中です。</div></div>';
   }
@@ -2774,30 +2867,6 @@ function lexicalProductLabel(item){
   }catch{}
   return String(item?.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim().slice(0,90)||'商品名を確認してください';
 }
-
-function aiSafeFallbackPost(item,result=null){
-  const aiType=(result?.validation?.productType?.valid&&result.validation.productType.value)?String(result.validation.productType.value):'';
-  const title=specificGroundedProductType(item,aiType);
-  const price=Number(item?.itemPrice);
-  const priceLine=Number.isFinite(price)&&price>0?'価格：'+fmt(price)+'円':'';
-  const safePoints=((result?.validation?.sellingPoints)||[])
-    .filter(x=>x?.eligibleForPost&&x?.text)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,2);
-  const facts=((result?.validation?.features)||[])
-    .filter(x=>x?.eligibleForPost&&x?.text)
-    .map(x=>String(x.text).trim())
-    .filter((x,i,a)=>x&&a.indexOf(x)===i)
-    .slice(0,4);
-  const lines=[title];
-  if(safePoints.length) lines.push('',...safePoints.map(x=>'・'+x));
-  if(facts.length) lines.push('','商品ページで確認できるポイント👇',...facts.map(x=>'✔ '+x));
-  if(priceLine) lines.push('',priceLine);
-  lines.push('','※アフィリエイト広告を利用しています');
-  return lines.join('\n').slice(0,500).trim();
-}
-
 
 function ruleSecondOpinion(item,validation,keyword=''){
   const shadow=(window.UrenaviProductShadowV2&&typeof window.UrenaviProductShadowV2.analyze==='function')
@@ -2827,11 +2896,24 @@ function resolveAiGate(item,index,keyword=''){
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
   }
+  if(ai.state==='restored'){
+    return {enabled:true,status:'fallback',full:false,reasons:['restored_not_run'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
   if(ai.state==='skipped'&&ai.reason==='rule_confident'){
     return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(isV3PreviewResult(ai.data)) {
+    const full=Boolean(readyV3Post(ai.data));
+    return {enabled:true,status:full?'full':'fallback',full,reasons:full?[]:(ai.data?.quality?.reasons||['purchase_reason_unconfirmed']),useLegacy:false};
+  }
+  if(String(ai.data?.version||'').startsWith('room_contract_')){
+    return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
+  }
+  if(usePurchasePlan){
+    return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
@@ -2879,7 +2961,7 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
 
 function neutralRulePost(item,keyword=''){
   const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  return UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
@@ -2928,7 +3010,7 @@ function postReady(i,p='room'){
 function postDisplay(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
-    if(s.state?.state==='error') return '';
+    if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
   return String(post(i,p)||'').trim();
@@ -2971,12 +3053,12 @@ function today(a){
       audience=aud(i);points=pts(i);
     }else{
       const insight=aiSalesInsight(i,aiRoomResults.get(chosen.index)?.data);
-      audience=String(insight.productType||'');
+      audience=String((usePurchasePlan?(insight.scene||insight.productType):insight.productType)||'商品内容を確認済み');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
     return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
       '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
-      '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(audience)+'</div>'+
+      '<div class="guide"><div class="gt">'+(usePurchasePlan?'使う場面':'狙う相手')+'</div><div class="target">'+esc(audience)+'</div>'+
       '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
   const eligible=fullOutputItems(a);
@@ -3181,11 +3263,17 @@ function compare(
 
 
 function render(
-  a
+  a,
+  {autoAi=true,restored=false}={}
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
   aiRoomResults=new Map();
+  if(restored){
+    lastSearchItems.forEach((item,index)=>{
+      aiRoomResults.set(index,{state:'restored',message:'前回の検索結果です。AI再確認は自動実行しません。'});
+    });
+  }
   aiRoomReviews=new Map();
   aiRunGeneration++;
   postCache=new Map();
@@ -3596,8 +3684,10 @@ function render(
 
   }
 
-  if(aiGatesFullOutput){
+  if(aiGatesFullOutput&&autoAi){
     runAiPreview(a);
+  }else if(restored){
+    lastSearchItems.forEach((_,index)=>updateAiPanel(index));
   }
 
 }
@@ -4147,14 +4237,18 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
 
 </script>
-<script src="/access-guard.js?v=20260919-2"></script>
+<script src="/vendor/qrcode-1.0.0.min.js"></script>
+<script src="/access-guard.js?v=20261002-qr"></script>
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);
-window.addEventListener('pageshow',()=>{if(!document.hidden) void bootAuth();});
+window.addEventListener('pageshow',()=>{if(!document.hidden){void bootAuth();setTimeout(resumeActiveAiQueue,500);}});
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden) saveSearchState();
-  else void bootAuth();
+  else{
+    void bootAuth();
+    setTimeout(resumeActiveAiQueue,500);
+  }
 });
 document.addEventListener('click',e=>{if(e.target.closest?.('a.roomLink')) saveSearchState();},true);
 setInterval(()=>{if(!document.hidden) void bootAuth();},60000);
