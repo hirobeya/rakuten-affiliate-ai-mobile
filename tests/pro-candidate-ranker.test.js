@@ -37,3 +37,14 @@ assert.doesNotMatch(html,/id="proSuppliedInput"/);
 assert.doesNotMatch(html,/id="proSuppliedRankBtn"/);
 assert.doesNotMatch(html,/function proRankSupplied\(\)/);
 console.log('Pro main UI does not require labor-intensive manual candidate entry');
+
+assert.match(html,/id="proActivityType"/);
+assert.match(html,/id="proActivityAdd"/);
+assert.match(html,/function proAddActivity\(\)/);
+assert.match(html,/function proReadActivities\(\)/);
+assert.match(html,/function proExportActivities\(\)/);
+assert.match(html,/localStorage\.setItem\(PRO_ACTIVITY_KEY/);
+assert.match(html,/like_visit:'いいね回り'/);
+assert.match(html,/follow_return:'フォロー返し'/);
+assert.doesNotMatch(html,/data-pro-task="follow"/);
+console.log('Pro engagement ledger has explicit user-recorded like/follow/post activity');
