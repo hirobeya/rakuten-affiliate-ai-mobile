@@ -921,11 +921,23 @@ input,select{
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
 
-  <div class="proTasks">
-    <strong style="font-size:13px">今日のROOM活動</strong>
-    <label class="proTask"><input type="checkbox" data-pro-task="follow">フォロー返し候補を確認</label>
-    <label class="proTask"><input type="checkbox" data-pro-task="like">フォロワーの最新投稿を確認</label>
-    <label class="proTask"><input type="checkbox" data-pro-task="post">今日の投稿3件を進める</label>
+  <div class="proTasks" id="proActivityPanel">
+    <strong style="font-size:14px">ROOM交流・投稿の実施記録</strong>
+    <div class="proHint">実際のフォロー・いいねは楽天ROOMで本人が操作します。ここでは活動を記録します。自動操作ではありません。</div>
+    <label for="proActivityType">活動内容</label>
+    <select id="proActivityType">
+      <option value="like_visit">いいね回り</option>
+      <option value="like_return">いいね返し</option>
+      <option value="follow_visit">フォロー回り</option>
+      <option value="follow_return">フォロー返し</option>
+      <option value="post">ROOM投稿</option>
+    </select>
+    <label for="proActivityTarget">相手・商品メモ（任意）</label>
+    <input id="proActivityTarget" type="text" maxlength="160" placeholder="相手のROOM名や投稿した商品名">
+    <button id="proActivityAdd" type="button" class="proGhost">実施した活動を記録</button>
+    <div id="proActivitySummary" class="proMsg" aria-live="polite"></div>
+    <div id="proActivityHistory" class="proPreview"></div>
+    <button id="proActivityExport" type="button" class="proGhost">活動記録をコピー</button>
   </div>
 </section>
 
@@ -4178,14 +4190,45 @@ async function proGenerate(){
     proRenderQueue(d.queue||[]);
   }catch(e){proEl('proMsg').textContent=e.message||'候補を取得できませんでした。'}
 }
-function proLoadTasks(){
-  let s={};try{s=JSON.parse(localStorage.getItem(PRO_TASK_KEY)||'{}')}catch{}
-  document.querySelectorAll('[data-pro-task]').forEach(x=>x.checked=!!s[x.dataset.proTask]);
+// Explicitly user-confirmed activity log; it does not claim to automate ROOM.
+const PRO_ACTIVITY_KEY='urenavi_pro_activities_v1';
+const PRO_ACTIVITY_LABELS={like_visit:'いいね回り',like_return:'いいね返し',follow_visit:'フォロー回り',follow_return:'フォロー返し',post:'ROOM投稿'};
+function proReadActivities(){
+  try{
+    const data=JSON.parse(localStorage.getItem(PRO_ACTIVITY_KEY)||'[]');
+    return Array.isArray(data)?data.filter(x=>x&&PRO_ACTIVITY_LABELS[x.type]&&typeof x.at==='string').slice(-1000):[];
+  }catch{return [];}
 }
-function proSaveTasks(){
-  const s={};document.querySelectorAll('[data-pro-task]').forEach(x=>s[x.dataset.proTask]=x.checked);
-  localStorage.setItem(PRO_TASK_KEY,JSON.stringify(s));
+function proRenderActivities(){
+  const all=proReadActivities();
+  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});
+  const rows=all.filter(x=>x.day===today);
+  const counts=Object.keys(PRO_ACTIVITY_LABELS).map(type=>PRO_ACTIVITY_LABELS[type]+' '+rows.filter(x=>x.type===type).length+'件');
+  proEl('proActivitySummary').textContent='今日の実施記録：'+counts.join('／');
+  proEl('proActivityHistory').innerHTML=rows.slice(-10).reverse().map(x=>'<div class="proCard">'+proEsc(PRO_ACTIVITY_LABELS[x.type])+' ｜ '+proEsc(x.note||'（メモなし）')+'<div class="proMeta">'+proEsc(new Date(x.at).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))+'</div></div>').join('')||'<div class="proHint">今日の記録はまだありません。</div>';
 }
+function proAddActivity(){
+  const type=proEl('proActivityType').value;
+  if(!PRO_ACTIVITY_LABELS[type])return;
+  const all=proReadActivities();
+  const now=new Date();
+  const day=now.toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});
+  all.push({type,note:String(proEl('proActivityTarget').value||'').trim().slice(0,160),at:now.toISOString(),day});
+  try{
+    localStorage.setItem(PRO_ACTIVITY_KEY,JSON.stringify(all.slice(-1000)));
+    proEl('proActivityTarget').value='';
+    proRenderActivities();
+  }catch{proEl('proActivitySummary').textContent='端末の保存容量に空きがありません。活動は保存されていません。';}
+}
+async function proExportActivities(){
+  const csv=['日時,活動,メモ',...proReadActivities().map(x=>[x.at,PRO_ACTIVITY_LABELS[x.type],x.note||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\\n');
+  try{
+    await navigator.clipboard.writeText(csv);
+    proEl('proActivitySummary').textContent='活動記録をコピーしました。';
+  }catch{proEl('proActivitySummary').textContent='コピーできませんでした。端末の権限を確認してください。';}
+}
+proEl('proActivityAdd').addEventListener('click',proAddActivity);
+proEl('proActivityExport').addEventListener('click',proExportActivities);
 function setAppScreen(mode='normal'){
   const canPro=proAvailable;
   const target=(mode==='pro'&&canPro)?'pro':'normal';
@@ -4258,7 +4301,7 @@ async function configureIntegratedPro(enabled){
       const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
       const d=await r.json().catch(()=>({}));
       if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
-      await proApply(d.settings||{});proLoadTasks();proRenderQueue(d.queue||[]);
+      await proApply(d.settings||{});proRenderActivities();proRenderQueue(d.queue||[]);
     }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
   }
   setAppScreen(location.hash==='#pro'?'pro':'normal');
@@ -4278,7 +4321,7 @@ proEl('proGenreBack').addEventListener('click',async()=>{
 proEl('proPreviewBtn').addEventListener('click',proPreview);
 proEl('proSaveBtn').addEventListener('click',()=>proSave().catch(e=>proEl('proMsg').textContent=e.message));
 proEl('proGenerateBtn').addEventListener('click',proGenerate);
-document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
+
 
 </script>
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
