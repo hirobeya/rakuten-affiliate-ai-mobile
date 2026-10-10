@@ -918,6 +918,7 @@ input,select{
     <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
   </div>
   <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を自動選定</button>
+  <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
 
@@ -4117,23 +4118,32 @@ function proSafeProductUrl(value){
   }catch{return ''}
 }
 let proVisibleCandidateItems=[];
-function proOpenCandidate(index){
-  const item=proVisibleCandidateItems[index];
-  if(!item||!item.itemName)return;
-  // A Pro-selected item is a new search context. Never reuse the previous
-  // normal-search keyword when determining the product identity or audience.
+function proPrepareCandidates(items){
+  const candidates=(Array.isArray(items)?items:[]).filter(item=>item&&typeof item.itemName==='string'&&item.itemName.trim()).slice(0,3);
+  if(!candidates.length){
+    proEl('proMsg').textContent='投稿文を作る商品がありません。';
+    return;
+  }
   const keyword=String(proEl('proProductKeyword')?.value||'').trim();
   k.value=keyword;
   lastSearchKeyword=keyword;
   setAppScreen('normal');
-  // Start the existing gated product-understanding and verification pipeline
-  // only after the owner explicitly selects a candidate.
-  render([item],{autoAi:true});
+  // Shared gated writer and verifier. The queue halts on Groq 429.
+  render(candidates,{autoAi:true});
   const results=document.getElementById('res');
   if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
 }
+function proOpenCandidate(index){
+  const item=proVisibleCandidateItems[index];
+  if(!item||!item.itemName)return;
+  proPrepareCandidates([item]);
+}
+function proPrepareVisibleBatch(){
+  proPrepareCandidates(proVisibleCandidateItems);
+}
 function proRenderItems(items=[],label='候補'){
   proVisibleCandidateItems=Array.isArray(items)?items:[];
+  proEl('proPrepareBatchBtn').style.display=proVisibleCandidateItems.length?'block':'none';
   proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
     const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
     const metrics=[
@@ -4150,6 +4160,7 @@ function proRenderItems(items=[],label='候補'){
       '</div>';
   }).join('');
 }
+proEl('proPrepareBatchBtn').addEventListener('click',proPrepareVisibleBatch);
 proEl('proPreviewResults').addEventListener('click',event=>{
   const button=event.target.closest('[data-pro-candidate]');
   if(!button||!proEl('proPreviewResults').contains(button))return;
