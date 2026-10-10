@@ -34,7 +34,9 @@ for(const [category,type,quote,scene,text] of rows){
  const verifiedAppeals=applyVerification(validation,{results:[{verificationIndex:0,supported:true,keepDirectFact:true,reason:'synthetic contract'}]});
  const result=composePurchaseCopy({item,analysis:{validation,verifiedAppeals}});
  assert.equal(result.status,'ready',category+' '+JSON.stringify(result));
- assert.ok(result.text.length>=80&&result.text.length<=500,category);
+ assert.ok(result.text.length>0&&result.text.length<=500,category);
+ assert.doesNotMatch(result.text,/特徴👇|✓ /,'do not append unverified extra attributes');
+ assert.ok(!result.text.includes(details[report.length]),category+' unverified detail must not be published');
  assert.doesNotMatch(result.text,/商品名には|明記されています|比較しやすい|素材を見て選びたい|便利|快適|時短/);
  assert.equal(result.ledger[0].facts[0].quote,quote);
  if(category!=='バイクグローブ') assert.doesNotMatch(result.text,/停車中|スマホ対応/);
