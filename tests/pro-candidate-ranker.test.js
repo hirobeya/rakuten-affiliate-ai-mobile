@@ -19,6 +19,10 @@ assert.deepEqual(rankProductCandidates(settings,items),result,'deterministic res
 const excluded=rankProductCandidates(settings,items,{excludeCodes:[result[0].itemCode]});
 assert.ok(!excluded.some(x=>x.itemCode===result[0].itemCode));
 assert.deepEqual(rankProductCandidates(settings,[]),[]);
+const budgeted=rankProductCandidates({...settings,min_price:2000,max_price:3000},[...items,items[0],{itemName:'価格不明',reviewCount:99999}]);
+assert.ok(budgeted.every(x=>x.itemPrice>=2000&&x.itemPrice<=3000));
+assert.equal(new Set(budgeted.map(x=>x.itemCode)).size,budgeted.length);
+assert.ok(budgeted.every(x=>x.selectionReasons.length>0&&x.unknownSignals.includes('購入者の需要')));
 console.log('pro-candidate-ranker.test.js: PASS (API-independent ranking)');
 
 // API-free route must not call searchProducts, fetch, or the Rakuten API.

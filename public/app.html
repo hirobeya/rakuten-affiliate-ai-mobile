@@ -687,6 +687,17 @@ input,select{
 .appScreen.off{display:none}
 #proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
+
+.roomToday h2,#roomOpsPanel h2{font-size:18px;margin:0 0 12px}
+.roomToday{background:#edf5ff;border-color:#b9d2f3}
+.roomActionRow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.roomLink,.roomActionRow button,#roomOpsAdd,#roomOpsExport{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 12px;border:1px solid #ccd9e9;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.roomActionRow button:disabled{opacity:.5}
+#roomOpsPanel h3{font-size:15px;margin:20px 0 8px}
+#roomOpsPanel input,#roomOpsPanel select,#roomOpsPanel textarea{width:100%;box-sizing:border-box;font-size:16px}
+#roomOpsPanel summary{padding:14px 0;cursor:pointer}
+#roomOpsPanel .proCard{overflow-wrap:anywhere}
+@media(max-width:520px){.roomActionRow>*{flex:1 1 120px}}
 </style>
 <script src="/room-preview-request.js"></script>
 </head>
@@ -762,6 +773,16 @@ input,select{
 ※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
 </div>
 
+<section class="box roomToday" aria-labelledby="roomTodayTitle">
+  <h2 id="roomTodayTitle">今日のROOM運用</h2>
+  <p id="roomTodayCounts" aria-live="polite">ログイン後に活動を読み込みます。</p>
+  <p id="roomNextAction">今日の商品選び・投稿準備・交流を進めましょう。</p>
+  <nav class="roomActionRow" aria-label="今日の操作">
+    <a class="roomLink" href="#normalScreen">商品を選ぶ</a>
+    <a class="roomLink" href="#roomOpsPanel">交流に進む</a>
+    <a class="roomLink" href="#proDailyDashboard">売上を確認</a>
+  </nav>
+</section>
 <div id="normalScreen" class="appScreen">
 <section class="box">
 
@@ -924,13 +945,30 @@ input,select{
 
   <div class="proActions">
     <button id="proPreviewBtn" class="proPrimary" type="button">商品候補を確認（開発確認用）</button>
-    <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
+    <button id="proSaveBtn" class="proGhost" type="button">選定設定を保存</button>
   </div>
   <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を候補選定（開発確認用）</button>
   <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
 
+  <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
+    <h2 id="roomOpsTitle">交流候補から実施まで</h2>
+    <p class="proHint">ROOMで見つけた相手や、いいね・フォローをくれた相手を登録。返しを先に表示し、同じ活動の重複を防ぎます。</p>
+    <a class="roomLink" href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">ROOMで相手を探す</a>
+    <label for="roomOpsType">活動内容</label>
+    <select id="roomOpsType"><option value="like_return">いいね返し</option><option value="follow_return">フォロー返し</option><option value="like_visit">いいね回り</option><option value="follow_visit">フォロー回り</option></select>
+    <label for="roomOpsUrl">相手のROOM・投稿URL</label><input id="roomOpsUrl" type="url" placeholder="https://room.rakuten.co.jp/room_…/" autocomplete="off">
+    <label for="roomOpsName">相手の名前（任意）</label><input id="roomOpsName" maxlength="160">
+    <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している">
+    <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
+    <p id="roomOpsMessage" class="proMsg" role="status"></p>
+    <h3>対応待ち</h3><div id="roomOpsQueue" class="proPreview"></div>
+    <h3>活動の集計</h3><p id="roomOpsAnalysis" class="proMsg"></p>
+    <details><summary>完了・保留の履歴</summary><div id="roomOpsHistory" class="proPreview"></div></details>
+    <button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
+    <textarea id="roomOpsBackup" aria-label="交流バックアップ" hidden readonly rows="6"></textarea>
+  </section>
   <div class="proTasks" id="proActivityPanel">
     <strong style="font-size:14px">ROOM交流・投稿の実施記録</strong>
     <div class="proHint">実際のフォロー・いいねは楽天ROOMで本人が操作します。ここでは活動を記録します。自動操作ではありません。</div>
@@ -961,6 +999,8 @@ input,select{
 <script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
+<script src="/room-operations.js"></script>
+<script src="/room-operations-panel.js"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
@@ -1150,6 +1190,7 @@ async function showApp(session) {
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
+    window.initRoomOperations(session.user.email||'');
     restoreSearchState(session.user.email||'');
     updateUpgradeUi(access);
     await configureIntegratedPro(!!access.pro);
@@ -4155,14 +4196,15 @@ function proRenderItems(items=[],label='候補'){
   proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
     const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
     const metrics=[
-      '総合 '+proEsc(i.score??'-'),
+      '比較指標 '+proEsc(i.score??'-'),
       '検索との一致 '+proEsc(i.relevance??'-'),
-      '販売指標 '+proEsc(i.sellability??'-'),
-      '報酬指標 '+proEsc(i.profitability??'-'),
       'レビュー '+proEsc(i.reviewCount||0)+'件'
     ].join(' ｜ ');
     return '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b>'+
       '<div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ '+metrics+'</div>'+
+      '<div class="proMeta">選定の根拠：'+proEsc((i.selectionReasons||[]).join(' ／ ')||'根拠情報が不足しています')+'</div>'+
+      '<div class="proMeta">未確認：'+proEsc((i.unknownSignals||['購入者の需要','報酬条件']).join(' ／ '))+'</div>'+
+      '<div class="proMeta">比較指標は売上や売れる確率を示しません。</div>'+
       (link?'<div class="proMeta"><a href="'+proEsc(link)+'" target="_blank" rel="noopener noreferrer sponsored">楽天の商品ページを確認</a></div>':'')+
       '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">選んだ商品の投稿文を作成</button></div>'+
       '</div>';
@@ -4185,7 +4227,7 @@ async function proSave(){
   const r=await fetch('/api/pro?action=settings',{method:'POST',headers:proHeaders(),credentials:'include',body:JSON.stringify(proPayload())});
   const d=await r.json().catch(()=>({}));
   if(!r.ok) throw new Error(d.message||'Pro設定を保存できませんでした。');
-  proEl('proMsg').textContent='Pro設定を保存しました。上の通常検索条件も自動選定に使います。';
+  proEl('proMsg').textContent='選定設定を保存しました。商品検索の条件も選定に使います。';
   return true;
 }
 async function proPreview(){
