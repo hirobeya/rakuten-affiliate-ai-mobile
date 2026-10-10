@@ -192,12 +192,16 @@ test('mobile AI queue blocks premature debug export and can resume unfinished ac
   assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)/);
 });
 
-test('Pro candidates hand off to normal workflow without auto-running AI',()=>{
+test('Pro candidates enter the gated writer as a bounded batch',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function proOpenCandidate\(index\)/);
   assert.match(html,/proVisibleCandidateItems\[index\]/);
   assert.match(html,/k\.value=keyword;\s*lastSearchKeyword=keyword;/);
-  assert.match(html,/render\(\[item\],\{autoAi:true\}\);/);
+  assert.match(html,/function proPrepareCandidates\(items\)/);
+  assert.match(html,/\.slice\(0,3\)/);
+  assert.match(html,/render\(candidates,\{autoAi:true\}\);/);
+  assert.match(html,/id="proPrepareBatchBtn"/);
+  assert.match(html,/proPrepareCandidates\(proVisibleCandidateItems\)/);
   assert.match(html,/data-pro-candidate/);
   assert.match(html,/function proSafeProductUrl\(value\)/);
   assert.match(html,/u\.protocol!=='https:'\)/);
