@@ -33,8 +33,7 @@ assert.doesNotMatch(handler,/searchProducts\(|fetch\(/);
 assert.match(handler,/apiCalls:0/);
 
 const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');
-assert.match(html,/id="proSuppliedInput"/);
-assert.match(html,/id="proSuppliedRankBtn"/);
-assert.match(html,/function proRankSupplied\(\)/);
-assert.match(html,/\/api\/pro\?action=rank-supplied/);
-assert.match(html,/proRenderItems\(d\.items\|\|\[\],'入力候補'\)/);
+assert.doesNotMatch(html,/id="proSuppliedInput"/);
+assert.doesNotMatch(html,/id="proSuppliedRankBtn"/);
+assert.doesNotMatch(html,/function proRankSupplied\(\)/);
+console.log('Pro main UI does not require labor-intensive manual candidate entry');
