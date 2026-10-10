@@ -4104,7 +4104,17 @@ function proSafeProductUrl(value){
     return '';
   }catch{return ''}
 }
+let proVisibleCandidateItems=[];
+function proOpenCandidate(index){
+  const item=proVisibleCandidateItems[index];
+  if(!item||!item.itemName)return;
+  setAppScreen('normal');
+  render([item],{autoAi:false});
+  const results=document.getElementById('res');
+  if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function proRenderItems(items=[],label='候補'){
+  proVisibleCandidateItems=Array.isArray(items)?items:[];
   proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
     const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
     const metrics=[
@@ -4117,9 +4127,16 @@ function proRenderItems(items=[],label='候補'){
     return '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b>'+
       '<div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ '+metrics+'</div>'+
       (link?'<div class="proMeta"><a href="'+proEsc(link)+'" target="_blank" rel="noopener noreferrer sponsored">楽天の商品ページを確認</a></div>':'')+
+      '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">通常版で投稿文を準備</button></div>'+
       '</div>';
   }).join('');
 }
+proEl('proPreviewResults').addEventListener('click',event=>{
+  const button=event.target.closest('[data-pro-candidate]');
+  if(!button||!proEl('proPreviewResults').contains(button))return;
+  const index=Number(button.dataset.proCandidate);
+  if(Number.isSafeInteger(index)&&index>=0)proOpenCandidate(index);
+});
 function proRenderQueue(queue=[]){
   proQueue=Array.isArray(queue)?queue:[];
   const items=[];proQueue.forEach(q=>(Array.isArray(q.items)?q.items:[]).forEach(i=>items.push(i)));
