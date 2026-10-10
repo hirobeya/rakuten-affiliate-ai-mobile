@@ -4331,13 +4331,21 @@ async function configureIntegratedPro(enabled){
     return;
   }
   if(!proBooted){
-    proBooted=true;
     try{
       const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
       const d=await r.json().catch(()=>({}));
-      if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
-      await proApply(d.settings||{});proRenderActivities();proUpdateDashboard();proRenderQueue(d.queue||[]);
-    }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
+      if(!r.ok) throw new Error(d.message||'ウレナビ改の情報を取得できませんでした。');
+      await proApply(d.settings||{});
+      proRenderActivities();
+      proUpdateDashboard();
+      proRenderQueue(d.queue||[]);
+      proBooted=true;
+      proEl('proMsg').textContent='';
+    }catch(e){
+      // Allow recovery when mobile connectivity, auth, or upstream access fails.
+      proBooted=false;
+      proEl('proMsg').textContent=(e.message||'読み込みに失敗しました。')+' 再読み込みで再試行できます。';
+    }
   }
   setAppScreen();
 }
