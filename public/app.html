@@ -941,6 +941,7 @@ input,select{
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
+<script src="/pro-candidate-copy.js?v=20261010-1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
 
@@ -4110,11 +4111,8 @@ proEl('proPreviewResults').addEventListener('click',async event=>{
   if(!button||!proEl('proPreviewResults').contains(button))return;
   const item=proVisibleItems[Number(button.dataset.proCopy)];
   if(!item)return;
-  const lines=[String(item.itemName||'').trim()];
-  if(Number.isFinite(Number(item.itemPrice))&&Number(item.itemPrice)>0)lines.push('価格：'+Number(item.itemPrice).toLocaleString('ja-JP')+'円');
-  const url=String(item.affiliateUrl||item.itemUrl||'').trim();
-  if(/^https:\/\//i.test(url))lines.push(url);
-  const copyText=lines.filter(Boolean).join('\n');
+  const copyText=window.UrenaviProCandidateCopy.format(item);
+  if(!copyText)return;
   try{
     if(!navigator.clipboard?.writeText)throw new Error('clipboard unavailable');
     await navigator.clipboard.writeText(copyText);
