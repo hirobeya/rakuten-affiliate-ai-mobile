@@ -125,6 +125,18 @@ module.exports=async function handler(req,res){
       return res.status(200).json({preview:true,source:'user_supplied',apiCalls:0,items});
     }
 
+    // Do not expose Rakuten Web Service data through a paid feature without
+    // explicit authorization. The current fetch-based path is only for the
+    // owner to evaluate on Preview; all other callers must use a cleared
+    // non-RWS source before commercial release.
+    if(req.method==='POST' && (action==='preview'||action==='generate') &&
+      !(auth.plan==='owner'&&process.env.VERCEL_ENV==='preview')){
+      return res.status(409).json({
+        message:'この商品自動取得機能は利用条件の確認中です。販売向けにはまだ利用できません。',
+        code:'pro_rakuten_source_not_cleared'
+      });
+    }
+
     if(req.method==='POST' && action==='preview'){
       const settings=sanitize(req.body||{});
       const excludeCodes=settings.avoid_duplicates?await getRecentCodes(email):[];
