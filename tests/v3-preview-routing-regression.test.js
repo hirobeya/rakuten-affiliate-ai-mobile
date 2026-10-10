@@ -191,3 +191,14 @@ test('mobile AI queue blocks premature debug export and can resume unfinished ac
   assert.match(html,/setTimeout\(resumeActiveAiQueue,500\)/);
   assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)/);
 });
+
+test('Pro candidates hand off to normal workflow without auto-running AI',()=>{
+  const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+  assert.match(html,/function proOpenCandidate\(index\)/);
+  assert.match(html,/proVisibleCandidateItems\[index\]/);
+  assert.match(html,/setAppScreen\('normal'\);\s*render\(\[item\],\{autoAi:false\}\);/);
+  assert.match(html,/data-pro-candidate/);
+  assert.match(html,/function proSafeProductUrl\(value\)/);
+  assert.match(html,/u\.protocol!=='https:'\)/);
+  assert.match(html,/host\.endsWith\('\.rakuten\.co\.jp'\)/);
+});
