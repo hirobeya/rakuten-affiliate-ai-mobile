@@ -4098,7 +4098,10 @@ async function proApply(s={}){
 function proSafeProductUrl(value){
   try{
     const u=new URL(String(value||''));
-    return u.protocol==='https:'&&/^(?:[a-z0-9-]+\\.)*(?:rakuten\\.co\\.jp|rakuten\.com)$/i.test(u.hostname)?u.href:'';
+    const host=u.hostname.toLowerCase();
+    if(u.protocol!=='https:') return '';
+    if(host==='rakuten.co.jp'||host.endsWith('.rakuten.co.jp')||host==='rakuten.com'||host.endsWith('.rakuten.com')) return u.href;
+    return '';
   }catch{return ''}
 }
 function proRenderItems(items=[],label='候補'){
