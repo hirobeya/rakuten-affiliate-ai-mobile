@@ -884,9 +884,9 @@ input,select{
 </div>
 <section id="proPanel" class="box proIntegrated appScreen">
   <div class="proHead">
-    <div><span class="proBadge">PRO</span> <strong>ROOM運用アシスト</strong></div>
+    <div><span class="proBadge">PRO</span> <strong>ROOM売上支援｜開発プレビュー</strong></div>
   </div>
-  <div class="proHint">通常版の機能はそのまま使えます。Proでは、楽天カテゴリー・商品条件・自動選定などROOM運用向けの機能を使えます。価格帯と並び順は通常画面の設定を共通で使います。</div>
+  <div class="proHint">これは開発中の検証画面です。商品取得の商用利用は未承認のため、有料ユーザー向けの候補検索は停止しています。投稿・いいね・フォローの自動操作は行いません。</div>
 
   <label>楽天市場カテゴリー</label>
   <div id="proGenrePath" class="proPath">楽天市場</div>
@@ -906,7 +906,7 @@ input,select{
     <label class="proCheck"><input id="proDup" type="checkbox" checked>投稿済み商品の重複を避ける</label>
   </div>
 
-  <label>投稿予定時刻</label>
+  <label>投稿目標時刻（通知・自動投稿は未対応）</label>
   <div class="proTimes">
     <input id="proT1" type="time" value="08:00">
     <input id="proT2" type="time" value="12:30">
@@ -914,10 +914,10 @@ input,select{
   </div>
 
   <div class="proActions">
-    <button id="proPreviewBtn" class="proPrimary" type="button">この条件で商品プレビュー</button>
+    <button id="proPreviewBtn" class="proPrimary" type="button">商品候補を確認（開発確認用）</button>
     <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
   </div>
-  <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を自動選定</button>
+  <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を候補選定（開発確認用）</button>
   <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
