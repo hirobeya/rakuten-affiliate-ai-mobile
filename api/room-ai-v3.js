@@ -541,7 +541,8 @@ function createHandler(deps={}){
         :{status:'blocked',text:'',reasons:['copy_quality_missing'],ledger:[]};
       const ready=analysis.ok===true
         && publication.status==='ready'
-        && Boolean(String(copy.variants?.[0]?.text||'').trim());
+        && Boolean(String(publication.text||'').trim())
+        && String(publication.text||'').trim()===String(copy.variants?.[0]?.text||'').trim();
       const quality={
         ...publication,
         status:ready?'ready':'blocked',
