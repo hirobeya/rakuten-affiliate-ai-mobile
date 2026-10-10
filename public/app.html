@@ -4126,7 +4126,9 @@ function proOpenCandidate(index){
   k.value=keyword;
   lastSearchKeyword=keyword;
   setAppScreen('normal');
-  render([item],{autoAi:false});
+  // Start the existing gated product-understanding and verification pipeline
+  // only after the owner explicitly selects a candidate.
+  render([item],{autoAi:true});
   const results=document.getElementById('res');
   if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -4144,7 +4146,7 @@ function proRenderItems(items=[],label='候補'){
     return '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b>'+
       '<div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ '+metrics+'</div>'+
       (link?'<div class="proMeta"><a href="'+proEsc(link)+'" target="_blank" rel="noopener noreferrer sponsored">楽天の商品ページを確認</a></div>':'')+
-      '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">通常版で投稿文を準備</button></div>'+
+      '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">選んだ商品の投稿文を作成</button></div>'+
       '</div>';
   }).join('');
 }
