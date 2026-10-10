@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {format,httpsUrl}=require('../public/pro-candidate-copy');
+assert.equal(format({itemName:'折りたたみ収納',itemPrice:2980,affiliateUrl:'https://example.com/aff',itemUrl:'https://example.com/item'}),'折りたたみ収納\n価格：2,980円\nhttps://example.com/aff');
+assert.equal(format({itemName:'商品',itemPrice:0,affiliateUrl:'javascript:alert(1)',itemUrl:'https://example.com/item'}),'商品\nhttps://example.com/item');
+assert.equal(format({itemName:'商品',itemPrice:-5,itemUrl:'http://example.com'}),'商品');
+assert.equal(format({itemName:'   '}),'');
+assert.equal(httpsUrl('https://example.com/x'),'https://example.com/x');
+assert.equal(httpsUrl('data:text/html,bad'),'');
+const page=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
+assert.match(page,/<script src="\/pro-candidate-copy\.js\?v=20261010-1"><\/script>/);
+assert.match(page,/window\.UrenaviProCandidateCopy\.format\(item\)/);
+console.log('pro-candidate-copy: PASS');
