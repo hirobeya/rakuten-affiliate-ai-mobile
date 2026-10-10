@@ -918,6 +918,13 @@ input,select{
     <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
   </div>
   <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を自動選定</button>
+  <details style="margin-top:12px">
+    <summary style="font-weight:800;cursor:pointer">自分で用意した商品情報から選ぶ（楽天API不使用）</summary>
+    <label for="proSuppliedInput">商品名を1行ずつ入力（最大30件）</label>
+    <textarea id="proSuppliedInput" rows="5" placeholder="例：折りたたみ収納ボックス&#10;例：フタ付き収納ボックス" style="width:100%;box-sizing:border-box"></textarea>
+    <div class="proHint">入力された商品名のみを比較します。価格やレビューが未入力の場合、正確な収益比較はできません。楽天の商品ページは取得しません。</div>
+    <button id="proSuppliedRankBtn" type="button" class="proGhost" style="margin-top:8px;padding:12px;border-radius:10px">入力商品を比較する</button>
+  </details>
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
 
@@ -4167,6 +4174,24 @@ async function proPreview(){
     proRenderItems(items,'プレビュー');
   }catch(e){proEl('proMsg').textContent=e.message||'プレビューできませんでした。'}
 }
+async function proRankSupplied(){
+  const raw=String(proEl('proSuppliedInput').value||'');
+  const names=raw.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);
+  if(names.length<1||names.length>30||names.some(x=>x.length>1000)){
+    proEl('proMsg').textContent='商品名を1〜30件、1行ずつ入力してください。';
+    return;
+  }
+  proEl('proMsg').textContent='入力した商品の候補を比較しています…';
+  try{
+    const items=names.map((itemName,index)=>({itemName,itemCode:'manual:'+index,itemCaption:'',itemPrice:0}));
+    const r=await fetch('/api/pro?action=rank-supplied',{method:'POST',headers:proHeaders(),credentials:'include',body:JSON.stringify({items,settings:proPayload()})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.message||'入力商品の比較に失敗しました。');
+    proRenderItems(d.items||[],'入力候補');
+    proEl('proMsg').textContent='入力情報だけで比較しました。価格・レビュー未入力のため、スコアは限定的な参考値です。';
+  }catch(e){proEl('proMsg').textContent=e.message||'入力商品の比較に失敗しました。'}
+}
+proEl('proSuppliedRankBtn').addEventListener('click',proRankSupplied);
 async function proGenerate(){
   proEl('proMsg').textContent='今日の候補を選定しています…';
   try{
