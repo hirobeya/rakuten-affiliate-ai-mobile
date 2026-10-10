@@ -27,8 +27,9 @@ const a=composeVariants({item,analysis:{validation,verifiedAppeals}});
 assert.equal(a.tier,'A');
 assert.equal(a.variants.length,1);
 for(const v of a.variants){
-  assert.match(v.text,/50-100度/);
-  assert.match(v.text,/1℃単位/);
+  // The appeal may reference these specs without explicitly publishing their values.
+  // Never append unverified detail lines just to fill a feature list.
+  assert.doesNotMatch(v.text,/特徴👇|✓ /);
   assert.match(v.text,/飲み物に合わせて温度を細かく選べる/);
   assert.doesNotMatch(v.text,/商品名には|と確認できます|冷めるのを待たなくていい/);
   assert.match(v.text,/8,980円/);
