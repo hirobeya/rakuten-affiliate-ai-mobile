@@ -4311,11 +4311,11 @@ async function upgradeToPro(){
     currentAccessPlan='pro';
     proAvailable=true;
     btn.style.display='none';
-    proEl('appModeNav').classList.add('on');
+    setAppScreen();
     await configureIntegratedPro(true);
     const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
     proEl('proMsg').textContent=(d.alreadyPro?'すでにPro契約です。':'Proへアップグレードしました。')+' '+renewal+'から月額1,480円です。';
-    setAppScreen('pro');
+    setAppScreen();
   }catch(e){
     alert(e.message||'アップグレードできませんでした。');
     btn.disabled=false;btn.textContent='Proへアップグレード';
