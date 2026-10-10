@@ -31,3 +31,10 @@ const handler=api.slice(begin,end);
 assert.match(handler,/rankProductCandidates\(settings,source\)/);
 assert.doesNotMatch(handler,/searchProducts\(|fetch\(/);
 assert.match(handler,/apiCalls:0/);
+
+const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');
+assert.match(html,/id="proSuppliedInput"/);
+assert.match(html,/id="proSuppliedRankBtn"/);
+assert.match(html,/function proRankSupplied\(\)/);
+assert.match(html,/\/api\/pro\?action=rank-supplied/);
+assert.match(html,/proRenderItems\(d\.items\|\|\[\],'入力候補'\)/);
