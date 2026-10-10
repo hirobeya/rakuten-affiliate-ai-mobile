@@ -70,3 +70,7 @@ assert.match(html,/function setAppScreen\(\)/);
 assert.match(html,/proEl\('normalScreen'\)\.classList\.remove\('off'\)/);
 assert.match(html,/proEl\('proPanel'\)\.classList\.add\('on'\)/);
 console.log('Single Urenavi interface shows product and ROOM workflow together');
+
+assert.match(html,/proBooted=true;\s*proEl\('proMsg'\)\.textContent='';/);
+assert.match(html,/catch\(e\)\{\s*\/\/ Allow recovery[\s\S]*?proBooted=false;/);
+console.log('Mobile initialization remains retryable after transient failures');
