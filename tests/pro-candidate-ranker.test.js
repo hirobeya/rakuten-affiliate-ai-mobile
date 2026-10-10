@@ -54,3 +54,11 @@ assert.match(guardedApi,/action==='preview'\|\|action==='generate'/);
 assert.match(guardedApi,/auth\.plan==='owner'&&process\.env\.VERCEL_ENV==='preview'/);
 assert.match(guardedApi,/pro_rakuten_source_not_cleared/);
 console.log('Paid Pro Rakuten API source is blocked until approved');
+
+assert.match(html,/id="proDailyDashboard"/);
+assert.match(html,/id="proRevenueToday"/);
+assert.match(html,/id="proCommissionToday"/);
+assert.match(html,/function proSaveRevenue\(\)/);
+assert.match(html,/PRO_REVENUE_KEY='urenavi_pro_verified_revenue_v1'/);
+assert.match(html,/proUpdateDashboard\(\)/);
+console.log('Pro dashboard shows explicitly entered sales and engagement activity');
