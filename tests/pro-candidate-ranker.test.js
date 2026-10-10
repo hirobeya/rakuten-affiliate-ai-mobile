@@ -20,3 +20,14 @@ const excluded=rankProductCandidates(settings,items,{excludeCodes:[result[0].ite
 assert.ok(!excluded.some(x=>x.itemCode===result[0].itemCode));
 assert.deepEqual(rankProductCandidates(settings,[]),[]);
 console.log('pro-candidate-ranker.test.js: PASS (API-independent ranking)');
+
+// API-free route must not call searchProducts, fetch, or the Rakuten API.
+const fs=require('node:fs');
+const api=fs.readFileSync(require.resolve('../api/pro'),'utf8');
+const begin=api.indexOf("action==='rank-supplied'");
+const end=api.indexOf("action==='preview'",begin);
+assert.ok(begin>=0&&end>begin);
+const handler=api.slice(begin,end);
+assert.match(handler,/rankProductCandidates\(settings,source\)/);
+assert.doesNotMatch(handler,/searchProducts\(|fetch\(/);
+assert.match(handler,/apiCalls:0/);
