@@ -4095,9 +4095,34 @@ async function proApply(s={}){
   if(s.sort) document.getElementById('sort').value=String(s.sort);
   await proRestoreGenre(s);
 }
+let proVisibleItems=[];
 function proRenderItems(items=[],label='候補'){
-  proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>'<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b><div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ AI '+proEsc(i.score??'-')+' ｜ レビュー '+proEsc(i.reviewCount||0)+'件</div></div>').join('');
+  proVisibleItems=Array.isArray(items)?items:[];
+  proEl('proPreviewResults').innerHTML=proVisibleItems.map((i,n)=>
+    '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+
+    '</b><div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ AI '+
+    proEsc(i.score??'-')+' ｜ レビュー '+proEsc(i.reviewCount||0)+
+    '件</div><button type="button" class="proGhost" data-pro-copy="'+n+'">商品情報をコピー</button></div>'
+  ).join('');
 }
+proEl('proPreviewResults').addEventListener('click',async event=>{
+  const button=event.target.closest('[data-pro-copy]');
+  if(!button||!proEl('proPreviewResults').contains(button))return;
+  const item=proVisibleItems[Number(button.dataset.proCopy)];
+  if(!item)return;
+  const lines=[String(item.itemName||'').trim()];
+  if(Number.isFinite(Number(item.itemPrice))&&Number(item.itemPrice)>0)lines.push('価格：'+Number(item.itemPrice).toLocaleString('ja-JP')+'円');
+  const url=String(item.itemUrl||'').trim();
+  if(/^https:\/\//i.test(url))lines.push(url);
+  const copyText=lines.filter(Boolean).join('\\n');
+  try{
+    if(!navigator.clipboard?.writeText)throw new Error('clipboard unavailable');
+    await navigator.clipboard.writeText(copyText);
+    proEl('proMsg').textContent='商品情報をコピーしました。';
+  }catch{
+    proEl('proMsg').textContent='コピーできませんでした。端末のコピー権限を確認してください。';
+  }
+});
 function proRenderQueue(queue=[]){
   proQueue=Array.isArray(queue)?queue:[];
   const items=[];proQueue.forEach(q=>(Array.isArray(q.items)?q.items:[]).forEach(i=>items.push(i)));
