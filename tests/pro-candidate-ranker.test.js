@@ -48,3 +48,9 @@ assert.match(html,/like_visit:'いいね回り'/);
 assert.match(html,/follow_return:'フォロー返し'/);
 assert.doesNotMatch(html,/data-pro-task="follow"/);
 console.log('Pro engagement ledger has explicit user-recorded like/follow/post activity');
+
+const guardedApi=fs.readFileSync(require.resolve('../api/pro'),'utf8');
+assert.match(guardedApi,/action==='preview'\|\|action==='generate'/);
+assert.match(guardedApi,/auth\.plan==='owner'&&process\.env\.VERCEL_ENV==='preview'/);
+assert.match(guardedApi,/pro_rakuten_source_not_cleared/);
+console.log('Paid Pro Rakuten API source is blocked until approved');
