@@ -753,12 +753,9 @@ input,select{
 
 </div>
 
-<div id="appModeNav" class="appModeNav" aria-label="ウレナビ画面切替">
-  <button id="normalModeBtn" class="modeBtn on" type="button">通常</button>
-  <button id="proModeBtn" class="modeBtn" type="button">Pro</button>
-</div>
 
-<h1>ウレナビ</h1>
+
+<h1>ウレナビ改</h1>
 
 <div class="sub">
 商品を探して、売れやすさと収益性を評価。誰にどう売るかまで決めます。<br>
@@ -882,9 +879,9 @@ input,select{
 
 <section id="res"></section>
 </div>
-<section id="proPanel" class="box proIntegrated appScreen">
+<section id="proPanel" class="box proIntegrated on appScreen">
   <div class="proHead">
-    <div><span class="proBadge">PRO</span> <strong>ROOM売上支援｜開発プレビュー</strong></div>
+    <div><strong>ROOM売上支援｜開発プレビュー</strong></div>
   </div>
   <div class="proHint">これは開発中の検証画面です。商品取得の商用利用は未承認のため、有料ユーザー向けの候補検索は停止しています。投稿・いいね・フォローの自動操作は行いません。</div>
 
@@ -4139,7 +4136,6 @@ function proPrepareCandidates(items){
   const keyword=String(proEl('proProductKeyword')?.value||'').trim();
   k.value=keyword;
   lastSearchKeyword=keyword;
-  setAppScreen('normal');
   // Shared gated writer and verifier. The queue halts on Groq 429.
   render(candidates,{autoAi:true});
   const results=document.getElementById('res');
@@ -4279,27 +4275,16 @@ async function proExportActivities(){
 }
 proEl('proActivityAdd').addEventListener('click',proAddActivity);
 proEl('proActivityExport').addEventListener('click',proExportActivities);
-function setAppScreen(mode='normal'){
-  const canPro=proAvailable;
-  const target=(mode==='pro'&&canPro)?'pro':'normal';
-  proEl('normalScreen').classList.toggle('off',target!=='normal');
-  proEl('proPanel').classList.toggle('on',target==='pro'&&canPro);
-  proEl('normalModeBtn').classList.toggle('on',target==='normal');
-  proEl('proModeBtn').classList.toggle('on',target==='pro');
-  if(target==='pro') location.hash='pro';
-  else if(location.hash==='#pro') history.replaceState({},document.title,location.pathname+location.search);
-  window.scrollTo({top:0,behavior:'smooth'});
+function setAppScreen(){
+  // Single integrated interface; keep both product and ROOM operations visible.
+  proEl('normalScreen').classList.remove('off');
+  proEl('proPanel').classList.add('on');
 }
-proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
-proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
-
 function updateUpgradeUi(access={}){
   const btn=proEl('upgradeProBtn');
-  const isBase=String(access.plan||'')==='base' && !access.pro;
-  proAvailable=!!access.pro;
-  btn.style.display=isBase?'inline-block':'none';
-  proEl('appModeNav').classList.toggle('on',proAvailable);
-  if(!proAvailable) setAppScreen('normal');
+  if(btn)btn.style.display='none';
+  proAvailable=Boolean(access.pro);
+  setAppScreen();
 }
 async function upgradeToPro(){
   const ok=window.confirm(
@@ -4340,9 +4325,9 @@ proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
   proAvailable=!!enabled;
-  proEl('appModeNav').classList.toggle('on',enabled);
+  setAppScreen();
   if(!enabled){
-    setAppScreen('normal');
+    setAppScreen();
     return;
   }
   if(!proBooted){
@@ -4354,7 +4339,7 @@ async function configureIntegratedPro(enabled){
       await proApply(d.settings||{});proRenderActivities();proUpdateDashboard();proRenderQueue(d.queue||[]);
     }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
   }
-  setAppScreen(location.hash==='#pro'?'pro':'normal');
+  setAppScreen();
 }
 proEl('proGenrePicker').addEventListener('change',async e=>{
   const opt=e.target.selectedOptions?.[0];if(!opt?.value)return;
