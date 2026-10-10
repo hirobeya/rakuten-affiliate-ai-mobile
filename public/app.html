@@ -4114,7 +4114,7 @@ proEl('proPreviewResults').addEventListener('click',async event=>{
   if(Number.isFinite(Number(item.itemPrice))&&Number(item.itemPrice)>0)lines.push('価格：'+Number(item.itemPrice).toLocaleString('ja-JP')+'円');
   const url=String(item.itemUrl||'').trim();
   if(/^https:\/\//i.test(url))lines.push(url);
-  const copyText=lines.filter(Boolean).join('\\n');
+  const copyText=lines.filter(Boolean).join('\n');
   try{
     if(!navigator.clipboard?.writeText)throw new Error('clipboard unavailable');
     await navigator.clipboard.writeText(copyText);
