@@ -4095,8 +4095,27 @@ async function proApply(s={}){
   if(s.sort) document.getElementById('sort').value=String(s.sort);
   await proRestoreGenre(s);
 }
+function proSafeProductUrl(value){
+  try{
+    const u=new URL(String(value||''));
+    return u.protocol==='https:'&&/^(?:[a-z0-9-]+\\.)*(?:rakuten\\.co\\.jp|rakuten\.com)$/i.test(u.hostname)?u.href:'';
+  }catch{return ''}
+}
 function proRenderItems(items=[],label='候補'){
-  proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>'<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b><div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ AI '+proEsc(i.score??'-')+' ｜ レビュー '+proEsc(i.reviewCount||0)+'件</div></div>').join('');
+  proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
+    const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
+    const metrics=[
+      '総合 '+proEsc(i.score??'-'),
+      '検索との一致 '+proEsc(i.relevance??'-'),
+      '販売指標 '+proEsc(i.sellability??'-'),
+      '報酬指標 '+proEsc(i.profitability??'-'),
+      'レビュー '+proEsc(i.reviewCount||0)+'件'
+    ].join(' ｜ ');
+    return '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b>'+
+      '<div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ '+metrics+'</div>'+
+      (link?'<div class="proMeta"><a href="'+proEsc(link)+'" target="_blank" rel="noopener noreferrer sponsored">楽天の商品ページを確認</a></div>':'')+
+      '</div>';
+  }).join('');
 }
 function proRenderQueue(queue=[]){
   proQueue=Array.isArray(queue)?queue:[];
