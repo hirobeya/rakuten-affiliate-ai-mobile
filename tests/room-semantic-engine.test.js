@@ -20,5 +20,14 @@ function setup(verdicts){let row=null,clock=0,calls=0,quota=0;const args={item,r
  const peek=setup([true]);const empty=await advance({...peek.args,readOnly:true});assert.equal(empty.pending,true);assert.deepEqual(peek.counts(),{calls:0,quota:0});await advance(peek.args);peek.tick();const pending=await advance({...peek.args,readOnly:true});assert.equal(pending.phase,'verification');assert.deepEqual(pending.diagnostics.draft,draft);assert.deepEqual(peek.counts(),{calls:1,quota:1});
  const malformed=setup([true]);let errorCalls=0;const normalCall=malformed.args.provider.call;malformed.args.provider.call=async stage=>{errorCalls++;if(errorCalls===1){const e=new Error('invalid JSON');e.status=400;e.safeError={code:'json_validate_failed'};e.failedGeneration='recorded invalid JSON';throw e;}return normalCall(stage);};let retry=await advance(malformed.args);assert.equal(retry.phase,'regeneration');assert.equal(retry.groq.totalCalls,1);assert.equal(retry.diagnostics.upstreamErrors[0].failedGeneration,'recorded invalid JSON');assert.equal(retry.variants.length,0);for(let i=0;i<3&&retry.pending;i++){malformed.tick();retry=await advance(malformed.args);}assert.equal(retry.ok,true);assert.equal(retry.groq.totalCalls,3);
  const alwaysBad=setup([]);alwaysBad.args.provider.call=async()=>{const e=new Error('invalid JSON');e.status=400;e.safeError={code:'json_validate_failed'};throw e;};let bad=await advance(alwaysBad.args);alwaysBad.tick();bad=await advance(alwaysBad.args);assert.equal(bad.pending,false);assert.equal(bad.ok,false);assert.equal(bad.groq.totalCalls,2);assert.equal(bad.variants.length,0);
+ // A Groq 429 must stop immediately, even if retry-after suggests a short wait.
+ for(const retryAfter of ['0','614']){
+  const limited=setup([true]);let providerCalls=0;
+  limited.args.provider.call=async()=>{providerCalls++;const e=new Error('rate limited');e.status=429;e.rateLimit={'retry-after':retryAfter};throw e;};
+  await assert.rejects(()=>advance(limited.args),e=>e.status===429&&e.stage==='generate');
+  limited.tick();
+  assert.equal(providerCalls,1);
+  assert.deepEqual(limited.counts(),{calls:0,quota:1});
+ }
  console.log('room-semantic-engine: PASS (header waits, deduplication, one rewrite, no failed publication)');
 })().catch(e=>{console.error(e);process.exitCode=1;});
