@@ -888,6 +888,18 @@ input,select{
   </div>
   <div class="proHint">これは開発中の検証画面です。商品取得の商用利用は未承認のため、有料ユーザー向けの候補検索は停止しています。投稿・いいね・フォローの自動操作は行いません。</div>
 
+  <div class="proTasks" style="margin:14px 0">
+    <strong style="font-size:15px">今日のROOM運用ダッシュボード</strong>
+    <div class="proHint">投稿準備・交流活動・売上をひとつの画面で確認。数値は自分で入力した実績のみです。</div>
+    <div id="proDailyDashboard" class="proMsg" aria-live="polite"></div>
+    <label for="proRevenueToday">今日のROOM売上（実績・円）</label>
+    <input id="proRevenueToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた売上のみ入力">
+    <label for="proCommissionToday">今日の獲得報酬（実績・円）</label>
+    <input id="proCommissionToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた報酬のみ入力">
+    <button id="proRevenueSave" class="proGhost" type="button">今日の実績を保存</button>
+    <div id="proRevenueMsg" class="proMsg" aria-live="polite"></div>
+  </div>
+
   <label>楽天市場カテゴリー</label>
   <div id="proGenrePath" class="proPath">楽天市場</div>
   <select id="proGenrePicker"><option value="">カテゴリーを読み込み中…</option></select>
@@ -4204,6 +4216,31 @@ async function proGenerate(){
   }catch(e){proEl('proMsg').textContent=e.message||'候補を取得できませんでした。'}
 }
 // Explicitly user-confirmed activity log; it does not claim to automate ROOM.
+const PRO_REVENUE_KEY='urenavi_pro_verified_revenue_v1';
+function proJstToday(){return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});}
+function proReadRevenue(){
+  try{const v=JSON.parse(localStorage.getItem(PRO_REVENUE_KEY)||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}
+}
+function proUpdateDashboard(){
+  const today=proJstToday();
+  const metrics=proReadRevenue()[today]||{};
+  const logs=proReadActivities().filter(x=>x.day===today);
+  const count=type=>logs.filter(x=>x.type===type).length;
+  proEl('proDailyDashboard').textContent='投稿実施 '+count('post')+'件 ｜ いいね活動 '+(count('like_visit')+count('like_return'))+'件 ｜ フォロー活動 '+(count('follow_visit')+count('follow_return'))+'件 ｜ 売上 '+(metrics.sales==null?'未入力':Number(metrics.sales).toLocaleString()+'円')+' ｜ 報酬 '+(metrics.commission==null?'未入力':Number(metrics.commission).toLocaleString()+'円');
+}
+function proSaveRevenue(){
+  const salesText=proEl('proRevenueToday').value.trim();
+  const commissionText=proEl('proCommissionToday').value.trim();
+  if(!salesText&&!commissionText){proEl('proRevenueMsg').textContent='売上か報酬を入力してください。';return;}
+  const valid=x=>x===''||(Number.isSafeInteger(Number(x))&&Number(x)>=0);
+  if(!valid(salesText)||!valid(commissionText)){proEl('proRevenueMsg').textContent='0以上の整数を入力してください。';return;}
+  const today=proJstToday(),all=proReadRevenue();
+  const old=all[today]||{};
+  all[today]={sales:salesText===''?(old.sales??null):Number(salesText),commission:commissionText===''?(old.commission??null):Number(commissionText)};
+  try{localStorage.setItem(PRO_REVENUE_KEY,JSON.stringify(all));proEl('proRevenueMsg').textContent='確認済み実績を端末に保存しました。';proUpdateDashboard();}
+  catch{proEl('proRevenueMsg').textContent='保存できませんでした。端末の空き容量を確認してください。';}
+}
+proEl('proRevenueSave').addEventListener('click',proSaveRevenue);
 const PRO_ACTIVITY_KEY='urenavi_pro_activities_v1';
 const PRO_ACTIVITY_LABELS={like_visit:'いいね回り',like_return:'いいね返し',follow_visit:'フォロー回り',follow_return:'フォロー返し',post:'ROOM投稿'};
 function proReadActivities(){
@@ -4230,7 +4267,7 @@ function proAddActivity(){
   try{
     localStorage.setItem(PRO_ACTIVITY_KEY,JSON.stringify(all.slice(-1000)));
     proEl('proActivityTarget').value='';
-    proRenderActivities();
+    proRenderActivities();proUpdateDashboard();
   }catch{proEl('proActivitySummary').textContent='端末の保存容量に空きがありません。活動は保存されていません。';}
 }
 async function proExportActivities(){
@@ -4314,7 +4351,7 @@ async function configureIntegratedPro(enabled){
       const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
       const d=await r.json().catch(()=>({}));
       if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
-      await proApply(d.settings||{});proRenderActivities();proRenderQueue(d.queue||[]);
+      await proApply(d.settings||{});proRenderActivities();proUpdateDashboard();proRenderQueue(d.queue||[]);
     }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
   }
   setAppScreen(location.hash==='#pro'?'pro':'normal');
