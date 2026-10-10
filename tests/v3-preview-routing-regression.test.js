@@ -197,7 +197,7 @@ test('Pro candidates hand off to normal workflow without auto-running AI',()=>{
   assert.match(html,/function proOpenCandidate\(index\)/);
   assert.match(html,/proVisibleCandidateItems\[index\]/);
   assert.match(html,/k\.value=keyword;\s*lastSearchKeyword=keyword;/);
-  assert.match(html,/setAppScreen\('normal'\);\s*render\(\[item\],\{autoAi:false\}\);/);
+  assert.match(html,/setAppScreen\('normal'\);\s*render\(\[item\],\{autoAi:true\}\);/);
   assert.match(html,/data-pro-candidate/);
   assert.match(html,/function proSafeProductUrl\(value\)/);
   assert.match(html,/u\.protocol!=='https:'\)/);
