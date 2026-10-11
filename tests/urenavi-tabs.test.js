@@ -98,3 +98,21 @@ test('local readiness requires a grounded purchase-value sentence in the display
  const grounded='外出先での充電に。\n\n充電式のモバイルバッテリーです。\nコードをつながずに使うタイプです。\n\n※アフィリエイト広告を利用しています';
  assert.equal(ctx.roomCopyNeedsReview(grounded,{},false),false);
 });
+
+
+test('unresolved local spec alone cannot bypass Groq fallback, grounded copy can',()=>{
+ const start=html.indexOf('function aiTargetDecision(item){'),end=html.indexOf('function activeAiProgress(',start);
+ assert.ok(start>0&&end>start);
+ const ctx={usePurchasePlan:false,groundedAnalysis:()=>({outputMode:'fallback',ambiguous:false,topCandidates:[],conflicts:[]}),
+   window:{UrenaviPainCopy:{extractFallbackTitleFacts:()=>['洗える'],buildGroundedBenefitPost:()=> '洗える仕様です。'}},
+   roomCopyNeedsReview:()=>true};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,true);
+ assert.ok(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).reasons.includes('insufficient_grounded_purchase_reason'));
+ ctx.window.UrenaviPainCopy.buildGroundedBenefitPost=()=> '洗濯ネットです。洗うときに確認できます。';
+ ctx.roomCopyNeedsReview=()=>false;
+ assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,false);
+ ctx.groundedAnalysis=()=>({outputMode:'full',ambiguous:false,topCandidates:[],conflicts:[]});
+ ctx.roomCopyNeedsReview=()=>true;
+ assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,false);
+});
