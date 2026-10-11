@@ -775,7 +775,7 @@ input,select{
 <div id="appRoot">
 
 <main class="w">
-<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認3</p>
+<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認4</p>
 
 <div class="appHead">
 
@@ -3196,11 +3196,19 @@ function roomCopyNeedsReview(text,item,validatedByServer=false){
   return !result||result.status!=='ok'||(!result.understanding?.scene&&!result.values?.length);
 }
 
+function isFullyReviewedCopyState(s){
+  const data=s?.state?.data;
+  return Boolean(data && (
+    (isV3PreviewResult(data) && readyV3Post(data)) ||
+    (RoomCopyResult.canonical(data) && RoomCopyResult.ready(data))
+  ));
+}
+
 function postReady(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
   const text=String(post(i,p)||'').trim();
-  return Boolean(text) && !roomCopyNeedsReview(text,i,Boolean(s.gate?.full&&!s.gate?.useLegacy));
+  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s));
 }
 
 function postDisplay(i,p='room'){
@@ -3210,7 +3218,7 @@ function postDisplay(i,p='room'){
     return '商品内容を確認中です。';
   }
   const text=String(post(i,p)||'').trim();
-  return roomCopyNeedsReview(text,i,Boolean(s.gate?.full&&!s.gate?.useLegacy))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
+  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
 
