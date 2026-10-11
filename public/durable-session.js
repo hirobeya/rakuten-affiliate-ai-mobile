@@ -203,21 +203,18 @@
     void waitForApp();
   }
 
-  root.addEventListener('click',async event=>{
+  root.addEventListener('click',event=>{
     const link=event.target.closest?.('a');
     if(!link || link.dataset.urenaviProductLink!=='market') return;
-    const href=safeUrl(link.href||'');
-    if(!href) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    try{await syncPromise;}catch{}
-    if(!currentSession) await loadActive();
-    const index=linkIndex(link);
-    if(index>=0){
-      try{await markProcessing(index);}catch{}
-    }
+    if(!safeUrl(link.href||'')) return;
+    // Preserve native target=_blank behavior: never replace the Urenavi tab.
     try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-    root.location.assign(href);
+    const index=linkIndex(link);
+    void (async()=>{
+      try{await syncPromise;}catch{}
+      try{if(!currentSession) await loadActive();}catch{}
+      if(index>=0)try{await markProcessing(index);}catch{}
+    })();
   },true);
 
   root.document.addEventListener('click',event=>{
