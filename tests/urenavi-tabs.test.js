@@ -22,7 +22,7 @@ test('ROOM management screens explain steps and retain their operational control
  assert.match(html,/class="urenaviAdvanced"/);
 });
 
-test('management flow prioritizes confirmation and keeps legacy records secondary',()=>{const a=html.indexOf('<h3>① 投稿できたかを確認</h3>'),b=html.indexOf('<h3>② 商品別の成果を入力</h3>'),c=html.indexOf('<h3>③ 商品ごとの結果を比較</h3>');assert.ok(a>0&&a<b&&b<c);assert.match(html,/<details class="proTasks urenaviAdvanced" id="proActivityPanel">/);assert.match(html,/<summary>名前・理由を追加する（任意）<\/summary>/);});
+test('management flow prioritizes confirmation and keeps legacy records secondary',()=>{const a=html.indexOf('<h3>① 投稿できたかを確認</h3>'),b=html.indexOf('<h3>② 商品別の成果を入力</h3>'),c=html.indexOf('<h3>③ 次の商品選びのヒント</h3>');assert.ok(a>0&&a<b&&b<c);assert.match(html,/<details class="proTasks urenaviAdvanced" id="proActivityPanel">/);assert.match(html,/<summary>名前・理由を追加する（任意）<\/summary>/);});
 
 test('outcomes navigation provides evidence-bounded next choice',()=>{assert.match(html,/id="outcomeDecision"/);assert.match(html,/次の商品選びのヒント/);assert.match(html,/商品別の記録を詳しく比較する/);});
 
