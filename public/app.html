@@ -953,6 +953,7 @@ input,select{
   </div>
   <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を候補選定（開発確認用）</button>
   <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
+  <div class="roomActionRow"><button id="proPauseBatchBtn" type="button">現在の商品を終えて一括生成を停止</button><button id="proResumeBatchBtn" type="button">未処理の商品から再開</button></div>
   <div id="proMsg" class="proMsg"></div>
   <div id="proPreviewResults" class="proPreview"></div>
 
@@ -1097,6 +1098,7 @@ let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
+let aiBatchPauseRequested=false;
 let aiQueueRunning=false;
 
 
@@ -2840,6 +2842,7 @@ async function runAiPreview(items,{resume=false}={}){
   if(!aiGatesFullOutput||aiQueueRunning) return;
   const generation=resume?aiRunGeneration:++aiRunGeneration;
   if(!resume){
+    aiBatchPauseRequested=false;
     aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
     (Array.isArray(items)?items:[]).forEach((item,index)=>{
       const target=aiTargetDecision(item);
@@ -2860,6 +2863,10 @@ async function runAiPreview(items,{resume=false}={}){
   aiQueueRunning=true;
   try{
     while(queue.length&&generation===aiRunGeneration){
+      if(aiBatchPauseRequested){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'paused'});updateAiPanel(rest.index);}
+        break;
+      }
       const job=queue.shift();
       await requestAiRoom(job.item,job.index,generation);
       if(aiRoomResults.get(job.index)?.state==='pending'){
@@ -2868,6 +2875,10 @@ async function runAiPreview(items,{resume=false}={}){
       }
       if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
         for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+        queue.length=0;
+      }
+      if(aiBatchPauseRequested){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'paused'});updateAiPanel(rest.index);}
         queue.length=0;
       }
       const progress=activeAiProgress();
@@ -4238,7 +4249,18 @@ function proSafeProductUrl(value){
 }
 let proVisibleCandidateItems=[];
 function proPrepareCandidates(items){
-  const candidates=(Array.isArray(items)?items:[]).filter(item=>item&&typeof item.itemName==='string'&&item.itemName.trim()).slice(0,3);
+  if(aiQueueRunning||[...aiRoomResults.values()].some(row=>['loading','pending','paused'].includes(row.state))){
+    proEl('proMsg').textContent='作成中・確認待ちの投稿文があります。表示中の商品の確認・再開を先に行ってください。';
+    const results=document.getElementById('res');
+    if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  const seen=new Set();
+  const candidates=(Array.isArray(items)?items:[]).filter(item=>{
+    if(!item||typeof item.itemName!=='string'||!item.itemName.trim()||window.roomOutcomePosted?.(item))return false;
+    let id;try{id=RoomOutcomes.identity(item);}catch{return true;}
+    if(seen.has(id))return false;seen.add(id);return true;
+  }).slice(0,3);
   if(!candidates.length){
     proEl('proMsg').textContent='投稿文を作る商品がありません。';
     return;
@@ -4280,6 +4302,22 @@ function proRenderItems(items=[],label='候補'){
       '</div>';
   }).join('');
 }
+function proPauseBatch(){
+  if(!aiQueueRunning){proEl('proMsg').textContent='現在処理中の一括生成はありません。';return;}
+  aiBatchPauseRequested=true;
+  proEl('proMsg').textContent='現在確認中の商品を終えた後、残りを停止します。完成済みの投稿文は保持します。';
+}
+async function proResumeBatch(){
+  if(aiQueueRunning)return;
+  if([...aiRoomResults.values()].some(row=>row.status===429||row.upstreamStatus===429)){proEl('proMsg').textContent='利用上限で停止しています。この一括生成は再開できません。';return;}
+  if([...aiRoomResults.values()].some(row=>row.state==='pending')){proEl('proMsg').textContent='表示中の商品の検証を先に再開してください。';return;}
+  if(![...aiRoomResults.values()].some(row=>row.state==='paused')){proEl('proMsg').textContent='再開する商品はありません。';return;}
+  aiBatchPauseRequested=false;
+  proEl('proMsg').textContent='未処理の商品から再開します。';
+  await runAiPreview(lastSearchItems,{resume:true});
+}
+proEl('proPauseBatchBtn').addEventListener('click',proPauseBatch);
+proEl('proResumeBatchBtn').addEventListener('click',proResumeBatch);
 proEl('proPrepareBatchBtn').addEventListener('click',proPrepareVisibleBatch);
 proEl('proPreviewResults').addEventListener('click',event=>{
   const button=event.target.closest('[data-pro-candidate]');
