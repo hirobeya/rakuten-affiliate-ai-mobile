@@ -994,7 +994,7 @@ input,select{
     <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している"></details>
     <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
     <p id="roomOpsMessage" class="proMsg" role="status"></p>
-    <h3>② 対応待ち（返しを優先）</h3><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
+    <h3>② 対応待ち（返しを優先）</h3><label for="roomOpsFind">登録済みの相手を探す</label><input id="roomOpsFind" type="search" autocomplete="off" placeholder="名前・ROOM URLで絞り込み"><p id="roomOpsFindStatus" class="proHint" aria-live="polite"></p><div id="roomOpsRecent" class="proPreview"></div><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
     <h3>③ 今日の活動記録</h3><p id="roomOpsAnalysis" class="proMsg"></p>
     <details><summary>完了・保留の履歴</summary><div id="roomOpsHistory" class="proPreview"></div></details>
     <details class="urenaviAdvanced"><summary>データ保存・端末移行（必要なときだけ開く）</summary><p class="proHint">記録はこのブラウザ内に保存されます。機種変更前に必ずバックアップしてください。</p><button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
