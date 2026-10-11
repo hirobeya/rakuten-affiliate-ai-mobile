@@ -139,92 +139,11 @@
     return currentSession.items.findIndex(item=>safeUrl(item?.affiliateUrl||item?.itemUrl||'')===href);
   }
 
-  async function postedNext(){
-    if(!currentSession?.id) return;
-    try{
-      const data=await timeout(api({action:'posted-next',session_id:currentSession.id}),4000);
-      currentSession=data?.session||currentSession;
-      applyResumeUI();
-      const next=data?.next?.item;
-      if(!next){
-        const st=root.document.getElementById('st');
-        if(st) st.textContent='この検索セッションの商品はすべて投稿済みです。';
-        return;
-      }
-      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-      const url=safeUrl(next.affiliateUrl||next.itemUrl||'');
-      if(url) root.location.assign(url);
-    }catch(e){
-      console.warn('Urenavi durable next failed',e);
-      const st=root.document.getElementById('st');
-      if(st) st.textContent='続き情報を更新できませんでした。通信状態を確認してもう一度お試しください。';
-    }
-  }
-
-  function makeBadge(status){
-    const badge=root.document.createElement('span');
-    badge.className='durableStatus';
-    const cfg=status===POSTED
-      ?['✓ 投稿済み','#eaf7ee','#216e39']
-      :status===PROCESSING
-      ?['処理中','#fff4df','#8a5b00']
-      :['未処理','#eef1f4','#666'];
-    badge.textContent=cfg[0];
-    badge.style.cssText=`display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:${cfg[1]};color:${cfg[2]};font-size:10px;font-weight:900;vertical-align:middle;`;
-    return badge;
-  }
-
-  function applyItemStatuses(){
-    if(!currentSession?.items?.length) return;
-    const map=statuses(currentSession.items,currentSession.item_statuses||{});
-    root.document.querySelectorAll('.item').forEach((card,index)=>{
-      card.querySelector('.durableStatus')?.remove();
-      card.querySelector('.durableFinishNext')?.remove();
-      const item=currentSession.items[index];
-      if(!item) return;
-      const state=map[itemKey(item)];
-      card.querySelector('.rank')?.appendChild(makeBadge(state));
-      if(state===PROCESSING){
-        const button=root.document.createElement('button');
-        button.type='button';
-        button.className='durableFinishNext';
-        button.textContent='投稿済みにして次の商品へ';
-        button.style.cssText='width:100%;margin-top:9px;padding:11px;border:0;border-radius:10px;background:#172a4b;color:#fff;font-size:12px;font-weight:900;';
-        button.addEventListener('click',()=>{void postedNext();});
-        (card.querySelector('.acts')||card).insertAdjacentElement('afterend',button);
-      }
-    });
-  }
-
   function applyResumeUI(){
-    if(!currentSession?.items?.length) return;
-    const res=root.document.getElementById('res');
-    if(!res) return;
+    // Search persistence remains available, but it must never infer a ROOM post
+    // or add a next-product control that navigates to another Rakuten page.
     root.document.getElementById('durableResumeBox')?.remove();
-    const map=statuses(currentSession.items,currentSession.item_statuses||{});
-    const values=currentSession.items.map(item=>map[itemKey(item)]);
-    const posted=values.filter(v=>v===POSTED).length;
-    const processing=values.filter(v=>v===PROCESSING).length;
-    const pending=values.filter(v=>v===PENDING).length;
-
-    const box=root.document.createElement('section');
-    box.id='durableResumeBox';
-    box.style.cssText='background:#eef5ff;border:1px solid #cbdcf3;border-radius:16px;padding:13px;margin-top:12px;';
-    const title=root.document.createElement('div');
-    title.textContent='続きから再開';
-    title.style.cssText='font-size:15px;font-weight:900;color:#172a4b;';
-    const meta=root.document.createElement('div');
-    meta.textContent=`投稿済み ${posted}件 / 処理中 ${processing}件 / 未処理 ${pending}件`;
-    meta.style.cssText='margin-top:4px;font-size:11px;color:#52606d;';
-    const button=root.document.createElement('button');
-    button.type='button';
-    button.textContent=processing>0?'投稿済みにして次の商品へ':pending>0?'次の商品へ':'この検索は完了しています';
-    button.disabled=pending===0 && processing===0;
-    button.style.cssText='width:100%;margin-top:10px;padding:12px;border:0;border-radius:11px;background:#172a4b;color:#fff;font-size:13px;font-weight:900;';
-    button.addEventListener('click',()=>{void postedNext();});
-    box.append(title,meta,button);
-    res.insertAdjacentElement('afterbegin',box);
-    applyItemStatuses();
+    root.document.querySelectorAll('.durableFinishNext,.durableStatus').forEach(node=>node.remove());
   }
 
   async function restoreActive(){
@@ -314,5 +233,5 @@
     start();
   }
 
-  root.UrenaviDurable={restoreActive,loadActive,postedNext,start};
+  root.UrenaviDurable={restoreActive,loadActive,start};
 })(typeof window==='undefined'?null:window);
