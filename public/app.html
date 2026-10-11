@@ -993,6 +993,7 @@ input,select{
   </div>
 </section>
 
+<section class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
 <section id="legacyMigration" class="box" hidden><h2>以前の記録を引き継ぐ</h2><p id="legacyMigrationSummary"></p><div class="roomActionRow"><button id="legacyMigrationImport" type="button">自分の旧記録を取り込む</button><button id="legacyMigrationExport" type="button">旧記録をバックアップ</button></div><p id="legacyMigrationMessage" aria-live="polite"></p><textarea id="legacyMigrationBackup" readonly hidden aria-label="旧記録バックアップ" style="width:100%;min-height:160px"></textarea></section>
 <section id="roomOutcomesPanel" class="box">
 <h2>投稿と商品別の成果</h2><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
@@ -4335,6 +4336,21 @@ proEl('legacyMigrationImport').addEventListener('click',()=>{
 proEl('legacyMigrationExport').addEventListener('click',async()=>{
   try{const field=proEl('legacyMigrationBackup');field.hidden=false;field.value=proAccountRecords().legacyBackup();await navigator.clipboard.writeText(field.value);proEl('legacyMigrationMessage').textContent='旧記録をコピーしました。';}
   catch(e){proEl('legacyMigrationMessage').textContent='コピーできない場合は表示された記録を選択してください。 '+e.message;}
+});
+let accountRestoreReview=null;
+const accountBackupMessage=text=>{proEl('accountBackupMessage').textContent=text;};
+proEl('accountBackupText').addEventListener('input',()=>{accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;});
+proEl('accountBackupExport').addEventListener('click',async()=>{
+ try{accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;const field=proEl('accountBackupText');field.value=proAccountRecords().exportData();accountBackupMessage('バックアップを表示しました。端末外の安全な場所に保存してください。');try{await navigator.clipboard.writeText(field.value);accountBackupMessage('コピーしました。端末外の安全な場所に保存してください。');}catch{field.focus();field.select();}}
+ catch(e){accountBackupMessage(e.message);}
+});
+proEl('accountBackupPreview').addEventListener('click',()=>{
+ try{const text=proEl('accountBackupText').value,p=proAccountRecords().previewRestore(text);accountRestoreReview={text,owner:currentAppSession?.user?.email};proEl('accountBackupRestore').disabled=false;accountBackupMessage('追加する売上 '+p.days+'日・活動 '+p.activities+'件。同一記録は重複せず、食い違う売上は上書きしません。');}
+ catch(e){accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;accountBackupMessage(e.message);}
+});
+proEl('accountBackupRestore').addEventListener('click',()=>{
+ try{if(!accountRestoreReview||accountRestoreReview.text!==proEl('accountBackupText').value||accountRestoreReview.owner!==currentAppSession?.user?.email)throw Error('現在のアカウントで復元内容を確認してください。');if(!confirm('このバックアップはあなた自身の記録ですか？現在のアカウントへ復元します。'))return;const p=proAccountRecords().restore(accountRestoreReview.text);accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;proRenderActivities();proUpdateDashboard();accountBackupMessage('復元しました。売上 '+p.days+'日・活動 '+p.activities+'件を追加しました。');}
+ catch(e){accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;accountBackupMessage(e.message);}
 });
 function proJstToday(){return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});}
 function proReadRevenue(){

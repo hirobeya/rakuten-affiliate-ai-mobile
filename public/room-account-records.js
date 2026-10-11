@@ -14,7 +14,23 @@ function createStore(storage,owner){const account=String(owner||'').trim().toLow
  function preview(){const d=all();if(d.legacyOwner)return {available:false,claimed:true,own:d.legacyOwner===account};const r=revenue(parsed(storage.getItem(REVENUE),{})),a=activities(parsed(storage.getItem(ACTIVITY),[])),current=read();return {available:Object.keys(r).length+a.length>0,days:Object.keys(r).length,activities:a.length,conflicts:Object.keys(r).filter(k=>current.revenue[k]).length};}
  function migrate(){const d=all();if(d.legacyOwner)throw Error(d.legacyOwner===account?'旧記録は取り込み済みです。':'旧記録は別のアカウントへ取り込み済みです。');const p=preview();if(!p.available)throw Error('取り込める旧記録がありません。');if(p.conflicts)throw Error('同じ日付の売上記録があります。上書きせず、旧記録のバックアップと現在の記録を確認してください。');const oldRevenue=revenue(parsed(storage.getItem(REVENUE),{})),oldActivities=activities(parsed(storage.getItem(ACTIVITY),[])),r=read(),unique=new Set(r.activities.map(x=>JSON.stringify([x.type,x.at,x.day,x.note||''])));for(const row of oldActivities){const key=JSON.stringify([row.type,row.at,row.day,row.note||'']);if(!unique.has(key)){r.activities.push(row);unique.add(key);}}r.revenue={...oldRevenue,...r.revenue};d.accounts[account]=r;d.legacyOwner=account;storage.setItem(KEY,JSON.stringify(d));return p;}
  function legacyBackup(){return JSON.stringify({revenue:parsed(storage.getItem(REVENUE),{}),activities:parsed(storage.getItem(ACTIVITY),[])},null,2);}
- return {read,setRevenue,setActivities,preview,migrate,legacyBackup};
+ function exportData(){return JSON.stringify({format:'urenavi-account-records',version:1,...read()},null,2);}
+ function restorePlan(text){
+  if(typeof text!=='string'||text.length>2000000)throw Error('バックアップは2MB以内のJSONを指定してください。');
+  const b=parsed(text,null);if(!b||b.format!=='urenavi-account-records'||b.version!==1)throw Error('売上・活動バックアップの形式が異なります。');
+  const incomingRevenue=revenue(b.revenue),incomingActivities=activities(b.activities),current=read();
+  const merged={revenue:{...current.revenue},activities:[...current.activities]};let days=0,count=0;
+  for(const [day,row] of Object.entries(incomingRevenue)){
+   const old=merged.revenue[day];if(old&&((old.sales??null)!==(row.sales??null)||(old.commission??null)!==(row.commission??null)))throw Error(day+'の売上が現在の記録と異なります。復元を中止しました。');
+   if(!old){merged.revenue[day]={sales:row.sales??null,commission:row.commission??null};days++;}
+  }
+  const key=x=>JSON.stringify([x.type,x.at,x.day,x.note||'']);const seen=new Set(merged.activities.map(key));
+  for(const row of incomingActivities)if(!seen.has(key(row))){merged.activities.push({type:row.type,at:row.at,day:row.day,note:row.note||''});seen.add(key(row));count++;}
+  return {merged,days,activities:count};
+ }
+ function previewRestore(text){const p=restorePlan(text);return {days:p.days,activities:p.activities};}
+ function restore(text){const p=restorePlan(text);put(p.merged);return {days:p.days,activities:p.activities};}
+ return {read,setRevenue,setActivities,preview,migrate,legacyBackup,exportData,previewRestore,restore};
 }
 return {createStore};
 });
