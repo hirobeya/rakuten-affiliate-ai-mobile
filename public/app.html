@@ -984,12 +984,12 @@ input,select{
   </div>
 
   <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
-    <h2 id="roomOpsTitle">いいね・フォロー管理</h2><p class="proHint"><strong>この画面でできること：</strong>返したい相手を登録し、楽天ROOMで実際にいいね・フォローしたあと、その記録を残します。自動いいね・自動フォローではありません。</p><ol class="urenaviSteps"><li>ROOMで相手を見つける</li><li>相手のURLを登録する</li><li>「対応待ち」からROOMへ移動して実施する</li><li>戻って「実施したと記録」を押す</li></ol>
+    <h2 id="roomOpsTitle">いいね・フォロー管理</h2><div id="roomOpsQuick" class="box"><strong>今やる交流</strong><p id="roomOpsQuickStatus" aria-live="polite">登録済みの候補を確認します。</p><button id="roomOpsQuickGo" type="button" class="proPrimary">対応待ちを見る</button></div><p class="proHint"><strong>この画面でできること：</strong>返したい相手を登録し、楽天ROOMで実際にいいね・フォローしたあと、その記録を残します。自動いいね・自動フォローではありません。</p><ol class="urenaviSteps"><li>ROOMで相手を見つける</li><li>相手のURLを登録する</li><li>「対応待ち」からROOMへ移動して実施する</li><li>戻って「実施したと記録」を押す</li></ol>
     <p class="proHint">ROOMで見つけた相手や、いいね・フォローをくれた相手を登録。返しを先に表示し、同じ活動の重複を防ぎます。</p>
     <a class="roomLink" href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">ROOMで相手を探す</a>
     <h3>① 対応したい相手を登録</h3><label for="roomOpsType">どんな活動をする？</label>
     <select id="roomOpsType"><option value="like_return">いいね返し</option><option value="follow_return">フォロー返し</option><option value="like_visit">いいね回り</option><option value="follow_visit">フォロー回り</option></select>
-    <label for="roomOpsUrl">相手のROOM・投稿URL（必須）</label><p class="proHint">相手のROOMで共有したリンクを貼り付けます。現状は候補の自動収集には対応していません。</p><input id="roomOpsUrl" type="url" placeholder="https://room.rakuten.co.jp/room_…/" autocomplete="off">
+    <label for="roomOpsUrl">相手のROOM・投稿URL（必須）</label><p class="proHint">相手のROOMで共有したリンクを貼り付けます。現状は候補の自動収集には対応していません。</p><input id="roomOpsUrl" type="url" placeholder="https://room.rakuten.co.jp/room_…/" autocomplete="off"><button id="roomOpsPaste" type="button" class="proGhost">コピーしたURLを貼り付け</button>
     <details class="urenaviAdvanced"><summary>名前・理由を追加する（任意）</summary><label for="roomOpsName">相手の名前（任意）</label><input id="roomOpsName" maxlength="160">
     <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している"></details>
     <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
@@ -1033,7 +1033,7 @@ input,select{
 <label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
 <button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
 <p class="proHint">商品別記録の合計です。日別売上記録とは重複加算しません。活動と売上の因果関係は判断しません。</p>
-<h3>③ 次の商品選びのヒント</h3><div id="outcomeDecision" class="proMsg" aria-live="polite">記録をもとに分析します。</div><p class="proHint">確認できた商品別の記録だけを比較します。売れやすさの予測や交流の効果を示すものではありません。</p><details class="urenaviAdvanced"><summary>商品別の記録を詳しく比較する</summary><div id="outcomeComparison"></div></details><details class="urenaviAdvanced"><summary>投稿・実績データのバックアップと復元</summary><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
+<h3>③ 次の商品選びのヒント</h3><button id="outcomeToSearch" type="button" class="proPrimary">商品検索に戻る</button><div id="outcomeDecision" class="proMsg" aria-live="polite">記録をもとに分析します。</div><p class="proHint">確認できた商品別の記録だけを比較します。売れやすさの予測や交流の効果を示すものではありません。</p><details class="urenaviAdvanced"><summary>商品別の記録を詳しく比較する</summary><div id="outcomeComparison"></div></details><details class="urenaviAdvanced"><summary>投稿・実績データのバックアップと復元</summary><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
 </section>
 </main>
 
@@ -4620,6 +4620,24 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
     search.scrollIntoView({block:'start'});
     // Keep the keyboard closed on iPhone; the user can tap the search field.
   }
+  document.getElementById('outcomeToSearch').addEventListener('click',goToProductSearch);
+  document.getElementById('roomOpsQuickGo').addEventListener('click',()=>{
+    const queue=document.getElementById('roomOpsQueue');
+    queue.scrollIntoView({block:'start'});
+  });
+  document.getElementById('roomOpsPaste').addEventListener('click',async()=>{
+    const field=document.getElementById('roomOpsUrl');
+    const status=document.getElementById('roomOpsMessage');
+    try{
+      const value=await navigator.clipboard.readText();
+      if(!value.trim()){status.textContent='コピーしたURLがありません。';return;}
+      field.value=value.trim();
+      status.textContent='URLを貼り付けました。相手と活動の種類を確認してから登録してください。';
+    }catch{
+      status.textContent='自動貼り付けが許可されませんでした。URL欄を長押しして貼り付けてください。';
+      field.focus();
+    }
+  });
   document.getElementById('urenaviNextSearchBtn').addEventListener('click',event=>{
     event.preventDefault();
     event.stopPropagation();
