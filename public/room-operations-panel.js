@@ -8,6 +8,8 @@
     if(!store)return;
     try{
       const data=store.read(),summary=store.summary(),queue=store.queue(),labels=RoomOperations.labels;
+      $('roomOpsQuickStatus').textContent=summary.pending?('対応待ち '+summary.pending+'件。'+(summary.next?'次は「'+labels[summary.next.type]+'」を確認しましょう。':'')):'今のところ対応待ちはありません。必要なときだけ候補を登録してください。';
+      $('roomOpsQuickGo').textContent=summary.pending?'対応待ち '+summary.pending+'件を見る':'候補の登録欄を見る';
       $('roomTodayCounts').textContent='交流完了 '+summary.today+'件 ／ 対応待ち '+summary.pending+'件';
       $('roomNextAction').textContent=summary.next?labels[summary.next.type]+'：'+(summary.next.name||'登録したROOM')+'を確認しましょう。':'投稿する商品を選ぶか、ROOMで見つけた交流候補を登録しましょう。';
       $('roomOpsQueue').innerHTML=queue.map(row=>'<article class="proCard"><b>'+escape(labels[row.type])+'｜'+escape(row.name||'相手のROOM')+'</b><p class="proMeta">'+escape(row.reason||'本人が選んだ交流候補')+'</p><p class="proMeta">'+(row.state==='opened'?'ROOMを開いた状態・実施は未確認':'未対応')+'</p><div class="roomActionRow"><a class="roomLink" href="'+escape(row.url)+'" target="_blank" rel="noopener noreferrer" data-room-open="'+escape(row.id)+'">相手のROOMを開く</a><button type="button" data-room-complete="'+escape(row.id)+'" '+(row.state!=='opened'?'disabled':'')+'>実施したと記録</button><button type="button" data-room-skip="'+escape(row.id)+'">保留</button></div></article>').join('')||'<p class="proHint">対応待ちはありません。いいね・フォローの実操作はROOMで行います。</p>';
