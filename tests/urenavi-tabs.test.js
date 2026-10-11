@@ -53,3 +53,13 @@ test('weak copy from the reported washing-net screen is not publish-ready',()=>{
  assert.equal(ctx.roomCopyNeedsReview('ブラジャーの型崩れを防ぎつつ、ドラム式洗濯機で手軽に洗いたいときに使えます。\n\n※アフィリエイト広告を利用しています'),true);
  assert.equal(ctx.roomCopyNeedsReview('使う場面の説明を確認しました。\n\n2枚組で選べる洗濯ネットです。\n\n※アフィリエイト広告を利用しています'),false);
 });
+
+test('restored search never creates a next-product button or marks a product posted',()=>{
+ const fs=require('node:fs');
+ const durable=fs.readFileSync('public/durable-session.js','utf8');
+ const loader=fs.readFileSync('public/return-state.js','utf8');
+ assert.doesNotMatch(durable,/投稿済みにして次の商品へ|button\.textContent=.*次の商品へ|action:'posted-next'|function postedNext\(/);
+ assert.doesNotMatch(durable,/root\.location\.assign\(url\)/);
+ assert.match(loader,/durable-session\.js\?v=20261011-ux-restore-no-next/);
+ assert.match(durable,/function applyResumeUI\(\)/);
+});
