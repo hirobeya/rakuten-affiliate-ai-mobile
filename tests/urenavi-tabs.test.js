@@ -116,3 +116,16 @@ test('unresolved local spec alone cannot bypass Groq fallback, grounded copy can
  ctx.roomCopyNeedsReview=()=>true;
  assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,true);
 });
+
+
+test('owner Preview does not force Groq when grounded local copy is ready',()=>{
+ const start=html.indexOf('function aiTargetDecision(item){'),end=html.indexOf('function activeAiProgress(',start);
+ assert.ok(start>0&&end>start);
+ const ctx={usePurchasePlan:true,groundedAnalysis:()=>({outputMode:'full',ambiguous:false,topCandidates:[],conflicts:[]}),
+  window:{UrenaviPainCopy:{extractFallbackTitleFacts:()=>['コードレス'],buildGroundedBenefitPost:()=> '掃除機です。\nコードをつながずに使うタイプです。'}},
+  roomCopyNeedsReview:()=>false};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ assert.equal(ctx.aiTargetDecision({itemName:'コードレス 掃除機'}).callAi,false);
+ ctx.roomCopyNeedsReview=()=>true;
+ assert.equal(ctx.aiTargetDecision({itemName:'コードレス 掃除機'}).callAi,true);
+});
