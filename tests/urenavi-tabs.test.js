@@ -43,3 +43,5 @@ test('ROOM engagement prioritizes four activities and keeps contact lookup secon
 
 
 test('copy tab has no redundant next-product control',()=>{assert.doesNotMatch(html,/id="urenaviCopyToSearch"|id="urenaviNextSearchBtn"/);assert.match(html,/data-urenavi-tab="search"/);});
+
+test('preview version identifies stale iPhone sessions and weak copy is blocked',()=>{assert.match(html,/id="urenaviPreviewVersion"/);assert.match(html,/function roomCopyNeedsReview\(text\)/);assert.match(html,/!roomCopyNeedsReview\(text\)/);assert.doesNotMatch(html,/投稿済みにして次の商品へ/);});
