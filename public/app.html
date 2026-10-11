@@ -775,6 +775,7 @@ input,select{
 <div id="appRoot">
 
 <main class="w">
+<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認1</p>
 
 <div class="appHead">
 
@@ -3183,10 +3184,18 @@ function aiPostState(i){
   return {index,target,state,gate:resolveAiGate(i,index,lastSearchKeyword)};
 }
 
+function roomCopyNeedsReview(text){
+  const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
+  // A single vague line is not a sales-ready post even when text generation succeeded.
+  const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  return lines.length<2 && body.length<85;
+}
+
 function postReady(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
-  return Boolean(String(post(i,p)||'').trim());
+  const text=String(post(i,p)||'').trim();
+  return Boolean(text) && !roomCopyNeedsReview(text);
 }
 
 function postDisplay(i,p='room'){
