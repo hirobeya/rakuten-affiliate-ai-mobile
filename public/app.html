@@ -701,6 +701,24 @@ input,select{
 #roomOutcomesPanel .proCard{overflow-wrap:anywhere;margin-top:8px}
 #roomOutcomesPanel button{min-height:44px;max-width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccd9e9;font-size:14px}
 #roomOutcomesPanel select,#roomOutcomesPanel input{min-width:0;width:100%;font-size:16px}
+
+/* One app, task-oriented navigation. Visibility only; entitlement/API gates unchanged. */
+.urenaviWorkTabs{display:flex;gap:5px;overflow-x:auto;position:sticky;top:0;z-index:30;padding:9px 2px;background:#f6f7f9;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.urenaviWorkTabs button{flex:0 0 auto;min-height:44px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:12px;background:white;color:#334155;font-size:13px;font-weight:800}
+.urenaviWorkTabs button[aria-current="page"]{background:#172a4b;color:#fff;border-color:#172a4b}
+#appRoot[data-urenavi-tab] .roomToday,#appRoot[data-urenavi-tab] #normalScreen,#appRoot[data-urenavi-tab] #proPanel,#appRoot[data-urenavi-tab] #roomOutcomesPanel,#appRoot[data-urenavi-tab] #roomAccountBackupPanel,#appRoot[data-urenavi-tab] #legacyMigration{display:none}
+#appRoot[data-urenavi-tab="today"] .roomToday{display:block}
+#appRoot[data-urenavi-tab="search"] #normalScreen,#appRoot[data-urenavi-tab="copy"] #normalScreen{display:block}
+#appRoot[data-urenavi-tab="copy"] #normalScreen > .box{display:none}
+#appRoot[data-urenavi-tab="search"] #proPanel.proIntegrated.on,#appRoot[data-urenavi-tab="operations"] #proPanel.proIntegrated.on,#appRoot[data-urenavi-tab="today"] #proPanel.proIntegrated.on{display:block}
+#appRoot[data-urenavi-tab] #proPanel > .proHead,#appRoot[data-urenavi-tab] #proPanel > .proHint{display:none}
+#appRoot[data-urenavi-tab] #proPanel > .proTasks,#appRoot[data-urenavi-tab] #proPanel > #urenaviCandidateTools{display:none}
+#appRoot[data-urenavi-tab="search"] #proPanel > #urenaviCandidateTools{display:block}
+#appRoot[data-urenavi-tab="operations"] #proPanel > #roomOpsPanel,#appRoot[data-urenavi-tab="operations"] #proPanel > #proActivityPanel{display:block}
+#appRoot[data-urenavi-tab="today"] #proPanel > .proTasks:not(#roomOpsPanel):not(#proActivityPanel){display:block}
+#appRoot[data-urenavi-tab="results"] #roomOutcomesPanel,#appRoot[data-urenavi-tab="results"] #roomAccountBackupPanel{display:block}
+#appRoot[data-urenavi-tab="results"] #legacyMigration:not([hidden]){display:block}
+
 </style>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
@@ -777,6 +795,7 @@ input,select{
 ※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
 </div>
 
+<nav id="urenaviWorkTabs" class="urenaviWorkTabs" aria-label="作業を切り替える"><button type="button" data-urenavi-tab="search">商品検索</button><button type="button" data-urenavi-tab="copy">投稿文</button><button type="button" data-urenavi-tab="operations">交流</button><button type="button" data-urenavi-tab="results">実績</button><button type="button" data-urenavi-tab="today">今日の運用</button></nav>
 <section class="box roomToday" aria-labelledby="roomTodayTitle">
   <h2 id="roomTodayTitle">今日のROOM運用</h2>
   <p id="roomTodayCounts" aria-live="polite">ログイン後に活動を読み込みます。</p>
@@ -923,6 +942,7 @@ input,select{
     <div id="proRevenueMsg" class="proMsg" aria-live="polite"></div>
   </div>
 
+  <div id="urenaviCandidateTools">
   <label>楽天市場カテゴリー</label>
   <div id="proGenrePath" class="proPath">楽天市場</div>
   <select id="proGenrePicker"><option value="">カテゴリーを読み込み中…</option></select>
@@ -958,6 +978,7 @@ input,select{
   <div id="proMsg" class="proMsg"></div>
   <p id="proResourceUsage" class="proHint" aria-live="polite">現在の生成の使用量はまだ取得していません。</p>
   <div id="proPreviewResults" class="proPreview"></div>
+  </div>
 
   <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
     <h2 id="roomOpsTitle">交流候補から実施まで</h2>
@@ -996,7 +1017,7 @@ input,select{
   </div>
 </section>
 
-<section class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
+<section id="roomAccountBackupPanel" class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
 <section id="legacyMigration" class="box" hidden><h2>以前の記録を引き継ぐ</h2><p id="legacyMigrationSummary"></p><div class="roomActionRow"><button id="legacyMigrationImport" type="button">自分の旧記録を取り込む</button><button id="legacyMigrationExport" type="button">旧記録をバックアップ</button></div><p id="legacyMigrationMessage" aria-live="polite"></p><textarea id="legacyMigrationBackup" readonly hidden aria-label="旧記録バックアップ" style="width:100%;min-height:160px"></textarea></section>
 <section id="roomOutcomesPanel" class="box">
 <h2>投稿と商品別の成果</h2><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
@@ -4572,6 +4593,51 @@ proEl('proSaveBtn').addEventListener('click',()=>proSave().catch(e=>proEl('proMs
 proEl('proGenerateBtn').addEventListener('click',proGenerate);
 
 
+</script>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.getElementById('appRoot');
+  const tabs=document.getElementById('urenaviWorkTabs');
+  const valid=new Set(['search','copy','operations','results','today']);
+  function choose(next){
+    if(!valid.has(next))return;
+    root.dataset.urenaviTab=next;
+    tabs.querySelectorAll('[data-urenavi-tab]').forEach(b=>{
+      if(b.dataset.urenaviTab===next)b.setAttribute('aria-current','page');
+      else b.removeAttribute('aria-current');
+    });
+  }
+  tabs.addEventListener('click',e=>{
+    const b=e.target.closest('[data-urenavi-tab]');
+    if(!b)return;
+    choose(b.dataset.urenaviTab);
+    tabs.scrollIntoView({block:'start',behavior:'instant'});
+  });
+  function tabForHash(hash){
+    if(!hash)return null;
+    const id=decodeURIComponent(hash.slice(1));
+    const node=document.getElementById(id);
+    if(!node)return null;
+    if(node.closest('#roomOpsPanel,#proActivityPanel'))return 'operations';
+    if(node.closest('#roomOutcomesPanel,#roomAccountBackupPanel,#legacyMigration')||id==='proDailyDashboard'&&false)return 'results';
+    if(node.closest('.roomToday')||id==='roomToday')return 'today';
+    if(node.closest('#urenaviCandidateTools'))return 'search';
+    if(id==='res')return 'copy';
+    if(node.closest('#normalScreen'))return 'search';
+    if(id==='proDailyDashboard')return 'today';
+    return null;
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest?.('a[href^="#"]');
+    if(!a)return;
+    const tab=tabForHash(a.getAttribute('href'));
+    if(tab)choose(tab);
+  },true);
+  window.addEventListener('hashchange',()=>{const tab=tabForHash(location.hash);if(tab)choose(tab);});
+  choose(tabForHash(location.hash)||'search');
+})();
 </script>
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
 <script src="/access-guard.js?v=20261002-qr"></script>
