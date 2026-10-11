@@ -39,3 +39,5 @@ test('saved ROOM contacts can be searched and reused without manual URL input',(
  assert.match(panel,/data-room-reuse/);
  assert.match(panel,/24時間以上前に登録した返し候補/);
 });
+
+test('ROOM engagement prioritizes four activities and keeps contact lookup secondary',()=>{for(const k of ['like_return','follow_return','like_visit','follow_visit'])assert.match(html,new RegExp('data-room-work="'+k+'"'));assert.match(html,/<summary>以前の相手を探す・再利用する（必要なときだけ）<\/summary>/);assert.match(html,/document\.getElementById\('roomOpsType'\)\.value=button\.dataset\.roomWork/);});
