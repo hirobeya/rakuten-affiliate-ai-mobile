@@ -93,8 +93,8 @@ test('local readiness requires a grounded purchase-value sentence in the display
  assert.ok(start>0&&end>start);
  const ctx={window:{UrenaviStructuredCopy:{compose:()=>({status:'ok',understanding:{scene:'外出先での充電に。'},values:[{text:'コードをつながずに使うタイプです。',factRefs:['コードレス']}]})}}};
  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
- const unrelated='外出先での充電に。\\n\\n見た目を楽しみながら選べる一品です。\\n\\n※アフィリエイト広告を利用しています';
+ const unrelated='外出先での充電に。\n\n見た目を楽しみながら選べる一品です。\n\n※アフィリエイト広告を利用しています';
  assert.equal(ctx.roomCopyNeedsReview(unrelated,{},false),true);
- const grounded='外出先での充電に。\\n\\n充電式のモバイルバッテリーです。\\nコードをつながずに使うタイプです。\\n\\n※アフィリエイト広告を利用しています';
+ const grounded='外出先での充電に。\n\n充電式のモバイルバッテリーです。\nコードをつながずに使うタイプです。\n\n※アフィリエイト広告を利用しています';
  assert.equal(ctx.roomCopyNeedsReview(grounded,{},false),false);
 });
