@@ -177,8 +177,6 @@
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
     if(!understanding.identity||!facts.length) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
-    // A spec list alone is not a purchase reason. Do not promote it as ready ROOM copy.
-    if(!values.length&&!understanding.scene) return {version:VERSION,understanding,facts,values,text:'',status:'purchase_reason_unconfirmed'};
     const used=new Set(values.flatMap(x=>x.factRefs||[x.factRef]));
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     const lead=understanding.scene;
