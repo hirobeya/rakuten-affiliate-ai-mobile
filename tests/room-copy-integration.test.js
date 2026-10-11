@@ -69,3 +69,13 @@ test('public copy URL reuses the existing function and rejects production dispat
   await require('../api/room-ai-v3')({method:'POST',query:{urenaviContract:'1'},body:{}},res);assert.equal(status,404);
  }finally{process.env.VERCEL_ENV=previous;}
 });
+
+test('semantic generator requires evidenced purchase value, not generic one-line usage',()=>{
+ const prompts=require('../lib/room-semantic-provider');
+ assert.match(prompts.WRITER_PROMPT,/商品固有の特徴/);
+ assert.match(prompts.WRITER_PROMPT,/一般的な一文だけでは完成扱いにしない/);
+ assert.match(prompts.REVIEW_PROMPT,/distinguishable evidenced feature/);
+ assert.match(prompts.REVIEW_PROMPT,/Do not demand a specific sentence count/);
+ const engine=require('../lib/room-semantic-engine');
+ assert.match(engine.VERSION,/^room_contract_[a-f0-9]{16}$/);
+});
