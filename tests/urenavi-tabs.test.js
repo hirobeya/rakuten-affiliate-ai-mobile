@@ -87,3 +87,14 @@ test('actual copy-quality guard rejects generic laundry copy and ungrounded loca
  // A scene label alone, without supported purchase benefits, is still not publish-ready.
  assert.equal(context.roomCopyNeedsReview('洗うときに\\n洗濯ネットです。\\n洗える仕様です。\\n※アフィリエイト広告を利用しています',{scene:true},false),true);
 });
+
+test('local readiness requires a grounded purchase-value sentence in the displayed copy',()=>{
+ const start=html.indexOf('function roomCopyNeedsReview('),end=html.indexOf('function isFullyReviewedCopyState(',start);
+ assert.ok(start>0&&end>start);
+ const ctx={window:{UrenaviStructuredCopy:{compose:()=>({status:'ok',understanding:{scene:'外出先での充電に。'},values:[{text:'コードをつながずに使うタイプです。',factRefs:['コードレス']}]})}}};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ const unrelated='外出先での充電に。\\n\\n見た目を楽しみながら選べる一品です。\\n\\n※アフィリエイト広告を利用しています';
+ assert.equal(ctx.roomCopyNeedsReview(unrelated,{},false),true);
+ const grounded='外出先での充電に。\\n\\n充電式のモバイルバッテリーです。\\nコードをつながずに使うタイプです。\\n\\n※アフィリエイト広告を利用しています';
+ assert.equal(ctx.roomCopyNeedsReview(grounded,{},false),false);
+});
