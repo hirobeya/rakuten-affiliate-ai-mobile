@@ -14,4 +14,4 @@ test('tab change script is syntactically valid and direct anchors target existin
  for(const id of ['normalScreen','res','roomOpsPanel','proDailyDashboard','outcomeHistory'])assert.match(html,new RegExp('id="'+id+'"'));
 });
 
-test('next product search button switches to in-app search without an external URL',()=>{assert.match(html,/id="urenaviNextSearchBtn"/);assert.match(html,/getElementById\('urenaviNextSearchBtn'\)\.addEventListener\('click',[\s\S]*?choose\('search'\)/);assert.match(html,/function goToProductSearch\(\)/);assert.match(html,/search\.scrollIntoView\(\{block:'start'\}\)/);assert.match(html,/event\.stopPropagation\(\)/);});
+test('next product search button switches to in-app search without an external URL',()=>{assert.match(html,/id="urenaviNextSearchBtn"/);assert.match(html,/function goToProductSearch\(\)\{\s*choose\('search'\)/);assert.match(html,/getElementById\('urenaviNextSearchBtn'\)\.addEventListener\('click',[\s\S]*?goToProductSearch\(\)/);assert.match(html,/function goToProductSearch\(\)/);assert.match(html,/search\.scrollIntoView\(\{block:'start'\}\)/);assert.match(html,/event\.stopPropagation\(\)/);});
