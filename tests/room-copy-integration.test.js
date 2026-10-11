@@ -1,6 +1,6 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict');
-const {createHandler}=require('../api/room-copy');
+const {createHandler}=require('../lib/room-copy-handler');
 const {publication,questions}=require('../lib/room-semantic-contract');
 const client=require('../public/room-copy-result');
 const {measure,meteredProvider}=require('../lib/room-copy-cost');
@@ -59,4 +59,13 @@ test('cost measurement leaves unknown models or token counts unknown and include
  assert.equal(measure({model:'openai/gpt-oss-120b',usage:{}}).estimatedUsd,null);
  assert.equal(measure({model:'openai/gpt-oss-20b',usage:{input_tokens:1000,output_tokens:500,output_tokens_details:{reasoning_tokens:400}}}).estimatedUsd,.000225);
  const rows=[];const provider=meteredProvider({model:'openai/gpt-oss-20b',call:async()=>({usage:{prompt_tokens:1000,completion_tokens:500}})},{log:x=>rows.push(x)});await provider.call('generate',{},{});assert.equal(rows[0].outputTokens,500);
+});
+
+test('public copy URL reuses the existing function and rejects production dispatch',async()=>{
+ const config=require('../vercel.json');
+ assert.deepEqual(config.rewrites[0],{source:'/api/room-copy',destination:'/api/room-ai-v3?urenaviContract=1'});
+ const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='production';
+ try{let status;const res={setHeader(){},status(n){status=n;return this;},json(body){return body;}};
+  await require('../api/room-ai-v3')({method:'POST',query:{urenaviContract:'1'},body:{}},res);assert.equal(status,404);
+ }finally{process.env.VERCEL_ENV=previous;}
 });

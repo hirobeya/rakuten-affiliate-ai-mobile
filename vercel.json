@@ -8,6 +8,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/room-copy",
+      "destination": "/api/room-ai-v3?urenaviContract=1"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/public/$1"
     }

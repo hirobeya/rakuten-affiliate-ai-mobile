@@ -31,7 +31,7 @@ test('Preview UI uses explicit canonical adapter and preserves tested local V3 r
 test('legacy V3 endpoint remains unchanged while the integrated endpoint owns semantic generation',()=>{
   const source=fs.readFileSync(path.join(__dirname,'../api/room-ai-v3.js'),'utf8');
   assert.doesNotMatch(source,/room-semantic-engine|room-semantic-provider/);
-  const gateway=fs.readFileSync(path.join(__dirname,'../api/room-copy.js'),'utf8');
+  const gateway=fs.readFileSync(path.join(__dirname,'../lib/room-copy-handler.js'),'utf8');
   assert.match(gateway,/room-semantic-engine/);
 });
 

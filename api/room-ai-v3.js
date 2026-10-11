@@ -593,7 +593,11 @@ function createHandler(deps={}){
   };
 }
 
-module.exports=createHandler();
+const legacyHandler=createHandler();
+module.exports=function(req,res){
+  if(req.query?.urenaviContract==='1')return require('../lib/room-copy-handler')(req,res);
+  return legacyHandler(req,res);
+};
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
