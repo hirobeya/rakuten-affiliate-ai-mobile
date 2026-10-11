@@ -2847,9 +2847,9 @@ function aiTargetDecision(item){
   const localReady=Boolean(localText)&&!roomCopyNeedsReview(localText,item,false);
   const reasons=[];
   if(conflicts.length) reasons.push('rule_conflict');
-  else if(unresolved&&!localReady){
+  else if(!localReady){
     if(a?.ambiguous) reasons.push('rule_ambiguous');
-    if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
+    if(unresolved&&top.length>1&&gap<20) reasons.push('small_candidate_gap');
     reasons.push('insufficient_grounded_purchase_reason');
   }
   return {
