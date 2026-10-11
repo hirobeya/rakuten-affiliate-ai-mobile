@@ -205,7 +205,7 @@
 
   root.addEventListener('click',async event=>{
     const link=event.target.closest?.('a');
-    if(!link || String(link.textContent||'').trim()!=='楽天で見る') return;
+    if(!link || link.dataset.urenaviProductLink!=='market') return;
     const href=safeUrl(link.href||'');
     if(!href) return;
     event.preventDefault();
