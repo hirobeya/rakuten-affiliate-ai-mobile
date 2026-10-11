@@ -76,7 +76,7 @@
   ensurePwaHead();
 
   const durableScript=root.document.createElement('script');
-  durableScript.src='/durable-session.js?v=20260916-1';
+  durableScript.src='/durable-session.js?v=20261011-ux-restore-no-next';
   durableScript.defer=true;
   root.document.head.appendChild(durableScript);
 
