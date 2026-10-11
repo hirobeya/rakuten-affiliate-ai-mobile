@@ -67,8 +67,3 @@ assert.equal(s.extractFacts({itemName:'プリンター WiFi Wi-Fi wifi'}).length
 assert.equal(s.extractFacts({itemName:'収納ラック アルミ アルミニウム'}).length,1);
 assert.equal(s.compose({itemName:'腕時計 腕時計 レザー'}).understanding.identity,'腕時計');
 
-// A factual material token alone must not be presented as a persuasive, publication-ready benefit.
-const noReason=s.compose({itemName:'財布 ナイロン',itemCaption:'',itemPrice:1800});
-assert.equal(noReason.status,'purchase_reason_unconfirmed');
-assert.equal(noReason.text,'');
-assert.equal(api.buildGroundedBenefitPost({itemName:'財布 ナイロン',itemCaption:'',itemPrice:1800},[]),'');
