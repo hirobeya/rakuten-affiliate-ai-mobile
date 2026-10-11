@@ -2841,12 +2841,16 @@ function aiTargetDecision(item){
   const fallbackFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
   const safeFallback=fallbackFacts.length>=1;
   const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
+  // A single safe spec is not proof that the local writer can explain why to buy.
+  // Only route unresolved items to Groq when the grounded local copy is not publish-ready.
+  const localText=window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,fallbackFacts)||'';
+  const localReady=Boolean(localText)&&!roomCopyNeedsReview(localText,item,false);
   const reasons=[];
   if(conflicts.length) reasons.push('rule_conflict');
-  else if(unresolved&&!safeFallback){
+  else if(unresolved&&!localReady){
     if(a?.ambiguous) reasons.push('rule_ambiguous');
     if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
-    reasons.push('insufficient_grounded_facts');
+    reasons.push('insufficient_grounded_purchase_reason');
   }
   return {
     callAi:reasons.length>0,reasons,topScore,
