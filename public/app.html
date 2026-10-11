@@ -702,7 +702,7 @@ input,select{
 #roomOutcomesPanel button{min-height:44px;max-width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccd9e9;font-size:14px}
 #roomOutcomesPanel select,#roomOutcomesPanel input{min-width:0;width:100%;font-size:16px}
 
-.urenaviNextSearch{display:none;margin-top:12px}.urenaviNextSearch button{width:100%;min-height:48px;border:0;border-radius:12px;background:#172a4b;color:#fff;font-size:15px;font-weight:800}#appRoot[data-urenavi-tab="copy"] .urenaviNextSearch{display:block}
+
 /* One app, task-oriented navigation. Visibility only; entitlement/API gates unchanged. */
 .urenaviWorkTabs{display:flex;gap:5px;overflow-x:auto;position:sticky;top:0;z-index:30;padding:9px 2px;background:#f6f7f9;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .urenaviWorkTabs button{flex:0 0 auto;min-height:44px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:12px;background:white;color:#334155;font-size:13px;font-weight:800}
@@ -926,9 +926,9 @@ input,select{
 
 
 
-<div id="urenaviCopyNavigation" class="urenaviCopyNavigation"><button id="urenaviCopyToSearch" type="button">次の商品へ（ウレナビの商品検索に戻る）</button><p>この操作では投稿済みになりません。楽天の商品詳細は開きません。</p></div>
+<div id="urenaviCopyNavigation" class="urenaviCopyNavigation"><button id="urenaviCopyToSearch" type="button">次の商品を探す</button><p>この操作では投稿済みになりません。楽天の商品詳細は開きません。</p></div>
 <section id="res"></section>
-<div class="urenaviNextSearch"><button id="urenaviNextSearchBtn" type="button">次の商品を検索する</button></div>
+
 </div>
 <section id="proPanel" class="box proIntegrated on appScreen">
   <div class="proHead">
@@ -3670,9 +3670,9 @@ function render(
     </button>
 
     <a
-      href="${esc(safeUrl(i.affiliateUrl))}"
+      href="${esc(safeUrl(i.affiliateUrl))}" target="_blank" rel="noopener noreferrer"
     >
-      楽天で見る
+      楽天で商品詳細を確認（外部サイト）
     </a>
 
   </div>
@@ -4661,11 +4661,7 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
       field.focus();
     }
   });
-  document.getElementById('urenaviNextSearchBtn').addEventListener('click',event=>{
-    event.preventDefault();
-    event.stopPropagation();
-    goToProductSearch();
-  });
+
   tabs.addEventListener('click',e=>{
     const b=e.target.closest('[data-urenavi-tab]');
     if(!b)return;
