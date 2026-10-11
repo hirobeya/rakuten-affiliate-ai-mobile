@@ -41,3 +41,5 @@ test('saved ROOM contacts can be searched and reused without manual URL input',(
 });
 
 test('ROOM engagement prioritizes four activities and keeps contact lookup secondary',()=>{for(const k of ['like_return','follow_return','like_visit','follow_visit'])assert.match(html,new RegExp('data-room-work="'+k+'"'));assert.match(html,/<summary>以前の相手を探す・再利用する（必要なときだけ）<\/summary>/);assert.match(html,/document\.getElementById\('roomOpsType'\)\.value=button\.dataset\.roomWork/);});
+
+test('next product action in copy tab stays inside Urenavi without posting',()=>{assert.match(html,/id="urenaviCopyToSearch" type="button"/);assert.match(html,/getElementById\('urenaviCopyToSearch'\)\.addEventListener\('click',goToProductSearch\)/);assert.match(html,/この操作では投稿済みになりません/);assert.match(html,/#appRoot\[data-urenavi-tab="copy"\] \.urenaviCopyNavigation\{display:block\}/);});
