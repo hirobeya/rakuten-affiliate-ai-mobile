@@ -939,7 +939,7 @@ input,select{
     <div id="proDailyDashboard" class="proMsg" aria-live="polite"></div>
     <label for="proRevenueToday">今日のROOM売上（実績・円）</label>
     <input id="proRevenueToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた売上のみ入力">
-    <label for="proCommissionToday">今日の獲得報酬（実績・円）</label>
+    <label for="proCommissionToday">今日の入力報酬（区分未確認・円）</label>
     <input id="proCommissionToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた報酬のみ入力">
     <button id="proRevenueSave" class="proGhost" type="button">今日の実績を保存</button>
     <div id="proRevenueMsg" class="proMsg" aria-live="polite"></div>
@@ -1023,12 +1023,12 @@ input,select{
 <section id="roomAccountBackupPanel" class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
 <section id="legacyMigration" class="box" hidden><h2>以前の記録を引き継ぐ</h2><p id="legacyMigrationSummary"></p><div class="roomActionRow"><button id="legacyMigrationImport" type="button">自分の旧記録を取り込む</button><button id="legacyMigrationExport" type="button">旧記録をバックアップ</button></div><p id="legacyMigrationMessage" aria-live="polite"></p><textarea id="legacyMigrationBackup" readonly hidden aria-label="旧記録バックアップ" style="width:100%;min-height:160px"></textarea></section>
 <section id="roomOutcomesPanel" class="box">
-<h2>投稿確認・売上管理</h2><p class="proHint"><strong>使い方：</strong>①ROOMに投稿した商品だけ「投稿したと記録」→②楽天で分かった売上や報酬を入力→③商品ごとの結果を比較。売上未確認は空欄のままで構いません。</p><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
+<h2>投稿確認・売上管理</h2><div class="box" aria-label="今月の成果報酬"><strong>今月の成果報酬</strong><p class="proHint">発生報酬（未確定）：未取得 ／ 確定報酬：未取得</p><p class="proHint">楽天の報酬区分別データとは未連携です。下の手入力報酬を発生・確定へ自動振り分けしません。</p></div><p class="proHint"><strong>使い方：</strong>①ROOMに投稿した商品だけ「投稿したと記録」→②楽天で分かった売上や報酬を入力→③商品ごとの結果を比較。売上未確認は空欄のままで構いません。</p><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
 <p class="proHint">投稿文のコピー後、ROOMでの投稿完了を本人が記録します。投稿済み商品は次の候補から除外します。実績は楽天の画面で確認できた値だけ入力し、不明は空欄にしてください。端末・アカウント別に保存します。</p>
 <h3>① 投稿できたかを確認</h3><p class="proHint">「投稿文をコピーしただけ」の商品は未投稿です。実際にROOMへ投稿してから完了記録を付けてください。</p><div id="outcomeHistory"></div><h3>② 商品別の成果を入力</h3><p class="proHint">投稿完了を記録した商品だけ選択できます。売上・報酬がまだ分からない場合は入力せず、後日確認してください。</p><label for="outcomeProduct">投稿済み商品を選ぶ</label><select id="outcomeProduct"></select>
 <label for="outcomeDate">実績の日付</label><input id="outcomeDate" type="date">
 <label for="outcome-sales">商品別売上（円）</label><input id="outcome-sales" type="number" min="0" step="1" inputmode="numeric">
-<label for="outcome-commission">商品別報酬（円）</label><input id="outcome-commission" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-commission">商品別の入力報酬（区分未確認・円）</label><input id="outcome-commission" type="number" min="0" step="1" inputmode="numeric">
 <label for="outcome-units">販売件数</label><input id="outcome-units" type="number" min="0" step="1" inputmode="numeric">
 <label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
 <button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
