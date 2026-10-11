@@ -3193,7 +3193,11 @@ function roomCopyNeedsReview(text,item,validatedByServer=false){
   // Local rule generation can safely list specifications without establishing
   // any supported purchase use-case. Keep its output for inspection, not posting.
   const result=window.UrenaviStructuredCopy?.compose?.(item||{});
-  return !result||result.status!=='ok'||(!result.understanding?.scene&&!result.values?.length);
+  if(!result||result.status!=='ok'||(!result.understanding?.scene&&!result.values?.length))return true;
+  // Check the displayed copy, not merely the facts available on the item.
+  // An available grounded value cannot certify unrelated/generated text.
+  if(result.values?.length&&!result.values.some(value=>value?.text&&body.includes(value.text)))return true;
+  return false;
 }
 
 function isFullyReviewedCopyState(s){
