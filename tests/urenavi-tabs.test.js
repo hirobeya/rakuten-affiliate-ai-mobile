@@ -75,3 +75,14 @@ test('Rakuten product link restores by stable action role rather than button lab
 test('all copy shortcuts recheck product readiness before touching clipboard',()=>{assert.match(html,/if\(!postReady\(a\[index\],b\.dataset\.p\)\)/);assert.match(html,/if\(!i\|\|!postReady\(i,'room'\)\)/);assert.match(html,/if\(b\.dataset\.p==='room'\)window\.roomOutcomePrepared\(a\[index\]\)/);});
 
 test('return-state does not hijack internal work tabs or Rakuten new-tab links',()=>{const state=fs.readFileSync('public/return-state.js','utf8');assert.match(state,/link\.dataset\?\.urenaviProductLink==='market'/);assert.doesNotMatch(state,/root\.location\.assign\(link\.href\)/);assert.doesNotMatch(state,/event\.stopImmediatePropagation\(\)/);assert.match(state,/楽天の商品ページは別画面で開きます/);});
+
+test('actual copy-quality guard rejects generic laundry copy and ungrounded local spec-only copy',()=>{
+ const start=html.indexOf('function roomCopyNeedsReview('),end=html.indexOf('function isFullyReviewedCopyState(',start);
+ assert.ok(start>0&&end>start);
+ const context={window:{UrenaviStructuredCopy:{compose:item=>item.scene?{status:'ok',understanding:{scene:'洗うときに'},values:[]}:{status:'ok',understanding:{scene:''},values:[]}}}};
+ vm.createContext(context);vm.runInContext(html.slice(start,end),context);
+ const weak='ブラジャーの型崩れを防ぎつつ、ドラム式洗濯機で手軽に洗いたいときに使えます。\\n\\n※アフィリエイト広告を利用しています';
+ assert.equal(context.roomCopyNeedsReview(weak,{scene:true},false),true);
+ assert.equal(context.roomCopyNeedsReview('財布 本革\\n仕様：本革\\n価格：5000円\\n※アフィリエイト広告を利用しています',{scene:false},false),true);
+ assert.equal(context.roomCopyNeedsReview('洗うときに\\n洗濯ネットです。\\n洗える仕様です。\\n※アフィリエイト広告を利用しています',{scene:true},false),false);
+});
