@@ -775,7 +775,7 @@ input,select{
 <div id="appRoot">
 
 <main class="w">
-<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認1</p>
+<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認2</p>
 
 <div class="appHead">
 
@@ -3204,7 +3204,8 @@ function postDisplay(i,p='room'){
     if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
-  return String(post(i,p)||'').trim();
+  const text=String(post(i,p)||'').trim();
+  return roomCopyNeedsReview(text)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
 
