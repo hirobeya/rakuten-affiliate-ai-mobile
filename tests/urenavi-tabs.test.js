@@ -44,7 +44,7 @@ test('ROOM engagement prioritizes four activities and keeps contact lookup secon
 
 test('copy tab has no redundant next-product control',()=>{assert.doesNotMatch(html,/id="urenaviCopyToSearch"|id="urenaviNextSearchBtn"/);assert.match(html,/data-urenavi-tab="search"/);});
 
-test('preview version identifies stale iPhone sessions and weak copy is blocked',()=>{assert.match(html,/id="urenaviPreviewVersion"/);assert.match(html,/function roomCopyNeedsReview\(text,item,validatedByServer=false\)/);assert.match(html,/!roomCopyNeedsReview\(text,i,/);assert.doesNotMatch(html,/投稿済みにして次の商品へ/);});
+test('preview version identifies stale iPhone sessions and weak copy is blocked',()=>{assert.match(html,/id="urenaviPreviewVersion"/);assert.match(html,/function roomCopyNeedsReview\(text,item,validatedByServer=false\)/);assert.match(html,/!roomCopyNeedsReview\(text,i,isFullyReviewedCopyState\(s\)\)/);assert.doesNotMatch(html,/投稿済みにして次の商品へ/);});
 
 test('weak copy from the reported washing-net screen is not publish-ready',()=>{
  const vm=require('node:vm');const start=html.indexOf('function roomCopyNeedsReview(text,item,validatedByServer=false){');const end=html.indexOf('function postReady(',start);
@@ -67,3 +67,5 @@ test('restored search never creates a next-product button or marks a product pos
  assert.match(loader,/durable-session\.js\?v=20261011-ux-restore-no-next/);
  assert.match(durable,/function applyResumeUI\(\)/);
 });
+
+test('only contract-verified AI may bypass local evidence gate',()=>{assert.match(html,/function isFullyReviewedCopyState\(s\)/);assert.match(html,/RoomCopyResult\.canonical\(data\) && RoomCopyResult\.ready\(data\)/);assert.match(html,/isV3PreviewResult\(data\) && readyV3Post\(data\)/);assert.doesNotMatch(html,/Boolean\(s\.gate\?\.full&&!s\.gate\?\.useLegacy\)/);});
