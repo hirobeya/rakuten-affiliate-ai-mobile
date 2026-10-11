@@ -13,3 +13,5 @@ test('tab change script is syntactically valid and direct anchors target existin
  for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
  for(const id of ['normalScreen','res','roomOpsPanel','proDailyDashboard','outcomeHistory'])assert.match(html,new RegExp('id="'+id+'"'));
 });
+
+test('next product search button switches to in-app search without an external URL',()=>{assert.match(html,/id="urenaviNextSearchBtn"/);assert.match(html,/getElementById\('urenaviNextSearchBtn'\)\.addEventListener\('click',[\s\S]*?choose\('search'\)/);assert.match(html,/getElementById\('k'\)\.focus/);});
