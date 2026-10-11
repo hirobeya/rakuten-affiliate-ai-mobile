@@ -2831,7 +2831,7 @@ async function requestAiRoom(item,index,generation){
 }
 
 function aiTargetDecision(item){
-  if(usePurchasePlan) return {callAi:true,reasons:['grounded_purchase_reason_required']};
+  // Owner Preview also uses local-first evidence gating; no unconditional Groq calls.
   const a=groundedAnalysis(item);
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
