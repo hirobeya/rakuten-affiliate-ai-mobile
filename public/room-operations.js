@@ -47,6 +47,7 @@
         row.state='skipped';
       }else if(action==='undo'){
         if(!['done','skipped'].includes(row.state))throw new Error('取り消す完了記録がありません。');
+        if(data.candidates.some(x=>x.id!==row.id&&x.state!=='skipped'&&sameAction(x,row)&&(x.state!=='done'||!row.type.startsWith('like')||day(x.completedAt)===day(at))))throw new Error('同じ相手・活動の候補または実施済み記録があります。重複するため候補へ戻せません。');
         row.state='pending';delete row.completedAt;delete row.openedAt;
       }else throw new Error('操作を確認してください。');
       data.events.push({candidateId:id,action,at});save(data);return row;

@@ -773,7 +773,7 @@ input,select{
 <h1>ウレナビ改</h1>
 
 <div class="sub">
-商品を探して、売れやすさと収益性を評価。誰にどう売るかまで決めます。<br>
+商品を探し、用途・価格・確認できた報酬条件を比較。商品選びから投稿準備・実績確認まで支援します。<br>
 ※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
 </div>
 
@@ -781,6 +781,7 @@ input,select{
   <h2 id="roomTodayTitle">今日のROOM運用</h2>
   <p id="roomTodayCounts" aria-live="polite">ログイン後に活動を読み込みます。</p>
   <p id="roomNextAction">今日の商品選び・投稿準備・交流を進めましょう。</p>
+  <a id="roomNextTask" class="roomLink" href="#normalScreen">次の商品を選ぶ</a>
   <nav class="roomActionRow" aria-label="今日の操作">
     <a class="roomLink" href="#normalScreen">商品を選ぶ</a>
     <a class="roomLink" href="#roomOpsPanel">交流に進む</a>
@@ -1020,6 +1021,7 @@ input,select{
 <script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
+<script src="/room-today-plan.js"></script>
 <script src="/room-account-records.js"></script>
 <script src="/room-record-restore.js"></script>
 <script src="/room-restore-panel.js"></script>
@@ -2666,6 +2668,7 @@ function aiPanelMarkup(item,index){
 }
 
 function updateAiPanel(index){
+  if(currentAppSession)proUpdateDashboard();
   const usageField=document.getElementById('proResourceUsage');
   if(usageField){
     const rows=[...aiRoomResults.values()].map(x=>x.data?.resourceUsage).filter(Boolean);
@@ -3192,7 +3195,7 @@ function today(a){
     const candidates=(Array.isArray(a)?a:[]).map((item,index)=>({item,index,gate:resolveAiGate(item,index,lastSearchKeyword)}))
       .filter(x=>x.gate.full);
     if(!candidates.length){
-      return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
+      return '<section class="today"><h2>条件に合う商品候補</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
     }
     const chosen=candidates.sort((x,y)=>(y.item.sellability||0)-(x.item.sellability||0)||(y.item.score||0)-(x.item.score||0))[0];
     const i=chosen.item;
@@ -3204,16 +3207,16 @@ function today(a){
       audience=String((usePurchasePlan?(insight.scene||insight.productType):insight.productType)||'商品内容を確認済み');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
-    return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-      '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
+    return '<section class="today"><h2>条件に合う商品候補</h2><div class="name">'+short(i)+'</div>'+
+      '<div class="muted">選定比較指標 '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
       '<div class="guide"><div class="gt">'+(usePurchasePlan?'使う場面':'狙う相手')+'</div><div class="target">'+esc(audience)+'</div>'+
       '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
   const eligible=fullOutputItems(a);
-  if(!eligible.length) return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
+  if(!eligible.length) return '<section class="today"><h2>条件に合う商品候補</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
   const i=[...eligible].sort((a,b)=>(b.sellability||0)-(a.sellability||0)||(b.score||0)-(a.score||0))[0];
-  return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-    '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。まず成約を狙うならこの商品を優先。</div>'+
+  return '<section class="today"><h2>条件に合う商品候補</h2><div class="name">'+short(i)+'</div>'+
+    '<div class="muted">選定比較指標 '+i.sellability+'/100・AI '+i.score+'/100。比較条件に合う候補です。販売成果を予測するものではありません。</div>'+
     '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
 }
 
@@ -3270,7 +3273,7 @@ function decision(
   </h2>
 
   <div class="dm">
-    迷ったら総合1位。まずは売れやすさを取りにいく。
+    順位だけで決めず、用途・価格・根拠を比較して選びましょう。
   </div>
 
   <div class="dg">
@@ -3281,7 +3284,7 @@ function decision(
     </div>
 
     <div class="mini">
-      <b>売れやすさ</b>
+      <b>選定比較指標</b>
       <span>${short(s)}</span>
     </div>
 
@@ -3376,7 +3379,7 @@ function compare(
             }%
             <br>
 
-            売れやすさ
+            選定比較指標
             ${i.sellability}
             /
 
@@ -3398,7 +3401,7 @@ function compare(
     style="margin-top:8px"
   >
 
-    総合順位は「売れやすさ70%＋収益性30%」で算出。
+    総合順位は「選定比較指標70%＋収益性30%」で算出。
     報酬目安は商品価格×料率の概算で、
     1商品1個あたり上限1,000円を反映しています。
 
@@ -3427,6 +3430,7 @@ function render(
   aiRoomReviews=new Map();
   aiRunGeneration++;
   postCache=new Map();
+  if(currentAppSession)proUpdateDashboard();
   roomSentenceContext={openings:new Set(),seconds:new Set()};
   if(excluded)document.getElementById('outcomeMsg').textContent=excluded+'件の投稿済み商品を候補から除外しました。取り消しは投稿履歴からできます。';
   const debugJson=document.getElementById('debugJson');
@@ -3479,7 +3483,7 @@ function render(
     </span>
 
     <span class="g">
-      売れやすさ
+      選定比較指標
       ${
         i.sellability>=80
         ?'◎'
@@ -3569,7 +3573,7 @@ function render(
       </span>
 
       <span class="chip">
-        売れやすさ ${i.sellability}
+        選定比較指標 ${i.sellability}
       </span>
 
       <span class="chip">
@@ -4410,6 +4414,13 @@ function proUpdateDashboard(){
   const metrics=proReadRevenue()[today]||{};
   const logs=proReadActivities().filter(x=>x.day===today);
   const count=type=>logs.filter(x=>x.type===type).length;
+  try{
+    const outcomes=window.roomOutcomeOverview?.()||null,operations=window.roomOperationsOverview?.()||null;
+    const task=RoomTodayPlan.next({generation:[...aiRoomResults.values()],outcomes,operations,metrics});
+    proEl('roomNextAction').textContent=task.reason;
+    proEl('roomNextTask').textContent=task.label;proEl('roomNextTask').href=task.href;
+    proEl('roomTodayCounts').textContent='今日の投稿確認 '+(outcomes?.todayPosts??'未取得')+'件 ／ 交流完了 '+(operations?.today??'未取得')+'件 ／ 投稿未確認 '+(outcomes?.prepared??'未取得')+'件 ／ 交流待ち '+(operations?.pending??'未取得')+'件 ／ 売上 '+(metrics.sales==null?'未入力':Number(metrics.sales).toLocaleString()+'円')+' ／ 報酬 '+(metrics.commission==null?'未入力':Number(metrics.commission).toLocaleString()+'円');
+  }catch(e){proEl('roomNextAction').textContent='記録を読み込めません。実績・交流パネルのエラーとバックアップを確認してください。';proEl('roomTodayCounts').textContent='記録の確認が必要です。';proEl('roomNextTask').textContent='記録を確認';proEl('roomNextTask').href='#roomOutcomesPanel';}
   proEl('proDailyDashboard').textContent='商品台帳の投稿確認 '+(window.roomOutcomeToday?.()||0)+'件 ｜ 交流候補の実施確認 '+(window.roomOperationsToday?.()||0)+'件 ｜ 旧手動記録の投稿 '+count('post')+'件 ｜ 旧手動記録のいいね '+(count('like_visit')+count('like_return'))+'件 ｜ フォロー活動 '+(count('follow_visit')+count('follow_return'))+'件 ｜ 売上 '+(metrics.sales==null?'未入力':Number(metrics.sales).toLocaleString()+'円')+' ｜ 報酬 '+(metrics.commission==null?'未入力':Number(metrics.commission).toLocaleString()+'円');
 }
 function proSaveRevenue(){

@@ -17,6 +17,7 @@
       $('roomOpsAnalysis').textContent=Object.keys(labels).map(k=>labels[k]+' '+counts[k]+'件').join(' ／ ')+'。返しの候補を優先表示しています。実施件数から売上への効果は判断できません。';
     }catch(e){message(e.message);}
   }
+  window.roomOperationsOverview=()=>store?store.summary():null;
   window.roomOperationsToday=()=>store?store.summary().today:0;
   window.initRoomOperations=function(owner){
     try{store=RoomOperations.createStore(localStorage,owner);render();message('候補・履歴はこのブラウザに保存されます。端末を変える前にバックアップしてください。');}
