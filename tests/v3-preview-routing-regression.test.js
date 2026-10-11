@@ -15,22 +15,24 @@ function response(){
   };
 }
 
-test('Preview UI has one active V3 contract and blocks dormant contracts',()=>{
+test('Preview UI uses explicit canonical adapter and preserves tested local V3 rendering',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function isV3PreviewResult\(result\)/);
   assert.match(html,/startsWith\('super-urenavi-v3-'\)/);
   assert.doesNotMatch(html,/version==='super-urenavi-v3-preview'/);
   assert.match(html,/unexpected_ai_contract/);
-  assert.match(html,/if\(String\(result\?\.version\|\|''\)\.startsWith\('room_contract_'\)\) return '';/);
+  assert.match(html,/RoomCopyResult\.canonical\(result\)\) return RoomCopyResult\.ready\(result\)/);
   assert.doesNotMatch(
     html,
     /startsWith\('super-urenavi-v3-'\)\|\|String\(ai\.data\?\.version\|\|''\)\.startsWith\('room_contract_'\)/
   );
 });
 
-test('active V3 endpoint is isolated from the dormant semantic engine',()=>{
+test('legacy V3 endpoint remains unchanged while the integrated endpoint owns semantic generation',()=>{
   const source=fs.readFileSync(path.join(__dirname,'../api/room-ai-v3.js'),'utf8');
   assert.doesNotMatch(source,/room-semantic-engine|room-semantic-provider/);
+  const gateway=fs.readFileSync(path.join(__dirname,'../api/room-copy.js'),'utf8');
+  assert.match(gateway,/room-semantic-engine/);
 });
 
 test('tier A without a composed variant is not reported as ready',async()=>{

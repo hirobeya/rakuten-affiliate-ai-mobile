@@ -4,7 +4,7 @@
   const active=()=>!signal?.aborted&&isCurrent();
   const cancelled=()=>{const e=new Error('Generation cancelled');e.name='AbortError';return e;};
   if(!active())throw cancelled();
-  const response=await fetchImpl('/api/room-ai-v3',{method:'POST',headers,credentials:'include',signal,body:JSON.stringify(item)});
+  const response=await fetchImpl('/api/room-copy',{method:'POST',headers,credentials:'include',signal,body:JSON.stringify(item)});
   const data=await response.json().catch(()=>({}));
   if(!active())throw cancelled();
   if(data?.phase)onStage(data.phase);
