@@ -775,7 +775,7 @@ input,select{
 <div id="appRoot">
 
 <main class="w">
-<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認2</p>
+<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認3</p>
 
 <div class="appHead">
 
@@ -3184,18 +3184,23 @@ function aiPostState(i){
   return {index,target,state,gate:resolveAiGate(i,index,lastSearchKeyword)};
 }
 
-function roomCopyNeedsReview(text){
+function roomCopyNeedsReview(text,item,validatedByServer=false){
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
-  // A single vague line is not a sales-ready post even when text generation succeeded.
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  return lines.length<2 && body.length<85;
+  // Insufficient copy remains visible for review, but cannot be copied as ready.
+  if(lines.length<2&&body.length<85)return true;
+  if(validatedByServer)return false;
+  // Local rule generation can safely list specifications without establishing
+  // any supported purchase use-case. Keep its output for inspection, not posting.
+  const result=window.UrenaviStructuredCopy?.compose?.(item||{});
+  return !result||result.status!=='ok'||(!result.understanding?.scene&&!result.values?.length);
 }
 
 function postReady(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
   const text=String(post(i,p)||'').trim();
-  return Boolean(text) && !roomCopyNeedsReview(text);
+  return Boolean(text) && !roomCopyNeedsReview(text,i,Boolean(s.gate?.full&&!s.gate?.useLegacy));
 }
 
 function postDisplay(i,p='room'){
@@ -3205,7 +3210,7 @@ function postDisplay(i,p='room'){
     return '商品内容を確認中です。';
   }
   const text=String(post(i,p)||'').trim();
-  return roomCopyNeedsReview(text)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
+  return roomCopyNeedsReview(text,i,Boolean(s.gate?.full&&!s.gate?.useLegacy))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
 
