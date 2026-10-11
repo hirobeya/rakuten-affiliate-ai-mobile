@@ -1,0 +1,5 @@
+(function(){'use strict';window.RoomRestorePanel={bind(prefix,getStore,render,message){const $=suffix=>document.getElementById(prefix+'Restore'+suffix);let review=null;
+ $('Text').addEventListener('input',()=>{review=null;$('Apply').disabled=true;});
+ $('Preview').addEventListener('click',()=>{try{const store=getStore();if(!store)throw Error('ログイン状態を確認してください。');const input=$('Text').value,p=store.previewRestore(input);review={store,input};$('Apply').disabled=false;message('追加する商品・候補 '+p.added+'件 ／ 実績・履歴 '+p.records+'件。異なる状態や実績は上書きしません。');}catch(e){review=null;$('Apply').disabled=true;message(e.message);}});
+ $('Apply').addEventListener('click',()=>{try{if(!review||review.store!==getStore()||review.input!==$('Text').value)throw Error('現在のアカウントで復元内容を確認してください。');if(!confirm('このバックアップはあなた自身の記録ですか？現在のアカウントへ復元します。'))return;const p=review.store.restore(review.input);review=null;$('Apply').disabled=true;render();message('復元しました。商品・候補 '+p.added+'件 ／ 実績・履歴 '+p.records+'件を追加しました。');}catch(e){review=null;$('Apply').disabled=true;message(e.message);}});
+}};})();

@@ -51,5 +51,6 @@
       else message('下のバックアップを選択してコピーしてください。');
     }catch(e){message('コピーできません。下のバックアップを選択してコピーしてください。');}
   });
-  window.addEventListener('storage',render);
+  RoomRestorePanel.bind('roomOps',()=>store,render,message);
+window.addEventListener('storage',render);
 })();

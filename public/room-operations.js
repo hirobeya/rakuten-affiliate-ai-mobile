@@ -56,7 +56,10 @@
       const rows=read().candidates,done=rows.filter(x=>x.state==='done'&&day(x.completedAt)===day(at));
       return {pending:queue().length,today:done.length,counts:Object.fromEntries(Object.keys(labels).map(t=>[t,done.filter(x=>x.type===t).length])),next:queue()[0]||null};
     }
-    return {read,add,transition,queue,summary,exportData:()=>JSON.stringify(read(),null,2)};
+ function restorePlan(input){const engine=typeof module==='object'&&module.exports?require('./room-record-restore'):RoomRecordRestore;return engine.plan(read(),input,'operations');}
+ function previewRestore(input){const p=restorePlan(input);return {added:p.added,records:p.records};}
+ function restore(input){const p=restorePlan(input);save(p.data);return {added:p.added,records:p.records};}
+    return {previewRestore,restore,read,add,transition,queue,summary,exportData:()=>JSON.stringify(read(),null,2)};
   }
   return {labels,roomUrl,day,createStore};
 });

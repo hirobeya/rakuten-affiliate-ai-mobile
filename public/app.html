@@ -971,7 +971,7 @@ input,select{
     <h3>活動の集計</h3><p id="roomOpsAnalysis" class="proMsg"></p>
     <details><summary>完了・保留の履歴</summary><div id="roomOpsHistory" class="proPreview"></div></details>
     <button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
-    <textarea id="roomOpsBackup" aria-label="交流バックアップ" hidden readonly rows="6"></textarea>
+    <textarea id="roomOpsBackup" aria-label="交流バックアップ" hidden readonly rows="6"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="roomOpsRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="roomOpsRestorePreview" type="button">復元内容を確認</button><button id="roomOpsRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div>
   </section>
   <div class="proTasks" id="proActivityPanel">
     <strong style="font-size:14px">ROOM交流・投稿の実施記録</strong>
@@ -1006,7 +1006,7 @@ input,select{
 <label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
 <button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
 <p class="proHint">商品別記録の合計です。日別売上記録とは重複加算しません。活動と売上の因果関係は判断しません。</p>
-<h3>商品ごとの記録を比較</h3><div id="outcomeComparison"></div><h3>投稿履歴・取り消し</h3><div id="outcomeHistory"></div><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea>
+<h3>商品ごとの記録を比較</h3><div id="outcomeComparison"></div><h3>投稿履歴・取り消し</h3><div id="outcomeHistory"></div><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div>
 </section>
 </main>
 
@@ -1019,6 +1019,8 @@ input,select{
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/room-account-records.js"></script>
+<script src="/room-record-restore.js"></script>
+<script src="/room-restore-panel.js"></script>
 <script src="/room-outcomes.js"></script>
 <script src="/room-outcomes-panel.js"></script>
 <script src="/room-operations.js"></script>

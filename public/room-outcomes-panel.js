@@ -11,5 +11,6 @@ $('outcomeProduct').addEventListener('change',load);$('outcomeDate').addEventLis
 function load(){if(!store)return;try{const row=store.read().results.find(r=>r.id===$('outcomeProduct').value&&r.date===$('outcomeDate').value);for(const k of ['sales','commission','units','minutes'])$('outcome-'+k).value=row?.[k]??'';}catch(e){msg(e.message);}}
 $('outcomeSave').addEventListener('click',()=>{try{if(!store)throw new Error('ログイン状態を確認してください。');const input={id:$('outcomeProduct').value,date:$('outcomeDate').value};for(const k of ['sales','commission','units','minutes'])input[k]=$('outcome-'+k).value;store.result(input);render();msg('同じ商品・日付の実績を保存しました。再保存は上書きされ、二重加算しません。');}catch(e){msg(e.message);}});
 $('outcomeExport').addEventListener('click',async()=>{try{if(!store)throw new Error('ログイン状態を確認してください。');$('outcomeBackup').hidden=false;$('outcomeBackup').value=store.exportData();await navigator.clipboard.writeText($('outcomeBackup').value);msg('実績バックアップをコピーしました。');}catch(e){msg('コピーできない場合は、表示されたバックアップを選択してコピーしてください。');}});
+RoomRestorePanel.bind('outcome',()=>store,render,msg);
 window.addEventListener('storage',render);
 })();
