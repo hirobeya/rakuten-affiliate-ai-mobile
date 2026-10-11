@@ -45,3 +45,11 @@ test('ROOM engagement prioritizes four activities and keeps contact lookup secon
 test('copy tab has no redundant next-product control',()=>{assert.doesNotMatch(html,/id="urenaviCopyToSearch"|id="urenaviNextSearchBtn"/);assert.match(html,/data-urenavi-tab="search"/);});
 
 test('preview version identifies stale iPhone sessions and weak copy is blocked',()=>{assert.match(html,/id="urenaviPreviewVersion"/);assert.match(html,/function roomCopyNeedsReview\(text\)/);assert.match(html,/!roomCopyNeedsReview\(text\)/);assert.doesNotMatch(html,/投稿済みにして次の商品へ/);});
+
+test('weak copy from the reported washing-net screen is not publish-ready',()=>{
+ const vm=require('node:vm');const start=html.indexOf('function roomCopyNeedsReview(text){');const end=html.indexOf('function postReady(',start);
+ assert.ok(start>0&&end>start);
+ const ctx={};vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ assert.equal(ctx.roomCopyNeedsReview('ブラジャーの型崩れを防ぎつつ、ドラム式洗濯機で手軽に洗いたいときに使えます。\\n\\n※アフィリエイト広告を利用しています'),true);
+ assert.equal(ctx.roomCopyNeedsReview('使う場面の説明を確認しました。\\n\\n2枚組で選べる洗濯ネットです。\\n\\n※アフィリエイト広告を利用しています'),false);
+});
