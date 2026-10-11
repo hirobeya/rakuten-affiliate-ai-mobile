@@ -3807,6 +3807,13 @@ function render(
           b.dataset.p
         );
 
+        // Validate again after async work, including stale buttons and direct events.
+        if(!postReady(a[index],b.dataset.p)){
+          b.disabled=true;
+          b.textContent='コピー不可';
+          return;
+        }
+
         if(
           !String(
             copy||
@@ -3869,6 +3876,10 @@ function render(
 
     tc.onclick=
     async()=>{
+      if(!i||!postReady(i,'room')){
+        tc.textContent='投稿文の確認が必要です';
+        return;
+      }
 
       try{
 
