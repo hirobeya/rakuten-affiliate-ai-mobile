@@ -698,6 +698,9 @@ input,select{
 #roomOpsPanel summary{padding:14px 0;cursor:pointer}
 #roomOpsPanel .proCard{overflow-wrap:anywhere}
 @media(max-width:520px){.roomActionRow>*{flex:1 1 120px}}
+#roomOutcomesPanel .proCard{overflow-wrap:anywhere;margin-top:8px}
+#roomOutcomesPanel button{min-height:44px;max-width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccd9e9;font-size:14px}
+#roomOutcomesPanel select,#roomOutcomesPanel input{min-width:0;width:100%;font-size:16px}
 </style>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
@@ -990,6 +993,19 @@ input,select{
   </div>
 </section>
 
+<section id="roomOutcomesPanel" class="box">
+<h2>投稿と商品別の成果</h2><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
+<p class="proHint">投稿文のコピー後、ROOMでの投稿完了を本人が記録します。投稿済み商品は次の候補から除外します。実績は楽天の画面で確認できた値だけ入力し、不明は空欄にしてください。端末・アカウント別に保存します。</p>
+<label for="outcomeProduct">投稿済み商品</label><select id="outcomeProduct"></select>
+<label for="outcomeDate">実績の日付</label><input id="outcomeDate" type="date">
+<label for="outcome-sales">商品別売上（円）</label><input id="outcome-sales" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-commission">商品別報酬（円）</label><input id="outcome-commission" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-units">販売件数</label><input id="outcome-units" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
+<button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
+<p class="proHint">商品別記録の合計です。日別売上記録とは重複加算しません。活動と売上の因果関係は判断しません。</p>
+<h3>商品ごとの記録を比較</h3><div id="outcomeComparison"></div><h3>投稿履歴・取り消し</h3><div id="outcomeHistory"></div><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea>
+</section>
 </main>
 
 </div>
@@ -1000,6 +1016,8 @@ input,select{
 <script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
+<script src="/room-outcomes.js"></script>
+<script src="/room-outcomes-panel.js"></script>
 <script src="/room-operations.js"></script>
 <script src="/room-operations-panel.js"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
@@ -1197,6 +1215,7 @@ async function showApp(session) {
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
     window.initRoomOperations(session.user.email||'');
+    window.initRoomOutcomes(session.user.email||'');
     restoreSearchState(session.user.email||'');
     updateUpgradeUi(access);
     await configureIntegratedPro(!!access.pro);
@@ -3141,6 +3160,7 @@ function short(
 
 
 function today(a){
+  if(!a.length)return '<section class="today"><h2>商品候補</h2><p>表示できる未投稿商品がありません。投稿履歴を確認するか、検索条件を変えてください。</p></section>';
   if(aiGatesFullOutput){
     const candidates=(Array.isArray(a)?a:[]).map((item,index)=>({item,index,gate:resolveAiGate(item,index,lastSearchKeyword)}))
       .filter(x=>x.gate.full);
@@ -3368,7 +3388,9 @@ function render(
   {autoAi=true,restored=false}={}
 ){
 
-  lastSearchItems=Array.isArray(a)?a:[];
+  const excluded=(Array.isArray(a)?a:[]).filter(item=>window.roomOutcomePosted?.(item)).length;
+  a=(Array.isArray(a)?a:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  lastSearchItems=a;
   aiRoomResults=new Map();
   if(restored){
     lastSearchItems.forEach((item,index)=>{
@@ -3379,6 +3401,7 @@ function render(
   aiRunGeneration++;
   postCache=new Map();
   roomSentenceContext={openings:new Set(),seconds:new Set()};
+  if(excluded)document.getElementById('outcomeMsg').textContent=excluded+'件の投稿済み商品を候補から除外しました。取り消しは投稿履歴からできます。';
   const debugJson=document.getElementById('debugJson');
   if(debugJson) debugJson.value='';
   const debugJsonMeta=document.getElementById('debugJsonMeta');
@@ -3717,6 +3740,7 @@ function render(
           );
 
 
+          if(b.dataset.p==='room')window.roomOutcomePrepared(a[index]);
           b.textContent=
           'コピーしました';
 
@@ -4229,7 +4253,8 @@ function proPrepareVisibleBatch(){
   proPrepareCandidates(proVisibleCandidateItems);
 }
 function proRenderItems(items=[],label='候補'){
-  proVisibleCandidateItems=Array.isArray(items)?items:[];
+  items=(Array.isArray(items)?items:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  proVisibleCandidateItems=items;
   proEl('proPrepareBatchBtn').style.display=proVisibleCandidateItems.length?'block':'none';
   proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
     const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
