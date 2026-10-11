@@ -993,6 +993,7 @@ input,select{
   </div>
 </section>
 
+<section id="legacyMigration" class="box" hidden><h2>以前の記録を引き継ぐ</h2><p id="legacyMigrationSummary"></p><div class="roomActionRow"><button id="legacyMigrationImport" type="button">自分の旧記録を取り込む</button><button id="legacyMigrationExport" type="button">旧記録をバックアップ</button></div><p id="legacyMigrationMessage" aria-live="polite"></p><textarea id="legacyMigrationBackup" readonly hidden aria-label="旧記録バックアップ" style="width:100%;min-height:160px"></textarea></section>
 <section id="roomOutcomesPanel" class="box">
 <h2>投稿と商品別の成果</h2><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
 <p class="proHint">投稿文のコピー後、ROOMでの投稿完了を本人が記録します。投稿済み商品は次の候補から除外します。実績は楽天の画面で確認できた値だけ入力し、不明は空欄にしてください。端末・アカウント別に保存します。</p>
@@ -1016,6 +1017,7 @@ input,select{
 <script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
+<script src="/room-account-records.js"></script>
 <script src="/room-outcomes.js"></script>
 <script src="/room-outcomes-panel.js"></script>
 <script src="/room-operations.js"></script>
@@ -1216,6 +1218,8 @@ async function showApp(session) {
     userMail.textContent=session.user.email||'';
     window.initRoomOperations(session.user.email||'');
     window.initRoomOutcomes(session.user.email||'');
+    proRenderMigration();
+    proRenderActivities();proUpdateDashboard();
     restoreSearchState(session.user.email||'');
     updateUpgradeUi(access);
     await configureIntegratedPro(!!access.pro);
@@ -4317,10 +4321,24 @@ async function proGenerate(){
   }catch(e){proEl('proMsg').textContent=e.message||'候補を取得できませんでした。'}
 }
 // Explicitly user-confirmed activity log; it does not claim to automate ROOM.
-const PRO_REVENUE_KEY='urenavi_pro_verified_revenue_v1';
+function proAccountRecords(){return RoomAccountRecords.createStore(localStorage,currentAppSession?.user?.email||'');}
+function proRenderMigration(){
+  const panel=proEl('legacyMigration');
+  try{const p=proAccountRecords().preview();panel.hidden=!p.available;proEl('legacyMigrationSummary').textContent=p.available?'この端末にアカウント未設定の旧記録があります。売上 '+p.days+'日・活動 '+p.activities+'件。同日売上の重複 '+p.conflicts+'日。本人の記録か確認してください。':'';}
+  catch(e){panel.hidden=false;proEl('legacyMigrationSummary').textContent=e.message;}
+}
+proEl('legacyMigrationImport').addEventListener('click',()=>{
+  try{if(!confirm('この端末の旧売上・活動記録は、現在ログインしているあなた自身の記録ですか？このアカウントへ一度だけ取り込みます。元記録は保持します。'))return;
+    proAccountRecords().migrate();proRenderMigration();proRenderActivities();proUpdateDashboard();proEl('legacyMigrationMessage').textContent='取り込みました。元の記録は削除していません。';
+  }catch(e){proEl('legacyMigrationMessage').textContent=e.message;}
+});
+proEl('legacyMigrationExport').addEventListener('click',async()=>{
+  try{const field=proEl('legacyMigrationBackup');field.hidden=false;field.value=proAccountRecords().legacyBackup();await navigator.clipboard.writeText(field.value);proEl('legacyMigrationMessage').textContent='旧記録をコピーしました。';}
+  catch(e){proEl('legacyMigrationMessage').textContent='コピーできない場合は表示された記録を選択してください。 '+e.message;}
+});
 function proJstToday(){return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});}
 function proReadRevenue(){
-  try{const v=JSON.parse(localStorage.getItem(PRO_REVENUE_KEY)||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}
+  try{return proAccountRecords().read().revenue;}catch(e){proEl('proRevenueMsg').textContent=e.message;return {};}
 }
 function proUpdateDashboard(){
   const today=proJstToday();
@@ -4338,17 +4356,17 @@ function proSaveRevenue(){
   const today=proJstToday(),all=proReadRevenue();
   const old=all[today]||{};
   all[today]={sales:salesText===''?(old.sales??null):Number(salesText),commission:commissionText===''?(old.commission??null):Number(commissionText)};
-  try{localStorage.setItem(PRO_REVENUE_KEY,JSON.stringify(all));proEl('proRevenueMsg').textContent='確認済み実績を端末に保存しました。';proUpdateDashboard();}
+  try{proAccountRecords().setRevenue(all);proEl('proRevenueMsg').textContent='確認済み実績を端末に保存しました。';proUpdateDashboard();}
   catch{proEl('proRevenueMsg').textContent='保存できませんでした。端末の空き容量を確認してください。';}
 }
 proEl('proRevenueSave').addEventListener('click',proSaveRevenue);
 window.addEventListener('room-outcomes-change',proUpdateDashboard);
-const PRO_ACTIVITY_KEY='urenavi_pro_activities_v1';
+
 const PRO_ACTIVITY_LABELS={like_visit:'いいね回り',like_return:'いいね返し',follow_visit:'フォロー回り',follow_return:'フォロー返し',post:'ROOM投稿'};
 function proReadActivities(){
   try{
-    const data=JSON.parse(localStorage.getItem(PRO_ACTIVITY_KEY)||'[]');
-    return Array.isArray(data)?data.filter(x=>x&&PRO_ACTIVITY_LABELS[x.type]&&typeof x.at==='string').slice(-1000):[];
+    const data=proAccountRecords().read().activities;
+    return Array.isArray(data)?data:[];
   }catch{return [];}
 }
 function proRenderActivities(){
@@ -4367,13 +4385,13 @@ function proAddActivity(){
   const day=now.toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});
   all.push({type,note:String(proEl('proActivityTarget').value||'').trim().slice(0,160),at:now.toISOString(),day});
   try{
-    localStorage.setItem(PRO_ACTIVITY_KEY,JSON.stringify(all.slice(-1000)));
+    proAccountRecords().setActivities(all);
     proEl('proActivityTarget').value='';
     proRenderActivities();proUpdateDashboard();
   }catch{proEl('proActivitySummary').textContent='端末の保存容量に空きがありません。活動は保存されていません。';}
 }
 async function proExportActivities(){
-  const csv=['日時,活動,メモ',...proReadActivities().map(x=>[x.at,PRO_ACTIVITY_LABELS[x.type],x.note||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\\n');
+  const csv=['日時,活動,メモ',...proReadActivities().map(x=>[x.at,PRO_ACTIVITY_LABELS[x.type],x.note||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\n');
   try{
     await navigator.clipboard.writeText(csv);
     proEl('proActivitySummary').textContent='活動記録をコピーしました。';
