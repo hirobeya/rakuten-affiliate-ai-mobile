@@ -114,5 +114,5 @@ test('unresolved local spec alone cannot bypass Groq fallback, grounded copy can
  assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,false);
  ctx.groundedAnalysis=()=>({outputMode:'full',ambiguous:false,topCandidates:[],conflicts:[]});
  ctx.roomCopyNeedsReview=()=>true;
- assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,false);
+ assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,true);
 });
