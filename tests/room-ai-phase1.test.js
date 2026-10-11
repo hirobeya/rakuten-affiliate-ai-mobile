@@ -497,7 +497,8 @@ function run(name,fn){
   await run('AI targeting distinguishes safe fallback from AI-needed fallback',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(src,/fallbackFacts\.length>=1/);
-    assert.match(src,/insufficient_grounded_facts/);
+    assert.match(src,/insufficient_grounded_purchase_reason/);
+    assert.match(src,/const localReady=Boolean\(localText\)&&!roomCopyNeedsReview\(localText,item,false\)/);
     assert.match(src,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
     assert.doesNotMatch(src,/if\(a\?\.outputMode!=='full'\) reasons\.push\('rule_fallback'\)/);
   });
@@ -698,7 +699,7 @@ function run(name,fn){
     assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
     assert.match(html,/function aiTargetDecision\(/);
     assert.match(html,/safeFallback/);
-    assert.match(html,/insufficient_grounded_facts/);
+    assert.match(html,/insufficient_grounded_purchase_reason/);
     assert.match(html,/rule_conflict/);
     assert.doesNotMatch(html,/weak_single_candidate/);
     assert.match(html,/Number\(result\?\.data\?\.nextDelayMs\)\|\|750/);
