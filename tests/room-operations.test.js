@@ -54,9 +54,11 @@ test('undo on a later day still rejects another completed like on the original c
  const second=store.add(input,'2026-10-11T01:00:00Z');
  store.transition(second.id,'open','2026-10-11T01:01:00Z');
  store.transition(second.id,'complete','2026-10-11T01:02:00Z');
- const before=store.exportData();
- // This later undo is valid because the completed likes happened on separate Japan calendar days.
- store.transition(first.id,'undo','2026-10-12T01:00:00Z');
- assert.equal(store.queue().length,1);
- assert.equal(store.read().candidates.find(x=>x.id===second.id).state,'done');
+ // A restored/completed record can carry an older completion timestamp; reject duplicate historical completion day.
+ store.transition(second.id,'undo','2026-10-12T01:00:00Z');
+ store.transition(second.id,'open','2026-10-12T01:01:00Z');
+ store.transition(second.id,'complete','2026-10-10T02:00:00Z');
+ const snapshot=store.exportData();
+ assert.throws(()=>store.transition(first.id,'undo','2026-10-12T02:00:00Z'),/重複/);
+ assert.equal(store.exportData(),snapshot);
 });
