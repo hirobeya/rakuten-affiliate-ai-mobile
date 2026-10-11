@@ -29,3 +29,13 @@ test('outcomes navigation provides evidence-bounded next choice',()=>{assert.mat
 test('exchange shortcuts and earnings follow-up remain in the same app',()=>{for(const id of ['roomOpsQuickStatus','roomOpsQuickGo','roomOpsPaste','outcomeToSearch'])assert.match(html,new RegExp('id="'+id+'"'));assert.match(html,/getElementById\('outcomeToSearch'\)\.addEventListener\('click',goToProductSearch\)/);assert.match(html,/navigator\.clipboard\.readText\(\)/);});
 
 test('reusing a past ROOM contact keeps URL entry optional and retains duplicate validation',()=>{const panel=fs.readFileSync(require.resolve('../public/room-operations-panel.js'),'utf8');new vm.Script(panel);assert.match(panel,/data-room-reuse/);assert.match(panel,/store\.add\(\{type:previous\.type,url:previous\.url,name:previous\.name,reason:previous\.reason\}\)/);});
+
+test('saved ROOM contacts can be searched and reused without manual URL input',()=>{
+ const panel=fs.readFileSync(require.resolve('../public/room-operations-panel.js'),'utf8');
+ new vm.Script(panel);
+ for(const id of ['roomOpsFind','roomOpsFindStatus','roomOpsRecent'])assert.match(html,new RegExp('id="'+id+'"'));
+ assert.match(panel,/roomOpsFind'\)\.addEventListener\('input',render\)/);
+ assert.match(panel,/filteredQueue=queue\.filter\(matches\)/);
+ assert.match(panel,/data-room-reuse/);
+ assert.match(panel,/24時間以上前に登録した返し候補/);
+});
