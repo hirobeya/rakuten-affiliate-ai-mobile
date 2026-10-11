@@ -769,7 +769,7 @@ function run(name,fn){
     assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
     assert.match(html,/if\(s\.state\?\.state==='error'\|\|s\.state\?\.state==='restored'\) return ''/);
     assert.match(html,/const text=String\(post\(i,p\)\|\|''\)\.trim\(\)/);
-    assert.match(html,/roomCopyNeedsReview\(text\)/);
+    assert.match(html,/roomCopyNeedsReview\(text,i,/);
     assert.doesNotMatch(html,/誤った投稿文は表示していません/);
     assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
   });
