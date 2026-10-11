@@ -955,6 +955,7 @@ input,select{
   <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
   <div class="roomActionRow"><button id="proPauseBatchBtn" type="button">現在の商品を終えて一括生成を停止</button><button id="proResumeBatchBtn" type="button">未処理の商品から再開</button></div>
   <div id="proMsg" class="proMsg"></div>
+  <p id="proResourceUsage" class="proHint" aria-live="polite">現在の生成の使用量はまだ取得していません。</p>
   <div id="proPreviewResults" class="proPreview"></div>
 
   <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
@@ -2665,6 +2666,14 @@ function aiPanelMarkup(item,index){
 }
 
 function updateAiPanel(index){
+  const usageField=document.getElementById('proResourceUsage');
+  if(usageField){
+    const rows=[...aiRoomResults.values()].map(x=>x.data?.resourceUsage).filter(Boolean);
+    const total=k=>rows.every(x=>typeof x[k]==='number')?rows.reduce((n,x)=>n+x[k],0):null;
+    const fmt=x=>x===null?'未取得':String(x);
+    usageField.textContent=rows.length?'現在表示中の商品リクエストの実測：Groq '+fmt(total('calls'))+'回 ／ 入力 '+fmt(total('inputTokens'))+'・出力 '+fmt(total('outputTokens'))+'トークン ／ Groq処理 '+fmt(total('providerElapsedMs'))+'ms。無料枠方針・実請求額とアカウント全体の残枠は未確認。':'現在の生成の使用量はまだ取得していません。';
+  }
+
   const box=document.querySelector('.aiPreview[data-ai-index="'+index+'"]');
   if(!box) return;
   const item=lastSearchItems[index];
@@ -2740,7 +2749,7 @@ async function requestAiRoom(item,index,generation){
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
-      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus});
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
     }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d});
     else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
