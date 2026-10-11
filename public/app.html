@@ -990,8 +990,8 @@ input,select{
     <h3>① 対応したい相手を登録</h3><label for="roomOpsType">どんな活動をする？</label>
     <select id="roomOpsType"><option value="like_return">いいね返し</option><option value="follow_return">フォロー返し</option><option value="like_visit">いいね回り</option><option value="follow_visit">フォロー回り</option></select>
     <label for="roomOpsUrl">相手のROOM・投稿URL（必須）</label><p class="proHint">相手のROOMで共有したリンクを貼り付けます。現状は候補の自動収集には対応していません。</p><input id="roomOpsUrl" type="url" placeholder="https://room.rakuten.co.jp/room_…/" autocomplete="off">
-    <label for="roomOpsName">相手の名前（任意）</label><input id="roomOpsName" maxlength="160">
-    <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している">
+    <details class="urenaviAdvanced"><summary>名前・理由を追加する（任意）</summary><label for="roomOpsName">相手の名前（任意）</label><input id="roomOpsName" maxlength="160">
+    <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している"></details>
     <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
     <p id="roomOpsMessage" class="proMsg" role="status"></p>
     <h3>② 対応待ち（返しを優先）</h3><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
@@ -1000,7 +1000,7 @@ input,select{
     <details class="urenaviAdvanced"><summary>データ保存・端末移行（必要なときだけ開く）</summary><p class="proHint">記録はこのブラウザ内に保存されます。機種変更前に必ずバックアップしてください。</p><button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
     <textarea id="roomOpsBackup" aria-label="交流バックアップ" hidden readonly rows="6"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="roomOpsRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="roomOpsRestorePreview" type="button">復元内容を確認</button><button id="roomOpsRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
   </section>
-  <div class="proTasks" id="proActivityPanel">
+  <details class="proTasks urenaviAdvanced" id="proActivityPanel"><summary>以前の手動記録を確認・追加する</summary>
     <strong style="font-size:14px">以前の手動活動記録</strong>
     <div class="proHint">上の交流候補管理とは別の旧方式です。新しいいいね・フォローの管理は「①〜③」を利用してください。過去の記録の確認・追加が必要な場合に使います。</div>
     <label for="proActivityType">活動内容</label>
@@ -1017,7 +1017,7 @@ input,select{
     <div id="proActivitySummary" class="proMsg" aria-live="polite"></div>
     <div id="proActivityHistory" class="proPreview"></div>
     <button id="proActivityExport" type="button" class="proGhost">活動記録をコピー</button>
-  </div>
+  </details>
 </section>
 
 <section id="roomAccountBackupPanel" class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
@@ -1025,7 +1025,7 @@ input,select{
 <section id="roomOutcomesPanel" class="box">
 <h2>投稿確認・売上管理</h2><p class="proHint"><strong>使い方：</strong>①ROOMに投稿した商品だけ「投稿したと記録」→②楽天で分かった売上や報酬を入力→③商品ごとの結果を比較。売上未確認は空欄のままで構いません。</p><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
 <p class="proHint">投稿文のコピー後、ROOMでの投稿完了を本人が記録します。投稿済み商品は次の候補から除外します。実績は楽天の画面で確認できた値だけ入力し、不明は空欄にしてください。端末・アカウント別に保存します。</p>
-<h3>① 商品別の成果を入力</h3><label for="outcomeProduct">投稿済み商品を選ぶ</label><select id="outcomeProduct"></select>
+<h3>① 投稿できたかを確認</h3><p class="proHint">「投稿文をコピーしただけ」の商品は未投稿です。実際にROOMへ投稿してから完了記録を付けてください。</p><div id="outcomeHistory"></div><h3>② 商品別の成果を入力</h3><p class="proHint">下の「投稿履歴」で未確認の商品を選び、実際の投稿が済んでいれば「ROOMに投稿したと記録」を押してください。</p><label for="outcomeProduct">投稿済み商品を選ぶ</label><select id="outcomeProduct"></select>
 <label for="outcomeDate">実績の日付</label><input id="outcomeDate" type="date">
 <label for="outcome-sales">商品別売上（円）</label><input id="outcome-sales" type="number" min="0" step="1" inputmode="numeric">
 <label for="outcome-commission">商品別報酬（円）</label><input id="outcome-commission" type="number" min="0" step="1" inputmode="numeric">
@@ -1033,7 +1033,7 @@ input,select{
 <label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
 <button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
 <p class="proHint">商品別記録の合計です。日別売上記録とは重複加算しません。活動と売上の因果関係は判断しません。</p>
-<h3>② 商品ごとの結果を比較</h3><div id="outcomeComparison"></div><h3>③ 投稿完了の確認・取り消し</h3><p class="proHint">「投稿文をコピーしただけ」の商品は未投稿です。実際にROOMへ投稿してから完了記録を付けてください。</p><div id="outcomeHistory"></div><details class="urenaviAdvanced"><summary>投稿・実績データのバックアップと復元</summary><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
+<h3>③ 商品ごとの結果を比較</h3><div id="outcomeComparison"></div><details class="urenaviAdvanced"><summary>投稿・実績データのバックアップと復元</summary><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
 </section>
 </main>
 
