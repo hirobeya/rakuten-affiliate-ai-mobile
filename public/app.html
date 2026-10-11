@@ -721,6 +721,7 @@ input,select{
 #appRoot[data-urenavi-tab="results"] #legacyMigration:not([hidden]){display:block}
 
 .urenaviSteps{margin:10px 0 16px;padding-left:22px;font-size:14px;line-height:1.85;color:#334155}.urenaviAdvanced{margin-top:18px;padding:12px;border:1px solid #d7e2ef;border-radius:12px;background:#f8fafc}.urenaviAdvanced summary{cursor:pointer;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}.urenaviAdvanced textarea{max-width:100%}
+.urenaviExchangeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.urenaviExchangeChoices button{min-height:82px;padding:12px 8px;border-radius:12px;border:1px solid #b8cee6;background:#f7faff;color:#17345d;font-weight:800;font-size:15px;cursor:pointer}.urenaviExchangeChoices button[aria-pressed="true"]{border:2px solid #1d4ed8;background:#eaf2ff}.urenaviExchangeChoices small{display:block;font-size:11px;font-weight:500;margin-top:6px}@media(max-width:350px){.urenaviExchangeChoices{grid-template-columns:1fr}}
 </style>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
@@ -984,7 +985,14 @@ input,select{
   </div>
 
   <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
-    <h2 id="roomOpsTitle">いいね・フォロー管理</h2><div id="roomOpsQuick" class="box"><strong>今やる交流</strong><p id="roomOpsQuickStatus" aria-live="polite">登録済みの候補を確認します。</p><button id="roomOpsQuickGo" type="button" class="proPrimary">対応待ちを見る</button></div><p class="proHint"><strong>この画面でできること：</strong>返したい相手を登録し、楽天ROOMで実際にいいね・フォローしたあと、その記録を残します。自動いいね・自動フォローではありません。</p><ol class="urenaviSteps"><li>ROOMで相手を見つける</li><li>相手のURLを登録する</li><li>「対応待ち」からROOMへ移動して実施する</li><li>戻って「実施したと記録」を押す</li></ol>
+    <h2 id="roomOpsTitle">いいね・フォロー管理</h2>
+    <p class="proHint">やりたい活動を選んで、楽天ROOMで確認してください。相手の名前を覚えたり検索する必要はありません。</p>
+    <div class="urenaviExchangeChoices" aria-label="交流の種類">
+      <button type="button" data-room-work="like_return">♡ いいね返し<small>お知らせを確認</small></button>
+      <button type="button" data-room-work="follow_return">＋ フォロー返し<small>新しいフォロワーを確認</small></button>
+      <button type="button" data-room-work="like_visit">♥ いいね回り<small>フィードを確認</small></button>
+      <button type="button" data-room-work="follow_visit">＋ フォロー回り<small>おすすめユーザーを確認</small></button>
+    </div><p id="roomOpsWorkGuide" class="proHint" aria-live="polite">活動を選ぶと次の操作が表示されます。</p><div id="roomOpsQuick" class="box"><strong>今やる交流</strong><p id="roomOpsQuickStatus" aria-live="polite">登録済みの候補を確認します。</p><button id="roomOpsQuickGo" type="button" class="proPrimary">対応待ちを見る</button></div><p class="proHint"><strong>この画面でできること：</strong>返したい相手を登録し、楽天ROOMで実際にいいね・フォローしたあと、その記録を残します。自動いいね・自動フォローではありません。</p><ol class="urenaviSteps"><li>ROOMで相手を見つける</li><li>相手のURLを登録する</li><li>「対応待ち」からROOMへ移動して実施する</li><li>戻って「実施したと記録」を押す</li></ol>
     <p class="proHint">ROOMで見つけた相手や、いいね・フォローをくれた相手を登録。返しを先に表示し、同じ活動の重複を防ぎます。</p>
     <a class="roomLink" href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">ROOMで相手を探す</a>
     <h3>① 対応したい相手を登録</h3><label for="roomOpsType">どんな活動をする？</label>
@@ -994,7 +1002,7 @@ input,select{
     <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している"></details>
     <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
     <p id="roomOpsMessage" class="proMsg" role="status"></p>
-    <h3>② 対応待ち（返しを優先）</h3><label for="roomOpsFind">登録済みの相手を探す</label><input id="roomOpsFind" type="search" autocomplete="off" placeholder="名前・ROOM URLで絞り込み"><p id="roomOpsFindStatus" class="proHint" aria-live="polite"></p><div id="roomOpsRecent" class="proPreview"></div><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
+    <h3>② 対応待ち（返しを優先）</h3><details class="urenaviAdvanced"><summary>以前の相手を探す・再利用する（必要なときだけ）</summary><label for="roomOpsFind">登録済みの相手を絞り込む</label><input id="roomOpsFind" type="search" autocomplete="off" placeholder="名前・ROOM URLで絞り込み"><p id="roomOpsFindStatus" class="proHint" aria-live="polite"></p><div id="roomOpsRecent" class="proPreview"></div></details><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
     <h3>③ 今日の活動記録</h3><p id="roomOpsAnalysis" class="proMsg"></p>
     <details><summary>完了・保留の履歴</summary><div id="roomOpsHistory" class="proPreview"></div></details>
     <details class="urenaviAdvanced"><summary>データ保存・端末移行（必要なときだけ開く）</summary><p class="proHint">記録はこのブラウザ内に保存されます。機種変更前に必ずバックアップしてください。</p><button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
@@ -4626,6 +4634,17 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
     const pending=waiting.querySelector('[data-room-open]');
     (pending?waiting:document.getElementById('roomOpsType')).scrollIntoView({block:'start'});
   });
+  const guides={
+    like_return:'楽天ROOMのお知らせで、いいねをくれた相手を確認。ROOMで返したあと、必要に応じて実施を記録します。',
+    follow_return:'楽天ROOMで新しいフォロワーを確認。実際にフォローを返した場合だけ記録します。',
+    like_visit:'楽天ROOMのフィードでフォロー中の人の投稿を確認。実際にいいねした場合だけ記録します。',
+    follow_visit:'楽天ROOMの「見つける」などでユーザーを確認。実際にフォローした場合だけ記録します。'
+  };
+  document.querySelectorAll('[data-room-work]').forEach(button=>button.addEventListener('click',()=>{
+    document.getElementById('roomOpsType').value=button.dataset.roomWork;
+    document.querySelectorAll('[data-room-work]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    document.getElementById('roomOpsWorkGuide').textContent=guides[button.dataset.roomWork];
+  }));
   document.getElementById('roomOpsPaste').addEventListener('click',async()=>{
     const field=document.getElementById('roomOpsUrl');
     const status=document.getElementById('roomOpsMessage');
