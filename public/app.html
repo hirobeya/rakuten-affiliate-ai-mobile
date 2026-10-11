@@ -3852,6 +3852,12 @@ function render(
 $('#go').onclick=
 async()=>{
 
+  if(aiQueueRunning){
+    $('#st').textContent='投稿文を確認中です。現在の商品を終えて停止してから、新しい検索を始めてください。';
+    return;
+  }
+  if([...aiRoomResults.values()].some(row=>['pending','paused'].includes(row.state))&&!confirm('確認待ち・未処理の投稿文があります。現在の一括生成を終了して新しい商品を検索しますか？コピー済み・投稿済みの記録は保持します。'))return;
+
   if(
     searching
   ){
