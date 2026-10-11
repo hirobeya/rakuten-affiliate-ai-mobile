@@ -15,3 +15,9 @@ test('tab change script is syntactically valid and direct anchors target existin
 });
 
 test('next product search button switches to in-app search without an external URL',()=>{assert.match(html,/id="urenaviNextSearchBtn"/);assert.match(html,/function goToProductSearch\(\)\{\s*choose\('search'\)/);assert.match(html,/getElementById\('urenaviNextSearchBtn'\)\.addEventListener\('click',[\s\S]*?goToProductSearch\(\)/);assert.match(html,/function goToProductSearch\(\)/);assert.match(html,/search\.scrollIntoView\(\{block:'start'\}\)/);assert.match(html,/event\.stopPropagation\(\)/);});
+
+test('ROOM management screens explain steps and retain their operational controls',()=>{
+ for(const text of ['いいね・フォロー管理','対応待ち（返しを優先）','投稿確認・売上管理','実際にROOMへ投稿してから'])assert.ok(html.includes(text));
+ for(const id of ['roomOpsAdd','roomOpsQueue','roomOpsRestorePreview','roomOpsRestoreApply','outcomeSave','outcomeRestorePreview','outcomeRestoreApply'])assert.match(html,new RegExp('id="'+id+'"'));
+ assert.match(html,/class="urenaviAdvanced"/);
+});
