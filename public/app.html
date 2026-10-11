@@ -4622,8 +4622,9 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
   }
   document.getElementById('outcomeToSearch').addEventListener('click',goToProductSearch);
   document.getElementById('roomOpsQuickGo').addEventListener('click',()=>{
-    const queue=document.getElementById('roomOpsQueue');
-    queue.scrollIntoView({block:'start'});
+    const waiting=document.getElementById('roomOpsQueue');
+    const pending=waiting.querySelector('[data-room-open]');
+    (pending?waiting:document.getElementById('roomOpsType')).scrollIntoView({block:'start'});
   });
   document.getElementById('roomOpsPaste').addEventListener('click',async()=>{
     const field=document.getElementById('roomOpsUrl');
