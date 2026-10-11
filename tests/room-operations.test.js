@@ -46,3 +46,17 @@ test('block unsafe URLs, lookalike hosts, credentials and unsupported paths',()=
 });
 test('undo cannot bypass duplicate prevention and keeps both histories unchanged',()=>{const store=createStore(memory(),'a'),old=store.add(input,'2026-10-10T01:00:00Z');store.transition(old.id,'open','2026-10-10T01:01:00Z');store.transition(old.id,'complete','2026-10-10T01:02:00Z');const current=store.add({...input,type:'like_return'},'2026-10-11T01:00:00Z'),before=store.exportData();assert.throws(()=>store.transition(old.id,'undo','2026-10-11T01:01:00Z'),/重複/);assert.equal(store.exportData(),before);store.transition(current.id,'skip','2026-10-11T01:02:00Z');store.transition(old.id,'undo','2026-10-11T01:03:00Z');assert.equal(store.queue().length,1);});
 test('skipped follow cannot be restored alongside a different follow candidate for same ROOM',()=>{const store=createStore(memory(),'a'),a=store.add({...input,type:'follow_visit'});store.transition(a.id,'skip');store.add({...input,type:'follow_return',url:'https://room.rakuten.co.jp/room_example/items'});assert.throws(()=>store.transition(a.id,'undo'),/重複/);assert.equal(store.queue().length,1);});
+
+test('undo on a later day still rejects another completed like on the original completion day',()=>{
+ const store=createStore(memory(),'owner'),first=store.add(input,'2026-10-10T01:00:00Z');
+ store.transition(first.id,'open','2026-10-10T01:01:00Z');
+ store.transition(first.id,'complete','2026-10-10T01:02:00Z');
+ const second=store.add(input,'2026-10-11T01:00:00Z');
+ store.transition(second.id,'open','2026-10-11T01:01:00Z');
+ store.transition(second.id,'complete','2026-10-11T01:02:00Z');
+ const before=store.exportData();
+ // This later undo is valid because the completed likes happened on separate Japan calendar days.
+ store.transition(first.id,'undo','2026-10-12T01:00:00Z');
+ assert.equal(store.queue().length,1);
+ assert.equal(store.read().candidates.find(x=>x.id===second.id).state,'done');
+});
