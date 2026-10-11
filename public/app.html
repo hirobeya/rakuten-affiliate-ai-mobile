@@ -4611,10 +4611,18 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
       else b.removeAttribute('aria-current');
     });
   }
-  document.getElementById('urenaviNextSearchBtn').addEventListener('click',()=>{
+  function goToProductSearch(){
     choose('search');
-    tabs.scrollIntoView({block:'start'});
-    document.getElementById('k').focus({preventScroll:true});
+    // A previous #res anchor must not reopen the copy tab on hash changes.
+    if(location.hash&&history.replaceState)history.replaceState(null,'',location.pathname+location.search);
+    const search=document.getElementById('normalScreen');
+    search.scrollIntoView({block:'start'});
+    // Keep the keyboard closed on iPhone; the user can tap the search field.
+  }
+  document.getElementById('urenaviNextSearchBtn').addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    goToProductSearch();
   });
   tabs.addEventListener('click',e=>{
     const b=e.target.closest('[data-urenavi-tab]');
