@@ -27,3 +27,5 @@ test('management flow prioritizes confirmation and keeps legacy records secondar
 test('outcomes navigation provides evidence-bounded next choice',()=>{assert.match(html,/id="outcomeDecision"/);assert.match(html,/次の商品選びのヒント/);assert.match(html,/商品別の記録を詳しく比較する/);});
 
 test('exchange shortcuts and earnings follow-up remain in the same app',()=>{for(const id of ['roomOpsQuickStatus','roomOpsQuickGo','roomOpsPaste','outcomeToSearch'])assert.match(html,new RegExp('id="'+id+'"'));assert.match(html,/getElementById\('outcomeToSearch'\)\.addEventListener\('click',goToProductSearch\)/);assert.match(html,/navigator\.clipboard\.readText\(\)/);});
+
+test('reusing a past ROOM contact keeps URL entry optional and retains duplicate validation',()=>{const panel=fs.readFileSync(require.resolve('../public/room-operations-panel.js'),'utf8');new vm.Script(panel);assert.match(panel,/data-room-reuse/);assert.match(panel,/store\.add\(\{type:previous\.type,url:previous\.url,name:previous\.name,reason:previous\.reason\}\)/);});
