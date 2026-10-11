@@ -66,7 +66,7 @@ assert.match(html,/function proSaveRevenue\(\)/);
 assert.match(html,/function proAccountRecords\(\)/);
 assert.match(html,/proUpdateDashboard\(\)/);
 console.log('Pro dashboard shows explicitly entered sales and engagement activity');
-assert.match(html,/<h1>ウレナビ改<\/h1>/);
+assert.match(html,/<h1>ウレナビ<\/h1>/);
 assert.doesNotMatch(html,/id="appModeNav"/);
 assert.doesNotMatch(html,/id="normalModeBtn"/);
 assert.doesNotMatch(html,/id="proModeBtn"/);
