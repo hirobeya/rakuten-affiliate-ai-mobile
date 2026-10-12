@@ -174,17 +174,17 @@
     // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
     return out.slice(0,3);
   }
-  // Compose a purchase angle from the verified use-case and evidence, not a
-  // product-name-specific promotional template. Unsupported claims are never added.
+  // Rank evidence by usefulness rather than source order. The score only
+  // selects verified sentences; it never generates unsupported product claims.
   function purchaseReasons(understanding,values){
-    const scene=String(understanding.scene||'').replace(/[。！!]+$/,'').trim();
-    return values.map((value,index)=>{
-      const detail=String(value.text||'').trim();
-      const quotes=value.factRefs||[value.factRef];
-      // The use-case is already expressed in the opening. Avoid repeating it.
-      const text=index===0&&scene?detail:detail;
-      return {text,quotes};
+    const scored=values.map((value,index)=>{
+      const quote=String(value.factRef||'');
+      const kind=/^(?:\\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
+      const isUseCase=/対応|使|洗|移動|折り|掛け|風対策|コード|包装/.test(value.text||'');
+      const score=(kind==='feature'?3:0)+(isUseCase?3:0)+(Array.isArray(value.factRefs)&&value.factRefs.length>1?1:0);
+      return {text:value.text,quotes:value.factRefs||[value.factRef],score,index};
     });
+    return scored.sort((a,b)=>b.score-a.score||a.index-b.index);
   }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
