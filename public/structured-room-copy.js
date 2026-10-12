@@ -176,7 +176,8 @@
   }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
-    // Verified specifications alone do not establish a purchase reason.\n    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
+    // Verified specifications alone do not establish a purchase reason.
+    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
     const used=new Set(values.flatMap(x=>x.factRefs||[x.factRef]));
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     const lead=understanding.scene;
@@ -185,7 +186,14 @@
     const introduction=materials.length?materialLabel+materialJoin+understanding.identity+'です。':understanding.identity+(understanding.method==='source_label'||understanding.domain==='unknown'?'':'です。');
     for(const x of materials) used.add(x.quote);
     const lines=lead?[lead,'',introduction]:[introduction];
-    if(values.length) lines.push(values.map(x=>x.text).join(''));
+    // Lead with a source-grounded reason to consider the item, not a spec dump.
+    // Each value sentence already carries its originating source quote.
+    if(values.length){
+      const chosen=values.slice(0,2);
+      const benefit=chosen.map(x=>x.text).join('');
+      lines.push('',benefit);
+      if(chosen.length>1) lines.push('使う場面に合う仕様か、チェックしてみてください。');
+    }
     const remaining=facts.filter(x=>!used.has(x.quote));
     if(remaining.length&&values.length){lines.push('','確認できる仕様');for(const x of remaining.slice(0,2)) lines.push('・'+x.quote);}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
