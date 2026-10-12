@@ -207,7 +207,8 @@
     const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
     for(const value of chosen) for(const quote of value.quotes) used.add(quote);
     if(lead&&chosen.length){
-      lines.push(lead.replace(/。$/,'')+'、'+chosen[0].text);
+      // Keep two grammatical sentences; joining arbitrary Japanese clauses with a comma creates broken copy.
+      lines.push(lead,chosen[0].text);
       lines.push('',introduction);
       if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
     }else{
@@ -226,7 +227,8 @@
   // Shared local-copy assessment: callers must not independently redefine readiness.
   function assess(item,{identity='',evidence=[]}={}){
     const result=compose(item,{identity,evidence});
-    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(result.understanding?.scene||result.values?.length);
+    const hasGroundedValue=result.values?.some(value=>value?.text&&result.text.includes(value.text));
+    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
     return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
   }
   return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,assess,RISK};
