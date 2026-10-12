@@ -187,7 +187,7 @@
     const lines=lead?[lead,'',introduction]:[introduction];
     if(values.length) lines.push(values.map(x=>x.text).join(''));
     const remaining=facts.filter(x=>!used.has(x.quote));
-    if(remaining.length){lines.push('','特徴👇');for(const x of remaining) lines.push('✓ '+x.quote);}
+    if(remaining.length){lines.push('','確認できる仕様');for(const x of remaining.slice(0,2)) lines.push('・'+x.quote);}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
