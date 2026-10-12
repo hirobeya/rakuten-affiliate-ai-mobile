@@ -33,7 +33,8 @@
     {names:['掃除機','電動モップ'],scene:'床の掃除に。',domain:'cleaning'},
     {names:['レトルトカレー','カレー','スープ','米','コーヒー','お茶'],scene:'',domain:'food'}
   ];
-  function sourceParts(item){return ['itemName','itemCaption'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
+  // Search returns catchcopy separately; include it as quoted source evidence rather than discarding it.
+  function sourceParts(item){return ['itemName','itemCaption','catchcopy'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
   function occurrence(parts,quote){
     const q=normalize(quote); if(!q||RISK.test(q)||(BAD_CONTEXT.test(q)&&q!=='フィルター交換不要')) return null;
     for(const part of parts){
