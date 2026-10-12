@@ -91,7 +91,14 @@
     // Nested category names are fine, unrelated product types are ambiguous.
     const conflict=[...domains].some(x=>x!==winner?.domain&&!(parents[winner?.domain]||[]).includes(x));
     if(conflict) return {identity:'',scene:'',domain:'',reason:'conflicting_types'};
-    if(winner) return {identity:winner.name,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
+    if(winner){
+      const verified=normalize(identity);
+      const supported=verified&&!RISK.test(verified)&&!BAD_CONTEXT.test(verified)&&sourceParts(item).some(x=>x.text.includes(verified));
+      // A verified, more specific product identity may refine the detected type,
+      // but cannot replace it with a different or unrelated product.
+      const precise=supported&&(verified.includes(winner.name)||winner.name.includes(verified))?verified:winner.name;
+      return {identity:precise,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
+    }
     const label=sourceLabel(item,extractFacts(item));
     if(label&&TYPES.some(type=>type.names.some(name=>name.length>=3&&compact.includes(name)&&/^(?:用|専用)?(?:ケース|カバー|ポーチ|交換パーツ)/.test(compact.split(name)[1]||'')))) {label.domain='accessory';return label;}
     const id=normalize(identity);
