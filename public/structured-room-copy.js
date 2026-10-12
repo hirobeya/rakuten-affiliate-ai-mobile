@@ -192,7 +192,7 @@
       const chosen=values.slice(0,2);
       const benefit=chosen.map(x=>x.text).join('');
       lines.push('',benefit);
-      if(chosen.length>1) lines.push('使う場面に合う仕様か、チェックしてみてください。');
+      // Do not append generic sales prompts that have no product-specific evidence.
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
     if(remaining.length&&values.length){lines.push('','確認できる仕様');for(const x of remaining.slice(0,2)) lines.push('・'+x.quote);}
