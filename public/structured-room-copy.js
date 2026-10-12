@@ -194,5 +194,11 @@
     if(text.length>500) return {version:VERSION,understanding,facts,values,text:'',status:'length_overflow'};
     return {version:VERSION,understanding,facts,values,text,status:'ok'};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,RISK};
+  // Shared local-copy assessment: callers must not independently redefine readiness.
+  function assess(item,{identity='',evidence=[]}={}){
+    const result=compose(item,{identity,evidence});
+    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(result.understanding?.scene||result.values?.length);
+    return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
+  }
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,assess,RISK};
 });
