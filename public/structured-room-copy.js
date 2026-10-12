@@ -169,6 +169,7 @@
       if(fact.quote==='オールシーズン'&&['riding','clothing'].includes(domain)) text='オールシーズン仕様です。';
       if(fact.quote==='壁掛け'&&['holder','storage'].includes(domain)) text='壁に掛けて使うタイプです。';
       if(fact.quote==='粘着式'&&['holder','storage'].includes(domain)) text='粘着式で取り付けるタイプです。';
+      if(fact.kind==='material'&&['daily','clothing','riding','towel','storage','storage-seat','beauty','pet','grooming'].includes(domain)) text='素材に'+fact.quote+'を選びたい方に。';
       if(fact.kind==='count') text=fact.quote+(/セット$/.test(fact.quote)?'です。':'のセットです。');
       if(text) add(text,[fact]);
     }
