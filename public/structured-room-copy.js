@@ -174,6 +174,23 @@
     // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
     return out.slice(0,3);
   }
+  // Purchase reasoning stays local and traceable to verified product evidence.
+  function purchaseReasons(understanding,values){
+    const domain=understanding.domain;
+    const patterns={
+      riding:{'スマホ対応':'停車中のスマホ確認を考えるなら','防風':'走行中の風対策を考えるなら'},
+      cooking:{'IH対応':'IHコンロで調理するなら','食洗機対応':'食後の片付けまで考えるなら'},
+      storage:{'キャスター付き':'収納場所を移動させたいなら','壁掛け':'壁面を収納に使いたいなら'},
+      holder:{'壁掛け':'壁面に掛けて整理したいなら'},
+      clothing:{'防風':'風への備えも考えるなら'},
+      charging:{'コードレス':'コードをつながずに使いたいなら'}
+    };
+    return values.map(value=>{
+      const key=value.factRef;
+      const context=patterns[domain]?.[key];
+      return {text:context?context+'、'+value.text:value.text,quotes:value.factRefs||[key]};
+    });
+  }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
     // Verified specifications alone do not establish a purchase reason.
@@ -188,7 +205,7 @@
     // A product-specific opening combines the use-case and supported differentiator.
     // Never invent outcomes: each value comes from an extracted source quote.
     const lines=[];
-    const chosen=values.slice(0,2);
+    const chosen=purchaseReasons(understanding,values).slice(0,2);
     if(lead&&chosen.length){
       lines.push(lead,chosen[0].text);
       lines.push('',introduction);
