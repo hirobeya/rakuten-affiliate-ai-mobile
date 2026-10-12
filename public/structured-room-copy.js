@@ -185,17 +185,21 @@
     const materialJoin=materials.length===1&&/製$/.test(materialLabel)?'の':/100[%％]$/.test(materialLabel)?'素材の':materialLabel.includes('木製')?'仕様の':'を使った';
     const introduction=materials.length?materialLabel+materialJoin+understanding.identity+'です。':understanding.identity+(understanding.method==='source_label'||understanding.domain==='unknown'?'':'です。');
     for(const x of materials) used.add(x.quote);
-    const lines=lead?[lead,'',introduction]:[introduction];
-    // Lead with a source-grounded reason to consider the item, not a spec dump.
-    // Each value sentence already carries its originating source quote.
-    if(values.length){
-      const chosen=values.slice(0,2);
-      const benefit=chosen.map(x=>x.text).join('');
-      lines.push('',benefit);
-      // Do not append generic sales prompts that have no product-specific evidence.
+    // A product-specific opening combines the use-case and supported differentiator.
+    // Never invent outcomes: each value comes from an extracted source quote.
+    const lines=[];
+    const chosen=values.slice(0,2);
+    if(lead&&chosen.length){
+      lines.push(lead,chosen[0].text);
+      lines.push('',introduction);
+      if(chosen.length>1) lines.push(chosen[1].text);
+    }else{
+      if(lead) lines.push(lead,'');
+      lines.push(introduction);
+      if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
-    if(remaining.length&&values.length){lines.push('','確認できる仕様');for(const x of remaining.slice(0,2)) lines.push('・'+x.quote);}
+    if(remaining.length&&chosen.length){lines.push('','確認できる仕様');for(const x of remaining.slice(0,2)) lines.push('・'+x.quote);}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
