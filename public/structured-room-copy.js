@@ -212,7 +212,7 @@
       if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
-    if(remaining.length&&chosen.length){const useful=remaining.filter(x=>x.kind==='function');lines.push('','確認できる仕様');for(const x of [...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3)) lines.push('・'+x.quote);}
+    if(remaining.length&&chosen.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','確認できる仕様');for(const x of specs) lines.push('・'+x.quote);}}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
