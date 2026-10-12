@@ -154,7 +154,7 @@
     for(const fact of facts){
       if(taken.has(fact.quote)) continue;
       let text='';
-      if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中のスマホ操作にも対応。';
+      if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中にスマホを操作したい場面にも対応。';
       if(fact.quote==='防風'&&domain==='riding') text='走行時の風対策にも。';
       if(fact.quote==='防風'&&domain==='clothing') text='風対策の防風仕様です。';
       if(fact.quote==='IH対応'&&domain==='cooking') text='IHでの調理に対応。';
