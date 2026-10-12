@@ -172,7 +172,7 @@
       if(text) add(text,[fact]);
     }
     // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
-    return out.slice(0,3);
+    return out;
   }
   // Rank evidence by usefulness rather than source order. The score only
   // selects verified sentences; it never generates unsupported product claims.
@@ -190,7 +190,7 @@
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
     // Verified specifications alone do not establish a purchase reason.
     if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
-    const used=new Set(values.flatMap(x=>x.factRefs||[x.factRef]));
+    const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     const lead=understanding.scene;
     const materialLabel=materials.map(x=>x.quote).join('・');
@@ -201,11 +201,13 @@
     // Never invent outcomes: each value comes from an extracted source quote.
     const lines=[];
     // Prefer a practical benefit over inventory-like quantity statements.
-    const chosen=purchaseReasons(understanding,values).filter(x=>x.score>=3).slice(0,2);
+    const ranked=purchaseReasons(understanding,values);
+    const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
+    for(const value of chosen) for(const quote of value.quotes) used.add(quote);
     if(lead&&chosen.length){
       lines.push(lead,chosen[0].text);
       lines.push('',introduction);
-      if(chosen.length>1) lines.push(chosen[1].text);
+      if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
     }else{
       if(lead) lines.push(lead,'');
       lines.push(introduction);
