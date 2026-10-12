@@ -174,21 +174,16 @@
     // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
     return out.slice(0,3);
   }
-  // Purchase reasoning stays local and traceable to verified product evidence.
+  // Compose a purchase angle from the verified use-case and evidence, not a
+  // product-name-specific promotional template. Unsupported claims are never added.
   function purchaseReasons(understanding,values){
-    const domain=understanding.domain;
-    const patterns={
-      riding:{'スマホ対応':'停車中のスマホ確認を考えるなら','防風':'走行中の風対策を考えるなら'},
-      cooking:{'IH対応':'IHコンロで調理するなら','食洗機対応':'食後の片付けまで考えるなら'},
-      storage:{'キャスター付き':'収納場所を移動させたいなら','壁掛け':'壁面を収納に使いたいなら'},
-      holder:{'壁掛け':'壁面に掛けて整理したいなら'},
-      clothing:{'防風':'風への備えも考えるなら'},
-      charging:{'コードレス':'コードをつながずに使いたいなら'}
-    };
-    return values.map(value=>{
-      const key=value.factRef;
-      const context=patterns[domain]?.[key];
-      return {text:context?context+'、'+value.text:value.text,quotes:value.factRefs||[key]};
+    const scene=String(understanding.scene||'').replace(/[。！!]+$/,'').trim();
+    return values.map((value,index)=>{
+      const detail=String(value.text||'').trim();
+      const quotes=value.factRefs||[value.factRef];
+      // The use-case is already expressed in the opening. Avoid repeating it.
+      const text=index===0&&scene?detail:detail;
+      return {text,quotes};
     });
   }
   function compose(item,{identity='',evidence=[]}={}){
