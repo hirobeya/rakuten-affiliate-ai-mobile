@@ -192,6 +192,8 @@
     if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
     const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
+    // An attractive opening must connect the actual use scene to a sourced reason.
+    // A generic scene alone is not a purchase reason.
     const lead=understanding.scene;
     const materialLabel=materials.map(x=>x.quote).join('・');
     const materialJoin=materials.length===1&&/製$/.test(materialLabel)?'の':/100[%％]$/.test(materialLabel)?'素材の':materialLabel.includes('木製')?'仕様の':'を使った';
@@ -205,7 +207,7 @@
     const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
     for(const value of chosen) for(const quote of value.quotes) used.add(quote);
     if(lead&&chosen.length){
-      lines.push(lead,chosen[0].text);
+      lines.push(lead.replace(/。$/,'')+'、'+chosen[0].text);
       lines.push('',introduction);
       if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
     }else{
@@ -214,7 +216,7 @@
       if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
-    if(remaining.length&&chosen.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','確認できる仕様');for(const x of specs) lines.push('・'+x.quote);}}
+    if(remaining.length&&chosen.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','商品の特徴');for(const x of specs) lines.push('・'+x.quote);}}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
