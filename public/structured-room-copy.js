@@ -179,7 +179,7 @@
   function purchaseReasons(understanding,values){
     const scored=values.map((value,index)=>{
       const quote=String(value.factRef||'');
-      const kind=/^(?:\\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
+      const kind=/^(?:\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
       const isUseCase=/対応|使|洗|移動|折り|掛け|風対策|コード|包装/.test(value.text||'');
       const score=(kind==='feature'?3:0)+(isUseCase?3:0)+(Array.isArray(value.factRefs)&&value.factRefs.length>1?1:0);
       return {text:value.text,quotes:value.factRefs||[value.factRef],score,index};
@@ -200,7 +200,8 @@
     // A product-specific opening combines the use-case and supported differentiator.
     // Never invent outcomes: each value comes from an extracted source quote.
     const lines=[];
-    const chosen=purchaseReasons(understanding,values).slice(0,2);
+    // Prefer a practical benefit over inventory-like quantity statements.
+    const chosen=purchaseReasons(understanding,values).filter(x=>x.score>=3).slice(0,2);
     if(lead&&chosen.length){
       lines.push(lead,chosen[0].text);
       lines.push('',introduction);
