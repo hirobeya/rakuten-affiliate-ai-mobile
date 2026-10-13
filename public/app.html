@@ -2672,16 +2672,9 @@ function safeSearchIdentity(item){
 function aiPhase1Post(item,result){
   if(isV3PreviewResult(result)) return readyV3Post(result);
   if(RoomCopyResult.canonical(result)) return RoomCopyResult.ready(result);
-  const v=result?.validation||{},insight=aiSalesInsight(item,result);
-  const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
-  if(!identity) return '';
-  const combinedFacts=[...(Array.isArray(insight.features)?insight.features:[]),...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])];
-  const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,identity,combinedFacts)||'';
-  if(universalPost) return universalPost;
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
-  const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
-  const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
-  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  // Unsupported legacy payloads must not bypass the verified copy contract.
+  return '';
+
 }
 
 function aiPanelMarkup(item,index){
@@ -3104,39 +3097,9 @@ function resolveAiGate(item,index,keyword=''){
   if(usePurchasePlan){
     return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  const v=ai.data?.validation||{};
-  const second=ruleSecondOpinion(item,v,keyword);
-  const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
-  if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
-  if(second.conflict) reasons.push('rule_second_opinion_conflict');
-  const softReasons=new Set(['invalid_features_dropped']);
-  const blockingReasons=reasons.filter(x=>!softReasons.has(x));
-  const validatedFull=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
-  const fallbackIdentity=safeSearchIdentity(item);
-  const groundedFallback=Boolean(fallbackIdentity);
-  const full=validatedFull||groundedFallback;
-  return {
-    enabled:true,
-    status:full?'full':'fallback',
-    full,
-    validatedFull,
-    groundedFallback,
-    fallbackIdentity,
-    reasons,
-    mediumHandling:'fallback_fixed',
-    cacheKeyComponents:ai.data?.cache?.keyComponents||{
-      itemCode:String(item?.itemCode||''),
-      itemName:String(item?.itemName||''),
-      imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
-      itemCaptionNormalized:String(item?.itemCaption||'').normalize('NFKC').replace(/\s+/g,' ').trim()
-    },
-    ruleSecondOpinion:second,
-    validation:v,
-    cache:ai.data?.cache||null,
-    stages:ai.data?.stages||null,
-    rateLimit:ai.data?.rateLimit||{},
-    target:ai.target||null
-  };
+  // Legacy AI response formats are not a verified posting contract.
+  // Fail closed instead of reconstructing a second draft from partial fields.
+  return {enabled:true,status:'fallback',full:false,useLegacy:false,reasons:['unsupported_ai_contract']};
 }
 
 function mediaTemplateFor(item,index,p='room',keyword=''){
