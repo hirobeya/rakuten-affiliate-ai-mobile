@@ -3155,18 +3155,12 @@ function neutralRulePost(item,keyword=''){
 
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
-  if(gate.enabled){
-    if(gate.status==='fallback') return '';
-    if(gate.useLegacy){
-      const options={variant:index};
-      if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-      if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-      return neutralRulePost(item,keyword);
-    }
-    if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
-    return '';
+  // Only a completed, contract-verified AI result may enter the AI copy route.
+  if(gate.enabled&&gate.status==='fallback') return '';
+  if(gate.enabled&&!gate.useLegacy){
+    return gate.full?aiPhase1Post(item,aiRoomResults.get(index)?.data):'';
   }
-
+  // Rule-confident and non-AI items share one local route.
   const options={variant:index};
   if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
   if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
