@@ -6,13 +6,17 @@ const structured=require('../public/structured-room-copy.js');
 const safety=require('../public/fact-safety.js');
 const dir=path.join(__dirname,'../tests/fixtures');
 const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort();
-const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0};
+const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0};
 const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=new Map();
 const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map();
 for(const file of files){
   const json=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));
   for(const genre of json.genres||[])for(const raw of genre.items||[]){
     totals.total++;
+    if(!String(item.itemCaption||'').trim()&&!String(item.catchcopy||'').trim())totals.titleOnly++;
+    if(String(item.itemCaption||'').trim())totals.hasCaption++;
+    if(String(item.catchcopy||'').trim())totals.hasCatchcopy++;
+    if(String(item.itemName||'').trim().length<15&&!String(item.itemCaption||'').trim()&&!String(item.catchcopy||'').trim())totals.sourceSparse++;
     const item={...raw,catchcopy:raw.catchcopy||'',itemCaption:raw.itemCaption||''};
     const result=structured.compose(item);
     const assessment=structured.assess(item);
@@ -30,7 +34,7 @@ for(const file of files){
       unreadyGenerated.set(key,(unreadyGenerated.get(key)||0)+1);
     }
     if(!result.facts.length){
-      const genreName=String(genre.genreName||genre.name||genre.genreId||file);
+      const genreName=String(genre.nameJa||genre.genreName||genre.name||genre.genreId||file);
       missingEvidenceByGenre.set(genreName,(missingEvidenceByGenre.get(genreName)||0)+1);
       if(!missingEvidenceExamples.has(genreName))missingEvidenceExamples.set(genreName,String(item.itemName||'').slice(0,140));
     }
