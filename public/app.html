@@ -1188,7 +1188,6 @@ function showLogin(
 let accessGeneration=0;
 let lastSearchItems=[];
 let lastSearchKeyword='';
-let postCache=new Map();
 let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
 function bootAuth(){
@@ -2781,12 +2780,10 @@ async function requestAiRoom(item,index,generation){
       aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
     }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d});
     else aiRoomResults.set(index,{state:'done',data:d});
-    for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
     // A pending draft must not survive a failed verification as a cached result.
-    for(const channel of ['room','threads','instagram']) postCache.delete(channel+':'+index);
   }finally{
     clearTimeout(timer);
     if(generation===aiRunGeneration){
@@ -2887,7 +2884,7 @@ async function runAiPreview(items,{resume=false}={}){
   const generation=resume?aiRunGeneration:++aiRunGeneration;
   if(!resume){
     aiBatchPauseRequested=false;
-    aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+    aiRoomResults=new Map();aiRoomReviews=new Map();
     (Array.isArray(items)?items:[]).forEach((item,index)=>{
       const target=aiTargetDecision(item);
       if(target.callAi) aiRoomResults.set(index,{state:'loading',target,auto:true});
@@ -3133,11 +3130,9 @@ function resolvedPost(item,index,p='room',keyword=''){
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
-  const key=p+':'+variant;
-  if(postCache.has(key)) return postCache.get(key);
-  const value=resolvedPost(i,variant,p,keyword);
-  postCache.set(key,value);
-  return value;
+  // Derive from the current verification state. A cached draft can outlive
+  // an AI gate transition and expose stale or unverified copy.
+  return resolvedPost(i,variant,p,keyword);
 }
 
 function aiPostState(i){
@@ -3452,7 +3447,7 @@ function render(
   }
   aiRoomReviews=new Map();
   aiRunGeneration++;
-  postCache=new Map();
+  
   if(currentAppSession)proUpdateDashboard();
   roomSentenceContext={openings:new Set(),seconds:new Set()};
   if(excluded)document.getElementById('outcomeMsg').textContent=excluded+'件の投稿済み商品を候補から除外しました。取り消しは投稿履歴からできます。';
