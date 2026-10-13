@@ -184,6 +184,11 @@
       if(fact.quote==='壁掛け'&&['holder','storage'].includes(domain)) text='壁に掛けて使うタイプです。';
       if(fact.quote==='粘着式'&&['holder','storage'].includes(domain)) text='粘着式で取り付けるタイプです。';
       if(fact.kind==='material'&&['daily','clothing','riding','towel','storage','storage-seat','beauty','pet','grooming'].includes(domain)) text='素材に'+fact.quote+'を選びたい方に。';
+      // Dimensions support a concrete fit decision only for products whose
+      // physical placement/size is central; do not infer comfort or capacity.
+      if(fact.kind==='dimension'&&['storage','storage-seat','daily'].includes(domain)&&/プール|収納|ラック|ボックス|ケース/.test(understanding.identity)) {
+        text='サイズは'+fact.quote+'。置き場所に収まるか、寸法を確認して選べます。';
+      }
       if(fact.kind==='count') text=fact.quote+(/セット$/.test(fact.quote)?'です。':'のセットです。');
       if(text) add(text,[fact]);
     }
