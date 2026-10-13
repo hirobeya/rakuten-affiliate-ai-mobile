@@ -203,7 +203,7 @@
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
     // Verified specifications alone do not establish a purchase reason.
-    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity')) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
+    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity'&&understanding.method!=='source_label')) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
     const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     // An attractive opening must connect the actual use scene to a sourced reason.
