@@ -168,6 +168,8 @@
       if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中にスマホを操作したい場面にも対応。';
       if(fact.quote==='防風'&&domain==='riding') text='走行時の風対策にも。';
       if(fact.quote==='防風'&&domain==='clothing') text='風対策の防風仕様です。';
+      if(fact.quote==='HDMI'&&domain==='daily') text='HDMI接続を使う場面に。';
+      if(fact.quote==='USB-C対応'&&domain==='daily') text='USB-C対応の接続先を使う場面に。';
       if(fact.quote==='IH対応'&&domain==='cooking') text='IHでの調理に対応。';
       if(fact.quote==='食洗機対応'&&domain==='cooking') text='使用後は食洗機で洗えます。';
       if(['折りたたみ','折り畳み'].includes(fact.quote)&&domain!=='accessory') text='使わないときは折りたためます。';
