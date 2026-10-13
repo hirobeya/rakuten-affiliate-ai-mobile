@@ -5,7 +5,7 @@ const path=require('node:path');
 const structured=require('../public/structured-room-copy.js');
 const safety=require('../public/fact-safety.js');
 const dir=path.join(__dirname,'../tests/fixtures');
-const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\\.json$/.test(x)).sort();
+const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort();
 const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0};
 const failures=new Map(),domains=new Map(),examples=new Map();
 for(const file of files){
