@@ -181,6 +181,13 @@
       if(fact.quote==='コードレス'&&domain!=='accessory') text='コードをつながずに使うタイプです。';
       if(fact.quote==='個包装') text='1つずつ包装されています。';
       if(fact.quote==='オールシーズン'&&['riding','clothing'].includes(domain)) text='オールシーズン仕様です。';
+      // Season and sleeve choices are concrete clothing selection criteria.
+      // This only restates an exact, non-negated source token and never promises comfort.
+      if(domain==='clothing'&&fact.quote==='長袖') text='長袖の服を探しているときに。';
+      if(domain==='clothing'&&fact.quote==='半袖') text='半袖の服を探しているときに。';
+      if(domain==='clothing'&&fact.quote==='春夏') text='春夏向けの服を選ぶときに。';
+      if(domain==='clothing'&&fact.quote==='秋冬') text='秋冬向けの服を選ぶときに。';
+
       if(fact.quote==='壁掛け'&&['holder','storage'].includes(domain)) text='壁に掛けて使うタイプです。';
       if(fact.quote==='粘着式'&&['holder','storage'].includes(domain)) text='粘着式で取り付けるタイプです。';
       if(fact.kind==='material'&&['daily','clothing','riding','towel','storage','storage-seat','beauty','pet','grooming'].includes(domain)) text='素材に'+fact.quote+'を選びたい方に。';
