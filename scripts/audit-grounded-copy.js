@@ -6,7 +6,7 @@ const structured=require('../public/structured-room-copy.js');
 const safety=require('../public/fact-safety.js');
 const dir=path.join(__dirname,'../tests/fixtures');
 const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort();
-const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0};
+const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0,readyGuardChanged:0,readyGuardRejected:0};
 const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=new Map();
 const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map();
 for(const file of files){
@@ -28,6 +28,8 @@ for(const file of files){
     const after=safety.guardUnsupportedBenefitCopy(item,result.text);
     if(result.text&&after!==result.text)totals.guardChanged++;
     if(result.text&&!after)totals.guardRejected++;
+    if(assessment.ready&&after!==result.text)totals.readyGuardChanged++;
+    if(assessment.ready&&!after)totals.readyGuardRejected++;
     if(result.text&&!assessment.ready){
       const selected=result.values.filter(value=>value?.text&&result.text.includes(value.text));
       const key=[result.status,selected.length?'value_visible':'value_not_selected',result.values.length+' values',result.understanding?.domain||'unknown'].join('|');
