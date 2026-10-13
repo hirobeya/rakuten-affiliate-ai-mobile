@@ -43,7 +43,7 @@
     for(const part of parts){
       const tokens=split(part.text);
       for(let i=0;i<tokens.length;i++){
-        if(tokens[i]!==q && !(q.includes(' ')&&part.text.includes(q)) && !(tokens[i].startsWith(q)&&/^(?:を採用|を使用|を使|採用|です|として)/.test(tokens[i].slice(q.length)))) continue;
+        if(tokens[i]!==q && !(q.includes(' ')&&part.text.includes(q)) && !(tokens[i].startsWith(q)&&/^(?:を採用|を使用|を使|採用|です|として)/.test(tokens[i].slice(q.length))) && !(tokens[i].startsWith(q)&&/^(?:長袖|半袖|春夏|秋冬)$/.test(q)&&/^(?:シャツ|ブラウス|トップス|アウター|ジャケット|コート|ワンピース|パーカー|ニット|服)$/.test(tokens[i].slice(q.length)))) continue;
         // A term must be an entire source token; nearby negation, conditions and material modifiers reject it.
         if(MODIFIER.test(tokens[i-1]||'')||MODIFIER.test(tokens[i+1]||'')) continue;
         const at=part.text.indexOf(q);
@@ -115,7 +115,13 @@
     const multipack=/^\d+(?:枚|個|本|袋|粒|錠)[x×X]\d+(?:枚|個|本|袋|粒|錠)(?:入り|入|セット)?$/;
     const specPhrase=/^(?:Bluetooth \d+(?:\.\d+)?|最大\d+時間再生|\d+段階温度調節|\d+時間保温|回転式\d+枚刃|\d+(?:\.\d+)?リットル(?:大容量)?|\d+-\d+度|\d+℃単位|(?:重量|幅|奥行|高さ) \d+(?:\.\d+)?(?:g|kg|mm|cm))$/;
     const sizes=/^(?:XS|S|M|L|LL|XL|XXL|XXXL|[2-5]XL)$/;
-    const candidates=[...parts.flatMap(x=>split(x.text)),...evidence.map(x=>typeof x==='object'?x.quote:x)];
+    // Recognize a bounded clothing-spec compound (e.g. 長袖シャツ) without
+    // treating arbitrary substrings or negated claims as source facts.
+    const clothingCompounds=parts.flatMap(part=>split(part.text).flatMap(token=>{
+      const m=token.match(/^(長袖|半袖|春夏|秋冬)(?:シャツ|ブラウス|トップス|アウター|ジャケット|コート|ワンピース|パーカー|ニット|服)$/);
+      return m?[m[1]]:[];
+    }));
+    const candidates=[...parts.flatMap(x=>split(x.text)),...clothingCompounds,...evidence.map(x=>typeof x==='object'?x.quote:x)];
     for(const raw of candidates){
       const q=normalize(raw);
       if(!specs.has(q)&&!numeric.test(q)&&!count.test(q)&&!dimensions.test(q)&&!sizes.test(q)&&!specPhrase.test(q)&&!multipack.test(q)) continue;
