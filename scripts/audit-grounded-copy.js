@@ -13,11 +13,11 @@ for(const file of files){
   const json=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));
   for(const genre of json.genres||[])for(const raw of genre.items||[]){
     totals.total++;
+    const item={...raw,catchcopy:raw.catchcopy||'',itemCaption:raw.itemCaption||''};
     if(!String(item.itemCaption||'').trim()&&!String(item.catchcopy||'').trim())totals.titleOnly++;
     if(String(item.itemCaption||'').trim())totals.hasCaption++;
     if(String(item.catchcopy||'').trim())totals.hasCatchcopy++;
     if(String(item.itemName||'').trim().length<15&&!String(item.itemCaption||'').trim()&&!String(item.catchcopy||'').trim())totals.sourceSparse++;
-    const item={...raw,catchcopy:raw.catchcopy||'',itemCaption:raw.itemCaption||''};
     const result=structured.compose(item);
     const assessment=structured.assess(item);
     const domain=result.understanding?.domain||'unresolved';
