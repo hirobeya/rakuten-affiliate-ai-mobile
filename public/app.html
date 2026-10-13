@@ -2792,6 +2792,8 @@ async function requestAiRoom(item,index,generation){
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+    // A pending draft must not survive a failed verification as a cached result.
+    for(const channel of ['room','threads','instagram']) postCache.delete(channel+':'+index);
   }finally{
     clearTimeout(timer);
     if(generation===aiRunGeneration){
