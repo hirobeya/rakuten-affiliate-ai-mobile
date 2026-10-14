@@ -3146,6 +3146,10 @@ function roomCopyNeedsReview(text,item,validatedByServer=false){
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
   if(lines.length<2&&body.length<85)return true;
+  // Publication safety is enforced at the final copy boundary for every route.
+  // Draft builders remain responsible only for generating drafts.
+  const guard=window.UrenaviFactSafety?.guardUnsupportedBenefitCopy;
+  if(typeof guard!=='function'||guard(item||{},String(text||''))!==String(text||''))return true;
   if(validatedByServer)return false;
   // Use the exact same grounded local assessment for AI routing and posting.
   // Never approve text merely because the item has some unrelated safe facts.
