@@ -64,7 +64,7 @@
     const knownFacts=new Set(facts.map(x=>x.quote));
     const selected=[];
     for(const token of tokens){
-      if(!token||LABEL_NOISE.test(token)||RISK.test(token)||BAD_CONTEXT.test(token)||/^\d+(?:個|枚|本|袋|組|食|セット)/.test(token)||/^(?:本日|今日|今だけ|期間限定|P\d+倍|\d+円OFF|\d+%OFF|\d+％OFF)$/i.test(token)) continue;
+      if(!token||LABEL_NOISE.test(token)||RISK.test(token)||BAD_CONTEXT.test(token)||/^\d+(?:個|枚|本|袋|組|食|セット)/.test(token)||/(?:本日|今だけ|期間限定|P\d+倍|ポイント\d+倍|\d+円OFF|\d+[%％]OFF)/i.test(token)) continue;
       if(knownFacts.has(token)||MATERIALS.includes(token)||FUNCTIONS.includes(token)||/^(?:SS|XS|S|M|L|LL|XL|XXL|XXXL|\dXL)$/.test(token)) continue;
       // Keep complete original tokens; never cut a word/model/number to fit.
       if(token.length>48) continue;
