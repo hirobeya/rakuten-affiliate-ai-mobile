@@ -972,7 +972,15 @@
   }
 
   const StructuredCopy=(typeof window!=='undefined'&&window.UrenaviStructuredCopy)||(typeof require==='function'?require('./structured-room-copy.js'):null);
-  function structuredPost(item,identity='',evidence=[]){return StructuredCopy?.compose(item,{identity,evidence}).text||'';}
+  function structuredPost(item,identity='',evidence=[]){
+    const assessment=StructuredCopy?.assess?.(item,{identity,evidence});
+    if(!assessment?.ready) return '';
+    const draft=String(assessment.result?.text||'');
+    // Do not publish a draft that the independent source/benefit guard would rewrite.
+    // Reject rather than silently stripping the very sentence that established readiness.
+    if(!FactSafety?.guardUnsupportedBenefitCopy) return '';
+    return FactSafety.guardUnsupportedBenefitCopy(item,draft)===draft?draft:'';
+  }
   function buildNeutralFactPost(item,facts=[]){return buildGroundedBenefitPost(item,facts);}
   const AI_COPY_EVIDENCE_RISK_RE=/(?:絶対|必ず|確実|No\.?\s*1|ナンバーワン|一番|最高|最強|治る|治療|改善|若返|痩せ|美白|小顔|リフトアップ|予防|効果|効能|除菌|殺菌|抗菌|消臭|防臭|ランキング|受賞|送料無料|クーポン|SALE|セール|半額|最安|ポイント\d*倍|P\d+倍)/i;
 
