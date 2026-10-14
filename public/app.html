@@ -3120,10 +3120,8 @@ function resolvedPost(item,index,p='room',keyword=''){
   if(gate.enabled&&!gate.useLegacy){
     return gate.full?aiPhase1Post(item,aiRoomResults.get(index)?.data):'';
   }
-  // Rule-confident and non-AI items share one local route.
-  const options={variant:index};
-  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+  // All local copy channels resolve through the same grounded draft route.
+  // Channel-specific presentation belongs in the UI, not in product reasoning.
   return neutralRulePost(item,keyword);
 }
 
