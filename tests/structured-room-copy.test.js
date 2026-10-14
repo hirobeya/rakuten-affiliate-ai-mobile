@@ -91,3 +91,17 @@ for(const itemName of [
  if(assessment.ready) assert.equal(safety.guardUnsupportedBenefitCopy(item,assessment.result.text),assessment.result.text,itemName);
 }
 console.log('Cross-category promotional identity and independent safety guard regressions PASS');
+
+// The user-facing ROOM channel must not expose copy rejected by the common readiness gate.
+for(const itemName of ['洗濯ネット','美顔ローラー 小顔 リフトアップ','モバイルバッテリー用ケース USB-C']){
+ const item={itemName};
+ assert.equal(s.assess(item).ready,false,itemName);
+ assert.equal(api.makeRoomCopy(item,''),'',itemName);
+}
+for(const itemName of ['掃除機 コードレス 充電式','バイクグローブ 山羊革 防風 スマホ対応']){
+ const item={itemName};
+ const assessment=s.assess(item);
+ assert.equal(assessment.ready,true,itemName);
+ assert.equal(api.makeRoomCopy(item,''),assessment.result.text,itemName);
+}
+console.log('Publish gate and user-facing copy alignment PASS');
