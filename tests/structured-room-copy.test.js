@@ -92,16 +92,16 @@ for(const itemName of [
 }
 console.log('Cross-category promotional identity and independent safety guard regressions PASS');
 
-// The user-facing ROOM channel must not expose copy rejected by the common readiness gate.
+// Draft creation and publication readiness are separate responsibilities.
+// All channel drafts share one composition route; the app alone gates copying.
 for(const itemName of ['洗濯ネット','美顔ローラー 小顔 リフトアップ','モバイルバッテリー用ケース USB-C']){
  const item={itemName};
  assert.equal(s.assess(item).ready,false,itemName);
- assert.equal(api.makeRoomCopy(item,''),'',itemName);
+ assert.equal(api.makeRoomCopy(item,''),s.compose(item).text,itemName);
 }
 for(const itemName of ['掃除機 コードレス 充電式','バイクグローブ 山羊革 防風 スマホ対応']){
  const item={itemName};
- const assessment=s.assess(item);
- assert.equal(assessment.ready,true,itemName);
- assert.equal(api.makeRoomCopy(item,''),assessment.result.text,itemName);
+ assert.equal(api.makeRoomCopy(item,''),s.compose(item).text,itemName);
+ assert.equal(api.makeThreadsCopy(item,''),api.makeRoomCopy(item,''),itemName);
 }
-console.log('Publish gate and user-facing copy alignment PASS');
+console.log('Shared draft route and separate publication gate PASS');
