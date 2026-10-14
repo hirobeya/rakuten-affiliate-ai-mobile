@@ -8,7 +8,7 @@ const dir=path.join(__dirname,'../tests/fixtures');
 const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort();
 const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0,readyGuardChanged:0,readyGuardRejected:0};
 const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=new Map();
-const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map();
+const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map(),readyGuardExamples=[];
 for(const file of files){
   const json=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));
   for(const genre of json.genres||[])for(const raw of genre.items||[]){
@@ -28,7 +28,10 @@ for(const file of files){
     const after=safety.guardUnsupportedBenefitCopy(item,result.text);
     if(result.text&&after!==result.text)totals.guardChanged++;
     if(result.text&&!after)totals.guardRejected++;
-    if(assessment.ready&&after!==result.text)totals.readyGuardChanged++;
+    if(assessment.ready&&after!==result.text){
+      totals.readyGuardChanged++;
+      if(readyGuardExamples.length<10)readyGuardExamples.push({itemName:String(item.itemName||'').slice(0,160),before:result.text,after});
+    }
     if(assessment.ready&&!after)totals.readyGuardRejected++;
     if(result.text&&!assessment.ready){
       const selected=result.values.filter(value=>value?.text&&result.text.includes(value.text));
@@ -48,6 +51,6 @@ for(const file of files){
   }
 }
 const byFailure=[...failures].sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,example:examples.get(reason)}));
-const report={totals,missingEvidenceByGenre:[...missingEvidenceByGenre].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([genre,count])=>({genre,count,example:missingEvidenceExamples.get(genre)})),unreadyGenerated:Object.fromEntries([...unreadyGenerated].sort((a,b)=>b[1]-a[1])),byDomain:Object.fromEntries([...domains].sort((a,b)=>b[1].total-a[1].total)),byFailure};
+const report={totals,readyGuardExamples,missingEvidenceByGenre:[...missingEvidenceByGenre].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([genre,count])=>({genre,count,example:missingEvidenceExamples.get(genre)})),unreadyGenerated:Object.fromEntries([...unreadyGenerated].sort((a,b)=>b[1]-a[1])),byDomain:Object.fromEntries([...domains].sort((a,b)=>b[1].total-a[1].total)),byFailure};
 console.log(JSON.stringify(report,null,2));
 if(process.argv.includes('--strict')&&totals.ready<112)process.exitCode=1;
