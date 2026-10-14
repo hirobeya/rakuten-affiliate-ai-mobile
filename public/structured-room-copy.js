@@ -25,7 +25,7 @@
     {names:['美顔ローラー','美容ローラー'],scene:'顔のお手入れに使うローラーを探している方に。',domain:'beauty'},
     {names:['フライパン','鍋','キッチンバサミ','包丁','まな板'],scene:'キッチンでの調理に。',domain:'cooking'},
     {names:['収納ボックス','収納ケース','収納ラック'],scene:'ものを入れる収納を用意したいときに。',domain:'storage'},
-    {names:['かっさ','ヘアブラシ','コーム','メイクブラシ'],scene:'日々のお手入れに使う道具に。',domain:'beauty'},
+    {names:['かっさ','ヘアブラシ','コーム','メイクブラシ'],scene:'メイクブラシやヘアブラシを探しているときに。',domain:'beauty'},
     {names:['ペットベッド','犬用ベッド','猫用ベッド'],scene:'ペットが過ごす場所に。',domain:'pet'},
     {names:['パジャマ','ボクサーパンツ','Tシャツ','シャツ','パーカー','パンツ','靴下','スカート','ワンピース','ブルゾン','コート'],scene:'日々の着替えに。',domain:'clothing'},
     {names:['完全ワイヤレスイヤホン','ワイヤレスイヤホン','イヤホン'],scene:'音声を聴くときに。',domain:'audio'},
@@ -182,7 +182,7 @@
       if(fact.quote==='食洗機対応'&&domain==='cooking') text='使用後は食洗機で洗えます。';
       if(['折りたたみ','折り畳み'].includes(fact.quote)&&domain!=='accessory') text='使わないときは折りたためます。';
       if(fact.quote==='キャスター付き'&&['storage','storage-seat'].includes(domain)) text='キャスターで移動できるタイプです。';
-      if(fact.quote==='洗える'&&domain!=='accessory') text='お手入れ時に洗えるタイプです。';
+      if(fact.quote==='洗える'&&domain!=='accessory') text='洗える仕様です。';
       if(fact.quote==='充電式'&&domain!=='accessory') text='充電して使うタイプです。';
       if(fact.quote==='コードレス'&&domain!=='accessory') text='コードをつながずに使うタイプです。';
       if(fact.quote==='個包装') text='1つずつ包装されています。';
