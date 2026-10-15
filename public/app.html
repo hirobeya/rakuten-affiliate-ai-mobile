@@ -2835,8 +2835,9 @@ function aiTargetDecision(item){
   const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
   // A single safe spec is not proof that the local writer can explain why to buy.
   // Only route unresolved items to Groq when the grounded local copy is not publish-ready.
-  const localText=window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,fallbackFacts)||'';
-  const localReady=Boolean(localText)&&!roomCopyNeedsReview(localText,item,false);
+  const localAssessment=localCopyAssessment(item);
+  const localText=String(localAssessment?.result?.text||'');
+  const localReady=Boolean(localAssessment?.ready)&&Boolean(localText)&&!roomCopyNeedsReview(localText,item,false);
   const reasons=[];
   if(conflicts.length) reasons.push('rule_conflict');
   else if(!localReady){
@@ -3108,9 +3109,14 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
   return 'legacy_'+p;
 }
 
+function localCopyAssessment(item){
+  // One evidence selection and one structured result for all local routes.
+  const evidence=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  return window.UrenaviStructuredCopy?.assess?.(item,{evidence})||null;
+}
+
 function neutralRulePost(item,keyword=''){
-  const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||'';
+  return localCopyAssessment(item)?.result?.text||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
@@ -3153,8 +3159,7 @@ function roomCopyNeedsReview(text,item,validatedByServer=false){
   // Never approve text merely because the item has some unrelated safe facts.
   // Evaluate the same source-backed evidence used by neutralRulePost.
   // A different evidence set here would reject a valid draft or approve the wrong one.
-  const evidence=window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item||{})||[];
-  const assessment=window.UrenaviStructuredCopy?.assess?.(item||{},{evidence});
+  const assessment=localCopyAssessment(item||{});
   if(!assessment?.ready)return true;
   const expected=String(assessment.result?.text||'').trim();
   return !expected||String(text||'').trim()!==expected;
