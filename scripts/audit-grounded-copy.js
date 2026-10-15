@@ -5,12 +5,20 @@ const path=require('node:path');
 const structured=require('../public/structured-room-copy.js');
 const safety=require('../public/fact-safety.js');
 const dir=path.join(__dirname,'../tests/fixtures');
-const files=fs.readdirSync(dir).filter(x=>/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort();
+// Keep the historical title-only baseline unchanged. A separately captured
+// evidence-rich corpus can be audited with --corpus=path/to/file-or-directory.
+const corpusArg=process.argv.find(x=>x.startsWith('--corpus='));
+const corpusPath=corpusArg?path.resolve(process.cwd(),corpusArg.slice('--corpus='.length)):null;
+if(corpusArg&&(!corpusPath||!fs.existsSync(corpusPath)))throw new Error('Corpus path does not exist');
+const auditDir=corpusPath&&fs.statSync(corpusPath).isDirectory()?corpusPath:dir;
+const files=corpusPath&&fs.statSync(corpusPath).isFile()
+  ?[corpusPath]
+  :fs.readdirSync(auditDir).filter(x=>corpusPath?x.endsWith('.json'):/^rakuten-large-genres-20260925-.*\\.json$/.test(x)).sort().map(x=>path.join(auditDir,x));
 const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0,readyGuardChanged:0,readyGuardRejected:0};
 const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=new Map();
 const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map(),readyGuardExamples=[];
 for(const file of files){
-  const json=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));
+  const json=JSON.parse(fs.readFileSync(file,'utf8'));
   for(const genre of json.genres||[])for(const raw of genre.items||[]){
     totals.total++;
     const item={...raw,catchcopy:raw.catchcopy||'',itemCaption:raw.itemCaption||''};
@@ -51,6 +59,6 @@ for(const file of files){
   }
 }
 const byFailure=[...failures].sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,example:examples.get(reason)}));
-const report={totals,readyGuardExamples,missingEvidenceByGenre:[...missingEvidenceByGenre].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([genre,count])=>({genre,count,example:missingEvidenceExamples.get(genre)})),unreadyGenerated:Object.fromEntries([...unreadyGenerated].sort((a,b)=>b[1]-a[1])),byDomain:Object.fromEntries([...domains].sort((a,b)=>b[1].total-a[1].total)),byFailure};
+const report={corpus:corpusPath||'historical-title-only',totals,readyGuardExamples,missingEvidenceByGenre:[...missingEvidenceByGenre].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([genre,count])=>({genre,count,example:missingEvidenceExamples.get(genre)})),unreadyGenerated:Object.fromEntries([...unreadyGenerated].sort((a,b)=>b[1]-a[1])),byDomain:Object.fromEntries([...domains].sort((a,b)=>b[1].total-a[1].total)),byFailure};
 console.log(JSON.stringify(report,null,2));
 if(process.argv.includes('--strict')&&totals.ready<112)process.exitCode=1;
