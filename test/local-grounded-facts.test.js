@@ -76,10 +76,15 @@ test('multiple dimension variants are dropped as ambiguous',()=>{
   assert.deepEqual(Array.from(dims),['本革']);
 });
 
-test('combined Groq and local facts are ambiguity-filtered again before posting',()=>{
+test('local drafts, AI routing, and publication use one grounded assessment',()=>{
   const app=fs.readFileSync('public/app.html','utf8');
-  assert.match(app,/combinedFacts=\[/);
-  assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
+  assert.match(app,/function localCopyAssessment\(item\)/);
+  assert.match(app,/extractFallbackTitleFacts\?\.\(item\)/);
+  assert.match(app,/UrenaviStructuredCopy\?\.assess\?\.\(item,\{evidence\}\)/);
+  assert.match(app,/return localCopyAssessment\(item\)\?\.result\?\.text\|\|''/);
+  assert.match(app,/const localAssessment=localCopyAssessment\(item\)/);
+  assert.match(app,/const assessment=localCopyAssessment\(item\|\|\{\}\)/);
+  assert.match(app,/guard\(item\|\|\{\},String\(text\|\|''\)\)/);
 });
 
 test('all client copy channels use the same grounded benefit output from safe facts',()=>{
