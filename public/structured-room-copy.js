@@ -261,7 +261,13 @@
   // Shared local-copy assessment: callers must not independently redefine readiness.
   function assess(item,{identity='',evidence=[]}={}){
     const result=compose(item,{identity,evidence});
-    const hasGroundedValue=result.values?.some(value=>value?.text&&result.text.includes(value.text));
+    // Publication requires a purchase reason that was actually selected and
+    // rendered as its own sentence, not merely mentioned inside the title.
+    const selected=purchaseReasons(result.understanding,result.values||[])
+      .filter(value=>value.score>=3).slice(0,3);
+    const body=String(result.text||'').split('商品の特徴')[0].split('価格：')[0];
+    const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
+    const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
     const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
     return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
   }
