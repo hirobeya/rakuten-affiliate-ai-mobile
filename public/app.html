@@ -3151,7 +3151,10 @@ function roomCopyNeedsReview(text,item,validatedByServer=false){
   if(validatedByServer)return false;
   // Use the exact same grounded local assessment for AI routing and posting.
   // Never approve text merely because the item has some unrelated safe facts.
-  const assessment=window.UrenaviStructuredCopy?.assess?.(item||{});
+  // Evaluate the same source-backed evidence used by neutralRulePost.
+  // A different evidence set here would reject a valid draft or approve the wrong one.
+  const evidence=window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item||{})||[];
+  const assessment=window.UrenaviStructuredCopy?.assess?.(item||{},{evidence});
   if(!assessment?.ready)return true;
   const expected=String(assessment.result?.text||'').trim();
   return !expected||String(text||'').trim()!==expected;
