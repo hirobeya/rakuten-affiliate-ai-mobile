@@ -13,7 +13,7 @@ if(corpusArg&&(!corpusPath||!fs.existsSync(corpusPath)))throw new Error('Corpus 
 const auditDir=corpusPath&&fs.statSync(corpusPath).isDirectory()?corpusPath:dir;
 const files=corpusPath&&fs.statSync(corpusPath).isFile()
   ?[corpusPath]
-  :fs.readdirSync(auditDir).filter(x=>corpusPath?x.endsWith('.json'):/^rakuten-large-genres-20260925-.*\\.json$/.test(x)).sort().map(x=>path.join(auditDir,x));
+  :fs.readdirSync(auditDir).filter(x=>corpusPath?x.endsWith('.json'):/^rakuten-large-genres-20260925-.*\.json$/.test(x)).sort().map(x=>path.join(auditDir,x));
 const totals={total:0,composed:0,ready:0,guardChanged:0,guardRejected:0,titleOnly:0,hasCaption:0,hasCatchcopy:0,sourceSparse:0,readyGuardChanged:0,readyGuardRejected:0};
 const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=new Map();
 const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map(),readyGuardExamples=[];
