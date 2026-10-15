@@ -97,9 +97,9 @@ test('all client copy channels use the same grounded benefit output from safe fa
   assert.equal(room,instagram);
   assert.match(room,/外出先での充電に。/);
   assert.doesNotMatch(room,/商品名には|明記されています|比較しやすい/);
-  assert.match(room,/特徴👇/);
+  assert.match(room,/商品の特徴/);
   assert.match(room,/10枚入り/);
-  assert.match(room,/✓ USB-C対応/);
+  assert.match(room,/・USB-C対応/);
   assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
   assert.match(room,/価格：1,980円/);
   assert.match(room,/※アフィリエイト広告を利用しています/);
@@ -110,7 +110,7 @@ test('neutral builder rejects non-source and non-allowlisted facts',()=>{
   const item={itemName:'財布 本革 内容量500ml USB-C対応',itemPrice:1000};
   const out=api.buildNeutralFactPost(item,['本革','内容量500ml','防水','存在しない仕様']);
   assert.match(out,/本革/);
-  assert.match(out,/✓ 内容量500ml/);
+  assert.match(out,/・内容量500ml/);
   assert.doesNotMatch(out,/防水|存在しない仕様/);
 });
 
