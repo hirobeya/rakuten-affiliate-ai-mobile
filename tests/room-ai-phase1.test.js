@@ -498,7 +498,7 @@ function run(name,fn){
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(src,/fallbackFacts\.length>=1/);
     assert.match(src,/insufficient_grounded_purchase_reason/);
-    assert.match(src,/const localReady=Boolean\(localText\)&&!roomCopyNeedsReview\(localText,item,false\)/);
+    assert.match(src,/const localReady=Boolean\(localAssessment\?\.ready\)&&Boolean\(localText\)&&!roomCopyNeedsReview\(localText,item,false\)/);
     assert.match(src,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
     assert.doesNotMatch(src,/if\(a\?\.outputMode!=='full'\) reasons\.push\('rule_fallback'\)/);
   });
@@ -689,8 +689,8 @@ function run(name,fn){
     assert.match(html,/aiGatesFullOutput=runtimeKnown/);
     assert.match(html,/preview\s*\?debugExportAllowed/);
     assert.match(html,/function resolvedPost\(/);
-    assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
-    assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
+    assert.match(html,/function resolvedPost\(/);
+    assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/rule_second_opinion_conflict/);
     assert.match(html,/mediumHandling:'fallback_fixed'/);
@@ -706,7 +706,7 @@ function run(name,fn){
     assert.match(html,/Groqの利用枠を守るため約/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/if\(gate\.enabled&&gate\.status==='fallback'\) return ''/);
     assert.match(html,/if\(aiGatesFullOutput&&s\.target\.callAi&&s\.state\?\.state!=='done'\) return false/);
     assert.match(html,/\.tab\[data-i=/);
   });
@@ -714,7 +714,7 @@ function run(name,fn){
   await run('client copy permits only source-grounded fallback identity and keeps strict evidence path',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/function safeSearchIdentity\(item\)/);
-    assert.match(html,/v\.productType\?\.valid===true\?String\(insight\.productType\|\|''\)\.trim\(\):safeSearchIdentity\(item\)/);
+    assert.match(html,/function localCopyAssessment\(item\)/);
     assert.match(html,/const universalPost=window\.UrenaviPainCopy\?\.buildValidatedProductPost/);
     assert.match(html,/if\(universalPost\) return universalPost/);
     assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
@@ -767,7 +767,7 @@ function run(name,fn){
   await run('AI-needed products hide unfinished fallback copy until validation completes',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/if\(gate\.enabled&&gate\.status==='fallback'\) return ''/);
     assert.match(html,/if\(s\.state\?\.state==='error'\|\|s\.state\?\.state==='restored'\) return ''/);
     assert.match(html,/const text=String\(post\(i,p\)\|\|''\)\.trim\(\)/);
     assert.match(html,/roomCopyNeedsReview\(text,i,/);
