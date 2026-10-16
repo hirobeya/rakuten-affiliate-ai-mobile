@@ -692,7 +692,7 @@ function run(name,fn){
     assert.match(html,/function resolvedPost\(/);
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
-    assert.match(html,/rule_second_opinion_conflict/);
+    assert.match(html,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
     assert.match(html,/mediumHandling:'fallback_fixed'/);
     assert.match(html,/cacheKeyComponents/);
     assert.match(html,/resolvedPost:resolvedPostMeta/);
