@@ -787,7 +787,9 @@ function run(name,fn){
     assert.doesNotMatch(html,/valueFromFacts/);
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(html,/buildGroundedBenefitPost/);
+    // The active client uses the structured assessment, not the removed legacy helper.
+    assert.match(html,/function localCopyAssessment\(item\)/);
+    assert.match(html,/UrenaviStructuredCopy\?\.assess/);
     assert.match(quality,/StructuredCopy/);
     assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);
