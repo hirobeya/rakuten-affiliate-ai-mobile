@@ -347,7 +347,14 @@ function localZeroCall(item,learnedIdentity=''){
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const partnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  // Generic material, quantity and dimension descriptions are factual, but do
+  // not by themselves explain a buyer's use case. Defer those to verified AI
+  // instead of marking a thin title-only description as a finished post.
+  const weakGenericAxis=/^(?:素材・構造|生産情報|サイズ|入り数|数値仕様|重量|容量)$/;
+  const partnerCopy=proposedPartnerCopy?.generic
+    && weakGenericAxis.test(String(proposedPartnerCopy.axisHints?.[0]||''))
+    ?null:proposedPartnerCopy;
   const facts=[];
   const semanticFactKeys=new Set();
   for(const fact of [...structuredFacts,...literalFacts]){
