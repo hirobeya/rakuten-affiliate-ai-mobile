@@ -222,8 +222,10 @@
   }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
-    // Verified specifications alone do not establish a purchase reason.
-    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity')) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
+    // Preserve exact source facts as a draft without declaring a purchase reason.
+    // All publication consumers must require status=ok plus a rendered value.
+    const draftOnly=!understanding.scene&&!values.length&&understanding.method==='source_label';
+    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity'&&!draftOnly)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
     const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     // An attractive opening must connect the actual use scene to a sourced reason.
@@ -256,7 +258,7 @@
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
     if(text.length>500) return {version:VERSION,understanding,facts,values,text:'',status:'length_overflow'};
-    return {version:VERSION,understanding,facts,values,text,status:'ok'};
+    return {version:VERSION,understanding,facts,values,text,status:draftOnly?'draft':'ok'};
   }
   // Shared local-copy assessment: callers must not independently redefine readiness.
   function assess(item,{identity='',evidence=[]}={}){
