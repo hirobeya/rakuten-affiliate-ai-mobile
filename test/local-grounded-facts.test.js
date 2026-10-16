@@ -133,7 +133,8 @@ test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
   assert.doesNotMatch(html,/valueFromFacts/);
   assert.doesNotMatch(quality,/VALUE_RULES/);
   assert.doesNotMatch(quality,/function valueFromFacts\(/);
-  assert.match(html,/buildGroundedBenefitPost/);
+  assert.match(html,/function neutralRulePost\(item,keyword=''/);
+  assert.match(html,/return localCopyAssessment\(item\)\?\.result\?\.text\|\|''/);
   assert.match(quality,/function buildGroundedBenefitPost/);
   assert.match(quality,/StructuredCopy/);
 });
@@ -209,6 +210,9 @@ test('validated AI copy rejects identity or evidence absent from source',()=>{
 test('client AI path uses validated copy evidence instead of spec-only evidence',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-  assert.match(html,/eligibleForCopyEvidence/);
-  assert.match(html,/buildValidatedProductPost/);
+  // The active path shares a single source-grounded assessment for routing and publication.
+  assert.match(html,/function localCopyAssessment\(item\)/);
+  assert.match(html,/UrenaviStructuredCopy\?\.assess\?\.\(item,\{evidence\}\)/);
+  assert.match(html,/const localAssessment=localCopyAssessment\(item\)/);
+  assert.match(html,/const assessment=localCopyAssessment\(item\|\|\{\}\)/);
 });
