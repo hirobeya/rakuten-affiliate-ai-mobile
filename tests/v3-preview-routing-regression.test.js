@@ -167,7 +167,7 @@ test('stale legacy generatedCopy is never a publication source in active V3 Prev
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function readyV3Post\(result\)/);
   assert.match(html,/return String\(result\?\.variants\?\.\[0\]\?\.text\|\|''\)\.trim\(\);/);
-  assert.match(html,/if\(gate\.full\) return aiPhase1Post\(item,aiRoomResults\.get\(index\)\?\.data\);/);
+  assert.match(html,/return gate\.full\?aiPhase1Post\(item,aiRoomResults\.get\(index\)\?\.data\):'';/);
   assert.doesNotMatch(html,/item\?\.generatedCopy|item\.generatedCopy/);
 });
 
