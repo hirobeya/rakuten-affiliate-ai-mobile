@@ -391,7 +391,7 @@ function localZeroCall(item,learnedIdentity=''){
     && selectedGroundedValues.length>0
     && !hasWeakStructuredPiggyback
     // A rendered value that just repeats the identity is not a purchase reason.
-    && !selectedGroundedValues.some(v=>normalize(v.text)===identity+'です。')
+    && !renderedCopyLines.has(identity+'です。')
     && hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
