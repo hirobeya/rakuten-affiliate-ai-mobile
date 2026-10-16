@@ -15,22 +15,24 @@ function response(){
   };
 }
 
-test('Preview UI has one active V3 contract and blocks dormant contracts',()=>{
+test('Preview UI uses explicit canonical adapter and preserves tested local V3 rendering',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function isV3PreviewResult\(result\)/);
   assert.match(html,/startsWith\('super-urenavi-v3-'\)/);
   assert.doesNotMatch(html,/version==='super-urenavi-v3-preview'/);
   assert.match(html,/unexpected_ai_contract/);
-  assert.match(html,/if\(String\(result\?\.version\|\|''\)\.startsWith\('room_contract_'\)\) return '';/);
+  assert.match(html,/RoomCopyResult\.canonical\(result\)\) return RoomCopyResult\.ready\(result\)/);
   assert.doesNotMatch(
     html,
     /startsWith\('super-urenavi-v3-'\)\|\|String\(ai\.data\?\.version\|\|''\)\.startsWith\('room_contract_'\)/
   );
 });
 
-test('active V3 endpoint is isolated from the dormant semantic engine',()=>{
+test('legacy V3 endpoint remains unchanged while the integrated endpoint owns semantic generation',()=>{
   const source=fs.readFileSync(path.join(__dirname,'../api/room-ai-v3.js'),'utf8');
   assert.doesNotMatch(source,/room-semantic-engine|room-semantic-provider/);
+  const gateway=fs.readFileSync(path.join(__dirname,'../lib/room-copy-handler.js'),'utf8');
+  assert.match(gateway,/room-semantic-engine/);
 });
 
 test('tier A without a composed variant is not reported as ready',async()=>{
@@ -165,7 +167,7 @@ test('stale legacy generatedCopy is never a publication source in active V3 Prev
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function readyV3Post\(result\)/);
   assert.match(html,/return String\(result\?\.variants\?\.\[0\]\?\.text\|\|''\)\.trim\(\);/);
-  assert.match(html,/if\(gate\.full\) return aiPhase1Post\(item,aiRoomResults\.get\(index\)\?\.data\);/);
+  assert.match(html,/return gate\.full\?aiPhase1Post\(item,aiRoomResults\.get\(index\)\?\.data\):'';/);
   assert.doesNotMatch(html,/item\?\.generatedCopy|item\.generatedCopy/);
 });
 
@@ -192,12 +194,16 @@ test('mobile AI queue blocks premature debug export and can resume unfinished ac
   assert.match(html,/async function runAiPreview\(items,\{resume=false\}=\{\}\)/);
 });
 
-test('Pro candidates hand off to normal workflow without auto-running AI',()=>{
+test('Pro candidates enter the gated writer as a bounded batch',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
   assert.match(html,/function proOpenCandidate\(index\)/);
   assert.match(html,/proVisibleCandidateItems\[index\]/);
   assert.match(html,/k\.value=keyword;\s*lastSearchKeyword=keyword;/);
-  assert.match(html,/setAppScreen\('normal'\);\s*render\(\[item\],\{autoAi:false\}\);/);
+  assert.match(html,/function proPrepareCandidates\(items\)/);
+  assert.match(html,/\.slice\(0,3\)/);
+  assert.match(html,/render\(candidates,\{autoAi:true\}\);/);
+  assert.match(html,/id="proPrepareBatchBtn"/);
+  assert.match(html,/proPrepareCandidates\(proVisibleCandidateItems\)/);
   assert.match(html,/data-pro-candidate/);
   assert.match(html,/function proSafeProductUrl\(value\)/);
   assert.match(html,/u\.protocol!=='https:'\)/);

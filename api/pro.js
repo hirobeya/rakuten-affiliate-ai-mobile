@@ -1,5 +1,5 @@
 const {authorizePro,db,setDeviceCookie}=require('../lib/billing');
-const {searchProducts}=require('../lib/pro-search');
+const {searchProducts,rankProductCandidates}=require('../lib/pro-search');
 
 const ALLOWED_SORTS=new Set(['standard','-reviewCount','-reviewAverage','-affiliateRate','+itemPrice']);
 const DEFAULTS={
@@ -107,6 +107,34 @@ module.exports=async function handler(req,res){
         body:JSON.stringify(row)
       });
       return res.status(200).json({saved:true,settings:row});
+    }
+
+    // Score user-supplied product data without invoking the Rakuten API.
+    // No server-side product-page fetch, scraping, or automatic publication.
+    if(req.method==='POST' && action==='rank-supplied'){
+      const body=req.body&&typeof req.body==='object'?req.body:{};
+      const source=body.items;
+      if(!Array.isArray(source)||source.length<1||source.length>30||
+        source.some(x=>!x||typeof x!=='object'||Array.isArray(x)||
+          typeof x.itemName!=='string'||!x.itemName.trim()||x.itemName.length>1000||
+          String(x.itemCaption||'').length>12000)){
+        return res.status(400).json({message:'商品データは1〜30件、商品名を含めて入力してください。'});
+      }
+      const settings={...DEFAULTS,...(body.settings&&typeof body.settings==='object'?body.settings:{})};
+      const items=rankProductCandidates(settings,source);
+      return res.status(200).json({preview:true,source:'user_supplied',apiCalls:0,items});
+    }
+
+    // Do not expose Rakuten Web Service data through a paid feature without
+    // explicit authorization. The current fetch-based path is only for the
+    // owner to evaluate on Preview; all other callers must use a cleared
+    // non-RWS source before commercial release.
+    if(req.method==='POST' && (action==='preview'||action==='generate') &&
+      !(auth.plan==='owner'&&process.env.VERCEL_ENV==='preview')){
+      return res.status(409).json({
+        message:'この商品自動取得機能は利用条件の確認中です。販売向けにはまだ利用できません。',
+        code:'pro_rakuten_source_not_cleared'
+      });
     }
 
     if(req.method==='POST' && action==='preview'){

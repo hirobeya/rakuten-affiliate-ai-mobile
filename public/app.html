@@ -687,7 +687,43 @@ input,select{
 .appScreen.off{display:none}
 #proPanel{margin-top:12px}
 @media(max-width:520px){.proActions,.proChecks{grid-template-columns:1fr}}
+
+.roomToday h2,#roomOpsPanel h2{font-size:18px;margin:0 0 12px}
+.roomToday{background:#edf5ff;border-color:#b9d2f3}
+.roomActionRow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.roomLink,.roomActionRow button,#roomOpsAdd,#roomOpsExport{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 12px;border:1px solid #ccd9e9;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.roomActionRow button:disabled{opacity:.5}
+#roomOpsPanel h3{font-size:15px;margin:20px 0 8px}
+#roomOpsPanel input,#roomOpsPanel select,#roomOpsPanel textarea{width:100%;box-sizing:border-box;font-size:16px}
+#roomOpsPanel summary{padding:14px 0;cursor:pointer}
+#roomOpsPanel .proCard{overflow-wrap:anywhere}
+@media(max-width:520px){.roomActionRow>*{flex:1 1 120px}}
+#roomOutcomesPanel .proCard{overflow-wrap:anywhere;margin-top:8px}
+#roomOutcomesPanel button{min-height:44px;max-width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ccd9e9;font-size:14px}
+#roomOutcomesPanel select,#roomOutcomesPanel input{min-width:0;width:100%;font-size:16px}
+
+
+/* One app, task-oriented navigation. Visibility only; entitlement/API gates unchanged. */
+.urenaviWorkTabs{display:flex;gap:5px;overflow-x:auto;position:sticky;top:0;z-index:30;padding:9px 2px;background:#f6f7f9;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.urenaviWorkTabs button{flex:0 0 auto;min-height:44px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:12px;background:white;color:#334155;font-size:13px;font-weight:800}
+.urenaviWorkTabs button[aria-current="page"]{background:#172a4b;color:#fff;border-color:#172a4b}
+#appRoot[data-urenavi-tab] .roomToday,#appRoot[data-urenavi-tab] #normalScreen,#appRoot[data-urenavi-tab] #proPanel,#appRoot[data-urenavi-tab] #roomOutcomesPanel,#appRoot[data-urenavi-tab] #roomAccountBackupPanel,#appRoot[data-urenavi-tab] #legacyMigration{display:none}
+#appRoot[data-urenavi-tab="today"] .roomToday{display:block}
+#appRoot[data-urenavi-tab="search"] #normalScreen,#appRoot[data-urenavi-tab="copy"] #normalScreen{display:block}
+#appRoot[data-urenavi-tab="copy"] #normalScreen > .box{display:none}
+#appRoot[data-urenavi-tab="search"] #proPanel.proIntegrated.on,#appRoot[data-urenavi-tab="operations"] #proPanel.proIntegrated.on,#appRoot[data-urenavi-tab="today"] #proPanel.proIntegrated.on{display:block}
+#appRoot[data-urenavi-tab] #proPanel > .proHead,#appRoot[data-urenavi-tab] #proPanel > .proHint{display:none}
+#appRoot[data-urenavi-tab] #proPanel > .proTasks,#appRoot[data-urenavi-tab] #proPanel > #urenaviCandidateTools{display:none}
+#appRoot[data-urenavi-tab="search"] #proPanel > #urenaviCandidateTools{display:block}
+#appRoot[data-urenavi-tab="operations"] #proPanel > #roomOpsPanel,#appRoot[data-urenavi-tab="operations"] #proPanel > #proActivityPanel{display:block}
+#appRoot[data-urenavi-tab="today"] #proPanel > .proTasks:not(#roomOpsPanel):not(#proActivityPanel){display:block}
+#appRoot[data-urenavi-tab="results"] #roomOutcomesPanel,#appRoot[data-urenavi-tab="results"] #roomAccountBackupPanel{display:block}
+#appRoot[data-urenavi-tab="results"] #legacyMigration:not([hidden]){display:block}
+
+.urenaviSteps{margin:10px 0 16px;padding-left:22px;font-size:14px;line-height:1.85;color:#334155}.urenaviAdvanced{margin-top:18px;padding:12px;border:1px solid #d7e2ef;border-radius:12px;background:#f8fafc}.urenaviAdvanced summary{cursor:pointer;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}.urenaviAdvanced textarea{max-width:100%}
+.urenaviExchangeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.urenaviExchangeChoices button{min-height:82px;padding:12px 8px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-weight:800;font-size:15px;cursor:pointer}.urenaviExchangeChoices button[aria-pressed="true"]{border-color:#172a4b;box-shadow:inset 0 0 0 1px #172a4b}.urenaviExchangeChoices button:focus-visible{outline:3px solid #64748b;outline-offset:2px}.urenaviExchangeChoices small{display:block;font-size:11px;font-weight:500;margin-top:6px;color:inherit}@media(max-width:350px){.urenaviExchangeChoices{grid-template-columns:1fr}}
 </style>
+<script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
 </head>
 
@@ -739,6 +775,7 @@ input,select{
 <div id="appRoot">
 
 <main class="w">
+<p id="urenaviPreviewVersion" class="muted" style="font-size:11px;margin:6px 0" aria-label="プレビュー更新番号">開発版 2026.10.11-品質確認4</p>
 
 <div class="appHead">
 
@@ -753,18 +790,27 @@ input,select{
 
 </div>
 
-<div id="appModeNav" class="appModeNav" aria-label="ウレナビ画面切替">
-  <button id="normalModeBtn" class="modeBtn on" type="button">通常</button>
-  <button id="proModeBtn" class="modeBtn" type="button">Pro</button>
-</div>
+
 
 <h1>ウレナビ</h1>
 
 <div class="sub">
-商品を探して、売れやすさと収益性を評価。誰にどう売るかまで決めます。<br>
+商品を探し、用途・価格・確認できた報酬条件を比較。商品選びから投稿準備・実績確認まで支援します。<br>
 ※スコアは公開データをもとにした参考指標で、販売成果を保証するものではありません。
 </div>
 
+<nav id="urenaviWorkTabs" class="urenaviWorkTabs" aria-label="作業を切り替える"><button type="button" data-urenavi-tab="search">商品検索</button><button type="button" data-urenavi-tab="copy">投稿文</button><button type="button" data-urenavi-tab="operations">交流</button><button type="button" data-urenavi-tab="results">実績</button><button type="button" data-urenavi-tab="today">今日の運用</button></nav>
+<section class="box roomToday" aria-labelledby="roomTodayTitle">
+  <h2 id="roomTodayTitle">今日のROOM運用</h2>
+  <p id="roomTodayCounts" aria-live="polite">ログイン後に活動を読み込みます。</p>
+  <p id="roomNextAction">今日の商品選び・投稿準備・交流を進めましょう。</p>
+  <a id="roomNextTask" class="roomLink" href="#normalScreen">次の商品を選ぶ</a>
+  <nav class="roomActionRow" aria-label="今日の操作">
+    <a class="roomLink" href="#normalScreen">商品を選ぶ</a>
+    <a class="roomLink" href="#roomOpsPanel">交流に進む</a>
+    <a class="roomLink" href="#proDailyDashboard">売上を確認</a>
+  </nav>
+</section>
 <div id="normalScreen" class="appScreen">
 <section class="box">
 
@@ -881,13 +927,27 @@ input,select{
 
 
 <section id="res"></section>
-</div>
-<section id="proPanel" class="box proIntegrated appScreen">
-  <div class="proHead">
-    <div><span class="proBadge">PRO</span> <strong>ROOM運用アシスト</strong></div>
-  </div>
-  <div class="proHint">通常版の機能はそのまま使えます。Proでは、楽天カテゴリー・商品条件・自動選定などROOM運用向けの機能を使えます。価格帯と並び順は通常画面の設定を共通で使います。</div>
 
+</div>
+<section id="proPanel" class="box proIntegrated on appScreen">
+  <div class="proHead">
+    <div><strong>ROOM売上支援｜開発プレビュー</strong></div>
+  </div>
+  <div class="proHint">これは開発中の検証画面です。商品取得の商用利用は未承認のため、有料ユーザー向けの候補検索は停止しています。投稿・いいね・フォローの自動操作は行いません。</div>
+
+  <div class="proTasks" style="margin:14px 0">
+    <strong style="font-size:15px">今日のROOM運用ダッシュボード</strong>
+    <div class="proHint">投稿準備・交流活動・売上をひとつの画面で確認。数値は自分で入力した実績のみです。</div>
+    <div id="proDailyDashboard" class="proMsg" aria-live="polite"></div>
+    <label for="proRevenueToday">今日のROOM売上（実績・円）</label>
+    <input id="proRevenueToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた売上のみ入力">
+    <label for="proCommissionToday">今日の入力報酬（区分未確認・円）</label>
+    <input id="proCommissionToday" type="number" min="0" step="1" inputmode="numeric" placeholder="確認できた報酬のみ入力">
+    <button id="proRevenueSave" class="proGhost" type="button">今日の実績を保存</button>
+    <div id="proRevenueMsg" class="proMsg" aria-live="polite"></div>
+  </div>
+
+  <div id="urenaviCandidateTools">
   <label>楽天市場カテゴリー</label>
   <div id="proGenrePath" class="proPath">楽天市場</div>
   <select id="proGenrePicker"><option value="">カテゴリーを読み込み中…</option></select>
@@ -906,7 +966,7 @@ input,select{
     <label class="proCheck"><input id="proDup" type="checkbox" checked>投稿済み商品の重複を避ける</label>
   </div>
 
-  <label>投稿予定時刻</label>
+  <label>投稿目標時刻（通知・自動投稿は未対応）</label>
   <div class="proTimes">
     <input id="proT1" type="time" value="08:00">
     <input id="proT2" type="time" value="12:30">
@@ -914,21 +974,76 @@ input,select{
   </div>
 
   <div class="proActions">
-    <button id="proPreviewBtn" class="proPrimary" type="button">この条件で商品プレビュー</button>
-    <button id="proSaveBtn" class="proGhost" type="button">Pro設定を保存</button>
+    <button id="proPreviewBtn" class="proPrimary" type="button">商品候補を確認（開発確認用）</button>
+    <button id="proSaveBtn" class="proGhost" type="button">選定設定を保存</button>
   </div>
-  <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を自動選定</button>
+  <button id="proGenerateBtn" class="go" type="button" style="background:#172a4b">今日の3商品を候補選定（開発確認用）</button>
+  <button id="proPrepareBatchBtn" type="button" class="go" style="background:#14532d;display:none">選定した商品をまとめて投稿文作成</button>
+  <div class="roomActionRow"><button id="proPauseBatchBtn" type="button">現在の商品を終えて一括生成を停止</button><button id="proResumeBatchBtn" type="button">未処理の商品から再開</button></div>
   <div id="proMsg" class="proMsg"></div>
+  <p id="proResourceUsage" class="proHint" aria-live="polite">現在の生成の使用量はまだ取得していません。</p>
   <div id="proPreviewResults" class="proPreview"></div>
-
-  <div class="proTasks">
-    <strong style="font-size:13px">今日のROOM活動</strong>
-    <label class="proTask"><input type="checkbox" data-pro-task="follow">フォロー返し候補を確認</label>
-    <label class="proTask"><input type="checkbox" data-pro-task="like">フォロワーの最新投稿を確認</label>
-    <label class="proTask"><input type="checkbox" data-pro-task="post">今日の投稿3件を進める</label>
   </div>
+
+  <section id="roomOpsPanel" class="proTasks" aria-labelledby="roomOpsTitle">
+    <h2 id="roomOpsTitle">いいね・フォロー管理</h2>
+    <p class="proHint">やりたい活動を選んで、楽天ROOMで確認してください。相手の名前を覚えたり検索する必要はありません。</p>
+    <div class="urenaviExchangeChoices" aria-label="交流の種類">
+      <button type="button" data-room-work="like_return">♡ いいね返し<small>お知らせを確認</small></button>
+      <button type="button" data-room-work="follow_return">＋ フォロー返し<small>新しいフォロワーを確認</small></button>
+      <button type="button" data-room-work="like_visit">♥ いいね回り<small>フィードを確認</small></button>
+      <button type="button" data-room-work="follow_visit">＋ フォロー回り<small>おすすめユーザーを確認</small></button>
+    </div><p id="roomOpsWorkGuide" class="proHint" aria-live="polite">活動を選ぶと次の操作が表示されます。</p><div id="roomOpsQuick" class="box"><strong>今やる交流</strong><p id="roomOpsQuickStatus" aria-live="polite">登録済みの候補を確認します。</p><button id="roomOpsQuickGo" type="button" class="proPrimary">対応待ちを見る</button></div><p class="proHint"><strong>この画面でできること：</strong>返したい相手を登録し、楽天ROOMで実際にいいね・フォローしたあと、その記録を残します。自動いいね・自動フォローではありません。</p><ol class="urenaviSteps"><li>ROOMで相手を見つける</li><li>相手のURLを登録する</li><li>「対応待ち」からROOMへ移動して実施する</li><li>戻って「実施したと記録」を押す</li></ol>
+    <p class="proHint">ROOMで見つけた相手や、いいね・フォローをくれた相手を登録。返しを先に表示し、同じ活動の重複を防ぎます。</p>
+    <a class="roomLink" href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">ROOMで相手を探す</a>
+    <h3>① 対応したい相手を登録</h3><label for="roomOpsType">どんな活動をする？</label>
+    <select id="roomOpsType"><option value="like_return">いいね返し</option><option value="follow_return">フォロー返し</option><option value="like_visit">いいね回り</option><option value="follow_visit">フォロー回り</option></select>
+    <label for="roomOpsUrl">相手のROOM・投稿URL（必須）</label><p class="proHint">相手のROOMで共有したリンクを貼り付けます。現状は候補の自動収集には対応していません。</p><input id="roomOpsUrl" type="url" placeholder="https://room.rakuten.co.jp/room_…/" autocomplete="off"><button id="roomOpsPaste" type="button" class="proGhost">コピーしたURLを貼り付け</button>
+    <details class="urenaviAdvanced"><summary>名前・理由を追加する（任意）</summary><label for="roomOpsName">相手の名前（任意）</label><input id="roomOpsName" maxlength="160">
+    <label for="roomOpsReason">対応する理由（任意）</label><input id="roomOpsReason" maxlength="240" placeholder="例：いいねをくれた、同じジャンルを紹介している"></details>
+    <button id="roomOpsAdd" class="proPrimary" type="button">交流候補に追加</button>
+    <p id="roomOpsMessage" class="proMsg" role="status"></p>
+    <h3>② 対応待ち（返しを優先）</h3><details class="urenaviAdvanced"><summary>以前の相手を探す・再利用する（必要なときだけ）</summary><label for="roomOpsFind">登録済みの相手を絞り込む</label><input id="roomOpsFind" type="search" autocomplete="off" placeholder="名前・ROOM URLで絞り込み"><p id="roomOpsFindStatus" class="proHint" aria-live="polite"></p><div id="roomOpsRecent" class="proPreview"></div></details><p class="proHint">「相手のROOMを開く」→楽天ROOMで操作→この画面に戻る→「実施したと記録」の順です。開いただけでは完了になりません。</p><div id="roomOpsQueue" class="proPreview"></div>
+    <h3>③ 今日の活動記録</h3><p id="roomOpsAnalysis" class="proMsg"></p>
+    <details><summary>完了・保留の履歴</summary><div id="roomOpsHistory" class="proPreview"></div></details>
+    <details class="urenaviAdvanced"><summary>データ保存・端末移行（必要なときだけ開く）</summary><p class="proHint">記録はこのブラウザ内に保存されます。機種変更前に必ずバックアップしてください。</p><button id="roomOpsExport" class="proGhost" type="button">候補・履歴をバックアップ</button>
+    <textarea id="roomOpsBackup" aria-label="交流バックアップ" hidden readonly rows="6"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="roomOpsRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="roomOpsRestorePreview" type="button">復元内容を確認</button><button id="roomOpsRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
+  </section>
+  <details class="proTasks urenaviAdvanced" id="proActivityPanel"><summary>以前の手動記録を確認・追加する</summary>
+    <strong style="font-size:14px">以前の手動活動記録</strong>
+    <div class="proHint">上の交流候補管理とは別の旧方式です。新しいいいね・フォローの管理は「①〜③」を利用してください。過去の記録の確認・追加が必要な場合に使います。</div>
+    <label for="proActivityType">活動内容</label>
+    <select id="proActivityType">
+      <option value="like_visit">いいね回り</option>
+      <option value="like_return">いいね返し</option>
+      <option value="follow_visit">フォロー回り</option>
+      <option value="follow_return">フォロー返し</option>
+      <option value="post">ROOM投稿</option>
+    </select>
+    <label for="proActivityTarget">相手・商品メモ（任意）</label>
+    <input id="proActivityTarget" type="text" maxlength="160" placeholder="相手のROOM名や投稿した商品名">
+    <button id="proActivityAdd" type="button" class="proGhost">実施した活動を記録</button>
+    <div id="proActivitySummary" class="proMsg" aria-live="polite"></div>
+    <div id="proActivityHistory" class="proPreview"></div>
+    <button id="proActivityExport" type="button" class="proGhost">活動記録をコピー</button>
+  </details>
 </section>
 
+<section id="roomAccountBackupPanel" class="box"><h2>売上・活動記録を別端末へ引き継ぐ</h2><p>現在のアカウントの売上と手動活動記録を保存・復元できます。商品別台帳と交流候補はこのバックアップに含まれません。保存したJSONを別端末で貼り付けてください。</p><button id="accountBackupExport" type="button">バックアップを表示・コピー</button><textarea id="accountBackupText" aria-label="売上・活動バックアップJSON" placeholder="復元するバックアップを貼り付け" style="width:100%;min-height:160px;font-size:16px"></textarea><div class="roomActionRow"><button id="accountBackupPreview" type="button">復元内容を確認</button><button id="accountBackupRestore" type="button" disabled>現在のアカウントへ復元</button></div><p id="accountBackupMessage" aria-live="polite"></p></section>
+<section id="legacyMigration" class="box" hidden><h2>以前の記録を引き継ぐ</h2><p id="legacyMigrationSummary"></p><div class="roomActionRow"><button id="legacyMigrationImport" type="button">自分の旧記録を取り込む</button><button id="legacyMigrationExport" type="button">旧記録をバックアップ</button></div><p id="legacyMigrationMessage" aria-live="polite"></p><textarea id="legacyMigrationBackup" readonly hidden aria-label="旧記録バックアップ" style="width:100%;min-height:160px"></textarea></section>
+<section id="roomOutcomesPanel" class="box">
+<h2>投稿確認・売上管理</h2><div class="box" aria-label="今月の成果報酬"><strong>今月の成果報酬</strong><p class="proHint">発生報酬（未確定）：未取得 ／ 確定報酬：未取得</p><p class="proHint">楽天の報酬区分別データとは未連携です。下の手入力報酬を発生・確定へ自動振り分けしません。</p></div><p class="proHint"><strong>使い方：</strong>①ROOMに投稿した商品だけ「投稿したと記録」→②楽天で分かった売上や報酬を入力→③商品ごとの結果を比較。売上未確認は空欄のままで構いません。</p><p id="outcomeSummary" aria-live="polite"></p><p id="outcomeAdvice"></p>
+<p class="proHint">投稿文のコピー後、ROOMでの投稿完了を本人が記録します。投稿済み商品は次の候補から除外します。実績は楽天の画面で確認できた値だけ入力し、不明は空欄にしてください。端末・アカウント別に保存します。</p>
+<h3>① 投稿できたかを確認</h3><p class="proHint">「投稿文をコピーしただけ」の商品は未投稿です。実際にROOMへ投稿してから完了記録を付けてください。</p><div id="outcomeHistory"></div><h3>② 商品別の成果を入力</h3><p class="proHint">投稿完了を記録した商品だけ選択できます。売上・報酬がまだ分からない場合は入力せず、後日確認してください。</p><label for="outcomeProduct">投稿済み商品を選ぶ</label><select id="outcomeProduct"></select>
+<label for="outcomeDate">実績の日付</label><input id="outcomeDate" type="date">
+<label for="outcome-sales">商品別売上（円）</label><input id="outcome-sales" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-commission">商品別の入力報酬（区分未確認・円）</label><input id="outcome-commission" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-units">販売件数</label><input id="outcome-units" type="number" min="0" step="1" inputmode="numeric">
+<label for="outcome-minutes">この商品に使った作業時間（分）</label><input id="outcome-minutes" type="number" min="0" step="1" inputmode="numeric">
+<button id="outcomeSave" type="button" class="go">確認済み実績を保存</button><p id="outcomeMsg" aria-live="polite"></p>
+<p class="proHint">商品別記録の合計です。日別売上記録とは重複加算しません。活動と売上の因果関係は判断しません。</p>
+<h3>③ 次の商品選びのヒント</h3><button id="outcomeToSearch" type="button" class="proPrimary">商品検索に戻る</button><div id="outcomeDecision" class="proMsg" aria-live="polite">記録をもとに分析します。</div><p class="proHint">確認できた商品別の記録だけを比較します。売れやすさの予測や交流の効果を示すものではありません。</p><details class="urenaviAdvanced"><summary>商品別の記録を詳しく比較する</summary><div id="outcomeComparison"></div></details><details class="urenaviAdvanced"><summary>投稿・実績データのバックアップと復元</summary><button id="outcomeExport" type="button">投稿・実績をバックアップ</button><textarea id="outcomeBackup" hidden readonly aria-label="投稿実績のバックアップ" style="width:100%;min-height:160px"></textarea><p>別端末への移行：バックアップを貼り付けて内容を確認してください。</p><textarea id="outcomeRestoreText" aria-label="復元するバックアップJSON" rows="6" style="width:100%;font-size:16px"></textarea><div class="roomActionRow"><button id="outcomeRestorePreview" type="button">復元内容を確認</button><button id="outcomeRestoreApply" type="button" disabled>現在のアカウントへ復元</button></div></details>
+</section>
 </main>
 
 </div>
@@ -939,6 +1054,14 @@ input,select{
 <script src="/structured-room-copy.js?v=20261002-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
+<script src="/room-today-plan.js"></script>
+<script src="/room-account-records.js"></script>
+<script src="/room-record-restore.js"></script>
+<script src="/room-restore-panel.js"></script>
+<script src="/room-outcomes.js"></script>
+<script src="/room-outcomes-panel.js"></script>
+<script src="/room-operations.js"></script>
+<script src="/room-operations-panel.js"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
@@ -1011,6 +1134,7 @@ let usePurchasePlan=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
+let aiBatchPauseRequested=false;
 let aiQueueRunning=false;
 
 
@@ -1064,7 +1188,6 @@ function showLogin(
 let accessGeneration=0;
 let lastSearchItems=[];
 let lastSearchKeyword='';
-let postCache=new Map();
 let roomSentenceContext={openings:new Set(),seconds:new Set()};
 let authBoot=null;
 function bootAuth(){
@@ -1079,6 +1202,7 @@ function saveSearchState(){
       email:userMail.textContent,items:lastSearchItems,
       fields:Object.fromEntries(['k','min','max','sort'].map(id=>[id,document.getElementById(id).value])),
       platforms:Array.from(document.querySelectorAll('.item .cb'),b=>b.dataset.p),
+      copyStates:lastSearchItems.map((_,i)=>({state:aiRoomResults.get(i)?.state||'restored'})),
       scrollY:window.scrollY||0
     });
   }catch{}
@@ -1093,6 +1217,10 @@ function restoreSearchState(email){
     for(const id of ['k','min','max','sort']) document.getElementById(id).value=String(state.fields?.[id]||'');
     lastSearchKeyword=String(state.fields?.k||'').trim();
     render(state.items,{autoAi:false,restored:true});
+    (state.copyStates||[]).slice(0,state.items.length).forEach((row,i)=>{
+      if(row?.state==='pending'||row?.state==='paused')aiRoomResults.set(i,{state:row.state,data:{retryAfterMs:0}});
+      updateAiPanel(i);
+    });
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
@@ -1128,6 +1256,10 @@ async function showApp(session) {
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
+    window.initRoomOperations(session.user.email||'');
+    window.initRoomOutcomes(session.user.email||'');
+    proRenderMigration();
+    proRenderActivities();proUpdateDashboard();
     restoreSearchState(session.user.email||'');
     updateUpgradeUi(access);
     await configureIntegratedPro(!!access.pro);
@@ -2504,7 +2636,7 @@ function readyV3Post(result){
 
 function aiSalesInsight(item,result){
   if(isV3PreviewResult(result)) return {scene:String(result.quality?.ledger?.[0]?.scene||''),productType:String(result.productType?.specific||''),features:(result.attributes||[]).map(x=>String(x?.quote||'')).filter(Boolean),sellingPoints:(result.quality?.ledger||[]).map(x=>String(x?.text||'')).filter(Boolean),featureRows:[]};
-  if(String(result?.version||'').startsWith('room_contract_')) return {productType:'',scene:'',features:[],sellingPoints:[],featureRows:[]};
+  if(RoomCopyResult.canonical(result)) return {productType:result.product?.what||'',scene:'',features:[],sellingPoints:RoomCopyResult.ready(result)?result.sentences.map(s=>s.text):[],featureRows:[]};
   const v=result?.validation||{};
   const rawType=(v.productType?.valid&&v.productType?.value)?String(v.productType.value):lexicalProductLabel(item);
   const productType=specificGroundedProductType(item,rawType);
@@ -2538,17 +2670,10 @@ function safeSearchIdentity(item){
 
 function aiPhase1Post(item,result){
   if(isV3PreviewResult(result)) return readyV3Post(result);
-  if(String(result?.version||'').startsWith('room_contract_')) return '';
-  const v=result?.validation||{},insight=aiSalesInsight(item,result);
-  const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
-  if(!identity) return '';
-  const combinedFacts=[...(Array.isArray(insight.features)?insight.features:[]),...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])];
-  const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,identity,combinedFacts)||'';
-  if(universalPost) return universalPost;
-  if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
-  const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
-  const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
-  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  if(RoomCopyResult.canonical(result)) return RoomCopyResult.ready(result);
+  // Unsupported legacy payloads must not bypass the verified copy contract.
+  return '';
+
 }
 
 function aiPanelMarkup(item,index){
@@ -2560,7 +2685,7 @@ function aiPanelMarkup(item,index){
     '<div class="aiStatus">AI分析待ち…</div>'+
     (image!=='#'?'<img class="aiThumb" src="'+esc(image)+'" alt="">':'')+
     '<div class="aiCaption"><strong>itemCaption先頭300文字</strong><br>'+esc(caption||'（説明文なし）')+'</div>'+
-    '<div class="aiFacts"></div><div class="aiCopy"></div>'+
+    '<div class="aiFacts"></div><div class="aiCopy"></div><button type="button" data-ai-continue="'+index+'" hidden>確認を続ける</button>'+
     '<div class="aiWarn">自動生成です。投稿前に商品ページの内容と表現を必ず確認してください。</div>'+
     '<div class="aiLinks">'+(safeUrl(item?.itemUrl)!=='#'?'<a href="'+esc(safeUrl(item.itemUrl))+'" target="_blank" rel="noopener noreferrer">楽天の商品ページで確認</a>':'商品ページURLなし')+'</div>'+
     '<div class="aiReview"><button type="button" data-ai-review="ok" data-i="'+index+'">○ 問題なし</button><button type="button" data-ai-review="minor" data-i="'+index+'">△ 軽微な誤り</button><button type="button" data-ai-review="major" data-i="'+index+'">× 重大な誤り</button></div>'+
@@ -2568,6 +2693,15 @@ function aiPanelMarkup(item,index){
 }
 
 function updateAiPanel(index){
+  if(currentAppSession)proUpdateDashboard();
+  const usageField=document.getElementById('proResourceUsage');
+  if(usageField){
+    const rows=[...aiRoomResults.values()].map(x=>x.data?.resourceUsage).filter(Boolean);
+    const total=k=>rows.every(x=>typeof x[k]==='number')?rows.reduce((n,x)=>n+x[k],0):null;
+    const fmt=x=>x===null?'未取得':String(x);
+    usageField.textContent=rows.length?'現在表示中の商品リクエストの実測：Groq '+fmt(total('calls'))+'回 ／ 入力 '+fmt(total('inputTokens'))+'・出力 '+fmt(total('outputTokens'))+'トークン ／ Groq処理 '+fmt(total('providerElapsedMs'))+'ms。無料枠方針・実請求額とアカウント全体の残枠は未確認。':'現在の生成の使用量はまだ取得していません。';
+  }
+
   const box=document.querySelector('.aiPreview[data-ai-index="'+index+'"]');
   if(!box) return;
   const item=lastSearchItems[index];
@@ -2575,6 +2709,10 @@ function updateAiPanel(index){
   const status=box.querySelector('.aiStatus');
   const facts=box.querySelector('.aiFacts');
   const copy=box.querySelector('.aiCopy');
+  const continueButton=box.querySelector('[data-ai-continue]');
+  if(continueButton){continueButton.hidden=!['pending','restored'].includes(result?.state);continueButton.textContent=result?.state==='restored'?'保存済み結果を確認':'確認を続ける';}
+  if(result?.state==='pending'){status.textContent='投稿文はまだ未完成です。'+(Number(result.data?.retryAfterMs)>0?'利用枠の回復後、確認を続けてください。':'確認を続けてください。');facts.textContent='';copy.textContent='';return;}
+  if(result?.state==='paused'){status.textContent='前の商品で確認が停止しています。確認を続けるとこの商品へ進みます。';facts.textContent='';copy.textContent='';return;}
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='restored'){status.textContent=result.message||'前回の検索結果です。AI再確認は行っていません。';facts.textContent='';copy.textContent='';return;}
@@ -2586,6 +2724,12 @@ function updateAiPanel(index){
     facts.textContent='';
     copy.textContent=resolvedPost(item,index,'room',lastSearchKeyword);
     return;
+  }
+  if(RoomCopyResult.canonical(result.data)){
+    const data=result.data;
+    status.textContent=RoomCopyResult.ready(data)?'原文・全文章の意味・購入理由の確認を完了':'根拠を確認できないため、投稿文を採用していません。';
+    facts.innerHTML=RoomCopyResult.ledger(data).map(row=>'<div class="aiFact">'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
+    copy.textContent=RoomCopyResult.ready(data);return;
   }
   if(isV3PreviewResult(result.data)){
     const data=result.data;
@@ -2620,25 +2764,29 @@ async function requestAiRoom(item,index,generation){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),catchcopy:String(item?.catchcopy||'').slice(0,500),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
     let r,d;
     if(usePurchasePlan){
       const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
       r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
     }else{
-      r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify(payload)});
-      d=await r.json().catch(()=>({}));
+      // The legacy endpoint does not return the verified room_contract_ payload.
+      // Do not spend Groq quota on a response that the publication gate rejects.
+      // Keep production fail-closed until a verified production contract is available.
+      r={status:503,ok:false};
+      d={message:'検証済み投稿文の提供準備中です。AIの利用枠は消費していません。'};
     }
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
-      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus});
-    }else aiRoomResults.set(index,{state:'done',data:d});
-    for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
+      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
+    }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d});
+    else aiRoomResults.set(index,{state:'done',data:d});
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+    // A pending draft must not survive a failed verification as a cached result.
   }finally{
     clearTimeout(timer);
     if(generation===aiRunGeneration){
@@ -2672,12 +2820,13 @@ async function requestAiRoom(item,index,generation){
           button.textContent=ready?'投稿文をコピー':'コピー不可';
         }
       }
+      saveSearchState();
     }
   }
 }
 
 function aiTargetDecision(item){
-  if(usePurchasePlan) return {callAi:true,reasons:['grounded_purchase_reason_required']};
+  // Owner Preview also uses local-first evidence gating; no unconditional Groq calls.
   const a=groundedAnalysis(item);
   const top=Array.isArray(a?.topCandidates)?a.topCandidates:[];
   const topScore=Number(top[0]?.score||0);
@@ -2687,12 +2836,17 @@ function aiTargetDecision(item){
   const fallbackFacts=(window.UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[]).filter(Boolean);
   const safeFallback=fallbackFacts.length>=1;
   const unresolved=a?.outputMode!=='full'||Boolean(a?.ambiguous);
+  // A single safe spec is not proof that the local writer can explain why to buy.
+  // Only route unresolved items to Groq when the grounded local copy is not publish-ready.
+  const localAssessment=localCopyAssessment(item);
+  const localText=String(localAssessment?.result?.text||'');
+  const localReady=Boolean(localAssessment?.ready)&&Boolean(localText)&&!roomCopyNeedsReview(localText,item,false);
   const reasons=[];
   if(conflicts.length) reasons.push('rule_conflict');
-  else if(unresolved&&!safeFallback){
+  else if(!localReady){
     if(a?.ambiguous) reasons.push('rule_ambiguous');
-    if(top.length>1&&gap<20) reasons.push('small_candidate_gap');
-    reasons.push('insufficient_grounded_facts');
+    if(unresolved&&top.length>1&&gap<20) reasons.push('small_candidate_gap');
+    reasons.push('insufficient_grounded_purchase_reason');
   }
   return {
     callAi:reasons.length>0,reasons,topScore,
@@ -2719,7 +2873,7 @@ function activeAiProgress(){
 }
 
 function resumeActiveAiQueue(){
-  if(!aiGatesFullOutput||aiQueueRunning||!lastSearchItems.length) return;
+  if(!aiGatesFullOutput||aiQueueRunning||!lastSearchItems.length||[...aiRoomResults.values()].some(x=>x.state==='pending'||x.state==='paused')) return;
   const progress=activeAiProgress();
   if(progress.pending<=0) return;
   const hasActive=lastSearchItems.some((item,index)=>{
@@ -2733,7 +2887,8 @@ async function runAiPreview(items,{resume=false}={}){
   if(!aiGatesFullOutput||aiQueueRunning) return;
   const generation=resume?aiRunGeneration:++aiRunGeneration;
   if(!resume){
-    aiRoomResults=new Map();aiRoomReviews=new Map();postCache=new Map();
+    aiBatchPauseRequested=false;
+    aiRoomResults=new Map();aiRoomReviews=new Map();
     (Array.isArray(items)?items:[]).forEach((item,index)=>{
       const target=aiTargetDecision(item);
       if(target.callAi) aiRoomResults.set(index,{state:'loading',target,auto:true});
@@ -2748,15 +2903,27 @@ async function runAiPreview(items,{resume=false}={}){
     const target=aiTargetDecision(item);
     if(!target.callAi) return;
     const state=aiRoomResults.get(index)?.state;
-    if(state==='loading'||!state) queue.push({item,index});
+    if(state==='loading'||state==='paused'||!state) queue.push({item,index});
   });
   aiQueueRunning=true;
   try{
     while(queue.length&&generation===aiRunGeneration){
+      if(aiBatchPauseRequested){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'paused'});updateAiPanel(rest.index);}
+        break;
+      }
       const job=queue.shift();
       await requestAiRoom(job.item,job.index,generation);
+      if(aiRoomResults.get(job.index)?.state==='pending'){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'paused'});updateAiPanel(rest.index);}
+        queue.length=0;
+      }
       if(aiRoomResults.get(job.index)?.status===429||aiRoomResults.get(job.index)?.upstreamStatus===429){
         for(const rest of queue){aiRoomResults.set(rest.index,{state:'error',message:'AIの確認上限に達したため、残りの生成を停止しました。',status:429});updateAiPanel(rest.index);}
+        queue.length=0;
+      }
+      if(aiBatchPauseRequested){
+        for(const rest of queue){aiRoomResults.set(rest.index,{state:'paused'});updateAiPanel(rest.index);}
         queue.length=0;
       }
       const progress=activeAiProgress();
@@ -2796,7 +2963,19 @@ async function ensureAiForItem(index){
   await requestAiRoom(item,index,generation);
 }
 
-document.addEventListener('click',e=>{
+document.addEventListener('click',async e=>{
+  const resume=e.target.closest?.('[data-ai-continue]');
+  if(resume){
+    const index=Number(resume.dataset.aiContinue);
+    if(aiQueueRunning||!['pending','restored'].includes(aiRoomResults.get(index)?.state))return;
+    aiQueueRunning=true;resume.disabled=true;
+    try{await requestAiRoom(lastSearchItems[index],index,aiRunGeneration);
+      const result=aiRoomResults.get(index);
+      if(result?.status===429||result?.upstreamStatus===429){for(const [i,row] of aiRoomResults)if(row.state==='paused'){aiRoomResults.set(i,{state:'error',status:429,message:'AIの上限に達したため、残りの生成を停止しました。'});updateAiPanel(i);}}
+    }finally{aiQueueRunning=false;resume.disabled=false;}
+    if(aiRoomResults.get(index)?.state==='done')await runAiPreview(lastSearchItems,{resume:true});
+    return;
+  }
   const b=e.target.closest?.('[data-ai-review]');if(!b)return;
   const index=Number(b.dataset.i);aiRoomReviews.set(index,b.dataset.aiReview);updateAiPanel(index);
 });
@@ -2902,6 +3081,9 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='skipped'&&ai.reason==='rule_confident'){
     return {enabled:true,status:'rule_confident',full:true,useLegacy:true,reasons:['rule_confident_ai_skipped'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
+  if(ai.state==='pending'||ai.state==='paused'){
+    return {enabled:true,status:'fallback',full:false,reasons:['verification_pending'],useLegacy:false};
+  }
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
@@ -2909,45 +3091,16 @@ function resolveAiGate(item,index,keyword=''){
     const full=Boolean(readyV3Post(ai.data));
     return {enabled:true,status:full?'full':'fallback',full,reasons:full?[]:(ai.data?.quality?.reasons||['purchase_reason_unconfirmed']),useLegacy:false};
   }
-  if(String(ai.data?.version||'').startsWith('room_contract_')){
-    return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
+  if(RoomCopyResult.canonical(ai.data)){
+    const full=Boolean(RoomCopyResult.ready(ai.data));
+    return {enabled:true,status:full?'full':'fallback',full,reasons:full?[]:(ai.data?.quality?.reasons||['contract_not_verified']),useLegacy:false};
   }
   if(usePurchasePlan){
     return {enabled:true,status:'fallback',full:false,reasons:['unexpected_ai_contract'],useLegacy:false,ruleSecondOpinion:{checked:false,conflict:false}};
   }
-  const v=ai.data?.validation||{};
-  const second=ruleSecondOpinion(item,v,keyword);
-  const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
-  if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
-  if(second.conflict) reasons.push('rule_second_opinion_conflict');
-  const softReasons=new Set(['invalid_features_dropped']);
-  const blockingReasons=reasons.filter(x=>!softReasons.has(x));
-  const validatedFull=(v.mode==='simple'||v.mode==='simple_partial') && v.productType?.valid===true && blockingReasons.length===0;
-  const fallbackIdentity=safeSearchIdentity(item);
-  const groundedFallback=Boolean(fallbackIdentity);
-  const full=validatedFull||groundedFallback;
-  return {
-    enabled:true,
-    status:full?'full':'fallback',
-    full,
-    validatedFull,
-    groundedFallback,
-    fallbackIdentity,
-    reasons,
-    mediumHandling:'fallback_fixed',
-    cacheKeyComponents:ai.data?.cache?.keyComponents||{
-      itemCode:String(item?.itemCode||''),
-      itemName:String(item?.itemName||''),
-      imageUrl:firstImageUrl(item)==='#'?'':firstImageUrl(item),
-      itemCaptionNormalized:String(item?.itemCaption||'').normalize('NFKC').replace(/\s+/g,' ').trim()
-    },
-    ruleSecondOpinion:second,
-    validation:v,
-    cache:ai.data?.cache||null,
-    stages:ai.data?.stages||null,
-    rateLimit:ai.data?.rateLimit||{},
-    target:ai.target||null
-  };
+  // Legacy AI response formats are not a verified posting contract.
+  // Fail closed instead of reconstructing a second draft from partial fields.
+  return {enabled:true,status:'fallback',full:false,useLegacy:false,reasons:['unsupported_ai_contract']};
 }
 
 function mediaTemplateFor(item,index,p='room',keyword=''){
@@ -2959,39 +3112,34 @@ function mediaTemplateFor(item,index,p='room',keyword=''){
   return 'legacy_'+p;
 }
 
+function localCopyAssessment(item){
+  // One evidence selection and one structured result for all local routes.
+  const evidence=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
+  return window.UrenaviStructuredCopy?.assess?.(item,{evidence})||null;
+}
+
 function neutralRulePost(item,keyword=''){
-  const facts=UrenaviPainCopy?.extractFallbackTitleFacts?.(item)||[];
-  return UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||'';
+  return localCopyAssessment(item)?.result?.text||'';
 }
 
 function resolvedPost(item,index,p='room',keyword=''){
   const gate=resolveAiGate(item,index,keyword);
-  if(gate.enabled){
-    if(gate.status==='fallback') return '';
-    if(gate.useLegacy){
-      const options={variant:index};
-      if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-      if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
-      return neutralRulePost(item,keyword);
-    }
-    if(gate.full) return aiPhase1Post(item,aiRoomResults.get(index)?.data);
-    return '';
+  // Only a completed, contract-verified AI result may enter the AI copy route.
+  if(gate.enabled&&gate.status==='fallback') return '';
+  if(gate.enabled&&!gate.useLegacy){
+    return gate.full?aiPhase1Post(item,aiRoomResults.get(index)?.data):'';
   }
-
-  const options={variant:index};
-  if(p==='threads') return UrenaviPainCopy.makeThreadsCopy(item,keyword,options);
-  if(p==='instagram') return UrenaviPainCopy.makeInstagramCopy(item,keyword,options);
+  // All local copy channels resolve through the same grounded draft route.
+  // Channel-specific presentation belongs in the UI, not in product reasoning.
   return neutralRulePost(item,keyword);
 }
 
 function post(i,p='room'){
   const keyword=k.value.trim();
   const variant=Math.max(0,lastSearchItems.indexOf(i));
-  const key=p+':'+variant;
-  if(postCache.has(key)) return postCache.get(key);
-  const value=resolvedPost(i,variant,p,keyword);
-  postCache.set(key,value);
-  return value;
+  // Derive from the current verification state. A cached draft can outlive
+  // an AI gate transition and expose stale or unverified copy.
+  return resolvedPost(i,variant,p,keyword);
 }
 
 function aiPostState(i){
@@ -3001,10 +3149,38 @@ function aiPostState(i){
   return {index,target,state,gate:resolveAiGate(i,index,lastSearchKeyword)};
 }
 
+function roomCopyNeedsReview(text,item,validatedByServer=false){
+  const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
+  const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  if(lines.length<2&&body.length<85)return true;
+  // Publication safety is enforced at the final copy boundary for every route.
+  // Draft builders remain responsible only for generating drafts.
+  const guard=window.UrenaviFactSafety?.guardUnsupportedBenefitCopy;
+  if(typeof guard!=='function'||guard(item||{},String(text||''))!==String(text||''))return true;
+  if(validatedByServer)return false;
+  // Use the exact same grounded local assessment for AI routing and posting.
+  // Never approve text merely because the item has some unrelated safe facts.
+  // Evaluate the same source-backed evidence used by neutralRulePost.
+  // A different evidence set here would reject a valid draft or approve the wrong one.
+  const assessment=localCopyAssessment(item||{});
+  if(!assessment?.ready)return true;
+  const expected=String(assessment.result?.text||'').trim();
+  return !expected||String(text||'').trim()!==expected;
+}
+
+function isFullyReviewedCopyState(s){
+  const data=s?.state?.data;
+  return Boolean(data && (
+    (isV3PreviewResult(data) && readyV3Post(data)) ||
+    (RoomCopyResult.canonical(data) && RoomCopyResult.ready(data))
+  ));
+}
+
 function postReady(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
-  return Boolean(String(post(i,p)||'').trim());
+  const text=String(post(i,p)||'').trim();
+  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s));
 }
 
 function postDisplay(i,p='room'){
@@ -3013,7 +3189,8 @@ function postDisplay(i,p='room'){
     if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
-  return String(post(i,p)||'').trim();
+  const text=String(post(i,p)||'').trim();
+  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
 
@@ -3040,11 +3217,12 @@ function short(
 
 
 function today(a){
+  if(!a.length)return '<section class="today"><h2>商品候補</h2><p>表示できる未投稿商品がありません。投稿履歴を確認するか、検索条件を変えてください。</p></section>';
   if(aiGatesFullOutput){
     const candidates=(Array.isArray(a)?a:[]).map((item,index)=>({item,index,gate:resolveAiGate(item,index,lastSearchKeyword)}))
       .filter(x=>x.gate.full);
     if(!candidates.length){
-      return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
+      return '<section class="today"><h2>条件に合う商品候補</h2><div class="muted">商品内容をAIで確認しています。誤った用途を出さないため、確認後におすすめを表示します。</div></section>';
     }
     const chosen=candidates.sort((x,y)=>(y.item.sellability||0)-(x.item.sellability||0)||(y.item.score||0)-(x.item.score||0))[0];
     const i=chosen.item;
@@ -3056,16 +3234,16 @@ function today(a){
       audience=String((usePurchasePlan?(insight.scene||insight.productType):insight.productType)||'商品内容を確認済み');
       points=(insight.sellingPoints.length?insight.sellingPoints:insight.features).slice(0,2);
     }
-    return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-      '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
+    return '<section class="today"><h2>条件に合う商品候補</h2><div class="name">'+short(i)+'</div>'+
+      '<div class="muted">選定比較指標 '+i.sellability+'/100・AI '+i.score+'/100。</div>'+
       '<div class="guide"><div class="gt">'+(usePurchasePlan?'使う場面':'狙う相手')+'</div><div class="target">'+esc(audience)+'</div>'+
       '<ul class="pts">'+points.map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
   }
   const eligible=fullOutputItems(a);
-  if(!eligible.length) return '<section class="today"><h2>今日売るならこれ</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
+  if(!eligible.length) return '<section class="today"><h2>条件に合う商品候補</h2><div class="muted">現在の検索結果には、自動投稿文を安全に生成できる商品がありません。</div></section>';
   const i=[...eligible].sort((a,b)=>(b.sellability||0)-(a.sellability||0)||(b.score||0)-(a.score||0))[0];
-  return '<section class="today"><h2>今日売るならこれ</h2><div class="name">'+short(i)+'</div>'+
-    '<div class="muted">売れやすさ '+i.sellability+'/100・AI '+i.score+'/100。まず成約を狙うならこの商品を優先。</div>'+
+  return '<section class="today"><h2>条件に合う商品候補</h2><div class="name">'+short(i)+'</div>'+
+    '<div class="muted">選定比較指標 '+i.sellability+'/100・AI '+i.score+'/100。比較条件に合う候補です。販売成果を予測するものではありません。</div>'+
     '<div class="guide"><div class="gt">狙う相手</div><div class="target">'+esc(aud(i))+'</div><ul class="pts">'+pts(i).map(z=>'<li>'+esc(z)+'</li>').join('')+'</ul></div></section>';
 }
 
@@ -3122,7 +3300,7 @@ function decision(
   </h2>
 
   <div class="dm">
-    迷ったら総合1位。まずは売れやすさを取りにいく。
+    順位だけで決めず、用途・価格・根拠を比較して選びましょう。
   </div>
 
   <div class="dg">
@@ -3133,7 +3311,7 @@ function decision(
     </div>
 
     <div class="mini">
-      <b>売れやすさ</b>
+      <b>選定比較指標</b>
       <span>${short(s)}</span>
     </div>
 
@@ -3228,7 +3406,7 @@ function compare(
             }%
             <br>
 
-            売れやすさ
+            選定比較指標
             ${i.sellability}
             /
 
@@ -3250,7 +3428,7 @@ function compare(
     style="margin-top:8px"
   >
 
-    総合順位は「売れやすさ70%＋収益性30%」で算出。
+    総合順位は「選定比較指標70%＋収益性30%」で算出。
     報酬目安は商品価格×料率の概算で、
     1商品1個あたり上限1,000円を反映しています。
 
@@ -3267,7 +3445,9 @@ function render(
   {autoAi=true,restored=false}={}
 ){
 
-  lastSearchItems=Array.isArray(a)?a:[];
+  const excluded=(Array.isArray(a)?a:[]).filter(item=>window.roomOutcomePosted?.(item)).length;
+  a=(Array.isArray(a)?a:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  lastSearchItems=a;
   aiRoomResults=new Map();
   if(restored){
     lastSearchItems.forEach((item,index)=>{
@@ -3276,8 +3456,10 @@ function render(
   }
   aiRoomReviews=new Map();
   aiRunGeneration++;
-  postCache=new Map();
+  
+  if(currentAppSession)proUpdateDashboard();
   roomSentenceContext={openings:new Set(),seconds:new Set()};
+  if(excluded)document.getElementById('outcomeMsg').textContent=excluded+'件の投稿済み商品を候補から除外しました。取り消しは投稿履歴からできます。';
   const debugJson=document.getElementById('debugJson');
   if(debugJson) debugJson.value='';
   const debugJsonMeta=document.getElementById('debugJsonMeta');
@@ -3328,7 +3510,7 @@ function render(
     </span>
 
     <span class="g">
-      売れやすさ
+      選定比較指標
       ${
         i.sellability>=80
         ?'◎'
@@ -3418,7 +3600,7 @@ function render(
       </span>
 
       <span class="chip">
-        売れやすさ ${i.sellability}
+        選定比較指標 ${i.sellability}
       </span>
 
       <span class="chip">
@@ -3481,9 +3663,9 @@ function render(
     </button>
 
     <a
-      href="${esc(safeUrl(i.affiliateUrl))}"
+      data-urenavi-product-link="market" href="${esc(safeUrl(i.affiliateUrl))}" target="_blank" rel="noopener noreferrer"
     >
-      楽天で見る
+      楽天で商品詳細を確認（外部サイト）
     </a>
 
   </div>
@@ -3597,6 +3779,13 @@ function render(
           b.dataset.p
         );
 
+        // Validate again after async work, including stale buttons and direct events.
+        if(!postReady(a[index],b.dataset.p)){
+          b.disabled=true;
+          b.textContent='コピー不可';
+          return;
+        }
+
         if(
           !String(
             copy||
@@ -3616,6 +3805,7 @@ function render(
           );
 
 
+          if(b.dataset.p==='room')window.roomOutcomePrepared(a[index]);
           b.textContent=
           'コピーしました';
 
@@ -3658,6 +3848,10 @@ function render(
 
     tc.onclick=
     async()=>{
+      if(!i||!postReady(i,'room')){
+        tc.textContent='投稿文の確認が必要です';
+        return;
+      }
 
       try{
 
@@ -3695,6 +3889,12 @@ function render(
 
 $('#go').onclick=
 async()=>{
+
+  if(aiQueueRunning){
+    $('#st').textContent='投稿文を確認中です。現在の商品を終えて停止してから、新しい検索を始めてください。';
+    return;
+  }
+  if([...aiRoomResults.values()].some(row=>['pending','paused'].includes(row.state))&&!confirm('確認待ち・未処理の投稿文があります。現在の一括生成を終了して新しい商品を検索しますか？コピー済み・投稿済みの記録は保持します。'))return;
 
   if(
     searching
@@ -4105,37 +4305,77 @@ function proSafeProductUrl(value){
   }catch{return ''}
 }
 let proVisibleCandidateItems=[];
-function proOpenCandidate(index){
-  const item=proVisibleCandidateItems[index];
-  if(!item||!item.itemName)return;
-  // A Pro-selected item is a new search context. Never reuse the previous
-  // normal-search keyword when determining the product identity or audience.
+function proPrepareCandidates(items){
+  if(aiQueueRunning||[...aiRoomResults.values()].some(row=>['loading','pending','paused'].includes(row.state))){
+    proEl('proMsg').textContent='作成中・確認待ちの投稿文があります。表示中の商品の確認・再開を先に行ってください。';
+    const results=document.getElementById('res');
+    if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  const seen=new Set();
+  const candidates=(Array.isArray(items)?items:[]).filter(item=>{
+    if(!item||typeof item.itemName!=='string'||!item.itemName.trim()||window.roomOutcomePosted?.(item))return false;
+    let id;try{id=RoomOutcomes.identity(item);}catch{return true;}
+    if(seen.has(id))return false;seen.add(id);return true;
+  }).slice(0,3);
+  if(!candidates.length){
+    proEl('proMsg').textContent='投稿文を作る商品がありません。';
+    return;
+  }
   const keyword=String(proEl('proProductKeyword')?.value||'').trim();
   k.value=keyword;
   lastSearchKeyword=keyword;
-  setAppScreen('normal');
-  render([item],{autoAi:false});
+  // Shared gated writer and verifier. The queue halts on Groq 429.
+  render(candidates,{autoAi:true});
   const results=document.getElementById('res');
   if(results)results.scrollIntoView({behavior:'smooth',block:'start'});
 }
+function proOpenCandidate(index){
+  const item=proVisibleCandidateItems[index];
+  if(!item||!item.itemName)return;
+  proPrepareCandidates([item]);
+}
+function proPrepareVisibleBatch(){
+  proPrepareCandidates(proVisibleCandidateItems);
+}
 function proRenderItems(items=[],label='候補'){
-  proVisibleCandidateItems=Array.isArray(items)?items:[];
+  items=(Array.isArray(items)?items:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  proVisibleCandidateItems=items;
+  proEl('proPrepareBatchBtn').style.display=proVisibleCandidateItems.length?'block':'none';
   proEl('proPreviewResults').innerHTML=(items||[]).map((i,n)=>{
     const link=proSafeProductUrl(i.affiliateUrl||i.itemUrl);
     const metrics=[
-      '総合 '+proEsc(i.score??'-'),
+      '比較指標 '+proEsc(i.score??'-'),
       '検索との一致 '+proEsc(i.relevance??'-'),
-      '販売指標 '+proEsc(i.sellability??'-'),
-      '報酬指標 '+proEsc(i.profitability??'-'),
       'レビュー '+proEsc(i.reviewCount||0)+'件'
     ].join(' ｜ ');
     return '<div class="proCard"><b>'+proEsc(label+' '+(n+1)+'｜'+(i.itemName||''))+'</b>'+
       '<div class="proMeta">'+proEsc(Number(i.itemPrice||0).toLocaleString())+'円 ｜ '+metrics+'</div>'+
+      '<div class="proMeta">選定の根拠：'+proEsc((i.selectionReasons||[]).join(' ／ ')||'根拠情報が不足しています')+'</div>'+
+      '<div class="proMeta">未確認：'+proEsc((i.unknownSignals||['購入者の需要','報酬条件']).join(' ／ '))+'</div>'+
+      '<div class="proMeta">比較指標は売上や売れる確率を示しません。</div>'+
       (link?'<div class="proMeta"><a href="'+proEsc(link)+'" target="_blank" rel="noopener noreferrer sponsored">楽天の商品ページを確認</a></div>':'')+
-      '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">通常版で投稿文を準備</button></div>'+
+      '<div class="proMeta"><button type="button" data-pro-candidate="'+n+'">選んだ商品の投稿文を作成</button></div>'+
       '</div>';
   }).join('');
 }
+function proPauseBatch(){
+  if(!aiQueueRunning){proEl('proMsg').textContent='現在処理中の一括生成はありません。';return;}
+  aiBatchPauseRequested=true;
+  proEl('proMsg').textContent='現在確認中の商品を終えた後、残りを停止します。完成済みの投稿文は保持します。';
+}
+async function proResumeBatch(){
+  if(aiQueueRunning)return;
+  if([...aiRoomResults.values()].some(row=>row.status===429||row.upstreamStatus===429)){proEl('proMsg').textContent='利用上限で停止しています。この一括生成は再開できません。';return;}
+  if([...aiRoomResults.values()].some(row=>row.state==='pending')){proEl('proMsg').textContent='表示中の商品の検証を先に再開してください。';return;}
+  if(![...aiRoomResults.values()].some(row=>row.state==='paused')){proEl('proMsg').textContent='再開する商品はありません。';return;}
+  aiBatchPauseRequested=false;
+  proEl('proMsg').textContent='未処理の商品から再開します。';
+  await runAiPreview(lastSearchItems,{resume:true});
+}
+proEl('proPauseBatchBtn').addEventListener('click',proPauseBatch);
+proEl('proResumeBatchBtn').addEventListener('click',proResumeBatch);
+proEl('proPrepareBatchBtn').addEventListener('click',proPrepareVisibleBatch);
 proEl('proPreviewResults').addEventListener('click',event=>{
   const button=event.target.closest('[data-pro-candidate]');
   if(!button||!proEl('proPreviewResults').contains(button))return;
@@ -4152,7 +4392,7 @@ async function proSave(){
   const r=await fetch('/api/pro?action=settings',{method:'POST',headers:proHeaders(),credentials:'include',body:JSON.stringify(proPayload())});
   const d=await r.json().catch(()=>({}));
   if(!r.ok) throw new Error(d.message||'Pro設定を保存できませんでした。');
-  proEl('proMsg').textContent='Pro設定を保存しました。上の通常検索条件も自動選定に使います。';
+  proEl('proMsg').textContent='選定設定を保存しました。商品検索の条件も選定に使います。';
   return true;
 }
 async function proPreview(){
@@ -4178,35 +4418,117 @@ async function proGenerate(){
     proRenderQueue(d.queue||[]);
   }catch(e){proEl('proMsg').textContent=e.message||'候補を取得できませんでした。'}
 }
-function proLoadTasks(){
-  let s={};try{s=JSON.parse(localStorage.getItem(PRO_TASK_KEY)||'{}')}catch{}
-  document.querySelectorAll('[data-pro-task]').forEach(x=>x.checked=!!s[x.dataset.proTask]);
+// Explicitly user-confirmed activity log; it does not claim to automate ROOM.
+function proAccountRecords(){return RoomAccountRecords.createStore(localStorage,currentAppSession?.user?.email||'');}
+function proRenderMigration(){
+  const panel=proEl('legacyMigration');
+  try{const p=proAccountRecords().preview();panel.hidden=!p.available;proEl('legacyMigrationSummary').textContent=p.available?'この端末にアカウント未設定の旧記録があります。売上 '+p.days+'日・活動 '+p.activities+'件。同日売上の重複 '+p.conflicts+'日。本人の記録か確認してください。':'';}
+  catch(e){panel.hidden=false;proEl('legacyMigrationSummary').textContent=e.message;}
 }
-function proSaveTasks(){
-  const s={};document.querySelectorAll('[data-pro-task]').forEach(x=>s[x.dataset.proTask]=x.checked);
-  localStorage.setItem(PRO_TASK_KEY,JSON.stringify(s));
+proEl('legacyMigrationImport').addEventListener('click',()=>{
+  try{if(!confirm('この端末の旧売上・活動記録は、現在ログインしているあなた自身の記録ですか？このアカウントへ一度だけ取り込みます。元記録は保持します。'))return;
+    proAccountRecords().migrate();proRenderMigration();proRenderActivities();proUpdateDashboard();proEl('legacyMigrationMessage').textContent='取り込みました。元の記録は削除していません。';
+  }catch(e){proEl('legacyMigrationMessage').textContent=e.message;}
+});
+proEl('legacyMigrationExport').addEventListener('click',async()=>{
+  try{const field=proEl('legacyMigrationBackup');field.hidden=false;field.value=proAccountRecords().legacyBackup();await navigator.clipboard.writeText(field.value);proEl('legacyMigrationMessage').textContent='旧記録をコピーしました。';}
+  catch(e){proEl('legacyMigrationMessage').textContent='コピーできない場合は表示された記録を選択してください。 '+e.message;}
+});
+let accountRestoreReview=null;
+const accountBackupMessage=text=>{proEl('accountBackupMessage').textContent=text;};
+proEl('accountBackupText').addEventListener('input',()=>{accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;});
+proEl('accountBackupExport').addEventListener('click',async()=>{
+ try{accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;const field=proEl('accountBackupText');field.value=proAccountRecords().exportData();accountBackupMessage('バックアップを表示しました。端末外の安全な場所に保存してください。');try{await navigator.clipboard.writeText(field.value);accountBackupMessage('コピーしました。端末外の安全な場所に保存してください。');}catch{field.focus();field.select();}}
+ catch(e){accountBackupMessage(e.message);}
+});
+proEl('accountBackupPreview').addEventListener('click',()=>{
+ try{const text=proEl('accountBackupText').value,p=proAccountRecords().previewRestore(text);accountRestoreReview={text,owner:currentAppSession?.user?.email};proEl('accountBackupRestore').disabled=false;accountBackupMessage('追加する売上 '+p.days+'日・活動 '+p.activities+'件。同一記録は重複せず、食い違う売上は上書きしません。');}
+ catch(e){accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;accountBackupMessage(e.message);}
+});
+proEl('accountBackupRestore').addEventListener('click',()=>{
+ try{if(!accountRestoreReview||accountRestoreReview.text!==proEl('accountBackupText').value||accountRestoreReview.owner!==currentAppSession?.user?.email)throw Error('現在のアカウントで復元内容を確認してください。');if(!confirm('このバックアップはあなた自身の記録ですか？現在のアカウントへ復元します。'))return;const p=proAccountRecords().restore(accountRestoreReview.text);accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;proRenderActivities();proUpdateDashboard();accountBackupMessage('復元しました。売上 '+p.days+'日・活動 '+p.activities+'件を追加しました。');}
+ catch(e){accountRestoreReview=null;proEl('accountBackupRestore').disabled=true;accountBackupMessage(e.message);}
+});
+function proJstToday(){return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});}
+function proReadRevenue(){
+  try{return proAccountRecords().read().revenue;}catch(e){proEl('proRevenueMsg').textContent=e.message;return {};}
 }
-function setAppScreen(mode='normal'){
-  const canPro=proAvailable;
-  const target=(mode==='pro'&&canPro)?'pro':'normal';
-  proEl('normalScreen').classList.toggle('off',target!=='normal');
-  proEl('proPanel').classList.toggle('on',target==='pro'&&canPro);
-  proEl('normalModeBtn').classList.toggle('on',target==='normal');
-  proEl('proModeBtn').classList.toggle('on',target==='pro');
-  if(target==='pro') location.hash='pro';
-  else if(location.hash==='#pro') history.replaceState({},document.title,location.pathname+location.search);
-  window.scrollTo({top:0,behavior:'smooth'});
+function proUpdateDashboard(){
+  const today=proJstToday();
+  const metrics=proReadRevenue()[today]||{};
+  const logs=proReadActivities().filter(x=>x.day===today);
+  const count=type=>logs.filter(x=>x.type===type).length;
+  try{
+    const outcomes=window.roomOutcomeOverview?.()||null,operations=window.roomOperationsOverview?.()||null;
+    const task=RoomTodayPlan.next({generation:[...aiRoomResults.values()],outcomes,operations,metrics});
+    proEl('roomNextAction').textContent=task.reason;
+    proEl('roomNextTask').textContent=task.label;proEl('roomNextTask').href=task.href;
+    proEl('roomTodayCounts').textContent='今日の投稿確認 '+(outcomes?.todayPosts??'未取得')+'件 ／ 交流完了 '+(operations?.today??'未取得')+'件 ／ 投稿未確認 '+(outcomes?.prepared??'未取得')+'件 ／ 交流待ち '+(operations?.pending??'未取得')+'件 ／ 売上 '+(metrics.sales==null?'未入力':Number(metrics.sales).toLocaleString()+'円')+' ／ 報酬 '+(metrics.commission==null?'未入力':Number(metrics.commission).toLocaleString()+'円');
+  }catch(e){proEl('roomNextAction').textContent='記録を読み込めません。実績・交流パネルのエラーとバックアップを確認してください。';proEl('roomTodayCounts').textContent='記録の確認が必要です。';proEl('roomNextTask').textContent='記録を確認';proEl('roomNextTask').href='#roomOutcomesPanel';}
+  proEl('proDailyDashboard').textContent='商品台帳の投稿確認 '+(window.roomOutcomeToday?.()||0)+'件 ｜ 交流候補の実施確認 '+(window.roomOperationsToday?.()||0)+'件 ｜ 旧手動記録の投稿 '+count('post')+'件 ｜ 旧手動記録のいいね '+(count('like_visit')+count('like_return'))+'件 ｜ フォロー活動 '+(count('follow_visit')+count('follow_return'))+'件 ｜ 売上 '+(metrics.sales==null?'未入力':Number(metrics.sales).toLocaleString()+'円')+' ｜ 報酬 '+(metrics.commission==null?'未入力':Number(metrics.commission).toLocaleString()+'円');
 }
-proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
-proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
+function proSaveRevenue(){
+  const salesText=proEl('proRevenueToday').value.trim();
+  const commissionText=proEl('proCommissionToday').value.trim();
+  if(!salesText&&!commissionText){proEl('proRevenueMsg').textContent='売上か報酬を入力してください。';return;}
+  const valid=x=>x===''||(Number.isSafeInteger(Number(x))&&Number(x)>=0);
+  if(!valid(salesText)||!valid(commissionText)){proEl('proRevenueMsg').textContent='0以上の整数を入力してください。';return;}
+  const today=proJstToday(),all=proReadRevenue();
+  const old=all[today]||{};
+  all[today]={sales:salesText===''?(old.sales??null):Number(salesText),commission:commissionText===''?(old.commission??null):Number(commissionText)};
+  try{proAccountRecords().setRevenue(all);proEl('proRevenueMsg').textContent='確認済み実績を端末に保存しました。';proUpdateDashboard();}
+  catch{proEl('proRevenueMsg').textContent='保存できませんでした。端末の空き容量を確認してください。';}
+}
+proEl('proRevenueSave').addEventListener('click',proSaveRevenue);
+window.addEventListener('room-outcomes-change',proUpdateDashboard);
 
+const PRO_ACTIVITY_LABELS={like_visit:'いいね回り',like_return:'いいね返し',follow_visit:'フォロー回り',follow_return:'フォロー返し',post:'ROOM投稿'};
+function proReadActivities(){
+  try{
+    const data=proAccountRecords().read().activities;
+    return Array.isArray(data)?data:[];
+  }catch{return [];}
+}
+function proRenderActivities(){
+  const all=proReadActivities();
+  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});
+  const rows=all.filter(x=>x.day===today);
+  const counts=Object.keys(PRO_ACTIVITY_LABELS).map(type=>PRO_ACTIVITY_LABELS[type]+' '+rows.filter(x=>x.type===type).length+'件');
+  proEl('proActivitySummary').textContent='今日の実施記録：'+counts.join('／');
+  proEl('proActivityHistory').innerHTML=rows.slice(-10).reverse().map(x=>'<div class="proCard">'+proEsc(PRO_ACTIVITY_LABELS[x.type])+' ｜ '+proEsc(x.note||'（メモなし）')+'<div class="proMeta">'+proEsc(new Date(x.at).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))+'</div></div>').join('')||'<div class="proHint">今日の記録はまだありません。</div>';
+}
+function proAddActivity(){
+  const type=proEl('proActivityType').value;
+  if(!PRO_ACTIVITY_LABELS[type])return;
+  const all=proReadActivities();
+  const now=new Date();
+  const day=now.toLocaleDateString('en-CA',{timeZone:'Asia/Tokyo'});
+  all.push({type,note:String(proEl('proActivityTarget').value||'').trim().slice(0,160),at:now.toISOString(),day});
+  try{
+    proAccountRecords().setActivities(all);
+    proEl('proActivityTarget').value='';
+    proRenderActivities();proUpdateDashboard();
+  }catch{proEl('proActivitySummary').textContent='端末の保存容量に空きがありません。活動は保存されていません。';}
+}
+async function proExportActivities(){
+  const csv=['日時,活動,メモ',...proReadActivities().map(x=>[x.at,PRO_ACTIVITY_LABELS[x.type],x.note||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\n');
+  try{
+    await navigator.clipboard.writeText(csv);
+    proEl('proActivitySummary').textContent='活動記録をコピーしました。';
+  }catch{proEl('proActivitySummary').textContent='コピーできませんでした。端末の権限を確認してください。';}
+}
+proEl('proActivityAdd').addEventListener('click',proAddActivity);
+proEl('proActivityExport').addEventListener('click',proExportActivities);
+function setAppScreen(){
+  // Single integrated interface; keep both product and ROOM operations visible.
+  proEl('normalScreen').classList.remove('off');
+  proEl('proPanel').classList.add('on');
+}
 function updateUpgradeUi(access={}){
   const btn=proEl('upgradeProBtn');
-  const isBase=String(access.plan||'')==='base' && !access.pro;
-  proAvailable=!!access.pro;
-  btn.style.display=isBase?'inline-block':'none';
-  proEl('appModeNav').classList.toggle('on',proAvailable);
-  if(!proAvailable) setAppScreen('normal');
+  if(btn)btn.style.display='none';
+  proAvailable=Boolean(access.pro);
+  setAppScreen();
 }
 async function upgradeToPro(){
   const ok=window.confirm(
@@ -4233,11 +4555,11 @@ async function upgradeToPro(){
     currentAccessPlan='pro';
     proAvailable=true;
     btn.style.display='none';
-    proEl('appModeNav').classList.add('on');
+    setAppScreen();
     await configureIntegratedPro(true);
     const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
     proEl('proMsg').textContent=(d.alreadyPro?'すでにPro契約です。':'Proへアップグレードしました。')+' '+renewal+'から月額1,480円です。';
-    setAppScreen('pro');
+    setAppScreen();
   }catch(e){
     alert(e.message||'アップグレードできませんでした。');
     btn.disabled=false;btn.textContent='Proへアップグレード';
@@ -4247,21 +4569,29 @@ proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
   proAvailable=!!enabled;
-  proEl('appModeNav').classList.toggle('on',enabled);
+  setAppScreen();
   if(!enabled){
-    setAppScreen('normal');
+    setAppScreen();
     return;
   }
   if(!proBooted){
-    proBooted=true;
     try{
       const r=await fetch('/api/pro?action=status',{headers:proHeaders(),credentials:'include',cache:'no-store'});
       const d=await r.json().catch(()=>({}));
-      if(!r.ok) throw new Error(d.message||'Pro情報を取得できませんでした。');
-      await proApply(d.settings||{});proLoadTasks();proRenderQueue(d.queue||[]);
-    }catch(e){proEl('proMsg').textContent=e.message||'Pro情報を取得できませんでした。'}
+      if(!r.ok) throw new Error(d.message||'ウレナビの情報を取得できませんでした。');
+      await proApply(d.settings||{});
+      proRenderActivities();
+      proUpdateDashboard();
+      proRenderQueue(d.queue||[]);
+      proBooted=true;
+      proEl('proMsg').textContent='';
+    }catch(e){
+      // Allow recovery when mobile connectivity, auth, or upstream access fails.
+      proBooted=false;
+      proEl('proMsg').textContent=(e.message||'読み込みに失敗しました。')+' 再読み込みで再試行できます。';
+    }
   }
-  setAppScreen(location.hash==='#pro'?'pro':'normal');
+  setAppScreen();
 }
 proEl('proGenrePicker').addEventListener('change',async e=>{
   const opt=e.target.selectedOptions?.[0];if(!opt?.value)return;
@@ -4278,8 +4608,92 @@ proEl('proGenreBack').addEventListener('click',async()=>{
 proEl('proPreviewBtn').addEventListener('click',proPreview);
 proEl('proSaveBtn').addEventListener('click',()=>proSave().catch(e=>proEl('proMsg').textContent=e.message));
 proEl('proGenerateBtn').addEventListener('click',proGenerate);
-document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
 
+
+</script>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.getElementById('appRoot');
+  const tabs=document.getElementById('urenaviWorkTabs');
+  const valid=new Set(['search','copy','operations','results','today']);
+  function choose(next){
+    if(!valid.has(next))return;
+    root.dataset.urenaviTab=next;
+    tabs.querySelectorAll('[data-urenavi-tab]').forEach(b=>{
+      if(b.dataset.urenaviTab===next)b.setAttribute('aria-current','page');
+      else b.removeAttribute('aria-current');
+    });
+  }
+  function goToProductSearch(){
+    choose('search');
+    // A previous #res anchor must not reopen the copy tab on hash changes.
+    if(location.hash&&history.replaceState)history.replaceState(null,'',location.pathname+location.search);
+    const search=document.getElementById('normalScreen');
+    search.scrollIntoView({block:'start'});
+    // Keep the keyboard closed on iPhone; the user can tap the search field.
+  }
+  document.getElementById('outcomeToSearch').addEventListener('click',goToProductSearch);
+  document.getElementById('roomOpsQuickGo').addEventListener('click',()=>{
+    const waiting=document.getElementById('roomOpsQueue');
+    const pending=waiting.querySelector('[data-room-open]');
+    (pending?waiting:document.getElementById('roomOpsType')).scrollIntoView({block:'start'});
+  });
+  const guides={
+    like_return:'楽天ROOMのお知らせで、いいねをくれた相手を確認。ROOMで返したあと、必要に応じて実施を記録します。',
+    follow_return:'楽天ROOMで新しいフォロワーを確認。実際にフォローを返した場合だけ記録します。',
+    like_visit:'楽天ROOMのフィードでフォロー中の人の投稿を確認。実際にいいねした場合だけ記録します。',
+    follow_visit:'楽天ROOMの「見つける」などでユーザーを確認。実際にフォローした場合だけ記録します。'
+  };
+  document.querySelectorAll('[data-room-work]').forEach(button=>button.addEventListener('click',()=>{
+    document.getElementById('roomOpsType').value=button.dataset.roomWork;
+    document.querySelectorAll('[data-room-work]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    document.getElementById('roomOpsWorkGuide').textContent=guides[button.dataset.roomWork];
+  }));
+  document.getElementById('roomOpsPaste').addEventListener('click',async()=>{
+    const field=document.getElementById('roomOpsUrl');
+    const status=document.getElementById('roomOpsMessage');
+    try{
+      const value=await navigator.clipboard.readText();
+      if(!value.trim()){status.textContent='コピーしたURLがありません。';return;}
+      field.value=value.trim();
+      status.textContent='URLを貼り付けました。相手と活動の種類を確認してから登録してください。';
+    }catch{
+      status.textContent='自動貼り付けが許可されませんでした。URL欄を長押しして貼り付けてください。';
+      field.focus();
+    }
+  });
+
+  tabs.addEventListener('click',e=>{
+    const b=e.target.closest('[data-urenavi-tab]');
+    if(!b)return;
+    choose(b.dataset.urenaviTab);
+    tabs.scrollIntoView({block:'start',behavior:'instant'});
+  });
+  function tabForHash(hash){
+    if(!hash)return null;
+    const id=decodeURIComponent(hash.slice(1));
+    const node=document.getElementById(id);
+    if(!node)return null;
+    if(node.closest('#roomOpsPanel,#proActivityPanel'))return 'operations';
+    if(node.closest('#roomOutcomesPanel,#roomAccountBackupPanel,#legacyMigration')||id==='proDailyDashboard'&&false)return 'results';
+    if(node.closest('.roomToday')||id==='roomToday')return 'today';
+    if(node.closest('#urenaviCandidateTools'))return 'search';
+    if(id==='res')return 'copy';
+    if(node.closest('#normalScreen'))return 'search';
+    if(id==='proDailyDashboard')return 'today';
+    return null;
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest?.('a[href^="#"]');
+    if(!a)return;
+    const tab=tabForHash(a.getAttribute('href'));
+    if(tab)choose(tab);
+  },true);
+  window.addEventListener('hashchange',()=>{const tab=tabForHash(location.hash);if(tab)choose(tab);});
+  choose(tabForHash(location.hash)||'search');
+})();
 </script>
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
 <script src="/access-guard.js?v=20261002-qr"></script>

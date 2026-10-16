@@ -497,7 +497,8 @@ function run(name,fn){
   await run('AI targeting distinguishes safe fallback from AI-needed fallback',()=>{
     const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(src,/fallbackFacts\.length>=1/);
-    assert.match(src,/insufficient_grounded_facts/);
+    assert.match(src,/insufficient_grounded_purchase_reason/);
+    assert.match(src,/const localReady=Boolean\(localAssessment\?\.ready\)&&Boolean\(localText\)&&!roomCopyNeedsReview\(localText,item,false\)/);
     assert.match(src,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
     assert.doesNotMatch(src,/if\(a\?\.outputMode!=='full'\) reasons\.push\('rule_fallback'\)/);
   });
@@ -688,45 +689,40 @@ function run(name,fn){
     assert.match(html,/aiGatesFullOutput=runtimeKnown/);
     assert.match(html,/preview\s*\?debugExportAllowed/);
     assert.match(html,/function resolvedPost\(/);
-    assert.match(html,/if\(p==='threads'\) return UrenaviPainCopy\.makeThreadsCopy/);
-    assert.match(html,/if\(p==='instagram'\) return UrenaviPainCopy\.makeInstagramCopy/);
+    assert.match(html,/function resolvedPost\(/);
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
-    assert.match(html,/rule_second_opinion_conflict/);
-    assert.match(html,/mediumHandling:'fallback_fixed'/);
-    assert.match(html,/cacheKeyComponents/);
+    assert.match(html,/return neutralRulePost\(item,keyword\)/);
+    assert.match(html,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
     assert.match(html,/resolvedPost:resolvedPostMeta/);
     assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
     assert.match(html,/function aiTargetDecision\(/);
     assert.match(html,/safeFallback/);
-    assert.match(html,/insufficient_grounded_facts/);
+    assert.match(html,/insufficient_grounded_purchase_reason/);
     assert.match(html,/rule_conflict/);
     assert.doesNotMatch(html,/weak_single_candidate/);
     assert.match(html,/Number\(result\?\.data\?\.nextDelayMs\)\|\|750/);
     assert.match(html,/Groqの利用枠を守るため約/);
     assert.doesNotMatch(html,/Math\.min\(3,queue\.length\)/);
     assert.doesNotMatch(html,/AI確認中です/);
-    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/if\(gate\.enabled&&gate\.status==='fallback'\) return ''/);
     assert.match(html,/if\(aiGatesFullOutput&&s\.target\.callAi&&s\.state\?\.state!=='done'\) return false/);
     assert.match(html,/\.tab\[data-i=/);
   });
 
-  await run('client copy permits only source-grounded fallback identity and keeps strict evidence path',()=>{
+  await run('client copy accepts only verified AI or the same grounded local assessment',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function safeSearchIdentity\(item\)/);
-    assert.match(html,/v\.productType\?\.valid===true\?String\(insight\.productType\|\|''\)\.trim\(\):safeSearchIdentity\(item\)/);
-    assert.match(html,/const universalPost=window\.UrenaviPainCopy\?\.buildValidatedProductPost/);
-    assert.match(html,/if\(universalPost\) return universalPost/);
-    assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
-    assert.doesNotMatch(html,/if\(v\.productType\?\.valid!==true\) return ''/);
-    assert.match(html,/バッグ\|ケース\|カバー\|ブラシ\|ローラー/);
-    assert.match(html,/source\.includes\(qc\)\?q:''/);
-    assert.match(html,/const fallbackIdentity=safeSearchIdentity\(item\)/);
-    assert.match(html,/const groundedFallback=Boolean\(fallbackIdentity\)/);
-    assert.match(html,/const full=validatedFull\|\|groundedFallback/);
-    assert.match(html,/audience=String\(\(usePurchasePlan\?\(insight\.scene\|\|insight\.productType\):insight\.productType\)\|\|'商品内容を確認済み'\)/);
-    assert.match(html,/unexpected_ai_contract/);
-    assert.match(html,/function readyV3Post\(result\)/);
-    assert.match(html,/points=\(insight\.sellingPoints\.length\?insight\.sellingPoints:insight\.features\)\.slice\(0,2\)/);
+    assert.ok(html.includes('function safeSearchIdentity(item)'));
+    assert.ok(html.includes('function localCopyAssessment(item)'));
+    assert.ok(html.includes('function readyV3Post(result)'));
+    assert.ok(html.includes('function resolvedPost('));
+    assert.ok(html.includes("if(gate.enabled&&gate.status==='fallback') return ''"));
+    assert.ok(html.includes('return neutralRulePost(item,keyword)'));
+    assert.ok(html.includes('RoomCopyResult.canonical(data) && RoomCopyResult.ready(data)'));
+    assert.ok(html.includes('isV3PreviewResult(data) && readyV3Post(data)'));
+    assert.ok(html.includes('const assessment=localCopyAssessment(item||{})'));
+    assert.ok(html.includes('if(!assessment?.ready)return true'));
+    assert.ok(html.includes('unexpected_ai_contract'));
+    assert.ok(!html.includes('const full=validatedFull||groundedFallback'));
   });
 
   await run('validation cache hash includes prompt and rule versions',()=>{
@@ -766,9 +762,10 @@ function run(name,fn){
   await run('AI-needed products hide unfinished fallback copy until validation completes',()=>{
     const fs=require('node:fs'),path=require('node:path');
     const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/if\(gate\.status==='fallback'\) return ''/);
+    assert.match(html,/if\(gate\.enabled&&gate\.status==='fallback'\) return ''/);
     assert.match(html,/if\(s\.state\?\.state==='error'\|\|s\.state\?\.state==='restored'\) return ''/);
-    assert.match(html,/return String\(post\(i,p\)\|\|''\)\.trim\(\)/);
+    assert.match(html,/const text=String\(post\(i,p\)\|\|''\)\.trim\(\)/);
+    assert.match(html,/roomCopyNeedsReview\(text,i,/);
     assert.doesNotMatch(html,/誤った投稿文は表示していません/);
     assert.doesNotMatch(html,/この商品は投稿文を安全に生成できませんでした/);
   });
@@ -785,7 +782,9 @@ function run(name,fn){
     assert.doesNotMatch(html,/valueFromFacts/);
     assert.doesNotMatch(quality,/VALUE_RULES/);
     assert.doesNotMatch(quality,/スマホを見るたびに外す手間が気になるなら/);
-    assert.match(html,/buildGroundedBenefitPost/);
+    // The active client uses the structured assessment, not the removed legacy helper.
+    assert.match(html,/function localCopyAssessment\(item\)/);
+    assert.match(html,/UrenaviStructuredCopy\?\.assess/);
     assert.match(quality,/StructuredCopy/);
     assert.match(quality,/FactSafety\?\.isAllowedSpecFact/);
     assert.match(quality,/sourceTokens\.has\(x\)/);

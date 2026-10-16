@@ -25,21 +25,25 @@
     {names:['美顔ローラー','美容ローラー'],scene:'顔のお手入れに使うローラーを探している方に。',domain:'beauty'},
     {names:['フライパン','鍋','キッチンバサミ','包丁','まな板'],scene:'キッチンでの調理に。',domain:'cooking'},
     {names:['収納ボックス','収納ケース','収納ラック'],scene:'ものを入れる収納を用意したいときに。',domain:'storage'},
-    {names:['かっさ','ヘアブラシ','コーム','メイクブラシ'],scene:'日々のお手入れに使う道具に。',domain:'beauty'},
+    {names:['かっさ','ヘアブラシ','コーム','メイクブラシ'],scene:'メイクブラシやヘアブラシを探しているときに。',domain:'beauty'},
     {names:['ペットベッド','犬用ベッド','猫用ベッド'],scene:'ペットが過ごす場所に。',domain:'pet'},
-    {names:['パジャマ','ボクサーパンツ','Tシャツ','シャツ','パーカー','パンツ','靴下'],scene:'日々の着替えに。',domain:'clothing'},
+    {names:['パジャマ','ボクサーパンツ','Tシャツ','シャツ','パーカー','パンツ','靴下','スカート','ワンピース','ブルゾン','コート'],scene:'日々の着替えに。',domain:'clothing'},
+    {names:['完全ワイヤレスイヤホン','ワイヤレスイヤホン','イヤホン'],scene:'音声を聴くときに。',domain:'audio'},
+    {names:['加湿器'],scene:'室内の加湿に。',domain:'humidifier'},
+    {names:['電気シェーバー','シェーバー'],scene:'ひげのお手入れに。',domain:'grooming'},
     {names:['電気ケトル'],scene:'お湯を沸かすときに。',domain:'kettle'},
     {names:['扇風機','サーキュレーター'],scene:'室内で風を送るときに。',domain:'fan'},
     {names:['掃除機','電動モップ'],scene:'床の掃除に。',domain:'cleaning'},
     {names:['レトルトカレー','カレー','スープ','米','コーヒー','お茶'],scene:'',domain:'food'}
   ];
-  function sourceParts(item){return ['itemName','itemCaption'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
+  // Search returns catchcopy separately; include it as quoted source evidence rather than discarding it.
+  function sourceParts(item){return ['itemName','itemCaption','catchcopy'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
   function occurrence(parts,quote){
     const q=normalize(quote); if(!q||RISK.test(q)||(BAD_CONTEXT.test(q)&&q!=='フィルター交換不要')) return null;
     for(const part of parts){
       const tokens=split(part.text);
       for(let i=0;i<tokens.length;i++){
-        if(tokens[i]!==q && !(q.includes(' ')&&part.text.includes(q)) && !(tokens[i].startsWith(q)&&/^(?:を採用|を使用|を使|採用|です|として)/.test(tokens[i].slice(q.length)))) continue;
+        if(tokens[i]!==q && !(q.includes(' ')&&part.text.includes(q)) && !(tokens[i].startsWith(q)&&/^(?:を採用|を使用|を使|採用|です|として)/.test(tokens[i].slice(q.length))) && !(tokens[i].startsWith(q)&&/^(?:長袖|半袖|春夏|秋冬)$/.test(q)&&/^(?:シャツ|ブラウス|トップス|アウター|ジャケット|コート|ワンピース|パーカー|ニット|服)$/.test(tokens[i].slice(q.length)))) continue;
         // A term must be an entire source token; nearby negation, conditions and material modifiers reject it.
         if(MODIFIER.test(tokens[i-1]||'')||MODIFIER.test(tokens[i+1]||'')) continue;
         const at=part.text.indexOf(q);
@@ -60,7 +64,7 @@
     const knownFacts=new Set(facts.map(x=>x.quote));
     const selected=[];
     for(const token of tokens){
-      if(!token||LABEL_NOISE.test(token)||RISK.test(token)||BAD_CONTEXT.test(token)||/^\d+(?:個|枚|本|袋|組|食|セット)/.test(token)) continue;
+      if(!token||LABEL_NOISE.test(token)||RISK.test(token)||BAD_CONTEXT.test(token)||/^\d+(?:個|枚|本|袋|組|食|セット)/.test(token)||/(?:本日|今だけ|期間限定|P\d+倍|ポイント\d+倍|\d+円OFF|\d+[%％]OFF)/i.test(token)) continue;
       if(knownFacts.has(token)||MATERIALS.includes(token)||FUNCTIONS.includes(token)||/^(?:SS|XS|S|M|L|LL|XL|XXL|XXXL|\dXL)$/.test(token)) continue;
       // Keep complete original tokens; never cut a word/model/number to fit.
       if(token.length>48) continue;
@@ -87,7 +91,14 @@
     // Nested category names are fine, unrelated product types are ambiguous.
     const conflict=[...domains].some(x=>x!==winner?.domain&&!(parents[winner?.domain]||[]).includes(x));
     if(conflict) return {identity:'',scene:'',domain:'',reason:'conflicting_types'};
-    if(winner) return {identity:winner.name,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
+    if(winner){
+      const verified=normalize(identity);
+      const supported=verified&&!RISK.test(verified)&&!BAD_CONTEXT.test(verified)&&sourceParts(item).some(x=>x.text.includes(verified));
+      // A verified, more specific product identity may refine the detected type,
+      // but cannot replace it with a different or unrelated product.
+      const precise=supported&&(verified.includes(winner.name)||winner.name.includes(verified))?verified:winner.name;
+      return {identity:precise,scene:winner.scene,domain:winner.domain,reason:'',method:'type_definition'};
+    }
     const label=sourceLabel(item,extractFacts(item));
     if(label&&TYPES.some(type=>type.names.some(name=>name.length>=3&&compact.includes(name)&&/^(?:用|専用)?(?:ケース|カバー|ポーチ|交換パーツ)/.test(compact.split(name)[1]||'')))) {label.domain='accessory';return label;}
     const id=normalize(identity);
@@ -104,7 +115,13 @@
     const multipack=/^\d+(?:枚|個|本|袋|粒|錠)[x×X]\d+(?:枚|個|本|袋|粒|錠)(?:入り|入|セット)?$/;
     const specPhrase=/^(?:Bluetooth \d+(?:\.\d+)?|最大\d+時間再生|\d+段階温度調節|\d+時間保温|回転式\d+枚刃|\d+(?:\.\d+)?リットル(?:大容量)?|\d+-\d+度|\d+℃単位|(?:重量|幅|奥行|高さ) \d+(?:\.\d+)?(?:g|kg|mm|cm))$/;
     const sizes=/^(?:XS|S|M|L|LL|XL|XXL|XXXL|[2-5]XL)$/;
-    const candidates=[...parts.flatMap(x=>split(x.text)),...evidence.map(x=>typeof x==='object'?x.quote:x)];
+    // Recognize a bounded clothing-spec compound (e.g. 長袖シャツ) without
+    // treating arbitrary substrings or negated claims as source facts.
+    const clothingCompounds=parts.flatMap(part=>split(part.text).flatMap(token=>{
+      const m=token.match(/^(長袖|半袖|春夏|秋冬)(?:シャツ|ブラウス|トップス|アウター|ジャケット|コート|ワンピース|パーカー|ニット|服)$/);
+      return m?[m[1]]:[];
+    }));
+    const candidates=[...parts.flatMap(x=>split(x.text)),...clothingCompounds,...evidence.map(x=>typeof x==='object'?x.quote:x)];
     for(const raw of candidates){
       const q=normalize(raw);
       if(!specs.has(q)&&!numeric.test(q)&&!count.test(q)&&!dimensions.test(q)&&!sizes.test(q)&&!specPhrase.test(q)&&!multipack.test(q)) continue;
@@ -154,45 +171,105 @@
     for(const fact of facts){
       if(taken.has(fact.quote)) continue;
       let text='';
-      if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中のスマホ操作にも対応。';
+      if(fact.quote==='スマホ対応'&&domain==='riding') text='停車中にスマホを操作したい場面にも対応。';
       if(fact.quote==='防風'&&domain==='riding') text='走行時の風対策にも。';
       if(fact.quote==='防風'&&domain==='clothing') text='風対策の防風仕様です。';
+      // Connector use cases belong to cables, never unrelated daily goods (e.g. wallets).
+      const cable=domain==='daily'&&/ケーブル/.test(understanding.identity);
+      if(fact.quote==='HDMI'&&cable) text='HDMI接続を使う場面に。';
+      if(fact.quote==='USB-C対応'&&cable) text='USB-C対応の接続先を使う場面に。';
       if(fact.quote==='IH対応'&&domain==='cooking') text='IHでの調理に対応。';
       if(fact.quote==='食洗機対応'&&domain==='cooking') text='使用後は食洗機で洗えます。';
       if(['折りたたみ','折り畳み'].includes(fact.quote)&&domain!=='accessory') text='使わないときは折りたためます。';
       if(fact.quote==='キャスター付き'&&['storage','storage-seat'].includes(domain)) text='キャスターで移動できるタイプです。';
-      if(fact.quote==='洗える'&&domain!=='accessory') text='お手入れ時に洗えるタイプです。';
+      if(fact.quote==='洗える'&&domain!=='accessory') text='洗える仕様です。';
       if(fact.quote==='充電式'&&domain!=='accessory') text='充電して使うタイプです。';
       if(fact.quote==='コードレス'&&domain!=='accessory') text='コードをつながずに使うタイプです。';
       if(fact.quote==='個包装') text='1つずつ包装されています。';
       if(fact.quote==='オールシーズン'&&['riding','clothing'].includes(domain)) text='オールシーズン仕様です。';
+      // Season and sleeve choices are concrete clothing selection criteria.
+      // This only restates an exact, non-negated source token and never promises comfort.
+      if(domain==='clothing'&&fact.quote==='長袖') text='長袖の服を探しているときに。';
+      if(domain==='clothing'&&fact.quote==='半袖') text='半袖の服を探しているときに。';
+      if(domain==='clothing'&&fact.quote==='春夏') text='春夏向けの服を選ぶときに。';
+      if(domain==='clothing'&&fact.quote==='秋冬') text='秋冬向けの服を選ぶときに。';
+
       if(fact.quote==='壁掛け'&&['holder','storage'].includes(domain)) text='壁に掛けて使うタイプです。';
       if(fact.quote==='粘着式'&&['holder','storage'].includes(domain)) text='粘着式で取り付けるタイプです。';
+      if(fact.kind==='material'&&['daily','clothing','riding','towel','storage','storage-seat','beauty','pet','grooming'].includes(domain)) text='素材に'+fact.quote+'を選びたい方に。';
+      // Dimensions support a concrete fit decision only for products whose
+      // physical placement/size is central; do not infer comfort or capacity.
+      if(fact.kind==='dimension'&&['storage','storage-seat','daily'].includes(domain)&&/プール|収納|ラック|ボックス|ケース/.test(understanding.identity)) {
+        text='サイズは'+fact.quote+'。置き場所に収まるか、寸法を確認して選べます。';
+      }
       if(fact.kind==='count') text=fact.quote+(/セット$/.test(fact.quote)?'です。':'のセットです。');
       if(text) add(text,[fact]);
     }
     // Too many explanatory sentences becomes another report. Remaining facts stay in the list.
-    return out.slice(0,3);
+    return out;
+  }
+  // Rank evidence by usefulness rather than source order. The score only
+  // selects verified sentences; it never generates unsupported product claims.
+  function purchaseReasons(understanding,values){
+    const scored=values.map((value,index)=>{
+      const quote=String(value.factRef||'');
+      const kind=/^(?:\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
+      const isUseCase=/対応|使|洗|移動|折り|掛け|風対策|コード|包装/.test(value.text||'');
+      const score=(kind==='feature'?3:0)+(isUseCase?3:0)+(Array.isArray(value.factRefs)&&value.factRefs.length>1?1:0);
+      return {text:value.text,quotes:value.factRefs||[value.factRef],score,index};
+    });
+    return scored.sort((a,b)=>b.score-a.score||a.index-b.index);
   }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
-    if(!understanding.identity||!facts.length) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
-    const used=new Set(values.flatMap(x=>x.factRefs||[x.factRef]));
+    // Verified specifications alone do not establish a purchase reason.
+    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity')) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
+    const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
+    // An attractive opening must connect the actual use scene to a sourced reason.
+    // A generic scene alone is not a purchase reason.
     const lead=understanding.scene;
     const materialLabel=materials.map(x=>x.quote).join('・');
     const materialJoin=materials.length===1&&/製$/.test(materialLabel)?'の':/100[%％]$/.test(materialLabel)?'素材の':materialLabel.includes('木製')?'仕様の':'を使った';
     const introduction=materials.length?materialLabel+materialJoin+understanding.identity+'です。':understanding.identity+(understanding.method==='source_label'||understanding.domain==='unknown'?'':'です。');
     for(const x of materials) used.add(x.quote);
-    const lines=lead?[lead,'',introduction]:[introduction];
-    if(values.length) lines.push(values.map(x=>x.text).join(''));
+    // A product-specific opening combines the use-case and supported differentiator.
+    // Never invent outcomes: each value comes from an extracted source quote.
+    const lines=[];
+    // Prefer a practical benefit over inventory-like quantity statements.
+    const ranked=purchaseReasons(understanding,values);
+    const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
+    for(const value of chosen) for(const quote of value.quotes) used.add(quote);
+    if(lead&&chosen.length){
+      // Keep two grammatical sentences; joining arbitrary Japanese clauses with a comma creates broken copy.
+      lines.push(lead,chosen[0].text);
+      lines.push('',introduction);
+      if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
+    }else{
+      if(lead) lines.push(lead,'');
+      lines.push(introduction);
+      if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
+    }
     const remaining=facts.filter(x=>!used.has(x.quote));
-    if(remaining.length){lines.push('','特徴👇');for(const x of remaining) lines.push('✓ '+x.quote);}
+    if(remaining.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','商品の特徴');for(const x of specs) lines.push('・'+x.quote);}}
     const price=Number(item?.itemPrice);if(Number.isFinite(price)&&price>0) lines.push('','価格：'+new Intl.NumberFormat('ja-JP').format(price)+'円');
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
     if(text.length>500) return {version:VERSION,understanding,facts,values,text:'',status:'length_overflow'};
     return {version:VERSION,understanding,facts,values,text,status:'ok'};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,RISK};
+  // Shared local-copy assessment: callers must not independently redefine readiness.
+  function assess(item,{identity='',evidence=[]}={}){
+    const result=compose(item,{identity,evidence});
+    // Publication requires a purchase reason that was actually selected and
+    // rendered as its own sentence, not merely mentioned inside the title.
+    const selected=purchaseReasons(result.understanding,result.values||[])
+      .filter(value=>value.score>=3).slice(0,3);
+    const body=String(result.text||'').split('商品の特徴')[0].split('価格：')[0];
+    const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
+    const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
+    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
+    return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
+  }
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,assess,RISK};
 });

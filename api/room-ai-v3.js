@@ -347,7 +347,14 @@ function localZeroCall(item,learnedIdentity=''){
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const partnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  // Generic material, quantity and dimension descriptions are factual, but do
+  // not by themselves explain a buyer's use case. Defer those to verified AI
+  // instead of marking a thin title-only description as a finished post.
+  const weakGenericAxis=/^(?:素材・構造|生産情報|サイズ|入り数|数値仕様|重量|容量)$/;
+  const partnerCopy=proposedPartnerCopy?.generic
+    && weakGenericAxis.test(String(proposedPartnerCopy.axisHints?.[0]||''))
+    ?null:proposedPartnerCopy;
   const facts=[];
   const semanticFactKeys=new Set();
   for(const fact of [...structuredFacts,...literalFacts]){
@@ -373,7 +380,10 @@ function localZeroCall(item,learnedIdentity=''){
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
-  const selectedGroundedValues=groundedValues.filter(v=>String(copy?.text||'').includes(String(v?.text||'').trim()));
+  // A purchase reason must appear as a complete rendered line. A substring
+  // inside a title, a generic hook, or an unrelated specification is not proof.
+  const renderedCopyLines=new Set(String(copy?.text||'').split(/\n+/).map(line=>line.trim()).filter(Boolean));
+  const selectedGroundedValues=groundedValues.filter(v=>renderedCopyLines.has(String(v?.text||'').trim()));
   const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structuredValueHasStrongReason(v,structuredFacts,identity));
   const useStructuredText=!partnerCopy
     && structuredSafe
@@ -593,7 +603,11 @@ function createHandler(deps={}){
   };
 }
 
-module.exports=createHandler();
+const legacyHandler=createHandler();
+module.exports=function(req,res){
+  if(req.query?.urenaviContract==='1')return require('../lib/room-copy-handler')(req,res);
+  return legacyHandler(req,res);
+};
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;

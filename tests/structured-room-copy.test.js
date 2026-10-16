@@ -66,3 +66,42 @@ assert.equal(api.buildValidatedProductPost({itemName:'モバイルバッテリ�
 assert.equal(s.extractFacts({itemName:'プリンター WiFi Wi-Fi wifi'}).length,1);
 assert.equal(s.extractFacts({itemName:'収納ラック アルミ アルミニウム'}).length,1);
 assert.equal(s.compose({itemName:'腕時計 腕時計 レザー'}).understanding.identity,'腕時計');
+
+
+// Cross-category safety regressions: no promotional fragments in inferred identity.
+for(const itemName of [
+ '＼本日P6倍!300円クーポン／ラグ 洗える 200×500cm',
+ '期間限定P10倍 タオル 綿100%',
+ 'ポイント5倍 収納ラック キャスター付き'
+]){
+ const result=s.compose({itemName});
+ assert.doesNotMatch(result.understanding.identity||'',/本日|期間限定|P\d+倍|ポイント\d+倍|クーポン/);
+}
+// Ready copy must survive the independent benefit safety guard unchanged.
+const safety=require('../public/fact-safety');
+for(const itemName of [
+ 'ペットマット 洗える 防水 撥水',
+ 'メイクブラシ シリコン',
+ 'ラグ 洗える 200×500cm',
+ '掃除機 コードレス 充電式',
+ 'Tシャツ 綿100% オールシーズン'
+]){
+ const item={itemName};
+ const assessment=s.assess(item);
+ if(assessment.ready) assert.equal(safety.guardUnsupportedBenefitCopy(item,assessment.result.text),assessment.result.text,itemName);
+}
+console.log('Cross-category promotional identity and independent safety guard regressions PASS');
+
+// Draft creation and publication readiness are separate responsibilities.
+// All channel drafts share one composition route; the app alone gates copying.
+for(const itemName of ['洗濯ネット','美顔ローラー 小顔 リフトアップ','モバイルバッテリー用ケース USB-C']){
+ const item={itemName};
+ assert.equal(s.assess(item).ready,false,itemName);
+ assert.equal(api.makeRoomCopy(item,''),s.compose(item).text,itemName);
+}
+for(const itemName of ['掃除機 コードレス 充電式','バイクグローブ 山羊革 防風 スマホ対応']){
+ const item={itemName};
+ assert.equal(api.makeRoomCopy(item,''),s.compose(item).text,itemName);
+ assert.equal(api.makeThreadsCopy(item,''),api.makeRoomCopy(item,''),itemName);
+}
+console.log('Shared draft route and separate publication gate PASS');

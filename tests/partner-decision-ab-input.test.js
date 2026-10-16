@@ -30,5 +30,5 @@ test('partner knowledge is guidance, never product evidence',()=>{
 test('final verifier never receives partner knowledge as evidence',()=>{
   const verify=payload('verify',item,{partnerKnowledge:true,partnerProductType:'電気ケトル',draft:{product:{},sentences:[]},machine:{flags:[]}});
   assert.equal(verify.decisionKnowledge,undefined);
-  assert.deepEqual(Object.keys(verify).sort(),['draft','flags','itemCaption','itemName'].sort());
+  assert.deepEqual(Object.keys(verify).sort(),['catchcopy','draft','flags','itemCaption','itemName'].sort());
 });

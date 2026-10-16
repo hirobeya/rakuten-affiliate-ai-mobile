@@ -76,7 +76,7 @@
   ensurePwaHead();
 
   const durableScript=root.document.createElement('script');
-  durableScript.src='/durable-session.js?v=20260916-1';
+  durableScript.src='/durable-session.js?v=20261011-ux-restore-no-next';
   durableScript.defer=true;
   root.document.head.appendChild(durableScript);
 
@@ -86,7 +86,7 @@
   }
 
   function isRakutenViewLink(link){
-    return !!link && String(link.textContent||'').trim()==='楽天で見る' && /^https:/i.test(link.href||'');
+    return !!link && link.dataset?.urenaviProductLink==='market' && /^https:/i.test(link.href||'');
   }
 
   function restoreSavedSearchOnReturn(){
@@ -111,7 +111,7 @@
     guide.id='roomReturnGuide';
     guide.setAttribute('role','note');
     guide.style.cssText='margin-top:8px;padding:10px 34px 10px 10px;border:1px solid #f0dfb5;border-radius:11px;background:#fff9eb;color:#725718;font-size:11px;line-height:1.55;position:relative;';
-    guide.textContent='ROOM投稿後に白い画面が出ても、ウレナビを開き直すと「続きから再開」が表示されます。';
+    guide.textContent='楽天の商品ページは別画面で開きます。投稿文はウレナビの「投稿文」タブで確認できます。';
 
     const close=root.document.createElement('button');
     close.type='button';
@@ -129,21 +129,11 @@
   root.document.addEventListener('click',event=>{
     const link=event.target.closest?.('a');
     if(!link) return;
-
-    if(link.classList?.contains('roomLink')){
+    // In-app hashes are handled by the work tabs. External product links
+    // use the browser's native target=_blank behavior; never hijack either.
+    if(isRakutenViewLink(link)){
       roomAway=true;
       try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      root.location.assign(link.href);
-      return;
-    }
-
-    if(isRakutenViewLink(link)){
-      try{if(typeof root.saveSearchState==='function') root.saveSearchState();}catch{}
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      root.location.assign(link.href);
     }
   },true);
 

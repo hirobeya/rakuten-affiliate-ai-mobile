@@ -14,6 +14,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+      - name: Audit grounded copy coverage and failure reasons (non-gating)
+        run: node scripts/audit-grounded-copy.js
       - name: Run ROOM copy regression tests
         run: npm run test:copy
       - name: Run ROOM AI phase1 regression tests

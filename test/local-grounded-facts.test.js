@@ -76,10 +76,15 @@ test('multiple dimension variants are dropped as ambiguous',()=>{
   assert.deepEqual(Array.from(dims),['本革']);
 });
 
-test('combined Groq and local facts are ambiguity-filtered again before posting',()=>{
+test('local drafts, AI routing, and publication use one grounded assessment',()=>{
   const app=fs.readFileSync('public/app.html','utf8');
-  assert.match(app,/combinedFacts=\[/);
-  assert.match(app,/UrenaviFactSafety\?\.filterAllowedTitleFacts\?\.\(titleTokens,combinedFacts\)/);
+  assert.match(app,/function localCopyAssessment\(item\)/);
+  assert.match(app,/extractFallbackTitleFacts\?\.\(item\)/);
+  assert.match(app,/UrenaviStructuredCopy\?\.assess\?\.\(item,\{evidence\}\)/);
+  assert.match(app,/return localCopyAssessment\(item\)\?\.result\?\.text\|\|''/);
+  assert.match(app,/const localAssessment=localCopyAssessment\(item\)/);
+  assert.match(app,/const assessment=localCopyAssessment\(item\|\|\{\}\)/);
+  assert.match(app,/guard\(item\|\|\{\},String\(text\|\|''\)\)/);
 });
 
 test('all client copy channels use the same grounded benefit output from safe facts',()=>{
@@ -92,9 +97,9 @@ test('all client copy channels use the same grounded benefit output from safe fa
   assert.equal(room,instagram);
   assert.match(room,/外出先での充電に。/);
   assert.doesNotMatch(room,/商品名には|明記されています|比較しやすい/);
-  assert.match(room,/特徴👇/);
+  assert.match(room,/商品の特徴/);
   assert.match(room,/10枚入り/);
-  assert.match(room,/✓ USB-C対応/);
+  assert.match(room,/・USB-C対応/);
   assert.doesNotMatch(room,/ブラック|人気|ギフト|絶対|必ず|確実に|改善|治る|痩せる|若返/);
   assert.match(room,/価格：1,980円/);
   assert.match(room,/※アフィリエイト広告を利用しています/);
@@ -105,7 +110,7 @@ test('neutral builder rejects non-source and non-allowlisted facts',()=>{
   const item={itemName:'財布 本革 内容量500ml USB-C対応',itemPrice:1000};
   const out=api.buildNeutralFactPost(item,['本革','内容量500ml','防水','存在しない仕様']);
   assert.match(out,/本革/);
-  assert.match(out,/✓ 内容量500ml/);
+  assert.match(out,/・内容量500ml/);
   assert.doesNotMatch(out,/防水|存在しない仕様/);
 });
 
@@ -128,7 +133,8 @@ test('client post path no longer uses VALUE_RULES or valueFromFacts',()=>{
   assert.doesNotMatch(html,/valueFromFacts/);
   assert.doesNotMatch(quality,/VALUE_RULES/);
   assert.doesNotMatch(quality,/function valueFromFacts\(/);
-  assert.match(html,/buildGroundedBenefitPost/);
+  assert.match(html,/function neutralRulePost\(item,keyword=''/);
+  assert.match(html,/return localCopyAssessment\(item\)\?\.result\?\.text\|\|''/);
   assert.match(quality,/function buildGroundedBenefitPost/);
   assert.match(quality,/StructuredCopy/);
 });
@@ -204,6 +210,9 @@ test('validated AI copy rejects identity or evidence absent from source',()=>{
 test('client AI path uses validated copy evidence instead of spec-only evidence',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
-  assert.match(html,/eligibleForCopyEvidence/);
-  assert.match(html,/buildValidatedProductPost/);
+  // The active path shares a single source-grounded assessment for routing and publication.
+  assert.match(html,/function localCopyAssessment\(item\)/);
+  assert.match(html,/UrenaviStructuredCopy\?\.assess\?\.\(item,\{evidence\}\)/);
+  assert.match(html,/const localAssessment=localCopyAssessment\(item\)/);
+  assert.match(html,/const assessment=localCopyAssessment\(item\|\|\{\}\)/);
 });

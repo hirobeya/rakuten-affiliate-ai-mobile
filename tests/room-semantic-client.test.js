@@ -13,11 +13,11 @@ const {run}=require('../public/room-preview-request');
  assert.equal(waits,0);
 
  const html=fs.readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
- assert.match(html,/startsWith\('room_contract_'\)\) return '';/);
+ assert.match(html,/RoomCopyResult\.canonical\(result\)\) return RoomCopyResult\.ready\(result\)/);
  assert.match(html,/unexpected_ai_contract/);
  assert.doesNotMatch(
   html,
   /startsWith\('super-urenavi-v3-'\)\|\|String\(ai\.data\?\.version\|\|''\)\.startsWith\('room_contract_'\)/
  );
- console.log('room-semantic-client: PASS (dormant contract cannot auto-poll or render)');
+ console.log('room-semantic-client: PASS (verified canonical contract; no automatic polling)');
 })().catch(e=>{console.error(e);process.exitCode=1;});

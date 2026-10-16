@@ -33,9 +33,9 @@ test('app has a single source of truth for product copy',()=>{
   const app=fs.readFileSync('public/app.html','utf8');
   assert.match(app,/function productContext\(i\)/);
   assert.match(app,/function neutralRulePost\(/);
-  assert.match(app,/UrenaviPainCopy\?\.buildNeutralFactPost/);
-  assert.match(app,/UrenaviPainCopy\.makeThreadsCopy/);
-  assert.match(app,/UrenaviPainCopy\.makeInstagramCopy/);
+  assert.match(app,/function localCopyAssessment\(item\)/);
+  assert.match(app,/return neutralRulePost\(item,keyword\)/);
+  assert.match(app,/if\(gate\.enabled&&gate\.status==='fallback'\) return ''/);
   assert.doesNotMatch(app,/楽天で見つけた注目アイテム/);
   assert.doesNotMatch(app,/レビューを見ながら失敗しにくく選びたい人/);
   const bridge=fs.readFileSync('public/return-state.js','utf8');
