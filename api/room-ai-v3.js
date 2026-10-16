@@ -411,6 +411,10 @@ function localZeroCall(item,learnedIdentity=''){
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   const textSafe=partnerCopy?localPartnerTextSafe(item,partnerCopy,text):!structured.RISK.test(text);
   if(!String(text||'').trim()||!textSafe) return null;
+  // A type label restated as a full sentence is not a purchase reason,
+  // even if unrelated scene phrases or other weak facts also appear.
+  // Reject the completed local draft instead of letting a thin copy bypass AI.
+  if(!partnerCopy && String(text).split(/\n+/).some(line=>normalize(line)===identity+'です。')) return null;
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};
