@@ -105,7 +105,7 @@ test('unresolved local spec alone cannot bypass Groq fallback, grounded copy can
  assert.ok(start>0&&end>start);
  const ctx={usePurchasePlan:false,groundedAnalysis:()=>({outputMode:'fallback',ambiguous:false,topCandidates:[],conflicts:[]}),
    window:{UrenaviPainCopy:{extractFallbackTitleFacts:()=>['洗える'],buildGroundedBenefitPost:()=> '洗える仕様です。'}},
-   roomCopyNeedsReview:()=>true};
+   roomCopyNeedsReview:()=>true,localCopyAssessment:()=>({ready:false,result:{text:''}})};
  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
  assert.equal(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).callAi,true);
  assert.ok(ctx.aiTargetDecision({itemName:'洗濯ネット 洗える'}).reasons.includes('insufficient_grounded_purchase_reason'));
@@ -123,7 +123,7 @@ test('owner Preview does not force Groq when grounded local copy is ready',()=>{
  assert.ok(start>0&&end>start);
  const ctx={usePurchasePlan:true,groundedAnalysis:()=>({outputMode:'full',ambiguous:false,topCandidates:[],conflicts:[]}),
   window:{UrenaviPainCopy:{extractFallbackTitleFacts:()=>['コードレス'],buildGroundedBenefitPost:()=> '掃除機です。\nコードをつながずに使うタイプです。'}},
-  roomCopyNeedsReview:()=>false};
+  roomCopyNeedsReview:()=>false,localCopyAssessment:()=>({ready:true,result:{text:'根拠に基づく投稿文'}})};
  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
  assert.equal(ctx.aiTargetDecision({itemName:'コードレス 掃除機'}).callAi,false);
  ctx.roomCopyNeedsReview=()=>true;
