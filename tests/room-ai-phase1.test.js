@@ -711,23 +711,20 @@ function run(name,fn){
     assert.match(html,/\.tab\[data-i=/);
   });
 
-  await run('client copy permits only source-grounded fallback identity and keeps strict evidence path',()=>{
+  await run('client copy accepts only verified AI or the same grounded local assessment',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function safeSearchIdentity\(item\)/);
-    assert.match(html,/function localCopyAssessment\(item\)/);
-    assert.match(html,/const universalPost=window\.UrenaviPainCopy\?\.buildValidatedProductPost/);
-    assert.match(html,/if\(universalPost\) return universalPost/);
-    assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
-    assert.doesNotMatch(html,/if\(v\.productType\?\.valid!==true\) return ''/);
-    assert.match(html,/バッグ\|ケース\|カバー\|ブラシ\|ローラー/);
-    assert.match(html,/source\.includes\(qc\)\?q:''/);
-    assert.match(html,/const fallbackIdentity=safeSearchIdentity\(item\)/);
-    assert.match(html,/const groundedFallback=Boolean\(fallbackIdentity\)/);
-    assert.match(html,/const full=validatedFull\|\|groundedFallback/);
-    assert.match(html,/audience=String\(\(usePurchasePlan\?\(insight\.scene\|\|insight\.productType\):insight\.productType\)\|\|'商品内容を確認済み'\)/);
+    assert.match(html,/function safeSearchIdentity\\(item\\)/);
+    assert.match(html,/function localCopyAssessment\\(item\\)/);
+    assert.match(html,/function readyV3Post\\(result\\)/);
+    assert.match(html,/function resolvedPost\\(/);
+    assert.match(html,/if\\(gate\\.enabled&&gate\\.status==='fallback'\\) return ''/);
+    assert.match(html,/return neutralRulePost\\(item,keyword\\)/);
+    assert.match(html,/RoomCopyResult\\.canonical\\(data\\) && RoomCopyResult\\.ready\\(data\\)/);
+    assert.match(html,/isV3PreviewResult\\(data\\) && readyV3Post\\(data\\)/);
+    assert.match(html,/const assessment=localCopyAssessment\\(item\\|\\|\\{\\}\\)/);
+    assert.match(html,/if\\(!assessment\\?\\.ready\\)return true/);
     assert.match(html,/unexpected_ai_contract/);
-    assert.match(html,/function readyV3Post\(result\)/);
-    assert.match(html,/points=\(insight\.sellingPoints\.length\?insight\.sellingPoints:insight\.features\)\.slice\(0,2\)/);
+    assert.doesNotMatch(html,/const full=validatedFull\\|\\|groundedFallback/);
   });
 
   await run('validation cache hash includes prompt and rule versions',()=>{
