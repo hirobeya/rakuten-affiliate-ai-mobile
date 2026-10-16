@@ -45,3 +45,25 @@ test('every publication reason uses real source facts and the same strength rule
  }
  assert.equal(total,780);assert.ok(ready>0);console.log('SHARED_PURCHASE_REASON_CORPUS '+JSON.stringify({total,ready}));
 });
+
+test('related-product caption facts cannot become a completed local browser post',()=>{
+ const reviewed=require('./fixtures/room-unseen-products.json');
+ const item=reviewed.find(row=>row.id==='u02').item,app=context();
+ const a=copy.assess(item);
+ assert.ok(a.result.facts.some(f=>f.quote==='折りたたみ'&&f.source==='itemCaption'),'exercise the related-product contamination');
+ assert.equal(a.ready,false);assert.equal(a.reason,'unverified_source_association');
+ assert.equal(app.roomCopyNeedsReview(a.result.text,item),true);assert.equal(app.aiTargetDecision(item).callAi,true);assert.equal(localZeroCall(item),null);
+ for(const source of ['itemCaption','catchcopy']){
+  const sample={itemName:'収納ボックス', [source]:'関連商品：折りたたみ キャスター付き'};
+  assert.equal(copy.assess(sample).ready,false,source);
+  assert.equal(localZeroCall(sample),null,source);
+ }
+});
+
+test('unassociated supplemental material also prevents local publication while direct title proofs still work',()=>{
+ const item={itemName:'フライパン IH対応',itemCaption:'関連商品 ステンレス'};
+ assert.equal(copy.assess(item).ready,false);
+ assert.equal(copy.assess({...item,itemCaption:''}).ready,true);
+ // Source association must not be bypassed by passing a literal evidence string.
+ assert.equal(copy.assess(item,{evidence:['IH対応','ステンレス']}).ready,false);
+});

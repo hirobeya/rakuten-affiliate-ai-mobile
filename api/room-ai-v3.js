@@ -301,6 +301,7 @@ function localZeroCall(item,learnedIdentity=''){
   const structuredMethod=String(understanding?.method||'');
   const structuredIdentity=String(understanding?.identity||'').trim();
   const structuredSafe=copy?.status==='ok'
+    && structured.factsAreTitleBound(copy.facts)
     && ['type_definition','validated_identity'].includes(structuredMethod)
     && structuredIdentity===identity
     && String(copy.text||'').trim()

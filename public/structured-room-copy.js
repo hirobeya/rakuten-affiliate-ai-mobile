@@ -278,6 +278,12 @@
     return {version:VERSION,understanding,facts,values,text,status:draftOnly?'draft':'ok'};
   }
   // Shared local-copy assessment: callers must not independently redefine readiness.
+  function factsAreTitleBound(facts=[]){
+    // A raw caption can contain other products, bundles and store introductions.
+    // Exact occurrence alone does not prove that its claim belongs to this item.
+    // The separately verified server path owns cross-source claim association.
+    return facts.length>0&&facts.every(fact=>fact.source==='itemName');
+  }
   function assess(item,{identity='',evidence=[]}={}){
     const result=compose(item,{identity,evidence});
     // Publication requires a purchase reason that was actually selected and
@@ -287,8 +293,9 @@
     const body=String(result.text||'').split('商品の特徴')[0].split('価格：')[0];
     const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
-    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
-    return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
+    const titleBound=factsAreTitleBound(result.facts);
+    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound;
+    return {ready,result,reason:ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,compose,assess,RISK};
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,compose,assess,RISK};
 });
