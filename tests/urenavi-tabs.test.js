@@ -46,16 +46,28 @@ test('copy tab has no redundant next-product control',()=>{assert.doesNotMatch(h
 
 test('preview version identifies stale iPhone sessions and weak copy is blocked',()=>{assert.match(html,/id="urenaviPreviewVersion"/);assert.match(html,/function roomCopyNeedsReview\(text,item,validatedByServer=false\)/);assert.match(html,/!roomCopyNeedsReview\(text,i,isFullyReviewedCopyState\(s\)\)/);assert.doesNotMatch(html,/投稿済みにして次の商品へ/);});
 
-test('weak copy from the reported washing-net screen is not publish-ready',()=>{
- const vm=require('node:vm');const start=html.indexOf('function roomCopyNeedsReview(text,item,validatedByServer=false){');const end=html.indexOf('function postReady(',start);
+function copyGuardContext(){
+ const start=html.indexOf('function roomCopyNeedsReview('),end=html.indexOf('function isFullyReviewedCopyState(',start);
  assert.ok(start>0&&end>start);
- const ctx={window:{UrenaviStructuredCopy:{assess:()=>({ready:false,result:{status:'ok',understanding:{scene:'商品に合う場面'},values:[]}})}}};vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
- assert.equal(ctx.roomCopyNeedsReview('ブラジャーの型崩れを防ぎつつ、ドラム式洗濯機で手軽に洗いたいときに使えます。\n\n※アフィリエイト広告を利用しています'),true);
- ctx.window.UrenaviStructuredCopy.assess=()=>({ready:false,result:{status:'ok',understanding:{scene:''},values:[]}});
- assert.equal(ctx.roomCopyNeedsReview('財布の素材を確認。\n\n本革の財布です。\n\n※アフィリエイト広告を利用しています',{}),true);
- assert.equal(ctx.roomCopyNeedsReview('用途は根拠を確認済み。\n\n素材を説明した文章です。\n\n※アフィリエイト広告を利用しています',{},true),false);
- ctx.window.UrenaviStructuredCopy.assess=()=>({ready:true,result:{status:'ok',understanding:{scene:'商品に合う場面'},values:[{text:'使う場面の説明を確認しました。'}]}});
- assert.equal(ctx.roomCopyNeedsReview('使う場面の説明を確認しました。\n\n2枚組で選べる洗濯ネットです。\n\n※アフィリエイト広告を利用しています',{}),false);
+ const structured=require('../public/structured-room-copy');
+ const safety=require('../public/fact-safety');
+ const ctx={window:{UrenaviFactSafety:safety},localCopyAssessment:item=>structured.assess(item)};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ return ctx;
+}
+
+test('weak copy from the reported washing-net screen is not publish-ready',()=>{
+ const ctx=copyGuardContext();
+ const item={itemName:'洗濯ネット 2枚組'};
+ const weak='ブラジャーの型崩れを防ぎつつ、ドラム式洗濯機で手軽に洗いたいときに使えます。\n\n※アフィリエイト広告を利用しています';
+ assert.equal(ctx.roomCopyNeedsReview(weak,item),true);
+ // Even a reviewed route must pass the final unsupported-benefit guard.
+ assert.equal(ctx.roomCopyNeedsReview(weak,item,true),true);
+ const supportedItem={itemName:'コードレス 掃除機'};
+ const supported=ctx.localCopyAssessment(supportedItem).result.text;
+ assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem,true),false);
+ ctx.window.UrenaviFactSafety=null;
+ assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem,true),true);
 });
 
 test('restored search never creates a next-product button or marks a product posted',()=>{
@@ -88,15 +100,15 @@ test('actual copy-quality guard rejects generic laundry copy and ungrounded loca
  assert.equal(context.roomCopyNeedsReview('洗うときに\\n洗濯ネットです。\\n洗える仕様です。\\n※アフィリエイト広告を利用しています',{scene:true},false),true);
 });
 
-test('local readiness requires a grounded purchase-value sentence in the displayed copy',()=>{
- const start=html.indexOf('function roomCopyNeedsReview('),end=html.indexOf('function isFullyReviewedCopyState(',start);
- assert.ok(start>0&&end>start);
- const ctx={window:{UrenaviStructuredCopy:{compose:()=>({status:'ok',understanding:{scene:'外出先での充電に。'},values:[{text:'コードをつながずに使うタイプです。',factRefs:['コードレス']}]})}}};
- vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
- const unrelated='外出先での充電に。\n\n見た目を楽しみながら選べる一品です。\n\n※アフィリエイト広告を利用しています';
- assert.equal(ctx.roomCopyNeedsReview(unrelated,{},false),true);
- const grounded='外出先での充電に。\n\n充電式のモバイルバッテリーです。\nコードをつながずに使うタイプです。\n\n※アフィリエイト広告を利用しています';
- assert.equal(ctx.roomCopyNeedsReview(grounded,{},false),false);
+test('local readiness requires the exact grounded copy assessed for the current product',()=>{
+ const ctx=copyGuardContext();
+ const item={itemName:'コードレス 掃除機'};
+ const assessment=ctx.localCopyAssessment(item);
+ assert.equal(assessment.ready,true);
+ assert.equal(ctx.roomCopyNeedsReview(assessment.result.text,item,false),false);
+ const unrelated='床の掃除に。\n\n見た目を楽しみながら選べる一品です。\n\n※アフィリエイト広告を利用しています';
+ assert.equal(ctx.roomCopyNeedsReview(unrelated,item,false),true);
+ assert.equal(ctx.roomCopyNeedsReview(assessment.result.text,{itemName:'財布 本革'},false),true);
 });
 
 

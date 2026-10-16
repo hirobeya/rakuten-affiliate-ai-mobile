@@ -204,7 +204,7 @@ function weakStructuredFact(fact={}){
   if(['count','dimension','size','material','numeric'].includes(kind)) return true;
   if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote)) return true;
   if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote)) return true;
-  if(kind==='function'&&['洗える','手洗い','メッシュ','充電式'].includes(quote)) return true;
+  if(kind==='function'&&['洗える','手洗い','メッシュ','充電式','長袖','半袖','春夏','秋冬'].includes(quote)) return true;
   return false;
 }
 
@@ -352,7 +352,10 @@ function localZeroCall(item,learnedIdentity=''){
   // not by themselves explain a buyer's use case. Defer those to verified AI
   // instead of marking a thin title-only description as a finished post.
   const weakGenericAxis=/^(?:素材・構造|生産情報|サイズ|入り数|数値仕様|重量|容量)$/;
+  // A complete, source-checked caption claim can describe what fits inside.
+  // Its capacity axis does not make it equivalent to an isolated size/number.
   const partnerCopy=proposedPartnerCopy?.generic
+    && proposedPartnerCopy.kind!=='caption_claim'
     && weakGenericAxis.test(String(proposedPartnerCopy.axisHints?.[0]||''))
     ?null:proposedPartnerCopy;
   const facts=[];

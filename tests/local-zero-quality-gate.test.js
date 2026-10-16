@@ -63,3 +63,18 @@ test('bare count or size facts cannot complete a local ROOM post',()=>{
     itemPrice:700
   }),null);
 });
+
+test('caption evidence does not turn bare dimensions or a negated claim into a purchase reason',()=>{
+  for(const itemCaption of ['サイズは110cm×90cmです。','布団を収納できない洗濯ネットです。']){
+    assert.equal(localZeroCall({itemName:'洗濯ネット 110cm×90cm 布団',itemCaption}),null);
+  }
+});
+
+test('sleeve or season labels alone remain drafts rather than zero-call completed posts',()=>{
+  for(const spec of ['長袖','半袖','春夏','秋冬']){
+    assert.equal(localZeroCall({itemName:'シャツ '+spec,itemCaption:''}),null,spec);
+  }
+  const result=localZeroCall({itemName:'コードレス 掃除機',itemCaption:''});
+  assert.ok(result,'a separate grounded functional reason must remain available');
+  assert.equal(result.groq.totalCalls,0);
+});
