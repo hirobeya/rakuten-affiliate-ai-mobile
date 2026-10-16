@@ -352,14 +352,8 @@ function localZeroCall(item,learnedIdentity=''){
   // not by themselves explain a buyer's use case. Defer those to verified AI
   // instead of marking a thin title-only description as a finished post.
   const weakGenericAxis=/^(?:素材・構造|生産情報|サイズ|入り数|数値仕様|重量|容量)$/;
-  // A directly grounded caption claim can explain a concrete use case even
-  // when its decision axis is capacity. Only defer weak specification repeats.
-  const directCaptionReason=proposedPartnerCopy?.source==='itemCaption'
-    && proposedPartnerCopy?.kind==='caption_claim'
-    && String(proposedPartnerCopy?.quote||'').trim().length>=8;
   const partnerCopy=proposedPartnerCopy?.generic
     && weakGenericAxis.test(String(proposedPartnerCopy.axisHints?.[0]||''))
-    && !directCaptionReason
     ?null:proposedPartnerCopy;
   const facts=[];
   const semanticFactKeys=new Set();
