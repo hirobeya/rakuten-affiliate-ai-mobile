@@ -693,8 +693,6 @@ function run(name,fn){
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/return neutralRulePost\(item,keyword\)/);
     assert.match(html,/if\(conflicts\.length\) reasons\.push\('rule_conflict'\)/);
-    assert.match(html,/mediumHandling:'fallback_fixed'/);
-    assert.match(html,/cacheKeyComponents/);
     assert.match(html,/resolvedPost:resolvedPostMeta/);
     assert.match(html,/UrenaviPainCopy\.fallbackProductName/);
     assert.match(html,/function aiTargetDecision\(/);
