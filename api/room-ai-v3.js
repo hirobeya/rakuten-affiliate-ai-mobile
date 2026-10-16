@@ -373,7 +373,10 @@ function localZeroCall(item,learnedIdentity=''){
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
   ):[];
-  const selectedGroundedValues=groundedValues.filter(v=>String(copy?.text||'').includes(String(v?.text||'').trim()));
+  // A purchase reason must appear as a complete rendered line. A substring
+  // inside a title, a generic hook, or an unrelated specification is not proof.
+  const renderedCopyLines=new Set(String(copy?.text||'').split(/\n+/).map(line=>line.trim()).filter(Boolean));
+  const selectedGroundedValues=groundedValues.filter(v=>renderedCopyLines.has(String(v?.text||'').trim()));
   const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structuredValueHasStrongReason(v,structuredFacts,identity));
   const useStructuredText=!partnerCopy
     && structuredSafe
