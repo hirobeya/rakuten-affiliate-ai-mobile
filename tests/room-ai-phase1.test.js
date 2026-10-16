@@ -713,18 +713,18 @@ function run(name,fn){
 
   await run('client copy accepts only verified AI or the same grounded local assessment',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
-    assert.match(html,/function safeSearchIdentity\\(item\\)/);
-    assert.match(html,/function localCopyAssessment\\(item\\)/);
-    assert.match(html,/function readyV3Post\\(result\\)/);
-    assert.match(html,/function resolvedPost\\(/);
-    assert.match(html,/if\\(gate\\.enabled&&gate\\.status==='fallback'\\) return ''/);
-    assert.match(html,/return neutralRulePost\\(item,keyword\\)/);
-    assert.match(html,/RoomCopyResult\\.canonical\\(data\\) && RoomCopyResult\\.ready\\(data\\)/);
-    assert.match(html,/isV3PreviewResult\\(data\\) && readyV3Post\\(data\\)/);
-    assert.match(html,/const assessment=localCopyAssessment\\(item\\|\\|\\{\\}\\)/);
-    assert.match(html,/if\\(!assessment\\?\\.ready\\)return true/);
-    assert.match(html,/unexpected_ai_contract/);
-    assert.doesNotMatch(html,/const full=validatedFull\\|\\|groundedFallback/);
+    assert.ok(html.includes('function safeSearchIdentity(item)'));
+    assert.ok(html.includes('function localCopyAssessment(item)'));
+    assert.ok(html.includes('function readyV3Post(result)'));
+    assert.ok(html.includes('function resolvedPost('));
+    assert.ok(html.includes("if(gate.enabled&&gate.status==='fallback') return ''"));
+    assert.ok(html.includes('return neutralRulePost(item,keyword)'));
+    assert.ok(html.includes('RoomCopyResult.canonical(data) && RoomCopyResult.ready(data)'));
+    assert.ok(html.includes('isV3PreviewResult(data) && readyV3Post(data)'));
+    assert.ok(html.includes('const assessment=localCopyAssessment(item||{})'));
+    assert.ok(html.includes('if(!assessment?.ready)return true'));
+    assert.ok(html.includes('unexpected_ai_contract'));
+    assert.ok(!html.includes('const full=validatedFull||groundedFallback'));
   });
 
   await run('validation cache hash includes prompt and rule versions',()=>{
