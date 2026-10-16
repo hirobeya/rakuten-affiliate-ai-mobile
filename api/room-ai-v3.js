@@ -198,45 +198,6 @@ function neutralLiteralText(identity,facts,itemPrice){
   return rows.join('\n');
 }
 
-function weakStructuredFact(fact={}){
-  const kind=String(fact?.kind||'');
-  const quote=normalize(fact?.quote);
-  if(['count','dimension','size','material','numeric'].includes(kind)) return true;
-  if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote)) return true;
-  if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote)) return true;
-  if(kind==='function'&&['洗える','手洗い','メッシュ','充電式','長袖','半袖','春夏','秋冬'].includes(quote)) return true;
-  return false;
-}
-
-function identityAlreadyStatesFact(identity='',quote=''){
-  const id=normalize(identity).toLocaleLowerCase('ja-JP');
-  const q=normalize(quote).toLocaleLowerCase('ja-JP');
-  if(!id||!q) return false;
-  if(id.includes(q)) return true;
-  const variants={
-    '折りたたみ':['折り畳み'],
-    '折り畳み':['折りたたみ'],
-    '伸縮式':['伸縮'],
-    '伸縮':['伸縮式']
-  };
-  return (variants[q]||[]).some(v=>id.includes(v));
-}
-
-function structuredValueHasStrongReason(value={},facts=[],identity=''){
-  const sourceFacts=Array.isArray(facts)?facts:[];
-  const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
-  if(!refs.length||!sourceFacts.length) return false;
-  return refs.some(ref=>{
-    const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
-    return fact&&!weakStructuredFact(fact)&&!identityAlreadyStatesFact(identity,fact.quote);
-  });
-}
-
-function hasStrongStructuredReason(values=[],facts=[],identity=''){
-  const rows=Array.isArray(values)?values:[];
-  return rows.some(value=>structuredValueHasStrongReason(value,facts,identity));
-}
-
 const LOCAL_PARTNER_ALLOWED_PREVENTION=[
   '型崩れ防止','形崩れ防止','絡まり防止','色移り防止','毛玉防止','シワ防止'
 ];
@@ -387,13 +348,13 @@ function localZeroCall(item,learnedIdentity=''){
   // inside a title, a generic hook, or an unrelated specification is not proof.
   const renderedCopyLines=new Set(String(copy?.text||'').split(/\n+/).map(line=>line.trim()).filter(Boolean));
   const selectedGroundedValues=groundedValues.filter(v=>renderedCopyLines.has(String(v?.text||'').trim()));
-  const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structuredValueHasStrongReason(v,structuredFacts,identity));
+  const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structured.valueHasStrongReason(v,structuredFacts,identity));
   const useStructuredText=!partnerCopy
     && structuredSafe
     && structuredFacts.length>0
     && selectedGroundedValues.length>0
     && !hasWeakStructuredPiggyback
-    && hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
+    && selectedGroundedValues.some(v=>structured.valueHasStrongReason(v,structuredFacts,identity));
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;

@@ -210,13 +210,30 @@
   }
   // Rank evidence by usefulness rather than source order. The score only
   // selects verified sentences; it never generates unsupported product claims.
+  function valueHasStrongReason(value={},facts=[],identity=''){
+    const norm=x=>normalize(x).normalize('NFKC');
+    const refs=(value.factRefs||[value.factRef]).filter(Boolean).map(norm);
+    const id=norm(identity).toLocaleLowerCase('ja-JP');
+    return refs.some(ref=>{
+      const fact=(Array.isArray(facts)?facts:[]).find(f=>norm(f?.quote)===ref);
+      if(!fact)return false;
+      const quote=norm(fact.quote),kind=String(fact.kind||'');
+      if(['count','dimension','size','material','numeric'].includes(kind))return false;
+      if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote))return false;
+      if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote))return false;
+      if(kind==='function'&&['洗える','手洗い','メッシュ','充電式','長袖','半袖','春夏','秋冬'].includes(quote))return false;
+      const q=quote.toLocaleLowerCase('ja-JP');
+      const variants={'折りたたみ':['折り畳み'],'折り畳み':['折りたたみ'],'伸縮式':['伸縮'],'伸縮':['伸縮式']};
+      return Boolean(q)&&!id.includes(q)&&!(variants[q]||[]).some(v=>id.includes(v));
+    });
+  }
   function purchaseReasons(understanding,values){
     const scored=values.map((value,index)=>{
       const quote=String(value.factRef||'');
       const kind=/^(?:\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
       const isUseCase=/対応|使|洗|移動|折り|掛け|風対策|コード|包装/.test(value.text||'');
       const score=(kind==='feature'?3:0)+(isUseCase?3:0)+(Array.isArray(value.factRefs)&&value.factRefs.length>1?1:0);
-      return {text:value.text,quotes:value.factRefs||[value.factRef],score,index};
+      return {...value,quotes:value.factRefs||[value.factRef],score,index};
     });
     return scored.sort((a,b)=>b.score-a.score||a.index-b.index);
   }
@@ -240,17 +257,17 @@
     const lines=[];
     // Prefer a practical benefit over inventory-like quantity statements.
     const ranked=purchaseReasons(understanding,values);
-    const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
+    const chosen=ranked.filter(x=>x.score>=3&&valueHasStrongReason(x,facts,understanding.identity)).slice(0,3);
     for(const value of chosen) for(const quote of value.quotes) used.add(quote);
     if(lead&&chosen.length){
       // Keep two grammatical sentences; joining arbitrary Japanese clauses with a comma creates broken copy.
       lines.push(lead,chosen[0].text);
       lines.push('',introduction);
-      if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
+      if(chosen.length>1) lines.push(...chosen.slice(1).map(x=>x.text));
     }else{
       if(lead) lines.push(lead,'');
       lines.push(introduction);
-      if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
+      if(chosen.length) lines.push('',...chosen.map(x=>x.text));
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
     if(remaining.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','商品の特徴');for(const x of specs) lines.push('・'+x.quote);}}
@@ -266,12 +283,12 @@
     // Publication requires a purchase reason that was actually selected and
     // rendered as its own sentence, not merely mentioned inside the title.
     const selected=purchaseReasons(result.understanding,result.values||[])
-      .filter(value=>value.score>=3).slice(0,3);
+      .filter(value=>value.score>=3&&valueHasStrongReason(value,result.facts,result.understanding.identity)).slice(0,3);
     const body=String(result.text||'').split('商品の特徴')[0].split('価格：')[0];
     const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
     const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
     return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,assess,RISK};
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,compose,assess,RISK};
 });
