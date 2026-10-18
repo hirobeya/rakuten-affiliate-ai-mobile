@@ -32,3 +32,9 @@ test('semantic inspection blocks quotes cut before trailing negation',()=>{
   assert.ok(contract.inspect(item,draft).failures.some(x=>x.rule==='quote_cuts_negation'),itemCaption);
  }
 });
+
+test('semantic inspection preserves an explicitly stated negative limitation',()=>{
+ const item={itemName:'バイクグローブ',itemCaption:'防水不可'};
+ const draft={product:{what:'バイクグローブ',acts_on:'手',acts_on_quote:'バイクグローブ'},sentences:[{text:'防水不可のバイクグローブを選ぶときに。',kinds:['spec'],quotes:['防水不可']}]};
+ assert.ok(!contract.inspect(item,draft).failures.some(x=>x.rule==='quote_cuts_negation'));
+});
