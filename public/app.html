@@ -1073,7 +1073,7 @@ input,select{
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
-<script src="/email-link-login.js?v=20261018-1"></script>
+<script src="/email-link-login.js?v=20261018-2"></script>
 <script>
 
 const SUPABASE_URL=
@@ -1132,13 +1132,14 @@ document.getElementById('verifyEmailLoginLink').addEventListener('click',async()
   const input=document.getElementById('emailLoginLink'),button=document.getElementById('verifyEmailLoginLink');
   if(button.disabled)return;
   button.disabled=true;
+  accessGeneration++; // Ignore an older startup check while this explicit login runs.
   try{
     setAuthMessage('ログインリンクを確認しています。');
     const value=input.value;input.value='';
     const session=await authDeadline(UrenaviEmailLinkLogin.signIn(value,{supabaseUrl:SUPABASE_URL,auth:sb.auth}),12000);
     await showApp(session);
-  }catch{
-    setAuthMessage('リンクを確認できませんでした。最新の未使用のログインリンクをコピーしてお試しください。','err');
+  }catch(error){
+    setAuthMessage(UrenaviEmailLinkLogin.errorMessage(error),'err');
   }finally{input.value='';button.disabled=false;}
 });
 
