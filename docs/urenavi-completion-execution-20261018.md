@@ -33,3 +33,15 @@
 - 追加5回帰を含むnode --test: 425/425成功。npm run vercel-build: exit 0。git diff --check成功。実Groq通信はしていない。
 - strict横断監査はexit1。780件はすべて商品名のみ、草稿249、ready8、ready文のguard変更0/拒否0。112の合格基準を下げていない。この入力集合での完成率改善とは報告しない。
 - 本番DBへの読み取りで無料検索quota/session検証/AI日次上限の3関数が存在することを確認。関数の存在を実認証・無料境界の合格とは扱わない。DB変更なし。
+
+## 次工程：無料検索と有料生成の画面境界
+既存searchは無料認証を採用済みなのにapp起動statusだけが有料契約を要求するため、正規の無料アカウントが検索画面へ到達できない。app専用statusを追加し、有料確認が明示的403の時だけ既存のBearer/session検証へ戻す。既存status/pro-status、生成API、記憶端末cookie、有料認可は維持。無料アカウントには投稿文コピー・表示を開放しない。失効・不正セッション・DB/Stripe障害は無料へ降格させず拒否。新規登録設定・販売停止・決済を変更しないため、未登録者の新規受付は引き続き未完了。
+
+## 続行した修正と実際の限界
+- app専用statusを実装。無料アカウントのBearer/session検証で検索画面への入口を許可し、有料status/pro-statusや生成APIは維持。無料では全コピー導線の共通判定を拒否し、生成文の代わりに有料機能表示を出す。登録済み無料アカウントでの本番実操作は未確認。
+- titleの肯定機能に対してcaption/catchcopyが否定してもlocalZeroCallがreadyを返すことを修正前に再現（コードレス、型崩れ防止）。ブラウザとサーバーで3原文の矛盾検査を共有した。不可・できません等を含む関連否定だけを拒否し、無関係な否定文では正例を維持。商品名別分岐は追加しない。
+- 追加7ケースを含め全432テスト成功、npm run vercel-build成功。strict監査は780件/草稿249/ready8のままexit1、未達を維持。
+- 前段a584104fe19a2816ca9414a93197c3e51c101796は両CI成功（39106832102、39106832097）、Preview dpl_67pP3jDoLZmeZpnZLtf5RRsnj9ph READY/target=null/SHA一致。
+- 実ブラウザはVercelログイン画面。Vercel接続の保護URL取得もdeployment_authentication_required/302で失敗。ローカルVercel CLIは未導入。この制約をアプリ認証成功やPreview実操作成功と読み替えない。
+- 公式条件を確認: Vercel Hobbyは非商用個人利用限定（https://vercel.com/docs/plans/hobby）。ただし今回のチーム取得結果には契約planがなく実契約は未確認。Groqは組織単位の複数レート制限で、正確な枠はアカウントLimitsが必要（https://console.groq.com/docs/rate-limits）。本文を長く保持する変更の実トークン負荷も未実測。楽天規約は公式英訳を確認したが日本語原本が優先と明記され、今回のサービスへの書面許可は未確認（https://webservice.rakuten.co.jp/guide/rule）。
+- 未完: 実Groqの自然さ・購入価値・トークン負荷、認証後Preview一周、iPhone実機、無料新規登録、商用条件、成果連携・クラウド同期。外部制約だけで全残作業が止まっているとは主張しない。販売完成とは判定しない。

@@ -38,6 +38,18 @@
   ];
   // Search returns catchcopy separately; include it as quoted source evidence rather than discarding it.
   function sourceParts(item){return ['itemName','itemCaption','catchcopy'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
+  function hasSourceFactConflict(item,facts=[]){
+    const parts=sourceParts(item);
+    for(const fact of facts){
+      const quote=normalize(fact?.quote);
+      if(!quote)continue;
+      const escaped=quote.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const negated=new RegExp('(?:非|不|未)\\s*'+escaped+'|'+escaped+'\\s*(?:ではない|ではありません|非対応|未対応|対象外|不可|なし|無し|不要|できない|できません|しない|していません)','i');
+      if(parts.some(part=>negated.test(part.text)))return true;
+    }
+    const explicitCord=/(?:電源|AC)?コード(?:長)?\s*[:：]?\s*\d+(?:\.\d+)?\s*(?:m|cm)|\d+(?:\.\d+)?\s*(?:m|cm)\s*の(?:ロング)?コード|ロングコード/i;
+    return parts.some((part,i)=>/コードレス/i.test(part.text)&&parts.some((other,j)=>i!==j&&explicitCord.test(other.text)));
+  }
   function occurrence(parts,quote){
     const q=normalize(quote); if(!q||RISK.test(q)||(BAD_CONTEXT.test(q)&&q!=='フィルター交換不要')) return null;
     for(const part of parts){
@@ -294,8 +306,9 @@
     const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
     const titleBound=factsAreTitleBound(result.facts);
-    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound;
-    return {ready,result,reason:ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
+    const sourceConflict=hasSourceFactConflict(item,result.facts);
+    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
+    return {ready,result,reason:sourceConflict?'source_fact_conflict':ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,compose,assess,RISK};
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,hasSourceFactConflict,compose,assess,RISK};
 });

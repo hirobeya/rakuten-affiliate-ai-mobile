@@ -1051,7 +1051,7 @@ input,select{
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/structured-room-copy.js?v=20261016-source-association-1"></script>
+<script src="/structured-room-copy.js?v=20261018-source-contract-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/room-today-plan.js"></script>
@@ -1245,7 +1245,7 @@ async function showApp(session) {
   const timeout=setTimeout(()=>controller.abort(),10000);
   if(!wasVisible) authGate.style.display='flex';
   try {
-    const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
+    const response=await fetch('/api/access?action=app-status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
     const access=typeof response.json==='function'?await response.json().catch(()=>({})):{};
@@ -3177,6 +3177,7 @@ function isFullyReviewedCopyState(s){
 }
 
 function postReady(i,p='room'){
+  if(currentAccessPlan==='free') return false;
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
   const text=String(post(i,p)||'').trim();
@@ -3184,6 +3185,7 @@ function postReady(i,p='room'){
 }
 
 function postDisplay(i,p='room'){
+  if(currentAccessPlan==='free') return '投稿文生成は有料機能です。商品検索は無料で利用できます。';
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
     if(s.state?.state==='error'||s.state?.state==='restored') return '';
