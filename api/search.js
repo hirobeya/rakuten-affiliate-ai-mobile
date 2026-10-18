@@ -1,4 +1,5 @@
 const {authorize,authenticateSearchUser,db} = require('../lib/billing');
+const {boundedSource}=require('../lib/product-source');
 const clamp=(n,min=0,max=100)=>
 Math.max(
   min,
@@ -844,10 +845,10 @@ function createHandler(deps={}){
         0,
 
         catchcopy:
-        String(x.catchcopy||'').slice(0,500),
+        boundedSource(x.catchcopy,500),
 
         itemCaption:
-        String(x.itemCaption||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,1200),
+        boundedSource(x.itemCaption,12000),
 
         genreId:
         String(x.genreId||''),
