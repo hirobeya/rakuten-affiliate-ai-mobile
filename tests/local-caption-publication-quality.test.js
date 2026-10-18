@@ -23,3 +23,12 @@ test('caption publishing skips decorative promotions and guarantees but can sele
     assert.ok(!selected.text.includes(noisy));
   }
 });
+test('shared title keywords cannot promote another product or accessory claim to the main item',()=>{
+  for(const scope of ['同じシリーズの','関連商品の','別売の','付属の']){
+    const item={itemName:'収納ボックス 収納付き',itemCaption:scope+'収納付きベッドは持ち手付きで簡単に移動できます。'};
+    assert.equal(localZeroCall(item),null,scope);
+    const clean='収納ボックスは持ち手を掛けて収納できます。';
+    const candidate=composeLocalPartnerCopy({...item,itemCaption:item.itemCaption+' '+clean,identity:'収納ボックス'});
+    assert.equal(candidate?.quote,clean);
+  }
+});
