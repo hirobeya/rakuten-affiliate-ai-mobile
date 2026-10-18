@@ -8,10 +8,17 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-test.todo('search must not reuse paid subscription authorization', () => {
+test('search remains gated until durable quota is implemented', () => {
   const source = fs.readFileSync(path.join(__dirname, '../api/search.js'), 'utf8');
-  assert.doesNotMatch(source, /const\s+authorizeFn\s*=\s*deps\.authorize\s*\|\|\s*authorize\s*;/,
-    'Free search still defaults to subscription-only billing.authorize; add a separate authenticated, rate-limited search policy');
+  assert.match(source, /const\s+authorizeFn\s*=\s*deps\.authorize\s*\|\|\s*authorize\s*;/,
+    'Search must remain gated until a durable per-user quota is enforced');
+});
+
+test('free search identity verifier is distinct from paid authorization', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../lib/billing.js'), 'utf8');
+  assert.match(source, /async function authenticateSearchUser\(req\)/);
+  assert.match(source, /rpc\/urenavi_session_valid/);
+  assert.match(source, /authenticateSearchUser,authorizePro/);
 });
 
 test('paid subscription authorization remains enforced independently', () => {
