@@ -8,10 +8,11 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-test('search remains gated until durable quota is implemented', () => {
+test('search uses independent verified identity and atomic quota', () => {
   const source = fs.readFileSync(path.join(__dirname, '../api/search.js'), 'utf8');
-  assert.match(source, /const\s+authorizeFn\s*=\s*deps\.authorize\s*\|\|\s*authorize\s*;/,
-    'Search must remain gated until a durable per-user quota is enforced');
+  assert.match(source, /const\s+authorizeFn\s*=\s*deps\.authorize\s*\|\|\s*authenticateSearchUser\s*;/);
+  assert.match(source, /rpc\/urenavi_claim_search_daily/);
+  assert.match(source, /if\(!allowed\) return res\.status\(429\)/);
 });
 
 test('free search identity verifier is distinct from paid authorization', () => {
