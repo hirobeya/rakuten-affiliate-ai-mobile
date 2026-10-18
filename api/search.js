@@ -1,4 +1,4 @@
-const {authorize} = require('../lib/billing');
+const {authorize,authenticateSearchUser,db} = require('../lib/billing');
 const clamp=(n,min=0,max=100)=>
 Math.max(
   min,
@@ -470,7 +470,14 @@ function profitabilityScore(x){
 
 
 function createHandler(deps={}){
-  const authorizeFn=deps.authorize||authorize;
+  const authorizeFn=deps.authorize||authenticateSearchUser;
+  const claimSearchFn=deps.claimSearch|| (async userId=>{
+    const date=new Date().toISOString().slice(0,10);
+    const rows=await db('rpc/urenavi_claim_search_daily',{
+      method:'POST',body:JSON.stringify({p_user_id:userId,p_local_date:date,p_limit:30})
+    });
+    return Array.isArray(rows) && rows.length===1 && rows[0].allowed===true;
+  });
   return async function handler(req,res){
 
   if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
@@ -546,6 +553,10 @@ function createHandler(deps={}){
 
 
     if (keyword.length > 128 || !['standard','-reviewCount','-reviewAverage','-affiliateRate','+itemPrice'].includes(userSort) || [minPrice,maxPrice].some(x=>x!==null && (!Number.isSafeInteger(x) || x<0)) || (minPrice!==null && maxPrice!==null && minPrice>maxPrice)) return res.status(400).json({message:'検索条件を確認してください。'});
+
+    if(!auth.user?.id && !deps.authorize) return res.status(401).json({message:'Authentication required'});
+    const allowed=await claimSearchFn(auth.user?.id);
+    if(!allowed) return res.status(429).json({message:'本日の無料検索回数の上限に達しました。'});
 
     const appId=
     process.env.RAKUTEN_APP_ID;
