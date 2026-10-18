@@ -14,6 +14,7 @@ const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflic
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
+const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -81,7 +82,7 @@ const TYPE_SUFFIXES=sharedTypeSuffixes();
 
 function validateLiteralIdentity(item,value){
   const title=normalize(item?.itemName),identity=normalize(value);
-  if(!identity||!title.includes(identity)||accessoryScoped(title,identity)) return null;
+  if(!identity||isDescriptorIdentity(identity)||!title.includes(identity)||accessoryScoped(title,identity)) return null;
   const raw={productType:{value:identity,source:'itemName',evidence:identity},features:[],sellingPoints:[],confidence:'high'};
   const validation=validateAiExtraction(raw,{itemName:title,itemCaption:item?.itemCaption||''},{imageAvailable:false});
   if(validation?.productType?.valid!==true||!['simple','simple_partial'].includes(validation.mode)) return null;
