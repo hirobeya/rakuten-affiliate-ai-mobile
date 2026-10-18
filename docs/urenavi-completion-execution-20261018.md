@@ -60,3 +60,7 @@
 「収納ボックス 収納付き」に「同じシリーズの収納付きベッドは持ち手付きで簡単に移動できます。」を与えると、本体の機能としてlocalZeroCallがreadyを返す不具合を再現。共有語の一致は本体との関連付けの証拠ではない。caption候補で関連商品・同シリーズ・別売・付属品等の明示スコープを検出し、ローカル公開では採用しない。別の本商品を明示した機能文は従来どおり採用する。商品名や商品IDの例外は追加していない。全440テスト・vercel-build・diff check成功。
 
 e618650ce4b211dd2e3bcb7c9eef5951264d0a4bは両CI成功（39108463414、39108463396）。Preview dpl_5bZx1zM9ywDd5mposH7Sbiq9rp2Pのビルド完了と実画面確認は別途確認する。認証待ちだけを理由にコード作業全体を停止しない。
+
+## 同一ブラウザでの認証完了導線
+現状はメールのリンクを別ブラウザで開いた後、端末cookie連携に頼る導線しかなく、Preview検証ブラウザに正規Bearer sessionが渡らない。認証リンクを元のアプリ画面の秘密入力欄へ貼り、既存Supabase SDKのverifyOtp({token_hash,type:'email'})で正規セッションを取得する導線を追加する。受け付けるリンクは設定済みSupabase originの/auth/v1/verifyのみ、種別email/magiclinkと単一tokenを必須にする。redirect_toは実行しない。トークンを保存・ログ出力・エラー文へ含めず、入力は検証直後に消去。既存メール方式・認可・販売停止・本番設定は維持。公式根拠 https://supabase.com/docs/guides/auth/auth-email-passwordless 。リンクの存在自体でログイン済みにせず、SDKによる検証とサーバーのsession検証成功が必要。
+同一画面でのリンク検証導線の追加後、全444テスト、vercel-build、diff check成功。実セッションは未取得なので認証成功とは扱わない。リンクを別サービスへ転送することはなく、設定済みSupabase Authへの正規検証だけを行う。

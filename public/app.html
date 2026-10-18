@@ -758,6 +758,14 @@ input,select{
 
     <div id="authMsg" class="authMsg"></div>
 
+    <details style="margin-top:12px;font-size:13px;line-height:1.6">
+      <summary>メールを開いてもログインできない場合</summary>
+      <p>メール内のログインボタンを長押ししてリンクをコピーし、ここに貼り付けてください。このブラウザで認証します。</p>
+      <label for="emailLoginLink">ログインメールのリンク</label>
+      <input id="emailLoginLink" type="password" autocomplete="off" spellcheck="false" autocapitalize="none" aria-label="ログインメールのリンク">
+      <button id="verifyEmailLoginLink" type="button" class="authBtn">ログインリンクで認証</button>
+    </details>
+
     <div class="authNote">
       パスワードは不要です。<br>
       メールに届いたリンクを押すとログインできます。<br>
@@ -1065,6 +1073,7 @@ input,select{
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script src="/email-link-login.js?v=20261018-1"></script>
 <script>
 
 const SUPABASE_URL=
@@ -1118,6 +1127,20 @@ document.getElementById('logoutBtn');
 
 const userMail=
 document.getElementById('userMail');
+
+document.getElementById('verifyEmailLoginLink').addEventListener('click',async()=>{
+  const input=document.getElementById('emailLoginLink'),button=document.getElementById('verifyEmailLoginLink');
+  if(button.disabled)return;
+  button.disabled=true;
+  try{
+    setAuthMessage('ログインリンクを確認しています。');
+    const value=input.value;input.value='';
+    const session=await authDeadline(UrenaviEmailLinkLogin.signIn(value,{supabaseUrl:SUPABASE_URL,auth:sb.auth}),12000);
+    await showApp(session);
+  }catch{
+    setAuthMessage('リンクを確認できませんでした。最新の未使用のログインリンクをコピーしてお試しください。','err');
+  }finally{input.value='';button.disabled=false;}
+});
 
 
 let sendTimer=null;
