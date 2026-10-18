@@ -64,3 +64,6 @@ e618650ce4b211dd2e3bcb7c9eef5951264d0a4bは両CI成功（39108463414、391084633
 ## 同一ブラウザでの認証完了導線
 現状はメールのリンクを別ブラウザで開いた後、端末cookie連携に頼る導線しかなく、Preview検証ブラウザに正規Bearer sessionが渡らない。認証リンクを元のアプリ画面の秘密入力欄へ貼り、既存Supabase SDKのverifyOtp({token_hash,type:'email'})で正規セッションを取得する導線を追加する。受け付けるリンクは設定済みSupabase originの/auth/v1/verifyのみ、種別email/magiclinkと単一tokenを必須にする。redirect_toは実行しない。トークンを保存・ログ出力・エラー文へ含めず、入力は検証直後に消去。既存メール方式・認可・販売停止・本番設定は維持。公式根拠 https://supabase.com/docs/guides/auth/auth-email-passwordless 。リンクの存在自体でログイン済みにせず、SDKによる検証とサーバーのsession検証成功が必要。
 同一画面でのリンク検証導線の追加後、全444テスト、vercel-build、diff check成功。実セッションは未取得なので認証成功とは扱わない。リンクを別サービスへ転送することはなく、設定済みSupabase Authへの正規検証だけを行う。
+
+## Groq待機判定の原文量見積もり
+requiredTokensが商品payloadだけを数え、実際に送るsystem promptとstrict schemaを除外していたため、残り枠が足りると誤判定して次の検証呼出へ進む可能性があった。stageRequestを共有し、実際のmessages/response_formatと同じ内容を見積もる。送信内容・モデル・出力上限3000・semantic使用条件・429停止・再試行方針は変更しない。変更は待機判定の見積もりだけ。測定値とは区別する。保存34件の生成段階の見積もりは6332〜7880/6519〜7750トークンであり、実使用量・アカウント固有枠の実測ではない。全445テスト・vercel-build・diff check成功。固定Previewで同一ブラウザ認証用の入力欄が表示されることを確認。実認証・実Groqは未完了。
