@@ -5,6 +5,31 @@ const fs=require('node:fs'),vm=require('node:vm');
 const {tokenHash,signIn,errorMessage}=require('../public/email-link-login');
 const provider='https://example.supabase.co',token='a'.repeat(64);
 const link=provider+'/auth/v1/verify?token='+token+'&type=magiclink&redirect_to=https://untrusted.test/';
+test('invalid-link diagnostics distinguish fixed causes without revealing submitted credentials',()=>{
+  const cases=[
+    ['', 'empty'],
+    ['not a URL', 'format'],
+    [link.replace(provider,'https://untrusted.test'),'provider'],
+    [provider+'/api/access?action=handoff-approve&code='+token,'path'],
+    [link.replace('magiclink','recovery'),'type'],
+    [provider+'/auth/v1/verify?type=email','token']
+  ];
+  for(const [input,reason] of cases){
+    assert.throws(()=>tokenHash(input,provider),error=>{
+      assert.equal(error.message,'invalid_link_'+reason);
+      const message=errorMessage(error);
+      assert.ok(!message.includes(token));
+      assert.ok(!message.includes('https://'));
+      assert.notEqual(message,errorMessage(Error('verification_failed')));
+      return true;
+    });
+  }
+  // Supabase-format hashes, redirect parameters and surrounding clipboard
+  // whitespace are accepted without following or exposing the redirect.
+  const hash='b'.repeat(56);
+  const valid=provider+'/auth/v1/verify?token='+hash+'&type=magiclink&redirect_to=https%3A%2F%2Fapp.example.test%2Fapp.html%3Fhandoff%3D'+token;
+  assert.equal(tokenHash('  '+valid+'\n',provider),hash);
+});
 test('same-provider magic link is verified by SDK without following its redirect',async()=>{
   let received;const session={access_token:'synthetic-session',user:{id:'test-user'}};
   const result=await signIn(link,{supabaseUrl:provider,auth:{verifyOtp:async args=>{received=args;return {data:{session},error:null};}}});
