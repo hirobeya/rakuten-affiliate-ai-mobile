@@ -2401,6 +2401,15 @@ function buildDebugValidationRowsFor(items,keyword){
       :null;
     return {
       rank:index+1,
+      // Reproduce the exact generation input, not the 300-character display
+      // preview. Explicit fields avoid exporting sessions or other UI state.
+      item:{
+        itemCode:String(item?.itemCode||''),
+        itemName:String(item?.itemName||''),
+        itemCaption:String(item?.itemCaption||''),
+        catchcopy:String(item?.catchcopy||''),
+        itemPrice:Number(item?.itemPrice)||0
+      },
       itemName:String(item?.itemName||''),
       category:String(a?.category||'unknown'),
       usage:String(a?.usage||'unknown'),
