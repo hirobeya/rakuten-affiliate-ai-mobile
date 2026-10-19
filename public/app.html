@@ -3130,6 +3130,9 @@ function ruleSecondOpinion(item,validation,keyword=''){
 
 function resolveAiGate(item,index,keyword=''){
   if(!aiGatesFullOutput) return {enabled:false,status:'off',full:false,reasons:[]};
+  // A position is only meaningful in the active search. Batch diagnostics and
+  // separately fetched items must never inherit another product's verification.
+  if(lastSearchItems[index]!==item) return {enabled:true,status:'fallback',full:false,reasons:['product_not_current'],useLegacy:false};
   const ai=aiRoomResults.get(index);
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};

@@ -60,3 +60,9 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - lib/pro-search.jsの候補出力だけitemCaptionを1200文字で切り、catchcopyも文の途中で切っていた。通常検索は既に12000文字・文境界保持を採用しており、統合経路だけ後段の限定条件が失われる。1200文字以降の「カバーのみ洗濯可能。本体は洗濯不可。」と、500文字境界の「防水不可」を使う回帰を追加し、修正前の欠落を確認。
 - 通常検索と同じboundedSourceを再利用し、itemCaption12000/catchcopy500へ統一。候補ランキング・生成契約・検証条件・API利用制限を変更せず、原文受け渡しだけ修正。全463テストとvercel-build成功。
 - 直前の復元修正3c4aec8は両CI成功、Preview dpl_3nJfCfzdF5ZzeMtgX5WdvySTraMTがREADY・target=null・同SHAを確認。自動配信の開始に時間がかかったが失敗とは判定しない。重複して作成したPreview dpl_F3v2UxtNgp99D6wxQAcTGhEPwFXTはqueuedの間に取消し済み。
+
+## 同日：商品とAI結果の対応
+
+- buildDebugValidationRowsForは別検索のitemsを受け取るが、resolvedPost/resolveAiGateはindexだけで画面のaiRoomResultsを参照していた。同じ順位の別商品へ確認済み文章・full判定を流用する不具合を、実際のHTML関数を動かす2件のVMテストで再現。
+- AI結果の採用前に、active lastSearchItems[index]と対象itemの一致を必須にした。別検索の別商品、同一コードでも原文が変わった商品、独立取得したコピー、負のindexはいずれも確認済み結果を流用しない。現在の画面の商品については従来どおり確認済み文章を返す。サーバーの原文キャッシュ再利用条件は変更しない。
+- 全465テスト・vercel-build成功。検証ブラウザで既存Preview URLを新規表示したが、表示はログイン画面。ユーザーのiPhoneがログイン済みという確認は維持し、こちらのブラウザと混同しない。ログインメール送信、古いmagic link再利用、認証迂回、Groq実呼出は行っていない。
