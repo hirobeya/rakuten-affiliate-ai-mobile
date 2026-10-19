@@ -72,3 +72,12 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - 既存room-copy-integrationの生成→全文検証→publication→RoomCopyResult.readyに、実際のHTMLのコピー可否関数を接続すると、原文一致・全文章検証済みの具体的な1文もUI独自の85文字制限で拒否することを再現。生成・検証契約は具体的な1文を許容しており、文数のための水増しは要求しない。
 - 単純に文字数制限を外す案は既存の洗濯ネット弱文テストを破ったため採用しない。短い文を許すのは、booleanだけではなく、完全なcanonical応答をRoomCopyResult.readyで再検証し、その全文と実際の表示文が完全一致した場合だけ。既存の最終fact-safety guardは必ず通し、ローカル草稿やbooleanだけの弱文は引き続き拒否する。
 - 未完了応答、別の短文への差し替え、根拠なし洗濯ネットの既存回帰、ローカル草稿の拒否を維持。全465テスト・vercel-build成功。これは合成providerでの接続試験であり、実Groq品質の合格ではない。
+
+## 2026-10-20 07:54 JST以降：ログイン成功と端末承認の分離不具合
+
+- IMG_6394でiPhoneのownerログイン成功と開発版の検索画面を再確認。検証ブラウザはログイン画面のまま。本人の認証失敗とは扱わない。
+- 22:46〜22:56 UTCのSupabaseログをrequest.path/request.method/response.status_codeだけで集計。Auth user200が37、session_valid200が36、OTP200が1、verify303が1、token200が1。device_handoffsはGET200が121あるが承認書込みは当該窓にない。最初に短い誤った属性名で取得した空集計は証拠として使わず、正しいネスト属性で再集計した。
+- appの先に登録されたonAuthStateChangeはcleanAuthUrlを同期実行し、pathnameだけへURLを置換していた。後から登録されるaccess-guardの承認はsetTimeout内でqueryのhandoffを読むため、implicit flowのauth fragmentがあるとhandoffが先に消える。実際のcleanAuthUrl→approveHandoffIfPresentをVMで順に実行し、承認が呼ばれない失敗を修正前に再現。
+- cleanupは認証fragment・code・error等を消しつつ、64桁hexのhandoffが重複なく1つある場合だけ承認完了まで保持する。承認成功後は従来どおりURLから消す。不正値・重複値やその他認証クエリは残さない。認証情報はテスト・ログへ入れず合成値のみ使用。
+- 既存Production承認導線に加え、ログイン済みの同じPreviewの端末で承認する導線を追加。本番側へ再ログインする必要なく、同じ既存handoff-approve/status API・ランダムnonce・10分制限・認可確認を使う。既存のProduction経路は保持し、main/Productionや認可条件は変更しない。
+- 3件追加、全468テスト・vercel-build成功。手動画面での本人のログインを失敗と断定したり、旧magic linkを再利用したりしない。承認が実際に検証ブラウザへ届いたという完了判定は、本人の正規承認と新しい画面の確認後だけ行う。

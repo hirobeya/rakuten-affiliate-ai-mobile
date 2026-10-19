@@ -1435,10 +1435,16 @@ function cleanAuthUrl(){
 
   }
 
+  // The auth event schedules device approval after this cleanup. Preserve only
+  // its validated handoff until access-guard confirms approval; remove all
+  // credential/error parameters and the auth fragment immediately.
+  const handoffs=new URLSearchParams(window.location.search).getAll('handoff');
+  const pendingHandoff=handoffs.length===1&&/^[a-f0-9]{64}$/i.test(handoffs[0])
+    ?'?handoff='+handoffs[0]:'';
   history.replaceState(
     {},
     document.title,
-    window.location.pathname
+    window.location.pathname+pendingHandoff
   );
 
 }
@@ -4764,7 +4770,7 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 })();
 </script>
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
-<script src="/access-guard.js?v=20261018-render-contract-1"></script>
+<script src="/access-guard.js?v=20261020-handoff-preserve-1"></script>
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);

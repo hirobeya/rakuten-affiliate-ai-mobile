@@ -169,12 +169,13 @@
     title.textContent='Preview確認用（オーナーのみ）';
 
     const note=document.createElement('div');
-    note.textContent='ログインメールを使わず、本番ウレナビで認証済みの端末情報を使ってPreviewへ入れます。';
+    note.textContent='ログイン済みの端末で承認すると、メールを再送せずにこの検証画面へ入れます。';
 
-    const btn=document.createElement('button');
-    btn.type='button';
-    btn.textContent='本番の認証でPreviewを開く';
-    Object.assign(btn.style,{
+    function approvalButton(label,origin,preview){
+      const button=document.createElement('button');
+      button.type='button';
+      button.textContent=label;
+      Object.assign(button.style,{
       display:'block',
       width:'100%',
       marginTop:'9px',
@@ -184,27 +185,30 @@
       background:'#172a4b',
       color:'#fff',
       fontWeight:'900'
-    });
+      });
+      button.addEventListener('click',()=>prepareApproval(origin,preview));
+      return button;
+    }
 
     const msg=document.createElement('div');
     msg.style.marginTop='8px';
 
-    btn.addEventListener('click',()=>{
+    function prepareApproval(origin,preview){
       const code=randomHandoff();
       localStorage.setItem(HANDOFF_KEY,code);
       startHandoffPolling(true);
 
-      const approveUrl='https://rakuten-affiliate-ai-mobile.vercel.app/api/access?action=handoff-approve&code='+encodeURIComponent(code);
+      const approveUrl=origin+'/api/access?action=handoff-approve&code='+encodeURIComponent(code);
       // A normal link does not depend on popup permission or window.open's
       // null return value with noopener. The existing approval/polling guards remain.
       msg.replaceChildren();
       const explanation=document.createElement('div');
-      explanation.textContent='下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
+      explanation.textContent=preview?'下のリンクを、この開発版にログイン済みのブラウザで開いて承認してください。ログインし直す必要はありません。':'下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
       const approvalLink=document.createElement('a');
       approvalLink.href=approveUrl;
       approvalLink.target='_blank';
       approvalLink.rel='noopener noreferrer';
-      approvalLink.textContent='本番で認証を確認する';
+      approvalLink.textContent=preview?'ログイン済みの開発版で承認する':'本番で認証を確認する';
       Object.assign(approvalLink.style,{display:'block',padding:'12px',marginTop:'8px',textAlign:'center',fontWeight:'900'});
       msg.append(explanation,approvalLink);
       if(typeof QRCode==='function'){
@@ -217,9 +221,11 @@
         msg.append(qrLabel,qr);
         new QRCode(qr,{text:approveUrl,width:256,height:256,correctLevel:QRCode.CorrectLevel.M});
       }
-    });
+    }
 
-    box.append(title,note,btn,msg);
+    const previewBtn=approvalButton('この開発版のログインで承認',window.location.origin,true);
+    const btn=approvalButton('本番の認証でPreviewを開く','https://rakuten-affiliate-ai-mobile.vercel.app',false);
+    box.append(title,note,previewBtn,btn,msg);
     loginBtn.insertAdjacentElement('afterend',box);
   }
 
