@@ -40,3 +40,14 @@ test('oversize or non-text catchcopy is rejected before local/provider processin
     }
   }finally{if(env===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=env;}
 });
+
+test('integrated candidate ranking retains late source conditions just like normal search',()=>{
+  const {rankProductCandidates}=require('../lib/pro-search');
+  const itemCaption='<p>'+('商品説明。'.repeat(250))+'カバーのみ洗濯可能。本体は洗濯不可。</p>';
+  const catchcopy='対応。'+'あ'.repeat(494)+'防水不可';
+  const [candidate]=rankProductCandidates({product_keyword:'収納ボックス'},[{itemCode:'source:integrated',itemName:'収納ボックス',itemPrice:1000,itemCaption,catchcopy}]);
+  assert.equal(candidate.itemCaption,boundedSource(itemCaption,12000));
+  assert.ok(candidate.itemCaption.endsWith('本体は洗濯不可。'));
+  assert.equal(candidate.catchcopy,'対応。');
+  assert.ok(!candidate.catchcopy.endsWith('防水'));
+});

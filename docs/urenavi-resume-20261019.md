@@ -54,3 +54,9 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - durable-session.jsを実行するVMで4系統の不具合を修正前に再現。復元時にrenderのautoAi=true既定値が適用される、表示済み結果を再取得・上書きする、取得中に開始した別検索を上書きする、入力変更やアカウント変更後も古い応答を描画する。
 - 復元を表示専用（autoAi:false/restored:true）とし、保存済みキーワードをrenderへ明示する。結果表示済み、検索中、AI実行中は復元しない。取得前後で画面状態・入力・アカウントを確認し、古い応答による上書きを拒否。表示中の生成結果を消したり、新規AI呼出を始めたりしない。iPhoneで昨夜発生した直接原因と断定せず、独立して再現した不具合として扱う。
 - 5件の回帰テストを追加。node --test全462件成功、vercel-build成功。商品理解・品質基準・AI検証・Groq制限・main/Production/決済は未変更。認証後の実商品による検索→生成→コピー→保存復帰と、無料枠の実測は引き続き未完了。
+
+## 同日：統合候補検索の原文欠落
+
+- lib/pro-search.jsの候補出力だけitemCaptionを1200文字で切り、catchcopyも文の途中で切っていた。通常検索は既に12000文字・文境界保持を採用しており、統合経路だけ後段の限定条件が失われる。1200文字以降の「カバーのみ洗濯可能。本体は洗濯不可。」と、500文字境界の「防水不可」を使う回帰を追加し、修正前の欠落を確認。
+- 通常検索と同じboundedSourceを再利用し、itemCaption12000/catchcopy500へ統一。候補ランキング・生成契約・検証条件・API利用制限を変更せず、原文受け渡しだけ修正。全463テストとvercel-build成功。
+- 直前の復元修正3c4aec8は両CI成功、Preview dpl_3nJfCfzdF5ZzeMtgX5WdvySTraMTがREADY・target=null・同SHAを確認。自動配信の開始に時間がかかったが失敗とは判定しない。重複して作成したPreview dpl_F3v2UxtNgp99D6wxQAcTGhEPwFXTはqueuedの間に取消し済み。
