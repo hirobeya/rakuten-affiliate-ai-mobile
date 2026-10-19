@@ -38,3 +38,12 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - owner用検証JSONがitemCaptionPreviewの300文字しか出力せず、itemCode/catchcopy/全文がなく、入力の忠実な再現に使えない問題を確認。明示した商品5項目だけをitemとして出力する。認証情報や画面の無関係なデータはコピーしない。既存の表示用300文字は維持する。
 - 既存監査のcorpus入力にbatch/searches形式の取り込みを追加。原文が欠けた旧JSONや検索失敗は黙って評価せず、明示的エラー。実export関数→同じitem原文→corpus読込の接続、末尾の限定条件保持、秘密情報除外、owner外拒否のテストを追加。全453テスト成功。
 - 最新版の検索・生成・保存復帰、無料枠成立、iPhone一周は引き続き実測待ち。これらの修正だけで完成とは報告しない。
+
+## 空の検証JSONと稼働状態の再確認
+
+- ユーザーから同じgeneratedAt・keyword空・items空のJSONを2回受領。新しい検索の結果ではないことは確認できるが、どのボタンを押したかや実際のclipboard失敗までは断定しない。
+- 通常検索のexportは空のデータを成功としてコピーできた。一括exportは複数のfetchをawaitした後にwriteTextを呼んでいた。WebKitの仕様ではユーザー操作外のclipboard書込みが拒否され、検索後のコピー失敗時に旧clipboardが残り得る（https://webkit.org/blog/10855/async-clipboard-api/ 、https://bugs.webkit.org/show_bug.cgi?id=222262）。検証データの作成と、本人の別クリックによるコピーを分離。空の通常結果はコピーを止め、作成中は古い表示とコピー可状態を消す。コピー失敗を成功表示せず、表示済みJSONは保持する。検索API・Groq呼出条件は変更しない。
+- 昨日動いていたというユーザーの確認を前提にする。開発用ブラウザの認証状態や検証JSONの転送失敗を、ウレナビ全体の停止と混同しない。10/18基準点からapi/search.js・lib/billing.js・api/access.jsの差分はない。
+- Vercel実ログで13:35 UTCの生成呼出失敗1件（使用量不明）、13:46 UTCのDB401を確認。後者を同時刻のSupabaseログで照合するとsession_validの401が1回、その一方で同RPC200が15回・Auth user200が13回・検索quota確認200が6回ある。全体停止やサービスキー一律無効とは判定できない。環境変数は復号せず存在・対象・更新日時のみ確認し、設定は変更していない。
+- 既存の生成失敗ログはHTTP statusを落としていたため、上限・provider認証・その他通信失敗を区別できなかった。statusと固定failureKindだけを失敗メトリクスへ追加。エラー本文・原文・headersは記録せず、429再試行なし・使用量不明はnullを維持。過去失敗の原因が確定したとは報告しない。
+- 実際のexport関数を用いて空コピー拒否、作成後の明示コピー、clipboard拒否時の表示保持、owner以外拒否を確認。provider失敗は401/403/429/400/503それぞれ1呼出で停止し秘密情報を記録しない。全457テスト成功。

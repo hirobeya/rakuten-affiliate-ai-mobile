@@ -923,8 +923,10 @@ input,select{
 <div id="debugExport" class="debugExport">
   <strong>検証データ出力（プレビュー・owner限定）</strong>
   <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>
-  <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
-  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
+  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">① 5つの検索で検証データを作る</button>
+  <button id="debugPreparedCopyBtn" type="button" disabled style="margin-top:8px">② 作成した検証データをコピー</button>
+  <details style="margin-top:8px"><summary>通常検索の結果だけを送る場合</summary>
+  <button id="debugCopyBtn" type="button">通常検索の結果を作成してコピー</button></details>
   <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
   <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
   <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
@@ -2489,6 +2491,9 @@ async function copyBatchDebugValidation(){
   if(btn?.disabled) return;
 
   btn.disabled=true;
+  if(ta) ta.value='';
+  const preparedCopy=document.getElementById('debugPreparedCopyBtn');
+  if(preparedCopy) preparedCopy.disabled=true;
   btn.textContent='5件を検証中…';
   if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
 
@@ -2540,23 +2545,18 @@ async function copyBatchDebugValidation(){
     const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
     if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
 
-    try{
-      if(navigator.clipboard?.writeText){
-        await navigator.clipboard.writeText(json);
-        btn.textContent='全部コピーしました';
-      }else throw new Error('Clipboard API unavailable');
-    }catch(error){
-      console.warn('batch clipboard copy failed',error);
-      btn.textContent='JSONを表示しました';
-      if(meta) meta.textContent+=' 自動コピーできない場合は下の枠を長押ししてコピーしてください。';
-    }
+    // Network waits lose clipboard user activation on iPhone. Copy only in
+    // a separate explicit click, after the data is ready.
+    if(preparedCopy) preparedCopy.disabled=false;
+    btn.textContent='検証データを作成しました';
+    if(meta) meta.textContent+=' 次に「② 作成した検証データをコピー」を押してください。まだコピーはされていません。';
   }catch(error){
     console.error('batch validation failed',error);
     if(meta) meta.textContent='一括検証を開始できませんでした：'+String(error?.message||'不明なエラー');
     btn.textContent='一括検証エラー';
   }finally{
     btn.disabled=false;
-    setTimeout(()=>{if(btn) btn.textContent='5件まとめて検証 → JSONをコピー';},2600);
+    setTimeout(()=>{if(btn) btn.textContent='① 5つの検索で検証データを作る';},2600);
   }
 }
 
@@ -2572,6 +2572,13 @@ async function copyDebugValidation(){
 
   let json='';
   try{
+    if(!lastSearchKeyword.trim()||!lastSearchItems.length){
+      if(ta) ta.value='';
+      const preparedCopy=document.getElementById('debugPreparedCopyBtn');
+      if(preparedCopy) preparedCopy.disabled=true;
+      if(meta) meta.textContent='検索結果がまだありません。上の「① 5つの検索で検証データを作る」をお使いください。空のデータはコピーしていません。';
+      return;
+    }
     const progress=activeAiProgress();
     if(progress.pending>0){
       if(meta) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。最終結果になるまでJSONはコピーできません。`;
@@ -2629,6 +2636,25 @@ async function copyDebugValidation(){
 
 document.getElementById('debugCopyBtn')?.addEventListener('click',copyDebugValidation);
 document.getElementById('debugBatchBtn')?.addEventListener('click',copyBatchDebugValidation);
+async function copyPreparedDebugValidation(){
+  if(!debugExportAllowed)return;
+  const ta=document.getElementById('debugJson'),meta=document.getElementById('debugJsonMeta'),btn=document.getElementById('debugPreparedCopyBtn');
+  let payload;
+  try{payload=JSON.parse(ta?.value||'');}catch{if(meta)meta.textContent='検証データがまだありません。先に①を押してください。';return;}
+  const valid=payload?.batch===true&&Array.isArray(payload.searches)&&payload.searches.length>0
+    || Array.isArray(payload?.items)&&payload.items.length>0;
+  if(!valid){if(meta)meta.textContent='空のデータはコピーできません。先に①を押してください。';return;}
+  try{
+    // Do not await session checks or network requests before this call.
+    await navigator.clipboard.writeText(ta.value);
+    if(btn)btn.textContent='コピーしました';
+    if(meta)meta.textContent='検証データをコピーしました。このチャットへ貼り付けてください。';
+  }catch{
+    if(btn)btn.textContent='コピーできませんでした';
+    if(meta)meta.textContent='まだコピーされていません。下のJSON欄を長押ししてコピーしてください。以前コピーした内容は今回の結果ではありません。';
+  }
+}
+document.getElementById('debugPreparedCopyBtn')?.addEventListener('click',copyPreparedDebugValidation);
 
 document.getElementById('debugJson')?.addEventListener('focus',e=>{
   // Keep native iOS selection behavior; do not auto-select the full payload.
