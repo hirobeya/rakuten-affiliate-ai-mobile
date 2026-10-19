@@ -66,3 +66,9 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - buildDebugValidationRowsForは別検索のitemsを受け取るが、resolvedPost/resolveAiGateはindexだけで画面のaiRoomResultsを参照していた。同じ順位の別商品へ確認済み文章・full判定を流用する不具合を、実際のHTML関数を動かす2件のVMテストで再現。
 - AI結果の採用前に、active lastSearchItems[index]と対象itemの一致を必須にした。別検索の別商品、同一コードでも原文が変わった商品、独立取得したコピー、負のindexはいずれも確認済み結果を流用しない。現在の画面の商品については従来どおり確認済み文章を返す。サーバーの原文キャッシュ再利用条件は変更しない。
 - 全465テスト・vercel-build成功。検証ブラウザで既存Preview URLを新規表示したが、表示はログイン画面。ユーザーのiPhoneがログイン済みという確認は維持し、こちらのブラウザと混同しない。ログインメール送信、古いmagic link再利用、認証迂回、Groq実呼出は行っていない。
+
+## 同日：サーバー完成文からUIコピーへの接続
+
+- 既存room-copy-integrationの生成→全文検証→publication→RoomCopyResult.readyに、実際のHTMLのコピー可否関数を接続すると、原文一致・全文章検証済みの具体的な1文もUI独自の85文字制限で拒否することを再現。生成・検証契約は具体的な1文を許容しており、文数のための水増しは要求しない。
+- 単純に文字数制限を外す案は既存の洗濯ネット弱文テストを破ったため採用しない。短い文を許すのは、booleanだけではなく、完全なcanonical応答をRoomCopyResult.readyで再検証し、その全文と実際の表示文が完全一致した場合だけ。既存の最終fact-safety guardは必ず通し、ローカル草稿やbooleanだけの弱文は引き続き拒否する。
+- 未完了応答、別の短文への差し替え、根拠なし洗濯ネットの既存回帰、ローカル草稿の拒否を維持。全465テスト・vercel-build成功。これは合成providerでの接続試験であり、実Groq品質の合格ではない。

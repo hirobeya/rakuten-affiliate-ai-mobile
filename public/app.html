@@ -3211,10 +3211,13 @@ function aiPostState(i){
   return {index,target,state,gate:resolveAiGate(i,index,lastSearchKeyword)};
 }
 
-function roomCopyNeedsReview(text,item,validatedByServer=false){
+function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=null){
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  if(lines.length<2&&body.length<85)return true;
+  // A short post may pass only with the complete canonical review for this
+  // exact text. A boolean flag alone cannot exempt a weak draft.
+  const verifiedText=validatedByServer&&typeof RoomCopyResult!=='undefined'?RoomCopyResult.ready(verifiedResult):'';
+  if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||'')))return true;
   // Publication safety is enforced at the final copy boundary for every route.
   // Draft builders remain responsible only for generating drafts.
   const guard=window.UrenaviFactSafety?.guardUnsupportedBenefitCopy;
@@ -3243,7 +3246,7 @@ function postReady(i,p='room'){
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
   const text=String(post(i,p)||'').trim();
-  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s));
+  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data);
 }
 
 function postDisplay(i,p='room'){
@@ -3254,7 +3257,7 @@ function postDisplay(i,p='room'){
     return '商品内容を確認中です。';
   }
   const text=String(post(i,p)||'').trim();
-  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
+  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
 
