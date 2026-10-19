@@ -152,6 +152,16 @@
     const loginBtn=document.getElementById('loginBtn');
     if(!loginBtn || document.getElementById('previewOwnerAccess')) return;
 
+    const incoming=new URLSearchParams(window.location.search).getAll('handoff');
+    if(incoming.length===1&&/^[a-f0-9]{64}$/i.test(incoming[0])){
+      const hint=document.createElement('div');
+      hint.id='previewOwnerAccess';
+      hint.textContent='端末接続の承認画面です。この画面にログイン表示が出ない場合は、同じリンクを、さきほどウレナビにログインしたブラウザで開いてください。ブラウザ間でログイン状態は共有されません。';
+      Object.assign(hint.style,{marginTop:'12px',padding:'12px',border:'1px solid #bfd3ee',borderRadius:'13px',background:'#f3f8ff',lineHeight:'1.6'});
+      loginBtn.insertAdjacentElement('afterend',hint);
+      return;
+    }
+
     const box=document.createElement('div');
     box.id='previewOwnerAccess';
     Object.assign(box.style,{
@@ -198,7 +208,10 @@
       localStorage.setItem(HANDOFF_KEY,code);
       startHandoffPolling(true);
 
-      const approveUrl=origin+'/api/access?action=handoff-approve&code='+encodeURIComponent(code);
+      // The app can recover its Supabase session and send the bearer token.
+      // Direct API navigation has only cookies and cannot read that session.
+      // Keep the existing production route, whose app is not changed here.
+      const approveUrl=origin+(preview?'/app.html?handoff=':'/api/access?action=handoff-approve&code=')+encodeURIComponent(code);
       // A normal link does not depend on popup permission or window.open's
       // null return value with noopener. The existing approval/polling guards remain.
       msg.replaceChildren();

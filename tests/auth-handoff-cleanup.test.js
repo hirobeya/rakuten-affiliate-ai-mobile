@@ -29,12 +29,15 @@ test('cleanup never preserves invalid, duplicated, or unrelated authentication q
 test('Preview device approval uses its own logged-in origin and retains the production option',async()=>{
  const nodes=[];function node(tag){const n={tag,style:{},children:[],listeners:{},append(...xs){this.children.push(...xs);},replaceChildren(...xs){this.children=xs;},setAttribute(){},addEventListener(type,fn){this.listeners[type]=fn;},insertAdjacentElement(where,child){nodes.push(child);}};nodes.push(n);return n;}
  const login=node('button'),storage=new Map(),polls=[],qrs=[];
- const ctx={window:{location:{origin:'https://current-preview.example.test'}},document:{getElementById:id=>id==='loginBtn'?login:null,createElement:node},fetch:async()=>({ok:true,json:async()=>({preview:true})}),localStorage:{setItem:(k,v)=>storage.set(k,v)},HANDOFF_KEY:'pending',randomHandoff:()=> 'd'.repeat(64),startHandoffPolling:x=>polls.push(x),QRCode:class{static CorrectLevel={M:1};constructor(el,opts){qrs.push(opts.text);}}};
+ const ctx={window:{location:{origin:'https://current-preview.example.test',search:''}},URLSearchParams,document:{getElementById:id=>id==='loginBtn'?login:null,createElement:node},fetch:async()=>({ok:true,json:async()=>({preview:true})}),localStorage:{setItem:(k,v)=>storage.set(k,v)},HANDOFF_KEY:'pending',randomHandoff:()=> 'd'.repeat(64),startHandoffPolling:x=>polls.push(x),QRCode:class{static CorrectLevel={M:1};constructor(el,opts){qrs.push(opts.text);}}};
  vm.createContext(ctx);vm.runInContext(guard.slice(guard.indexOf('  async function installPreviewOwnerAccess('),guard.indexOf('  function installRoomPostCopyFix(')),ctx);
  await ctx.installPreviewOwnerAccess();
  const buttons=nodes.filter(n=>n.tag==='button'&&n.listeners.click);
  const preview=buttons.find(n=>n.textContent==='この開発版のログインで承認');assert.ok(preview);preview.listeners.click();
- assert.equal(new URL(qrs[0]).origin,'https://current-preview.example.test');assert.equal(new URL(qrs[0]).pathname,'/api/access');assert.equal(new URL(qrs[0]).searchParams.get('action'),'handoff-approve');assert.deepEqual(polls,[true]);assert.equal(storage.get('pending'),'d'.repeat(64));
+ assert.equal(new URL(qrs[0]).origin,'https://current-preview.example.test');assert.equal(new URL(qrs[0]).pathname,'/app.html');assert.equal(new URL(qrs[0]).searchParams.get('handoff'),'d'.repeat(64));assert.deepEqual(polls,[true]);assert.equal(storage.get('pending'),'d'.repeat(64));
  buttons.find(n=>n.textContent==='本番の認証でPreviewを開く').listeners.click();
- assert.equal(new URL(qrs[1]).origin,'https://rakuten-affiliate-ai-mobile.vercel.app');assert.deepEqual(polls,[true,true]);
+ assert.equal(new URL(qrs[1]).origin,'https://rakuten-affiliate-ai-mobile.vercel.app');assert.equal(new URL(qrs[1]).pathname,'/api/access');assert.deepEqual(polls,[true,true]);
+ const before=nodes.length;ctx.window.location.search='?handoff='+'e'.repeat(64);await ctx.installPreviewOwnerAccess();
+ assert.equal(nodes.slice(before).filter(n=>n.tag==='button'&&n.listeners.click).length,0);
+ assert.ok(nodes.slice(before).some(n=>n.textContent?.includes('ブラウザ間でログイン状態は共有されません')));
 });

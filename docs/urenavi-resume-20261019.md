@@ -81,3 +81,10 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - cleanupは認証fragment・code・error等を消しつつ、64桁hexのhandoffが重複なく1つある場合だけ承認完了まで保持する。承認成功後は従来どおりURLから消す。不正値・重複値やその他認証クエリは残さない。認証情報はテスト・ログへ入れず合成値のみ使用。
 - 既存Production承認導線に加え、ログイン済みの同じPreviewの端末で承認する導線を追加。本番側へ再ログインする必要なく、同じ既存handoff-approve/status API・ランダムnonce・10分制限・認可確認を使う。既存のProduction経路は保持し、main/Productionや認可条件は変更しない。
 - 3件追加、全468テスト・vercel-build成功。手動画面での本人のログインを失敗と断定したり、旧magic linkを再利用したりしない。承認が実際に検証ブラウザへ届いたという完了判定は、本人の正規承認と新しい画面の確認後だけ行う。
+
+## 2026-10-20 08:10 JST：直接API承認リンクの修正
+
+- IMG_6395はChatGPTから開いた画面にAuthentication requiredのJSONが表示されている。操作待ちではなく認証できない応答。前のChromeのownerログイン成功とは区別する。APIへ直接ナビゲーションするとブラウザcookieだけが送られ、アプリのSupabase保存セッションをAuthorizationへ付けられない。
+- Previewの承認QR/リンクはapp.html?handoff=へ変更。通常のアプリ初期化が保存済みSDKセッションを復元し、既存approveHandoffIfPresentがBearer付きで同じ承認APIを呼ぶ。正規認可・nonce・期限・claimの仕組みは維持。本番の導線と本番コードは未変更。
+- incoming handoffの画面で未認証の場合は、ログイン済みブラウザで同じリンクを開く案内を表示。そこでさらに別のhandoffを作る操作を表示しない。ブラウザ間でセッションを自動共有できるとは説明しない。
+- 実際のUI生成関数のVM試験でPreviewは/app.html?handoff、本番は従来の/api/access、incomingでは承認コード再発行ボタンがないことを確認。前段のauth cleanup→Bearer承認→URL削除の回帰も維持。全468テスト・vercel-build成功。実承認の成功は引き続き本人の承認後に画面で確認する。
