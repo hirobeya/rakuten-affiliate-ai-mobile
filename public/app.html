@@ -1073,7 +1073,7 @@ input,select{
 <script src="/room-operations.js"></script>
 <script src="/room-operations-panel.js"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
-<script src="/return-state.js?v=20260918-8"></script>
+<script src="/return-state.js?v=20261020-display-only-restore"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script src="/email-link-login.js?v=20261019-1"></script>
 <script>
@@ -3503,11 +3503,12 @@ function compare(
 
 function render(
   a,
-  {autoAi=true,restored=false}={}
+  {autoAi=true,restored=false,keyword=lastSearchKeyword}={}
 ){
 
   const excluded=(Array.isArray(a)?a:[]).filter(item=>window.roomOutcomePosted?.(item)).length;
   a=(Array.isArray(a)?a:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  if(restored) lastSearchKeyword=String(keyword||'').trim();
   lastSearchItems=a;
   aiRoomResults=new Map();
   if(restored){

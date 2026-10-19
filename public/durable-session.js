@@ -149,17 +149,25 @@
   async function restoreActive(){
     if(restoringNow) return false;
     const app=root.document.getElementById('appRoot');
-    if(!app || app.style.display!=='block' || typeof root.render!=='function') return false;
+    const canRestore=()=>app?.style.display==='block'
+      && !root.document.getElementById('res')?.children?.length
+      && !(typeof searching!=='undefined' && searching)
+      && !(typeof aiQueueRunning!=='undefined' && aiQueueRunning);
+    if(!canRestore() || typeof root.render!=='function') return false;
+    const initialFields=JSON.stringify(fields());
+    const account=root.document.getElementById('userMail')?.textContent||'';
     restoringNow=true;
     try{
       const active=await loadActive();
-      if(!active?.items?.length) return false;
+      if(!active?.items?.length || !canRestore()
+        || JSON.stringify(fields())!==initialFields
+        || (root.document.getElementById('userMail')?.textContent||'')!==account) return false;
       for(const id of ['k','min','max','sort']){
         const el=root.document.getElementById(id);
         if(el) el.value=String(active.search_fields?.[id]||'');
       }
       restoring=true;
-      try{root.render(active.items);}finally{restoring=false;}
+      try{root.render(active.items,{autoAi:false,restored:true,keyword:String(active.search_fields?.k||'').trim()});}finally{restoring=false;}
       root.document.querySelectorAll('.item').forEach((el,i)=>{
         const p=active.platforms?.[i];
         if(['room','threads','instagram'].includes(p)) el.querySelector(`.tab[data-p="${p}"]`)?.click();

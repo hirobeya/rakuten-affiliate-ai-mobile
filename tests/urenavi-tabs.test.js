@@ -76,7 +76,7 @@ test('restored search never creates a next-product button or marks a product pos
  const loader=fs.readFileSync('public/return-state.js','utf8');
  assert.doesNotMatch(durable,/投稿済みにして次の商品へ|button\.textContent=.*次の商品へ|action:'posted-next'|function postedNext\(/);
  assert.doesNotMatch(durable,/root\.location\.assign\(url\)/);
- assert.match(loader,/durable-session\.js\?v=20261011-ux-restore-no-next/);
+ assert.match(loader,/durable-session\.js\?v=20261020-display-only-restore/);
  assert.match(durable,/function applyResumeUI\(\)/);
 });
 
