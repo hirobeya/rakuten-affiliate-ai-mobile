@@ -108,3 +108,9 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - 4商品のコピー不可を再現。既存local生成の「形/衣類を守るための仕様まで見て選ぶなら」という書き出しが、原文に「守る」がないと既存fact-safetyで除去される。商品固有の引用や本文は一致しても、最終UIが文章差分を検出して停止していた。
 - 既存の保護構造テンプレート2行の書き出しを、既にcaption側が使う「保護に関わる仕様まで見て選ぶなら」に統一。原文が示さない効果を追加しない。対象仕様の選択・引用・購入理由の判定基準・最終安全ガード・Groq使用条件はいずれも変更しない。
 - 既存の生成器からAPI応答を作り、実HTMLのroomCopyNeedsReviewへ渡す回帰テストを追加。修正前は守るの未出典により失敗を確認。6種の保護仕様でコピー境界を通ることと、根拠なし結果・否定/非対応・単なる洗える表記の拒否継続を確認。全477テスト・vercel-build成功。Previewの実再確認は配信後に行う。
+
+### 配信後の実操作確認
+
+- fb95ec88b3728aab5a514612e85522ca4aebd673の両CI成功、Preview dpl_FPConnkJBMSi7TXYXmrTcNP4V2gC READY、target=null、同SHAを確認。
+- 追加ログインなしでowner復元。検索10商品中8商品がコピー有効。以前止まったMakuake/6枚セット/選べる6枚セット/全3色の4商品のコピーを実行し、clipboardの原文引用・価格・広告表示を照合して成功。確認タブはdeliverableとして保持。
+- 残るAI経路はGroqの認証復旧後に実測が必要。VercelのSecretはwrite-only。秘密値は取得・表示せず、Production/main/決済/PRのDraft状態も変更していない。全体完成とは判定しない。
