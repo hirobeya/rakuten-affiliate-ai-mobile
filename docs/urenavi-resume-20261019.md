@@ -114,3 +114,11 @@ PR163、`fix/urenavi-quality-contract-20261016`、開始HEAD `a2d63acdec064f8b6b
 - fb95ec88b3728aab5a514612e85522ca4aebd673の両CI成功、Preview dpl_FPConnkJBMSi7TXYXmrTcNP4V2gC READY、target=null、同SHAを確認。
 - 追加ログインなしでowner復元。検索10商品中8商品がコピー有効。以前止まったMakuake/6枚セット/選べる6枚セット/全3色の4商品のコピーを実行し、clipboardの原文引用・価格・広告表示を照合して成功。確認タブはdeliverableとして保持。
 - 残るAI経路はGroqの認証復旧後に実測が必要。VercelのSecretはwrite-only。秘密値は取得・表示せず、Production/main/決済/PRのDraft状態も変更していない。全体完成とは判定しない。
+
+## 2026-10-20 18:08 JST：キー更新の確認と最終安全チェックの接続
+
+- 利用者の操作後、decrypt=falseでGROQ_API_KEYのPreview/Production双方の更新日時を確認。値は取得・出力しない。Vercel Authenticationは有効、passwordProtectionは無効。こちらから保護設定を変更せず、Production再デプロイもしない。
+- f6d62a4の最初のPreview再配信はIgnored Build Stepの差分なし判定でCANCELED。環境更新を反映する今回の配信だけcommandForIgnoringBuildStepをexit 1に指定し、dpl_HnLEo6zJcYcjAyBGbhSrhJyFvaGQをREADY、target=null、同SHAで確認。
+- 既存ログインを保ち、保存済みシャツ用洗濯ネット1商品で実測。09:13:36UTCにgenerate成功（入力2373/出力1137tokens）、09:15:31UTCにverify成功（2103/1137tokens）。いずれもfailed=false、free方針。401解消を実測で確認。生成後の利用枠待機では自動API再試行をせず、待機後にUIの確認を続けるから別の検証段階へ進めた。429は発生していない。
+- ただし全文検証済み文の手間という語が、原文の負担と文字どおり一致しないため既存の最終fact-safetyでコピー不可になることを再現。guardを緩めず、同じguardを生成後のinspectでも拒否に使用し、既存の一度だけの再作成へ理由を返す。商品理解・引用・全文AI検証・最終UI安全チェック・再作成上限は変更しない。fact-safetyの内容もVERSIONへ含め、古い完成判定キャッシュを採用しない。
+- 実HTMLのroomCopyNeedsReviewまでつなぐ回帰2件で、手間の拒否、原文の負担を保持した再作成、生成→再作成→全文章検証→UIコピー可を確認。既存contractのmock既定場面にあった未出典の用途に合わせを中立的な場面へ変更し、元の数値・部位・否定等の拒否試験を維持。全479テストとvercel-build成功。
