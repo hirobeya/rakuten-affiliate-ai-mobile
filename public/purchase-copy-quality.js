@@ -23,5 +23,6 @@
    || /[^。！？]{2,}(?:を|が)[^。！？]{0,30}(?:できます|できる|しやす|やすく|入ります|入る|収まり|楽しめ|味わえ|入れられ|包み込|抑え|おさえ|維持|保護)/.test(s)
    || /[^。！？]{3,}で[^。！？]{3,}(?:しやす|できます|できる)/.test(s);
  }
- return {catalogueOnly,hasUseRelation,sellerNarrative};
+ function sourceIncludes(source,quote){const q=normalize(quote);return Boolean(q)&&normalize(source).includes(q);}
+ return {catalogueOnly,hasUseRelation,sellerNarrative,sourceIncludes};
 });

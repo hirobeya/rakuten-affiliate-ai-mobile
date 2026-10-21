@@ -3241,9 +3241,9 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     &&verifiedResult?.groq?.totalCalls===0&&verifiedResult?.quality?.status==='ready'
     &&verifiedResult?.quality?.text===String(text||'')&&verifiedResult?.variants?.[0]?.text===String(text||'')
     &&String(verifiedResult?.productType?.quote||'').length>0
-    &&String(item?.itemName||'').includes(verifiedResult.productType.quote)
+    &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemName,verifiedResult.productType.quote)
     &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
-    &&String(item?.itemCaption||'').includes(partner.quote)
+    &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
     &&window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote);
   if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||''))&&!localSourceText)return true;
   // Publication safety is enforced at the final copy boundary for every route.

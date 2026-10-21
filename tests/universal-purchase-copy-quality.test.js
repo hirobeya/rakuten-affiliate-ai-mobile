@@ -47,6 +47,15 @@ test('short complete local source sentence reaches copy boundary only with its e
  }
  assert.doesNotMatch(result.verifiedAppeals[0].text,/^。/);
 });
+test('short local proof uses the same NFKC and whitespace normalization as its server source check',()=>{
+ const item={itemName:'洗濯ネット 布団 毛布 大容量',itemCaption:'シングルサイズの布団が  入る大容量サイズです。'};
+ const result=localZeroCall(item);assert.ok(result);
+ assert.equal(ui().roomCopyNeedsReview(result.quality.text,item,true,result),false);
+ assert.equal(quality.sourceIncludes('容量３０Ｌ  対応','容量30L 対応'),true);
+ assert.equal(quality.sourceIncludes('not waterproof','notwaterproof'),false);
+ assert.equal(quality.sourceIncludes('5 000 mAh','5000mAh'),false);
+ assert.equal(quality.sourceIncludes('',''),false);
+});
 test('safe literal protection labels fail purchase quality in local, machine and final browser paths',()=>{
  const item={itemName:'洗濯ネット 型崩れ防止',itemCaption:''};
  const text='保護に関わる仕様を見て選ぶなら。\n「型崩れ防止」表記の洗濯ネットです。';
