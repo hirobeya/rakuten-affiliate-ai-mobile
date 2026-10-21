@@ -60,6 +60,18 @@ test('a source relationship hint never overrides promotional, part, negative or 
   assert.equal(safeCaptionCandidates({itemName:title,itemCaption:caption,identity:'洗濯ネット'}).length,0,caption);
  }
 });
+test('seller actions never become actions performed by a product across categories',()=>{
+ for(const [itemName,identity,itemCaption]of [
+  ['ほうじ茶 ティーバッグ お茶','ティーバッグ','より良いお茶を作るために日々農家の方と話し合い、お互いに美味しいお茶づくりを追求しています。'],
+  ['工具 調整台','調整台','私たちは調整台を作るために職人と話し合っています。'],
+  ['型紙集 手芸','型紙集','当社では型紙集をお届けするために毎日検品しています。']
+ ]){
+  assert.equal(quality.hasUseRelation(itemCaption),false);
+  assert.equal(safeCaptionCandidates({itemName,itemCaption,identity}).length,0);
+  const clean=identity+'は高さを変えて作業できます。';
+  assert.ok(safeCaptionCandidates({itemName,itemCaption:itemCaption+clean,identity}).some(x=>x.quote===clean));
+ }
+});
 test('unknown category catalogue draft uses existing bounded rewrite and five-question review before exact UI copy',async()=>{
  const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{
