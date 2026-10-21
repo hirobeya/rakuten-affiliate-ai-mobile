@@ -13,7 +13,7 @@ test('variant feedback preserves scope through the existing one-rewrite path acr
  const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{for(const [index,c] of cases.entries()){
   const item={itemCode:'variant:'+index,itemName:c.name,itemCaption:c.quote};
-  const product={what:c.name,acts_on:c.name,acts_on_quote:c.quote};
+  const product={what:['お茶','ワンピース','料理本'][index],acts_on:c.name,acts_on_quote:c.quote};
   const draft=text=>({product,sentences:[{text,kinds:['scene','benefit'],quotes:[c.quote]}]});
   let row=null,calls=0,quotas=0;const stages=[];
   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),localZeroCall:()=>null,store:{loadProduct:async()=>row,saveProduct:async x=>{row={schema_version:x.schemaVersion,model:x.model,raw_ai_json:structuredClone(x.rawAiJson)};}},consumeQuota:async()=>{quotas++;return true;},logCost:()=>{},provider:{model:'test',requiredTokens:()=>1,call:async(stage,source,state)=>{
@@ -64,7 +64,8 @@ test('a compound product identity summarized from source phrases must also remai
  for(const [name,what,quote,text] of [
   ['ワンピース 授乳ケープ一体型','授乳ケープ一体型マタニティワンピース','ワンピースは授乳時に胸の上布をケープのように使える一体型デザインです。','授乳時に胸の上布をケープとして使える一体型デザインです。'],
   ['料理本 野菜のレシピ','野菜料理本','野菜のレシピを掲載した料理本です。','野菜のレシピを確認したいときに。'],
-  ['刺繍キット ステッチ図解付き','図解付き刺繍キット','刺繍キットにはステッチの図解が付属します。','ステッチの図解を確認したいときに。']
+  ['刺繍キット ステッチ図解付き','図解付き刺繍キット','刺繍キットにはステッチの図解が付属します。','ステッチの図解を確認したいときに。'],
+  ['ワンピース 授乳口付き','マタニティパジャマ ワンピース','マタニティパジャマは授乳ケープ一体型のワンピースです。','授乳時に胸の上布をケープとして使えます。']
  ]){
   const item={itemName:name,itemCaption:quote};
   const draft={product:{what,acts_on:what,acts_on_quote:quote},sentences:[{text,kinds:['scene','spec'],quotes:[quote]}]};
