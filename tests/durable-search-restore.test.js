@@ -31,3 +31,12 @@ test('search or generation in progress prevents restoration, including after the
   x.context[busy]=false;const p=x.root.UrenaviDurable.restoreActive();await responseReady();x.context[busy]=true;x.resolve(session);assert.equal(await p,false);assert.equal(x.renders.length,0);
  }
 });
+test('cross-device platform restoration uses the view-only renderer instead of clicking a generation control',async()=>{
+ const x=setup(),rendered=[];
+ const card={querySelector(){return {click(){assert.fail('restoration must never click a generation control');}};}};
+ x.root.document.querySelectorAll=selector=>selector==='.item'?[card]:[];
+ x.root.restoreItemPlatformView=(el,p)=>rendered.push({el,p});
+ const pending=x.root.UrenaviDurable.restoreActive();await responseReady();
+ x.resolve({session:{...session.session,platforms:['threads']}});
+ assert.equal(await pending,true);assert.equal(rendered.length,1);assert.equal(rendered[0].el,card);assert.equal(rendered[0].p,'threads');
+});

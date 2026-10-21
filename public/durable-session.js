@@ -170,7 +170,7 @@
       try{root.render(active.items,{autoAi:false,restored:true,keyword:String(active.search_fields?.k||'').trim()});}finally{restoring=false;}
       root.document.querySelectorAll('.item').forEach((el,i)=>{
         const p=active.platforms?.[i];
-        if(['room','threads','instagram'].includes(p)) el.querySelector(`.tab[data-p="${p}"]`)?.click();
+        if(['room','threads','instagram'].includes(p)) root.restoreItemPlatformView?.(el,p);
       });
       root.document.getElementById('x')?.classList.toggle('on',!!root.document.getElementById('k')?.value);
       const st=root.document.getElementById('st');

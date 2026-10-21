@@ -1251,7 +1251,7 @@ function restoreSearchState(email){
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
-      if(['room','threads','instagram'].includes(platform)) el.querySelector(`[data-p="${platform}"].tab`)?.click();
+      if(['room','threads','instagram'].includes(platform)) restoreItemPlatformView(el,platform);
     });
     document.getElementById('st').textContent='前回の検索結果に戻りました。価格・在庫を更新する場合は、もう一度検索してください。';
     requestAnimationFrame(()=>window.scrollTo(0,Math.max(0,Number(state.scrollY)||0)));
@@ -3290,6 +3290,25 @@ function postDisplay(i,p='room'){
   return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
 
+// Rendering a saved platform is not a user request to generate a post.
+function setItemPlatformView(article,item,platform){
+  article.querySelectorAll('.tab').forEach(tab=>tab.classList.toggle('on',tab.dataset.p===platform));
+  const copy=article.querySelector('.copy');
+  if(copy)copy.textContent=postDisplay(item,platform);
+  const button=article.querySelector('.cb');
+  if(button){
+    button.dataset.p=platform;
+    const ready=postReady(item,platform);
+    button.disabled=!ready;
+    button.textContent=ready?'投稿文をコピー':'コピー不可';
+  }
+}
+function restoreItemPlatformView(article,platform){
+  const index=Number(article.querySelector('.cb')?.dataset.i);
+  const item=lastSearchItems[index];
+  if(item)setItemPlatformView(article,item,platform);
+}
+
 
 function short(
   i
@@ -3797,58 +3816,7 @@ function render(
         b.dataset.p;
 
         await ensureAiForItem(i);
-
-        ar
-        .querySelectorAll(
-          '.tab'
-        )
-        .forEach(
-          z=>
-          z.classList.remove(
-            'on'
-          )
-        );
-
-
-        b.classList.add(
-          'on'
-        );
-
-
-        ar
-        .querySelector(
-          '.copy'
-        )
-        .textContent=
-        postDisplay(
-          a[i],
-          p
-        );
-
-
-        const copyButton=
-        ar.querySelector(
-          '.cb'
-        );
-
-        copyButton.dataset.p=
-        p;
-
-        const ready=
-        postReady(
-          a[i],
-          p
-        );
-
-        copyButton.disabled=
-        !ready;
-
-        copyButton.textContent=
-        ready
-        ?
-        '投稿文をコピー'
-        :
-        'コピー不可';
+        setItemPlatformView(ar,a[i],p);
 
       };
 
