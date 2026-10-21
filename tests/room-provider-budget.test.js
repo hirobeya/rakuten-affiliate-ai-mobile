@@ -95,3 +95,9 @@ test('a crashed or stale lease expires without allowing its old owner to overwri
  await assert.rejects(()=>old.release({called:true,response:{rateLimit:{}}}),e=>e.status===503);
  assert.equal(x.store.read().lease.token,owner);await next.release({called:false});assert.equal(x.store.read().lease,null);
 });
+
+test('a worker that read old product progress rechecks after reservation and does not regenerate completed work',async()=>{
+ const x=setup();let reads=0;const {VERSION}=require('../lib/room-semantic-engine');
+ const store={loadProduct:async()=>++reads===1?null:{schema_version:VERSION,model:x.provider.model,raw_ai_json:{state:{stage:'done',attempt:0,calls:[{stage:'generate'}],quality:{status:'blocked'},startedAt:0}}},saveProduct:async()=>{throw Error('must not overwrite completed progress');}};
+ const done=await advance({...x.args,store,item:item(1)});assert.equal(done.pending,false);assert.equal(x.calls.length,0);assert.equal(x.quotas.length,0);assert.equal(x.store.read().lease,null);
+});

@@ -13,7 +13,7 @@ This repair changes admission control only. Product understanding, quality thres
 3. Return completed source-bound semantic caches or read-only status without acquiring a provider lease.
 4. Before consuming the existing daily quota, load shared budget observations and compare the exact upcoming stage's estimated messages/schema/output allowance with remaining tokens.
 5. If waiting is required, return existing pending/202/retryAfterMs metadata. Spend neither provider tokens nor daily quota. Do not save a stale product snapshot while another server may be completing it.
-6. Acquire an exclusive lease with an atomic conditional database update on a random revision. Only the winner proceeds. Conflicts return pending; they do not retry the provider.
+6. Acquire an exclusive lease with an atomic conditional database update on a random revision. Only the winner proceeds. Conflicts return pending; they do not retry the provider. After admission, re-read source-bound product progress so a worker holding an older cache snapshot cannot regenerate a stage another worker just finished.
 7. Consume the existing daily quota and perform one provider call. Release the lease while persisting response/error observations, absolute reset deadlines and a minimum request spacing. The last verifier response therefore survives product completion and local/cache-only intervening requests.
 8. Keep normal semantic validation and product caching. The existing browser pauses on 202 and requires manual continuation; 429 still terminates the batch, with no provider retry or timer-driven follow-up.
 
@@ -27,7 +27,7 @@ Known boundaries: headers and upcoming token usage are estimates/observations, n
 
 ## Evidence
 
-- Local complete node suite: 495 passing, zero failed, followed by the additional expired-lease regression passing (11 admission-control tests total). vercel-build passed for the final implementation.
+- Local complete node suite: 497 passing, zero failed (12 admission-control tests total). vercel-build passed for the final implementation.
 - Actual HTTP-handler test: first product consumes one mocked generation; another product returns 202 with zero calls, zero tokens, no extra daily quota and no publishable text.
 - Independent-controller contention test permits exactly one reservation. Tests cover shared carry-over, expiry, read-only/cache bypass, daily-quota denial, failed DB access, missing headers, 429 preservation and no stale product overwrite.
 - Existing batch/429/semantic/quality regressions remain passing. These tests use synthetic providers and do not consume Groq.
