@@ -2757,6 +2757,16 @@ function aiPanelMarkup(item,index){
     '</section>';
 }
 
+function pendingAiStatus(result,now=Date.now()){
+  const phase={generation:'生成',verification:'内容の確認',regeneration:'再作成',reverification:'再作成後の確認'}[result?.data?.phase]||'確認';
+  const after=Number(result?.resumeAfter)||0;
+  if(after>now){
+    const time=new Date(after).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return '投稿文はまだ未完成です。次は'+phase+'です。再開の目安は'+time+'（この端末の時刻）。その時刻以降に「確認を続ける」を押してください。自動では再開しません。';
+  }
+  return '投稿文はまだ未完成です。次は'+phase+'です。「確認を続ける」を押してください。自動では再開しません。';
+}
+
 function updateAiPanel(index){
   if(currentAppSession)proUpdateDashboard();
   const usageField=document.getElementById('proResourceUsage');
@@ -2776,7 +2786,7 @@ function updateAiPanel(index){
   const copy=box.querySelector('.aiCopy');
   const continueButton=box.querySelector('[data-ai-continue]');
   if(continueButton){continueButton.hidden=!['pending','restored'].includes(result?.state);continueButton.textContent=result?.state==='restored'?'保存済み結果を確認':'確認を続ける';}
-  if(result?.state==='pending'){status.textContent='投稿文はまだ未完成です。'+(Number(result.data?.retryAfterMs)>0?'利用枠の回復後、確認を続けてください。':'確認を続けてください。');facts.textContent='';copy.textContent='';return;}
+  if(result?.state==='pending'){status.textContent=pendingAiStatus(result);facts.textContent='';copy.textContent='';return;}
   if(result?.state==='paused'){status.textContent='前の商品で確認が停止しています。確認を続けるとこの商品へ進みます。';facts.textContent='';copy.textContent='';return;}
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
@@ -2846,7 +2856,7 @@ async function requestAiRoom(item,index,generation){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
       aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
-    }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d});
+    }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d,resumeAfter:Date.now()+Math.max(0,Number(d.retryAfterMs)||0)});
     else aiRoomResults.set(index,{state:'done',data:d});
   }catch(e){
     if(generation!==aiRunGeneration) return;
