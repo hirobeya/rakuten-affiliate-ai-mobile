@@ -1061,7 +1061,7 @@ input,select{
 
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
-<script src="/pain-copy-context-fix.js?v=20260918-8"></script>
+<script src="/pain-copy-context-fix.js?v=20261022-scoped-room-link"></script>
 <script src="/structured-room-copy.js?v=20261018-source-contract-1"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
@@ -2114,7 +2114,7 @@ function roomSearchUrl(item){
 }
 
 function roomAction(item){
-  return `<a class="roomLink" href="${esc(roomSearchUrl(item))}" target="_blank" rel="noopener noreferrer">ROOMで商品を探す</a>`;
+  return `<a class="roomLink roomProductSearch" href="${esc(roomSearchUrl(item))}" target="_blank" rel="noopener noreferrer">ROOMで商品を探す</a>`;
 }
 
 function hist(){

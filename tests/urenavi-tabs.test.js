@@ -141,3 +141,20 @@ test('owner Preview does not force Groq when grounded local copy is ready',()=>{
  ctx.roomCopyNeedsReview=()=>true;
  assert.equal(ctx.aiTargetDecision({itemName:'コードレス 掃除機'}).callAi,true);
 });
+
+
+test('legacy product-search suppression preserves work navigation and ROOM contacts',()=>{
+ const patch=fs.readFileSync(require.resolve('../public/pain-copy-context-fix.js'),'utf8');
+ let injected='';
+ const context={window:{UrenaviPainCopy:{painContext(){}},document:{createElement:()=>({textContent:''}),head:{appendChild:style=>{injected=style.textContent;}}}}};
+ vm.createContext(context);vm.runInContext(patch,context);
+ assert.equal(injected,'.roomProductSearch{display:none!important}');
+ const start=html.indexOf('function roomAction(item){'),end=html.indexOf('function hist()',start);
+ const ctx={esc:x=>x,roomSearchUrl:()=> 'https://room.rakuten.co.jp/search/item?keyword=test'};
+ vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
+ assert.match(ctx.roomAction({}),/class="roomLink roomProductSearch"/);
+ for(const id of ['roomNextTask','roomOpsPanel','proDailyDashboard'])assert.match(html,new RegExp('(?:id="'+id+'"|href="#'+id+'")'));
+ assert.match(html,/<a class="roomLink" href="https:\/\/room.rakuten.co.jp\/"/);
+ const panel=fs.readFileSync(require.resolve('../public/room-operations-panel.js'),'utf8');
+ assert.doesNotMatch(panel,/roomProductSearch/);
+});
