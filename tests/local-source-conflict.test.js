@@ -12,7 +12,9 @@ test('local server and browser reject negated source facts across caption and ca
     ['洗濯ネット 型崩れ防止','型崩れ防止不可。']
   ];
   for(const [itemName,negative]of cases){
-    assert.equal(localZeroCall({itemName,itemCaption:'',catchcopy:''})?.quality?.status,'ready',itemName+' baseline');
+    const baseline=localZeroCall({itemName,itemCaption:'',catchcopy:''});
+    if(itemName==='洗濯ネット 型崩れ防止')assert.equal(baseline,null,'label-only text is not a purchase reason');
+    else assert.equal(baseline?.quality?.status,'ready',itemName+' baseline');
     for(const field of ['itemCaption','catchcopy']){
       const item={itemName,itemCaption:'',catchcopy:'',[field]:negative};
       assert.equal(localZeroCall(item),null,itemName+' '+field);

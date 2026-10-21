@@ -7,7 +7,7 @@ const client=require('../public/room-copy-result');
 const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');
 function appContext(){
  const window={};const ctx=vm.createContext({window,Intl});
- for(const name of ['structured-room-copy','fact-safety','pain-copy','room-copy-quality'])vm.runInContext(fs.readFileSync(require.resolve('../public/'+name+'.js'),'utf8'),ctx);
+ for(const name of ['purchase-copy-quality','structured-room-copy','fact-safety','pain-copy','room-copy-quality'])vm.runInContext(fs.readFileSync(require.resolve('../public/'+name+'.js'),'utf8'),ctx);
  ctx.UrenaviPainCopy=window.UrenaviPainCopy;
  ctx.groundedAnalysis=item=>window.UrenaviPainCopy.analyzeRoomProduct(item);
  ctx.usePurchasePlan=true;

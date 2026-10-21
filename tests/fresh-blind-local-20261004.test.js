@@ -35,13 +35,15 @@ test('first blind regressions remain safe after tighter zero-call fact boundary'
   const results=items.map(item=>({id:item.id,result:localZeroCall(item)}));
   console.log('FRESH_BLIND_LOCAL_20261004_REGRESSION '+JSON.stringify(results));
 
-  for(const row of results.slice(0,2)){
+  for(const row of results.slice(0,1)){
     assert.ok(row.result,row.id+' should keep the safe zero-call route');
     assert.equal(row.result.groq.totalCalls,0);
     assert.equal(row.result.quality.status,'ready');
     assert.ok(row.result.attributes.length>=1);
     assert.ok(row.result.quality.text.includes(row.result.productType.specific));
   }
+
+  assert.equal(results[1].result,null,'USB給電の仕様選びだけでは完成扱いにしない');
 
   // The attached range in "11.6~13.3インチノートPC" is still semantically
   // ambiguous and must never be sliced into a standalone product specification.

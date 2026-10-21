@@ -1,8 +1,8 @@
 (function(root,factory){
-  const api=factory();
+  const api=factory(typeof module==='object'&&module.exports?require('./purchase-copy-quality'):root.UrenaviPurchaseCopyQuality);
   if(typeof module==='object'&&module.exports) module.exports=api;
   if(root) root.UrenaviStructuredCopy=api;
-})(typeof window!=='undefined'?window:globalThis,function(){
+})(typeof window!=='undefined'?window:globalThis,function(purchaseQuality){
   'use strict';
   const VERSION='structured-copy-20261002-v2';
   const normalize=x=>String(x||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
@@ -307,7 +307,7 @@
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
     const titleBound=factsAreTitleBound(result.facts);
     const sourceConflict=hasSourceFactConflict(item,result.facts);
-    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
+    const ready=Boolean(purchaseQuality)&&!purchaseQuality.catalogueOnly(result.text)&&result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
     return {ready,result,reason:sourceConflict?'source_fact_conflict':ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
   }
   return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,hasSourceFactConflict,compose,assess,RISK};

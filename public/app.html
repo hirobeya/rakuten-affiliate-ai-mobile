@@ -723,6 +723,7 @@ input,select{
 .urenaviSteps{margin:10px 0 16px;padding-left:22px;font-size:14px;line-height:1.85;color:#334155}.urenaviAdvanced{margin-top:18px;padding:12px;border:1px solid #d7e2ef;border-radius:12px;background:#f8fafc}.urenaviAdvanced summary{cursor:pointer;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}.urenaviAdvanced textarea{max-width:100%}
 .urenaviExchangeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.urenaviExchangeChoices button{min-height:82px;padding:12px 8px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-weight:800;font-size:15px;cursor:pointer}.urenaviExchangeChoices button[aria-pressed="true"]{border-color:#172a4b;box-shadow:inset 0 0 0 1px #172a4b}.urenaviExchangeChoices button:focus-visible{outline:3px solid #64748b;outline-offset:2px}.urenaviExchangeChoices small{display:block;font-size:11px;font-weight:500;margin-top:6px;color:inherit}@media(max-width:350px){.urenaviExchangeChoices{grid-template-columns:1fr}}
 </style>
+<script src="/purchase-copy-quality.js"></script>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
 </head>
@@ -3230,14 +3231,26 @@ function aiPostState(i){
 function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=null){
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  // A short post may pass only with the complete canonical review for this
-  // exact text. A boolean flag alone cannot exempt a weak draft.
+  // Short prose needs an exact reviewed result. A server boolean alone is
+  // insufficient. Local source sentences also carry their original quote;
+  // factual association was checked by the server and is rebound here.
   const verifiedText=validatedByServer&&typeof RoomCopyResult!=='undefined'?RoomCopyResult.ready(verifiedResult):'';
-  if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||'')))return true;
+  const partner=verifiedResult?.local?.partner;
+  const localSourceText=validatedByServer&&verifiedResult?.ok===true&&verifiedResult?.pending===false
+    &&verifiedResult?.model==='local'&&verifiedResult?.phase==='local'
+    &&verifiedResult?.groq?.totalCalls===0&&verifiedResult?.quality?.status==='ready'
+    &&verifiedResult?.quality?.text===String(text||'')&&verifiedResult?.variants?.[0]?.text===String(text||'')
+    &&String(verifiedResult?.productType?.quote||'').length>0
+    &&String(item?.itemName||'').includes(verifiedResult.productType.quote)
+    &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
+    &&String(item?.itemCaption||'').includes(partner.quote)
+    &&window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote);
+  if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||''))&&!localSourceText)return true;
   // Publication safety is enforced at the final copy boundary for every route.
   // Draft builders remain responsible only for generating drafts.
   const guard=window.UrenaviFactSafety?.guardUnsupportedBenefitCopy;
   if(typeof guard!=='function'||guard(item||{},String(text||''))!==String(text||''))return true;
+  if(window.UrenaviPurchaseCopyQuality?.catalogueOnly(String(text||'')))return true;
   if(validatedByServer)return false;
   // Use the exact same grounded local assessment for AI routing and posting.
   // Never approve text merely because the item has some unrelated safe facts.

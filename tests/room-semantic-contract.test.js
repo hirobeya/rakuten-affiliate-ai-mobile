@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');const c=require('../lib/room-semantic
 const spacedSource={itemName:'掃除用品',itemCaption:'汚れに直接使えます。 水洗いできます。'};
 const spacedQuote=c.bind(spacedSource,'汚れに直接使えます。水洗いできます。');assert(spacedQuote);assert.equal(spacedQuote.quote,spacedSource.itemCaption);assert.equal(spacedQuote.start,0);assert.equal(spacedQuote.end,spacedSource.itemCaption.length);
 assert.equal(c.bind({itemName:'tool',itemCaption:'not waterproof'},'notwaterproof'),null);assert.equal(c.bind({itemName:'tool',itemCaption:'5 000 mAh'},'5000mAh'),null);
-function draft(type,source,text,scene='使い方も確認して選びたいときに。'){return {product:{what:type,acts_on:type,acts_on_quote:source},sentences:[{text:scene,kinds:['scene'],quotes:[source]},{text,kinds:['spec','benefit'],quotes:[source]}]};}
+function draft(type,source,text,scene='この商品を使いたいときに。'){return {product:{what:type,acts_on:type,acts_on_quote:source},sentences:[{text:scene,kinds:['scene'],quotes:[source]},{text,kinds:['spec','benefit'],quotes:[source]}]};}
 function review(d){return {product:{what:'supported',acts_on:'supported'},quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(q=>[q,'supported'])),sentences:d.sentences.map(s=>({text:s.text,...Object.fromEntries(c.questions.map(q=>[q,'supported'])),evidenceQuotes:s.quotes,reason:'mock approval to exercise independent server veto'}))};}
 for(const [type,source,text,ok] of [
  ['美顔ローラー','付属品 ポーチ・クリーンクロス','清潔に保てる美顔ローラー。',false],

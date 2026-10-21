@@ -19,18 +19,19 @@ test('origin-only metadata cannot complete a zero-call ROOM post',()=>{
   assert.equal(result,null);
 });
 
-test('equivalent volume spellings are published only once',()=>{
-  const result=localZeroCall({
+test('equivalent volume spellings remain deduplicated facts without becoming a label-only finished post',()=>{
+  const item={
     itemCode:'quality:volume-dedupe',
     itemName:'電気ケトル 1.2L 1200ml',
     itemCaption:'',
     itemPrice:3759
-  });
-  assert.ok(result);
+  };
+  assert.equal(localZeroCall(item),null);
+  const result=localZeroCall({...item,itemCaption:'電気ケトルは1.2Lの容量で、カップ6杯分のお湯を用意できます。'});
+  assert.ok(result,'a complete source use relationship still allows local publication');
   const values=result.attributes.map(x=>x.quote);
   assert.equal(values.filter(x=>x==='1.2L'||x==='1200ml').length,1);
-  const text=result.quality.text;
-  assert.equal((text.match(/1\.2L/g)||[]).length+(text.match(/1200ml/g)||[]).length,1);
+
 });
 
 

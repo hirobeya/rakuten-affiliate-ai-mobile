@@ -4,7 +4,7 @@ const copy=require('../public/structured-room-copy'),safety=require('../public/f
 const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');
 function context(){
  const window={};const c=vm.createContext({window,Intl});
- for(const name of ['structured-room-copy','fact-safety','pain-copy','room-copy-quality'])vm.runInContext(fs.readFileSync(require.resolve('../public/'+name+'.js'),'utf8'),c);
+ for(const name of ['purchase-copy-quality','structured-room-copy','fact-safety','pain-copy','room-copy-quality'])vm.runInContext(fs.readFileSync(require.resolve('../public/'+name+'.js'),'utf8'),c);
  c.UrenaviPainCopy=window.UrenaviPainCopy;c.groundedAnalysis=item=>window.UrenaviPainCopy.analyzeRoomProduct(item);c.usePurchasePlan=true;
  for(const [from,to] of [['function localCopyAssessment(','function neutralRulePost('],['function roomCopyNeedsReview(','function isFullyReviewedCopyState('],['function aiTargetDecision(item){','function activeAiProgress(']]){const a=html.indexOf(from),b=html.indexOf(to,a);assert.ok(a>0&&b>a);vm.runInContext(html.slice(a,b),c);}
  return c;

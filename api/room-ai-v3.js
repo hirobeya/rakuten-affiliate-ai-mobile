@@ -15,6 +15,7 @@ const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
+const {catalogueOnly}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 
 const DEFAULT_DAILY_LIMIT=200;
@@ -342,7 +343,7 @@ function localZeroCall(item,learnedIdentity=''){
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
   const directAppeals=partnerCopy?[{
-    text:partnerCopy.hook+'。'+partnerCopy.quote,
+    text:[partnerCopy.hook,partnerCopy.quote].filter(Boolean).join('。'),
     factRef:partnerCopy.quote,
     factRefs:[partnerCopy.quote],
     source:partnerCopy?.source||'itemName'
@@ -360,7 +361,7 @@ function localZeroCall(item,learnedIdentity=''){
   if(!String(text||'').trim()||!textSafe) return null;
   // The browser already refuses any text changed by this guard. A local
   // response must not claim ready while its final copy boundary will reject it.
-  if(guardUnsupportedBenefitCopy(item,text)!==text) return null;
+  if(guardUnsupportedBenefitCopy(item,text)!==text||catalogueOnly(text)) return null;
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};
