@@ -4,7 +4,7 @@ const quality=require('../public/purchase-copy-quality');
 const {composeGenericFromSources,safeCaptionCandidates}=require('../lib/local-generic-reasoner');
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const {localZeroCall}=require('../api/room-ai-v3');
-const {inspect,questions}=require('../lib/room-semantic-contract');
+const {inspect,questions,publication}=require('../lib/room-semantic-contract');
 const {createHandler}=require('../lib/room-copy-handler');
 const client=require('../public/room-copy-result');
 const html=fs.readFileSync(require.resolve('../public/app.html'),'utf8');
@@ -16,16 +16,16 @@ const examples=[
  ['ギフトボックス','ギフトボックスは小分けのお菓子を入れることができます。'],
  ['調整台','調整台は高さを変えて作業できます。']
 ];
-for(const [identity,caption] of examples)test('source use relationships work without category-specific hooks: '+identity,()=>{
+for(const [identity,caption] of examples)test('unregistered categories use the semantic contract instead of grammar-based local approval: '+identity,()=>{
  const item={itemName:identity,itemCaption:caption,identity};
- const copy=composeGenericFromSources(item);
- assert.ok(copy);assert.equal(copy.quote,caption);assert.equal(copy.source,'itemCaption');
- assert.equal(copy.text,caption+'\n\n※アフィリエイト広告を利用しています');
- assert.equal(quality.catalogueOnly(copy.text),false);
- assert.doesNotMatch(copy.text,/見て選ぶ|表記の|困って|悩んで|買いました/);
- // The ranking hint is not a source-association approval.
- const unrelated={...item,itemCaption:'関連商品：'+caption};
- assert.equal(safeCaptionCandidates(unrelated).length,0);
+ assert.equal(composeGenericFromSources(item),null);
+ const draft={product:{what:identity,acts_on:identity,acts_on_quote:caption},sentences:[{text:caption,kinds:['benefit'],quotes:[caption]}]};
+ assert.equal(inspect(item,draft).ok,true);
+ const review={product:{what:'supported',acts_on:'supported'},sentences:draft.sentences.map(s=>({text:s.text,...Object.fromEntries(questions.map(q=>[q,'supported'])),evidenceQuotes:[]})),quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(q=>[q,'supported']))};
+ assert.equal(publication(item,draft,review).status,'ready');
+ // Grammar and exact quotes cannot replace a real semantic quality verdict.
+ review.quality.reason='unclear';assert.equal(publication(item,draft,review).status,'blocked');
+ assert.equal(safeCaptionCandidates({...item,itemCaption:'関連商品：'+caption}).length,0);
 });
 test('complete caption purchase reason outranks a known title capacity label',()=>{
  const item={itemName:'収納ボックス 30L',itemCaption:'収納ボックスには毛布を収納できます。',identity:'収納ボックス'};
@@ -77,9 +77,14 @@ test('seller actions never become actions performed by a product across categori
  ]){
   assert.equal(quality.hasUseRelation(itemCaption),false);
   assert.equal(safeCaptionCandidates({itemName,itemCaption,identity}).length,0);
-  const clean=identity+'は高さを変えて作業できます。';
+  const clean=identity+'は持ち手を掛けて収納できます。';
   assert.ok(safeCaptionCandidates({itemName,itemCaption:itemCaption+clean,identity}).some(x=>x.quote===clean));
  }
+});
+test('generic promotional enjoyment and seller stories never become local purchase reasons',()=>{
+ const item={itemName:'ほうじ茶 ティーバッグ お茶',itemCaption:'より良いお茶を作るために日々農家の方と話し合い、お互いに美味しいお茶づくりを追求しています。これだけ本格的なお茶がティーバッグで手軽に楽しめる!'};
+ assert.equal(safeCaptionCandidates({...item,identity:'ティーバッグ'}).length,0);
+ assert.equal(localZeroCall(item),null);
 });
 test('unknown category catalogue draft uses existing bounded rewrite and five-question review before exact UI copy',async()=>{
  const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
