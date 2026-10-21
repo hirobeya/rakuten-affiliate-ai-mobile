@@ -60,3 +60,17 @@ test('a source-title product kind cannot disappear into an accessory-only post',
  const draft={product:{what:'A・Bの複合商品',acts_on:'組み合わせ',acts_on_quote:item.itemCaption},sentences:[{text:'組み合わせて使いたいときに。',kinds:['scene'],quotes:[item.itemCaption]}]};
  assert.ok(!inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
 });
+test('a compound product identity summarized from source phrases must also remain in the post',()=>{
+ for(const [name,what,quote,text] of [
+  ['ワンピース 授乳ケープ一体型','授乳ケープ一体型マタニティワンピース','ワンピースは授乳時に胸の上布をケープのように使える一体型デザインです。','授乳時に胸の上布をケープとして使える一体型デザインです。'],
+  ['料理本 野菜のレシピ','野菜料理本','野菜のレシピを掲載した料理本です。','野菜のレシピを確認したいときに。'],
+  ['刺繍キット ステッチ図解付き','図解付き刺繍キット','刺繍キットにはステッチの図解が付属します。','ステッチの図解を確認したいときに。']
+ ]){
+  const item={itemName:name,itemCaption:quote};
+  const draft={product:{what,acts_on:what,acts_on_quote:quote},sentences:[{text,kinds:['scene','spec'],quotes:[quote]}]};
+  assert.ok(!name.includes(what));
+  assert.ok(inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
+  draft.sentences[0].text=what+'で、'+text;
+  assert.ok(!inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
+ }
+});
