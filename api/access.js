@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {config, proConfig, stripeGet, activate, authorize, authorizePro, upgradeBaseToPro, setDeviceCookie, clearDeviceCookie, db} = require('../lib/billing');
+const {config, proConfig, stripeGet, activate, authorize, authenticateSearchUser, authorizePro, upgradeBaseToPro, setDeviceCookie, clearDeviceCookie, db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
@@ -22,10 +22,16 @@ module.exports = async function handler(req,res) {
       return res.status(200).json({configured:false});
     }
 
-    if (req.query.action === 'status' || req.query.action === 'pro-status') {
+    if (['app-status','status','pro-status'].includes(req.query.action)) {
       const pro=req.query.action==='pro-status';
-      const result = pro ? await authorizePro(req) : await authorize(req);
-      if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
+      let result = pro ? await authorizePro(req) : await authorize(req);
+      // App entry permits verified free search users. Paid API/status policies
+      // remain unchanged; an expired session or an unavailable check is never
+      // converted into a free grant. Device cookies cannot grant this fallback.
+      if(req.query.action==='app-status' && !result.ok && result.status===403){
+        result=await authenticateSearchUser(req);
+      }
+      if(result.ok && result.plan!=='free' && result.user?.email) setDeviceCookie(res,result.user.email);
       return res.status(result.ok ? 200 : result.status).json({
         allowed:result.ok,
         pro:result.ok && (result.plan==='pro' || result.plan==='owner'),

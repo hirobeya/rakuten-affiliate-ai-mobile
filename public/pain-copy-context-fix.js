@@ -608,7 +608,7 @@
   // Direct ROOM search is redundant. Keep the verified posting route:
   // Urenavi -> Rakuten Market product page -> ROOM icon -> ROOM posting screen.
   const style=root.document.createElement('style');
-  style.textContent='.roomLink{display:none!important}';
+  style.textContent='.roomProductSearch{display:none!important}';
   root.document.head.appendChild(style);
 })(typeof window==='undefined'?null:window);
 

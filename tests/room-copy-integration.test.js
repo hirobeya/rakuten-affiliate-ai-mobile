@@ -21,6 +21,17 @@ test('Preview canonical writer and every-sentence reviewer publish only verified
  try{
   const x=setup(),r=res();await x.handler({method:'POST',body:item},r);
   assert.equal(r.code,200);assert.equal(x.calls(),2);assert.equal(r.body.resourceUsage.calls,2);assert.equal(r.body.resourceUsage.inputTokens,200);assert.equal(r.body.resourceUsage.outputTokens,100);assert.deepEqual(r.body.product,draft.product);assert.deepEqual(r.body.sentences,draft.sentences);assert.equal(client.ready(r.body),publication(item,draft,review).text);
+  const html=require('node:fs').readFileSync('public/app.html','utf8');
+  const ui={window:{UrenaviFactSafety:require('../public/fact-safety')},RoomCopyResult:client,localCopyAssessment:()=>({ready:false})};
+  require('node:vm').createContext(ui);
+  require('node:vm').runInContext(html.slice(html.indexOf('function roomCopyNeedsReview('),html.indexOf('function isFullyReviewedCopyState(')),ui);
+  // The contract permits one concrete, fully reviewed sentence. Do not let
+  // a separate client length rule reject the server's complete verified post.
+  assert.equal(ui.roomCopyNeedsReview(client.ready(r.body),item,true,r.body),false);
+  assert.equal(ui.roomCopyNeedsReview(client.ready(r.body),item,true),true);
+  assert.equal(ui.roomCopyNeedsReview(client.ready(r.body),item,true,{...r.body,pending:true}),true);
+  assert.equal(ui.roomCopyNeedsReview('便利な収納ボックスです。',item,true,r.body),true);
+  assert.equal(ui.roomCopyNeedsReview(client.ready(r.body),item,false),true);
   assert.equal(x.logs.length,2);assert.ok(x.logs.every(x=>x.estimatedUsd===.000045));assert.ok(x.logs.every(x=>!JSON.stringify(x).includes('qa@example.test')));
   const cached=res();await x.handler({method:'POST',body:item},cached);assert.equal(x.calls(),2);assert.equal(client.ready(cached.body),client.ready(r.body));assert.equal(x.logs.at(-1).calls,0);assert.equal(cached.body.resourceUsage.calls,0);
   const unsafe=structuredClone(r.body);unsafe.sentences[0].text='絶対に売れる商品';assert.equal(client.ready(unsafe),'');

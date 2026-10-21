@@ -331,7 +331,7 @@ test('caption capacity wording distinguishes storage amount from neutral product
     identity:'洗濯ネット'
   });
   assert.ok(storage);
-  assert.match(storage.text,/入る量や容量まで見て選ぶなら/);
+  assert.doesNotMatch(storage.text,/見て選ぶなら/);
 });
 
 test('caption-grounded reasoning rejects unrelated cross-sell text',()=>{

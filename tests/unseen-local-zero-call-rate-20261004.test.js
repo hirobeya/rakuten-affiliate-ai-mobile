@@ -3,7 +3,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const unseen=require('./fixtures/room-unseen-products.json');
-const {localZeroCall}=require('../api/room-ai-v3');
+const {localZeroCall,resolveIdentityHint}=require('../api/room-ai-v3');
 
 test('measure generalized zero-call rate on reviewed unseen products without tuning',()=>{
   const rows=unseen.map(row=>{
@@ -26,7 +26,8 @@ test('measure generalized zero-call rate on reviewed unseen products without tun
   // the resolved identity rather than forcing every post to start with the product noun.
   // u03 contains H1,375mm in a noisy caption and must never publish a sliced "375mm" fact.
   const mobileBattery=rows.find(x=>x.id==='u08');
-  assert.equal(mobileBattery?.productType,'モバイルバッテリー');
+  assert.equal(resolveIdentityHint(unseen.find(x=>x.id==='u08').item),'モバイルバッテリー');
+  assert.equal(mobileBattery.zeroCall,false,'容量の仕様選びだけでは完成扱いにしない');
   assert.ok(!String(mobileBattery?.text||'').includes('スマホ充電器'));
 
   const fryingPan=rows.find(x=>x.id==='u09');

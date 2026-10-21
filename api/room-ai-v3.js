@@ -14,6 +14,9 @@ const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflic
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
+const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
+const {catalogueOnly}=require('../public/purchase-copy-quality');
+const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -81,7 +84,7 @@ const TYPE_SUFFIXES=sharedTypeSuffixes();
 
 function validateLiteralIdentity(item,value){
   const title=normalize(item?.itemName),identity=normalize(value);
-  if(!identity||!title.includes(identity)||accessoryScoped(title,identity)) return null;
+  if(!identity||isDescriptorIdentity(identity)||!title.includes(identity)||accessoryScoped(title,identity)) return null;
   const raw={productType:{value:identity,source:'itemName',evidence:identity},features:[],sellingPoints:[],confidence:'high'};
   const validation=validateAiExtraction(raw,{itemName:title,itemCaption:item?.itemCaption||''},{imageAvailable:false});
   if(validation?.productType?.valid!==true||!['simple','simple_partial'].includes(validation.mode)) return null;
@@ -198,71 +201,12 @@ function neutralLiteralText(identity,facts,itemPrice){
   return rows.join('\n');
 }
 
-function weakStructuredFact(fact={}){
-  const kind=String(fact?.kind||'');
-  const quote=normalize(fact?.quote);
-  if(['count','dimension','size','material','numeric'].includes(kind)) return true;
-  if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote)) return true;
-  if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote)) return true;
-  if(kind==='function'&&['洗える','手洗い','メッシュ','充電式'].includes(quote)) return true;
-  return false;
-}
-
-function identityAlreadyStatesFact(identity='',quote=''){
-  const id=normalize(identity).toLocaleLowerCase('ja-JP');
-  const q=normalize(quote).toLocaleLowerCase('ja-JP');
-  if(!id||!q) return false;
-  if(id.includes(q)) return true;
-  const variants={
-    '折りたたみ':['折り畳み'],
-    '折り畳み':['折りたたみ'],
-    '伸縮式':['伸縮'],
-    '伸縮':['伸縮式']
-  };
-  return (variants[q]||[]).some(v=>id.includes(v));
-}
-
-function structuredValueHasStrongReason(value={},facts=[],identity=''){
-  const sourceFacts=Array.isArray(facts)?facts:[];
-  const refs=(value?.factRefs||[value?.factRef]).filter(Boolean).map(normalize);
-  if(!refs.length||!sourceFacts.length) return false;
-  return refs.some(ref=>{
-    const fact=sourceFacts.find(f=>normalize(f?.quote)===ref);
-    return fact&&!weakStructuredFact(fact)&&!identityAlreadyStatesFact(identity,fact.quote);
-  });
-}
-
-function hasStrongStructuredReason(values=[],facts=[],identity=''){
-  const rows=Array.isArray(values)?values:[];
-  return rows.some(value=>structuredValueHasStrongReason(value,facts,identity));
-}
-
 const LOCAL_PARTNER_ALLOWED_PREVENTION=[
   '型崩れ防止','形崩れ防止','絡まり防止','色移り防止','毛玉防止','シワ防止'
 ];
 
-function regexEscape(value=''){
-  return String(value||'').replace(/[.*+?^$(){}|[\]\\]/g,'\\$&');
-}
-
 function hasCrossSourceFactConflict(item={},facts=[]){
-  const title=normalize(item?.itemName);
-  const caption=normalize(item?.itemCaption);
-  if(!title||!caption) return false;
-
-  const rows=Array.isArray(facts)?facts:[];
-  for(const fact of rows){
-    const quote=normalize(fact?.quote);
-    if(!quote) continue;
-    const escaped=regexEscape(quote);
-    const negated=new RegExp(`(?:非|不|未)\\s*${escaped}|${escaped}\\s*(?:ではない|ではありません|非対応|対象外|なし|無し|不要)`,'i');
-    if((title.includes(quote)&&negated.test(caption))||(caption.includes(quote)&&negated.test(title))) return true;
-  }
-
-  const explicitCord=/(?:電源|AC)?コード(?:長)?\s*[:：]?\s*\d+(?:\.\d+)?\s*(?:m|cm)|\d+(?:\.\d+)?\s*(?:m|cm)\s*の(?:ロング)?コード|ロングコード/i;
-  if((/コードレス/i.test(title)&&explicitCord.test(caption))||(/コードレス/i.test(caption)&&explicitCord.test(title))) return true;
-
-  return false;
+  return structured.hasSourceFactConflict(item,facts);
 }
 
 function localPartnerTextSafe(item,partnerCopy,text){
@@ -340,6 +284,7 @@ function localZeroCall(item,learnedIdentity=''){
   const structuredMethod=String(understanding?.method||'');
   const structuredIdentity=String(understanding?.identity||'').trim();
   const structuredSafe=copy?.status==='ok'
+    && structured.factsAreTitleBound(copy.facts)
     && ['type_definition','validated_identity'].includes(structuredMethod)
     && structuredIdentity===identity
     && String(copy.text||'').trim()
@@ -352,7 +297,10 @@ function localZeroCall(item,learnedIdentity=''){
   // not by themselves explain a buyer's use case. Defer those to verified AI
   // instead of marking a thin title-only description as a finished post.
   const weakGenericAxis=/^(?:素材・構造|生産情報|サイズ|入り数|数値仕様|重量|容量)$/;
+  // A complete, source-checked caption claim can describe what fits inside.
+  // Its capacity axis does not make it equivalent to an isolated size/number.
   const partnerCopy=proposedPartnerCopy?.generic
+    && proposedPartnerCopy.kind!=='caption_claim'
     && weakGenericAxis.test(String(proposedPartnerCopy.axisHints?.[0]||''))
     ?null:proposedPartnerCopy;
   const facts=[];
@@ -384,18 +332,18 @@ function localZeroCall(item,learnedIdentity=''){
   // inside a title, a generic hook, or an unrelated specification is not proof.
   const renderedCopyLines=new Set(String(copy?.text||'').split(/\n+/).map(line=>line.trim()).filter(Boolean));
   const selectedGroundedValues=groundedValues.filter(v=>renderedCopyLines.has(String(v?.text||'').trim()));
-  const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structuredValueHasStrongReason(v,structuredFacts,identity));
+  const hasWeakStructuredPiggyback=selectedGroundedValues.some(v=>!structured.valueHasStrongReason(v,structuredFacts,identity));
   const useStructuredText=!partnerCopy
     && structuredSafe
     && structuredFacts.length>0
     && selectedGroundedValues.length>0
     && !hasWeakStructuredPiggyback
-    && hasStrongStructuredReason(selectedGroundedValues,structuredFacts,identity);
+    && selectedGroundedValues.some(v=>structured.valueHasStrongReason(v,structuredFacts,identity));
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
   if(!partnerCopy&&!useStructuredText) return null;
   const directAppeals=partnerCopy?[{
-    text:partnerCopy.hook+'。'+partnerCopy.quote,
+    text:[partnerCopy.hook,partnerCopy.quote].filter(Boolean).join('。'),
     factRef:partnerCopy.quote,
     factRefs:[partnerCopy.quote],
     source:partnerCopy?.source||'itemName'
@@ -411,6 +359,9 @@ function localZeroCall(item,learnedIdentity=''){
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   const textSafe=partnerCopy?localPartnerTextSafe(item,partnerCopy,text):!structured.RISK.test(text);
   if(!String(text||'').trim()||!textSafe) return null;
+  // The browser already refuses any text changed by this guard. A local
+  // response must not claim ready while its final copy boundary will reject it.
+  if(guardUnsupportedBenefitCopy(item,text)!==text||catalogueOnly(text)) return null;
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};

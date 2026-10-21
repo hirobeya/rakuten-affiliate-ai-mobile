@@ -90,3 +90,11 @@ console.log('grounded-purchase-copy.test.js: PASS (18 synthetic contracts + adve
   assert.match(result.text,/ブラジャー用洗濯ネットを選ぶなら。/);
   assert.match(result.text,/型崩れを防ぎ、ドラム式でも使えます。/);
 }
+
+// A short positive quote must not reverse a negated feature in the same source.
+for(const negativeCaption of ['防水不可','防水なし','防水できません','防水対象外']){
+ const item={itemName:'バイクグローブ',itemCaption:negativeCaption};
+ const validation={valid:true,productType:{specific:'バイクグローブ'},attributes:[{quote:'防水',value:'防水'}]};
+ const verifiedAppeals=[{text:'防水のバイクグローブです',scene:'雨の日に使いたいとき',attributeRefs:[0],verification:{supported:true}}];
+ assert.equal(composePurchaseCopy({item,analysis:{validation,verifiedAppeals}}).status,'blocked',negativeCaption);
+}
