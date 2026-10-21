@@ -14,6 +14,7 @@ const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflic
 const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
+const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 
 const DEFAULT_DAILY_LIMIT=200;
@@ -357,6 +358,9 @@ function localZeroCall(item,learnedIdentity=''){
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   const textSafe=partnerCopy?localPartnerTextSafe(item,partnerCopy,text):!structured.RISK.test(text);
   if(!String(text||'').trim()||!textSafe) return null;
+  // The browser already refuses any text changed by this guard. A local
+  // response must not claim ready while its final copy boundary will reject it.
+  if(guardUnsupportedBenefitCopy(item,text)!==text) return null;
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};
