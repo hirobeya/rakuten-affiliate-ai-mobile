@@ -6,6 +6,7 @@
  function catalogueOnly(text){
   const s=normalize(text);
   return /(?:見て|確認して|見比べて)選(?:ぶ|び)/.test(s)
+   || /(?:点|ところ)(?:が|は)(?:選びやす|適しています)/.test(s)
    || /「[^」]{1,45}」表記の/.test(s)
    || /表記(?:がある|の)[^。！？]{0,30}(?:です|。)/.test(s);
  }
