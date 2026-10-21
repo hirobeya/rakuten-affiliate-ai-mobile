@@ -32,6 +32,21 @@ Known boundaries: headers and upcoming token usage are estimates/observations, n
 - Independent-controller contention test permits exactly one reservation. Tests cover shared carry-over, expiry, read-only/cache bypass, daily-quota denial, failed DB access, missing headers, 429 preservation and no stale product overwrite.
 - Existing batch/429/semantic/quality regressions remain passing. These tests use synthetic providers and do not consume Groq.
 - Supabase transaction verified one conditional revision claim succeeds and a stale claim fails. The test transaction was rolled back and zero fixture rows remained. Actual table RLS is enabled and anon/authenticated SELECT privileges are absent.
-- No additional live Groq call was made after the earlier 429. Live reduction of 429 frequency is not yet established by this fix's controlled tests.
+- Before the live follow-up below, this repair was tested with synthetic providers and no additional live Groq call after the earlier 429.
 
 References: https://console.groq.com/docs/rate-limits ; https://supabase.com/docs/reference/javascript/using-filters
+
+
+## Live follow-up: 2026-10-21 18:37–18:40 JST
+
+Serving code: 850f14b288a0e7c86c0a44a43e0b15141fe867b6, Preview dpl_J9V5LzXWsYMQuJdkCptFRKCLtHhg, READY/target=null. The user explicitly requested real verification. Existing owner login restored without another login or a protection change. A handheld-cleaner search returned 10 products.
+
+- 09:37:13.738 UTC: generation succeeded, 3424 input / 1345 output tokens.
+- 09:38:09.481 UTC: every-sentence verification succeeded, 2924 input / 1383 output tokens. No rewrite was needed. Total actual provider calls: 2, input 6348 / output 2728 tokens, free policy. These numbers are usage measurements, not an invoice.
+- 09:38:12.010 UTC: automatic progression reached the following product, which returned pending before generation. This request recorded calls=0, inputTokens=0, outputTokens=0, basis=no_provider_call. The UI showed the next generation stage and manual resumption time 18:38:36; it did not automatically resume.
+- Server-side coordination data retained the preceding verifier's remainingTokens=4689 and absolute token-reset deadline. The lease was released (null), rather than lost at product completion.
+- The daily quota row was call_count=7, updated_at=09:38:05.990795 UTC (the verification admission). A subsequent read after the zero-call request still showed this timestamp and count; the waiting product did not advance daily quota.
+- The completed second-ranked product was copied through the normal UI. Clipboard text matched the displayed reviewed text: 500gの軽量コードレスハンディクリーナーなので、車内の砂や食べこぼしなどのゴミを手軽に吸い取れます。 The affiliate disclosure was retained. No external ROOM posting or false posted/sales record was made.
+- No 429 or provider failure appeared in this bounded run. No further generation was requested once the intended carry-over/wait/copy path was verified.
+
+This is real evidence that final verification hands its budget observations to a different product, that the next product waits without provider/daily-quota consumption, and that verified text remains copyable. It is a small controlled sample, not proof that all future 429s are impossible, that all tabs/workers have been load-tested live, or that the whole app's release/quality gates are met. No implementation changes were required by this live check.
