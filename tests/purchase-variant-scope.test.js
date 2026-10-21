@@ -43,3 +43,20 @@ test('a selection appraisal cannot pass as the final purchase reason even with e
  }
  assert.equal(quality.catalogueOnly('レモンフレーバーのお茶で、爽やかな香りを楽しみたいときに。'),false);
 });
+test('a source-title product kind cannot disappear into an accessory-only post',()=>{
+ for(const [kind,accessory,quote] of [
+  ['刺繍キット','刺繍枠','刺繍キットには、ステッチ図解付きのハンドブックと刺繍枠が付属します。'],
+  ['コーヒーセット','計量スプーン','コーヒーセットには計量スプーンが付属します。'],
+  ['料理本','型紙','料理本には実物大型紙が付属します。']
+ ]){
+  const item={itemName:kind,itemCaption:quote};
+  const draft={product:{what:kind,acts_on:kind,acts_on_quote:quote},sentences:[{text:accessory+'が付属します。',kinds:['spec'],quotes:[quote]}]};
+  assert.ok(inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
+  draft.sentences[0].text=kind+'には、'+accessory+'が付属します。';
+  assert.ok(!inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
+ }
+ // A known word in source is not permission to skip semantic identity review.
+ const item={itemName:'複合商品 A・B',itemCaption:'AとBを組み合わせた商品です。'};
+ const draft={product:{what:'A・Bの複合商品',acts_on:'組み合わせ',acts_on_quote:item.itemCaption},sentences:[{text:'組み合わせて使いたいときに。',kinds:['scene'],quotes:[item.itemCaption]}]};
+ assert.ok(!inspect(item,draft).failures.some(f=>f.rule==='product_identity_missing_from_post'));
+});
