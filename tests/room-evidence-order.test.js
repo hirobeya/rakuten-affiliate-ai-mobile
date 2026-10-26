@@ -26,6 +26,15 @@ test('recorded live failures receive exact source locations without rewriting so
  }
 });
 
+test('initial requests for the recorded product fit the previously observed 8000 token window estimate',()=>{
+ const r=records[0],item={itemName:r.item_name,itemCaption:r.item_caption_normalized,catchcopy:'8枚入れ 型崩れ防止'};
+ const p=createProvider({apiKey:'unused',fetchImpl:()=>{throw Error('LIVE_NETWORK_DISABLED');}});
+ // This is a conservative request estimate and a regression bound for this
+ // source only, not an account-limit lookup or a promise for other products.
+ assert.ok(p.requiredTokens('generate',item,{})<=8000);
+ assert.ok(p.requiredTokens('verify',item,{draft:r.state.draft})<=8000);
+});
+
 test('source locations never repair invented quotes or conceal model and negation restrictions',async()=>{
  const item={itemName:'カバー付き収納ベンチ A/B',itemCaption:'A型のカバーのみ手洗いできます。本体は洗えません。B型には付属しません。',catchcopy:''};
  const draft={product:{what:'収納ベンチ',acts_on:'収納',acts_on_quote:'架空の引用'},sentences:[{text:'本体を丸洗いできます。',kinds:['spec'],quotes:['本体は洗えません。','本体を丸洗いできます。']}]};
