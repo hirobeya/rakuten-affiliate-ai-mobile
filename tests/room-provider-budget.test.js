@@ -7,7 +7,7 @@ const item=n=>({itemCode:'budget:'+n,itemName:'収納ボックス'+n,itemCaption
 const draft=i=>({product:{what:i.itemName,acts_on:'収納物',acts_on_quote:i.itemCaption},sentences:[{text:i.itemName+'は折りたためます。',kinds:['spec'],quotes:[i.itemName,i.itemCaption]}]});
 const productStore=()=>{const rows=new Map();return {loadProduct:async k=>structuredClone(rows.get(k.itemCode)),saveProduct:async r=>{rows.set(r.itemCode,{model:r.model,schema_version:r.schemaVersion,raw_ai_json:structuredClone(r.rawAiJson)});}};};
 function setup({store=memory(),clock={value:1000},call}={}){
- const calls=[],quotas=[];const base={model:'fixture-budget',requiredTokens:()=>5000,call:async(stage,i,state)=>{calls.push([stage,i.itemCode]);return call?call(stage,i,state):{raw:draft(i),rateLimit:{'x-ratelimit-remaining-tokens':'1200','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999','x-ratelimit-reset-requests':'1d'}};}};
+ const calls=[],quotas=[];const base={model:'fixture-budget',requiredTokens:()=>5000,call:async(stage,i,state)=>{calls.push([stage,i.itemCode]);return call?call(stage,i,state):{raw:draft(i),usage:{prompt_tokens:100,completion_tokens:20},rateLimit:{'x-ratelimit-remaining-tokens':'1200','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999','x-ratelimit-reset-requests':'1d'}};}};
  const provider=withSharedBudget(base,{store,now:()=>clock.value});
  return {store,clock,calls,provider,args:{store:productStore(),provider,now:()=>clock.value,consumeQuota:async s=>{quotas.push(s);return true;}},quotas};
 }
@@ -33,7 +33,7 @@ test('an active call holds a shared lease across products, and quota rejection r
 test('429 propagates once, publishes shared cooldown, and never schedules a retry',async()=>{
  const x=setup({call:async()=>{const e=new Error('fixture');e.status=429;e.retryAfterMs=180000;throw e;}});
  await assert.rejects(()=>advance({...x.args,item:item(1)}),e=>e.status===429);
- const next=await advance({...x.args,item:item(2)});assert.equal(next.pending,true);assert.equal(next.retryAfterMs,180000);
+ await assert.rejects(()=>advance({...x.args,item:item(2)}),e=>e.status===503);
  assert.equal(x.calls.length,1);assert.equal(x.quotas.length,1);
 });
 test('read-only and completed cached drafts do not acquire a lease or spend quota',async()=>{
@@ -43,12 +43,12 @@ test('read-only and completed cached drafts do not acquire a lease or spend quot
  x.args.store={loadProduct:async()=>({schema_version:VERSION,model:x.provider.model,raw_ai_json:{state:{stage:'done',calls:[],startedAt:0,quality:{status:'blocked'},draft:null}}})};
  const cached=await advance({...x.args,item:item(1)});assert.equal(cached.pending,false);assert.equal(x.quotas.length,0);assert.equal(x.calls.length,0);
 });
-test('expired or unknown observations do not permanently block; different models retain separate token observations',async()=>{
+test('expired observations and unknown headers with KNOWN usage retain pacing; models keep separate observations',async()=>{
  assert.equal(waitFor({remainingTokens:0,tokenResetAt:1000},5000,1001),0);
- const x=setup();const p=await x.provider.acquire('generate',item(1),{});await p.release({called:true,response:{rateLimit:{}}});
+ const x=setup();const p=await x.provider.acquire('generate',item(1),{});await p.release({called:true,response:{usage:{prompt_tokens:100,completion_tokens:20},rateLimit:{}}});
  assert.equal((await x.provider.acquire('generate',item(2),{})).waitMs,65000);
  const y=setup();const p2=await y.provider.acquire('generate',item(1),{});
- await p2.release({called:true,response:{rateLimit:{'x-ratelimit-remaining-tokens':'0','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999'}}});
+ await p2.release({called:true,response:{usage:{prompt_tokens:100,completion_tokens:20},rateLimit:{'x-ratelimit-remaining-tokens':'0','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999'}}});
  const other=withSharedBudget({model:'other',requiredTokens:()=>100,call(){}},{store:y.store,now:()=>y.clock.value});
  assert.ok((await other.acquire('generate',item(2),{})).waitMs>0);
  y.clock.value+=2101;assert.equal((await other.acquire('generate',item(2),{})).waitMs,0);
@@ -80,7 +80,7 @@ test('actual HTTP handler carries a shared wait across products with zero extra 
   const {createHandler}=require('../lib/room-copy-handler');const clock={value:1000},budget=memory(),store=productStore();let calls=0,quota=0;
   const source={itemName:'収納ボックス',itemCaption:'折りたたみ可能な収納ボックス。小物を収納できます。'};
   const raw={product:{what:'収納ボックス',acts_on:'小物',acts_on_quote:'小物を収納できます。'},sentences:[{text:'小物をまとめたいときに、折りたたみ可能な収納ボックス。',kinds:['scene','spec'],quotes:[source.itemCaption]}]};
-  const provider={model:'fixture',requiredTokens:()=>5000,call:async()=>{calls++;return {raw,rateLimit:{'x-ratelimit-remaining-tokens':'500','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999'}};}};
+  const provider={model:'fixture',requiredTokens:()=>5000,call:async()=>{calls++;return {raw,usage:{prompt_tokens:100,completion_tokens:20},rateLimit:{'x-ratelimit-remaining-tokens':'500','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999'}};}};
   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'fixture@example.test'}}),provider,budgetStore:budget,store,now:()=>clock.value,localZeroCall:()=>null,consumeQuota:async()=>{quota++;return true;},logCost(){}});
   const res=()=>({setHeader(){},status(n){this.code=n;return this;},json(body){this.body=body;}});
   const first=res();await handler({method:'POST',body:{...source,itemCode:'first'}},first);assert.equal(first.code,202);
@@ -100,4 +100,31 @@ test('a worker that read old product progress rechecks after reservation and doe
  const x=setup();let reads=0;const {VERSION}=require('../lib/room-semantic-engine');
  const store={loadProduct:async()=>++reads===1?null:{schema_version:VERSION,model:x.provider.model,raw_ai_json:{state:{stage:'done',attempt:0,calls:[{stage:'generate'}],quality:{status:'blocked'},startedAt:0}}},saveProduct:async()=>{throw Error('must not overwrite completed progress');}};
  const done=await advance({...x.args,store,item:item(1)});assert.equal(done.pending,false);assert.equal(x.calls.length,0);assert.equal(x.quotas.length,0);assert.equal(x.store.read().lease,null);
+});
+
+test('a successful send followed by failed progress save blocks later sends even after lease and cooldown expiry',async()=>{
+ const x=setup();x.args.store={loadProduct:async()=>null,saveProduct:async()=>{throw Error('save failed');}};
+ await assert.rejects(()=>advance({...x.args,item:item(1)}),/save failed/);
+ assert.equal(x.store.read().uncertain.reason,'progress_not_saved');
+ x.clock.value+=86400000;
+ await assert.rejects(()=>advance({...x.args,item:item(1)}),e=>e.status===503);
+ await assert.rejects(()=>advance({...x.args,item:item(2)}),e=>e.status===503);
+ assert.equal(x.calls.length,1);assert.equal(x.quotas.length,1);
+});
+test('unknown consumption and a crashed marked send cannot become zero consumption when time passes',async()=>{
+ const x=setup();const p=await x.provider.acquire('generate',item(1),{});
+ await p.release({called:true,response:{rateLimit:{}}});x.clock.value+=86400000;
+ await assert.rejects(()=>x.provider.acquire('generate',item(2),{}),e=>e.status===503);
+ const y=setup();const lease=await y.provider.acquire('generate',item(1),{});await lease.markSent();y.clock.value+=120001;
+ await assert.rejects(()=>y.provider.acquire('generate',item(2),{}),e=>e.status===503);
+});
+test('the provider lease remains held until product progress has been saved',async()=>{
+ const x=setup();const save=x.args.store.saveProduct;let observed=false;
+ x.args.store.saveProduct=async row=>{observed=true;assert.equal(x.store.read().lease.sent,true);await save(row);};
+ await advance({...x.args,item:item(1)});assert.equal(observed,true);assert.equal(x.store.read().lease,null);assert.equal(x.store.read().uncertain,undefined);
+});
+test('an unfinished stored execution at four sends cannot spend a fifth quota or provider call',async()=>{
+ const x=setup();const {VERSION}=require('../lib/room-semantic-engine');
+ x.args.store={loadProduct:async()=>({schema_version:VERSION,model:x.provider.model,raw_ai_json:{state:{stage:'generate',attempt:1,calls:Array.from({length:4},()=>({stage:'generate'})),startedAt:0}}}),saveProduct:async()=>{throw Error('must not save');}};
+ await assert.rejects(()=>advance({...x.args,item:item(1)}),e=>e.status===429);assert.equal(x.calls.length,0);assert.equal(x.quotas.length,0);
 });
