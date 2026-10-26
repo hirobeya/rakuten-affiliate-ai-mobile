@@ -3,7 +3,20 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
-const {localZeroCall}=require('../api/room-ai-v3');
+const {localZeroCall,resolveLiteralIdentity}=require('../api/room-ai-v3');
+
+test('purpose-qualified product names are preserved instead of shortened to a known suffix',()=>{
+  for(const itemName of ['シャツ用洗濯ネット 洗濯ネット','衣類用収納ボックス 収納ボックス','旅行用折りたたみ傘 折りたたみ傘']){
+    const identity=itemName.split(' ')[0];
+    const resolved=resolveLiteralIdentity({itemName,itemCaption:''});
+    assert.ok(resolved);
+    assert.equal(resolved.canonicalIdentity,identity);
+  }
+  assert.equal(resolveLiteralIdentity({itemName:'シャツ用洗濯ネット 洗濯ネット',itemCaption:''}).canonicalIdentity,'シャツ用洗濯ネット');
+  // A cover remains an accessory, never a reason to promote its target product.
+  const covered=localZeroCall({itemName:'シャツ用洗濯ネットカバー 洗濯ネット',itemCaption:'カバーを洗うことで、汚れを落とせます。'});
+  assert.equal(covered,null);
+});
 
 test('different compounds sharing a noun core defer instead of dropping target context',()=>{
   assert.equal(hasCompetingCompoundIdentity('ペットキャリー リュック 3WAY キャリーケース 折りたたみ','キャリーケース'),true);

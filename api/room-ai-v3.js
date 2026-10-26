@@ -129,7 +129,21 @@ function resolveLiteralIdentity(item){
     .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
     .sort((a,b)=>a.at-b.at||b.type.length-a.type.length);
 
+  const titleTokens=title.split(/[\s,，、。!！?？()（）【】\[\]・\/／|｜]+/).filter(Boolean);
   for(const hit of known){
+    // Preserve an explicitly named purpose compound instead of first reducing
+    // it to its known suffix (e.g. X用Y -> Y). Validation and the existing
+    // conflict/role arbitration still decide whether it is the whole product.
+    for(const token of titleTokens){
+      if(!token.endsWith(hit.type)||token===hit.type) continue;
+      const prefix=token.slice(0,-hit.type.length);
+      if(!/^[ぁ-んァ-ヶ一-龯ー]{1,12}用$/.test(prefix)) continue;
+      const compound=validateLiteralIdentity(item,token);
+      if(!compound) continue;
+      compound.canonicalIdentity=token;
+      compound.matchIndex=title.indexOf(token);
+      candidates.push(compound);
+    }
     const validated=validateLiteralIdentity(item,hit.type);
     if(!validated) continue;
     validated.canonicalIdentity=hit.type;
@@ -246,11 +260,22 @@ function resolveIdentityHint(item,learnedIdentity=''){
   return identity;
 }
 
-function localZeroCall(item,learnedIdentity=''){
+function localZeroCall(item,learnedIdentity='',diagnostics=null){
+  // Internal diagnostics expose the existing decision, never a second policy
+  // or a bypass. The normal endpoint still receives exactly the same contract.
+  const reject=(stage,reason)=>{
+    if(diagnostics) Object.assign(diagnostics,{status:'deferred',stage,reason});
+    return null;
+  };
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
   const literalLocal=resolveLiteralIdentity(item);
   const repeatedLocal=repeatedLiteralIdentity(item);
+  if(diagnostics) diagnostics.identityCandidates={
+    rule:ruleLocal?.canonicalIdentity||ruleLocal?.raw?.productType?.value||'',
+    literal:literalLocal?.canonicalIdentity||literalLocal?.raw?.productType?.value||'',
+    repeated:repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value||''
+  };
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
 
   if(!local){
@@ -275,8 +300,9 @@ function localZeroCall(item,learnedIdentity=''){
   let sourceIdentity=String(local?.raw?.productType?.value||'').trim();
   let identity=String(local?.canonicalIdentity||sourceIdentity).trim();
   let identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
-  if(!identity || local?.validation?.productType?.valid!==true) return null;
-  if(!local?.arbitration&&hasCompetingCompoundIdentity(title,identity)) return null;
+  if(diagnostics) diagnostics.identity=identity;
+  if(!identity || local?.validation?.productType?.valid!==true) return reject('identity','identity_unresolved');
+  if(!local?.arbitration&&hasCompetingCompoundIdentity(title,identity)) return reject('identity','competing_identity');
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
@@ -293,6 +319,10 @@ function localZeroCall(item,learnedIdentity=''){
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
   const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  if(diagnostics) diagnostics.purchaseCandidate=proposedPartnerCopy?{
+    text:proposedPartnerCopy.text,quote:proposedPartnerCopy.quote,source:proposedPartnerCopy.source||'itemName',
+    kind:proposedPartnerCopy.kind,axes:proposedPartnerCopy.axisHints||[]
+  }:null;
   // Generic material, quantity and dimension descriptions are factual, but do
   // not by themselves explain a buyer's use case. Defer those to verified AI
   // instead of marking a thin title-only description as a finished post.
@@ -321,9 +351,10 @@ function localZeroCall(item,learnedIdentity=''){
       facts.unshift({quote:partnerCopy.quote,source:partnerCopy.source||'itemName',kind:'partner_signal'});
     }
   }
-  if(!facts.length) return null;
-  if(hasCrossSourceFactConflict(item,facts)) return null;
-  if(facts.every(f=>/^(?:日本製)$/.test(normalize(f.quote)))) return null;
+  if(diagnostics) diagnostics.extractedFacts=facts.map(({quote,source,kind})=>({quote,source,kind}));
+  if(!facts.length) return reject('extraction','no_grounded_facts');
+  if(hasCrossSourceFactConflict(item,facts)) return reject('evidence','conflicting_source_facts');
+  if(facts.every(f=>/^(?:日本製)$/.test(normalize(f.quote)))) return reject('purchase_reason','origin_only');
 
   const groundedValues=structuredSafe?(Array.isArray(copy.values)?copy.values:[]).filter(v=>
     String(v?.text||'').trim() && (v.factRefs||[v.factRef]).filter(Boolean).length
@@ -341,7 +372,7 @@ function localZeroCall(item,learnedIdentity=''){
     && selectedGroundedValues.some(v=>structured.valueHasStrongReason(v,structuredFacts,identity));
   // Exact facts alone are not a finished ROOM post. Local completion requires
   // a grounded purchase reason; otherwise defer to the V3 Groq verification path.
-  if(!partnerCopy&&!useStructuredText) return null;
+  if(!partnerCopy&&!useStructuredText) return reject('purchase_reason','no_grounded_purchase_candidate');
   const directAppeals=partnerCopy?[{
     text:[partnerCopy.hook,partnerCopy.quote].filter(Boolean).join('。'),
     factRef:partnerCopy.quote,
@@ -353,15 +384,17 @@ function localZeroCall(item,learnedIdentity=''){
     factRefs:[f.quote],
     source:f.source
   })));
-  if(!directAppeals.length) return null;
+  if(!directAppeals.length) return reject('composition','no_renderable_appeals');
 
   let text=partnerCopy?.text||(useStructuredText?copy.text:neutralLiteralText(identity,facts,item.itemPrice));
   if(useStructuredText&&structuredFacts.length!==facts.length&&facts.some(f=>equivalentVolumeKey(f.quote))) text=neutralLiteralText(identity,facts,item.itemPrice);
   const textSafe=partnerCopy?localPartnerTextSafe(item,partnerCopy,text):!structured.RISK.test(text);
-  if(!String(text||'').trim()||!textSafe) return null;
+  if(!String(text||'').trim()||!textSafe) return reject('safety','local_text_rejected');
   // The browser already refuses any text changed by this guard. A local
   // response must not claim ready while its final copy boundary will reject it.
-  if(guardUnsupportedBenefitCopy(item,text)!==text||catalogueOnly(text)) return null;
+  if(guardUnsupportedBenefitCopy(item,text)!==text) return reject('safety','final_copy_guard');
+  if(catalogueOnly(text)) return reject('quality','catalogue_only_copy');
+  if(diagnostics) Object.assign(diagnostics,{status:'ready',stage:'publication',reason:'grounded_local_copy'});
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
   const variant={index:1,hookType,hook,text};

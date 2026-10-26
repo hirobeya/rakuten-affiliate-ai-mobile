@@ -17,13 +17,19 @@
  }
  // A ranking hint for complete source sentences. It is not an entailment
  // verdict and must never replace source binding or the five review questions.
+ function hasChoiceRelation(text){
+  const s=normalize(text);
+  if(/ではな|ではあり|できな|できませ|不可|対象外|別売|関連商品/.test(s))return false;
+  return /[^。！？]{1,}組み合わせ(?:は|が)?自由[^。！？]{0,20}選べる\d+(?:枚|個|本|袋|組|点|箱|足)セット/.test(s);
+ }
  function hasUseRelation(text){
   if(sellerNarrative(text))return false;
   const s=normalize(text);
   return /[^。！？]{4,}(?:ため(?:に|の)|ことで|ので|により|によって|に合わせて|に応じて)[^。！？]{4,}/.test(s)
+   || hasChoiceRelation(s)
    || /[^。！？]{2,}(?:を|が)[^。！？]{0,30}(?:できます|できる|しやす|やすく|入ります|入る|収まり|楽しめ|味わえ|入れられ|包み込|抑え|おさえ|維持|保護)/.test(s)
    || /[^。！？]{3,}で[^。！？]{3,}(?:しやす|できます|できる)/.test(s);
  }
  function sourceIncludes(source,quote){const q=normalize(quote);return Boolean(q)&&normalize(source).includes(q);}
- return {catalogueOnly,hasUseRelation,sellerNarrative,sourceIncludes};
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes};
 });

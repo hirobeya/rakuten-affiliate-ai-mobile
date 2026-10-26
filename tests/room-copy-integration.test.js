@@ -9,13 +9,43 @@ const item={itemCode:'qa:box',itemName:'収納ボックス',itemCaption:'折り�
 const draft={product:{what:'収納ボックス',acts_on:'小物',acts_on_quote:'小物を収納できます。'},sentences:[{text:'小物をまとめたいときに、折りたたみ可能な収納ボックス。',kinds:['scene','spec'],quotes:[item.itemCaption]}]};
 const review={product:{what:'supported',acts_on:'supported'},sentences:draft.sentences.map(s=>({text:s.text,...Object.fromEntries(questions.map(q=>[q,'supported'])),evidenceQuotes:[]})),quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(q=>[q,'supported']))};
 function res(){return {setHeader(){},status(n){this.code=n;return this;},json(body){this.body=body;return body;}};}
-function setup({wait=false,reject=false}={}){
+function setup({wait=false,reject=false,realLocal=false}={}){
  let row=null,calls=0;const logs=[];
  const provider={model:'openai/gpt-oss-120b',requiredTokens:()=>10,call:async stage=>{calls++;if(reject){const e=new Error('429');e.status=429;throw e;}return {model:'openai/gpt-oss-120b',raw:stage==='generate'?draft:review,usage:{prompt_tokens:100,completion_tokens:50},rateLimit:wait?{'x-ratelimit-remaining-tokens':'0','x-ratelimit-reset-tokens':'60s'}:{}};}};
  const store={loadProduct:async()=>row,saveProduct:async x=>{row={schema_version:x.schemaVersion,model:x.model,raw_ai_json:structuredClone(x.rawAiJson)};}};
- const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),store,provider,consumeQuota:async()=>true,localZeroCall:()=>null,logCost:x=>logs.push(x)});
+ const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),store,provider,consumeQuota:async()=>true,localZeroCall:realLocal?undefined:()=>null,logCost:x=>logs.push(x)});
  return {handler,logs,calls:()=>calls};
 }
+test('actual local route completes explicit choice without quota, cache or provider access',async()=>{
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ try{
+  const source={itemCode:'choice:source',itemName:'洗濯ネット ランドリーネット',itemCaption:'サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。'};
+  const never=()=>assert.fail('local completion must not spend provider resources');
+  const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),store:{loadProduct:never,saveProduct:never},provider:{call:never},consumeQuota:never,logCost(){}});
+  const r=res();await handler({method:'POST',body:source},r);
+  assert.equal(r.code,200);assert.equal(r.body.model,'local');assert.equal(r.body.resourceUsage.calls,0);
+  assert.equal(r.body.quality.status,'ready');assert.ok(r.body.quality.text.includes(source.itemCaption));
+  assert.equal(client.ready(r.body),''); // Local is never labelled AI-reviewed.
+  const html=require('node:fs').readFileSync('public/app.html','utf8');
+  const ui={window:{UrenaviFactSafety:require('../public/fact-safety'),UrenaviPurchaseCopyQuality:require('../public/purchase-copy-quality')},RoomCopyResult:client,localCopyAssessment:()=>({ready:false})};
+  require('node:vm').createContext(ui);
+  require('node:vm').runInContext(html.slice(html.indexOf('function roomCopyNeedsReview('),html.indexOf('function isFullyReviewedCopyState(')),ui);
+  assert.equal(ui.roomCopyNeedsReview(r.body.quality.text,source,true,r.body),false);
+  assert.equal(ui.roomCopyNeedsReview(r.body.quality.text,{...source,itemCaption:''},true,r.body),true);
+  assert.equal(r.body.pass2Status,'not_needed');
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
+test('actual local deferral reaches existing writer and review and then reuses completion',async()=>{
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ try{
+  const x=setup({realLocal:true}),first=res();await x.handler({method:'POST',body:item},first);
+  assert.equal(first.code,200);assert.equal(first.body.quality.status,'ready');assert.equal(x.calls(),2);
+  assert.deepEqual(first.body.sentences,draft.sentences);
+  const again=res();await x.handler({method:'POST',body:item},again);
+  assert.equal(again.body.resourceUsage.calls,0);assert.equal(x.calls(),2);
+  assert.equal(client.ready(again.body),client.ready(first.body));
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
 test('Preview canonical writer and every-sentence reviewer publish only verified text and reuse cache',async()=>{
  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{
