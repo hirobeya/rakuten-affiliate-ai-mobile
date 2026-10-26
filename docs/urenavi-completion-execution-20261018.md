@@ -117,3 +117,9 @@ requiredTokensが商品payloadだけを数え、実際に送るsystem promptとs
 - 修正後の初稿は開発6313〜7861、未見6500〜7731で34/34が観測8000以内。保存済みipowの再生成は7276。全原文・失敗文・修正指示を保持する容量回帰を追加。これは原文の短縮・部分引用への置換ではない。
 - 全438回帰・vercel-build成功。実Groq品質・全商品の再生成/review容量・全時間窓・30人運用の証明ではない。実Groq追加通信なし。
 - 前段の内容はGitHub connectorでaab9eb5cfe6546140e9cf254c392771d7086aec4へ反映（ローカル8c62a4dとtree一致）。両CI成功40375162004/40375162047。Preview dpl_5U7HeG2q8cYbEp3ZQfdBeirk3ReW起動を確認。現検証ブラウザには正規アプリsessionがなくログイン画面。ユーザー認証を省略・偽装せず、実生成は認証後に検証する。
+
+### 34件容量対策後の実測と寸法表記の不整合
+- GitHub HEAD 3a6f9f75e925005ad4771b47707e5a32490f87b4、policy room_contract_980398d73e1361ab。両CI40375674213/40375674088成功、Preview dpl_CChBydrA6jpm825LhUU9pwT1SHyH起動、固定開発URLの公開version一致を確認。固定URLでは既存の正規オーナーsessionが復元され、再認証は不要だった。直前の「sessionなし」は個別deployment URLの観測であり、固定URLまで未認証と断定しない。
+- 保存済みipowの明示生成と既存一回再作成を実施。2呼出、入力4832・出力2818・計7650トークン、429なし。初稿は商品名省略と寸法を拒否。再作成で商品名省略は解消、残る拒否はmeasurement_without_evidenceだけ。AIreviewには未到達、草稿は非公開・コピー不可のまま。容量解消を品質合格とは扱わない。
+- 原記録docs/measurements/room-copy-20261027-ipow-compact.jsonを保存。原文60*50cmと本文60×50cmの同じ寸法が不一致になる共有parserの欠陥を再現。長さ単位mm/cm/mを末尾に明記する既存寸法連鎖だけ、区切りに*を追加。別の数値、cm→mmやkgの変換、重さ等への単位継承は引き続き拒否。引用一致・意味検証・品質6項目を解除しない。
+- 保存済み実草稿の機械検査はこの修正で成功するが、AIreviewなしpublicationはblockedを維持。負例と既存反例、全440回帰・vercel-build成功。新しい実AIreviewによる品質確認は未完了。
