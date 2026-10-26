@@ -1063,7 +1063,7 @@ input,select{
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20261022-scoped-room-link"></script>
 <script src="/structured-room-copy.js?v=20261018-source-contract-1"></script>
-<script src="/fact-safety.js?v=20260925-1"></script>
+<script src="/fact-safety.js?v=20261023-source-relation"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/room-today-plan.js"></script>
 <script src="/room-account-records.js"></script>
@@ -2935,17 +2935,22 @@ function aiTargetDecision(item){
 
 function activeAiProgress(){
   const items=Array.isArray(lastSearchItems)?lastSearchItems:[];
-  let required=0,done=0,pending=0,failed=0;
+  let required=0,done=0,pending=0,failed=0,ready=0,blocked=0,unconfirmed=0;
   items.forEach((item,index)=>{
     const target=aiTargetDecision(item);
     if(!target.callAi) return;
     required++;
-    const state=aiRoomResults.get(index)?.state;
-    if(state==='done') done++;
+    const result=aiRoomResults.get(index),state=result?.state;
+    if(state==='done'){
+      done++;
+      if(result.data?.ok===true&&result.data?.pending===false&&result.data?.quality?.status==='ready') ready++;
+      else if(result.data?.quality?.status==='blocked') blocked++;
+      else unconfirmed++;
+    }
     else if(state==='error') failed++;
     else pending++;
   });
-  return {required,done,pending,failed,finished:required>0&&pending===0};
+  return {required,done,pending,failed,ready,blocked,unconfirmed,finished:required>0&&pending===0};
 }
 
 function resumeActiveAiQueue(){
@@ -3017,7 +3022,7 @@ async function runAiPreview(items,{resume=false}={}){
     aiQueueRunning=false;
     const progress=activeAiProgress();
     const meta=document.getElementById('debugJsonMeta');
-    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`AI確認完了：${progress.done}/${progress.required}件成功、${progress.failed}件停止。検証JSONを作成できます。`;
+    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`確認処理完了：${progress.done+progress.failed}/${progress.required}件。投稿文合格${progress.ready}件、不採用${progress.blocked}件、判定未確認${progress.unconfirmed}件、エラー停止${progress.failed}件。検証JSONを作成できます。`;
   }
 }
 
@@ -3246,6 +3251,15 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
     &&window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote);
+  // Length never substitutes for the exact approved result. In particular,
+  // long local text must rebind its source just as short local text does.
+  if(validatedByServer){
+    const v3=String(verifiedResult?.version||'').startsWith('super-urenavi-v3-');
+    const expected=verifiedText||(v3&&verifiedResult?.ok===true&&verifiedResult?.quality?.status==='ready'
+      ?String(verifiedResult?.variants?.[0]?.text||'').trim():'');
+    if(!expected||expected!==String(text||''))return true;
+    if(verifiedResult?.model==='local'&&partner?.kind==='caption_claim'&&!localSourceText)return true;
+  }
   if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||''))&&!localSourceText)return true;
   // Publication safety is enforced at the final copy boundary for every route.
   // Draft builders remain responsible only for generating drafts.

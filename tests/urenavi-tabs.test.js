@@ -65,7 +65,10 @@ test('weak copy from the reported washing-net screen is not publish-ready',()=>{
  assert.equal(ctx.roomCopyNeedsReview(weak,item,true),true);
  const supportedItem={itemName:'コードレス 掃除機'};
  const supported=ctx.localCopyAssessment(supportedItem).result.text;
- assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem,true),false);
+ // A boolean is not an approved server result, even for a long safe draft.
+ assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem,true),true);
+ // The separately grounded browser-local route remains available.
+ assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem),false);
  ctx.window.UrenaviFactSafety=null;
  assert.equal(ctx.roomCopyNeedsReview(supported,supportedItem,true),true);
 });

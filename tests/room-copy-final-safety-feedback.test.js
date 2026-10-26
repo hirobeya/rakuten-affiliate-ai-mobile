@@ -8,6 +8,23 @@ const draft=text=>({product:{what:item.itemName,acts_on:'シャツ',acts_on_quot
 const bad=draft('シャツ用洗濯ネットは、シャツを巻いて洗うとアイロンがけの手間が減ります。');
 const good=draft('シャツ用洗濯ネットは、シャツを巻いて洗うとアイロンがけの負担が減ります。');
 const review=d=>({product:{what:'supported',acts_on:'supported'},sentences:d.sentences.map(s=>({text:s.text,...Object.fromEntries(questions.map(q=>[q,'supported'])),evidenceQuotes:[]})),quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(q=>[q,'supported']))});
+test('coexisting attributes need the same positive source relation; unrelated provision claims still fail',()=>{
+ const {unsupportedBenefitTerms,guardUnsupportedBenefitCopy}=require('../public/fact-safety');
+ const source={itemName:'洗濯ネット',itemCaption:'六角形の構造が、クッション性と通気性を両立。'};
+ const text='洗濯ネットはクッション性と通気性を兼ね備えています。';
+ assert.deepEqual(unsupportedBenefitTerms(text,source),[]);
+ assert.equal(guardUnsupportedBenefitCopy(source,text),text);
+ for(const [caption,body] of [
+  ['',text],
+  ['クッション性と通気性を両立していません。',text],
+  ['クッション性と通気性を両立できない。',text],
+  ['クッション性と通気性を両立。','洗濯ネットは防水性と通気性を兼ね備えています。'],
+  ['クッション性と通気性を両立。',text+'災害への備えになります。']
+ ])assert.ok(unsupportedBenefitTerms(body,{...source,itemCaption:caption}).includes('備え'));
+ const unsafe={...source,itemCaption:'クッション性と通気性を両立。'};
+ const d={product:{what:'洗濯ネット',acts_on:'衣類',acts_on_quote:unsafe.itemCaption},sentences:[{text:'洗濯ネットはクッション性と通気性を兼ね備え、絶対に衣類を傷めません。',kinds:['benefit'],quotes:[unsafe.itemCaption]}]};
+ assert.equal(inspect(unsafe,d).ok,false);
+});
 test('the existing browser copy guard rejects an ungrounded term before the server calls a draft ready',()=>{
  assert.ok(inspect(item,bad).failures.some(f=>f.rule==='final_copy_guard'&&f.sentence===0&&f.detail.includes('手間')));
  assert.equal(inspect(item,good).ok,true);

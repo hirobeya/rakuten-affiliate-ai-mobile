@@ -130,7 +130,14 @@
 
   function unsupportedBenefitTerms(text,item){
     const t=normalize(text),source=sourceText(item);
-    return UNSUPPORTED_BENEFIT_TERMS.filter(term=>t.includes(term)&&!source.includes(term));
+    // Ignore the lexical collision only for the SAME coordinated attributes
+    // explicitly stated as coexisting in a positive source clause. This does
+    // not approve the sentence: scope, outcomes and all other guards still run.
+    let provisionText=t;
+    for(const m of source.matchAll(/([^。！？、]{1,40}と[^。！？、]{1,30})を両立(?:しています|している|します|する|した)?(?=[。！？]|$)/g)){
+      provisionText=provisionText.split(m[1]+'を兼ね備え').join(m[1]+'を両立');
+    }
+    return UNSUPPORTED_BENEFIT_TERMS.filter(term=>(term==='備え'?provisionText:t).includes(term)&&!source.includes(term));
   }
 
   function safeIdentityLead(item,identity=''){
