@@ -1,0 +1,416 @@
+{
+  "scope": "Actual Preview Groq execution, one development product. Not a multigenre or unseen quality rate.",
+  "deployment": "dpl_43SiuXGSZ4jH7jgE3JKuD34855Jg",
+  "commit": "dd012b12129c0b8bd9bfa887a753a0cf64d16848",
+  "totals": {
+    "calls": 3,
+    "input": 9304,
+    "output": 4687,
+    "serverElapsedMs": 16303
+  },
+  "records": [
+    {
+      "item_code": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+      "item_name": "【8枚セット】【送料無料】ipow 洗濯ネット ランドリーネット 洗濯バッグ ブラジャーネット 洗濯用品 衣類 下着 靴下 シャツ など適用 トラベルポーチ 型崩れ防止 細かい網目 丈夫 家庭用",
+      "item_caption_normalized": "商品説明 ★【洗濯ネットを利用するメリット】:&#10102;衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。 &#10123;ほこり・汚れの付着をガードしてくれる。 &#10104;色落ち・色移りを防いでくれる。&#10105;分類するのも簡単です。 ★【ランドリーネットの多機能】:ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。 ★【汚れを強力に落とす】:ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。しっかりと汚れも落ち、汗など水溶性の汚れを強力に落とします。 素材 ポリエステル セット内容 角型:60*50cm×1枚、50*40cm×1枚、40*30cm×2枚、30*23cm×2枚; 筒型:16*16 cm×1枚; ドーム型:17*19 cm×1枚。 セット数 8枚 ブランド&#183;メーカー ipow",
+      "source_hash": "f945ba51ceabf9b4fd75d11e0363fb79b08ab8a1bade0188e5c4e89ddb32e1b6",
+      "model": "openai/gpt-oss-120b",
+      "prompt_version": "room_contract_fffed2f9059bf4dc",
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.078963075,
+              "total_time": 3.54281538,
+              "prompt_time": 0.163553134,
+              "total_tokens": 4790,
+              "prompt_tokens": 3187,
+              "completion_time": 3.379262246,
+              "completion_tokens": 1603,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1340
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 5392,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "25.335s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "1m26.4s",
+              "x-ratelimit-remaining-tokens": "4622",
+              "x-ratelimit-remaining-requests": "999"
+            }
+          },
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.08982911,
+              "total_time": 2.354617789,
+              "prompt_time": 0.163728884,
+              "total_tokens": 4569,
+              "prompt_tokens": 3517,
+              "completion_time": 2.190888905,
+              "completion_tokens": 1052,
+              "completion_tokens_details": {
+                "reasoning_tokens": 745
+              }
+            },
+            "attempt": 1,
+            "elapsedMs": 4595,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "29.257s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "1m26.4s",
+              "x-ratelimit-remaining-tokens": "4099",
+              "x-ratelimit-remaining-requests": "999"
+            }
+          },
+          {
+            "stage": "verify",
+            "usage": {
+              "queue_time": 0.270405424,
+              "total_time": 4.408736614,
+              "prompt_time": 0.145378362,
+              "total_tokens": 4632,
+              "prompt_tokens": 2600,
+              "completion_time": 4.263358252,
+              "completion_tokens": 2032,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1725
+              }
+            },
+            "attempt": 1,
+            "elapsedMs": 6316,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "21.465s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "2m52.8s",
+              "x-ratelimit-remaining-tokens": "5138",
+              "x-ratelimit-remaining-requests": "998"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "洗濯ネット",
+            "acts_on": "衣類や下着などの洗濯物",
+            "acts_on_quote": "服を型崩れや毛羽立ちから守ります。"
+          },
+          "sentences": [
+            {
+              "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+              "kinds": [
+                "scene",
+                "benefit"
+              ],
+              "quotes": [
+                "服を型崩れや毛羽立ちから守ります。",
+                "8枚入れ 型崩れ防止"
+              ]
+            },
+            {
+              "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "ネットの目は細かいので、ごみなどが入りにくい。",
+                "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+              ]
+            }
+          ]
+        },
+        "stage": "done",
+        "nextAt": 0,
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+              "degree": "supported",
+              "reason": "Target mentions bras not in source; condition unsupported.",
+              "target": "not_supported",
+              "negation": "supported",
+              "conditions": "not_supported",
+              "evidenceQuotes": [
+                "服を型崩れや毛羽立ちから守ります。",
+                "型崩れ防止の細かい網目"
+              ]
+            },
+            {
+              "part": "supported",
+              "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。",
+              "degree": "supported",
+              "reason": "All statements directly supported by source.",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "supported",
+              "evidenceQuotes": [
+                "ネットの目は細かいので、ごみなどが入りにくい。",
+                "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+              ]
+            }
+          ]
+        },
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "21.465s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "2m52.8s",
+          "x-ratelimit-remaining-tokens": "5138",
+          "x-ratelimit-remaining-requests": "998"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "洗濯ネット",
+                "acts_on": "衣類や下着などの洗濯物",
+                "acts_on_quote": "服を型崩れや毛羽立ちから守ります。"
+              },
+              "sentences": [
+                {
+                  "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+                  "kinds": [
+                    "scene",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "服を型崩れや毛羽立ちから守ります。",
+                    "8枚入れ 型崩れ防止"
+                  ]
+                },
+                {
+                  "text": "細かい網目がごみの侵入を防ぎ、洗剤や柔軟剤が繊維に届きやすくなるので、汚れ落ちがしっかりします。",
+                  "kinds": [
+                    "spec",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "unsupported_prevention_result",
+                "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。",
+                "sentence": 1
+              }
+            ]
+          },
+          {
+            "draft": {
+              "product": {
+                "what": "洗濯ネット",
+                "acts_on": "衣類や下着などの洗濯物",
+                "acts_on_quote": "服を型崩れや毛羽立ちから守ります。"
+              },
+              "sentences": [
+                {
+                  "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+                  "kinds": [
+                    "scene",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "服を型崩れや毛羽立ちから守ります。",
+                    "8枚入れ 型崩れ防止"
+                  ]
+                },
+                {
+                  "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "ネットの目は細かいので、ごみなどが入りにくい。",
+                    "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+                  ]
+                }
+              ]
+            },
+            "review": {
+              "product": {
+                "what": "supported",
+                "acts_on": "supported"
+              },
+              "quality": {
+                "scene": "supported",
+                "reason": "supported",
+                "natural": "supported",
+                "identity": "supported",
+                "room_style": "supported",
+                "non_redundant": "supported"
+              },
+              "sentences": [
+                {
+                  "part": "supported",
+                  "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+                  "degree": "supported",
+                  "reason": "Target mentions bras not in source; condition unsupported.",
+                  "target": "not_supported",
+                  "negation": "supported",
+                  "conditions": "not_supported",
+                  "evidenceQuotes": [
+                    "服を型崩れや毛羽立ちから守ります。",
+                    "型崩れ防止の細かい網目"
+                  ]
+                },
+                {
+                  "part": "supported",
+                  "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。",
+                  "degree": "supported",
+                  "reason": "All statements directly supported by source.",
+                  "target": "supported",
+                  "negation": "supported",
+                  "conditions": "supported",
+                  "evidenceQuotes": [
+                    "ネットの目は細かいので、ごみなどが入りにくい。",
+                    "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+                  ]
+                }
+              ]
+            },
+            "attempt": 1,
+            "failures": [
+              {
+                "rule": "target_not_supported",
+                "detail": "Target mentions bras not in source; condition unsupported.",
+                "sentence": 0
+              },
+              {
+                "rule": "conditions_not_supported",
+                "detail": "Target mentions bras not in source; condition unsupported.",
+                "sentence": 0
+              },
+              {
+                "rule": "review_evidence_not_in_source",
+                "sentence": 0
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": true,
+          "flags": [],
+          "bindings": [
+            [
+              {
+                "end": 71,
+                "quote": "服を型崩れや毛羽立ちから守ります。",
+                "start": 54,
+                "source": "caption"
+              },
+              {
+                "end": 10,
+                "quote": "8枚入れ 型崩れ防止",
+                "start": 0,
+                "source": "catchcopy"
+              }
+            ],
+            [
+              {
+                "end": 255,
+                "quote": "ネットの目は細かいので、ごみなどが入りにくい。",
+                "start": 232,
+                "source": "caption"
+              },
+              {
+                "end": 287,
+                "quote": "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。",
+                "start": 255,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "quality": {
+          "text": "",
+          "ledger": [],
+          "status": "blocked",
+          "reasons": [
+            {
+              "rule": "target_not_supported",
+              "detail": "Target mentions bras not in source; condition unsupported.",
+              "sentence": 0
+            },
+            {
+              "rule": "conditions_not_supported",
+              "detail": "Target mentions bras not in source; condition unsupported.",
+              "sentence": 0
+            },
+            {
+              "rule": "review_evidence_not_in_source",
+              "sentence": 0
+            }
+          ]
+        },
+        "failures": [
+          {
+            "rule": "unsupported_prevention_result",
+            "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。",
+            "sentence": 1
+          }
+        ],
+        "startedAt": 1793024659060,
+        "finishedAt": 1793024905419,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "洗濯ネット",
+            "acts_on": "衣類や下着などの洗濯物",
+            "acts_on_quote": "服を型崩れや毛羽立ちから守ります。"
+          },
+          "sentences": [
+            {
+              "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。",
+              "kinds": [
+                "scene",
+                "benefit"
+              ],
+              "quotes": [
+                "服を型崩れや毛羽立ちから守ります。",
+                "8枚入れ 型崩れ防止"
+              ]
+            },
+            {
+              "text": "細かい網目がごみの侵入を防ぎ、洗剤や柔軟剤が繊維に届きやすくなるので、汚れ落ちがしっかりします。",
+              "kinds": [
+                "spec",
+                "benefit"
+              ],
+              "quotes": [
+                "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": "靴下"
+      },
+      "updated_at": "2026-10-26 14:28:25.419+00",
+      "observed_at": "2026-10-26 14:29:10.406972+00"
+    }
+  ]
+}
