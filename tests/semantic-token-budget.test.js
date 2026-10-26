@@ -32,3 +32,21 @@ test('recorded failed generation fits the observed window without removing sourc
   const required=createProvider({apiKey:'synthetic'}).requiredTokens('generate',item,state);
   assert.ok(required<=Number(state.headers['x-ratelimit-limit-tokens']),`estimate ${required} exceeds observed capacity`);
 });
+
+test('saved description-bearing development and unseen inputs fit generation without source truncation',()=>{
+  const provider=createProvider({apiKey:'synthetic'});
+  let count=0;
+  for(const file of ['room-products.json','room-unseen-products.json']){
+    for(const fixture of require('./fixtures/'+file)){
+      const item=fixture.item||fixture;
+      assert.ok(item.itemCaption.length>0,'description-bearing fixture required');
+      const sent=payload('generate',item,{});
+      assert.equal(sent.itemName,item.itemName);
+      assert.equal(sent.itemCaption,item.itemCaption);
+      assert.equal(sent.catchcopy,item.catchcopy||'');
+      assert.ok(provider.requiredTokens('generate',item,{})<=8000,`${file}: input exceeds observed window`);
+      count++;
+    }
+  }
+  assert.equal(count,34);
+});
