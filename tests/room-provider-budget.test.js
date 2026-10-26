@@ -6,6 +6,28 @@ function memory(){let row={revision:'initial',models:{}};return {load:async()=>s
 const item=n=>({itemCode:'budget:'+n,itemName:'収納ボックス'+n,itemCaption:'収納ボックスは折りたためます。'});
 const draft=i=>({product:{what:i.itemName,acts_on:'収納物',acts_on_quote:i.itemCaption},sentences:[{text:i.itemName+'は折りたためます。',kinds:['spec'],quotes:[i.itemName,i.itemCaption]}]});
 const productStore=()=>{const rows=new Map();return {loadProduct:async k=>structuredClone(rows.get(k.itemCode)),saveProduct:async r=>{rows.set(r.itemCode,{model:r.model,schema_version:r.schemaVersion,raw_ai_json:structuredClone(r.rawAiJson)});}};};
+test('a request larger than an observed window cannot be admitted after reset or from legacy product progress',async()=>{
+ for(const scope of ['shared','product']){
+  const budget=memory();
+  if(scope==='shared'){const r=await budget.load();await budget.swap(r.revision,{...r,models:{fixture:{tokenLimit:8000,remainingTokens:8000,tokenResetAt:1}}});}
+  const state=scope==='product'?{headers:{'x-ratelimit-limit-tokens':'8000'}}:{};
+  const provider=withSharedBudget({model:'fixture',requiredTokens:()=>8253},{store:budget,now:()=>10000});
+  await assert.rejects(()=>provider.acquire('generate',item(1),state),e=>e.status===503);
+  assert.equal(budget.read().lease,undefined);
+ }
+});
+test('provider capacity survives later missing headers while fitting requests remain admissible',async()=>{
+ const budget=memory(),clock={value:1000};
+ const p=withSharedBudget({model:'fixture',requiredTokens:()=>7656},{store:budget,now:()=>clock.value});
+ let permit=await p.acquire('generate',item(1),{});
+ await permit.release({called:true,response:{usage:{prompt_tokens:10,completion_tokens:20},rateLimit:{'x-ratelimit-limit-tokens':'8000'}}});
+ clock.value+=66000;permit=await p.acquire('generate',item(1),{});assert.equal(permit.waitMs,0);
+ await permit.release({called:true,response:{usage:{prompt_tokens:10,completion_tokens:20},rateLimit:{}}});
+ assert.equal(budget.read().models.fixture.tokenLimit,8000);
+ clock.value+=66000;
+ const tooLarge=withSharedBudget({model:'fixture',requiredTokens:()=>8253},{store:budget,now:()=>clock.value});
+ await assert.rejects(()=>tooLarge.acquire('generate',item(1),{}),e=>e.status===503);
+});
 function setup({store=memory(),clock={value:1000},call}={}){
  const calls=[],quotas=[];const base={model:'fixture-budget',requiredTokens:()=>5000,call:async(stage,i,state)=>{calls.push([stage,i.itemCode]);return call?call(stage,i,state):{raw:draft(i),usage:{prompt_tokens:100,completion_tokens:20},rateLimit:{'x-ratelimit-remaining-tokens':'1200','x-ratelimit-reset-tokens':'60s','x-ratelimit-remaining-requests':'999','x-ratelimit-reset-requests':'1d'}};}};
  const provider=withSharedBudget(base,{store,now:()=>clock.value});
