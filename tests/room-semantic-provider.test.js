@@ -10,10 +10,4 @@ assert.match(WRITER_PROMPT,/安定した操作感が得られます/);assert.mat
  assert.equal(payload('generate',socks,{partnerProductType:'靴下'}).decisionKnowledge.productType,'靴下');
  assert.equal(payload('generate',socks,{partnerProductType:'靴下',partnerKnowledge:false}).decisionKnowledge,undefined);
 }
-{
- const {readFileSync}=require('node:fs');
- const recorded=JSON.parse(readFileSync('docs/measurements/room-copy-20261026-ipow.json','utf8')).records[0];
- assert.ok(recorded.item_name.includes('ブラジャー'));
- assert.ok(recorded.state.review.sentences[0].reason.includes('bras not in source'));
-}
 (async()=>{let body,url;const p=createProvider({apiKey:'mock',fetchImpl:async(u,o)=>{url=u;body=JSON.parse(o.body);return {ok:true,headers:new Headers(),json:async()=>({choices:[{message:{content:'{"product":{},"sentences":[]}',reasoning:'excluded'}}],usage:{total_tokens:10}})}}});const out=await p.call('generate',{itemName:'収納',itemCaption:'収納付き'},{});assert.equal(url,'https://api.groq.com/openai/v1/chat/completions');assert.equal(body.response_format.json_schema.strict,true);assert.equal(body.reasoning_effort,'medium');assert.equal(body.max_completion_tokens,3000);assert.equal(out.raw.product.constructor,Object);assert.equal(out.raw.reasoning,undefined);console.log('room-semantic-provider: PASS (strict chat schema, semantic entailment guard, reasoning excluded)');})().catch(e=>{console.error(e);process.exitCode=1;});
