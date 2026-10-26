@@ -15,7 +15,7 @@ const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
-const {catalogueOnly}=require('../public/purchase-copy-quality');
+const {catalogueOnly,restatedReason}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 
 const DEFAULT_DAILY_LIMIT=200;
@@ -393,6 +393,8 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null){
   // The browser already refuses any text changed by this guard. A local
   // response must not claim ready while its final copy boundary will reject it.
   if(guardUnsupportedBenefitCopy(item,text)!==text) return reject('safety','final_copy_guard');
+  const restatement=restatedReason(text,{identity,quote:partnerCopy?.quote||''});
+  if(restatement) return reject('purchase_reason',restatement);
   if(catalogueOnly(text)) return reject('quality','catalogue_only_copy');
   if(diagnostics) Object.assign(diagnostics,{status:'ready',stage:'publication',reason:'grounded_local_copy'});
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
@@ -589,6 +591,7 @@ function createHandler(deps={}){
 
 const legacyHandler=createHandler();
 module.exports=function(req,res){
+  if(req.query?.urenaviReviewComparison==='1')return require('../lib/room-review-comparison')(req,res);
   if(req.query?.urenaviContract==='1')return require('../lib/room-copy-handler')(req,res);
   return legacyHandler(req,res);
 };

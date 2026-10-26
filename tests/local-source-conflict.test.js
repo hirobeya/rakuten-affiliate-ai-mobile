@@ -13,11 +13,13 @@ test('local server and browser reject negated source facts across caption and ca
   ];
   for(const [itemName,negative]of cases){
     const baseline=localZeroCall({itemName,itemCaption:'',catchcopy:''});
-    if(itemName==='洗濯ネット 型崩れ防止')assert.equal(baseline,null,'label-only text is not a purchase reason');
+    if(itemName==='洗濯ネット 型崩れ防止'||itemName==='折りたたみ 収納ボックス')assert.equal(baseline,null,'label-only text is not a purchase reason');
     else assert.equal(baseline?.quality?.status,'ready',itemName+' baseline');
     for(const field of ['itemCaption','catchcopy']){
       const item={itemName,itemCaption:'',catchcopy:'',[field]:negative};
       assert.equal(localZeroCall(item),null,itemName+' '+field);
+      const feature=negative.replace(/非対応|不可|ではありません|。/g,'');
+      assert.equal(structured.hasSourceFactConflict(item,[{quote:feature}]),true,'conflict must be detected even when quality already defers');
       assert.equal(structured.assess(item).ready,false,itemName+' browser '+field);
     }
   }

@@ -307,7 +307,7 @@
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
     const titleBound=factsAreTitleBound(result.facts);
     const sourceConflict=hasSourceFactConflict(item,result.facts);
-    const ready=Boolean(purchaseQuality)&&!purchaseQuality.catalogueOnly(result.text)&&result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
+    const ready=Boolean(purchaseQuality)&&!purchaseQuality.catalogueOnly(result.text)&&!purchaseQuality.restatedReason(result.text,{identity:result.understanding?.identity||''})&&result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
     return {ready,result,reason:sourceConflict?'source_fact_conflict':ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
   }
   return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,hasSourceFactConflict,compose,assess,RISK};

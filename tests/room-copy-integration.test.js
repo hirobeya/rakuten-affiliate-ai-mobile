@@ -16,10 +16,10 @@ function setup({wait=false,reject=false,realLocal=false}={}){
  const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),store,provider,consumeQuota:async()=>true,localZeroCall:realLocal?undefined:()=>null,logCost:x=>logs.push(x)});
  return {handler,logs,calls:()=>calls};
 }
-test('actual local route completes explicit choice without quota, cache or provider access',async()=>{
+test('actual local route completes a concrete source use relation without quota, cache or provider access',async()=>{
  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{
-  const source={itemCode:'choice:source',itemName:'洗濯ネット ランドリーネット',itemCaption:'サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。'};
+  const source={itemCode:'choice:source',itemName:'洗濯ネット ランドリーネット',itemCaption:'洗濯ネットは口が大きく開くので布団の出し入れがしやすい構造です。'};
   const never=()=>assert.fail('local completion must not spend provider resources');
   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),store:{loadProduct:never,saveProduct:never},provider:{call:never},consumeQuota:never,logCost(){}});
   const r=res();await handler({method:'POST',body:source},r);

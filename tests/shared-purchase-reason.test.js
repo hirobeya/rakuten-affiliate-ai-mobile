@@ -61,9 +61,9 @@ test('related-product caption facts cannot become a completed local browser post
 });
 
 test('unassociated supplemental material also prevents local publication while direct title proofs still work',()=>{
- const item={itemName:'フライパン IH対応',itemCaption:'関連商品 ステンレス'};
+ const item={itemName:'コードレス 掃除機',itemCaption:'関連商品 ステンレス'};
  assert.equal(copy.assess(item).ready,false);
  assert.equal(copy.assess({...item,itemCaption:''}).ready,true);
  // Source association must not be bypassed by passing a literal evidence string.
- assert.equal(copy.assess(item,{evidence:['IH対応','ステンレス']}).ready,false);
+ assert.equal(copy.assess(item,{evidence:['コードレス','ステンレス']}).ready,false);
 });

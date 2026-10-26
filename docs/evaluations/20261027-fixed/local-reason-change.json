@@ -1,0 +1,65 @@
+[
+  {
+    "id": "05",
+    "beforeReady": true,
+    "afterReady": true,
+    "unchanged": true,
+    "reason": "grounded_local_copy"
+  },
+  {
+    "id": "12",
+    "beforeReady": true,
+    "afterReady": true,
+    "unchanged": true,
+    "reason": "grounded_local_copy"
+  },
+  {
+    "id": "u01",
+    "beforeReady": true,
+    "afterReady": false,
+    "unchanged": false,
+    "reason": "feature_and_hook_restate_each_other"
+  },
+  {
+    "id": "u09",
+    "beforeReady": true,
+    "afterReady": false,
+    "unchanged": false,
+    "reason": "repeated_use_and_identity_only"
+  },
+  {
+    "id": "u10",
+    "beforeReady": true,
+    "afterReady": false,
+    "unchanged": false,
+    "reason": "feature_and_hook_restate_each_other"
+  },
+  {
+    "id": "washnet-1",
+    "beforeReady": true,
+    "afterReady": true,
+    "unchanged": true,
+    "reason": "grounded_local_copy"
+  },
+  {
+    "id": "washnet-2",
+    "beforeReady": true,
+    "afterReady": true,
+    "unchanged": true,
+    "reason": "grounded_local_copy"
+  },
+  {
+    "id": "washnet-4",
+    "beforeReady": true,
+    "afterReady": false,
+    "unchanged": false,
+    "reason": "choice_configuration_without_use_relation"
+  },
+  {
+    "id": "washnet-7",
+    "beforeReady": true,
+    "afterReady": true,
+    "unchanged": true,
+    "reason": "grounded_local_copy"
+  }
+]

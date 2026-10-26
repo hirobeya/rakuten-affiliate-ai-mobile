@@ -13,7 +13,7 @@ const expected={
   'daiya:10001447':['publication','grounded_local_copy'],
   'daiya:10001030':['publication','grounded_local_copy'],
   'ipow:10000579':['quality','catalogue_only_copy'],
-  'linofle:10000458':['publication','grounded_local_copy'],
+  'linofle:10000458':['purchase_reason','choice_configuration_without_use_relation'],
   'yukaiya:10001267':['quality','catalogue_only_copy'],
   'living-mahoroba:10015748':['purchase_reason','no_grounded_purchase_candidate'],
   'daiya:10001455':['publication','grounded_local_copy'],
@@ -47,7 +47,7 @@ test('recorded original sources expose distinct local failures without changing 
     assert.equal(ui.roomCopyNeedsReview(result.quality.text,{...item,itemCaption:''},true,result),true);
     assert.equal(ui.roomCopyNeedsReview(result.quality.text+'\n便利な商品です。',item,true,result),true);
   }
-  assert.deepEqual(ready,['daiya:10001447','daiya:10001030','linofle:10000458','daiya:10001455']);
+  assert.deepEqual(ready,['daiya:10001447','daiya:10001030','daiya:10001455']);
 });
 
 test('purpose-qualified identity and complete causal evidence survive into the same rendered post',()=>{
