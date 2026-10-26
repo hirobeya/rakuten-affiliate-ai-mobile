@@ -29,3 +29,7 @@ test('status checks and shared waits spend neither quota nor calls; unapproved i
 test('review prompt comparison budgets the same chosen prompt it actually sends; default remains fixed',async()=>{
  for(const reviewPrompt of [undefined,'bounded comparison prompt']){let sent;const p=createProvider({apiKey:'synthetic',...(reviewPrompt?{reviewPrompt}:{}),fetchImpl:async(_,o)=>{sent=JSON.parse(o.body);return {ok:true,headers:new Headers(),json:async()=>({choices:[{message:{content:'{}'}}]})};}});const n=p.requiredTokens('verify',fixture.item,{draft:fixture.draft});await p.call('verify',fixture.item,{draft:fixture.draft});assert.equal(sent.messages[0].content,reviewPrompt||REVIEW_PROMPT);assert.equal(n,estimate({messages:sent.messages,response_format:sent.response_format},3000));assert.equal(sent.max_completion_tokens,3000);}
 });
+test('shared budget release finishes before the HTTP response is sent',()=>preview(async()=>{
+ const x=setup(),r=res();const original=r.json;r.json=function(body){assert.equal(x.budget().lease,null,'response must not freeze a sent lease');return original.call(this,body);};
+ await x.handler({method:'POST',body:{caseId:fixture.id,variant:'after'}},r);assert.equal(r.code,200);assert.equal(x.counts().sends,1);
+}));
