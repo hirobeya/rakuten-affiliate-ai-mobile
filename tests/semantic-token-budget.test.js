@@ -19,3 +19,16 @@ test('rate estimate includes the exact sent system/user messages and strict sche
     assert.equal(body.reasoning_effort,'medium');
   }
 });
+
+test('recorded failed generation fits the observed window without removing source, feedback or output allowance',()=>{
+  const record=require('../docs/measurements/room-copy-20261027-ipow-evidence-order.json').records[0];
+  const item={itemName:record.item_name,itemCaption:record.item_caption_normalized,catchcopy:''};
+  const state=record.state;
+  const input=payload('generate',item,state);
+  assert.equal(input.itemName,item.itemName);
+  assert.equal(input.itemCaption,item.itemCaption);
+  assert.deepEqual(input.feedback.previousDraft,state.previousDraft);
+  assert.deepEqual(input.feedback.failures,state.failures);
+  const required=createProvider({apiKey:'synthetic'}).requiredTokens('generate',item,state);
+  assert.ok(required<=Number(state.headers['x-ratelimit-limit-tokens']),`estimate ${required} exceeds observed capacity`);
+});
