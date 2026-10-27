@@ -24,3 +24,13 @@ test('manual pause preserves completed product and resumes only unprocessed prod
  const {c,items,calls}=context([]);const request=c.requestAiRoom;c.requestAiRoom=async(...args)=>{await request(...args);c.aiBatchPauseRequested=true;};await c.runAiPreview(items);assert.deepEqual(calls,[0]);assert.equal(c.aiRoomResults.get(0).state,'done');assert.equal(c.aiRoomResults.get(1).state,'paused');c.aiBatchPauseRequested=false;c.requestAiRoom=request;await c.runAiPreview(items,{resume:true});assert.deepEqual(calls,[0,1,2]);
 });
 test('429 still stops remaining items when manual pause was requested simultaneously',async()=>{const {c,items,calls}=context([{state:'error',status:429}]);const request=c.requestAiRoom;c.requestAiRoom=async(...args)=>{await request(...args);c.aiBatchPauseRequested=true;};await c.runAiPreview(items);assert.deepEqual(calls,[0]);assert.equal(c.aiRoomResults.get(1).status,429);});
+test('completed blocked products are not labelled successful posts, and missing verdicts remain unknown',async()=>{
+ const outcomes=Array.from({length:10},(_,i)=>({state:'done',data:{ok:i<6,pending:false,quality:{status:i<6?'ready':'blocked'}}}));
+ const {c}=context(outcomes);c.lastSearchItems=outcomes.map((_,i)=>({itemName:String(i)}));
+ const meta={textContent:''};c.document.getElementById=()=>meta;
+ await c.runAiPreview(c.lastSearchItems);
+ const p=c.activeAiProgress();assert.equal(p.done,10);assert.equal(p.ready,6);assert.equal(p.blocked,4);assert.equal(p.failed,0);
+ assert.match(meta.textContent,/投稿文合格6件、不採用4件/);assert.doesNotMatch(meta.textContent,/10件成功|10\/10件成功/);
+ c.aiRoomResults.set(0,{state:'done',data:{}});
+ assert.equal(c.activeAiProgress().ready,5);assert.equal(c.activeAiProgress().unconfirmed,1);
+});

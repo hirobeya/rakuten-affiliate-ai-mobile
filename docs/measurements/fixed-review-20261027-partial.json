@@ -1,0 +1,124 @@
+{
+  "recordedOn": "2026-10-27",
+  "timeZone": "Asia/Tokyo",
+  "commit": "5599e38750300c5dcce99b906aff9ad82a9728b9",
+  "scope": "One immutable embroidery-kit review, candidate prompt only; not full calibration. Following send stopped by shared lease; no retry of the model call.",
+  "records": [
+    {
+      "item_code": "__fixed_review_b32d71da9178f3e0:after:0d887f2c325d0cf7",
+      "schema_version": "fixed_review_b32d71da9178f3e0",
+      "result": {
+        "usage": {
+          "queue_time": 0.142388178,
+          "total_time": 3.838017458,
+          "prompt_time": 0.126928745,
+          "total_tokens": 4800,
+          "prompt_tokens": 3024,
+          "completion_time": 3.711088713,
+          "completion_tokens": 1776,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1492
+          }
+        },
+        "caseId": "0d887f2c325d0cf7",
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "刺繍キットで初心者が刺繍を始めるとき、カード巻きタイプの刺繍糸が整然と並んでいるので、必要な色をすぐに取り出せます。",
+              "degree": "supported",
+              "reason": "カード巻き糸が整然と並び、必要な色をすぐに取り出せる点を示す",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "supported",
+              "evidenceQuotes": [
+                "刺繍糸は管理しやすいカード巻きタイプ。",
+                "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。"
+              ]
+            }
+          ]
+        },
+        "machine": {
+          "ok": true,
+          "flags": [],
+          "bindings": [
+            [
+              {
+                "end": 517,
+                "quote": "刺繍糸は管理しやすいカード巻きタイプ。",
+                "start": 498,
+                "source": "caption"
+              },
+              {
+                "end": 151,
+                "quote": "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒...",
+                "start": 120,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "pending": false,
+        "variant": "after",
+        "version": "fixed_review_b32d71da9178f3e0",
+        "draftHash": "2809ae9e2ff9aa1fe2323e3be9fdf9f6dd2c01c80b0f4448f69e85c38ae3102d",
+        "assessment": {
+          "ok": true,
+          "evidence": [
+            [
+              {
+                "end": 517,
+                "quote": "刺繍糸は管理しやすいカード巻きタイプ。",
+                "start": 498,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              },
+              {
+                "end": 498,
+                "quote": "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。",
+                "start": 472,
+                "source": "caption",
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          ],
+          "failures": [],
+          "additionalEvidence": [
+            {
+              "end": 498,
+              "quote": "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。",
+              "start": 472,
+              "source": "caption",
+              "approvalEvidence": "added_by_review"
+            }
+          ]
+        },
+        "experiment": true,
+        "promptHash": "264f2f6229370ffd167866ce085d87ae245ca49cce1b1467a83e8fde5cc421d6",
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "25.402s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "4613",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "sourceHash": "f568fd4f5a7b204b67a65677db791301e9bd18fed9160751fff10d466c1903bf",
+        "publishable": false
+      }
+    }
+  ]
+}

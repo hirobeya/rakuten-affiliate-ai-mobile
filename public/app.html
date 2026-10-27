@@ -723,6 +723,7 @@ input,select{
 .urenaviSteps{margin:10px 0 16px;padding-left:22px;font-size:14px;line-height:1.85;color:#334155}.urenaviAdvanced{margin-top:18px;padding:12px;border:1px solid #d7e2ef;border-radius:12px;background:#f8fafc}.urenaviAdvanced summary{cursor:pointer;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}.urenaviAdvanced textarea{max-width:100%}
 .urenaviExchangeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.urenaviExchangeChoices button{min-height:82px;padding:12px 8px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-weight:800;font-size:15px;cursor:pointer}.urenaviExchangeChoices button[aria-pressed="true"]{border-color:#172a4b;box-shadow:inset 0 0 0 1px #172a4b}.urenaviExchangeChoices button:focus-visible{outline:3px solid #64748b;outline-offset:2px}.urenaviExchangeChoices small{display:block;font-size:11px;font-weight:500;margin-top:6px;color:inherit}@media(max-width:350px){.urenaviExchangeChoices{grid-template-columns:1fr}}
 </style>
+<script src="/purchase-copy-quality.js?v=20261027-reason-veto-3"></script>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
 </head>
@@ -757,6 +758,14 @@ input,select{
     </button>
 
     <div id="authMsg" class="authMsg"></div>
+
+    <details style="margin-top:12px;font-size:13px;line-height:1.6">
+      <summary>メールを開いてもログインできない場合</summary>
+      <p>メール内のログインボタンを長押ししてリンクをコピーし、ここに貼り付けてください。このブラウザで認証します。</p>
+      <label for="emailLoginLink">ログインメールのリンク</label>
+      <input id="emailLoginLink" type="password" autocomplete="off" spellcheck="false" autocapitalize="none" aria-label="ログインメールのリンク">
+      <button id="verifyEmailLoginLink" type="button" class="authBtn">ログインリンクで認証</button>
+    </details>
 
     <div class="authNote">
       パスワードは不要です。<br>
@@ -915,8 +924,10 @@ input,select{
 <div id="debugExport" class="debugExport">
   <strong>検証データ出力（プレビュー・owner限定）</strong>
   <div class="muted">現在の通常検索結果をJSONで出力します。APIキー等の秘密情報は含みません。</div>
-  <button id="debugCopyBtn" type="button">現在の検索JSONを作成してコピー</button>
-  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">5件まとめて検証 → JSONをコピー</button>
+  <button id="debugBatchBtn" type="button" style="margin-top:8px;background:#172a4b;color:#fff">① 5つの検索で検証データを作る</button>
+  <button id="debugPreparedCopyBtn" type="button" disabled style="margin-top:8px">② 作成した検証データをコピー</button>
+  <details style="margin-top:8px"><summary>通常検索の結果だけを送る場合</summary>
+  <button id="debugCopyBtn" type="button">通常検索の結果を作成してコピー</button></details>
   <div class="muted" style="margin-top:6px">対象：ハンディクリーナー／洗濯ネット／ポータブル電源／犬 ベッド／ドライブベッド 犬</div>
   <div id="debugJsonMeta" class="muted" style="margin-top:8px"></div>
   <textarea id="debugJson" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="検索後、ここにJSONを表示します。長押しで選択・コピーできます。"></textarea>
@@ -1050,9 +1061,9 @@ input,select{
 
 <script src="/pain-copy.js?v=20260918-4"></script>
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
-<script src="/pain-copy-context-fix.js?v=20260918-8"></script>
-<script src="/structured-room-copy.js?v=20261002-1"></script>
-<script src="/fact-safety.js?v=20260925-1"></script>
+<script src="/pain-copy-context-fix.js?v=20261022-scoped-room-link"></script>
+<script src="/structured-room-copy.js?v=20261027-reason-veto-1"></script>
+<script src="/fact-safety.js?v=20261023-source-relation"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/room-today-plan.js"></script>
 <script src="/room-account-records.js"></script>
@@ -1063,8 +1074,9 @@ input,select{
 <script src="/room-operations.js"></script>
 <script src="/room-operations-panel.js"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
-<script src="/return-state.js?v=20260918-8"></script>
+<script src="/return-state.js?v=20261020-display-only-restore"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script src="/email-link-login.js?v=20261019-1"></script>
 <script>
 
 const SUPABASE_URL=
@@ -1118,6 +1130,21 @@ document.getElementById('logoutBtn');
 
 const userMail=
 document.getElementById('userMail');
+
+document.getElementById('verifyEmailLoginLink').addEventListener('click',async()=>{
+  const input=document.getElementById('emailLoginLink'),button=document.getElementById('verifyEmailLoginLink');
+  if(button.disabled)return;
+  button.disabled=true;
+  accessGeneration++; // Ignore an older startup check while this explicit login runs.
+  try{
+    setAuthMessage('ログインリンクを確認しています。');
+    const value=input.value;input.value='';
+    const session=await authDeadline(UrenaviEmailLinkLogin.signIn(value,{supabaseUrl:SUPABASE_URL,auth:sb.auth}),12000);
+    await showApp(session);
+  }catch(error){
+    setAuthMessage(UrenaviEmailLinkLogin.errorMessage(error),'err');
+  }finally{input.value='';button.disabled=false;}
+});
 
 
 let sendTimer=null;
@@ -1224,7 +1251,7 @@ function restoreSearchState(email){
     document.getElementById('x').classList.toggle('on',!!document.getElementById('k').value);
     document.querySelectorAll('.item').forEach((el,i)=>{
       const platform=state.platforms?.[i];
-      if(['room','threads','instagram'].includes(platform)) el.querySelector(`[data-p="${platform}"].tab`)?.click();
+      if(['room','threads','instagram'].includes(platform)) restoreItemPlatformView(el,platform);
     });
     document.getElementById('st').textContent='前回の検索結果に戻りました。価格・在庫を更新する場合は、もう一度検索してください。';
     requestAnimationFrame(()=>window.scrollTo(0,Math.max(0,Number(state.scrollY)||0)));
@@ -1245,7 +1272,7 @@ async function showApp(session) {
   const timeout=setTimeout(()=>controller.abort(),10000);
   if(!wasVisible) authGate.style.display='flex';
   try {
-    const response=await fetch('/api/access?action=status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
+    const response=await fetch('/api/access?action=app-status',{headers:{Authorization:`Bearer ${session.access_token}`},cache:'no-store',credentials:'include',signal:controller.signal});
     if(generation!==accessGeneration) return;
     if(response.status===401 || response.status===403) { showLogin(response.status===403?'有効な購入情報がありません。購入時のメールアドレスでログインしてください。':'ログイン情報を確認できません。再認証または再試行してください。','err'); return; }
     const access=typeof response.json==='function'?await response.json().catch(()=>({})):{};
@@ -1409,10 +1436,16 @@ function cleanAuthUrl(){
 
   }
 
+  // The auth event schedules device approval after this cleanup. Preserve only
+  // its validated handoff until access-guard confirms approval; remove all
+  // credential/error parameters and the auth fragment immediately.
+  const handoffs=new URLSearchParams(window.location.search).getAll('handoff');
+  const pendingHandoff=handoffs.length===1&&/^[a-f0-9]{64}$/i.test(handoffs[0])
+    ?'?handoff='+handoffs[0]:'';
   history.replaceState(
     {},
     document.title,
-    window.location.pathname
+    window.location.pathname+pendingHandoff
   );
 
 }
@@ -2081,7 +2114,7 @@ function roomSearchUrl(item){
 }
 
 function roomAction(item){
-  return `<a class="roomLink" href="${esc(roomSearchUrl(item))}" target="_blank" rel="noopener noreferrer">ROOMで商品を探す</a>`;
+  return `<a class="roomLink roomProductSearch" href="${esc(roomSearchUrl(item))}" target="_blank" rel="noopener noreferrer">ROOMで商品を探す</a>`;
 }
 
 function hist(){
@@ -2377,6 +2410,15 @@ function buildDebugValidationRowsFor(items,keyword){
       :null;
     return {
       rank:index+1,
+      // Reproduce the exact generation input, not the 300-character display
+      // preview. Explicit fields avoid exporting sessions or other UI state.
+      item:{
+        itemCode:String(item?.itemCode||''),
+        itemName:String(item?.itemName||''),
+        itemCaption:String(item?.itemCaption||''),
+        catchcopy:String(item?.catchcopy||''),
+        itemPrice:Number(item?.itemPrice)||0
+      },
       itemName:String(item?.itemName||''),
       category:String(a?.category||'unknown'),
       usage:String(a?.usage||'unknown'),
@@ -2456,6 +2498,9 @@ async function copyBatchDebugValidation(){
   if(btn?.disabled) return;
 
   btn.disabled=true;
+  if(ta) ta.value='';
+  const preparedCopy=document.getElementById('debugPreparedCopyBtn');
+  if(preparedCopy) preparedCopy.disabled=true;
   btn.textContent='5件を検証中…';
   if(meta) meta.textContent='5つの検索を順番に実行しています。画面は閉じずにそのままお待ちください。';
 
@@ -2507,23 +2552,18 @@ async function copyBatchDebugValidation(){
     const totalItems=searches.reduce((sum,x)=>sum+x.count,0);
     if(meta) meta.textContent=`${okCount}/${DEBUG_BATCH_KEYWORDS.length}検索完了・合計${totalItems}件。JSONを1つにまとめました。`;
 
-    try{
-      if(navigator.clipboard?.writeText){
-        await navigator.clipboard.writeText(json);
-        btn.textContent='全部コピーしました';
-      }else throw new Error('Clipboard API unavailable');
-    }catch(error){
-      console.warn('batch clipboard copy failed',error);
-      btn.textContent='JSONを表示しました';
-      if(meta) meta.textContent+=' 自動コピーできない場合は下の枠を長押ししてコピーしてください。';
-    }
+    // Network waits lose clipboard user activation on iPhone. Copy only in
+    // a separate explicit click, after the data is ready.
+    if(preparedCopy) preparedCopy.disabled=false;
+    btn.textContent='検証データを作成しました';
+    if(meta) meta.textContent+=' 次に「② 作成した検証データをコピー」を押してください。まだコピーはされていません。';
   }catch(error){
     console.error('batch validation failed',error);
     if(meta) meta.textContent='一括検証を開始できませんでした：'+String(error?.message||'不明なエラー');
     btn.textContent='一括検証エラー';
   }finally{
     btn.disabled=false;
-    setTimeout(()=>{if(btn) btn.textContent='5件まとめて検証 → JSONをコピー';},2600);
+    setTimeout(()=>{if(btn) btn.textContent='① 5つの検索で検証データを作る';},2600);
   }
 }
 
@@ -2539,6 +2579,13 @@ async function copyDebugValidation(){
 
   let json='';
   try{
+    if(!lastSearchKeyword.trim()||!lastSearchItems.length){
+      if(ta) ta.value='';
+      const preparedCopy=document.getElementById('debugPreparedCopyBtn');
+      if(preparedCopy) preparedCopy.disabled=true;
+      if(meta) meta.textContent='検索結果がまだありません。上の「① 5つの検索で検証データを作る」をお使いください。空のデータはコピーしていません。';
+      return;
+    }
     const progress=activeAiProgress();
     if(progress.pending>0){
       if(meta) meta.textContent=`AI確認中：${progress.done+progress.failed}/${progress.required}件完了。最終結果になるまでJSONはコピーできません。`;
@@ -2596,6 +2643,25 @@ async function copyDebugValidation(){
 
 document.getElementById('debugCopyBtn')?.addEventListener('click',copyDebugValidation);
 document.getElementById('debugBatchBtn')?.addEventListener('click',copyBatchDebugValidation);
+async function copyPreparedDebugValidation(){
+  if(!debugExportAllowed)return;
+  const ta=document.getElementById('debugJson'),meta=document.getElementById('debugJsonMeta'),btn=document.getElementById('debugPreparedCopyBtn');
+  let payload;
+  try{payload=JSON.parse(ta?.value||'');}catch{if(meta)meta.textContent='検証データがまだありません。先に①を押してください。';return;}
+  const valid=payload?.batch===true&&Array.isArray(payload.searches)&&payload.searches.length>0
+    || Array.isArray(payload?.items)&&payload.items.length>0;
+  if(!valid){if(meta)meta.textContent='空のデータはコピーできません。先に①を押してください。';return;}
+  try{
+    // Do not await session checks or network requests before this call.
+    await navigator.clipboard.writeText(ta.value);
+    if(btn)btn.textContent='コピーしました';
+    if(meta)meta.textContent='検証データをコピーしました。このチャットへ貼り付けてください。';
+  }catch{
+    if(btn)btn.textContent='コピーできませんでした';
+    if(meta)meta.textContent='まだコピーされていません。下のJSON欄を長押ししてコピーしてください。以前コピーした内容は今回の結果ではありません。';
+  }
+}
+document.getElementById('debugPreparedCopyBtn')?.addEventListener('click',copyPreparedDebugValidation);
 
 document.getElementById('debugJson')?.addEventListener('focus',e=>{
   // Keep native iOS selection behavior; do not auto-select the full payload.
@@ -2692,6 +2758,16 @@ function aiPanelMarkup(item,index){
     '</section>';
 }
 
+function pendingAiStatus(result,now=Date.now()){
+  const phase={generation:'生成',verification:'内容の確認',regeneration:'再作成',reverification:'再作成後の確認'}[result?.data?.phase]||'確認';
+  const after=Number(result?.resumeAfter)||0;
+  if(after>now){
+    const time=new Date(after).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return '投稿文はまだ未完成です。次は'+phase+'です。再開の目安は'+time+'（この端末の時刻）。その時刻以降に「確認を続ける」を押してください。自動では再開しません。';
+  }
+  return '投稿文はまだ未完成です。次は'+phase+'です。「確認を続ける」を押してください。自動では再開しません。';
+}
+
 function updateAiPanel(index){
   if(currentAppSession)proUpdateDashboard();
   const usageField=document.getElementById('proResourceUsage');
@@ -2711,7 +2787,7 @@ function updateAiPanel(index){
   const copy=box.querySelector('.aiCopy');
   const continueButton=box.querySelector('[data-ai-continue]');
   if(continueButton){continueButton.hidden=!['pending','restored'].includes(result?.state);continueButton.textContent=result?.state==='restored'?'保存済み結果を確認':'確認を続ける';}
-  if(result?.state==='pending'){status.textContent='投稿文はまだ未完成です。'+(Number(result.data?.retryAfterMs)>0?'利用枠の回復後、確認を続けてください。':'確認を続けてください。');facts.textContent='';copy.textContent='';return;}
+  if(result?.state==='pending'){status.textContent=pendingAiStatus(result);facts.textContent='';copy.textContent='';return;}
   if(result?.state==='paused'){status.textContent='前の商品で確認が停止しています。確認を続けるとこの商品へ進みます。';facts.textContent='';copy.textContent='';return;}
   if(!result){status.textContent='AI分析待ち…';facts.textContent='';copy.textContent='';return;}
   if(result.state==='loading'){status.textContent=result.message||'AI分析中…';facts.textContent='';copy.textContent='';return;}
@@ -2756,7 +2832,7 @@ function updateAiPanel(index){
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
 }
 
-async function requestAiRoom(item,index,generation){
+async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?240000:12000);
@@ -2764,7 +2840,7 @@ async function requestAiRoom(item,index,generation){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,usePurchasePlan?12000:1200),catchcopy:String(item?.catchcopy||'').slice(0,500),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')};
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),catchcopy:String(item?.catchcopy||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),...(statusOnly?{statusOnly:true}:{})};
     let r,d;
     if(usePurchasePlan){
       const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
@@ -2781,7 +2857,7 @@ async function requestAiRoom(item,index,generation){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
       aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
-    }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d});
+    }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d,resumeAfter:Date.now()+Math.max(0,Number(d.retryAfterMs)||0)});
     else aiRoomResults.set(index,{state:'done',data:d});
   }catch(e){
     if(generation!==aiRunGeneration) return;
@@ -2859,17 +2935,22 @@ function aiTargetDecision(item){
 
 function activeAiProgress(){
   const items=Array.isArray(lastSearchItems)?lastSearchItems:[];
-  let required=0,done=0,pending=0,failed=0;
+  let required=0,done=0,pending=0,failed=0,ready=0,blocked=0,unconfirmed=0;
   items.forEach((item,index)=>{
     const target=aiTargetDecision(item);
     if(!target.callAi) return;
     required++;
-    const state=aiRoomResults.get(index)?.state;
-    if(state==='done') done++;
+    const result=aiRoomResults.get(index),state=result?.state;
+    if(state==='done'){
+      done++;
+      if(result.data?.ok===true&&result.data?.pending===false&&result.data?.quality?.status==='ready') ready++;
+      else if(result.data?.quality?.status==='blocked') blocked++;
+      else unconfirmed++;
+    }
     else if(state==='error') failed++;
     else pending++;
   });
-  return {required,done,pending,failed,finished:required>0&&pending===0};
+  return {required,done,pending,failed,ready,blocked,unconfirmed,finished:required>0&&pending===0};
 }
 
 function resumeActiveAiQueue(){
@@ -2941,7 +3022,7 @@ async function runAiPreview(items,{resume=false}={}){
     aiQueueRunning=false;
     const progress=activeAiProgress();
     const meta=document.getElementById('debugJsonMeta');
-    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`AI確認完了：${progress.done}/${progress.required}件成功、${progress.failed}件停止。検証JSONを作成できます。`;
+    if(meta&&progress.required>0&&progress.pending===0) meta.textContent=`確認処理完了：${progress.done+progress.failed}/${progress.required}件。投稿文合格${progress.ready}件、不採用${progress.blocked}件、判定未確認${progress.unconfirmed}件、エラー停止${progress.failed}件。検証JSONを作成できます。`;
   }
 }
 
@@ -2968,12 +3049,13 @@ document.addEventListener('click',async e=>{
   if(resume){
     const index=Number(resume.dataset.aiContinue);
     if(aiQueueRunning||!['pending','restored'].includes(aiRoomResults.get(index)?.state))return;
+    const restoring=aiRoomResults.get(index)?.state==='restored';
     aiQueueRunning=true;resume.disabled=true;
-    try{await requestAiRoom(lastSearchItems[index],index,aiRunGeneration);
+    try{await requestAiRoom(lastSearchItems[index],index,aiRunGeneration,{statusOnly:restoring});
       const result=aiRoomResults.get(index);
       if(result?.status===429||result?.upstreamStatus===429){for(const [i,row] of aiRoomResults)if(row.state==='paused'){aiRoomResults.set(i,{state:'error',status:429,message:'AIの上限に達したため、残りの生成を停止しました。'});updateAiPanel(i);}}
     }finally{aiQueueRunning=false;resume.disabled=false;}
-    if(aiRoomResults.get(index)?.state==='done')await runAiPreview(lastSearchItems,{resume:true});
+    if(!restoring&&aiRoomResults.get(index)?.state==='done')await runAiPreview(lastSearchItems,{resume:true});
     return;
   }
   const b=e.target.closest?.('[data-ai-review]');if(!b)return;
@@ -3071,6 +3153,9 @@ function ruleSecondOpinion(item,validation,keyword=''){
 
 function resolveAiGate(item,index,keyword=''){
   if(!aiGatesFullOutput) return {enabled:false,status:'off',full:false,reasons:[]};
+  // A position is only meaningful in the active search. Batch diagnostics and
+  // separately fetched items must never inherit another product's verification.
+  if(lastSearchItems[index]!==item) return {enabled:true,status:'fallback',full:false,reasons:['product_not_current'],useLegacy:false};
   const ai=aiRoomResults.get(index);
   if(!ai || ai.state==='loading' || ai.state==='not_run'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_pending'],ruleSecondOpinion:{checked:false,conflict:false}};
@@ -3149,14 +3234,39 @@ function aiPostState(i){
   return {index,target,state,gate:resolveAiGate(i,index,lastSearchKeyword)};
 }
 
-function roomCopyNeedsReview(text,item,validatedByServer=false){
+function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=null){
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  if(lines.length<2&&body.length<85)return true;
+  // Short prose needs an exact reviewed result. A server boolean alone is
+  // insufficient. Local source sentences also carry their original quote;
+  // factual association was checked by the server and is rebound here.
+  const verifiedText=validatedByServer&&typeof RoomCopyResult!=='undefined'?RoomCopyResult.ready(verifiedResult):'';
+  const partner=verifiedResult?.local?.partner;
+  const localSourceText=validatedByServer&&verifiedResult?.ok===true&&verifiedResult?.pending===false
+    &&verifiedResult?.model==='local'&&verifiedResult?.phase==='local'
+    &&verifiedResult?.groq?.totalCalls===0&&verifiedResult?.quality?.status==='ready'
+    &&verifiedResult?.quality?.text===String(text||'')&&verifiedResult?.variants?.[0]?.text===String(text||'')
+    &&String(verifiedResult?.productType?.quote||'').length>0
+    &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemName,verifiedResult.productType.quote)
+    &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
+    &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
+    &&window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote);
+  // Length never substitutes for the exact approved result. In particular,
+  // long local text must rebind its source just as short local text does.
+  if(validatedByServer){
+    const v3=String(verifiedResult?.version||'').startsWith('super-urenavi-v3-');
+    const expected=verifiedText||(v3&&verifiedResult?.ok===true&&verifiedResult?.quality?.status==='ready'
+      ?String(verifiedResult?.variants?.[0]?.text||'').trim():'');
+    if(!expected||expected!==String(text||''))return true;
+    if(verifiedResult?.model==='local'&&partner?.kind==='caption_claim'&&!localSourceText)return true;
+  }
+  if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||''))&&!localSourceText)return true;
   // Publication safety is enforced at the final copy boundary for every route.
   // Draft builders remain responsible only for generating drafts.
   const guard=window.UrenaviFactSafety?.guardUnsupportedBenefitCopy;
   if(typeof guard!=='function'||guard(item||{},String(text||''))!==String(text||''))return true;
+  if(window.UrenaviPurchaseCopyQuality?.catalogueOnly(String(text||'')))return true;
+  if(window.UrenaviPurchaseCopyQuality?.restatedReason(String(text||''),{identity:verifiedResult?.productType?.specific||'',quote:partner?.quote||''}))return true;
   if(validatedByServer)return false;
   // Use the exact same grounded local assessment for AI routing and posting.
   // Never approve text merely because the item has some unrelated safe facts.
@@ -3177,20 +3287,41 @@ function isFullyReviewedCopyState(s){
 }
 
 function postReady(i,p='room'){
+  if(currentAccessPlan==='free') return false;
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done') return false;
   const text=String(post(i,p)||'').trim();
-  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s));
+  return Boolean(text) && !roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data);
 }
 
 function postDisplay(i,p='room'){
+  if(currentAccessPlan==='free') return '投稿文生成は有料機能です。商品検索は無料で利用できます。';
   const s=aiPostState(i);
   if(aiGatesFullOutput&&s.target.callAi&&s.state?.state!=='done'){
     if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
   const text=String(post(i,p)||'').trim();
-  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s))?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
+  return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
+}
+
+// Rendering a saved platform is not a user request to generate a post.
+function setItemPlatformView(article,item,platform){
+  article.querySelectorAll('.tab').forEach(tab=>tab.classList.toggle('on',tab.dataset.p===platform));
+  const copy=article.querySelector('.copy');
+  if(copy)copy.textContent=postDisplay(item,platform);
+  const button=article.querySelector('.cb');
+  if(button){
+    button.dataset.p=platform;
+    const ready=postReady(item,platform);
+    button.disabled=!ready;
+    button.textContent=ready?'投稿文をコピー':'コピー不可';
+  }
+}
+function restoreItemPlatformView(article,platform){
+  const index=Number(article.querySelector('.cb')?.dataset.i);
+  const item=lastSearchItems[index];
+  if(item)setItemPlatformView(article,item,platform);
 }
 
 
@@ -3442,11 +3573,12 @@ function compare(
 
 function render(
   a,
-  {autoAi=true,restored=false}={}
+  {autoAi=true,restored=false,keyword=lastSearchKeyword}={}
 ){
 
   const excluded=(Array.isArray(a)?a:[]).filter(item=>window.roomOutcomePosted?.(item)).length;
   a=(Array.isArray(a)?a:[]).filter(item=>!window.roomOutcomePosted?.(item));
+  if(restored) lastSearchKeyword=String(keyword||'').trim();
   lastSearchItems=a;
   aiRoomResults=new Map();
   if(restored){
@@ -3699,58 +3831,7 @@ function render(
         b.dataset.p;
 
         await ensureAiForItem(i);
-
-        ar
-        .querySelectorAll(
-          '.tab'
-        )
-        .forEach(
-          z=>
-          z.classList.remove(
-            'on'
-          )
-        );
-
-
-        b.classList.add(
-          'on'
-        );
-
-
-        ar
-        .querySelector(
-          '.copy'
-        )
-        .textContent=
-        postDisplay(
-          a[i],
-          p
-        );
-
-
-        const copyButton=
-        ar.querySelector(
-          '.cb'
-        );
-
-        copyButton.dataset.p=
-        p;
-
-        const ready=
-        postReady(
-          a[i],
-          p
-        );
-
-        copyButton.disabled=
-        !ready;
-
-        copyButton.textContent=
-        ready
-        ?
-        '投稿文をコピー'
-        :
-        'コピー不可';
+        setItemPlatformView(ar,a[i],p);
 
       };
 
@@ -4696,7 +4777,7 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 })();
 </script>
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
-<script src="/access-guard.js?v=20261002-qr"></script>
+<script src="/access-guard.js?v=20261020-handoff-app-2"></script>
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);

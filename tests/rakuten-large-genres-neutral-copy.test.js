@@ -9,6 +9,7 @@ function load(){
   const document={createElement(){return {textContent:''};},head:{appendChild(){}}};
   const window={document,Intl};
   const ctx=vm.createContext({window,Intl,console});
+  vm.runInContext(fs.readFileSync('public/purchase-copy-quality.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/structured-room-copy.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/fact-safety.js','utf8'),ctx);
   vm.runInContext(fs.readFileSync('public/pain-copy.js','utf8'),ctx);

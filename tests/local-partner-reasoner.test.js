@@ -4,6 +4,69 @@ const assert=require('node:assert/strict');
 const {chooseAngle,composeLocalPartnerCopy,explicitStepAdjustment}=require('../lib/local-partner-reasoner');
 const {candidateFromFact,resolveCompetingHypotheses,composeGenericLocalCopy,semanticProfile,safeTitleFacts,composeGenericFromTitle,safeCaptionCandidates,composeGenericFromSources}=require('../lib/local-generic-reasoner');
 
+test('unregistered source causal relationships survive extraction without inventing a benefit',()=>{
+  for(const [identity,sentence] of [
+    ['撮影用スタンド','撮影用スタンドは固定ねじを緩めて支柱を回すことで、照明の向きを切り替えられます。'],
+    ['計量ディスペンサー','計量ディスペンサーはロックを外してダイヤルを回すことで、一度に出す量を変えられます。'],
+    ['仕分けトレー','仕分けトレーは仕切りを外して差し替えることで、区画の幅を変えられます。']
+  ]){
+    const item={itemName:identity,itemCaption:sentence,identity};
+    const candidates=safeCaptionCandidates(item);
+    assert.equal(candidates.length,1);
+    assert.equal(candidates[0].quote,sentence);
+    const copy=composeGenericFromSources(item);
+    assert.ok(copy);
+    assert.equal(copy.quote,sentence);
+    assert.equal(copy.text,sentence+'\n\n※アフィリエイト広告を利用しています');
+    assert.deepEqual(safeCaptionCandidates({...item,itemCaption:'関連商品 '+sentence}),[]);
+    assert.deepEqual(safeCaptionCandidates({...item,itemCaption:sentence.replace('変えられます','変えられません').replace('切り替えられます','切り替えできません')}),[]);
+  }
+  assert.equal(composeGenericFromSources({itemName:'仕分けトレー',itemCaption:'仕分けトレーは便利なアイテムです。',identity:'仕分けトレー'}),null);
+});
+
+test('causal wording alone never upgrades generic convenience or category usage',()=>{
+  for(const identity of ['洗濯ネット','収納ボックス','照明スタンド']){
+    for(const body of ['使用することで、毎日の暮らしが便利になります。','使うことで、毎日の生活が快適になります。','対象物を処理することで、対象物を処理できます。']){
+      const item={itemName:identity,itemCaption:identity+'は'+body,identity};
+      assert.equal(composeGenericFromSources(item),null);
+      assert.deepEqual(safeCaptionCandidates(item),[]);
+    }
+  }
+});
+
+test('explicit configurable bundle remains an exact source reason across product types',()=>{
+  for(const [identity,choice,unit] of [['洗濯ネット','サイズ','枚'],['収納ケース','色','個'],['タオル','色とサイズ','枚']]){
+    const sentence=`${choice}組み合わせ自由で、選べる6${unit}セットの${identity}です。`;
+    const item={itemName:identity,itemCaption:sentence,identity};
+    const result=composeGenericFromSources(item);
+    assert.ok(result);
+    assert.equal(result.quote,sentence);
+    assert.ok(result.text.includes(sentence));
+    assert.equal(result.axis,'選択構成');
+    assert.ok(!result.text.includes('見て選ぶなら'));
+    assert.equal(composeGenericFromSources({...item,itemCaption:`関連商品の${sentence}`}),null);
+    assert.equal(composeGenericFromSources({...item,itemCaption:sentence.replace('です。','ではありません。')}),null);
+    assert.equal(composeGenericFromSources({...item,itemCaption:'6個セットです。'}),null);
+  }
+});
+
+test('final-local-risk candidates cannot displace a usable caption before ranking',()=>{
+  for(const identity of ['収納ケース','トートバッグ']){
+    const safe=`${identity}は衣類を収納できる構造です。`;
+    const unsafe=`${identity}は衣類の傷みを必ず防止します。`;
+    const item={itemName:identity,itemCaption:unsafe+safe,identity};
+    const candidates=safeCaptionCandidates(item);
+    assert.ok(candidates.some(c=>c.quote===safe));
+    assert.ok(candidates.every(c=>c.quote!==unsafe));
+    const result=composeGenericFromSources(item);
+    assert.ok(result);
+    assert.equal(result.quote,safe);
+    assert.ok(!result.text.includes('必ず'));
+    assert.deepEqual(safeCaptionCandidates({...item,itemCaption:unsafe}),[]);
+    assert.equal(composeGenericFromSources({...item,itemCaption:unsafe}),null);
+  }
+});
+
 test('electric kettle combines product scene and capacity choice without inventing speed',()=>{
   const title='T-fal ティファール ジャスティンロック 1.2L KO5901JP 電気ケトル 転倒湯こぼれ防止 1200ml';
   const out=composeLocalPartnerCopy({itemName:title,identity:'電気ケトル',itemPrice:3759});
@@ -331,7 +394,7 @@ test('caption capacity wording distinguishes storage amount from neutral product
     identity:'洗濯ネット'
   });
   assert.ok(storage);
-  assert.match(storage.text,/入る量や容量まで見て選ぶなら/);
+  assert.doesNotMatch(storage.text,/見て選ぶなら/);
 });
 
 test('caption-grounded reasoning rejects unrelated cross-sell text',()=>{

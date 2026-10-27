@@ -1,8 +1,8 @@
 (function(root,factory){
-  const api=factory();
+  const api=factory(typeof module==='object'&&module.exports?require('./purchase-copy-quality'):root.UrenaviPurchaseCopyQuality);
   if(typeof module==='object'&&module.exports) module.exports=api;
   if(root) root.UrenaviStructuredCopy=api;
-})(typeof window!=='undefined'?window:globalThis,function(){
+})(typeof window!=='undefined'?window:globalThis,function(purchaseQuality){
   'use strict';
   const VERSION='structured-copy-20261002-v2';
   const normalize=x=>String(x||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
@@ -38,6 +38,18 @@
   ];
   // Search returns catchcopy separately; include it as quoted source evidence rather than discarding it.
   function sourceParts(item){return ['itemName','itemCaption','catchcopy'].map(source=>({source,text:normalize(item?.[source])})).filter(x=>x.text);}
+  function hasSourceFactConflict(item,facts=[]){
+    const parts=sourceParts(item);
+    for(const fact of facts){
+      const quote=normalize(fact?.quote);
+      if(!quote)continue;
+      const escaped=quote.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const negated=new RegExp('(?:非|不|未)\\s*'+escaped+'|'+escaped+'\\s*(?:ではない|ではありません|非対応|未対応|対象外|不可|なし|無し|不要|できない|できません|しない|していません)','i');
+      if(parts.some(part=>negated.test(part.text)))return true;
+    }
+    const explicitCord=/(?:電源|AC)?コード(?:長)?\s*[:：]?\s*\d+(?:\.\d+)?\s*(?:m|cm)|\d+(?:\.\d+)?\s*(?:m|cm)\s*の(?:ロング)?コード|ロングコード/i;
+    return parts.some((part,i)=>/コードレス/i.test(part.text)&&parts.some((other,j)=>i!==j&&explicitCord.test(other.text)));
+  }
   function occurrence(parts,quote){
     const q=normalize(quote); if(!q||RISK.test(q)||(BAD_CONTEXT.test(q)&&q!=='フィルター交換不要')) return null;
     for(const part of parts){
@@ -210,20 +222,39 @@
   }
   // Rank evidence by usefulness rather than source order. The score only
   // selects verified sentences; it never generates unsupported product claims.
+  function valueHasStrongReason(value={},facts=[],identity=''){
+    const norm=x=>normalize(x).normalize('NFKC');
+    const refs=(value.factRefs||[value.factRef]).filter(Boolean).map(norm);
+    const id=norm(identity).toLocaleLowerCase('ja-JP');
+    return refs.some(ref=>{
+      const fact=(Array.isArray(facts)?facts:[]).find(f=>norm(f?.quote)===ref);
+      if(!fact)return false;
+      const quote=norm(fact.quote),kind=String(fact.kind||'');
+      if(['count','dimension','size','material','numeric'].includes(kind))return false;
+      if(/^(?:サイズ(?:は|[:：])?\s*)?\d+(?:\.\d+)?\s*(?:mm|cm|m)(?:\s*[×xX]\s*\d+(?:\.\d+)?\s*(?:mm|cm|m)){0,2}/i.test(quote))return false;
+      if(/^(?:本体サイズ|画面サイズ|寸法|高さ|幅|奥行|直径)/.test(quote))return false;
+      if(kind==='function'&&['洗える','手洗い','メッシュ','充電式','長袖','半袖','春夏','秋冬'].includes(quote))return false;
+      const q=quote.toLocaleLowerCase('ja-JP');
+      const variants={'折りたたみ':['折り畳み'],'折り畳み':['折りたたみ'],'伸縮式':['伸縮'],'伸縮':['伸縮式']};
+      return Boolean(q)&&!id.includes(q)&&!(variants[q]||[]).some(v=>id.includes(v));
+    });
+  }
   function purchaseReasons(understanding,values){
     const scored=values.map((value,index)=>{
       const quote=String(value.factRef||'');
       const kind=/^(?:\d+|内容量)/.test(quote)?'quantity':/^(?:XS|S|M|L|XL|XXL|XXXL)$/.test(quote)?'size':'feature';
       const isUseCase=/対応|使|洗|移動|折り|掛け|風対策|コード|包装/.test(value.text||'');
       const score=(kind==='feature'?3:0)+(isUseCase?3:0)+(Array.isArray(value.factRefs)&&value.factRefs.length>1?1:0);
-      return {text:value.text,quotes:value.factRefs||[value.factRef],score,index};
+      return {...value,quotes:value.factRefs||[value.factRef],score,index};
     });
     return scored.sort((a,b)=>b.score-a.score||a.index-b.index);
   }
   function compose(item,{identity='',evidence=[]}={}){
     const understanding=understand(item,identity),facts=extractFacts(item,evidence).filter(x=>x.kind!=='size'||['riding','clothing'].includes(understanding.domain)).filter(x=>understanding.domain!=='accessory'||!( /USB|Type-C|HDMI|PD対応|Bluetooth|Wi-Fi|mAh|Wh|[0-9](?:W|V|A|GB)$/.test(x.quote))),values=valuesFor(understanding,facts);
-    // Verified specifications alone do not establish a purchase reason.
-    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity')) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
+    // Preserve exact source facts as a draft without declaring a purchase reason.
+    // All publication consumers must require status=ok plus a rendered value.
+    const draftOnly=!understanding.scene&&!values.length&&understanding.method==='source_label';
+    if(!understanding.identity||!facts.length||(!understanding.scene&&!values.length&&understanding.method!=='validated_identity'&&!draftOnly)) return {version:VERSION,understanding,facts,values,text:'',status:'insufficient_evidence'};
     const used=new Set();
     const materials=facts.filter(x=>x.kind==='material'&&['riding','clothing','towel','cooking','holder','storage','storage-seat','beauty','pet','grooming','daily'].includes(understanding.domain));
     // An attractive opening must connect the actual use scene to a sourced reason.
@@ -238,17 +269,17 @@
     const lines=[];
     // Prefer a practical benefit over inventory-like quantity statements.
     const ranked=purchaseReasons(understanding,values);
-    const chosen=ranked.filter(x=>x.score>=3).slice(0,3);
+    const chosen=ranked.filter(x=>x.score>=3&&valueHasStrongReason(x,facts,understanding.identity)).slice(0,3);
     for(const value of chosen) for(const quote of value.quotes) used.add(quote);
     if(lead&&chosen.length){
       // Keep two grammatical sentences; joining arbitrary Japanese clauses with a comma creates broken copy.
       lines.push(lead,chosen[0].text);
       lines.push('',introduction);
-      if(chosen.length>1) lines.push(chosen.slice(1).map(x=>x.text).join(''));
+      if(chosen.length>1) lines.push(...chosen.slice(1).map(x=>x.text));
     }else{
       if(lead) lines.push(lead,'');
       lines.push(introduction);
-      if(chosen.length) lines.push('',chosen.map(x=>x.text).join(''));
+      if(chosen.length) lines.push('',...chosen.map(x=>x.text));
     }
     const remaining=facts.filter(x=>!used.has(x.quote));
     if(remaining.length){const useful=remaining.filter(x=>x.kind==='function');const specs=[...useful,...remaining.filter(x=>x.kind!=='function')].slice(0,3);if(specs.length){lines.push('','商品の特徴');for(const x of specs) lines.push('・'+x.quote);}}
@@ -256,20 +287,28 @@
     lines.push('','※アフィリエイト広告を利用しています');
     const text=lines.join('\n');
     if(text.length>500) return {version:VERSION,understanding,facts,values,text:'',status:'length_overflow'};
-    return {version:VERSION,understanding,facts,values,text,status:'ok'};
+    return {version:VERSION,understanding,facts,values,text,status:draftOnly?'draft':'ok'};
   }
   // Shared local-copy assessment: callers must not independently redefine readiness.
+  function factsAreTitleBound(facts=[]){
+    // A raw caption can contain other products, bundles and store introductions.
+    // Exact occurrence alone does not prove that its claim belongs to this item.
+    // The separately verified server path owns cross-source claim association.
+    return facts.length>0&&facts.every(fact=>fact.source==='itemName');
+  }
   function assess(item,{identity='',evidence=[]}={}){
     const result=compose(item,{identity,evidence});
     // Publication requires a purchase reason that was actually selected and
     // rendered as its own sentence, not merely mentioned inside the title.
     const selected=purchaseReasons(result.understanding,result.values||[])
-      .filter(value=>value.score>=3).slice(0,3);
+      .filter(value=>value.score>=3&&valueHasStrongReason(value,result.facts,result.understanding.identity)).slice(0,3);
     const body=String(result.text||'').split('商品の特徴')[0].split('価格：')[0];
     const renderedLines=new Set(body.split(/\n+/).map(line=>line.trim()).filter(Boolean));
     const hasGroundedValue=selected.some(value=>value.text&&renderedLines.has(value.text));
-    const ready=result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue);
-    return {ready,result,reason:ready?'ready':result.status==='ok'?'no_grounded_use_case':result.status};
+    const titleBound=factsAreTitleBound(result.facts);
+    const sourceConflict=hasSourceFactConflict(item,result.facts);
+    const ready=Boolean(purchaseQuality)&&!purchaseQuality.catalogueOnly(result.text)&&!purchaseQuality.restatedReason(result.text,{identity:result.understanding?.identity||''})&&result.status==='ok'&&Boolean(result.text)&&Boolean(hasGroundedValue)&&titleBound&&!sourceConflict;
+    return {ready,result,reason:sourceConflict?'source_fact_conflict':ready?'ready':result.status!=='ok'?result.status:!titleBound?'unverified_source_association':'no_grounded_use_case'};
   }
-  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,compose,assess,RISK};
+  return {VERSION,sourceLabel,understand,extractFacts,dedupeFacts,valuesFor,valueHasStrongReason,factsAreTitleBound,hasSourceFactConflict,compose,assess,RISK};
 });

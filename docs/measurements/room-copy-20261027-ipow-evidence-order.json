@@ -1,0 +1,240 @@
+{
+  "recordedOn": "2026-10-27",
+  "timeZone": "Asia/Tokyo",
+  "commit": "1d8a2c53579355441d045ac44fa4d03e55110535",
+  "policy": "room_contract_415ed0d8b7905ae5",
+  "scope": "One real Groq generation for a development product; not an independent quality pass or an isolated causal comparison",
+  "status": "pending_after_machine_rejection",
+  "stopReason": "Conservative next request estimate 8253 exceeds observed token window 8000; no further provider call made",
+  "estimatedInitialRequestTokens": 7656,
+  "estimatedNextRequestTokens": 8253,
+  "records": [
+    {
+      "item_code": "__semantic_preview__:room_contract_415ed0d8b7905ae5:ipow:10000579",
+      "item_name": "【8枚セット】【送料無料】ipow 洗濯ネット ランドリーネット 洗濯バッグ ブラジャーネット 洗濯用品 衣類 下着 靴下 シャツ など適用 トラベルポーチ 型崩れ防止 細かい網目 丈夫 家庭用",
+      "item_caption_normalized": "商品説明 ★【洗濯ネットを利用するメリット】:&#10102;衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。 &#10123;ほこり・汚れの付着をガードしてくれる。 &#10104;色落ち・色移りを防いでくれる。&#10105;分類するのも簡単です。 ★【ランドリーネットの多機能】:ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。 ★【汚れを強力に落とす】:ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。しっかりと汚れも落ち、汗など水溶性の汚れを強力に落とします。 素材 ポリエステル セット内容 角型:60*50cm×1枚、50*40cm×1枚、40*30cm×2枚、30*23cm×2枚; 筒型:16*16 cm×1枚; ドーム型:17*19 cm×1枚。 セット数 8枚 ブランド&#183;メーカー ipow",
+      "source_hash": "f945ba51ceabf9b4fd75d11e0363fb79b08ab8a1bade0188e5c4e89ddb32e1b6",
+      "model": "openai/gpt-oss-120b",
+      "prompt_version": "room_contract_415ed0d8b7905ae5",
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.177860261,
+              "total_time": 3.882378084,
+              "prompt_time": 0.17993212,
+              "total_tokens": 4477,
+              "prompt_tokens": 2706,
+              "completion_time": 3.702445964,
+              "completion_tokens": 1771,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1503
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 6043,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "23.19s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "1m26.4s",
+              "x-ratelimit-remaining-tokens": "4908",
+              "x-ratelimit-remaining-requests": "999"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "洗濯ネット",
+            "acts_on": "衣類",
+            "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+          },
+          "sentences": [
+            {
+              "text": "洗濯時に衣類の型崩れや絡みを防ぎたいときは、【8枚セット】の細かい網目の洗濯ネットが適しています。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+                "ネットの目は細かいので、ごみなどが入りにくい。"
+              ]
+            },
+            {
+              "text": "また、旅行や野菜保存など多用途に使える点も魅力です。",
+              "kinds": [
+                "spec",
+                "benefit"
+              ],
+              "quotes": [
+                "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+              ]
+            }
+          ]
+        },
+        "stage": "generate",
+        "nextAt": 1793036815920,
+        "review": null,
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "23.19s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "4908",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "洗濯ネット",
+                "acts_on": "衣類",
+                "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+              },
+              "sentences": [
+                {
+                  "text": "洗濯時に衣類の型崩れや絡みを防ぎたいときは、【8枚セット】の細かい網目の洗濯ネットが適しています。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+                    "ネットの目は細かいので、ごみなどが入りにくい。"
+                  ]
+                },
+                {
+                  "text": "また、旅行や野菜保存など多用途に使える点も魅力です。",
+                  "kinds": [
+                    "spec",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "number_without_evidence",
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                "sentence": 0
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                "sentence": 0
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": false,
+          "flags": [
+            {
+              "rule": "scope_or_exclusion",
+              "quotes": [
+                {
+                  "end": 218,
+                  "quote": "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。",
+                  "start": 159,
+                  "source": "caption"
+                }
+              ],
+              "sentence": 1
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 71,
+                "quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+                "start": 31,
+                "source": "caption"
+              },
+              {
+                "end": 255,
+                "quote": "ネットの目は細かいので、ごみなどが入りにくい。",
+                "start": 232,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 218,
+                "quote": "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。",
+                "start": 159,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": [
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 0
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 0
+            }
+          ]
+        },
+        "quality": null,
+        "failures": [
+          {
+            "rule": "number_without_evidence",
+            "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+            "sentence": 0
+          },
+          {
+            "rule": "measurement_without_evidence",
+            "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+            "sentence": 0
+          }
+        ],
+        "startedAt": 1793036784914,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "洗濯ネット",
+            "acts_on": "衣類",
+            "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+          },
+          "sentences": [
+            {
+              "text": "洗濯時に衣類の型崩れや絡みを防ぎたいときは、【8枚セット】の細かい網目の洗濯ネットが適しています。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+                "ネットの目は細かいので、ごみなどが入りにくい。"
+              ]
+            },
+            {
+              "text": "また、旅行や野菜保存など多用途に使える点も魅力です。",
+              "kinds": [
+                "spec",
+                "benefit"
+              ],
+              "quotes": [
+                "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": "靴下"
+      },
+      "updated_at": "2026-10-26 17:46:32.732+00"
+    }
+  ]
+}

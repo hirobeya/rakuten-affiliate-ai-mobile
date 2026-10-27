@@ -23,3 +23,18 @@ test('catchcopy cannot authorize facts absent from any source',()=>{
  assert.equal(contract.bind(item,'防水'),null);
  assert.ok(!structured.extractFacts(item).some(x=>x.quote==='防水'));
 });
+
+// Matching a positive substring inside a negated claim is not positive evidence.
+test('semantic inspection blocks quotes cut before trailing negation',()=>{
+ for(const itemCaption of ['防水不可','防水なし','防水できません','防水対象外']){
+  const item={itemName:'バイクグローブ',itemCaption};
+  const draft={product:{what:'バイクグローブ',acts_on:'手',acts_on_quote:'バイクグローブ'},sentences:[{text:'防水のバイクグローブを選びたいときに。',kinds:['benefit'],quotes:['防水']}]};
+  assert.ok(contract.inspect(item,draft).failures.some(x=>x.rule==='quote_cuts_negation'),itemCaption);
+ }
+});
+
+test('semantic inspection preserves an explicitly stated negative limitation',()=>{
+ const item={itemName:'バイクグローブ',itemCaption:'防水不可'};
+ const draft={product:{what:'バイクグローブ',acts_on:'手',acts_on_quote:'バイクグローブ'},sentences:[{text:'防水不可のバイクグローブを選ぶときに。',kinds:['spec'],quotes:['防水不可']}]};
+ assert.ok(!contract.inspect(item,draft).failures.some(x=>x.rule==='quote_cuts_negation'));
+});

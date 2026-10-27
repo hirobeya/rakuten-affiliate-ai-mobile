@@ -1,0 +1,455 @@
+{
+  "recordedOn": "2026-10-27",
+  "timeZone": "Asia/Tokyo",
+  "scope": "Immutable recorded drafts; candidate prompt on two positive and two weak development cases. Not independent holdout. No fresh generation.",
+  "result": "Two positive controls passed; one weak draft still passed and another had erroneous conditions and fabricated review quotation. Reviewer calibration is not established.",
+  "records": [
+    {
+      "item_code": "__fixed_review_b32d71da9178f3e0:after:0d887f2c325d0cf7",
+      "schema_version": "fixed_review_b32d71da9178f3e0",
+      "result": {
+        "usage": {
+          "queue_time": 0.142388178,
+          "total_time": 3.838017458,
+          "prompt_time": 0.126928745,
+          "total_tokens": 4800,
+          "prompt_tokens": 3024,
+          "completion_time": 3.711088713,
+          "completion_tokens": 1776,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1492
+          }
+        },
+        "caseId": "0d887f2c325d0cf7",
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "刺繍キットで初心者が刺繍を始めるとき、カード巻きタイプの刺繍糸が整然と並んでいるので、必要な色をすぐに取り出せます。",
+              "degree": "supported",
+              "reason": "カード巻き糸が整然と並び、必要な色をすぐに取り出せる点を示す",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "supported",
+              "evidenceQuotes": [
+                "刺繍糸は管理しやすいカード巻きタイプ。",
+                "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。"
+              ]
+            }
+          ]
+        },
+        "machine": {
+          "ok": true,
+          "flags": [],
+          "bindings": [
+            [
+              {
+                "end": 517,
+                "quote": "刺繍糸は管理しやすいカード巻きタイプ。",
+                "start": 498,
+                "source": "caption"
+              },
+              {
+                "end": 151,
+                "quote": "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒...",
+                "start": 120,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "pending": false,
+        "variant": "after",
+        "version": "fixed_review_b32d71da9178f3e0",
+        "draftHash": "2809ae9e2ff9aa1fe2323e3be9fdf9f6dd2c01c80b0f4448f69e85c38ae3102d",
+        "assessment": {
+          "ok": true,
+          "evidence": [
+            [
+              {
+                "end": 517,
+                "quote": "刺繍糸は管理しやすいカード巻きタイプ。",
+                "start": 498,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              },
+              {
+                "end": 498,
+                "quote": "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。",
+                "start": 472,
+                "source": "caption",
+                "approvalEvidence": "added_by_review"
+              }
+            ]
+          ],
+          "failures": [],
+          "additionalEvidence": [
+            {
+              "end": 498,
+              "quote": "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。",
+              "start": 472,
+              "source": "caption",
+              "approvalEvidence": "added_by_review"
+            }
+          ]
+        },
+        "experiment": true,
+        "promptHash": "264f2f6229370ffd167866ce085d87ae245ca49cce1b1467a83e8fde5cc421d6",
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "25.402s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "4613",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "sourceHash": "f568fd4f5a7b204b67a65677db791301e9bd18fed9160751fff10d466c1903bf",
+        "publishable": false
+      }
+    },
+    {
+      "item_code": "__fixed_review_8a28f58a1527d374:after:5c54cb7abfb6f6b3",
+      "schema_version": "fixed_review_8a28f58a1527d374",
+      "result": {
+        "usage": {
+          "queue_time": 0.227195602,
+          "total_time": 3.648404804,
+          "prompt_time": 0.10554213,
+          "total_tokens": 3948,
+          "prompt_tokens": 2248,
+          "completion_time": 3.542862674,
+          "completion_tokens": 1700,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1437
+          }
+        },
+        "caseId": "5c54cb7abfb6f6b3",
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "細かい網目の洗濯ネットは、洗濯時に衣類の型崩れや他の洗濯物との絡みを防ぎます。",
+              "degree": "supported",
+              "reason": "型崩れ防止と他の洗濯物との絡み防止を示す",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "not_supported",
+              "evidenceQuotes": [
+                "衣服を保護する、ほかの洗濯物と絡みつくのを防ぎ、服を型崩れや毛羽立ちから守ります。"
+              ]
+            }
+          ]
+        },
+        "machine": {
+          "ok": true,
+          "flags": [],
+          "bindings": [
+            [
+              {
+                "end": 71,
+                "quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+                "start": 31,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "pending": false,
+        "variant": "after",
+        "version": "fixed_review_8a28f58a1527d374",
+        "draftHash": "70958372505177b68036f441d8fa08408cefa5d408caf066fd4b840cad8f07d5",
+        "assessment": {
+          "ok": false,
+          "evidence": [
+            []
+          ],
+          "failures": [
+            {
+              "rule": "conditions_not_supported",
+              "detail": "型崩れ防止と他の洗濯物との絡み防止を示す",
+              "sentence": 0
+            },
+            {
+              "rule": "review_evidence_not_in_source",
+              "sentence": 0
+            }
+          ],
+          "additionalEvidence": []
+        },
+        "experiment": true,
+        "promptHash": "264f2f6229370ffd167866ce085d87ae245ca49cce1b1467a83e8fde5cc421d6",
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "19.56s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "5392",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "sourceHash": "2a5642bcea7c5f0b141b65d7899d33c47b313a111a7fddf080ec89391cde9c10",
+        "publishable": false
+      }
+    },
+    {
+      "item_code": "__fixed_review_8a28f58a1527d374:after:2be880f2f1d13c45",
+      "schema_version": "fixed_review_8a28f58a1527d374",
+      "result": {
+        "usage": {
+          "queue_time": 0.090360663,
+          "total_time": 3.521296998,
+          "prompt_time": 0.131670779,
+          "total_tokens": 4522,
+          "prompt_tokens": 2872,
+          "completion_time": 3.389626219,
+          "completion_tokens": 1650,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1430
+          }
+        },
+        "caseId": "2be880f2f1d13c45",
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "授乳時に胸の上布をそのまま授乳ケープとして使えるマタニティワンピースなので、来客や急な授乳でも着替えずにすぐ対応できます。",
+              "degree": "supported",
+              "reason": "Matches source description of integrated nursing cape and quick convenience.",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "supported",
+              "evidenceQuotes": [
+                "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+                "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ!"
+              ]
+            }
+          ]
+        },
+        "machine": {
+          "ok": true,
+          "flags": [
+            {
+              "rule": "scope_or_exclusion",
+              "quotes": [
+                {
+                  "end": 474,
+                  "quote": "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+                  "start": 419,
+                  "source": "caption"
+                },
+                {
+                  "end": 508,
+                  "quote": "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ!",
+                  "start": 475,
+                  "source": "caption"
+                }
+              ],
+              "sentence": 0
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 474,
+                "quote": "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+                "start": 419,
+                "source": "caption"
+              },
+              {
+                "end": 508,
+                "quote": "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ!",
+                "start": 475,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "pending": false,
+        "variant": "after",
+        "version": "fixed_review_8a28f58a1527d374",
+        "draftHash": "521e8a408b0ad13efc428d41a30cf5dca46837a650da7e42ba053d4438ab91ad",
+        "assessment": {
+          "ok": true,
+          "evidence": [
+            [
+              {
+                "end": 474,
+                "quote": "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+                "start": 419,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              },
+              {
+                "end": 508,
+                "quote": "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ!",
+                "start": 475,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "failures": [],
+          "additionalEvidence": []
+        },
+        "experiment": true,
+        "promptHash": "264f2f6229370ffd167866ce085d87ae245ca49cce1b1467a83e8fde5cc421d6",
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "24.389s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "4748",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "sourceHash": "b774fe117a652ded9bff2e5698899ad8f76f0c0524906e6954e3acb35bcd0b72",
+        "publishable": false
+      }
+    },
+    {
+      "item_code": "__fixed_review_8a28f58a1527d374:after:6ae52c7dda3e2335",
+      "schema_version": "fixed_review_8a28f58a1527d374",
+      "result": {
+        "usage": {
+          "queue_time": 0.206756806,
+          "total_time": 3.108948583,
+          "prompt_time": 0.096152688,
+          "total_tokens": 3693,
+          "prompt_tokens": 2249,
+          "completion_time": 3.012795895,
+          "completion_tokens": 1444,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1268
+          }
+        },
+        "caseId": "6ae52c7dda3e2335",
+        "review": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "quality": {
+            "scene": "supported",
+            "reason": "supported",
+            "natural": "supported",
+            "identity": "supported",
+            "room_style": "supported",
+            "non_redundant": "supported"
+          },
+          "sentences": [
+            {
+              "part": "supported",
+              "text": "旅行先で衣類を整理したいときは、サイズ組み合わせ自由な洗濯ネットが便利です。",
+              "degree": "supported",
+              "reason": "Caption directly states travel convenience and size‑combination feature.",
+              "target": "supported",
+              "negation": "supported",
+              "conditions": "supported",
+              "evidenceQuotes": [
+                "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+                "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+              ]
+            }
+          ]
+        },
+        "machine": {
+          "ok": true,
+          "flags": [],
+          "bindings": [
+            [
+              {
+                "end": 88,
+                "quote": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+                "start": 56,
+                "source": "caption"
+              },
+              {
+                "end": 215,
+                "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+                "start": 190,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "pending": false,
+        "variant": "after",
+        "version": "fixed_review_8a28f58a1527d374",
+        "draftHash": "1cfc8ff8b019e776b483d13483ac3b1cd036cd6b35df5cd83a993844fab1404f",
+        "assessment": {
+          "ok": true,
+          "evidence": [
+            [
+              {
+                "end": 88,
+                "quote": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+                "start": 56,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              },
+              {
+                "end": 215,
+                "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+                "start": 190,
+                "source": "caption",
+                "approvalEvidence": "generated"
+              }
+            ]
+          ],
+          "failures": [],
+          "additionalEvidence": []
+        },
+        "experiment": true,
+        "promptHash": "264f2f6229370ffd167866ce085d87ae245ca49cce1b1467a83e8fde5cc421d6",
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "19.627s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "5383",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "sourceHash": "5f1d77b31f461347db95a67652084ea42399b831b68d8c3d969bd3916d095cf4",
+        "publishable": false
+      }
+    }
+  ]
+}

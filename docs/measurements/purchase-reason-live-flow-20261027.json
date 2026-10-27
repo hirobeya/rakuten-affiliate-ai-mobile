@@ -1,0 +1,425 @@
+{
+  "recordedOn": "2026-10-27",
+  "timeZone": "Asia/Tokyo",
+  "commit": "79a602afb2e1b5c978c1b51eb7c534a5eaa55022",
+  "policy": "room_contract_1b695db9752d2845",
+  "itemCode": "linofle:10000458",
+  "scope": "One known development product through normal Preview UI; not independent holdout.",
+  "outcome": "Initial draft rejected; one rewrite replaced it with seller promotional assertions; review still approved. Generation quality improvement was not established. Do not repeat the same run to obtain a preferable result.",
+  "followup": "Reject existing writer-forbidden promotional assertions at shared server/local/final-copy boundary; retain positive controls. No new production AI phase or model change.",
+  "state": {
+    "calls": [
+      {
+        "stage": "generate",
+        "usage": {
+          "queue_time": 0.089810932,
+          "total_time": 3.456512466,
+          "prompt_time": 0.103355329,
+          "total_tokens": 3810,
+          "prompt_tokens": 2207,
+          "completion_time": 3.353157137,
+          "completion_tokens": 1603,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1353
+          }
+        },
+        "attempt": 0,
+        "elapsedMs": 4829,
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "18.787s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "5495",
+          "x-ratelimit-remaining-requests": "999"
+        }
+      },
+      {
+        "stage": "generate",
+        "usage": {
+          "queue_time": 0.20840088,
+          "total_time": 2.974049099,
+          "prompt_time": 0.106407641,
+          "total_tokens": 4022,
+          "prompt_tokens": 2650,
+          "completion_time": 2.867641458,
+          "completion_tokens": 1372,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1128
+          }
+        },
+        "attempt": 1,
+        "elapsedMs": 5571,
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "31.897s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "2m52.8s",
+          "x-ratelimit-remaining-tokens": "3747",
+          "x-ratelimit-remaining-requests": "998"
+        }
+      },
+      {
+        "stage": "verify",
+        "usage": {
+          "queue_time": 0.090492443,
+          "total_time": 4.91009229,
+          "prompt_time": 0.169463966,
+          "total_tokens": 4705,
+          "prompt_tokens": 2450,
+          "completion_time": 4.740628324,
+          "completion_tokens": 2255,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1880
+          }
+        },
+        "attempt": 1,
+        "elapsedMs": 6836,
+        "rateLimits": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "30.397s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "4m19.2s",
+          "x-ratelimit-remaining-tokens": "3947",
+          "x-ratelimit-remaining-requests": "997"
+        }
+      }
+    ],
+    "draft": {
+      "product": {
+        "what": "洗濯ネット",
+        "acts_on": "衣類の型崩れ防止",
+        "acts_on_quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+      },
+      "sentences": [
+        {
+          "text": "洗濯ネットの決定版です。",
+          "kinds": [
+            "spec"
+          ],
+          "quotes": [
+            "洗濯ネットの決定版！"
+          ]
+        },
+        {
+          "text": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテムです。",
+          "kinds": [
+            "benefit"
+          ],
+          "quotes": [
+            "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+          ]
+        },
+        {
+          "text": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+          "kinds": [
+            "scene"
+          ],
+          "quotes": [
+            "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+          ]
+        }
+      ]
+    },
+    "stage": "done",
+    "nextAt": 0,
+    "review": {
+      "product": {
+        "what": "supported",
+        "acts_on": "supported"
+      },
+      "quality": {
+        "scene": "supported",
+        "reason": "supported",
+        "natural": "supported",
+        "identity": "supported",
+        "room_style": "supported",
+        "non_redundant": "supported"
+      },
+      "sentences": [
+        {
+          "part": "supported",
+          "text": "洗濯ネットの決定版です。",
+          "degree": "supported",
+          "reason": "キャプションで『洗濯ネットの決定版！』と記載されているため。",
+          "target": "supported",
+          "negation": "supported",
+          "conditions": "supported",
+          "evidenceQuotes": [
+            "洗濯ネットの決定版！"
+          ]
+        },
+        {
+          "part": "supported",
+          "text": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテムです。",
+          "degree": "supported",
+          "reason": "キャプションに『洗濯時の型崩れ防止…必須のアイテム』と記載されているため。",
+          "target": "supported",
+          "negation": "supported",
+          "conditions": "supported",
+          "evidenceQuotes": [
+            "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+          ]
+        },
+        {
+          "part": "supported",
+          "text": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+          "degree": "supported",
+          "reason": "キャプションで『旅行時にも便利で、衣類を整理整頓するのに最適です』と記載されているため。",
+          "target": "supported",
+          "negation": "supported",
+          "conditions": "supported",
+          "evidenceQuotes": [
+            "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+          ]
+        }
+      ]
+    },
+    "attempt": 1,
+    "headers": {
+      "x-ratelimit-limit-tokens": "8000",
+      "x-ratelimit-reset-tokens": "30.397s",
+      "x-ratelimit-limit-requests": "1000",
+      "x-ratelimit-reset-requests": "4m19.2s",
+      "x-ratelimit-remaining-tokens": "3947",
+      "x-ratelimit-remaining-requests": "997"
+    },
+    "history": [
+      {
+        "draft": {
+          "product": {
+            "what": "洗濯ネット",
+            "acts_on": "衣類の型崩れ",
+            "acts_on_quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+          },
+          "sentences": [
+            {
+              "text": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。"
+              ]
+            },
+            {
+              "text": "洗濯時の型崩れ防止や衣類のダメージを軽減します。",
+              "kinds": [
+                "benefit"
+              ],
+              "quotes": [
+                "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+              ]
+            },
+            {
+              "text": "旅行時に衣類を整理整頓でき、便利に持ち運べます。",
+              "kinds": [
+                "scene"
+              ],
+              "quotes": [
+                "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+              ]
+            }
+          ]
+        },
+        "review": null,
+        "attempt": 0,
+        "failures": [
+          {
+            "rule": "restated_purchase_reason",
+            "detail": "choice_configuration_without_use_relation。特徴を願望と説明で繰り返さず、原文で支えられる具体的な使用意図と特徴の関係を伝える。関係が不明なら効果を作らない。",
+            "sentence": null
+          },
+          {
+            "rule": "product_identity_missing_from_post",
+            "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。",
+            "sentence": null
+          }
+        ]
+      }
+    ],
+    "machine": {
+      "ok": true,
+      "flags": [],
+      "bindings": [
+        [
+          {
+            "end": 56,
+            "quote": "洗濯ネットの決定版!",
+            "start": 46,
+            "source": "caption"
+          }
+        ],
+        [
+          {
+            "end": 122,
+            "quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。",
+            "start": 88,
+            "source": "caption"
+          }
+        ],
+        [
+          {
+            "end": 215,
+            "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+            "start": 190,
+            "source": "caption"
+          }
+        ]
+      ],
+      "failures": []
+    },
+    "quality": {
+      "text": "洗濯ネットの決定版です。\n\n洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテムです。\n\n旅行時にも便利で、衣類を整理整頓するのに最適です。\n\n※アフィリエイト広告を利用しています",
+      "ledger": [
+        [
+          {
+            "end": 56,
+            "quote": "洗濯ネットの決定版!",
+            "start": 46,
+            "source": "caption",
+            "approvalEvidence": "generated"
+          }
+        ],
+        [
+          {
+            "end": 122,
+            "quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。",
+            "start": 88,
+            "source": "caption",
+            "approvalEvidence": "generated"
+          }
+        ],
+        [
+          {
+            "end": 215,
+            "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+            "start": 190,
+            "source": "caption",
+            "approvalEvidence": "generated"
+          }
+        ]
+      ],
+      "review": {
+        "ok": true,
+        "evidence": [
+          [
+            {
+              "end": 56,
+              "quote": "洗濯ネットの決定版!",
+              "start": 46,
+              "source": "caption",
+              "approvalEvidence": "generated"
+            }
+          ],
+          [
+            {
+              "end": 122,
+              "quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。",
+              "start": 88,
+              "source": "caption",
+              "approvalEvidence": "generated"
+            }
+          ],
+          [
+            {
+              "end": 215,
+              "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+              "start": 190,
+              "source": "caption",
+              "approvalEvidence": "generated"
+            }
+          ]
+        ],
+        "failures": [],
+        "additionalEvidence": []
+      },
+      "status": "ready",
+      "machine": {
+        "ok": true,
+        "flags": [],
+        "bindings": [
+          [
+            {
+              "end": 56,
+              "quote": "洗濯ネットの決定版!",
+              "start": 46,
+              "source": "caption"
+            }
+          ],
+          [
+            {
+              "end": 122,
+              "quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。",
+              "start": 88,
+              "source": "caption"
+            }
+          ],
+          [
+            {
+              "end": 215,
+              "quote": "旅行時にも便利で、衣類を整理整頓するのに最適です。",
+              "start": 190,
+              "source": "caption"
+            }
+          ]
+        ],
+        "failures": []
+      },
+      "reasons": [],
+      "additionalEvidence": []
+    },
+    "failures": [
+      {
+        "rule": "restated_purchase_reason",
+        "detail": "choice_configuration_without_use_relation。特徴を願望と説明で繰り返さず、原文で支えられる具体的な使用意図と特徴の関係を伝える。関係が不明なら効果を作らない。",
+        "sentence": null
+      },
+      {
+        "rule": "product_identity_missing_from_post",
+        "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。",
+        "sentence": null
+      }
+    ],
+    "startedAt": 1793062688892,
+    "finishedAt": 1793062802354,
+    "rateRetries": 0,
+    "previousDraft": {
+      "product": {
+        "what": "洗濯ネット",
+        "acts_on": "衣類の型崩れ",
+        "acts_on_quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+      },
+      "sentences": [
+        {
+          "text": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+          "kinds": [
+            "spec"
+          ],
+          "quotes": [
+            "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。"
+          ]
+        },
+        {
+          "text": "洗濯時の型崩れ防止や衣類のダメージを軽減します。",
+          "kinds": [
+            "benefit"
+          ],
+          "quotes": [
+            "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。"
+          ]
+        },
+        {
+          "text": "旅行時に衣類を整理整頓でき、便利に持ち運べます。",
+          "kinds": [
+            "scene"
+          ],
+          "quotes": [
+            "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+          ]
+        }
+      ]
+    },
+    "partnerProductType": ""
+  }
+}

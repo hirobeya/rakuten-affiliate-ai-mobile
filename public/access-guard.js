@@ -1,5 +1,4 @@
 (() => {
-  const PURCHASE_URL='/api/access?action=buy';
   const HANDOFF_KEY='urenavi_handoff_pending_v1';
   let deviceAllowed=false;
   let deviceEmail='';
@@ -10,10 +9,9 @@
     if(document.getElementById('urenaviPurchaseLink')) return;
     const loginBtn=document.getElementById('loginBtn');
     if(!loginBtn) return;
-    const a=document.createElement('a');
+    const a=document.createElement('div');
     a.id='urenaviPurchaseLink';
-    a.href=PURCHASE_URL;
-    a.textContent='まだ購入していない方｜月額980円で始める';
+    a.textContent='新規受付・販売は現在準備中です。';
     Object.assign(a.style,{display:'block',marginTop:'12px',padding:'13px',border:'1px solid #e8b6ad',borderRadius:'13px',textAlign:'center',textDecoration:'none',color:'#a12e21',fontSize:'12px',fontWeight:'900',background:'#fff8f6'});
     loginBtn.insertAdjacentElement('afterend',a);
   }
@@ -154,6 +152,16 @@
     const loginBtn=document.getElementById('loginBtn');
     if(!loginBtn || document.getElementById('previewOwnerAccess')) return;
 
+    const incoming=new URLSearchParams(window.location.search).getAll('handoff');
+    if(incoming.length===1&&/^[a-f0-9]{64}$/i.test(incoming[0])){
+      const hint=document.createElement('div');
+      hint.id='previewOwnerAccess';
+      hint.textContent='端末接続の承認画面です。この画面にログイン表示が出ない場合は、同じリンクを、さきほどウレナビにログインしたブラウザで開いてください。ブラウザ間でログイン状態は共有されません。';
+      Object.assign(hint.style,{marginTop:'12px',padding:'12px',border:'1px solid #bfd3ee',borderRadius:'13px',background:'#f3f8ff',lineHeight:'1.6'});
+      loginBtn.insertAdjacentElement('afterend',hint);
+      return;
+    }
+
     const box=document.createElement('div');
     box.id='previewOwnerAccess';
     Object.assign(box.style,{
@@ -171,12 +179,13 @@
     title.textContent='Preview確認用（オーナーのみ）';
 
     const note=document.createElement('div');
-    note.textContent='ログインメールを使わず、本番ウレナビで認証済みの端末情報を使ってPreviewへ入れます。';
+    note.textContent='ログイン済みの端末で承認すると、メールを再送せずにこの検証画面へ入れます。';
 
-    const btn=document.createElement('button');
-    btn.type='button';
-    btn.textContent='本番の認証でPreviewを開く';
-    Object.assign(btn.style,{
+    function approvalButton(label,origin,preview){
+      const button=document.createElement('button');
+      button.type='button';
+      button.textContent=label;
+      Object.assign(button.style,{
       display:'block',
       width:'100%',
       marginTop:'9px',
@@ -186,27 +195,33 @@
       background:'#172a4b',
       color:'#fff',
       fontWeight:'900'
-    });
+      });
+      button.addEventListener('click',()=>prepareApproval(origin,preview));
+      return button;
+    }
 
     const msg=document.createElement('div');
     msg.style.marginTop='8px';
 
-    btn.addEventListener('click',()=>{
+    function prepareApproval(origin,preview){
       const code=randomHandoff();
       localStorage.setItem(HANDOFF_KEY,code);
       startHandoffPolling(true);
 
-      const approveUrl='https://rakuten-affiliate-ai-mobile.vercel.app/api/access?action=handoff-approve&code='+encodeURIComponent(code);
+      // The app can recover its Supabase session and send the bearer token.
+      // Direct API navigation has only cookies and cannot read that session.
+      // Keep the existing production route, whose app is not changed here.
+      const approveUrl=origin+(preview?'/app.html?handoff=':'/api/access?action=handoff-approve&code=')+encodeURIComponent(code);
       // A normal link does not depend on popup permission or window.open's
       // null return value with noopener. The existing approval/polling guards remain.
       msg.replaceChildren();
       const explanation=document.createElement('div');
-      explanation.textContent='下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
+      explanation.textContent=preview?'下のリンクを、この開発版にログイン済みのブラウザで開いて承認してください。ログインし直す必要はありません。':'下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
       const approvalLink=document.createElement('a');
       approvalLink.href=approveUrl;
       approvalLink.target='_blank';
       approvalLink.rel='noopener noreferrer';
-      approvalLink.textContent='本番で認証を確認する';
+      approvalLink.textContent=preview?'ログイン済みの開発版で承認する':'本番で認証を確認する';
       Object.assign(approvalLink.style,{display:'block',padding:'12px',marginTop:'8px',textAlign:'center',fontWeight:'900'});
       msg.append(explanation,approvalLink);
       if(typeof QRCode==='function'){
@@ -219,47 +234,12 @@
         msg.append(qrLabel,qr);
         new QRCode(qr,{text:approveUrl,width:256,height:256,correctLevel:QRCode.CorrectLevel.M});
       }
-    });
-
-    box.append(title,note,btn,msg);
-    loginBtn.insertAdjacentElement('afterend',box);
-  }
-
-  function installScoreCopyFix(){
-    if(typeof pts==='function'){
-      const basePts=pts;
-      window.pts=i=>{
-        const items=basePts(i).filter(text=>!String(text).includes('収益性も確保'));
-        const profitability=Number(i?.profitability||0);
-        const estimated=Number(i?.estimatedCommission||0);
-        if(items.length<3 && estimated>0){
-          if(profitability>=65) items.push(`収益性が高く、報酬目安は約${fmt(estimated)}円/件`);
-          else if(profitability>=45) items.push(`収益性は標準的。報酬目安は約${fmt(estimated)}円/件`);
-          else items.push(`報酬目安は約${fmt(estimated)}円/件`);
-        }
-        return items.slice(0,3);
-      };
     }
 
-    window.decision=a=>{
-      const t=(Array.isArray(a)?a:[]).slice(0,3);
-      if(!t.length) return '';
-      const sell=[...t].sort((x,y)=>(y.sellability||0)-(x.sellability||0))[0];
-      const profit=[...t].sort((x,y)=>(y.profitability||0)-(x.profitability||0))[0];
-      const overall=t[0];
-      const sellRank=t.indexOf(sell)+1;
-      const profitRank=t.indexOf(profit)+1;
-      return `
-<section class="decision">
-  <h2>AIの最終結論</h2>
-  <div class="dm">迷ったら総合1位。まずは売れやすさを取りにいく。</div>
-  <div class="dg">
-    <div class="mini"><b>総合</b><span>1位｜AI ${Number(overall.score||0)}/100</span></div>
-    <div class="mini"><b>売れやすさ</b><span>${sellRank}位｜${Number(sell.sellability||0)}/100</span></div>
-    <div class="mini"><b>利益</b><span>${profitRank}位｜収益性 ${Number(profit.profitability||0)}/100・約${fmt(Number(profit.estimatedCommission||0))}円/件</span></div>
-  </div>
-</section>`;
-    };
+    const previewBtn=approvalButton('この開発版のログインで承認',window.location.origin,true);
+    const btn=approvalButton('本番の認証でPreviewを開く','https://rakuten-affiliate-ai-mobile.vercel.app',false);
+    box.append(title,note,previewBtn,btn,msg);
+    loginBtn.insertAdjacentElement('afterend',box);
   }
 
   function installRoomPostCopyFix(){
@@ -316,9 +296,10 @@
 
     if(typeof render==='function'){
       const baseRender=render;
-      window.render=a=>{
-        baseRender(a);
+      window.render=(...args)=>{
+        const result=baseRender(...args);
         enhanceVisiblePreviews(document.getElementById('res')||document);
+        return result;
       };
     }
 
@@ -373,7 +354,6 @@
     };
   }
 
-  installScoreCopyFix();
   installRoomPostCopyFix();
   installSafePostPreviewLinks();
   installPriceLayout();

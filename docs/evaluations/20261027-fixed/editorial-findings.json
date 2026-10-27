@@ -1,0 +1,136 @@
+{
+  "method": "preliminary single-evaluator inspection; fixed original six criteria; no runtime decision changes",
+  "independentTwoRaterEvaluation": false,
+  "findings": [
+    {
+      "kind": "weak_local_ready",
+      "id": "u09",
+      "sourceHash": "ca4552811f0f9075f884d485078e8b951477c825f2d0cc135bc79d38bca42e0c",
+      "text": "キッチンでの調理に。\nIHでの調理に対応。\n\nフライパンです。\n\n価格：4,180円\n\n※アフィリエイト広告を利用しています",
+      "systemReady": true,
+      "criterionConcern": [
+        "選ぶ理由",
+        "対象・場面・価値",
+        "自然さ・魅力"
+      ],
+      "reason": "IH対応と調理用途の反復で、最後が品名だけの独立文。本文中の具体的な使い方と選ぶ理由の接続がない。",
+      "assessment": "single-evaluator development finding, not blinded independent six-pass"
+    },
+    {
+      "kind": "weak_local_ready",
+      "id": "u10",
+      "sourceHash": "7e05957c4e73b29729328abfab9384475faf368eee3b6d694c87ca626528df45",
+      "text": "折りたためる形で選びたいとき。\n折りたたみ仕様の収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+      "systemReady": true,
+      "criterionConcern": [
+        "選ぶ理由",
+        "対象・場面・価値",
+        "自然さ・魅力"
+      ],
+      "reason": "折りたたみで選ぶ→折りたたみ仕様の反復。収納・片付け等の意図と特徴の関係が本文にない。",
+      "assessment": "single-evaluator development finding, not blinded independent six-pass"
+    },
+    {
+      "kind": "weak_local_ready",
+      "id": "u01",
+      "sourceHash": "f0432d77ea154ac8266aeb0b8bf211566dd022bec5de3aee1ee651030c7696ba",
+      "text": "停車中にスマホ操作もしたいとき。\nスマホ対応のバイクグローブです。\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+      "systemReady": true,
+      "criterionConcern": [
+        "選ぶ理由",
+        "対象・場面・価値",
+        "自然さ・魅力"
+      ],
+      "reason": "スマホ操作をしたい→スマホ対応という言い直し。装着したまま使う等の具体的な関係が本文にない。",
+      "assessment": "single-evaluator development finding, not blinded independent six-pass"
+    },
+    {
+      "kind": "weak_local_ready",
+      "id": "washnet-4",
+      "sourceHash": "fcbaaefa93817e4d9c1d46dcdb21c109b894046d32ea2f6e3387507073da88b9",
+      "text": "洗濯ネットは、サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+      "systemReady": true,
+      "criterionConcern": [
+        "選ぶ理由",
+        "対象・場面・価値",
+        "自然さ・魅力"
+      ],
+      "reason": "サイズ組み合わせ自由・6枚セットの定義だけで、どの使用意図や選好にどう応えるかが本文にない。",
+      "assessment": "single-evaluator development finding, not blinded independent six-pass"
+    },
+    {
+      "kind": "weak_saved_ai_ready",
+      "draftId": "5c54cb7abfb6f6b3080447e17444e6a1576d364f11985753cf1dc660a2d4b319",
+      "text": [
+        "細かい網目の洗濯ネットは、洗濯時に衣類の型崩れや他の洗濯物との絡みを防ぎます。"
+      ],
+      "currentReplayStatus": "ready",
+      "storedAIQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "reason": "保存時AIは全品質supportedだが、一般的な型崩れ・絡み防止の説明に留まる。元の歴史的単独評価も独立不合格。",
+      "assessment": "historical single-evaluator label plus current single-evaluator inspection; not independent two-rater validation"
+    },
+    {
+      "kind": "weak_saved_ai_ready",
+      "draftId": "6ae52c7dda3e23357e1aa940b5aef53c7e785daec0c620826a116bee70e8b1d9",
+      "text": [
+        "旅行先で衣類を整理したいときは、サイズ組み合わせ自由な洗濯ネットが便利です。"
+      ],
+      "currentReplayStatus": "ready",
+      "storedAIQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "reason": "特徴と場面を便利という評価で結ぶだけで、具体的な選ぶ理由が弱い。元の歴史的単独評価も独立不合格。",
+      "assessment": "historical single-evaluator label plus current single-evaluator inspection; not independent two-rater validation"
+    },
+    {
+      "kind": "machine_false_rejection_removed",
+      "draftId": "69fd9a70456cb580f33671d36748645800104697caf281dd94c4ddc27cf440f5",
+      "before": [
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "after": [],
+      "currentPublication": "blocked",
+      "reason": "同一の保存草稿で寸法*と×の正規表現差だけ解消。保存AI審査なしのため公開不可を維持。"
+    },
+    {
+      "kind": "review_false_premise_with_other_failures",
+      "draftId": "47553c13659bf5e45b2fa25742215ebb706aeb2a90606b91751bdfe9788e94da",
+      "question": "target_not_supported",
+      "detail": "Target mentions bras not in source; condition unsupported.",
+      "counterevidence": "保存原文の商品名にブラジャーネットが含まれる。対象不在という理由は成立しない。",
+      "otherFailures": [
+        {
+          "rule": "target_not_supported",
+          "sentence": 0,
+          "detail": "Target mentions bras not in source; condition unsupported."
+        },
+        {
+          "rule": "conditions_not_supported",
+          "sentence": 0,
+          "detail": "Target mentions bras not in source; condition unsupported."
+        },
+        {
+          "rule": "review_evidence_not_in_source",
+          "sentence": 0
+        }
+      ],
+      "reason": "別に原文外のレビュー引用もあるため、拒否全体を自動的に覆してはいけない。"
+    }
+  ]
+}

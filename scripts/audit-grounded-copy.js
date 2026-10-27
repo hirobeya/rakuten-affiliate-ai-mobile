@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const structured=require('../public/structured-room-copy.js');
 const safety=require('../public/fact-safety.js');
+const {corpusGenres}=require('../lib/evaluation-corpus');
 const dir=path.join(__dirname,'../tests/fixtures');
 // Keep the historical title-only baseline unchanged. A separately captured
 // evidence-rich corpus can be audited with --corpus=path/to/file-or-directory.
@@ -19,7 +20,7 @@ const failures=new Map(),domains=new Map(),examples=new Map(),unreadyGenerated=n
 const missingEvidenceByGenre=new Map(),missingEvidenceExamples=new Map(),readyGuardExamples=[];
 for(const file of files){
   const json=JSON.parse(fs.readFileSync(file,'utf8'));
-  for(const genre of json.genres||[])for(const raw of genre.items||[]){
+  for(const genre of corpusGenres(json))for(const raw of genre.items||[]){
     totals.total++;
     const item={...raw,catchcopy:raw.catchcopy||'',itemCaption:raw.itemCaption||''};
     if(!String(item.itemCaption||'').trim()&&!String(item.catchcopy||'').trim())totals.titleOnly++;
@@ -60,5 +61,6 @@ for(const file of files){
 }
 const byFailure=[...failures].sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,example:examples.get(reason)}));
 const report={corpus:corpusPath||'historical-title-only',totals,readyGuardExamples,missingEvidenceByGenre:[...missingEvidenceByGenre].sort((a,b)=>b[1]-a[1]).slice(0,25).map(([genre,count])=>({genre,count,example:missingEvidenceExamples.get(genre)})),unreadyGenerated:Object.fromEntries([...unreadyGenerated].sort((a,b)=>b[1]-a[1])),byDomain:Object.fromEntries([...domains].sort((a,b)=>b[1].total-a[1].total)),byFailure};
+if(!totals.total)throw new Error('Evaluation corpus contained no products');
 console.log(JSON.stringify(report,null,2));
 if(process.argv.includes('--strict')&&totals.ready<112)process.exitCode=1;

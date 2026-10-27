@@ -5,7 +5,7 @@ const vm=require('node:vm');
 const s=require('../public/structured-room-copy');
 const fixtures=require('./fixtures/structured-copy-categories.json');
 const window={};const ctx=vm.createContext({window,Intl,console,setInterval:()=>0,setTimeout:()=>0,clearInterval:()=>{},document:{}});
-for(const name of ['structured-room-copy','fact-safety','pain-copy','room-copy-quality']) vm.runInContext(fs.readFileSync('public/'+name+'.js','utf8'),ctx);
+for(const name of ['purchase-copy-quality','structured-room-copy','fact-safety','pain-copy','room-copy-quality']) vm.runInContext(fs.readFileSync('public/'+name+'.js','utf8'),ctx);
 const api=window.UrenaviPainCopy;
 const posts=[];
 for(const item of fixtures){

@@ -1,0 +1,31 @@
+{
+  "recordedOn": "2026-10-27",
+  "commit": "a3c23415b832b0b6a9597dfcab6f7550e60d3764",
+  "scope": "Known completed fixed review reconciled; no new provider call, no quota refund, no schema or RLS change; not app completion",
+  "uiResult": {
+    "status": 200,
+    "reconciled": true,
+    "recordedInputTokens": 3024,
+    "recordedOutputTokens": 1776,
+    "providerCalls": 0
+  },
+  "databaseVerification": [
+    {
+      "lease_released": true,
+      "uncertain": null,
+      "budget": {
+        "notBefore": 1793056799910,
+        "tokenLimit": 8000,
+        "tokenResetAt": 1793056824212,
+        "requestResetAt": 1793056885210,
+        "remainingTokens": 4613,
+        "remainingRequests": 999
+      }
+    }
+  ],
+  "clipboardVerification": {
+    "copyToastObserved": true,
+    "contentEqualityVerified": false,
+    "reason": "Browser Use virtual clipboard reported no data; no evidence of app clipboard failure; requires real-device confirmation"
+  }
+}
