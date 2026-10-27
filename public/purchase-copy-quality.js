@@ -40,6 +40,12 @@
    if(compatibility&&lines.filter(x=>x.includes(compatibility[1])).length>=2)return 'repeated_use_and_identity_only';
   }
   const body=lines.join(' ');
+  // A configurable assortment followed only by "convenient" still does not
+  // explain how the configuration serves the stated intention. This is a
+  // structural veto across product kinds, not a category/brand exception.
+  const configuration=/(?:組み合わせ|組合せ)(?:は|が)?自由/.test(body);
+  const explicitRelation=/(?:ため|ことで|ので|により|によって|に合わせて|に応じて)/.test(body);
+  if(configuration&&!explicitRelation&&/(?:が|は)(?:とても|とっても)?便利(?:です|。|[!！]|$)/.test(body))return 'configuration_with_generic_convenience_only';
   if(hasChoiceRelation(body)&&!/(?:ため|ことで|ので|により|によって|に合わせて|に応じて)/.test(body))return 'choice_configuration_without_use_relation';
   if(lines.length===2&&id&&q){
    const claim=lines[1].replace(/[。.!！]+$/g,'');

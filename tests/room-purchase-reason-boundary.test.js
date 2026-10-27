@@ -2,6 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const {inspect,publication,questions}=require('../lib/room-semantic-contract');
 const {advance}=require('../lib/room-semantic-engine');
+const fixed=require('../data/fixed-review-cases-20261027.json');
 const quality=Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(k=>[k,'supported']));
 function approval(draft){return {product:{what:'supported',acts_on:'supported'},quality,sentences:draft.sentences.map(s=>({text:s.text,reason:'test approval',evidenceQuotes:[],...Object.fromEntries(questions.map(k=>[k,'supported']))}))};}
 function fixture(identity,quote,texts){const item={itemCode:'test:reason-boundary',itemName:identity,itemCaption:quote};return {item,draft:{product:{what:identity,acts_on:identity,acts_on_quote:quote},sentences:texts.map(text=>({text,quotes:[quote],kinds:['spec','scene']}))}};}
@@ -37,4 +38,21 @@ test('the existing rewrite receives the rejection; repeated weak drafts never pu
  assert.deepEqual(calls.map(x=>x.stage),['generate','generate']);
  assert(calls[1].failures.some(r=>r.rule==='restated_purchase_reason'));
  assert.equal(inspect(item,draft).ok,false);
+});
+test('the recorded configurable-assortment false approval is vetoed without blocking positive controls',()=>{
+ const weak=fixed.cases.find(x=>x.id==='6ae52c7dda3e2335');
+ const out=publication(weak.item,weak.draft,approval(weak.draft));
+ assert.equal(out.status,'blocked');
+ assert(out.reasons.some(r=>r.rule==='restated_purchase_reason'&&r.detail.startsWith('configuration_with_generic_convenience_only')));
+ for(const id of ['0d887f2c325d0cf7','2be880f2f1d13c45','c64cbb7d11333945']){
+  const good=fixed.cases.find(x=>x.id===id);
+  assert.equal(publication(good.item,good.draft,approval(good.draft)).status,'ready',id);
+ }
+ // Same unsupported convenience structure across unrelated product kinds.
+ for(const type of ['収納袋','ギフトセット','学習教材']){
+  const f=fixture(type,'組み合わせ自由で便利です。',['必要なものをまとめたいときは、組み合わせ自由な'+type+'が便利です。']);
+  assert(publication(f.item,f.draft,approval(f.draft)).reasons.some(r=>r.rule==='restated_purchase_reason'));
+ }
+ const useful=fixture('収納袋','荷物の大きさに合わせて組み合わせ自由な収納袋が便利です。',['荷物の大きさに合わせて組み合わせ自由な収納袋が便利です。']);
+ assert.equal(publication(useful.item,useful.draft,approval(useful.draft)).status,'ready');
 });
