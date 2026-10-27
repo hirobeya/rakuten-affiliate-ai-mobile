@@ -8,7 +8,10 @@
   return /(?:見て|確認して|見比べて)選(?:ぶ|び)/.test(s)
    || /(?:点|ところ)(?:が|は)(?:選びやす|適しています)/.test(s)
    || /「[^」]{1,45}」表記の/.test(s)
-   || /表記(?:がある|の)[^。！？]{0,30}(?:です|。)/.test(s);
+   || /表記(?:がある|の)[^。！？]{0,30}(?:です|。)/.test(s)
+   // Copying a seller's promotional assertion verbatim does not make it a
+   // concrete purchase reason. The writer already forbids these assertions.
+   || /(?:の決定版|必須のアイテム|に最適)(?:です|で[、,]|[。！!])/.test(s);
  }
  // Seller actions are not actions performed by the product. These passages
  // remain available to the semantic writer, which must preserve the actor.

@@ -3,6 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const {inspect,publication,questions}=require('../lib/room-semantic-contract');
 const {advance}=require('../lib/room-semantic-engine');
 const fixed=require('../data/fixed-review-cases-20261027.json');
+const live=require('../docs/measurements/purchase-reason-live-flow-20261027.json');
 const quality=Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(k=>[k,'supported']));
 function approval(draft){return {product:{what:'supported',acts_on:'supported'},quality,sentences:draft.sentences.map(s=>({text:s.text,reason:'test approval',evidenceQuotes:[],...Object.fromEntries(questions.map(k=>[k,'supported']))}))};}
 function fixture(identity,quote,texts){const item={itemCode:'test:reason-boundary',itemName:identity,itemCaption:quote};return {item,draft:{product:{what:identity,acts_on:identity,acts_on_quote:quote},sentences:texts.map(text=>({text,quotes:[quote],kinds:['spec','scene']}))}};}
@@ -55,4 +56,19 @@ test('the recorded configurable-assortment false approval is vetoed without bloc
  }
  const useful=fixture('収納袋','荷物の大きさに合わせて組み合わせ自由な収納袋が便利です。',['荷物の大きさに合わせて組み合わせ自由な収納袋が便利です。']);
  assert.equal(publication(useful.item,useful.draft,approval(useful.draft)).status,'ready');
+});
+test('verbatim seller promotion cannot substitute for a purchase reason even with unanimous AI approval',()=>{
+ const original=fixed.cases.find(x=>x.id==='6ae52c7dda3e2335').item;
+ const replay=publication(original,live.state.draft,live.state.review);
+ assert.equal(live.state.quality.status,'ready');
+ assert.equal(replay.status,'blocked');
+ assert.equal(replay.reasons.filter(r=>r.rule==='catalogue_only_copy').length,3);
+ assert.equal(replay.text,'');
+ for(const text of ['洗濯ネットの決定版です。','洗濯ネットは衣類を守るために必須のアイテムです。','洗濯ネットは衣類の整理に最適です。']){
+  const f=fixture('洗濯ネット',text,[text]);
+  const out=publication(f.item,f.draft,approval(f.draft));
+  assert.equal(out.status,'blocked');assert(out.reasons.some(r=>r.rule==='catalogue_only_copy'));assert.equal(out.text,'');
+ }
+ const f=fixture('収納袋','収納袋を整理に使いたいとき、荷物の大きさに合わせてサイズを選べます。',['収納袋を整理に使いたいとき、荷物の大きさに合わせてサイズを選べます。']);
+ assert.equal(publication(f.item,f.draft,approval(f.draft)).status,'ready');
 });
