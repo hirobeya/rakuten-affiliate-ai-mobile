@@ -1,0 +1,1 @@
+{"name":"urenavi-body-fixture-preview","private":true,"scripts":{"build":"node --require ../offline-guard.cjs build.cjs"}}

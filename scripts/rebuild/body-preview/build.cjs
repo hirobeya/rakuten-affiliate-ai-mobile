@@ -1,0 +1,16 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
+const root=path.resolve(__dirname,'../../..'),out=path.join(__dirname,'dist');fs.mkdirSync(out,{recursive:true});
+const html=fs.readFileSync(path.join(root,'public/app.html'),'utf8');
+const styles=[...html.matchAll(/<style[^>]*>[\s\S]*?<\/style>/g)].map(m=>m[0]).join('\n');
+const search=html.slice(html.indexOf('<div id="normalScreen"'),html.indexOf('<div id="normalScreen"')+html.slice(html.indexOf('<div id="normalScreen"')).indexOf('<div id="hist"'));
+const panel=html.slice(html.indexOf('<section id="roomOutcomesPanel"'),html.indexOf('</section>',html.indexOf('<section id="roomOutcomesPanel"'))+10);
+const modules=['room-outcomes.js','room-record-restore.js','room-restore-panel.js','room-outcomes-panel.js','room-copy-result.js'];
+for(const name of modules)fs.copyFileSync(path.join(root,'public',name),path.join(out,name));
+fs.copyFileSync(path.join(__dirname,'controller.js'),path.join(out,'controller.js'));
+(async()=>{const E=require(path.join(root,'lib/urenavi-core/local-engine')),B=require(path.join(root,'lib/urenavi-core/app-bridge')),f=require(path.join(root,'tests/rebuild/fixture.cjs')).fixture();const dir=fs.mkdtempSync(path.join(os.tmpdir(),'urenavi-body-'));
+try{const artifact=await E.run({item:f.item,directory:dir,limits:{tokens:10000000,requests:80,perCallTokens:1000000},transport:async(_,m)=>({raw:m.stage==='draft'?f.draft:f.review,usage:{prompt_tokens:1,completion_tokens:1,total_tokens:2},finish_reason:'stop'})});
+const response=await B.create({loadCompleted:async()=>({owner:'fixture-a',artifact})})({environment:'preview',authorization:{ok:true,plan:'owner',user:{id:'fixture-a'}},item:f.item});
+fs.writeFileSync(path.join(out,'fixture.js'),'window.BodyFixture='+JSON.stringify({item:f.item,response}).replace(/</g,'\\u003c')+';');
+fs.writeFileSync(path.join(out,'index.html'),`<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ウレナビ 操作検証専用</title>${styles}<body><section class="box"><h1>ウレナビ・操作検証</h1><p>全商品・認証・審査はfixtureです。実検索・実ログイン・文章品質の証拠ではありません。Groq・DB通信なし。</p><label>検証アカウント<select id="owner"><option>fixture-a</option><option>fixture-b</option></select></label><label>結果状態<select id="state"><option>ready</option><option>pending</option><option>blocked</option><option>error</option><option>429</option><option>offline</option></select></label><label><input type="checkbox" id="denyCopy">コピー拒否</label><label><input type="checkbox" id="denySave">保存失敗</label></section><section class="box"><label>探したい商品（fixture）<input id="k"></label><button id="go" class="go">候補を表示</button><div id="candidates"></div><textarea id="copyText" readonly aria-label="投稿文"></textarea><button id="copy" disabled>投稿文をコピー</button><p id="status" aria-live="polite"></p><a href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">ROOMを別画面で開く（自動投稿なし）</a></section>${panel}${['fixture.js',...modules,'controller.js'].map(n=>'<script src="/'+n+'"></script>').join('')}</body></html>`);
+}finally{fs.rmSync(dir,{recursive:true,force:true});}})().catch(()=>{process.exitCode=1;});
