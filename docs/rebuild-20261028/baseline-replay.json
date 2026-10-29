@@ -1,0 +1,5137 @@
+{
+  "protocol": "fixed-source-draft-diagnosis-v1",
+  "inputSha256": "15889332dd8ad1320220138dea1f47dcac3cb7b136fcf2b3bb8fb0012424f48b",
+  "baselineCommit": "a2da373c3517dcf30f1968ab7cd7431e13e3c6c9",
+  "currentRemoteCommit": "bafd6a07a0d4019c31b50b2be60304c2af7a102b",
+  "baselineContractSha256": "a0cb0d9f59ca0d2b32ca48c63d6802aa69e33c8f523f19697102a8fc406ee596",
+  "currentContractSha256": "2cb31a6558303b0fdcb021a1a395e42b40ee507c1faaa504328e6897eefe96e4",
+  "policy": "room_contract_84303088aea3d859",
+  "limitations": [
+    "no provider requests",
+    "no production or database mutation",
+    "no threshold or publication changes",
+    "historically unseen fixtures are now diagnostic, not a fresh holdout",
+    "historical single-reviewer labels are not two-person blind validation"
+  ],
+  "summary": {
+    "sourceProducts": 44,
+    "localByCohort": {
+      "existing-development": {
+        "total": 17,
+        "ready": 2
+      },
+      "previously-unseen-now-diagnostic": {
+        "total": 17,
+        "ready": 0
+      },
+      "frozen-washnet10": {
+        "total": 10,
+        "ready": 3
+      }
+    },
+    "savedJobs": 22,
+    "sourceProductsWithSavedDrafts": 18,
+    "uniqueDraftReviewPairs": 38,
+    "machinePassBefore": 18,
+    "machinePassAfter": 18,
+    "withSavedReview": 21,
+    "withoutSavedReview": 17,
+    "publicationBefore": {
+      "blocked": 31,
+      "ready": 7
+    },
+    "publicationAfter": {
+      "blocked": 32,
+      "ready": 6
+    },
+    "machineFailures": {
+      "unsupported_prevention_result": 3,
+      "final_copy_guard": 5,
+      "prohibited_expression": 1,
+      "number_without_evidence": 3,
+      "measurement_without_evidence": 2,
+      "product_identity_missing_from_post": 11,
+      "catalogue_only_copy": 1,
+      "unsupported_result": 1,
+      "unsafe_operation": 1,
+      "restated_purchase_reason": 1
+    },
+    "reviewFailures": {
+      "target_not_supported": 1,
+      "conditions_not_supported": 2,
+      "review_evidence_not_in_source": 3,
+      "degree_not_supported": 6,
+      "quality_reason_unclear": 1,
+      "degree_unclear": 1,
+      "quality_identity_not_supported": 3,
+      "product_not_supported": 1,
+      "conditions_unclear": 1
+    },
+    "reviewRequestAbove8000": 9,
+    "rewriteRequestAbove8000": 16,
+    "providerCallsThisEvaluation": 0,
+    "independentTwoRaterSixPass": null
+  },
+  "localRows": [
+    {
+      "id": "01",
+      "category": "バイクグローブ",
+      "cohort": "existing-development",
+      "itemCode": "pasoro:10001354",
+      "sourceHash": "bbfd13d5b753e4af9f1d43f77bf4fde9884a43c8c409e59ab211a427986f7aa2",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7202,
+      "historicalLocal": null
+    },
+    {
+      "id": "02",
+      "category": "収納ベンチ",
+      "cohort": "existing-development",
+      "itemCode": "e-kurashi:10019512",
+      "sourceHash": "53ed43af807ebab2d31a21daee117b4dd4e7dda24d85131bb82dd62947d318ce",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6959,
+      "historicalLocal": null
+    },
+    {
+      "id": "03",
+      "category": "モップハンガー",
+      "cohort": "existing-development",
+      "itemCode": "supplyshop:10028516",
+      "sourceHash": "c51193d0bd8a67a83e829b8a40ee9d3eca4fbd1ac2c8aba641c43765eafc9a66",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6313,
+      "historicalLocal": null
+    },
+    {
+      "id": "04",
+      "category": "空調服バッテリー",
+      "cohort": "existing-development",
+      "itemCode": "worktk:10014552",
+      "sourceHash": "f54975541b85dc2f00fd1b0047a3a4e159564f4da0b3759f85d8f7f6164c3824",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7079,
+      "historicalLocal": null
+    },
+    {
+      "id": "05",
+      "category": "ペット毛取りグローブ",
+      "cohort": "existing-development",
+      "itemCode": "wishsun:10000100",
+      "sourceHash": "8feceda4a576d16c2c678d8de74294ce6202d924230e82f7f39072ee875f3cda",
+      "ready": true,
+      "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+      "initialEstimate": 7780,
+      "historicalLocal": null
+    },
+    {
+      "id": "06",
+      "category": "BOS袋",
+      "cohort": "existing-development",
+      "itemCode": "bos-shop:10000023",
+      "sourceHash": "420ae817f19d5c7a41127ede3a1c108404df3374bc63afad7e192b1799a3bb3d",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6525,
+      "historicalLocal": null
+    },
+    {
+      "id": "07",
+      "category": "美顔ローラー",
+      "cohort": "existing-development",
+      "itemCode": "mtgec-beauty:10001348",
+      "sourceHash": "969adbdcf6dbd098d18e5a3e39954c585c1d423f16b5f369906c5beb03279467",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6316,
+      "historicalLocal": null
+    },
+    {
+      "id": "08",
+      "category": "モバイルバッテリー",
+      "cohort": "existing-development",
+      "itemCode": "besthouse:10000083",
+      "sourceHash": "5cf3c8813ce212e9816cf030e7cd945b6e3cd399a7eb540a4f9bdc43c45d083a",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6810,
+      "historicalLocal": null
+    },
+    {
+      "id": "09",
+      "category": "フライパン",
+      "cohort": "existing-development",
+      "itemCode": "e-kitchen:10079039",
+      "sourceHash": "28e8f2e0c65b1e15454f3c16aecbeaab2838ce0931e4719a2ad66484980bdeed",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7555,
+      "historicalLocal": null
+    },
+    {
+      "id": "10",
+      "category": "収納ボックス",
+      "cohort": "existing-development",
+      "itemCode": "risu-onlineshop:10002384",
+      "sourceHash": "9f691fe2ca2c7c714360e09784c395ae670ec76659c4d3dea3b89d58bc2e5a3e",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7325,
+      "historicalLocal": null
+    },
+    {
+      "id": "11",
+      "category": "ヘアブラシ",
+      "cohort": "existing-development",
+      "itemCode": "snowfoxskincare:10000116",
+      "sourceHash": "fff8267acaa5f08c31d7d7182faca12b919b4ebd6c48188953bf037cbe51b537",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7669,
+      "historicalLocal": null
+    },
+    {
+      "id": "12",
+      "category": "ペットベッド",
+      "cohort": "existing-development",
+      "itemCode": "emoor-nedogko:10000048",
+      "sourceHash": "1f29f4f34b3388a36f2b258f653b431f3687553a6edbba21e81ee68ce19924d8",
+      "ready": true,
+      "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+      "initialEstimate": 7861,
+      "historicalLocal": null
+    },
+    {
+      "id": "13",
+      "category": "靴下",
+      "cohort": "existing-development",
+      "itemCode": "astyone0728:10000001",
+      "sourceHash": "185b98b2bb137e931e4fabd4171495762bbbc062cb1ea54d7bb3a03991a411cf",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7661,
+      "historicalLocal": null
+    },
+    {
+      "id": "14",
+      "category": "電気ケトル",
+      "cohort": "existing-development",
+      "itemCode": "myhomeshop:10000326",
+      "sourceHash": "aebe546d28efc34e5bc44cf989b321bf575dad76b824e5e2ebc038cc5f9c84ea",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7769,
+      "historicalLocal": null
+    },
+    {
+      "id": "15",
+      "category": "食品",
+      "cohort": "existing-development",
+      "itemCode": "irisplaza-r:10170526",
+      "sourceHash": "1ed300414fd4750af9993fa1cb2b7cb913aaee592a61980987478c36f83c6878",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7546,
+      "historicalLocal": null
+    },
+    {
+      "id": "16",
+      "category": "掃除用グローブ",
+      "cohort": "existing-development",
+      "itemCode": "arkham:10000161",
+      "sourceHash": "d9af0a40a4e7441072761a0a07ee5f71569864bcbe532fb8143062e425b5c2e6",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7011,
+      "historicalLocal": null
+    },
+    {
+      "id": "17",
+      "category": "スポーツ用グローブ",
+      "cohort": "existing-development",
+      "itemCode": "high-broad:10000679",
+      "sourceHash": "9c701eebcff3b928f361bc0a7af5ce1d8a16050c79f1e41b617d06d41783ea78",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7727,
+      "historicalLocal": null
+    },
+    {
+      "id": "u01",
+      "category": "バイクグローブ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "arqs01:10000087",
+      "sourceHash": "f0432d77ea154ac8266aeb0b8bf211566dd022bec5de3aee1ee651030c7696ba",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6932,
+      "historicalLocal": null
+    },
+    {
+      "id": "u02",
+      "category": "収納ベンチ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "shopworld:10138423",
+      "sourceHash": "a684951657683d9e6267b21fb323e96867e78e4adc7581e2c489a55244c43cd4",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6906,
+      "historicalLocal": null
+    },
+    {
+      "id": "u03",
+      "category": "モップハンガー",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "satiwel:10002945",
+      "sourceHash": "a6dc691a91ceaf61e0dad9b99cccc662eca6f52b7990d51f0cd869e404d24ae8",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6961,
+      "historicalLocal": null
+    },
+    {
+      "id": "u04",
+      "category": "空調服バッテリー",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "pc2b:10001078",
+      "sourceHash": "2e28d9abb62e2306552e84a97836a02873e508aa6f7b36e9b9fcbbcf98535617",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6953,
+      "historicalLocal": null
+    },
+    {
+      "id": "u05",
+      "category": "ペット毛取りグローブ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "gogo1102:10000190",
+      "sourceHash": "416756db395d563533a9fcc1bd08df9b8b8977adf36bd0984530bef8d7b2c9b8",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6880,
+      "historicalLocal": null
+    },
+    {
+      "id": "u06",
+      "category": "BOS袋",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "bos-shop:10000024",
+      "sourceHash": "de0286636027f515be831b97402fce2624f4129e6c552ec494c62ace11b2ed11",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6528,
+      "historicalLocal": null
+    },
+    {
+      "id": "u07",
+      "category": "美顔ローラー",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "masayosiryouhin:10000072",
+      "sourceHash": "a8e9956cbb4610eb15c5068874f6ce6261bd31c9304b5d33c13f629c168850a7",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7141,
+      "historicalLocal": null
+    },
+    {
+      "id": "u08",
+      "category": "モバイルバッテリー",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "furumiyashop:10000146",
+      "sourceHash": "70321d7f5885c1ac682843f0fd3b957971a57d47d23b66be225fd1407d251aee",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6775,
+      "historicalLocal": null
+    },
+    {
+      "id": "u09",
+      "category": "フライパン",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "doshisha-marche:10000227",
+      "sourceHash": "ca4552811f0f9075f884d485078e8b951477c825f2d0cc135bc79d38bca42e0c",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7692,
+      "historicalLocal": null
+    },
+    {
+      "id": "u10",
+      "category": "収納ボックス",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "exception5251:10000379",
+      "sourceHash": "7e05957c4e73b29729328abfab9384475faf368eee3b6d694c87ca626528df45",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6500,
+      "historicalLocal": null
+    },
+    {
+      "id": "u11",
+      "category": "ヘアブラシ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "40s-skincare:10000159",
+      "sourceHash": "5250ece826fc103f7e98006c5920538e768715dcda1856b12d232556ddc69e68",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7731,
+      "historicalLocal": null
+    },
+    {
+      "id": "u12",
+      "category": "ペットベッド",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "auc-r-style:10000367",
+      "sourceHash": "88260a0deaa05c0f3dc154f5b9147cbc1b582c54a74aa1e08ebb30569aae2f70",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7541,
+      "historicalLocal": null
+    },
+    {
+      "id": "u13",
+      "category": "靴下",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "goodgoods-center:10000193",
+      "sourceHash": "1739480a692efb4679e0c5c9665bead50f10dbb7b836c00fabd99a4c8fbbd2cb",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7460,
+      "historicalLocal": null
+    },
+    {
+      "id": "u14",
+      "category": "電気ケトル",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "mpowjapan:10000907",
+      "sourceHash": "e40520666e806197e5d72682429f38edc75315545d909b1f98584217b422cc8b",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7668,
+      "historicalLocal": null
+    },
+    {
+      "id": "u15",
+      "category": "食品",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "fujisports-r:10054189",
+      "sourceHash": "bc8fe1b7feacb0041a1386ef6bddc31cf19f7a4e784ba86f6c08ecb051f746de",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7166,
+      "historicalLocal": null
+    },
+    {
+      "id": "u16",
+      "category": "掃除用グローブ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "repeat7:10002729",
+      "sourceHash": "118620f77d2e23cc490b6a2e1ce23e22cc21bdd6bb60ab5f35865c4d5ca3e7be",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6644,
+      "historicalLocal": null
+    },
+    {
+      "id": "u17",
+      "category": "スポーツ用グローブ",
+      "cohort": "previously-unseen-now-diagnostic",
+      "itemCode": "bbtown:10225214",
+      "sourceHash": "1c1f98ec213d5e15ab9817641a3c4f552e7b57cbaf34a95796c8495e08cb2ea4",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 7461,
+      "historicalLocal": null
+    },
+    {
+      "id": "washnet-1",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "daiya:10001447",
+      "sourceHash": "27624b7f2230c31c1bd77d36475c114b966a3aa265621de1f81c4571f896dd8d",
+      "ready": true,
+      "text": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+      "initialEstimate": 10020,
+      "historicalLocal": {
+        "elapsedMs": 67.29528599999998,
+        "ready": true,
+        "text": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています"
+      },
+      "historicalRating": [
+        "○",
+        "○",
+        "○",
+        "○",
+        "○",
+        "○"
+      ]
+    },
+    {
+      "id": "washnet-2",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "daiya:10001030",
+      "sourceHash": "de603e6cff31f0810275d4bffb8481664f48bd98548c3eb0107a92a8542812f7",
+      "ready": true,
+      "text": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+      "initialEstimate": 10306,
+      "historicalLocal": {
+        "elapsedMs": 66.93737299999998,
+        "ready": true,
+        "text": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています"
+      },
+      "historicalRating": [
+        "○",
+        "○",
+        "○",
+        "○",
+        "○",
+        "○"
+      ]
+    },
+    {
+      "id": "washnet-3",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "ipow:10000579",
+      "sourceHash": "e2f818c552aef1edcbe088735682713afc2c6d76e2f347a35029500bff1b6b62",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6719,
+      "historicalLocal": {
+        "elapsedMs": 15.015341999999976,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "×",
+        "△",
+        "×",
+        "×",
+        "△",
+        "×"
+      ]
+    },
+    {
+      "id": "washnet-4",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "linofle:10000458",
+      "sourceHash": "fcbaaefa93817e4d9c1d46dcdb21c109b894046d32ea2f6e3387507073da88b9",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6919,
+      "historicalLocal": {
+        "elapsedMs": 22.052769000000012,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    },
+    {
+      "id": "washnet-5",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "yukaiya:10001267",
+      "sourceHash": "58831ac045fb6ef67c588dae76b379096d7c1f986e09600e63b7ab70a281bb06",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6226,
+      "historicalLocal": {
+        "elapsedMs": 15.475861000000009,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "○",
+        "△",
+        "△",
+        "△",
+        "△",
+        "○"
+      ]
+    },
+    {
+      "id": "washnet-6",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "living-mahoroba:10015748",
+      "sourceHash": "342aa8be5ac1bf19a40635725c87320b8424d440ebd70ec37be1128417f50043",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 8610,
+      "historicalLocal": {
+        "elapsedMs": 10.747383000000013,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "○",
+        "○",
+        "△",
+        "△",
+        "△",
+        "○"
+      ]
+    },
+    {
+      "id": "washnet-7",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "daiya:10001455",
+      "sourceHash": "acaed8d3b43cd47ff45bbf44e211d682d0e2c40a63de5e63e39e498925720718",
+      "ready": true,
+      "text": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+      "initialEstimate": 6888,
+      "historicalLocal": {
+        "elapsedMs": 2.1538510000000315,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "×",
+        "△",
+        "×",
+        "×",
+        "△",
+        "×"
+      ]
+    },
+    {
+      "id": "washnet-8",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "ritoashop:10000039",
+      "sourceHash": "e7c7713a6a723a234da98237b199c773170d5ebc045e44ed931fb4a52f0e26f2",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 9937,
+      "historicalLocal": {
+        "elapsedMs": 17.039496000000042,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "×",
+        "△",
+        "×",
+        "×",
+        "△",
+        "×"
+      ]
+    },
+    {
+      "id": "washnet-9",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "brian:10001257",
+      "sourceHash": "6f490d4d2e0996300a91417d700200eeeef0da181f19f69b25d451bc6957f567",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 6815,
+      "historicalLocal": {
+        "elapsedMs": 6.873349999999959,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    },
+    {
+      "id": "washnet-10",
+      "category": "洗濯ネット",
+      "cohort": "frozen-washnet10",
+      "itemCode": "lebenwood:10004953",
+      "sourceHash": "85257da2d1c0d8b46f962807246d5f21da9c05dc2a850fd32061540bafc62c7d",
+      "ready": false,
+      "text": "",
+      "initialEstimate": 8815,
+      "historicalLocal": {
+        "elapsedMs": 2.6672600000000557,
+        "ready": false,
+        "text": ""
+      },
+      "historicalRating": [
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    }
+  ],
+  "draftRows": [
+    {
+      "id": "27bffc0860e11ff1861e55a21e22984b933434f956b74da86a681f11f793a268",
+      "origin": "docs/measurements/room-copy-20261026-ipow.json",
+      "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類や下着などの洗濯物",
+          "acts_on_quote": "服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "benefit"
+            ],
+            "quotes": [
+              "服を型崩れや毛羽立ちから守ります。",
+              "8枚入れ 型崩れ防止"
+            ],
+            "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。"
+          },
+          {
+            "kinds": [
+              "spec",
+              "benefit"
+            ],
+            "quotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+            ],
+            "text": "細かい網目がごみの侵入を防ぎ、洗剤や柔軟剤が繊維に届きやすくなるので、汚れ落ちがしっかりします。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 1,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 1,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6597,
+      "rewriteEstimate": 7194
+    },
+    {
+      "id": "47553c13659bf5e45b2fa25742215ebb706aeb2a90606b91751bdfe9788e94da",
+      "origin": "docs/measurements/room-copy-20261026-ipow.json",
+      "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類や下着などの洗濯物",
+          "acts_on_quote": "服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "benefit"
+            ],
+            "quotes": [
+              "服を型崩れや毛羽立ちから守ります。",
+              "8枚入れ 型崩れ防止"
+            ],
+            "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。"
+          },
+          {
+            "kinds": [
+              "spec"
+            ],
+            "quotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。",
+              "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+            ],
+            "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "not_supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "服を型崩れや毛羽立ちから守ります。",
+              "型崩れ防止の細かい網目"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Target mentions bras not in source; condition unsupported.",
+            "target": "not_supported",
+            "text": "ブラジャーやデリケートな下着を洗うときは、型崩れ防止の細かい網目の洗濯ネットを入れると形が保たれます。"
+          },
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。",
+              "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All statements directly supported by source.",
+            "target": "supported",
+            "text": "細かい網目はごみが入りにくく、洗剤や柔軟剤が繊維に透過しやすい構造です。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "target_not_supported",
+          "sentence": 0,
+          "detail": "Target mentions bras not in source; condition unsupported."
+        },
+        {
+          "rule": "conditions_not_supported",
+          "sentence": 0,
+          "detail": "Target mentions bras not in source; condition unsupported."
+        },
+        {
+          "rule": "review_evidence_not_in_source",
+          "sentence": 0
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6578,
+      "rewriteEstimate": 7063
+    },
+    {
+      "id": "923e52da20aaa00493eedf8e47e479ce03fbe93d524188b242aed722ec485621",
+      "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+      "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣服や下着などの衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "benefit",
+              "spec"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "text": "洗濯時に衣類が絡まって型崩れしやすいときは、細かい網目の洗濯ネットで衣服を保護すると安心です。"
+          },
+          {
+            "kinds": [
+              "benefit",
+              "spec"
+            ],
+            "quotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+            ],
+            "text": "細かい目がごみの侵入を防ぎ、洗剤や柔軟剤が繊維に届きやすくなるので、汚れ落ちがしっかりします。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 安心。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        },
+        {
+          "rule": "prohibited_expression",
+          "sentence": 0,
+          "detail": "禁止表現「安心」を使わない。安全・安心・結果の保証ではなく、原文にある機能と、それを選びたい用途で全文を書き直す。"
+        },
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 1,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 安心。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        },
+        {
+          "rule": "prohibited_expression",
+          "sentence": 0,
+          "detail": "禁止表現「安心」を使わない。安全・安心・結果の保証ではなく、原文にある機能と、それを選びたい用途で全文を書き直す。"
+        },
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 1,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6672,
+      "rewriteEstimate": 7434
+    },
+    {
+      "id": "f72ea2de2aee8d7cae17357a3c56d79be63c69cac2f106a2f2c21e5786cf7e40",
+      "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+      "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣服や下着などの衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "text": "衣服が他の洗濯物と絡まって型崩れしやすいときは、細かい網目の洗濯ネットで衣服を保護できます。"
+          },
+          {
+            "kinds": [
+              "benefit",
+              "spec"
+            ],
+            "quotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。"
+            ],
+            "text": "細かい目のネットはごみが入りにくく、洗剤や柔軟剤が繊維に届きやすくなるため、汚れ落ちがしっかりします。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "not_supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Condition not stated in source",
+            "target": "supported",
+            "text": "衣服が他の洗濯物と絡まって型崩れしやすいときは、細かい網目の洗濯ネットで衣服を保護できます。"
+          },
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "ネットの目は細かいので、ごみなどが入りにくい。洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。",
+              "しっかりと汚れも落ち、汗など水溶性の汚れを強力に落とします。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims supported",
+            "target": "supported",
+            "text": "細かい目のネットはごみが入りにくく、洗剤や柔軟剤が繊維に届きやすくなるため、汚れ落ちがしっかりします。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "conditions_not_supported",
+          "sentence": 0,
+          "detail": "Condition not stated in source"
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6677,
+      "rewriteEstimate": 7128
+    },
+    {
+      "id": "359d119a3b23b9da46201fd8847e212f856f56152a97e035e80f171319faccea",
+      "origin": "docs/measurements/room-copy-20261027-ipow-evidence-order.json",
+      "itemCode": "__semantic_preview__:room_contract_415ed0d8b7905ae5:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+              "ネットの目は細かいので、ごみなどが入りにくい。"
+            ],
+            "text": "洗濯時に衣類の型崩れや絡みを防ぎたいときは、【8枚セット】の細かい網目の洗濯ネットが適しています。"
+          },
+          {
+            "kinds": [
+              "spec",
+              "benefit"
+            ],
+            "quotes": [
+              "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+            ],
+            "text": "また、旅行や野菜保存など多用途に使える点も魅力です。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6696,
+      "rewriteEstimate": 7306
+    },
+    {
+      "id": "7fcc328d926d3f244239c07e566d4526392a698906ccd9fab54033753817ca8b",
+      "origin": "docs/measurements/room-copy-20261027-ipow-compact.json",
+      "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec"
+            ],
+            "quotes": [
+              "角型：60*50cm×1枚、50*40cm×1枚、40*30cm×2枚、30*23cm×2枚； 筒型：16*16 cm×1枚； ドーム型：17*19 cm×1枚。"
+            ],
+            "text": "サイズは角型が60×50cmから30×23cm、筒型16×16cm、ドーム型17×19cmと多彩です。"
+          },
+          {
+            "kinds": [
+              "benefit"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "text": "細かい網目で衣服を保護し、絡みや型崩れを防ぎます。"
+          },
+          {
+            "kinds": [
+              "scene"
+            ],
+            "quotes": [
+              "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+            ],
+            "text": "洗濯だけでなく、衣類収納や旅行のポーチ、野菜保存にも活用できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6784,
+      "rewriteEstimate": 7370
+    },
+    {
+      "id": "69fd9a70456cb580f33671d36748645800104697caf281dd94c4ddc27cf440f5",
+      "origin": "docs/measurements/room-copy-20261027-ipow-compact.json",
+      "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec"
+            ],
+            "quotes": [
+              "角型：60*50cm×1枚、50*40cm×1枚、40*30cm×2枚、30*23cm×2枚； 筒型：16*16 cm×1枚； ドーム型：17*19 cm×1枚。"
+            ],
+            "text": "角型は60×50cmから30×23cm、筒型は16×16cm、ドーム型は17×19cmとサイズが揃っています。"
+          },
+          {
+            "kinds": [
+              "benefit"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "text": "洗濯ネットは衣服を保護し、絡みや型崩れを防ぎます。"
+          },
+          {
+            "kinds": [
+              "scene"
+            ],
+            "quotes": [
+              "ランドリーネットとしてだけでなく、衣類収納、トラベルポーチや野菜の保存、おもちゃの収納などとしてもお使いいただけます。"
+            ],
+            "text": "洗濯ネットは衣類収納やトラベルポーチ、野菜保存にも活用できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6792,
+      "rewriteEstimate": 7179
+    },
+    {
+      "id": "de6ccbfb4dfb4e9bdf0c1a665fe411ba0c736ee635ee0a010fc5aed43219739a",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_dc7629f4a4f41709:chatsuminosato:10000073",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "e6cd68d7a7624f4e43b038d5cf243b931f370a73f922385d37193fd4874e3bee",
+      "draft": {
+        "product": {
+          "acts_on": "お茶を抽出する",
+          "acts_on_quote": "ティーバッグをカップ・ポットに“ポン”と入れるだけ。",
+          "what": "ほうじ茶ティーバッグ"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec",
+              "benefit"
+            ],
+            "quotes": [
+              "ティーバッグをカップ・ポットに“ポン”と入れるだけ。",
+              "抽出に優れた三角ティーバッグ"
+            ],
+            "text": "カップやポットにティーバッグを“ポン”と入れるだけで、抽出に優れた三角ティーバッグが茶葉を踊らせ、手軽に本格的なほうじ茶が楽しめます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "ティーバッグをカップ・ポットに“ポン”と入れるだけ。",
+              "抽出に優れた三角ティーバッグ",
+              "これだけ本格的なお茶がティーバッグで手軽に楽しめる！"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All assertions are directly backed by the product description.",
+            "target": "supported",
+            "text": "カップやポットにティーバッグを“ポン”と入れるだけで、抽出に優れた三角ティーバッグが茶葉を踊らせ、手軽に本格的なほうじ茶が楽しめます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ほうじ茶ティーバッグ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ほうじ茶ティーバッグ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 9520,
+      "rewriteEstimate": 10313
+    },
+    {
+      "id": "6aeb50f25e39181c9bec5bcc1a40db488c2a8bfa2320868f224cfd5218b5152f",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "3767fc75e531348caa2d327f80d5807cbd6cbcac58a8e1ed3be33232eff3e4c1",
+      "draft": {
+        "product": {
+          "acts_on": "掛け布団や毛布などの大型寝具",
+          "acts_on_quote": "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚",
+          "what": "ふくらむ洗濯ネット特大70"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "最大内径約70cmの大容量洗濯ネットです。",
+              "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚"
+            ],
+            "text": "シングルサイズの掛け布団を1枚入れられる大容量（内径約70cm）で、布団洗いを手軽にまとめて行えます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "unclear",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "最大内径約70cmの大容量洗濯ネットです。",
+              "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Target and size match source; ease of washing not explicitly stated.",
+            "target": "supported",
+            "text": "シングルサイズの掛け布団を1枚入れられる大容量（内径約70cm）で、布団洗いを手軽にまとめて行えます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Target and size match source; ease of washing not explicitly stated."
+        },
+        {
+          "rule": "quality_reason_unclear",
+          "sentence": null
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "unclear",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 9946,
+      "rewriteEstimate": 10548
+    },
+    {
+      "id": "8f1291f9560ec0d4f2f4fca73fdf24a9da2c1d9c8255fa04b20dfcbe66033fed",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "3767fc75e531348caa2d327f80d5807cbd6cbcac58a8e1ed3be33232eff3e4c1",
+      "draft": {
+        "product": {
+          "acts_on": "掛け布団や毛布などの大型寝具",
+          "acts_on_quote": "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚",
+          "what": "ふくらむ洗濯ネット特大70"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "最大内径約70cmの大容量洗濯ネットです。",
+              "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚"
+            ],
+            "text": "最大内径約70cmの大容量洗濯ネットは、シングルサイズの掛け布団を1枚、毛布を2枚まで入れられるので、大型寝具のまとめ洗いに最適です。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "最大内径約70cmの大容量洗濯ネットです。",
+              "シングルサイズの掛け布団なら1枚、シングルサイズの毛布なら 2 枚"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Capacity supported; \"optimal\" not directly stated.",
+            "target": "supported",
+            "text": "最大内径約70cmの大容量洗濯ネットは、シングルサイズの掛け布団を1枚、毛布を2枚まで入れられるので、大型寝具のまとめ洗いに最適です。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "catalogue_only_copy",
+          "sentence": 0,
+          "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "catalogue_only_copy",
+          "sentence": 0,
+          "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Capacity supported; \"optimal\" not directly stated."
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 9989,
+      "rewriteEstimate": 10702
+    },
+    {
+      "id": "87d32c0744a9870393d0df0b1b844e0594ef65e35757a4b762208a5e85f8e158",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "2ad36ec92ec1c7b7e7d2e3ab7de05ac93edbb5ba1f47933c618d1ac603e4dfbe",
+      "draft": {
+        "product": {
+          "acts_on": "物を収納",
+          "acts_on_quote": "座部を上げると、内部に物を収納可能",
+          "what": "収納ベンチ 2人掛け"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit"
+            ],
+            "quotes": [
+              "座部を上げると、内部に物を収納可能"
+            ],
+            "text": "座部を上げると、内部に物を収納可能なため、リビングの小物をすっきり整理できます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "unclear",
+            "evidenceQuotes": [
+              "座部を上げると、内部に物を収納可能"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Sentence refers to seat raising enabling storage, matching source.",
+            "target": "supported",
+            "text": "座部を上げると、内部に物を収納可能なため、リビングの小物をすっきり整理できます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_unclear",
+          "sentence": 0,
+          "detail": "Sentence refers to seat raising enabling storage, matching source."
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6443,
+      "rewriteEstimate": 7132
+    },
+    {
+      "id": "6592c7d06a66b99da0aad59823d917013063ff39937bf9538a4fe578b7b8bc26",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "2ad36ec92ec1c7b7e7d2e3ab7de05ac93edbb5ba1f47933c618d1ac603e4dfbe",
+      "draft": {
+        "product": {
+          "acts_on": "物を収納",
+          "acts_on_quote": "座部を上げると、内部に物を収納可能",
+          "what": "収納ベンチ 2人掛け"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit"
+            ],
+            "quotes": [
+              "座部を上げると、内部に物を収納可能"
+            ],
+            "text": "座部を上げると、内部に物を収納可能な2人掛け収納ベンチは、リビングの小物を整理したいときに便利です。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6469,
+      "rewriteEstimate": 7231
+    },
+    {
+      "id": "a58eaa0cfed3126d7dbdcb974988574cf09d66492db6596dd3c2347a21c99894",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "480a400a19e6aecd285008c5006b60d26bf2849b99540c298c7e19cdc35ebacd",
+      "draft": {
+        "product": {
+          "acts_on": "家庭やアウトドアの電化製品",
+          "acts_on_quote": "室内・屋外を問わず自由自在に使用できます。",
+          "what": "ポータブル電源（ソーラーパネルセット）"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec",
+              "scene"
+            ],
+            "quotes": [
+              "コンパクトながら定格1,500W高出力を実現。独自のX-Boost機能で最大2,000Wの機器にも対応し*、ドライヤーやIHクッキングヒーターなど消費電力の大きい複数機器を同時に稼働できます。"
+            ],
+            "text": "キャンプでドライヤーやIHクッキングヒーターを同時に使用したいときは、定格1,500Wの高出力とX‑Boost機能で最大2,000Wまで対応できる点が便利です。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "not_supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "コンパクトながら定格1,500W高出力を実現。独自のX-Boost機能で最大2,000Wの機器にも対応し*、ドライヤーやIHクッキングヒーターなど消費電力の大きい複数機器を同時に稼働できます。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Convenience claim not directly supported by source",
+            "target": "supported",
+            "text": "キャンプでドライヤーやIHクッキングヒーターを同時に使用したいときは、定格1,500Wの高出力とX‑Boost機能で最大2,000Wまで対応できる点が便利です。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 便利。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 便利。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Convenience claim not directly supported by source"
+        },
+        {
+          "rule": "quality_identity_not_supported",
+          "sentence": null
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "not_supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 7399,
+      "rewriteEstimate": 8061
+    },
+    {
+      "id": "274c57ea965f8a858ed86b38794420dbeb5ec77e5493bc422ea33fc0a52bd946",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "480a400a19e6aecd285008c5006b60d26bf2849b99540c298c7e19cdc35ebacd",
+      "draft": {
+        "product": {
+          "acts_on": "家庭やアウトドアの電化製品",
+          "acts_on_quote": "室内・屋外を問わず自由自在に使用できます。",
+          "what": "ポータブル電源（ソーラーパネルセット）"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec",
+              "scene"
+            ],
+            "quotes": [
+              "コンパクトながら定格1,500W高出力を実現。独自のX-Boost機能で最大2,000Wの機器にも対応し*、ドライヤーやIHクッキングヒーターなど消費電力の大きい複数機器を同時に稼働できます。"
+            ],
+            "text": "キャンプでドライヤーやIHクッキングヒーターを同時に使用したいときは、定格1,500Wの高出力とX‑Boost機能で最大2,000Wまで対応できます。"
+          },
+          {
+            "kinds": [
+              "spec",
+              "scene"
+            ],
+            "quotes": [
+              "本体は約12.1kgで、持ち運びしやすいハンドル付き。室内・屋外を問わず自由自在に使用できます。"
+            ],
+            "text": "本体は約12.1kgでハンドル付きなので、室内外を問わず持ち運びがしやすく利用できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 7649,
+      "rewriteEstimate": 8088
+    },
+    {
+      "id": "e9f809bf7cb91cc99fc52f0dfc096cbb9cdb43c00570e86843968acff1635bac",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "b60bb0549aa77d948919a312c30cb00f673718ca185752c34c2a07dc01e0b042",
+      "draft": {
+        "product": {
+          "acts_on": "全身を包み込み体圧を分散して睡眠中の体や腰への負担を軽減",
+          "acts_on_quote": "全身を包み、体をサポート ・睡眠中の腰や体の負担を軽減",
+          "what": "ハグモッチ 抱き枕"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "オーダーメイド高さ調整 ( 高め 低め 可能 )",
+              "どんな寝姿勢でも気持ちよく眠れる第3の寝具"
+            ],
+            "text": "寝姿勢に合わせて高さを調整できるので、好きな姿勢で快適に眠れます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ハグモッチ 抱き枕」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 快適。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        },
+        {
+          "rule": "unsupported_result",
+          "sentence": 0,
+          "detail": "快適"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ハグモッチ 抱き枕」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 快適。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        },
+        {
+          "rule": "unsupported_result",
+          "sentence": 0,
+          "detail": "快適"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 7276,
+      "rewriteEstimate": 8232
+    },
+    {
+      "id": "98ca71cef7f962f3840e0b8ce11ab0d31c5d55835478bdbcc845ec77a536d83e",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "b60bb0549aa77d948919a312c30cb00f673718ca185752c34c2a07dc01e0b042",
+      "draft": {
+        "product": {
+          "acts_on": "全身を包み込み体圧を分散し、睡眠中の体や腰への負担を軽減",
+          "acts_on_quote": "全身を包み、体をサポート ・睡眠中の腰や体の負担を軽減",
+          "what": "ハグモッチ 抱き枕"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "オーダーメイド高さ調整 ( 高め 低め 可能 )",
+              "どんな寝姿勢でも気持ちよく眠れる第3の寝具"
+            ],
+            "text": "オーダーメイドで高さ調整ができ、好きな寝姿勢で眠れる点が魅力です。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "not_supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "not_supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "オーダーメイド高さ調整 ( 高め 低め 可能 )",
+              "どんな寝姿勢でも気持ちよく眠れる第3の寝具"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims supported by source",
+            "target": "supported",
+            "text": "オーダーメイドで高さ調整ができ、好きな寝姿勢で眠れる点が魅力です。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ハグモッチ 抱き枕」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「ハグモッチ 抱き枕」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "product_not_supported",
+          "sentence": null
+        },
+        {
+          "rule": "quality_identity_not_supported",
+          "sentence": null
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "not_supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 7276,
+      "rewriteEstimate": 8116
+    },
+    {
+      "id": "2463490216172364af6d08d1f77d34636748aeabb24cdac7d2fac33779bf75ba",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:moosoo:10000127",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "a94787fd56446942ba7078d9dacf8707ca47b4637d0520b1d6d6a9a66232418d",
+      "draft": {
+        "product": {
+          "acts_on": "車内や家具のゴミ・ホコリ",
+          "acts_on_quote": "砂、食べこぼし、小石、ペットの毛などのゴミを吸引します。",
+          "what": "コードレスハンディクリーナー"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "本製品は重さ【500g】の軽量コードレスハンディクリーナーです。",
+              "砂、食べこぼし、小石、ペットの毛などのゴミを吸引します。",
+              "車、キッチン、テーブルのお掃除など、使い方に合わせてモードを選ぶことができます！"
+            ],
+            "text": "500gの軽量コードレスハンディクリーナーなので、車内の砂や食べこぼしなどのゴミを手軽に吸い取れます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "本製品は重さ【500g】の軽量コードレスハンディクリーナーです。",
+              "砂、食べこぼし、小石、ペットの毛などのゴミを吸引します。",
+              "女性やお子様でもソファー、車の隙間、チェアーなどを楽にお掃除できます。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims match source; weight, suction, and ease are supported.",
+            "target": "supported",
+            "text": "500gの軽量コードレスハンディクリーナーなので、車内の砂や食べこぼしなどのゴミを手軽に吸い取れます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 8070,
+      "rewriteEstimate": 8935
+    },
+    {
+      "id": "5800f05c8ed2c926976315826462c15ece54657692d55215b44b624ef27b76e8",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "ef441c759df2c406852d776f23fe3b6b6bc70bfc70bd161b98bfdec3ef19d896",
+      "draft": {
+        "product": {
+          "acts_on": "刺繍を始める初心者",
+          "acts_on_quote": "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒…",
+          "what": "刺繍キット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒…",
+              "刺繍糸は管理しやすいカード巻きタイプ。"
+            ],
+            "text": "初心者が刺繍を始めたいときに、カード巻きタイプの刺繍糸が整然と並び、目的の色をすぐに取り出せるので手間なく作業できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「刺繍キット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 手間。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「刺繍キット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 手間。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 7670,
+      "rewriteEstimate": 8549
+    },
+    {
+      "id": "0d887f2c325d0cf7d37f124c118fc6b7488fcb7e58a2c51d9438f8bb5735b920",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "ef441c759df2c406852d776f23fe3b6b6bc70bfc70bd161b98bfdec3ef19d896",
+      "draft": {
+        "product": {
+          "acts_on": "刺繍を始める初心者",
+          "acts_on_quote": "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒…",
+          "what": "刺繍キット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "刺繍糸は管理しやすいカード巻きタイプ。",
+              "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒…"
+            ],
+            "text": "刺繍キットで初心者が刺繍を始めるとき、カード巻きタイプの刺繍糸が整然と並んでいるので、必要な色をすぐに取り出せます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "刺繍糸は管理しやすいカード巻きタイプ。",
+              "整然と並んだ刺繍糸は、目的の色をすぐに取り出せます。",
+              "これから刺繍を始めてみたいけど、糸や道具を揃えるのが面倒…"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "カード巻き糸が整然と並び、初心者でもすぐ色が取れる点が購入理由になる",
+            "target": "supported",
+            "text": "刺繍キットで初心者が刺繍を始めるとき、カード巻きタイプの刺繍糸が整然と並んでいるので、必要な色をすぐに取り出せます。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 7665,
+      "rewriteEstimate": 8253
+    },
+    {
+      "id": "71510abbd6bf0412e3078380d389d6bc44556b5d24b28b503a9fcc32b31129b4",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "be0679685bf47581516ea2c9e8f6b569cd157b1bc071b0b3f97cb4fe32c2fa46",
+      "draft": {
+        "product": {
+          "acts_on": "手",
+          "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+          "what": "本革バイクグローブ"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+            ],
+            "text": "スマホ操作をしたいときは、親指と人差し指にタッチ対応素材が使われているので、グローブをはずさずに操作できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「本革バイクグローブ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "unsafe_operation",
+          "sentence": null,
+          "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「本革バイクグローブ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "unsafe_operation",
+          "sentence": null,
+          "detail": "運転に関係する製品のスマホ・ナビ操作は、操作する文の中に停車中と明記する。走行中・運転中の操作は禁止。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6836,
+      "rewriteEstimate": 7739
+    },
+    {
+      "id": "2795aee09b5edd88f099c3a8fede0ffaa89d195272d916960a6fd234a8e350aa",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+      "sourceStatus": "name/caption retained; original catchcopy not established",
+      "sourceHash": "be0679685bf47581516ea2c9e8f6b569cd157b1bc071b0b3f97cb4fe32c2fa46",
+      "draft": {
+        "product": {
+          "acts_on": "手",
+          "acts_on_quote": "長時間のツーリングでも快適な操作をサポートするバイク用手袋です。",
+          "what": "本革バイクグローブ"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+            ],
+            "text": "停車中にスマホを操作したいときは、親指と人差し指にタッチ対応素材が採用されているので、グローブを外さずに操作できます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "not_supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims supported by source",
+            "target": "supported",
+            "text": "停車中にスマホを操作したいときは、親指と人差し指にタッチ対応素材が採用されているので、グローブを外さずに操作できます。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「本革バイクグローブ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「本革バイクグローブ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "quality_identity_not_supported",
+          "sentence": null
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "not_supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6848,
+      "rewriteEstimate": 7657
+    },
+    {
+      "id": "c5d5127c09627f9e146e5d3f7f3e7b2b167fe9ca5a87b607c70e2f3fad909915",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "7c7a94af5a1c96df84eb3d8515a654a336136452486423efc739cd3c9f889008",
+      "draft": {
+        "product": {
+          "acts_on": "授乳",
+          "acts_on_quote": "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+          "what": "マタニティワンピース"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+              "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ！"
+            ],
+            "text": "授乳時に胸の上布をそのまま授乳ケープとして使えるので、来客時や急な授乳でも着替えずにすぐ対応できます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「マタニティワンピース」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「マタニティワンピース」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 7457,
+      "rewriteEstimate": 8184
+    },
+    {
+      "id": "2be880f2f1d13c457b9cf735be620bf69dd0cedc2315dbaf3e7f31983909b1d7",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "7c7a94af5a1c96df84eb3d8515a654a336136452486423efc739cd3c9f889008",
+      "draft": {
+        "product": {
+          "acts_on": "授乳",
+          "acts_on_quote": "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+          "what": "マタニティワンピース"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+              "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ！"
+            ],
+            "text": "授乳時に胸の上布をそのまま授乳ケープとして使えるマタニティワンピースなので、来客や急な授乳でも着替えずにすぐ対応できます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "授乳時には、胸の上布を授乳ケープのようにご利用いただける Pearls オリジナルの授乳ケープ一体型デザイン。",
+              "サッと授乳できるので、来客時や急な授乳タイムにとっても便利ですよ！"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims align with source; convenience statement matches source wording.",
+            "target": "supported",
+            "text": "授乳時に胸の上布をそのまま授乳ケープとして使えるマタニティワンピースなので、来客や急な授乳でも着替えずにすぐ対応できます。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 7485,
+      "rewriteEstimate": 7995
+    },
+    {
+      "id": "2934ca7a5db0f0ad88c88490528ddbf1a8aaec73c35cf901dd606e810022d629",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "c724973970ba80b35e28960a2934554ca827ace75167ef7036f59fe7bf88ab52",
+      "draft": {
+        "product": {
+          "acts_on": "モップ",
+          "acts_on_quote": "6本掛け",
+          "what": "モップハンガー"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec"
+            ],
+            "quotes": [
+              "6本掛け"
+            ],
+            "text": "6本掛けでモップをすぐに掛けられる。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「モップハンガー」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「モップハンガー」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 5642,
+      "rewriteEstimate": 6600
+    },
+    {
+      "id": "89ea2c7c5fbc4d6d8acaf4d8541eb656a945e9d41ba87148eb5233a68835a33d",
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "c724973970ba80b35e28960a2934554ca827ace75167ef7036f59fe7bf88ab52",
+      "draft": {
+        "product": {
+          "acts_on": "モップ",
+          "acts_on_quote": "6本掛け",
+          "what": "モップハンガー"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec"
+            ],
+            "quotes": [
+              "モップハンガー",
+              "6本掛け"
+            ],
+            "text": "モップハンガーで6本掛けにモップをすぐに掛けられる。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "unclear",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "モップハンガー",
+              "6本掛け"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Speed claim not in source; other claims supported.",
+            "target": "supported",
+            "text": "モップハンガーで6本掛けにモップをすぐに掛けられる。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "conditions_unclear",
+          "sentence": 0,
+          "detail": "Speed claim not in source; other claims supported."
+        },
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Speed claim not in source; other claims supported."
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 5700,
+      "rewriteEstimate": 6423
+    },
+    {
+      "id": "5c54cb7abfb6f6b3080447e17444e6a1576d364f11985753cf1dc660a2d4b319",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ipow:10000579",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "8d00f7b8fa78be17770b64751be095bed40fde53333aefa65b0cdf6a1a75e734",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "text": "細かい網目の洗濯ネットは、洗濯時に衣類の型崩れや他の洗濯物との絡みを防ぎます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "衣服を保護する、ほかの洗濯物と絡みつくを防ぎ、服を型崩れや毛羽立ちから守ります。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims match source; no unsupported assertions.",
+            "target": "supported",
+            "text": "細かい網目の洗濯ネットは、洗濯時に衣類の型崩れや他の洗濯物との絡みを防ぎます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6316,
+      "rewriteEstimate": 6943
+    },
+    {
+      "id": "6ae52c7dda3e23357e1aa940b5aef53c7e785daec0c620826a116bee70e8b1d9",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:linofle:10000458",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "d612fad27176c8b86fae1312b6ad312610cac9867f56ca15864120efb47b7693",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "繊細な衣類もしっかりと守ります。",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+              "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+            ],
+            "text": "旅行先で衣類を整理したいときは、サイズ組み合わせ自由な洗濯ネットが便利です。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+              "旅行時にも便利で、衣類を整理整頓するのに最適です。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Supported: source confirms size‑free net is convenient for travel clothing organization.",
+            "target": "supported",
+            "text": "旅行先で衣類を整理したいときは、サイズ組み合わせ自由な洗濯ネットが便利です。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [
+        {
+          "rule": "restated_purchase_reason",
+          "sentence": null,
+          "detail": "configuration_with_generic_convenience_only。特徴を願望と説明で繰り返さず、原文で支えられる具体的な使用意図と特徴の関係を伝える。関係が不明なら効果を作らない。"
+        }
+      ],
+      "baselinePublished": "ready",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6515,
+      "rewriteEstimate": 7247
+    },
+    {
+      "id": "0fe5baaf16b24e0f6ef987b284cbaf45633539e68c6fab7fd84918418de2bcfb",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "6557e127d5baa2a5946a9aa5a80016467ccb612d1649d9fc6dc4c1b40b4e2256",
+      "draft": {
+        "product": {
+          "acts_on": "下着やニット類",
+          "acts_on_quote": "下着 形崩れ防止",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "大型",
+              "6枚セット"
+            ],
+            "text": "大型の洗濯ネットは、ニットや下着をまとめて洗えるので、洗濯回数を減らしたいときに便利です。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 便利、回数を減ら。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "final_copy_guard",
+          "sentence": 0,
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 便利、回数を減ら。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 5681,
+      "rewriteEstimate": 6485
+    },
+    {
+      "id": "09a2c0d3a993e5ad6670ebf6c6ca021adb622e568b429df5f46444088548d5d7",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "6557e127d5baa2a5946a9aa5a80016467ccb612d1649d9fc6dc4c1b40b4e2256",
+      "draft": {
+        "product": {
+          "acts_on": "下着やニット類",
+          "acts_on_quote": "下着 形崩れ防止",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene"
+            ],
+            "quotes": [
+              "大型",
+              "6枚セット",
+              "下着 形崩れ防止"
+            ],
+            "text": "大型の洗濯ネットは、ニットや下着を一度に入れて洗えるので、まとめ洗いがしやすくなります。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "大型の洗濯ネットは、ニットや下着を一度に入れて洗えるので、まとめ洗いがしやすくなります。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims are supported by the source.",
+            "target": "supported",
+            "text": "大型の洗濯ネットは、ニットや下着を一度に入れて洗えるので、まとめ洗いがしやすくなります。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "review_evidence_not_in_source",
+          "sentence": 0
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 5712,
+      "rewriteEstimate": 6386
+    },
+    {
+      "id": "a3024da567930df486dff125f9b14e26bd5cea158f44020eea6ef730edd086a4",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "3290071144ee1cc30f382943eedec46f7e6cb3182441cd4380178a135cbd2bfd",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣類にやさしい綿100％",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "benefit",
+              "spec"
+            ],
+            "quotes": [
+              "水通しのよい網目のラッセル編み",
+              "マチ付きで厚みにも対応",
+              "衣類にやさしい綿100％"
+            ],
+            "text": "デリケートなインナーや厚手のパジャマを洗うとき、マチ付きの綿100％ラッセル編み洗濯ネットを使うと、網目が水通しよく乾きが早いので、洗濯後すぐに取り出せます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "水通しのよい網目のラッセル編み",
+              "マチ付きで厚みにも対応",
+              "綿なのですぐ乾く"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Immediate removal after wash not explicitly stated",
+            "target": "supported",
+            "text": "デリケートなインナーや厚手のパジャマを洗うとき、マチ付きの綿100％ラッセル編み洗濯ネットを使うと、網目が水通しよく乾きが早いので、洗濯後すぐに取り出せます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Immediate removal after wash not explicitly stated"
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 8217,
+      "rewriteEstimate": 8810
+    },
+    {
+      "id": "92c82fad9ba9a1208474e0d6f09ff5478e7d12824c2130329d34c1c83b2a1aac",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "3290071144ee1cc30f382943eedec46f7e6cb3182441cd4380178a135cbd2bfd",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣類にやさしい綿100％",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "scene",
+              "spec"
+            ],
+            "quotes": [
+              "水通しのよい網目のラッセル編み"
+            ],
+            "text": "デリケートなインナーや厚手のパジャマを洗うときは、マチ付き綿100％ラッセル編み洗濯ネットを使い、水通しのよい網目のラッセル編みがやさしく洗濯をサポートします。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 1,
+      "baselineMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "number_without_evidence",
+          "sentence": 0,
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。"
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "sentence": 0,
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 8126,
+      "rewriteEstimate": 8959
+    },
+    {
+      "id": "50fa7aaf52d30bf7ffbcbbc45b4d8259d6b280ef352c6b0d7094350b125ae0ec",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "5a02541712715cc492c52fa522040d758b553b5c2a71c0dddd649ef394551997",
+      "draft": {
+        "product": {
+          "acts_on": "ワイシャツやブラウス",
+          "acts_on_quote": "ワイシャツやブラウスの洗濯時に気になるシワや型くずれを防ぐためのシャツ専用の洗濯ネットです",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえる",
+              "洗濯物同士による摩擦を防ぎ、生地やボタンなどの付属品の傷みもおさえます"
+            ],
+            "text": "シワが気になるワイシャツやブラウスは、シャツをクルクル巻いてネットに入れるだけで、洗濯時のシワや型くずれを抑えられます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 6735,
+      "rewriteEstimate": 7433
+    },
+    {
+      "id": "c64cbb7d1133394527908b05881204ba8e919c963f14c94782be43effda7e035",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "5a02541712715cc492c52fa522040d758b553b5c2a71c0dddd649ef394551997",
+      "draft": {
+        "product": {
+          "acts_on": "ワイシャツやブラウス",
+          "acts_on_quote": "ワイシャツやブラウスの洗濯時に気になるシワや型くずれを防ぐためのシャツ専用の洗濯ネットです",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえる",
+              "洗濯物同士による摩擦を防ぎ、生地やボタンなどの付属品の傷みもおさえます"
+            ],
+            "text": "洗濯ネットを使えば、シワが気になるワイシャツやブラウスをクルクル巻くだけで、洗濯時のシワや型くずれを抑えられます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえる",
+              "洗濯物同士による摩擦を防ぎ、生地やボタンなどの付属品の傷みもおさえます"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All assertions are directly supported by source quotes.",
+            "target": "supported",
+            "text": "洗濯ネットを使えば、シワが気になるワイシャツやブラウスをクルクル巻くだけで、洗濯時のシワや型くずれを抑えられます。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6726,
+      "rewriteEstimate": 7233
+    },
+    {
+      "id": "1c1b352c3a81eb5714a756f9bd3ac8266f8e6328d13ea3172977fba1b8eea6a9",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "b5ecefc89ffde76a5e89b3e22e55e093005ab83da7caa7113b2548b851e01e37",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣類 を守る",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "ハニカム メッシュ 構造の 洗濯ネット。",
+              "六角形が連なる ハニカム 構造が、クッション性と通気性を両立。",
+              "衣類 を守る"
+            ],
+            "text": "ハニカムメッシュ構造がクッション性と通気性を両立し、洗濯時に衣類の型崩れを防ぎます。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 0,
+      "baselineMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 0,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "currentMachine": [
+        {
+          "rule": "product_identity_missing_from_post",
+          "sentence": null,
+          "detail": "product.whatで特定した短い商品種別「洗濯ネット」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。"
+        },
+        {
+          "rule": "unsupported_prevention_result",
+          "sentence": 0,
+          "detail": "「防○」という仕様名や「入りにくい」「強い」を、問題を防ぐ結果の断定へ変えない。原文の程度を保つか、その機能を選びたい意図として書く。"
+        }
+      ],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 9513,
+      "rewriteEstimate": 10787
+    },
+    {
+      "id": "3272a0855801591f999750cd0228546d4d06d417d69f5f2ef426faef792c2f48",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "b5ecefc89ffde76a5e89b3e22e55e093005ab83da7caa7113b2548b851e01e37",
+      "draft": {
+        "product": {
+          "acts_on": "衣類",
+          "acts_on_quote": "衣類 を守る",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "ハニカム メッシュ 構造の 洗濯ネット。",
+              "六角形が連なる ハニカム 構造が、クッション性と通気性を両立。",
+              "衣類 を守る"
+            ],
+            "text": "洗濯ネットはハニカムメッシュ構造でクッション性と通気性を兼ね備えており、衣類が形を保ちやすくなります。"
+          }
+        ]
+      },
+      "review": null,
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": null,
+      "reviewPresent": false,
+      "reviewQuality": null,
+      "nextReviewEstimate": 9538,
+      "rewriteEstimate": 10491
+    },
+    {
+      "id": "4a5db1050d23a96f4d4097568047fc4fbe121b96ed218e70f3ab4de318edf312",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "f1d88c19cc37d221429219bd8f0349e65776e563aad6521a15bb57b12f652245",
+      "draft": {
+        "product": {
+          "acts_on": "ブラジャーや下着などのデリケートな洗濯物",
+          "acts_on_quote": "ブラジャー 布団用 毛布 下着",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "細かい網目",
+              "形崩れ防止",
+              "ブラジャー 布団用 毛布 下着"
+            ],
+            "text": "細かい網目で形崩れ防止された洗濯ネットは、ブラジャーや下着などデリケートな洗濯物を優しく守ります。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "細かい網目で形崠れ防止された洗濯ネットは、ブラジャーや下着などデリケートな洗濯物を優しく守ります。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All claims match source; no unsupported conditions or exaggerations.",
+            "target": "supported",
+            "text": "細かい網目で形崩れ防止された洗濯ネットは、ブラジャーや下着などデリケートな洗濯物を優しく守ります。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "review_evidence_not_in_source",
+          "sentence": 0
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6378,
+      "rewriteEstimate": 7025
+    },
+    {
+      "id": "16ea2a99a4aa72c9c815bd9e7524c23f0b1de4be79b743e58b94b83e1b8440b1",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "f1d88c19cc37d221429219bd8f0349e65776e563aad6521a15bb57b12f652245",
+      "draft": {
+        "product": {
+          "acts_on": "ブラジャーや下着などのデリケートな洗濯物",
+          "acts_on_quote": "ブラジャー 布団用 毛布 下着",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "細かい網目 形崩れ防止",
+              "ブラジャー 布団用 毛布 下着"
+            ],
+            "text": "細かい網目で形崩れ防止された洗濯ネットは、ブラジャーや下着などのデリケートな洗濯物を優しく守ります。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "not_supported",
+            "evidenceQuotes": [
+              "細かい網目 形崩れ防止",
+              "ブラジャー 布団用 毛布 下着"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "Fine mesh and shape‑prevention are in source; 'gently' not stated",
+            "target": "supported",
+            "text": "細かい網目で形崩れ防止された洗濯ネットは、ブラジャーや下着などのデリケートな洗濯物を優しく守ります。"
+          }
+        ]
+      },
+      "attempt": 1,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "blocked",
+      "currentPublished": "blocked",
+      "savedReviewFailures": [
+        {
+          "rule": "degree_not_supported",
+          "sentence": 0,
+          "detail": "Fine mesh and shape‑prevention are in source; 'gently' not stated"
+        }
+      ],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 6365,
+      "rewriteEstimate": 7025
+    },
+    {
+      "id": "5d9cb9501a12f6d37172387a0dc08184348c6253a88db77b3d0338ce942ed53d",
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:lebenwood:10004953",
+      "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+      "sourceHash": "ef4a17afa794db9cac996965533da78746c13ed5d915548d8908dc8a93ee15af",
+      "draft": {
+        "product": {
+          "acts_on": "デリケートな衣類",
+          "acts_on_quote": "ニットやレース、下着などのデリケートな衣類",
+          "what": "洗濯ネット"
+        },
+        "sentences": [
+          {
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "細かい目のメッシュ生地で、ニットやレース、下着などのデリケートな衣類を優しく保護します。"
+            ],
+            "text": "デリケートな下着やレースを洗うときは、細かい目のメッシュ生地の洗濯ネットで優しく保護できます。"
+          }
+        ]
+      },
+      "review": {
+        "product": {
+          "acts_on": "supported",
+          "what": "supported"
+        },
+        "quality": {
+          "identity": "supported",
+          "natural": "supported",
+          "non_redundant": "supported",
+          "reason": "supported",
+          "room_style": "supported",
+          "scene": "supported"
+        },
+        "sentences": [
+          {
+            "conditions": "supported",
+            "degree": "supported",
+            "evidenceQuotes": [
+              "細かい目のメッシュ生地で、ニットやレース、下着などのデリケートな衣類を優しく保護します。"
+            ],
+            "negation": "supported",
+            "part": "supported",
+            "reason": "All assertions (target, part, conditions, negation, degree) are supported by source.",
+            "target": "supported",
+            "text": "デリケートな下着やレースを洗うときは、細かい目のメッシュ生地の洗濯ネットで優しく保護できます。"
+          }
+        ]
+      },
+      "attempt": 0,
+      "baselineMachine": [],
+      "currentMachine": [],
+      "baselinePublished": "ready",
+      "currentPublished": "ready",
+      "savedReviewFailures": [],
+      "reviewPresent": true,
+      "reviewQuality": {
+        "identity": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "reason": "supported",
+        "room_style": "supported",
+        "scene": "supported"
+      },
+      "nextReviewEstimate": 8384,
+      "rewriteEstimate": 9020
+    }
+  ],
+  "jobs": [
+    {
+      "origin": "docs/measurements/room-copy-20261026-ipow.json",
+      "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5392,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4622",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "25.335s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.379262246,
+            "completion_tokens": 1603,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1340
+            },
+            "prompt_time": 0.163553134,
+            "prompt_tokens": 3187,
+            "queue_time": 0.078963075,
+            "total_time": 3.54281538,
+            "total_tokens": 4790
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4595,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4099",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "29.257s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.190888905,
+            "completion_tokens": 1052,
+            "completion_tokens_details": {
+              "reasoning_tokens": 745
+            },
+            "prompt_time": 0.163728884,
+            "prompt_tokens": 3517,
+            "queue_time": 0.08982911,
+            "total_time": 2.354617789,
+            "total_tokens": 4569
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 6316,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "5138",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "21.465s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.263358252,
+            "completion_tokens": 2032,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1725
+            },
+            "prompt_time": 0.145378362,
+            "prompt_tokens": 2600,
+            "queue_time": 0.270405424,
+            "total_time": 4.408736614,
+            "total_tokens": 4632
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 13991
+    },
+    {
+      "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+      "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5751,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4527",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "26.047s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.0798084,
+            "completion_tokens": 1475,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1181
+            },
+            "prompt_time": 0.557653843,
+            "prompt_tokens": 3187,
+            "queue_time": 0.396868785,
+            "total_time": 3.637462243,
+            "total_tokens": 4662
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5190,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4089",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "29.332s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.762097357,
+            "completion_tokens": 1324,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1032
+            },
+            "prompt_time": 0.316167522,
+            "prompt_tokens": 3660,
+            "queue_time": 0.149725285,
+            "total_time": 3.078264879,
+            "total_tokens": 4984
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 6880,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4879",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "23.407s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.666941829,
+            "completion_tokens": 2198,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1854
+            },
+            "prompt_time": 0.199068189,
+            "prompt_tokens": 2777,
+            "queue_time": 0.227290688,
+            "total_time": 4.866010018,
+            "total_tokens": 4975
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 14621
+    },
+    {
+      "origin": "docs/measurements/room-copy-20261027-ipow-evidence-order.json",
+      "itemCode": "__semantic_preview__:room_contract_415ed0d8b7905ae5:ipow:10000579",
+      "status": "generate",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 6043,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4908",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "23.19s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.702445964,
+            "completion_tokens": 1771,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1503
+            },
+            "prompt_time": 0.17993212,
+            "prompt_tokens": 2706,
+            "queue_time": 0.177860261,
+            "total_time": 3.882378084,
+            "total_tokens": 4477
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 4477
+    },
+    {
+      "origin": "docs/measurements/room-copy-20261027-ipow-compact.json",
+      "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5353,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "5520",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "18.6s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.7624845369999997,
+            "completion_tokens": 1320,
+            "completion_tokens_details": {
+              "reasoning_tokens": 981
+            },
+            "prompt_time": 0.103539105,
+            "prompt_tokens": 2155,
+            "queue_time": 0.42635372,
+            "total_time": 2.866023642,
+            "total_tokens": 3475
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5583,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4892",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "23.31s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.135552531,
+            "completion_tokens": 1498,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1086
+            },
+            "prompt_time": 0.127303668,
+            "prompt_tokens": 2677,
+            "queue_time": 0.173225806,
+            "total_time": 3.262856199,
+            "total_tokens": 4175
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 7650
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_dc7629f4a4f41709:chatsuminosato:10000073",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4375,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "2156",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "43.83s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.458328877,
+            "completion_tokens": 920,
+            "completion_tokens_details": {
+              "reasoning_tokens": 748
+            },
+            "prompt_time": 0.178029434,
+            "prompt_tokens": 4544,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "queue_time": 0.14404304,
+            "total_time": 2.636358311,
+            "total_tokens": 5464
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 5719,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-remaining-tokens": "3084",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "36.87s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.501467028,
+            "completion_tokens": 1663,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1449
+            },
+            "prompt_time": 0.178182312,
+            "prompt_tokens": 4171,
+            "queue_time": 0.246229967,
+            "total_time": 3.67964934,
+            "total_tokens": 5834
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 11298
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 2140,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "2877",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "38.422s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.621697786,
+            "completion_tokens": 785,
+            "completion_tokens_details": {
+              "reasoning_tokens": 606
+            },
+            "prompt_time": 0.209153544,
+            "prompt_tokens": 4714,
+            "queue_time": 0.144167715,
+            "total_time": 1.83085133,
+            "total_tokens": 5499
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4037,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3200",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "36s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.398158987,
+            "completion_tokens": 1647,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1453
+            },
+            "prompt_time": 0.228100211,
+            "prompt_tokens": 4420,
+            "queue_time": 0.246022697,
+            "total_time": 3.626259198,
+            "total_tokens": 6067
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2271,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "2741",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "39.442s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.706577446,
+            "completion_tokens": 823,
+            "completion_tokens_details": {
+              "reasoning_tokens": 595
+            },
+            "prompt_time": 0.254010094,
+            "prompt_tokens": 4925,
+            "queue_time": 0.234655932,
+            "total_time": 1.9605875400000001,
+            "total_tokens": 5748
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3610,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3211",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "35.917s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.981174132,
+            "completion_tokens": 1433,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1232
+            },
+            "prompt_time": 0.242818013,
+            "prompt_tokens": 4431,
+            "queue_time": 0.144837491,
+            "total_time": 3.223992145,
+            "total_tokens": 5864
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 23178
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 1964,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "984",
+            "x-ratelimit-remaining-tokens": "402",
+            "x-ratelimit-reset-requests": "23m2.4s",
+            "x-ratelimit-reset-tokens": "56.985s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.437605439,
+            "completion_tokens": 1380,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1260
+            },
+            "prompt_time": 0.085301062,
+            "prompt_tokens": 1696,
+            "queue_time": 0.405891282,
+            "total_time": 1.522906501,
+            "total_tokens": 3076
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 1779,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "983",
+            "x-ratelimit-remaining-tokens": "5678",
+            "x-ratelimit-reset-requests": "24m28.8s",
+            "x-ratelimit-reset-tokens": "17.415s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 1.304397222,
+            "completion_tokens": 1239,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1085
+            },
+            "prompt_time": 0.116501117,
+            "prompt_tokens": 1867,
+            "queue_time": 0.203101894,
+            "total_time": 1.420898339,
+            "total_tokens": 3106
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2626,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-remaining-tokens": "2090",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "44.325s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.313301951,
+            "completion_tokens": 2056,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1926
+            },
+            "prompt_time": 0.107749075,
+            "prompt_tokens": 1835,
+            "queue_time": 0.083401657,
+            "total_time": 2.4210510259999998,
+            "total_tokens": 3891
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 10073
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 2986,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "973",
+            "x-ratelimit-remaining-tokens": "582",
+            "x-ratelimit-reset-requests": "38m52.8s",
+            "x-ratelimit-reset-tokens": "55.635s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.6236104879999997,
+            "completion_tokens": 1252,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1032
+            },
+            "prompt_time": 0.141679423,
+            "prompt_tokens": 2749,
+            "queue_time": 0.116205275,
+            "total_time": 2.765289911,
+            "total_tokens": 4001
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 3762,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "972",
+            "x-ratelimit-remaining-tokens": "4830",
+            "x-ratelimit-reset-requests": "40m19.2s",
+            "x-ratelimit-reset-tokens": "23.775s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.3489698,
+            "completion_tokens": 1587,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1348
+            },
+            "prompt_time": 0.145817715,
+            "prompt_tokens": 2827,
+            "queue_time": 0.146929841,
+            "total_time": 3.494787515,
+            "total_tokens": 4414
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3571,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-remaining-tokens": "3082",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "36.885s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.347073082,
+            "completion_tokens": 1425,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1123
+            },
+            "prompt_time": 0.093405412,
+            "prompt_tokens": 2997,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.171387004,
+            "total_time": 3.440478494,
+            "total_tokens": 4422
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4634,
+          "error": "invalid_structured_output",
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "970",
+            "x-ratelimit-remaining-tokens": "3473",
+            "x-ratelimit-reset-requests": "43m12s",
+            "x-ratelimit-reset-tokens": "33.952s"
+          },
+          "stage": "verify",
+          "usage": null
+        }
+      ],
+      "tokensKnown": false,
+      "totalTokens": 12837
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3117,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "976",
+            "x-ratelimit-remaining-tokens": "5052",
+            "x-ratelimit-reset-requests": "34m33.6s",
+            "x-ratelimit-reset-tokens": "22.11s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.435576069,
+            "completion_tokens": 1150,
+            "completion_tokens_details": {
+              "reasoning_tokens": 977
+            },
+            "prompt_time": 0.134226247,
+            "prompt_tokens": 2755,
+            "queue_time": 0.490529419,
+            "total_time": 2.569802316,
+            "total_tokens": 3905
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3061,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "975",
+            "x-ratelimit-remaining-tokens": "4428",
+            "x-ratelimit-reset-requests": "36m0s",
+            "x-ratelimit-reset-tokens": "26.79s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.727140956,
+            "completion_tokens": 1304,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1130
+            },
+            "prompt_time": 0.155783942,
+            "prompt_tokens": 2938,
+            "queue_time": 0.115994011,
+            "total_time": 2.8829248979999997,
+            "total_tokens": 4242
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3323,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "974",
+            "x-ratelimit-remaining-tokens": "4640",
+            "x-ratelimit-reset-requests": "37m26.4s",
+            "x-ratelimit-reset-tokens": "25.2s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.096818023,
+            "completion_tokens": 1475,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1309
+            },
+            "prompt_time": 0.133767285,
+            "prompt_tokens": 2764,
+            "queue_time": 0.038117272,
+            "total_time": 3.230585308,
+            "total_tokens": 4239
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 12386
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:moosoo:10000127",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5121,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4332",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "27.51s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.828356098,
+            "completion_tokens": 1345,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1135
+            },
+            "prompt_time": 0.219073375,
+            "prompt_tokens": 3424,
+            "queue_time": 0.014890383,
+            "total_time": 3.047429473,
+            "total_tokens": 4769
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4559,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4689",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "24.832s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.891853782,
+            "completion_tokens": 1383,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1090
+            },
+            "prompt_time": 0.172140622,
+            "prompt_tokens": 2924,
+            "queue_time": 0.251541082,
+            "total_time": 3.063994404,
+            "total_tokens": 4307
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 9076
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4331,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "3871",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "30.967s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.9949633119999999,
+            "completion_tokens": 948,
+            "completion_tokens_details": {
+              "reasoning_tokens": 727
+            },
+            "prompt_time": 0.171175342,
+            "prompt_tokens": 3718,
+            "queue_time": 0.098821151,
+            "total_time": 2.166138654,
+            "total_tokens": 4666
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4330,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3537",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "33.472s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.525747458,
+            "completion_tokens": 986,
+            "completion_tokens_details": {
+              "reasoning_tokens": 798
+            },
+            "prompt_time": 0.023186192,
+            "prompt_tokens": 4040,
+            "prompt_tokens_details": {
+              "cached_tokens": 3584
+            },
+            "queue_time": 0.088660371,
+            "total_time": 2.54893365,
+            "total_tokens": 5026
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5432,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3976",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "30.18s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.851580269,
+            "completion_tokens": 1369,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1124
+            },
+            "prompt_time": 0.604189081,
+            "prompt_tokens": 3038,
+            "queue_time": 0.095895775,
+            "total_time": 3.45576935,
+            "total_tokens": 4407
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 14099
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3281,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "979",
+            "x-ratelimit-remaining-tokens": "2488",
+            "x-ratelimit-reset-requests": "30m14.4s",
+            "x-ratelimit-reset-tokens": "41.34s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.052374079,
+            "completion_tokens": 944,
+            "completion_tokens_details": {
+              "reasoning_tokens": 789
+            },
+            "prompt_time": 0.065994423,
+            "prompt_tokens": 2394,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.087579061,
+            "total_time": 3.118368502,
+            "total_tokens": 3338
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 1584,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "978",
+            "x-ratelimit-remaining-tokens": "5106",
+            "x-ratelimit-reset-requests": "31m40.8s",
+            "x-ratelimit-reset-tokens": "21.705s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.109791273,
+            "completion_tokens": 529,
+            "completion_tokens_details": {
+              "reasoning_tokens": 370
+            },
+            "prompt_time": 0.134815784,
+            "prompt_tokens": 2599,
+            "queue_time": 0.245758845,
+            "total_time": 1.244607057,
+            "total_tokens": 3128
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3856,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "977",
+            "x-ratelimit-remaining-tokens": "2440",
+            "x-ratelimit-reset-requests": "33m7.2s",
+            "x-ratelimit-reset-tokens": "41.699s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.15683361,
+            "completion_tokens": 1498,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1252
+            },
+            "prompt_time": 0.110674602,
+            "prompt_tokens": 2399,
+            "queue_time": 0.143565844,
+            "total_time": 3.267508212,
+            "total_tokens": 3897
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 10363
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4003,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3849",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "31.132s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.069870944,
+            "completion_tokens": 994,
+            "completion_tokens_details": {
+              "reasoning_tokens": 788
+            },
+            "prompt_time": 0.14645853,
+            "prompt_tokens": 3719,
+            "queue_time": 0.164811922,
+            "total_time": 2.216329474,
+            "total_tokens": 4713
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3613,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3528",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "33.54s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.114315972,
+            "completion_tokens": 992,
+            "completion_tokens_details": {
+              "reasoning_tokens": 779
+            },
+            "prompt_time": 0.083354496,
+            "prompt_tokens": 4048,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "queue_time": 0.228764644,
+            "total_time": 2.197670468,
+            "total_tokens": 5040
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4245,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "4408",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "26.94s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.5361299710000003,
+            "completion_tokens": 1213,
+            "completion_tokens_details": {
+              "reasoning_tokens": 991
+            },
+            "prompt_time": 0.158763847,
+            "prompt_tokens": 3169,
+            "queue_time": 0.091168971,
+            "total_time": 2.694893818,
+            "total_tokens": 4382
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 14135
+    },
+    {
+      "origin": "archived-20261022/saved-real-groq-sample.json",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 1672,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "973",
+            "x-ratelimit-remaining-tokens": "2026",
+            "x-ratelimit-reset-requests": "38m52.8s",
+            "x-ratelimit-reset-tokens": "44.805s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.4576379959999999,
+            "completion_tokens": 1429,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1349
+            },
+            "prompt_time": 0.08483929,
+            "prompt_tokens": 1298,
+            "queue_time": 0.082166407,
+            "total_time": 1.542477286,
+            "total_tokens": 2727
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 2233,
+          "error": "invalid_structured_output",
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "972",
+            "x-ratelimit-remaining-tokens": "4515",
+            "x-ratelimit-reset-requests": "40m19.2s",
+            "x-ratelimit-reset-tokens": "26.137s"
+          },
+          "stage": "verify",
+          "usage": null
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 1476,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-remaining-tokens": "3261",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "35.542s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.262309093,
+            "completion_tokens": 1234,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1140
+            },
+            "prompt_time": 0.069836758,
+            "prompt_tokens": 1410,
+            "queue_time": 0.095166737,
+            "total_time": 1.332145851,
+            "total_tokens": 2644
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2044,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "970",
+            "x-ratelimit-remaining-tokens": "4616",
+            "x-ratelimit-reset-requests": "43m12s",
+            "x-ratelimit-reset-tokens": "25.38s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 1.789112581,
+            "completion_tokens": 1751,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1608
+            },
+            "prompt_time": 0.08308249,
+            "prompt_tokens": 1443,
+            "queue_time": 0.094949756,
+            "total_time": 1.8721950710000002,
+            "total_tokens": 3194
+          }
+        }
+      ],
+      "tokensKnown": false,
+      "totalTokens": 8565
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ipow:10000579",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4573,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4315",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "27.637s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.416263038,
+            "completion_tokens": 1157,
+            "completion_tokens_details": {
+              "reasoning_tokens": 985
+            },
+            "prompt_time": 0.264157233,
+            "prompt_tokens": 3419,
+            "queue_time": 0.245708406,
+            "total_time": 2.680420271,
+            "total_tokens": 4576
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4478,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "5244",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "20.67s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.237874961,
+            "completion_tokens": 1070,
+            "completion_tokens_details": {
+              "reasoning_tokens": 822
+            },
+            "prompt_time": 0.120444012,
+            "prompt_tokens": 2477,
+            "queue_time": 0.090037376,
+            "total_time": 2.358318973,
+            "total_tokens": 3547
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 8123
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:linofle:10000458",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4068,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "4520",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "26.1s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.949468651,
+            "completion_tokens": 927,
+            "completion_tokens_details": {
+              "reasoning_tokens": 788
+            },
+            "prompt_time": 0.194306444,
+            "prompt_tokens": 3239,
+            "queue_time": 0.248310436,
+            "total_time": 2.143775095,
+            "total_tokens": 4166
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4747,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "5290",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "20.325s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.088462428,
+            "completion_tokens": 1164,
+            "completion_tokens_details": {
+              "reasoning_tokens": 983
+            },
+            "prompt_time": 0.359548115,
+            "prompt_tokens": 2484,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.091155304,
+            "total_time": 3.448010543,
+            "total_tokens": 3648
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 7814
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3067,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-remaining-tokens": "4983",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "22.627s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.606092237,
+            "completion_tokens": 660,
+            "completion_tokens_details": {
+              "reasoning_tokens": 549
+            },
+            "prompt_time": 0.021185028,
+            "prompt_tokens": 2847,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "queue_time": 0.234831087,
+            "total_time": 1.627277265,
+            "total_tokens": 3507
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3826,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "994",
+            "x-ratelimit-remaining-tokens": "4726",
+            "x-ratelimit-reset-requests": "8m38.4s",
+            "x-ratelimit-reset-tokens": "24.555s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.734891636,
+            "completion_tokens": 835,
+            "completion_tokens_details": {
+              "reasoning_tokens": 719
+            },
+            "prompt_time": 0.15460032,
+            "prompt_tokens": 3024,
+            "queue_time": 0.246384717,
+            "total_time": 1.889491956,
+            "total_tokens": 3859
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5541,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "993",
+            "x-ratelimit-remaining-tokens": "5669",
+            "x-ratelimit-reset-requests": "10m4.8s",
+            "x-ratelimit-reset-tokens": "17.482s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.5076805110000002,
+            "completion_tokens": 1193,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1020
+            },
+            "prompt_time": 0.66571517,
+            "prompt_tokens": 2084,
+            "queue_time": 0.145467648,
+            "total_time": 3.173395681,
+            "total_tokens": 3277
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 10643
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4168,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "992",
+            "x-ratelimit-remaining-tokens": "3005",
+            "x-ratelimit-reset-requests": "11m31.2s",
+            "x-ratelimit-reset-tokens": "37.462s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.292306174,
+            "completion_tokens": 1087,
+            "completion_tokens_details": {
+              "reasoning_tokens": 915
+            },
+            "prompt_time": 0.235818798,
+            "prompt_tokens": 4335,
+            "queue_time": 0.008465332,
+            "total_time": 2.528124972,
+            "total_tokens": 5422
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4454,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "991",
+            "x-ratelimit-remaining-tokens": "4139",
+            "x-ratelimit-reset-requests": "12m57.599s",
+            "x-ratelimit-reset-tokens": "28.957s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.777974783,
+            "completion_tokens": 1333,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1058
+            },
+            "prompt_time": 0.209520949,
+            "prompt_tokens": 3655,
+            "queue_time": 0.235464791,
+            "total_time": 2.987495732,
+            "total_tokens": 4988
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5338,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-remaining-tokens": "2385",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "42.112s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.615742789,
+            "completion_tokens": 1250,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1103
+            },
+            "prompt_time": 0.281949464,
+            "prompt_tokens": 4528,
+            "queue_time": 0.859703816,
+            "total_time": 2.8976922529999998,
+            "total_tokens": 5778
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 16188
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4517,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-remaining-tokens": "3428",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "34.29s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.36336345,
+            "completion_tokens": 1127,
+            "completion_tokens_details": {
+              "reasoning_tokens": 896
+            },
+            "prompt_time": 0.162781984,
+            "prompt_tokens": 3239,
+            "queue_time": 0.080694157,
+            "total_time": 2.526145434,
+            "total_tokens": 4366
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4128,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "989",
+            "x-ratelimit-remaining-tokens": "4071",
+            "x-ratelimit-reset-requests": "15m50.4s",
+            "x-ratelimit-reset-tokens": "29.467s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.686706658,
+            "completion_tokens": 1266,
+            "completion_tokens_details": {
+              "reasoning_tokens": 996
+            },
+            "prompt_time": 0.186515073,
+            "prompt_tokens": 3589,
+            "queue_time": 0.055328035,
+            "total_time": 2.873221731,
+            "total_tokens": 4855
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4186,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "988",
+            "x-ratelimit-remaining-tokens": "4003",
+            "x-ratelimit-reset-requests": "17m16.8s",
+            "x-ratelimit-reset-tokens": "29.977s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.327930095,
+            "completion_tokens": 1096,
+            "completion_tokens_details": {
+              "reasoning_tokens": 860
+            },
+            "prompt_time": 0.157822038,
+            "prompt_tokens": 2731,
+            "queue_time": 0.037313006,
+            "total_time": 2.485752133,
+            "total_tokens": 3827
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 13048
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4072,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "987",
+            "x-ratelimit-remaining-tokens": "2157",
+            "x-ratelimit-reset-requests": "18m43.2s",
+            "x-ratelimit-reset-tokens": "43.822s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.08660386,
+            "completion_tokens": 987,
+            "completion_tokens_details": {
+              "reasoning_tokens": 834
+            },
+            "prompt_time": 0.243773195,
+            "prompt_tokens": 5506,
+            "queue_time": 0.088436351,
+            "total_time": 2.330377055,
+            "total_tokens": 6493
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3919,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "986",
+            "x-ratelimit-remaining-tokens": "1953",
+            "x-ratelimit-reset-requests": "20m9.6s",
+            "x-ratelimit-reset-tokens": "45.352s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.608641633,
+            "completion_tokens": 1123,
+            "completion_tokens_details": {
+              "reasoning_tokens": 928
+            },
+            "prompt_time": 0.047223982,
+            "prompt_tokens": 5844,
+            "prompt_tokens_details": {
+              "cached_tokens": 5376
+            },
+            "queue_time": 0.099052075,
+            "total_time": 2.6558656149999997,
+            "total_tokens": 6967
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 13460
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+      "status": "blocked",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3524,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "985",
+            "x-ratelimit-remaining-tokens": "3503",
+            "x-ratelimit-reset-requests": "21m36s",
+            "x-ratelimit-reset-tokens": "33.727s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.922796182,
+            "completion_tokens": 910,
+            "completion_tokens_details": {
+              "reasoning_tokens": 762
+            },
+            "prompt_time": 0.166369703,
+            "prompt_tokens": 3231,
+            "queue_time": 0.092410442,
+            "total_time": 2.089165885,
+            "total_tokens": 4141
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 5573,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "984",
+            "x-ratelimit-remaining-tokens": "4227",
+            "x-ratelimit-reset-requests": "23m2.4s",
+            "x-ratelimit-reset-tokens": "28.297s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.071432816,
+            "completion_tokens": 1442,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1251
+            },
+            "prompt_time": 0.131113938,
+            "prompt_tokens": 2507,
+            "queue_time": 0.090237456,
+            "total_time": 4.202546754,
+            "total_tokens": 3949
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3649,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "983",
+            "x-ratelimit-remaining-tokens": "3165",
+            "x-ratelimit-reset-requests": "24m28.8s",
+            "x-ratelimit-reset-tokens": "36.262s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.126692078,
+            "completion_tokens": 1021,
+            "completion_tokens_details": {
+              "reasoning_tokens": 872
+            },
+            "prompt_time": 0.292160634,
+            "prompt_tokens": 3393,
+            "queue_time": 0.285831998,
+            "total_time": 2.418852712,
+            "total_tokens": 4414
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4301,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-remaining-tokens": "5260",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "20.55s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.844478208,
+            "completion_tokens": 1347,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1098
+            },
+            "prompt_time": 0.118273067,
+            "prompt_tokens": 2509,
+            "queue_time": 0.083595974,
+            "total_time": 2.962751275,
+            "total_tokens": 3856
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 16360
+    },
+    {
+      "origin": "archived-20261022/live-current-groq.json",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:lebenwood:10004953",
+      "status": "ready",
+      "calls": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3516,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "981",
+            "x-ratelimit-remaining-tokens": "1992",
+            "x-ratelimit-reset-requests": "27m21.6s",
+            "x-ratelimit-reset-tokens": "45.06s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.317628764,
+            "completion_tokens": 1108,
+            "completion_tokens_details": {
+              "reasoning_tokens": 915
+            },
+            "prompt_time": 0.253491612,
+            "prompt_tokens": 4661,
+            "queue_time": 0.134339566,
+            "total_time": 2.571120376,
+            "total_tokens": 5769
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 9617,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "980",
+            "x-ratelimit-remaining-tokens": "3764",
+            "x-ratelimit-reset-requests": "28m48s",
+            "x-ratelimit-reset-tokens": "31.77s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.85262892,
+            "completion_tokens": 1245,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1056
+            },
+            "prompt_time": 0.197014051,
+            "prompt_tokens": 3932,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.141388113,
+            "total_time": 3.049642971,
+            "total_tokens": 5177
+          }
+        }
+      ],
+      "tokensKnown": true,
+      "totalTokens": 10946
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "summary": {
+    "jobs": 40,
+    "knownUsageJobs": 37,
+    "calls": 109,
+    "inputTokens": 253087,
+    "outputTokens": 122333,
+    "meanJobTokens": 10146.486486486487,
+    "maxJobTokens": 23178,
+    "meanCalls": 2.725,
+    "maxCalls": 4
+  },
+  "byStatus": {
+    "blocked": {
+      "jobs": 22,
+      "knownUsageJobs": 19,
+      "calls": 65,
+      "inputTokens": 139611,
+      "outputTokens": 65160,
+      "meanJobTokens": 10777.421052631578,
+      "maxJobTokens": 23178,
+      "meanCalls": 2.9545454545454546,
+      "maxCalls": 4
+    },
+    "generate": {
+      "jobs": 1,
+      "knownUsageJobs": 1,
+      "calls": 1,
+      "inputTokens": 2706,
+      "outputTokens": 1771,
+      "meanJobTokens": 4477,
+      "maxJobTokens": 4477,
+      "meanCalls": 1,
+      "maxCalls": 1
+    },
+    "ready": {
+      "jobs": 17,
+      "knownUsageJobs": 17,
+      "calls": 43,
+      "inputTokens": 110770,
+      "outputTokens": 55402,
+      "meanJobTokens": 9774.823529411764,
+      "maxJobTokens": 14135,
+      "meanCalls": 2.5294117647058822,
+      "maxCalls": 4
+    }
+  },
+  "unattributedTraces": 1,
+  "otherModelTraces": 5,
+  "capacity": {
+    "publicLimits": {
+      "RPM": 30,
+      "RPD": 1000,
+      "TPM": 8000,
+      "TPD": 200000
+    },
+    "currentAccountLimitsVerified": false,
+    "targetDailyFreshCompletions": 90,
+    "maximumTokensPerCompletionIncludingFailures": 2222.222222222222,
+    "diagnosticAttemptsPerDayAtObservedMean": 19,
+    "diagnosticTokenMinutesFor30AttemptsAtMean": 38.049324324324324,
+    "qualityVerifiedCompletionsPerDay": null
+  }
+}

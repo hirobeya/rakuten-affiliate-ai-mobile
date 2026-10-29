@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "limits": {
+    "tokens": 10000000,
+    "requests": 4,
+    "perCallTokens": 1000000
+  },
+  "spent": 800,
+  "reserved": 0,
+  "requests": 4,
+  "halt": null,
+  "keys": {
+    "8ad2365185d61e2f1fd2a23c0e886cafb9a5783fa4797cfb66587c4d38a8cacd": {
+      "status": "ready",
+      "reservation": 0
+    }
+  }
+}

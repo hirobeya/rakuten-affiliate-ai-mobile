@@ -1,0 +1,20 @@
+{
+  "observedAtUtc": "2026-10-29T12:58:30.730793+00:00",
+  "startHead": "d959ad7aa87fe623a8d573d65229552e8ae6a46e",
+  "branch": "rebuild/urenavi-core-20261028",
+  "startTreeClean": true,
+  "credentialPresent": false,
+  "canonicalStateDirectoryExists": false,
+  "inferenceCalls": 0,
+  "httpStatus": null,
+  "usage": null,
+  "splitApplicability": null,
+  "currentRemaining": null,
+  "reset": null,
+  "allCallersPaused": null,
+  "unresolvedSharedSends": null,
+  "crossHostDuplicateHistoryVerified": false,
+  "secureInjectionToolExposed": false,
+  "codeChanges": false,
+  "testsRerun": false
+}

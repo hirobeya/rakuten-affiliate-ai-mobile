@@ -1,0 +1,4275 @@
+{
+  "baseline": "f6f6c95b2e5322e872b2db8ab02b7c5bb4c3ddad",
+  "scope": "checked-in docs JSON execution traces; exact/prefix snapshots deduplicated; not account billing ledger",
+  "limitations": [
+    "No provider request IDs: indistinguishable traces cannot establish a complete account ledger.",
+    "Calls absent from saved traces, 429 and usage-unknown transport failures may be missing.",
+    "ready is the historical engine label, not independent quality approval.",
+    "Different versions, repeated products and selected failures are diagnostic, not population estimates.",
+    "Review-only measurements are reported separately and cannot count as completed products."
+  ],
+  "filesScanned": 16,
+  "snapshots": 50,
+  "maximalTraces": 46,
+  "targetModel": "openai/gpt-oss-120b",
+  "summary": {
+    "jobs": 40,
+    "knownUsageJobs": 37,
+    "calls": 109,
+    "inputTokens": 253087,
+    "outputTokens": 122333,
+    "meanJobTokens": 10146.486486486487,
+    "maxJobTokens": 23178,
+    "meanCalls": 2.725,
+    "maxCalls": 4
+  },
+  "byStatus": {
+    "blocked": {
+      "jobs": 22,
+      "knownUsageJobs": 19,
+      "calls": 65,
+      "inputTokens": 139611,
+      "outputTokens": 65160,
+      "meanJobTokens": 10777.421052631578,
+      "maxJobTokens": 23178,
+      "meanCalls": 2.9545454545454546,
+      "maxCalls": 4
+    },
+    "generate": {
+      "jobs": 1,
+      "knownUsageJobs": 1,
+      "calls": 1,
+      "inputTokens": 2706,
+      "outputTokens": 1771,
+      "meanJobTokens": 4477,
+      "maxJobTokens": 4477,
+      "meanCalls": 1,
+      "maxCalls": 1
+    },
+    "ready": {
+      "jobs": 17,
+      "knownUsageJobs": 17,
+      "calls": 43,
+      "inputTokens": 110770,
+      "outputTokens": 55402,
+      "meanJobTokens": 9774.823529411764,
+      "maxJobTokens": 14135,
+      "meanCalls": 2.5294117647058822,
+      "maxCalls": 4
+    }
+  },
+  "reviewOnlyMeasurements": {
+    "calls": 4,
+    "inputTokens": 10393,
+    "outputTokens": 6570,
+    "model": "not recorded in these rows; not added to model-attributed job totals"
+  },
+  "unattributedTraces": 1,
+  "otherModelTraces": 5,
+  "capacity": {
+    "publicLimits": {
+      "RPM": 30,
+      "RPD": 1000,
+      "TPM": 8000,
+      "TPD": 200000
+    },
+    "currentAccountLimitsVerified": false,
+    "targetDailyFreshCompletions": 90,
+    "maximumTokensPerCompletionIncludingFailures": 2222.222222222222,
+    "diagnosticAttemptsPerDayAtObservedMean": 19,
+    "diagnosticTokenMinutesFor30AttemptsAtMean": 38.049324324324324,
+    "qualityVerifiedCompletionsPerDay": null
+  },
+  "jobs": [
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[3]/data/records[0]/state",
+        "docs/measurements/room-copy-20261026-ipow.json/records[0]/state"
+      ],
+      "traceHash": "42c047e557a990fcad40b6b8aa3e65880fe343fa17d2973ffce41781f9207049",
+      "callHashes": [
+        "4882c0c91dd062453152ff80811a9216e822e9e98d332370e18c9a2a270973f1",
+        "314b007da3b536cd841a6f5c3a73c93d07672a82cd0b2191cd3ea02b9ae2c5a4",
+        "7cfc66113c5a8a5683ad396ef182da7ac0087db8009b8db795ca88c69aa9d872"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 9304,
+      "outputTokens": 4687,
+      "totalTokens": 13991,
+      "elapsedMs": 16303,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5392,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4622",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "25.335s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.379262246,
+            "completion_tokens": 1603,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1340
+            },
+            "prompt_time": 0.163553134,
+            "prompt_tokens": 3187,
+            "queue_time": 0.078963075,
+            "total_time": 3.54281538,
+            "total_tokens": 4790
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4595,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4099",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "29.257s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.190888905,
+            "completion_tokens": 1052,
+            "completion_tokens_details": {
+              "reasoning_tokens": 745
+            },
+            "prompt_time": 0.163728884,
+            "prompt_tokens": 3517,
+            "queue_time": 0.08982911,
+            "total_time": 2.354617789,
+            "total_tokens": 4569
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 6316,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "5138",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "21.465s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.263358252,
+            "completion_tokens": 2032,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1725
+            },
+            "prompt_time": 0.145378362,
+            "prompt_tokens": 2600,
+            "queue_time": 0.270405424,
+            "total_time": 4.408736614,
+            "total_tokens": 4632
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[4]/data/records[0]/state",
+        "docs/measurements/room-copy-20261026-ipow-review-scope.json/records[0]/state"
+      ],
+      "traceHash": "f535505231f7b5cf055eace92a48f2454e8479972570d3281023c23dba24ebf1",
+      "callHashes": [
+        "10a6ede8732a210901dd9647d4dbac20202a0c28695ecab3ec2525564b10d568",
+        "a7924217552f9c64ef0b03d25ce869adc974fe2cc38393ab49ded78143c3f1c9",
+        "7f8368a63068060e159620350678e9d36c01e56eec372d8cf6ffebd7852da476"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 9624,
+      "outputTokens": 4997,
+      "totalTokens": 14621,
+      "elapsedMs": 17821,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5751,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4527",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "26.047s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.0798084,
+            "completion_tokens": 1475,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1181
+            },
+            "prompt_time": 0.557653843,
+            "prompt_tokens": 3187,
+            "queue_time": 0.396868785,
+            "total_time": 3.637462243,
+            "total_tokens": 4662
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5190,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4089",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "29.332s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.762097357,
+            "completion_tokens": 1324,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1032
+            },
+            "prompt_time": 0.316167522,
+            "prompt_tokens": 3660,
+            "queue_time": 0.149725285,
+            "total_time": 3.078264879,
+            "total_tokens": 4984
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 6880,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4879",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "23.407s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.666941829,
+            "completion_tokens": 2198,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1854
+            },
+            "prompt_time": 0.199068189,
+            "prompt_tokens": 2777,
+            "queue_time": 0.227290688,
+            "total_time": 4.866010018,
+            "total_tokens": 4975
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_415ed0d8b7905ae5:ipow:10000579",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[5]/data/records[0]/state",
+        "docs/measurements/room-copy-20261027-ipow-evidence-order.json/records[0]/state"
+      ],
+      "traceHash": "891ccd24f76fdb724015ef450e22ac7e8e8ac9b38acd73814f8d9488c560910c",
+      "callHashes": [
+        "1b392313756c94e17b643f4f0b0747f6e123b6ae3ddb670fac4487e8744389b3"
+      ],
+      "status": "generate",
+      "calls": 1,
+      "usageKnown": true,
+      "inputTokens": 2706,
+      "outputTokens": 1771,
+      "totalTokens": 4477,
+      "elapsedMs": 6043,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 6043,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4908",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "23.19s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.702445964,
+            "completion_tokens": 1771,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1503
+            },
+            "prompt_time": 0.17993212,
+            "prompt_tokens": 2706,
+            "queue_time": 0.177860261,
+            "total_time": 3.882378084,
+            "total_tokens": 4477
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[6]/data/records[0]/state",
+        "docs/measurements/room-copy-20261027-ipow-compact.json/records[0]/state"
+      ],
+      "traceHash": "d39bab533931d7eb4bfbcb6e3e6dea6019d3654cb00d8168926a9222850982a4",
+      "callHashes": [
+        "eb5638a804cb0f5fd4ae451e114bd239f5daef05c7cfd3182e14361b5008799b",
+        "457f307366596069be8bb87bf2b5b2a844c6a9926006c7dd40b4bc2f144c9704"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 4832,
+      "outputTokens": 2818,
+      "totalTokens": 7650,
+      "elapsedMs": 10936,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5353,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "5520",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "18.6s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.7624845369999997,
+            "completion_tokens": 1320,
+            "completion_tokens_details": {
+              "reasoning_tokens": 981
+            },
+            "prompt_time": 0.103539105,
+            "prompt_tokens": 2155,
+            "queue_time": 0.42635372,
+            "total_time": 2.866023642,
+            "total_tokens": 3475
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5583,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4892",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "23.31s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.135552531,
+            "completion_tokens": 1498,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1086
+            },
+            "prompt_time": 0.127303668,
+            "prompt_tokens": 2677,
+            "queue_time": 0.173225806,
+            "total_time": 3.262856199,
+            "total_tokens": 4175
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_dc7629f4a4f41709:chatsuminosato:10000073",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[0]/raw_ai_json/state"
+      ],
+      "traceHash": "cc7df2e1f7a0bac59e75394b0ef27fdc6c8a360b40a28c21de90b57863beebb7",
+      "callHashes": [
+        "569c76095794064adc2908309e70b8a7067a40204e5027e1359f28800c5253ba",
+        "d2a78de45c27830d56b26ad7d912bf099e1e73d1fb0043f2292dd342b88b53cb"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 8715,
+      "outputTokens": 2583,
+      "totalTokens": 11298,
+      "elapsedMs": 10094,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4375,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "2156",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "43.83s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.458328877,
+            "completion_tokens": 920,
+            "completion_tokens_details": {
+              "reasoning_tokens": 748
+            },
+            "prompt_time": 0.178029434,
+            "prompt_tokens": 4544,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "queue_time": 0.14404304,
+            "total_time": 2.636358311,
+            "total_tokens": 5464
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 5719,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-remaining-tokens": "3084",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "36.87s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.501467028,
+            "completion_tokens": 1663,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1449
+            },
+            "prompt_time": 0.178182312,
+            "prompt_tokens": 4171,
+            "queue_time": 0.246229967,
+            "total_time": 3.67964934,
+            "total_tokens": 5834
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[1]/raw_ai_json/state"
+      ],
+      "traceHash": "a47c11810c5eca2b025634177e2ed80f95758a7a14c872ca43416a1345d77d6e",
+      "callHashes": [
+        "e39df7af2bd7963ee99da64f5b06c54f0fb773c94be5faca292c593c14c8f956",
+        "92886ec5b37ad0a994441d36f3ef7b6307f861acb1b95502918560f737c56fea",
+        "9b808f6de25f82e5f0756d741ad8e318dd67cd304b2601f24c7a60e19874ea5a",
+        "0259155e18072dd6864e108446c1baee35dbce10fe6f0ce0afb41b8ab2fcd10e"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": true,
+      "inputTokens": 18490,
+      "outputTokens": 4688,
+      "totalTokens": 23178,
+      "elapsedMs": 12058,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 2140,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "2877",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "38.422s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.621697786,
+            "completion_tokens": 785,
+            "completion_tokens_details": {
+              "reasoning_tokens": 606
+            },
+            "prompt_time": 0.209153544,
+            "prompt_tokens": 4714,
+            "queue_time": 0.144167715,
+            "total_time": 1.83085133,
+            "total_tokens": 5499
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4037,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3200",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "36s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.398158987,
+            "completion_tokens": 1647,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1453
+            },
+            "prompt_time": 0.228100211,
+            "prompt_tokens": 4420,
+            "queue_time": 0.246022697,
+            "total_time": 3.626259198,
+            "total_tokens": 6067
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2271,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "2741",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "39.442s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.706577446,
+            "completion_tokens": 823,
+            "completion_tokens_details": {
+              "reasoning_tokens": 595
+            },
+            "prompt_time": 0.254010094,
+            "prompt_tokens": 4925,
+            "queue_time": 0.234655932,
+            "total_time": 1.9605875400000001,
+            "total_tokens": 5748
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3610,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3211",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "35.917s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.981174132,
+            "completion_tokens": 1433,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1232
+            },
+            "prompt_time": 0.242818013,
+            "prompt_tokens": 4431,
+            "queue_time": 0.144837491,
+            "total_time": 3.223992145,
+            "total_tokens": 5864
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[2]/raw_ai_json/state"
+      ],
+      "traceHash": "1339bf3bdbb699bd61e20bd2a25110a17a57115e5f8173704fc83d09c0d75f64",
+      "callHashes": [
+        "992f7f0b75b14b9b2a098b5b1e964c4c0d420beeef46bd7107b77fded560b023",
+        "808836ea2c37b00439f5ab0c9cb26e2fe269b4a9b509d3ad4c59e73a90f65e7b",
+        "a092fb1bbd25baaeea5fd1c2b0e6542c9b1e64769c3be49aea9b61c84ba984b1"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 5398,
+      "outputTokens": 4675,
+      "totalTokens": 10073,
+      "elapsedMs": 6369,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 1964,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "984",
+            "x-ratelimit-remaining-tokens": "402",
+            "x-ratelimit-reset-requests": "23m2.4s",
+            "x-ratelimit-reset-tokens": "56.985s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.437605439,
+            "completion_tokens": 1380,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1260
+            },
+            "prompt_time": 0.085301062,
+            "prompt_tokens": 1696,
+            "queue_time": 0.405891282,
+            "total_time": 1.522906501,
+            "total_tokens": 3076
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 1779,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "983",
+            "x-ratelimit-remaining-tokens": "5678",
+            "x-ratelimit-reset-requests": "24m28.8s",
+            "x-ratelimit-reset-tokens": "17.415s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 1.304397222,
+            "completion_tokens": 1239,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1085
+            },
+            "prompt_time": 0.116501117,
+            "prompt_tokens": 1867,
+            "queue_time": 0.203101894,
+            "total_time": 1.420898339,
+            "total_tokens": 3106
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2626,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-remaining-tokens": "2090",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "44.325s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.313301951,
+            "completion_tokens": 2056,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1926
+            },
+            "prompt_time": 0.107749075,
+            "prompt_tokens": 1835,
+            "queue_time": 0.083401657,
+            "total_time": 2.4210510259999998,
+            "total_tokens": 3891
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[3]/raw_ai_json/state"
+      ],
+      "traceHash": "435167f4f3315a99077ff67354c01c73c21df9f1f451658b133e543f7478fcb7",
+      "callHashes": [
+        "1f6e3cb84880ced2b7d2d7585fd49a8dbe19ee218e39856b2dcaa82911f08a2e",
+        "da473120c2debd5c48eb1933af3af0dae696fed07b5d45811c04e0197c68dc20",
+        "30d0242ccae13eb5044f9593207b1c05583adab9032d43c70604b4499f47b10b",
+        "d7d41d6065e84387781b62a336dd5229ba281a867963aa9d346374b9003edc32"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": false,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "elapsedMs": 14953,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 2986,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "973",
+            "x-ratelimit-remaining-tokens": "582",
+            "x-ratelimit-reset-requests": "38m52.8s",
+            "x-ratelimit-reset-tokens": "55.635s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.6236104879999997,
+            "completion_tokens": 1252,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1032
+            },
+            "prompt_time": 0.141679423,
+            "prompt_tokens": 2749,
+            "queue_time": 0.116205275,
+            "total_time": 2.765289911,
+            "total_tokens": 4001
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 3762,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "972",
+            "x-ratelimit-remaining-tokens": "4830",
+            "x-ratelimit-reset-requests": "40m19.2s",
+            "x-ratelimit-reset-tokens": "23.775s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.3489698,
+            "completion_tokens": 1587,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1348
+            },
+            "prompt_time": 0.145817715,
+            "prompt_tokens": 2827,
+            "queue_time": 0.146929841,
+            "total_time": 3.494787515,
+            "total_tokens": 4414
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3571,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-remaining-tokens": "3082",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "36.885s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.347073082,
+            "completion_tokens": 1425,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1123
+            },
+            "prompt_time": 0.093405412,
+            "prompt_tokens": 2997,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.171387004,
+            "total_time": 3.440478494,
+            "total_tokens": 4422
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4634,
+          "error": "invalid_structured_output",
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "970",
+            "x-ratelimit-remaining-tokens": "3473",
+            "x-ratelimit-reset-requests": "43m12s",
+            "x-ratelimit-reset-tokens": "33.952s"
+          },
+          "stage": "verify",
+          "usage": null
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[4]/raw_ai_json/state"
+      ],
+      "traceHash": "1b514e38153dc0183d71b34785f4fa7f139fc989df8cff8b9c9b402a84bb85b0",
+      "callHashes": [
+        "79739c1d9b80c8bf7682a84277bb709e1c0feb2494171947e8e098185874d83a",
+        "3f92f0d2c42ec56f59d2566c1cb2efa8d7655797810d609f0e2bc92b40f75306",
+        "cfe978e73e648ee1f1e04b5c759778d423079d76bf095458fbd3d7b2655a6467"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 8457,
+      "outputTokens": 3929,
+      "totalTokens": 12386,
+      "elapsedMs": 9501,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3117,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "976",
+            "x-ratelimit-remaining-tokens": "5052",
+            "x-ratelimit-reset-requests": "34m33.6s",
+            "x-ratelimit-reset-tokens": "22.11s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.435576069,
+            "completion_tokens": 1150,
+            "completion_tokens_details": {
+              "reasoning_tokens": 977
+            },
+            "prompt_time": 0.134226247,
+            "prompt_tokens": 2755,
+            "queue_time": 0.490529419,
+            "total_time": 2.569802316,
+            "total_tokens": 3905
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3061,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "975",
+            "x-ratelimit-remaining-tokens": "4428",
+            "x-ratelimit-reset-requests": "36m0s",
+            "x-ratelimit-reset-tokens": "26.79s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.727140956,
+            "completion_tokens": 1304,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1130
+            },
+            "prompt_time": 0.155783942,
+            "prompt_tokens": 2938,
+            "queue_time": 0.115994011,
+            "total_time": 2.8829248979999997,
+            "total_tokens": 4242
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3323,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "974",
+            "x-ratelimit-remaining-tokens": "4640",
+            "x-ratelimit-reset-requests": "37m26.4s",
+            "x-ratelimit-reset-tokens": "25.2s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.096818023,
+            "completion_tokens": 1475,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1309
+            },
+            "prompt_time": 0.133767285,
+            "prompt_tokens": 2764,
+            "queue_time": 0.038117272,
+            "total_time": 3.230585308,
+            "total_tokens": 4239
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:moosoo:10000127",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[5]/raw_ai_json/state"
+      ],
+      "traceHash": "10742678734d308f7e2cc878b9dd1dfea79b459d617acbac860847ee6995091b",
+      "callHashes": [
+        "35b1eb4dfac7bc2da9aef7f72dd9dddc47574307dc9264fe195c0c9a062f1b68",
+        "d1864e004e575f916d020ab29303ea1ef5fa66ee1d8266e46f0f752d9df06ac6"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 6348,
+      "outputTokens": 2728,
+      "totalTokens": 9076,
+      "elapsedMs": 9680,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 5121,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4332",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "27.51s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.828356098,
+            "completion_tokens": 1345,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1135
+            },
+            "prompt_time": 0.219073375,
+            "prompt_tokens": 3424,
+            "queue_time": 0.014890383,
+            "total_time": 3.047429473,
+            "total_tokens": 4769
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4559,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "4689",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "24.832s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.891853782,
+            "completion_tokens": 1383,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1090
+            },
+            "prompt_time": 0.172140622,
+            "prompt_tokens": 2924,
+            "queue_time": 0.251541082,
+            "total_time": 3.063994404,
+            "total_tokens": 4307
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[6]/raw_ai_json/state"
+      ],
+      "traceHash": "eeb2bacf8eabba4ae284a96eba3bef05ef2a7d6733b61cad78fe8b8c225da8f3",
+      "callHashes": [
+        "f42b3f813350b74bbb5d4fe627d0f7ba1646f79a69a97a963c34fec0a22c34a1",
+        "989ef7d5975eb776ce3ae9893d99d631983206e822d91e5e422ee1039e37762d",
+        "2e8a933132e5882d89afe4810b4a77e37f55cc91787f192829cb79f767187f6c"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 10796,
+      "outputTokens": 3303,
+      "totalTokens": 14099,
+      "elapsedMs": 14093,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4331,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "3871",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "30.967s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.9949633119999999,
+            "completion_tokens": 948,
+            "completion_tokens_details": {
+              "reasoning_tokens": 727
+            },
+            "prompt_time": 0.171175342,
+            "prompt_tokens": 3718,
+            "queue_time": 0.098821151,
+            "total_time": 2.166138654,
+            "total_tokens": 4666
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4330,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3537",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "33.472s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.525747458,
+            "completion_tokens": 986,
+            "completion_tokens_details": {
+              "reasoning_tokens": 798
+            },
+            "prompt_time": 0.023186192,
+            "prompt_tokens": 4040,
+            "prompt_tokens_details": {
+              "cached_tokens": 3584
+            },
+            "queue_time": 0.088660371,
+            "total_time": 2.54893365,
+            "total_tokens": 5026
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5432,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3976",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "30.18s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.851580269,
+            "completion_tokens": 1369,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1124
+            },
+            "prompt_time": 0.604189081,
+            "prompt_tokens": 3038,
+            "queue_time": 0.095895775,
+            "total_time": 3.45576935,
+            "total_tokens": 4407
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[7]/raw_ai_json/state"
+      ],
+      "traceHash": "0aafa107d8f574e8ee99ed9ff2a78da32e4d1947dd9d974cf9bacff51c28085b",
+      "callHashes": [
+        "7db436c6f948b0f6524ec79e8192704c1f32bdc14547305931122ff2f0b966d1",
+        "20c970c429b93d85949e62440ab7a5cb443518ed941ffac1fd8e13d32687f4b2",
+        "f23df474493f8252122ab9808ae13e4db864862da13c62b6ff0f964bc4b9f31c"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 7392,
+      "outputTokens": 2971,
+      "totalTokens": 10363,
+      "elapsedMs": 8721,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3281,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "979",
+            "x-ratelimit-remaining-tokens": "2488",
+            "x-ratelimit-reset-requests": "30m14.4s",
+            "x-ratelimit-reset-tokens": "41.34s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 3.052374079,
+            "completion_tokens": 944,
+            "completion_tokens_details": {
+              "reasoning_tokens": 789
+            },
+            "prompt_time": 0.065994423,
+            "prompt_tokens": 2394,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.087579061,
+            "total_time": 3.118368502,
+            "total_tokens": 3338
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 1584,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "978",
+            "x-ratelimit-remaining-tokens": "5106",
+            "x-ratelimit-reset-requests": "31m40.8s",
+            "x-ratelimit-reset-tokens": "21.705s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.109791273,
+            "completion_tokens": 529,
+            "completion_tokens_details": {
+              "reasoning_tokens": 370
+            },
+            "prompt_time": 0.134815784,
+            "prompt_tokens": 2599,
+            "queue_time": 0.245758845,
+            "total_time": 1.244607057,
+            "total_tokens": 3128
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3856,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "977",
+            "x-ratelimit-remaining-tokens": "2440",
+            "x-ratelimit-reset-requests": "33m7.2s",
+            "x-ratelimit-reset-tokens": "41.699s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.15683361,
+            "completion_tokens": 1498,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1252
+            },
+            "prompt_time": 0.110674602,
+            "prompt_tokens": 2399,
+            "queue_time": 0.143565844,
+            "total_time": 3.267508212,
+            "total_tokens": 3897
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[8]/raw_ai_json/state"
+      ],
+      "traceHash": "45eb2faec22850d65a3afddf394baa71e957618387749df373ce5a09aeb03201",
+      "callHashes": [
+        "1082add75c2d24030be323bb848b1877b4a3b27963de65a7a9c7ace2c0a572c9",
+        "5bddcdee027d7985ac13517ce9568447bd9da9020b54eed5b350895edb121ab2",
+        "9301df9d4b9b71f3ca7f01712b0e309483f01d1b560b1dde70324aecaf4d0864"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 10936,
+      "outputTokens": 3199,
+      "totalTokens": 14135,
+      "elapsedMs": 11861,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4003,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "3849",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "31.132s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.069870944,
+            "completion_tokens": 994,
+            "completion_tokens_details": {
+              "reasoning_tokens": 788
+            },
+            "prompt_time": 0.14645853,
+            "prompt_tokens": 3719,
+            "queue_time": 0.164811922,
+            "total_time": 2.216329474,
+            "total_tokens": 4713
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3613,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "3528",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "33.54s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.114315972,
+            "completion_tokens": 992,
+            "completion_tokens_details": {
+              "reasoning_tokens": 779
+            },
+            "prompt_time": 0.083354496,
+            "prompt_tokens": 4048,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "queue_time": 0.228764644,
+            "total_time": 2.197670468,
+            "total_tokens": 5040
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4245,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "4408",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "26.94s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.5361299710000003,
+            "completion_tokens": 1213,
+            "completion_tokens_details": {
+              "reasoning_tokens": 991
+            },
+            "prompt_time": 0.158763847,
+            "prompt_tokens": 3169,
+            "queue_time": 0.091168971,
+            "total_time": 2.694893818,
+            "total_tokens": 4382
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[7]/data[9]/raw_ai_json/state"
+      ],
+      "traceHash": "959e4f247da2cd9409ffb9847eee783ebc17f05ab3dc3f0e9ef3158e5777e0b6",
+      "callHashes": [
+        "524170ab4ae59c86ce59d916e063eff0bfe8a37d7c8db7013d981ba6ebb0c577",
+        "9b21bd8b591a047772e52913325dc4b63a4bcc8e5f921fd067c6193385f4d407",
+        "ce65c78baf350104700bdd22dc2894fccbdef99a39bc150daed108930d02a73e",
+        "cdda99002c96af377a01fb16c2327343f796bcb71e422d5881268f14e8c25605"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": false,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "elapsedMs": 7425,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 1672,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "973",
+            "x-ratelimit-remaining-tokens": "2026",
+            "x-ratelimit-reset-requests": "38m52.8s",
+            "x-ratelimit-reset-tokens": "44.805s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.4576379959999999,
+            "completion_tokens": 1429,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1349
+            },
+            "prompt_time": 0.08483929,
+            "prompt_tokens": 1298,
+            "queue_time": 0.082166407,
+            "total_time": 1.542477286,
+            "total_tokens": 2727
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 2233,
+          "error": "invalid_structured_output",
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "972",
+            "x-ratelimit-remaining-tokens": "4515",
+            "x-ratelimit-reset-requests": "40m19.2s",
+            "x-ratelimit-reset-tokens": "26.137s"
+          },
+          "stage": "verify",
+          "usage": null
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 1476,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-remaining-tokens": "3261",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "35.542s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.262309093,
+            "completion_tokens": 1234,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1140
+            },
+            "prompt_time": 0.069836758,
+            "prompt_tokens": 1410,
+            "queue_time": 0.095166737,
+            "total_time": 1.332145851,
+            "total_tokens": 2644
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 2044,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "970",
+            "x-ratelimit-remaining-tokens": "4616",
+            "x-ratelimit-reset-requests": "43m12s",
+            "x-ratelimit-reset-tokens": "25.38s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 1.789112581,
+            "completion_tokens": 1751,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1608
+            },
+            "prompt_time": 0.08308249,
+            "prompt_tokens": 1443,
+            "queue_time": 0.094949756,
+            "total_time": 1.8721950710000002,
+            "total_tokens": 3194
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ipow:10000579",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[0]/state"
+      ],
+      "traceHash": "bb48c11494549f62bd030c6d2ce89774bf1d966fe0d16b6cbfcb4eada08128bf",
+      "callHashes": [
+        "0fb44dedca0f1d02cba506801d53c31c9722bbbeb9f5806bd2657a00cda5dcd4",
+        "6cbd472a14ea487e7c8e9d2779b66ab8872e0501880cabd7ef110e5df6b47ea6"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 5896,
+      "outputTokens": 2227,
+      "totalTokens": 8123,
+      "elapsedMs": 9051,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4573,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "999",
+            "x-ratelimit-remaining-tokens": "4315",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-reset-tokens": "27.637s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.416263038,
+            "completion_tokens": 1157,
+            "completion_tokens_details": {
+              "reasoning_tokens": 985
+            },
+            "prompt_time": 0.264157233,
+            "prompt_tokens": 3419,
+            "queue_time": 0.245708406,
+            "total_time": 2.680420271,
+            "total_tokens": 4576
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4478,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-remaining-tokens": "5244",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "20.67s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.237874961,
+            "completion_tokens": 1070,
+            "completion_tokens_details": {
+              "reasoning_tokens": 822
+            },
+            "prompt_time": 0.120444012,
+            "prompt_tokens": 2477,
+            "queue_time": 0.090037376,
+            "total_time": 2.358318973,
+            "total_tokens": 3547
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:linofle:10000458",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[1]/state"
+      ],
+      "traceHash": "fb14a9f46055e427de7f90f8d9f78d360b743539e8e5c84788f232387c6940ce",
+      "callHashes": [
+        "49f9a5034dd4ffb9e9ebd26ea4ea709382c9be24835ee1a35994b5ff4416d0a6",
+        "aff5fc8c718035a72d80809e7b7fdcd7e2654a38833de2714f2f32191acc433d"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 5723,
+      "outputTokens": 2091,
+      "totalTokens": 7814,
+      "elapsedMs": 8815,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4068,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "997",
+            "x-ratelimit-remaining-tokens": "4520",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-reset-tokens": "26.1s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.949468651,
+            "completion_tokens": 927,
+            "completion_tokens_details": {
+              "reasoning_tokens": 788
+            },
+            "prompt_time": 0.194306444,
+            "prompt_tokens": 3239,
+            "queue_time": 0.248310436,
+            "total_time": 2.143775095,
+            "total_tokens": 4166
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4747,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "996",
+            "x-ratelimit-remaining-tokens": "5290",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-reset-tokens": "20.325s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 3.088462428,
+            "completion_tokens": 1164,
+            "completion_tokens_details": {
+              "reasoning_tokens": 983
+            },
+            "prompt_time": 0.359548115,
+            "prompt_tokens": 2484,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.091155304,
+            "total_time": 3.448010543,
+            "total_tokens": 3648
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[2]/state"
+      ],
+      "traceHash": "b1ad86945712228bc9a7667702f062ec403eda14f6e2c9579f35d62757b88434",
+      "callHashes": [
+        "70e69dbf830544f147f8bcbe3d54d16283fea4780ac6784a14226756a18ea90a",
+        "e968cf6da4e1c8c909dd839ccb360f67ecf6f50b665def397aafa56bcb6a47f7",
+        "abbe46d36efc2a3080046dd750f682e38921f332bd9082b334a927df08f4e211"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 7955,
+      "outputTokens": 2688,
+      "totalTokens": 10643,
+      "elapsedMs": 12434,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3067,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-remaining-tokens": "4983",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "22.627s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.606092237,
+            "completion_tokens": 660,
+            "completion_tokens_details": {
+              "reasoning_tokens": 549
+            },
+            "prompt_time": 0.021185028,
+            "prompt_tokens": 2847,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "queue_time": 0.234831087,
+            "total_time": 1.627277265,
+            "total_tokens": 3507
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3826,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "994",
+            "x-ratelimit-remaining-tokens": "4726",
+            "x-ratelimit-reset-requests": "8m38.4s",
+            "x-ratelimit-reset-tokens": "24.555s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.734891636,
+            "completion_tokens": 835,
+            "completion_tokens_details": {
+              "reasoning_tokens": 719
+            },
+            "prompt_time": 0.15460032,
+            "prompt_tokens": 3024,
+            "queue_time": 0.246384717,
+            "total_time": 1.889491956,
+            "total_tokens": 3859
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5541,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "993",
+            "x-ratelimit-remaining-tokens": "5669",
+            "x-ratelimit-reset-requests": "10m4.8s",
+            "x-ratelimit-reset-tokens": "17.482s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.5076805110000002,
+            "completion_tokens": 1193,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1020
+            },
+            "prompt_time": 0.66571517,
+            "prompt_tokens": 2084,
+            "queue_time": 0.145467648,
+            "total_time": 3.173395681,
+            "total_tokens": 3277
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[3]/state"
+      ],
+      "traceHash": "aaaf4f24ab9920d160f631d7cb804537cd6515e42462b3ac0d903cf318187e03",
+      "callHashes": [
+        "dcf6b3f97dde5f11944166139307afd4dec71f19aae837998652d5cc07fc0aa6",
+        "4ee5ed6f28b7bad8cdd3856663598ae841e7dfd988c66a7b6bdf96c6c47d8a4b",
+        "30177b60e3be70b81e7c1dbcc5c2cb9a05b5f0d42d1fe98333d3715fa59bb790"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 12518,
+      "outputTokens": 3670,
+      "totalTokens": 16188,
+      "elapsedMs": 13960,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4168,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "992",
+            "x-ratelimit-remaining-tokens": "3005",
+            "x-ratelimit-reset-requests": "11m31.2s",
+            "x-ratelimit-reset-tokens": "37.462s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.292306174,
+            "completion_tokens": 1087,
+            "completion_tokens_details": {
+              "reasoning_tokens": 915
+            },
+            "prompt_time": 0.235818798,
+            "prompt_tokens": 4335,
+            "queue_time": 0.008465332,
+            "total_time": 2.528124972,
+            "total_tokens": 5422
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 4454,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "991",
+            "x-ratelimit-remaining-tokens": "4139",
+            "x-ratelimit-reset-requests": "12m57.599s",
+            "x-ratelimit-reset-tokens": "28.957s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.777974783,
+            "completion_tokens": 1333,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1058
+            },
+            "prompt_time": 0.209520949,
+            "prompt_tokens": 3655,
+            "queue_time": 0.235464791,
+            "total_time": 2.987495732,
+            "total_tokens": 4988
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 5338,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-remaining-tokens": "2385",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "42.112s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.615742789,
+            "completion_tokens": 1250,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1103
+            },
+            "prompt_time": 0.281949464,
+            "prompt_tokens": 4528,
+            "queue_time": 0.859703816,
+            "total_time": 2.8976922529999998,
+            "total_tokens": 5778
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[4]/state"
+      ],
+      "traceHash": "83bb6112274b1221fd5b50d8cf1afacf38a10c134644ccab82ae36793868328c",
+      "callHashes": [
+        "ae815d43b27f446abe76211f3439a9544118bf17cf1d58351b0f899166044516",
+        "5d83aba9c569cdb9ced82a79e0b80c867068ca28cd84abf8f09d5dd80e548ae9",
+        "c39662afbb8e5dc4567352b05f776a7c02aae25b196ac1e6299a089b96ad4e3d"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 9559,
+      "outputTokens": 3489,
+      "totalTokens": 13048,
+      "elapsedMs": 12831,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4517,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-remaining-tokens": "3428",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "34.29s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.36336345,
+            "completion_tokens": 1127,
+            "completion_tokens_details": {
+              "reasoning_tokens": 896
+            },
+            "prompt_time": 0.162781984,
+            "prompt_tokens": 3239,
+            "queue_time": 0.080694157,
+            "total_time": 2.526145434,
+            "total_tokens": 4366
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4128,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "989",
+            "x-ratelimit-remaining-tokens": "4071",
+            "x-ratelimit-reset-requests": "15m50.4s",
+            "x-ratelimit-reset-tokens": "29.467s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.686706658,
+            "completion_tokens": 1266,
+            "completion_tokens_details": {
+              "reasoning_tokens": 996
+            },
+            "prompt_time": 0.186515073,
+            "prompt_tokens": 3589,
+            "queue_time": 0.055328035,
+            "total_time": 2.873221731,
+            "total_tokens": 4855
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4186,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "988",
+            "x-ratelimit-remaining-tokens": "4003",
+            "x-ratelimit-reset-requests": "17m16.8s",
+            "x-ratelimit-reset-tokens": "29.977s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.327930095,
+            "completion_tokens": 1096,
+            "completion_tokens_details": {
+              "reasoning_tokens": 860
+            },
+            "prompt_time": 0.157822038,
+            "prompt_tokens": 2731,
+            "queue_time": 0.037313006,
+            "total_time": 2.485752133,
+            "total_tokens": 3827
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[5]/state"
+      ],
+      "traceHash": "3f9eddd55b067bdb4a1a5da2201b980c86eb9f0a1673857464668c85962d42f4",
+      "callHashes": [
+        "4320d4a677c01b07a8a8e63f265751fdbd3d7f99e3d0c93a3fb3735d924efb5f",
+        "2e94a18344e318872052f6fe082b57d1051a45015c87bf6a03cdaa5d669a1f6c"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 11350,
+      "outputTokens": 2110,
+      "totalTokens": 13460,
+      "elapsedMs": 7991,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 4072,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "987",
+            "x-ratelimit-remaining-tokens": "2157",
+            "x-ratelimit-reset-requests": "18m43.2s",
+            "x-ratelimit-reset-tokens": "43.822s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.08660386,
+            "completion_tokens": 987,
+            "completion_tokens_details": {
+              "reasoning_tokens": 834
+            },
+            "prompt_time": 0.243773195,
+            "prompt_tokens": 5506,
+            "queue_time": 0.088436351,
+            "total_time": 2.330377055,
+            "total_tokens": 6493
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3919,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "986",
+            "x-ratelimit-remaining-tokens": "1953",
+            "x-ratelimit-reset-requests": "20m9.6s",
+            "x-ratelimit-reset-tokens": "45.352s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.608641633,
+            "completion_tokens": 1123,
+            "completion_tokens_details": {
+              "reasoning_tokens": 928
+            },
+            "prompt_time": 0.047223982,
+            "prompt_tokens": 5844,
+            "prompt_tokens_details": {
+              "cached_tokens": 5376
+            },
+            "queue_time": 0.099052075,
+            "total_time": 2.6558656149999997,
+            "total_tokens": 6967
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[6]/state"
+      ],
+      "traceHash": "6aa0f985fdeec72492d0faf3bd703e8dd40ac5e6bef86e4a174cee4d45190e42",
+      "callHashes": [
+        "cd631292884d96df5393675c18698ccbac014649246c94bcd8f74192de263a10",
+        "debeeacd3d43546eed59033bff9e3e399635267836923e347c95615d65a1db99",
+        "cabdebd181a45490d07e85991681d2ee7fc418a1ec63d0dd80eab6befaea930c",
+        "4157cc47711debb9939dba8db17473a9bde595b846237a13bea2fe51d5865056"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": true,
+      "inputTokens": 11640,
+      "outputTokens": 4720,
+      "totalTokens": 16360,
+      "elapsedMs": 17047,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3524,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "985",
+            "x-ratelimit-remaining-tokens": "3503",
+            "x-ratelimit-reset-requests": "21m36s",
+            "x-ratelimit-reset-tokens": "33.727s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 1.922796182,
+            "completion_tokens": 910,
+            "completion_tokens_details": {
+              "reasoning_tokens": 762
+            },
+            "prompt_time": 0.166369703,
+            "prompt_tokens": 3231,
+            "queue_time": 0.092410442,
+            "total_time": 2.089165885,
+            "total_tokens": 4141
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 5573,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "984",
+            "x-ratelimit-remaining-tokens": "4227",
+            "x-ratelimit-reset-requests": "23m2.4s",
+            "x-ratelimit-reset-tokens": "28.297s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 4.071432816,
+            "completion_tokens": 1442,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1251
+            },
+            "prompt_time": 0.131113938,
+            "prompt_tokens": 2507,
+            "queue_time": 0.090237456,
+            "total_time": 4.202546754,
+            "total_tokens": 3949
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 3649,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "983",
+            "x-ratelimit-remaining-tokens": "3165",
+            "x-ratelimit-reset-requests": "24m28.8s",
+            "x-ratelimit-reset-tokens": "36.262s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.126692078,
+            "completion_tokens": 1021,
+            "completion_tokens_details": {
+              "reasoning_tokens": 872
+            },
+            "prompt_time": 0.292160634,
+            "prompt_tokens": 3393,
+            "queue_time": 0.285831998,
+            "total_time": 2.418852712,
+            "total_tokens": 4414
+          }
+        },
+        {
+          "attempt": 1,
+          "elapsedMs": 4301,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-remaining-tokens": "5260",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "20.55s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.844478208,
+            "completion_tokens": 1347,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1098
+            },
+            "prompt_time": 0.118273067,
+            "prompt_tokens": 2509,
+            "queue_time": 0.083595974,
+            "total_time": 2.962751275,
+            "total_tokens": 3856
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:lebenwood:10004953",
+      "origins": [
+        "docs/evaluations/20261027-fixed/inputs.json/entries[8]/data[7]/state"
+      ],
+      "traceHash": "e0d05f7f5e2da60fdd2167993e7a88c4a986c702d6746da113b6e0844101b1dc",
+      "callHashes": [
+        "8a79ea2fcc9cff5c240a9bff8e1f815c323bcc632f2a8a9d2a3f5cfd4c6934cf",
+        "d3730caa519092d86d633494341eda9ecc883f716820580173039f08cb6e9470"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 8593,
+      "outputTokens": 2353,
+      "totalTokens": 10946,
+      "elapsedMs": 13133,
+      "callDetails": [
+        {
+          "attempt": 0,
+          "elapsedMs": 3516,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "981",
+            "x-ratelimit-remaining-tokens": "1992",
+            "x-ratelimit-reset-requests": "27m21.6s",
+            "x-ratelimit-reset-tokens": "45.06s"
+          },
+          "stage": "generate",
+          "usage": {
+            "completion_time": 2.317628764,
+            "completion_tokens": 1108,
+            "completion_tokens_details": {
+              "reasoning_tokens": 915
+            },
+            "prompt_time": 0.253491612,
+            "prompt_tokens": 4661,
+            "queue_time": 0.134339566,
+            "total_time": 2.571120376,
+            "total_tokens": 5769
+          }
+        },
+        {
+          "attempt": 0,
+          "elapsedMs": 9617,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-requests": "980",
+            "x-ratelimit-remaining-tokens": "3764",
+            "x-ratelimit-reset-requests": "28m48s",
+            "x-ratelimit-reset-tokens": "31.77s"
+          },
+          "stage": "verify",
+          "usage": {
+            "completion_time": 2.85262892,
+            "completion_tokens": 1245,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1056
+            },
+            "prompt_time": 0.197014051,
+            "prompt_tokens": 3932,
+            "prompt_tokens_details": {
+              "cached_tokens": 1536
+            },
+            "queue_time": 0.141388113,
+            "total_time": 3.049642971,
+            "total_tokens": 5177
+          }
+        }
+      ]
+    },
+    {
+      "model": null,
+      "itemCode": "linofle:10000458",
+      "origins": [
+        "docs/measurements/purchase-reason-live-flow-20261027.json/state"
+      ],
+      "traceHash": "815c5520977f81e0f52ba03cce5f826ccb092939d30f0983365ef8bc1109202e",
+      "callHashes": [
+        "c39941d8284e90cd1049cf5f26ac9a70fd48f3cf6f69e9cb5a351ee906f678a1",
+        "33f08b826575f3596be433b07663d1a18d5b005e74f7529c670a6b335d8a965d",
+        "3affade7e6e9daab7d7fd34c784dfa118584771d66d619062326ed1b86f1195f"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 7307,
+      "outputTokens": 5230,
+      "totalTokens": 12537,
+      "elapsedMs": 17236,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.089810932,
+            "total_time": 3.456512466,
+            "prompt_time": 0.103355329,
+            "total_tokens": 3810,
+            "prompt_tokens": 2207,
+            "completion_time": 3.353157137,
+            "completion_tokens": 1603,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1353
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 4829,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "18.787s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-remaining-tokens": "5495",
+            "x-ratelimit-remaining-requests": "999"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.20840088,
+            "total_time": 2.974049099,
+            "prompt_time": 0.106407641,
+            "total_tokens": 4022,
+            "prompt_tokens": 2650,
+            "completion_time": 2.867641458,
+            "completion_tokens": 1372,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1128
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 5571,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "31.897s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-remaining-tokens": "3747",
+            "x-ratelimit-remaining-requests": "998"
+          }
+        },
+        {
+          "stage": "verify",
+          "usage": {
+            "queue_time": 0.090492443,
+            "total_time": 4.91009229,
+            "prompt_time": 0.169463966,
+            "total_tokens": 4705,
+            "prompt_tokens": 2450,
+            "completion_time": 4.740628324,
+            "completion_tokens": 2255,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1880
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 6836,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "30.397s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-remaining-tokens": "3947",
+            "x-ratelimit-remaining-requests": "997"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "itemCode": "fixed_1791062909788_01_1",
+      "origins": [
+        "docs/room-20b-comparison-20261004.json/records[0]/result/diagnostics"
+      ],
+      "traceHash": "ff52b35517c3ecc717240111610e9e417f89476f086ffb4edeed4677c205a451",
+      "callHashes": [
+        "5ce525da37f127abe5db760230c57295678433eb836568776feab316be3cdee8",
+        "a015761d12a48e4fb6ca2c66c94e66dbc43afd5b1956f7519de41baa0610c652"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": false,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "elapsedMs": 5761,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.099567894,
+            "total_time": 1.9183542409999998,
+            "prompt_time": 0.135404508,
+            "total_tokens": 3426,
+            "prompt_tokens": 1777,
+            "completion_time": 1.7829497330000001,
+            "completion_tokens": 1649,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1400
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2092,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "16.147s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-remaining-tokens": "5847",
+            "x-ratelimit-remaining-requests": "999"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 3669,
+          "usage": null,
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "998",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "2561",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-reset-tokens": "40.792s"
+          },
+          "error": "invalid_structured_output"
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "itemCode": "fixed_1791062920194_01_2",
+      "origins": [
+        "docs/room-20b-comparison-20261004.json/records[1]/result/diagnostics"
+      ],
+      "traceHash": "f8e0ec0f1765b539ca04666c98a0ec6059bfb56653f92bef9c46c67398812390",
+      "callHashes": [
+        "273cee2e2062a2f1a18046ed9039a099786d6b40c58b498a36d7e42627aee2cb",
+        "6fd3ab40ef281d5ab460ad2edcde4124463a59888bdd38772a7231d542445caa",
+        "49d0737a477c5f1b47dac71630bf04ac309efd3eea7f4c16747a953400d8b17d"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 5644,
+      "outputTokens": 3544,
+      "totalTokens": 9188,
+      "elapsedMs": 5161,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.241388937,
+            "total_time": 1.304560061,
+            "prompt_time": 0.088882356,
+            "total_tokens": 2910,
+            "prompt_tokens": 1777,
+            "completion_time": 1.215677705,
+            "completion_tokens": 1133,
+            "completion_tokens_details": {
+              "reasoning_tokens": 986
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 1594,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "51.982s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-remaining-tokens": "1069",
+            "x-ratelimit-remaining-requests": "997"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.140091255,
+            "total_time": 1.562779839,
+            "prompt_time": 0.114670579,
+            "total_tokens": 3286,
+            "prompt_tokens": 1974,
+            "completion_time": 1.44810926,
+            "completion_tokens": 1312,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1161
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2018,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "24.315s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "5m45.6s",
+            "x-ratelimit-remaining-tokens": "4758",
+            "x-ratelimit-remaining-requests": "996"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 1549,
+          "usage": {
+            "queue_time": 0.050530469,
+            "prompt_tokens": 1893,
+            "prompt_time": 0.131812546,
+            "completion_tokens": 1099,
+            "completion_time": 1.197526058,
+            "total_tokens": 2992,
+            "total_time": 1.329338604,
+            "completion_tokens_details": {
+              "reasoning_tokens": 911
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "995",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5869",
+            "x-ratelimit-reset-requests": "7m12s",
+            "x-ratelimit-reset-tokens": "15.982s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "itemCode": "fixed_1791063008908_01_3",
+      "origins": [
+        "docs/room-20b-comparison-20261004.json/records[2]/result/diagnostics"
+      ],
+      "traceHash": "e885e8e4e78dbbf29b6e37068b8d09547fa39eb9ec9c3bf9fad51fc6433d0e82",
+      "callHashes": [
+        "f2d0596949394c6386800896f34d1935fc6737bb6f5dd53979e1a287f248281c",
+        "c751e70089677795e3d3b3967083ee108ad0781e318a3e2f0e7773aef46914df",
+        "e91cfad8e64ad040bd3b358637ea620cd8fd29e32431882d2f13ed316229d4ec"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 5614,
+      "outputTokens": 3289,
+      "totalTokens": 8903,
+      "elapsedMs": 4812,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.063251703,
+            "total_time": 1.431738278,
+            "prompt_time": 0.106965562,
+            "total_tokens": 2948,
+            "prompt_tokens": 1777,
+            "completion_time": 1.324772716,
+            "completion_tokens": 1171,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1015
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 1538,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "33.644s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "8m38.4s",
+            "x-ratelimit-remaining-tokens": "3514",
+            "x-ratelimit-remaining-requests": "994"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.063301439,
+            "total_time": 1.418222254,
+            "prompt_time": 0.107235715,
+            "total_tokens": 3135,
+            "prompt_tokens": 1943,
+            "completion_time": 1.310986539,
+            "completion_tokens": 1192,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1048
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 1809,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.13s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "10m4.8s",
+            "x-ratelimit-remaining-tokens": "5316",
+            "x-ratelimit-remaining-requests": "993"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 1465,
+          "usage": {
+            "queue_time": 0.170114418,
+            "prompt_tokens": 1894,
+            "prompt_time": 0.121609233,
+            "completion_tokens": 926,
+            "completion_time": 1.016156862,
+            "total_tokens": 2820,
+            "total_time": 1.137766095,
+            "completion_tokens_details": {
+              "reasoning_tokens": 743
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "992",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "1790",
+            "x-ratelimit-reset-requests": "11m31.2s",
+            "x-ratelimit-reset-tokens": "46.575s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059400256_01_1",
+      "origins": [
+        "docs/room-c6-evaluation-20261004.json/runs[0]/result/diagnostics"
+      ],
+      "traceHash": "79bc265fa8cae9c21e37e64843c0df13fae03f6c4b79aec5014d04c8c8a27242",
+      "callHashes": [
+        "5cef3f64f16a5acaa811874ce2d3df5b5ebc8e6f75eb8e49e4a2452bbc234de8",
+        "70b5d457b263d5fd97b4ca5f79ce226c5562b50904cdb3105e6e723cd66404db",
+        "f193f8b2e08551fb4c53e4a325cf299a20f174a1da61571081227de8dc2c2529"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 5703,
+      "outputTokens": 4086,
+      "totalTokens": 9789,
+      "elapsedMs": 9656,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.101305946,
+            "total_time": 3.261769707,
+            "prompt_time": 0.090468307,
+            "total_tokens": 3111,
+            "prompt_tokens": 1624,
+            "completion_time": 3.1713014,
+            "completion_tokens": 1487,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1183
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 3439,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "28.837s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h1m55.2s",
+            "x-ratelimit-remaining-tokens": "4155",
+            "x-ratelimit-remaining-requests": "957"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.264400601,
+            "total_time": 1.8448831540000001,
+            "prompt_time": 0.106624004,
+            "total_tokens": 2866,
+            "prompt_tokens": 2040,
+            "completion_time": 1.73825915,
+            "completion_tokens": 826,
+            "completion_tokens_details": {
+              "reasoning_tokens": 480
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2198,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "18.045s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h3m21.6s",
+            "x-ratelimit-remaining-tokens": "5594",
+            "x-ratelimit-remaining-requests": "956"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 4019,
+          "usage": {
+            "queue_time": 0.101450594,
+            "prompt_tokens": 2039,
+            "prompt_time": 0.09467846,
+            "completion_tokens": 1773,
+            "completion_time": 3.741236531,
+            "total_tokens": 3812,
+            "total_time": 3.835914991,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1447
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "955",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3342",
+            "x-ratelimit-reset-requests": "1h4m48s",
+            "x-ratelimit-reset-tokens": "34.935s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059446499_01_2",
+      "origins": [
+        "docs/room-c6-evaluation-20261004.json/runs[1]/result/diagnostics"
+      ],
+      "traceHash": "686bd527ca11fac11c55f86d6f9d209a6b69d77baddb9cc42a09533b7316c8f9",
+      "callHashes": [
+        "cdc1c77ab9d77c7ec8255b098dae02b112194c6ebf56960a569e00b22879ad3f",
+        "e8d4379993484b501dfc3fa1017590eabf86da692c470f78a69d46a3cd93f623",
+        "86f057e0ffefd4843a3b56d1144a7138f84496f05e839231f568b8ad39626106"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": false,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "elapsedMs": 11214,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.143182376,
+            "total_time": 3.056417557,
+            "prompt_time": 0.073364864,
+            "total_tokens": 3059,
+            "prompt_tokens": 1624,
+            "completion_time": 2.983052693,
+            "completion_tokens": 1435,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1116
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 3261,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "15.284s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h6m14.4s",
+            "x-ratelimit-remaining-tokens": "5962",
+            "x-ratelimit-remaining-requests": "954"
+          }
+        },
+        {
+          "error": "invalid_structured_output",
+          "stage": "verify",
+          "usage": null,
+          "attempt": 0,
+          "elapsedMs": 5459,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "35.295s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h7m40.8s",
+            "x-ratelimit-remaining-tokens": "3294",
+            "x-ratelimit-remaining-requests": "953"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2494,
+          "usage": {
+            "queue_time": 0.245868325,
+            "prompt_tokens": 1928,
+            "prompt_time": 0.228264376,
+            "completion_tokens": 890,
+            "completion_time": 1.9653891030000001,
+            "total_tokens": 2818,
+            "total_time": 2.193653479,
+            "prompt_tokens_details": {
+              "cached_tokens": 512
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 627
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "952",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4299",
+            "x-ratelimit-reset-requests": "1h9m7.2s",
+            "x-ratelimit-reset-tokens": "27.757s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059540794_01_3",
+      "origins": [
+        "docs/room-c6-evaluation-20261004.json/runs[2]/result/diagnostics"
+      ],
+      "traceHash": "61f5f0166716e47770a6dd6a70321bf3914375b44158664a838c8ea8879e50ba",
+      "callHashes": [
+        "016bca84210aaedcceaff0d00b1ef54db5dbdb3249467bd5740b3fba7e730810",
+        "f3569af9eb450eaad6f22c7485e7922bb7a5b76769ceec901a673bd6d73e2018"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3680,
+      "outputTokens": 2405,
+      "totalTokens": 6085,
+      "elapsedMs": 5725,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.100681785,
+            "total_time": 2.727783352,
+            "prompt_time": 0.160122987,
+            "total_tokens": 2851,
+            "prompt_tokens": 1624,
+            "completion_time": 2.567660365,
+            "completion_tokens": 1227,
+            "completion_tokens_details": {
+              "reasoning_tokens": 969
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2913,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "36.135s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h10m33.6s",
+            "x-ratelimit-remaining-tokens": "3182",
+            "x-ratelimit-remaining-requests": "951"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2812,
+          "usage": {
+            "queue_time": 0.135089992,
+            "prompt_tokens": 2056,
+            "prompt_time": 0.121716893,
+            "completion_tokens": 1178,
+            "completion_time": 2.478205712,
+            "total_tokens": 3234,
+            "total_time": 2.599922605,
+            "completion_tokens_details": {
+              "reasoning_tokens": 919
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "950",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5519",
+            "x-ratelimit-reset-requests": "1h12m0s",
+            "x-ratelimit-reset-tokens": "18.607s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059585554_02_1",
+      "origins": [
+        "docs/room-c6-evaluation-20261004.json/runs[3]/result/diagnostics"
+      ],
+      "traceHash": "e0c58cb9fe248b7e322de7a649726813eefaad54c821139c9bbafece153069bf",
+      "callHashes": [
+        "d6afafb79b0ab8713102b0d0bb21e3d9d7d3809ae266f2c270a5b8ffdd95b25e",
+        "245826c2ee53cac4323b8a574253908ee53548b342a45c8da826e610543399a5"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3421,
+      "outputTokens": 2625,
+      "totalTokens": 6046,
+      "elapsedMs": 10221,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.144006834,
+            "total_time": 6.750639487,
+            "prompt_time": 0.575392097,
+            "total_tokens": 2689,
+            "prompt_tokens": 1543,
+            "completion_time": 6.17524739,
+            "completion_tokens": 1146,
+            "prompt_tokens_details": {
+              "cached_tokens": 512
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 937
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 6937,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "48.51s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h13m26.4s",
+            "x-ratelimit-remaining-tokens": "1532",
+            "x-ratelimit-remaining-requests": "949"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 0,
+          "elapsedMs": 3284,
+          "usage": {
+            "queue_time": 0.007475433,
+            "prompt_tokens": 1878,
+            "prompt_time": 0.086628174,
+            "completion_tokens": 1479,
+            "completion_time": 3.113458857,
+            "total_tokens": 3357,
+            "total_time": 3.200087031,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1116
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "948",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4687",
+            "x-ratelimit-reset-requests": "1h14m52.8s",
+            "x-ratelimit-reset-tokens": "24.847s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059648081_02_2",
+      "origins": [
+        "docs/room-c6-evaluation-20261004.json/runs[4]/result/diagnostics"
+      ],
+      "traceHash": "c29f3ef632b46a74686cf3996a35803ab54603c319b1adb0447ab42313f976a1",
+      "callHashes": [
+        "3145a0230958a8d8d4e7e606c51b2cf996ec348593f0c82378f136251aac8cf2",
+        "9a7f9d890047f8dbbe006f0aba9d5d2ce949d4e0a13af65fbd59072b265e47f4",
+        "44ed5b9cbb3ac1e5dce61a3a3b5b56317f724b78cea303cfdbbde90f448bdc25",
+        "049cb92e1d7a7e98befbe2756b4e7dd1e79c222782330fc0620736ad6d74a20f"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": true,
+      "inputTokens": 7082,
+      "outputTokens": 5857,
+      "totalTokens": 12939,
+      "elapsedMs": 15014,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.088701254,
+            "total_time": 2.777075151,
+            "prompt_time": 0.087533556,
+            "total_tokens": 2830,
+            "prompt_tokens": 1543,
+            "completion_time": 2.689541595,
+            "completion_tokens": 1287,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1016
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2913,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "42.525s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h16m19.2s",
+            "x-ratelimit-remaining-tokens": "2330",
+            "x-ratelimit-remaining-requests": "947"
+          }
+        },
+        {
+          "stage": "verify",
+          "usage": {
+            "queue_time": 0.069978807,
+            "total_time": 4.336975956,
+            "prompt_time": 0.092061114,
+            "total_tokens": 3912,
+            "prompt_tokens": 1881,
+            "completion_time": 4.244914842,
+            "completion_tokens": 2031,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1736
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 4495,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "22.942s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h17m45.6s",
+            "x-ratelimit-remaining-tokens": "4941",
+            "x-ratelimit-remaining-requests": "946"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.247703374,
+            "total_time": 2.002343604,
+            "prompt_time": 0.163562515,
+            "total_tokens": 2568,
+            "prompt_tokens": 1769,
+            "completion_time": 1.838781089,
+            "completion_tokens": 799,
+            "prompt_tokens_details": {
+              "cached_tokens": 512
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 571
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2309,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "47.032s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h19m12s",
+            "x-ratelimit-remaining-tokens": "1729",
+            "x-ratelimit-remaining-requests": "945"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 5297,
+          "usage": {
+            "queue_time": 0.210489255,
+            "prompt_tokens": 1889,
+            "prompt_time": 0.103283675,
+            "completion_tokens": 1740,
+            "completion_time": 4.605989873,
+            "total_tokens": 3629,
+            "total_time": 4.709273548,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1452
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "944",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4080",
+            "x-ratelimit-reset-requests": "1h20m38.4s",
+            "x-ratelimit-reset-tokens": "29.4s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791057974368_01_1",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[0]/result/diagnostics"
+      ],
+      "traceHash": "b290ac36bff27e2835c44e85e1e5254847da8368473a5ae07c7ade17d0ff55b7",
+      "callHashes": [
+        "c2789fe1eb4af710dc4f82f658f38b7038b773b5a15f42e7ea16fae36c477f45",
+        "0b11f48b9d2b67a924e17ecb59a78c0575b739bdd9b7140d4e37a243b1feeec0",
+        "05f2deb1c548f4465b369e91847a6f39b409b6e2336a1ac57e9cc05e29e7c8a4"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 5254,
+      "outputTokens": 3764,
+      "totalTokens": 9018,
+      "elapsedMs": 8845,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.038790773,
+            "total_time": 2.695553856,
+            "prompt_time": 0.073467725,
+            "total_tokens": 2779,
+            "prompt_tokens": 1541,
+            "completion_time": 2.622086131,
+            "completion_tokens": 1238,
+            "completion_tokens_details": {
+              "reasoning_tokens": 970
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2799,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "14.827s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "11m31.2s",
+            "x-ratelimit-remaining-tokens": "6023",
+            "x-ratelimit-remaining-requests": "992"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.177513238,
+            "total_time": 2.190276011,
+            "prompt_time": 0.08965619,
+            "total_tokens": 2813,
+            "prompt_tokens": 1819,
+            "completion_time": 2.100619821,
+            "completion_tokens": 994,
+            "completion_tokens_details": {
+              "reasoning_tokens": 766
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2509,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "38.505s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "12m57.599s",
+            "x-ratelimit-remaining-tokens": "2866",
+            "x-ratelimit-remaining-requests": "991"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 3537,
+          "usage": {
+            "queue_time": 0.299941598,
+            "prompt_tokens": 1894,
+            "prompt_time": 0.105221622,
+            "completion_tokens": 1532,
+            "completion_time": 3.205641625,
+            "total_tokens": 3426,
+            "total_time": 3.310863247,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1138
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "990",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5626",
+            "x-ratelimit-reset-requests": "14m24s",
+            "x-ratelimit-reset-tokens": "17.805s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058027690_01_2",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[1]/result/diagnostics"
+      ],
+      "traceHash": "e199517c8c5ec439eb782c7cdba24ebdbeba05ae55dec04291b8a253e6ea4cea",
+      "callHashes": [
+        "f92f56963871b6b175ca0a17705aaf4b9f72e7d51e28ef7f5774a988217e8889",
+        "fef0e68e641e1f7d1f5051ba8064250f7c3eb3a45986a38edb748d74afbc78c1"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3459,
+      "outputTokens": 3359,
+      "totalTokens": 6818,
+      "elapsedMs": 8095,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.285575897,
+            "total_time": 3.586682555,
+            "prompt_time": 0.11327668,
+            "total_tokens": 3197,
+            "prompt_tokens": 1541,
+            "completion_time": 3.473405875,
+            "completion_tokens": 1656,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1404
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 4150,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "35.377s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "15m50.4s",
+            "x-ratelimit-remaining-tokens": "3283",
+            "x-ratelimit-remaining-requests": "989"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 0,
+          "elapsedMs": 3945,
+          "usage": {
+            "queue_time": 0.206635581,
+            "prompt_tokens": 1918,
+            "prompt_time": 0.077529369,
+            "completion_tokens": 1703,
+            "completion_time": 3.566546165,
+            "total_tokens": 3621,
+            "total_time": 3.6440755339999997,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1311
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "988",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5175",
+            "x-ratelimit-reset-requests": "17m16.8s",
+            "x-ratelimit-reset-tokens": "21.187s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058075041_01_3",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[2]/result/diagnostics"
+      ],
+      "traceHash": "dd9b09594a493641bf9a7d7b5d134720871591fc901d8b5bba675d0ab308e5bb",
+      "callHashes": [
+        "e6306bde72b65fdfd6cb54ef6797b2e44ddd8e632087e10d21a20d1714e7ad10",
+        "75b74829a72b731c7f83f779cd401056e77bda53f527e7020bc92acef47efb4d"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3456,
+      "outputTokens": 2891,
+      "totalTokens": 6347,
+      "elapsedMs": 7288,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.207382634,
+            "total_time": 2.602474507,
+            "prompt_time": 0.066019626,
+            "total_tokens": 2740,
+            "prompt_tokens": 1541,
+            "completion_time": 2.536454881,
+            "completion_tokens": 1199,
+            "completion_tokens_details": {
+              "reasoning_tokens": 950
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2855,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "48.81s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "18m43.2s",
+            "x-ratelimit-remaining-tokens": "1492",
+            "x-ratelimit-remaining-requests": "987"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 0,
+          "elapsedMs": 4433,
+          "usage": {
+            "queue_time": 0.215890772,
+            "prompt_tokens": 1915,
+            "prompt_time": 0.199759502,
+            "completion_tokens": 1692,
+            "completion_time": 3.519500695,
+            "total_tokens": 3607,
+            "total_time": 3.719260197,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1295
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "986",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4429",
+            "x-ratelimit-reset-requests": "20m9.6s",
+            "x-ratelimit-reset-tokens": "26.782s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058454536_02_1",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[3]/result/diagnostics"
+      ],
+      "traceHash": "5861b0e9f6e0482b6d833fd4af75d8e4ad2983228e030bca88ae090faf8930a8",
+      "callHashes": [
+        "f65e7f7d946f811aa03541f12b87c225989370e562d0d590f83bdf6017f5065b",
+        "2db8541f3ab2afca1bd5584dff6e1e96b3b96f3523ac562f7d8e7d829d6e3241"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3123,
+      "outputTokens": 1652,
+      "totalTokens": 4775,
+      "elapsedMs": 4363,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.085534387,
+            "total_time": 1.619587946,
+            "prompt_time": 0.072011385,
+            "total_tokens": 2205,
+            "prompt_tokens": 1460,
+            "completion_time": 1.547576561,
+            "completion_tokens": 745,
+            "completion_tokens_details": {
+              "reasoning_tokens": 551
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 1781,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "14.069s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "17m16.8s",
+            "x-ratelimit-remaining-tokens": "6124",
+            "x-ratelimit-remaining-requests": "988"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2582,
+          "usage": {
+            "queue_time": 0.398043404,
+            "prompt_tokens": 1663,
+            "prompt_time": 0.222525301,
+            "completion_tokens": 907,
+            "completion_time": 1.9050332779999999,
+            "total_tokens": 2570,
+            "total_time": 2.127558579,
+            "completion_tokens_details": {
+              "reasoning_tokens": 713
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "987",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4141",
+            "x-ratelimit-reset-requests": "18m43.2s",
+            "x-ratelimit-reset-tokens": "28.942s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058462162_02_2",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[4]/result/diagnostics"
+      ],
+      "traceHash": "03dc30ae927eeecb9f25277dd0863ea542a168b88479e217f67b52b83b44d1be",
+      "callHashes": [
+        "0d6ad0b391445d208245848e2e9a69f34eace0bde1c12ae5a8cddf79aa5bec58",
+        "86dd5362027a968d0b3cd38a772817a82d8145aa17e257d27351a356ea7c2c00"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3144,
+      "outputTokens": 2088,
+      "totalTokens": 5232,
+      "elapsedMs": 5178,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.31020575,
+            "total_time": 2.209163845,
+            "prompt_time": 0.086359902,
+            "total_tokens": 2469,
+            "prompt_tokens": 1460,
+            "completion_time": 2.122803943,
+            "completion_tokens": 1009,
+            "completion_tokens_details": {
+              "reasoning_tokens": 794
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2578,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "42.33s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "20m9.6s",
+            "x-ratelimit-remaining-tokens": "2356",
+            "x-ratelimit-remaining-requests": "986"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2600,
+          "usage": {
+            "queue_time": 0.204782771,
+            "prompt_tokens": 1684,
+            "prompt_time": 0.086006505,
+            "completion_tokens": 1079,
+            "completion_time": 2.246923492,
+            "total_tokens": 2763,
+            "total_time": 2.332929997,
+            "completion_tokens_details": {
+              "reasoning_tokens": 812
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "985",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5486",
+            "x-ratelimit-reset-requests": "21m36s",
+            "x-ratelimit-reset-tokens": "18.854s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058512984_02_3",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[5]/result/diagnostics"
+      ],
+      "traceHash": "25e80352ccf1bb5b2e21346b75964a7f60635df4259c2c76ae9c9cc65cc0f426",
+      "callHashes": [
+        "b9370745b40747595f8bfc6d9df72656ceab6bd85870a3bf198d4ba3f630093a",
+        "e77edfc50b04ff7211a00672f9285a7b07f04229491b94bcbd642006e368ba15",
+        "ff89f5ab6ca105480ef06d6ee54c8e84420ac3e2c8f01ce3294823925b08adaa"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 4894,
+      "outputTokens": 2953,
+      "totalTokens": 7847,
+      "elapsedMs": 7710,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.087131918,
+            "total_time": 2.249254986,
+            "prompt_time": 0.081481846,
+            "total_tokens": 2488,
+            "prompt_tokens": 1460,
+            "completion_time": 2.16777314,
+            "completion_tokens": 1028,
+            "completion_tokens_details": {
+              "reasoning_tokens": 847
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2422,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "31.417s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "23m2.4s",
+            "x-ratelimit-remaining-tokens": "3811",
+            "x-ratelimit-remaining-requests": "984"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.191934032,
+            "total_time": 1.986906721,
+            "prompt_time": 0.388151236,
+            "total_tokens": 2413,
+            "prompt_tokens": 1650,
+            "completion_time": 1.5987554849999999,
+            "completion_tokens": 763,
+            "completion_tokens_details": {
+              "reasoning_tokens": 523
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2322,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "15.562s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "24m28.8s",
+            "x-ratelimit-remaining-tokens": "5925",
+            "x-ratelimit-remaining-requests": "983"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 2966,
+          "usage": {
+            "queue_time": 0.293274298,
+            "prompt_tokens": 1784,
+            "prompt_time": 0.147333642,
+            "completion_tokens": 1162,
+            "completion_time": 2.454447885,
+            "total_tokens": 2946,
+            "total_time": 2.601781527,
+            "completion_tokens_details": {
+              "reasoning_tokens": 801
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "982",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3340",
+            "x-ratelimit-reset-requests": "25m55.199s",
+            "x-ratelimit-reset-tokens": "34.95s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058558554_03_1",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[6]/result/diagnostics"
+      ],
+      "traceHash": "6a469cb29a9818cde80f5f1260c57ff31366f80f608fb2f81959343c50ece437",
+      "callHashes": [
+        "3e65c7c487c335f02ddd2257fdf866c503dfa30a76d30faebf205fc1db02302c",
+        "169e341975f32f92c108edd66fa91012af2a5fe844f3fc524c1c469a10984a95"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 2309,
+      "outputTokens": 1955,
+      "totalTokens": 4264,
+      "elapsedMs": 5041,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.247695971,
+            "total_time": 2.117562092,
+            "prompt_time": 0.048276748,
+            "total_tokens": 2049,
+            "prompt_tokens": 1062,
+            "completion_time": 2.069285344,
+            "completion_tokens": 987,
+            "completion_tokens_details": {
+              "reasoning_tokens": 811
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2699,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "41.737s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "27m21.6s",
+            "x-ratelimit-remaining-tokens": "2435",
+            "x-ratelimit-remaining-requests": "981"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2342,
+          "usage": {
+            "queue_time": 0.178094553,
+            "prompt_tokens": 1247,
+            "prompt_time": 0.051608209,
+            "completion_tokens": 968,
+            "completion_time": 2.009243569,
+            "total_tokens": 2215,
+            "total_time": 2.060851778,
+            "completion_tokens_details": {
+              "reasoning_tokens": 749
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "980",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5725",
+            "x-ratelimit-reset-requests": "28m48s",
+            "x-ratelimit-reset-tokens": "17.062s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058608591_03_2",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[7]/result/diagnostics"
+      ],
+      "traceHash": "206cf6e1124cf008443aab12d066d04ce93a611225a260589131ee2c1791ee20",
+      "callHashes": [
+        "fe50c55762eabd4388eb8f49e4e44158a6374ec10e3e0cc0379f2889c7702b37",
+        "0fe1d34fb824ba17369c198308e63fd9122e2c12b4e69fde7d8be0d1450d5745"
+      ],
+      "status": "blocked",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 2289,
+      "outputTokens": 1589,
+      "totalTokens": 3878,
+      "elapsedMs": 4268,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.145548942,
+            "total_time": 1.443114171,
+            "prompt_time": 0.049567285,
+            "total_tokens": 1727,
+            "prompt_tokens": 1062,
+            "completion_time": 1.393546886,
+            "completion_tokens": 665,
+            "completion_tokens_details": {
+              "reasoning_tokens": 509
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 1627,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "28.027s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "30m14.4s",
+            "x-ratelimit-remaining-tokens": "4263",
+            "x-ratelimit-remaining-requests": "979"
+          }
+        },
+        {
+          "stage": "generate",
+          "attempt": 1,
+          "elapsedMs": 2641,
+          "usage": {
+            "queue_time": 0.49413705,
+            "prompt_tokens": 1227,
+            "prompt_time": 0.185411754,
+            "completion_tokens": 924,
+            "completion_time": 1.9192731840000001,
+            "total_tokens": 2151,
+            "total_time": 2.104684938,
+            "completion_tokens_details": {
+              "reasoning_tokens": 750
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "978",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "2683",
+            "x-ratelimit-reset-requests": "31m40.8s",
+            "x-ratelimit-reset-tokens": "39.877s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058616606_03_3",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[8]/result/diagnostics"
+      ],
+      "traceHash": "e2ced50673e0978a955e49c305b3beb8d063c7700ebff6e1ad0a4ea786681505",
+      "callHashes": [
+        "0f00f05f23d96bacee2ae219e1223ba776e72e09d03f4dd98298f2f24f12a582",
+        "4daed2c5a86adf30db4c808b07d1c592c9a76d5c487816c4f4e9b203f830f694",
+        "960a516499058d066167f67d8f784bf904666f6297849695289cd309ea5998df"
+      ],
+      "status": "blocked",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 3636,
+      "outputTokens": 2938,
+      "totalTokens": 6574,
+      "elapsedMs": 6858,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.087514404,
+            "total_time": 1.534440353,
+            "prompt_time": 0.071880331,
+            "total_tokens": 1757,
+            "prompt_tokens": 1062,
+            "completion_time": 1.462560022,
+            "completion_tokens": 695,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 540
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 1717,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "47.497s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "33m7.2s",
+            "x-ratelimit-remaining-tokens": "1667",
+            "x-ratelimit-remaining-requests": "977"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.087889559,
+            "total_time": 1.398750731,
+            "prompt_time": 0.056792017,
+            "total_tokens": 1871,
+            "prompt_tokens": 1226,
+            "completion_time": 1.341958714,
+            "completion_tokens": 645,
+            "completion_tokens_details": {
+              "reasoning_tokens": 484
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 1573,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "15.997s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "34m33.6s",
+            "x-ratelimit-remaining-tokens": "5867",
+            "x-ratelimit-remaining-requests": "976"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 3568,
+          "usage": {
+            "queue_time": 0.173911975,
+            "prompt_tokens": 1348,
+            "prompt_time": 0.0556328,
+            "completion_tokens": 1598,
+            "completion_time": 3.31077885,
+            "total_tokens": 2946,
+            "total_time": 3.36641165,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1279
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "975",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4039",
+            "x-ratelimit-reset-requests": "36m0s",
+            "x-ratelimit-reset-tokens": "29.707s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058675359_04_1",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[9]/result/diagnostics"
+      ],
+      "traceHash": "f995a3aab7e32e77a6000438bab8d81714acbc626d4a03e0598e39ff08f3382c",
+      "callHashes": [
+        "5cd77b17b8c2e28a70df566a363cce52052bbb2dcc9ecc50ed7eee0cf119d1b1",
+        "19d6fa339551c28d7b22ffa02bbebe13534412c4f343a8a60a74e770b12cfe1c",
+        "2af6ed0796450f3274f1d0d8d6fc93f76e9930c4c1292b4e2208dfe4da59a047",
+        "4a640a64e447b13688aa443c5b9d45b013aca501192b937b060cbda842a70df2"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": false,
+      "inputTokens": null,
+      "outputTokens": null,
+      "totalTokens": null,
+      "elapsedMs": 11991,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.210170349,
+            "total_time": 2.173306766,
+            "prompt_time": 0.221777723,
+            "total_tokens": 2429,
+            "prompt_tokens": 1497,
+            "completion_time": 1.9515290429999999,
+            "completion_tokens": 932,
+            "completion_tokens_details": {
+              "reasoning_tokens": 715
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2565,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "44.707s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "37m26.4s",
+            "x-ratelimit-remaining-tokens": "2039",
+            "x-ratelimit-remaining-requests": "974"
+          }
+        },
+        {
+          "error": "invalid_structured_output",
+          "stage": "verify",
+          "usage": null,
+          "attempt": 0,
+          "elapsedMs": 3122,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.782s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "38m52.8s",
+            "x-ratelimit-remaining-tokens": "5229",
+            "x-ratelimit-remaining-requests": "973"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.145138804,
+            "total_time": 1.888704058,
+            "prompt_time": 0.07148937,
+            "total_tokens": 2622,
+            "prompt_tokens": 1746,
+            "completion_time": 1.817214688,
+            "completion_tokens": 876,
+            "completion_tokens_details": {
+              "reasoning_tokens": 663
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2134,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "36.765s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "40m19.2s",
+            "x-ratelimit-remaining-tokens": "3098",
+            "x-ratelimit-remaining-requests": "972"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 4170,
+          "usage": {
+            "queue_time": 0.180663447,
+            "prompt_tokens": 1835,
+            "prompt_time": 0.077765317,
+            "completion_tokens": 1807,
+            "completion_time": 3.781936299,
+            "total_tokens": 3642,
+            "total_time": 3.8597016159999997,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1550
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "971",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5258",
+            "x-ratelimit-reset-requests": "41m45.6s",
+            "x-ratelimit-reset-tokens": "20.565s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058776792_04_2",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[10]/result/diagnostics"
+      ],
+      "traceHash": "0bf070bea2ddc496ce654ac5df942d0d2d6eca27bbe9c8195adbc9e9258232bd",
+      "callHashes": [
+        "79920cb3d1b16ca612c5e9643495b04b9fc8d4aa40876141fa53e71e67f3cb9e",
+        "1fef03d96a98a7c4b4a8e46855ddc878478196395aaede97d07d0cbd7a0f4890",
+        "f763590822659233021e94f927dc31dba4736c5cf15a45a8170c32837a325aa5",
+        "34fb66da52920b8dbb9ea255cc3ac06d0b7067c2cb56be212015284f09baec83"
+      ],
+      "status": "ready",
+      "calls": 4,
+      "usageKnown": true,
+      "inputTokens": 6898,
+      "outputTokens": 5074,
+      "totalTokens": 11972,
+      "elapsedMs": 12542,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.085503511,
+            "total_time": 2.8038386969999998,
+            "prompt_time": 0.265015956,
+            "total_tokens": 2718,
+            "prompt_tokens": 1497,
+            "completion_time": 2.538822741,
+            "completion_tokens": 1221,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1010
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 2958,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "40.05s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "43m12s",
+            "x-ratelimit-remaining-tokens": "2660",
+            "x-ratelimit-remaining-requests": "970"
+          }
+        },
+        {
+          "stage": "verify",
+          "usage": {
+            "queue_time": 0.144840919,
+            "total_time": 3.241806623,
+            "prompt_time": 0.086572328,
+            "total_tokens": 3349,
+            "prompt_tokens": 1833,
+            "completion_time": 3.155234295,
+            "completion_tokens": 1516,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1241
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 4050,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.737s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "44m38.4s",
+            "x-ratelimit-remaining-tokens": "5235",
+            "x-ratelimit-remaining-requests": "969"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.088046788,
+            "total_time": 1.926442878,
+            "prompt_time": 0.152551421,
+            "total_tokens": 2530,
+            "prompt_tokens": 1728,
+            "completion_time": 1.773891457,
+            "completion_tokens": 802,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 584
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 2111,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "42.255s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "46m4.8s",
+            "x-ratelimit-remaining-tokens": "2366",
+            "x-ratelimit-remaining-requests": "968"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 3423,
+          "usage": {
+            "queue_time": 0.088147694,
+            "prompt_tokens": 1840,
+            "prompt_time": 0.085761998,
+            "completion_tokens": 1535,
+            "completion_time": 3.187427044,
+            "total_tokens": 3375,
+            "total_time": 3.273189042,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1254
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "967",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5808",
+            "x-ratelimit-reset-requests": "47m31.2s",
+            "x-ratelimit-reset-tokens": "16.44s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058878885_04_3",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[11]/result/diagnostics"
+      ],
+      "traceHash": "272906928118826e6eb6575de1c3aad6a301c09f01623a4366b15d5910290b76",
+      "callHashes": [
+        "c5e8fffda539589fe5345fdc4837ddd589df97ccc06fb1664c7d79f67decc313",
+        "07fcd305c4144c5e26e755f777805108ee510392c9661f244f31ac074d2f968b",
+        "5e7e1da0a1378ceb280f74ce2d9368fc9d0bc07af45720872e004119b7c9cf60",
+        "2720ce771339a80264cff2e3294ec63ce6a4f03f5bdfa84dd50e8ba594f4a8a6"
+      ],
+      "status": "blocked",
+      "calls": 4,
+      "usageKnown": true,
+      "inputTokens": 7083,
+      "outputTokens": 5312,
+      "totalTokens": 12395,
+      "elapsedMs": 13640,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.037861383,
+            "total_time": 2.9195931870000003,
+            "prompt_time": 0.049352929,
+            "total_tokens": 2683,
+            "prompt_tokens": 1497,
+            "completion_time": 2.870240258,
+            "completion_tokens": 1186,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 920
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 3007,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "39.802s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "48m57.6s",
+            "x-ratelimit-remaining-tokens": "2693",
+            "x-ratelimit-remaining-requests": "966"
+          }
+        },
+        {
+          "stage": "verify",
+          "usage": {
+            "queue_time": 0.088688005,
+            "total_time": 3.788460914,
+            "prompt_time": 0.096704478,
+            "total_tokens": 3665,
+            "prompt_tokens": 1888,
+            "completion_time": 3.691756436,
+            "completion_tokens": 1777,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1360
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 3992,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "23.317s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "50m24s",
+            "x-ratelimit-remaining-tokens": "4891",
+            "x-ratelimit-remaining-requests": "965"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.178106753,
+            "total_time": 3.018413857,
+            "prompt_time": 0.093982583,
+            "total_tokens": 2882,
+            "prompt_tokens": 1818,
+            "completion_time": 2.924431274,
+            "completion_tokens": 1064,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 806
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 3431,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "25.005s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "51m50.399s",
+            "x-ratelimit-remaining-tokens": "4666",
+            "x-ratelimit-remaining-requests": "964"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 3210,
+          "usage": {
+            "queue_time": 0.287682411,
+            "prompt_tokens": 1880,
+            "prompt_time": 0.158200228,
+            "completion_tokens": 1285,
+            "completion_time": 2.709523139,
+            "total_tokens": 3165,
+            "total_time": 2.867723367,
+            "completion_tokens_details": {
+              "reasoning_tokens": 987
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "963",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "5762",
+            "x-ratelimit-reset-requests": "53m16.799s",
+            "x-ratelimit-reset-tokens": "16.785s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791058988598_05_1",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[12]/result/diagnostics"
+      ],
+      "traceHash": "4b8ecd9594aabd5a121406c706523fd2f48781c3c0f79e2a39c72e441700815f",
+      "callHashes": [
+        "f955753f189206f374e9a045c9eb97eaac88aff7cb7cd65c239dfa24224f729b",
+        "779252cffca7e244678e800ca596c6557ad9841ec8f86d68fc5ede56a7bf93ce",
+        "9b0367ea2209a3175a823571eec998a6ce67ea04ca899ec55f9216683eaba3a6"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 6491,
+      "outputTokens": 4369,
+      "totalTokens": 10860,
+      "elapsedMs": 13425,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.185520287,
+            "total_time": 5.80826426,
+            "prompt_time": 1.099299648,
+            "total_tokens": 3284,
+            "prompt_tokens": 1875,
+            "completion_time": 4.708964612,
+            "completion_tokens": 1409,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1094
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 6037,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "35.077s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "54m43.2s",
+            "x-ratelimit-remaining-tokens": "3323",
+            "x-ratelimit-remaining-requests": "962"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.088197346,
+            "total_time": 2.972917882,
+            "prompt_time": 0.12474972,
+            "total_tokens": 3284,
+            "prompt_tokens": 2200,
+            "completion_time": 2.848168162,
+            "completion_tokens": 1084,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 761
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 3141,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.452s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "56m9.6s",
+            "x-ratelimit-remaining-tokens": "5273",
+            "x-ratelimit-remaining-requests": "961"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 4247,
+          "usage": {
+            "queue_time": 0.088306062,
+            "prompt_tokens": 2416,
+            "prompt_time": 0.105975281,
+            "completion_tokens": 1876,
+            "completion_time": 3.908220008,
+            "total_tokens": 4292,
+            "total_time": 4.014195289,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1359
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "960",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3807",
+            "x-ratelimit-reset-requests": "57m36s",
+            "x-ratelimit-reset-tokens": "31.447s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791059061907_05_2",
+      "origins": [
+        "docs/room-fixed-evaluation-20261004-in-progress.json/runs[13]/result/diagnostics"
+      ],
+      "traceHash": "af45cdd6d1c1154e66c81794a39dc68dcb3250c775a314840d56b3e57a168771",
+      "callHashes": [
+        "a531212a81ee196626e52334a105a71d88ef26fea1957fe41f84eab0f0c070c0",
+        "0fafb3153e02a0d7c14b42be4303c9f99cd9fb008f7c9cd1e8534bfdfeef547b",
+        "74d0346a5c796f97b376f226182fad8a2c782e82b9abd8ea1515418c7f5c51b7"
+      ],
+      "status": "ready",
+      "calls": 3,
+      "usageKnown": true,
+      "inputTokens": 6583,
+      "outputTokens": 5106,
+      "totalTokens": 11689,
+      "elapsedMs": 13106,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.245197622,
+            "total_time": 4.167574118,
+            "prompt_time": 0.051239818,
+            "total_tokens": 3493,
+            "prompt_tokens": 1875,
+            "completion_time": 4.1163343,
+            "completion_tokens": 1618,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1271
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 4472,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "48.15s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "59m2.4s",
+            "x-ratelimit-remaining-tokens": "1580",
+            "x-ratelimit-remaining-requests": "959"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.155176365,
+            "total_time": 2.750735787,
+            "prompt_time": 0.122626078,
+            "total_tokens": 3499,
+            "prompt_tokens": 2232,
+            "completion_time": 2.628109709,
+            "completion_tokens": 1267,
+            "completion_tokens_details": {
+              "reasoning_tokens": 929
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 3302,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.572s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h0m28.8s",
+            "x-ratelimit-remaining-tokens": "5257",
+            "x-ratelimit-remaining-requests": "958"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 1,
+          "elapsedMs": 5332,
+          "usage": {
+            "queue_time": 0.266410734,
+            "prompt_tokens": 2476,
+            "prompt_time": 0.14959122,
+            "completion_tokens": 2221,
+            "completion_time": 4.604850512,
+            "total_tokens": 4697,
+            "total_time": 4.754441732,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1732
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "957",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "3602",
+            "x-ratelimit-reset-requests": "1h1m55.2s",
+            "x-ratelimit-reset-tokens": "32.985s"
+          }
+        }
+      ]
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "itemCode": "fixed_1791060007288_01_1",
+      "origins": [
+        "docs/room-rate-limit-evaluation-20261004.json/runs[0]/result/diagnostics"
+      ],
+      "traceHash": "70f287685a6f164b3158377af9411938c5c67e169eb2b7169d7feef431a5dfe1",
+      "callHashes": [
+        "e674ed38261148f02e3727b5750da40eeb642c07ee4abe2a732164f5c7854b3a",
+        "d33fd4fd079c720380c1f49b5ce45673b63c7d5256703224ded25c73d6f130f2"
+      ],
+      "status": "ready",
+      "calls": 2,
+      "usageKnown": true,
+      "inputTokens": 3748,
+      "outputTokens": 3288,
+      "totalTokens": 7036,
+      "elapsedMs": 7701,
+      "callDetails": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.209463602,
+            "total_time": 2.807285394,
+            "prompt_time": 0.11781085,
+            "total_tokens": 3042,
+            "prompt_tokens": 1757,
+            "completion_time": 2.689474544,
+            "completion_tokens": 1285,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1036
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 3088,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "26.474s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1h22m4.8s",
+            "x-ratelimit-remaining-tokens": "4470",
+            "x-ratelimit-remaining-requests": "943"
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 0,
+          "elapsedMs": 4613,
+          "usage": {
+            "queue_time": 0.150490633,
+            "prompt_tokens": 1991,
+            "prompt_time": 0.139881028,
+            "completion_tokens": 2003,
+            "completion_time": 4.156766894,
+            "total_tokens": 3994,
+            "total_time": 4.296647922,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1656
+            }
+          },
+          "rateLimits": {
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-remaining-requests": "942",
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-remaining-tokens": "4236",
+            "x-ratelimit-reset-requests": "1h23m31.2s",
+            "x-ratelimit-reset-tokens": "28.229s"
+          }
+        }
+      ]
+    }
+  ]
+}

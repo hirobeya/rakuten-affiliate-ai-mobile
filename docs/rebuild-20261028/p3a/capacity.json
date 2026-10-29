@@ -1,0 +1,2369 @@
+{
+  "summary": {
+    "date": "2026-10-28",
+    "version": "urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88",
+    "model": "openai/gpt-oss-120b",
+    "outputLimit": 3000,
+    "networkCalls": 0,
+    "groqCalls": 0,
+    "dbCalls": 0,
+    "mockCallsThisInvocation": 0,
+    "mockTraceCalls": 4,
+    "sourceProducts": 44,
+    "sourceComplete": 10,
+    "sourceIncompleteLowerBounds": 34,
+    "hashFrozenInputs": "15889332dd8ad1320220138dea1f47dcac3cb7b136fcf2b3bb8fb0012424f48b",
+    "method": "Input heuristic ASCII/4 + nonASCII*1.4 + 500; full serialized request includes schema; output 3000 is reservation, not expected consumption. Envelope is schema character maxima, often impossible under 3000 output tokens; deliberately conservative, not predicted consumption.",
+    "completeSourceInitial": [
+      {
+        "itemCode": "daiya:10001447",
+        "input": 7216,
+        "output": 3000,
+        "total": 10216,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "daiya:10001030",
+        "input": 7502,
+        "output": 3000,
+        "total": 10502,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "ipow:10000579",
+        "input": 3914,
+        "output": 3000,
+        "total": 6914,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "linofle:10000458",
+        "input": 4115,
+        "output": 3000,
+        "total": 7115,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "yukaiya:10001267",
+        "input": 3423,
+        "output": 3000,
+        "total": 6423,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "living-mahoroba:10015748",
+        "input": 5808,
+        "output": 3000,
+        "total": 8808,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "daiya:10001455",
+        "input": 4084,
+        "output": 3000,
+        "total": 7084,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "ritoashop:10000039",
+        "input": 7134,
+        "output": 3000,
+        "total": 10134,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "brian:10001257",
+        "input": 4011,
+        "output": 3000,
+        "total": 7011,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      {
+        "itemCode": "lebenwood:10004953",
+        "input": 6012,
+        "output": 3000,
+        "total": 9012,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      }
+    ],
+    "initial": {
+      "note": "34 rows lack original catchcopy; these aggregate values include lower bounds, never full-input admission evidence",
+      "min": 6423,
+      "max": 10502,
+      "mean": 7590.045454545455,
+      "public8000Fit": 38
+    },
+    "fourStageEnvelope": {
+      "min": 207295,
+      "max": 223611,
+      "public8000Fit": 0
+    },
+    "mockTrace": [
+      {
+        "stage": "draft",
+        "input": 3309,
+        "output": 3000,
+        "total": 6309,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+        "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+      },
+      {
+        "stage": "review",
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+        "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+      },
+      {
+        "stage": "rewrite",
+        "input": 4251,
+        "output": 3000,
+        "total": 7251,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+        "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+      },
+      {
+        "stage": "rereview",
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+        "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+      }
+    ],
+    "mockTwoStageReservation": 13524,
+    "mockFourStageReservation": 27990,
+    "baselineReadyMean": 9774.82,
+    "targetIncludingFailures": 2222.222222222222,
+    "measuredReduction": null,
+    "actualGeneratedQuality": null,
+    "p3b": "HOLD: conservative preflight cannot admit these payload envelopes under the assumed public 8000 per-minute budget; current account limits, shared remaining budget, tokenizer calibration and live output fit remain unverified. No request for execution approval yet."
+  },
+  "products": [
+    {
+      "index": 0,
+      "itemCode": "pasoro:10001354",
+      "sourceHash": "2882f74d8ee8cd868493ae778b7b553c46b3dde4eb4f5e121c561d0ea1a716c4",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4398,
+        "output": 3000,
+        "total": 7398,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4398,
+          "output": 3000,
+          "total": 7398,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58408,
+          "output": 3000,
+          "total": 61408,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77981,
+          "output": 3000,
+          "total": 80981,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58408,
+          "output": 3000,
+          "total": 61408,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 211195,
+      "public8000Gate": false,
+      "sourceCharacters": 917
+    },
+    {
+      "index": 1,
+      "itemCode": "e-kurashi:10019512",
+      "sourceHash": "d5a0453051808eb1c2680151c84fb70079cbff6368d46265196ece6b878793c8",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4156,
+        "output": 3000,
+        "total": 7156,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4156,
+          "output": 3000,
+          "total": 7156,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58166,
+          "output": 3000,
+          "total": 61166,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77739,
+          "output": 3000,
+          "total": 80739,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58166,
+          "output": 3000,
+          "total": 61166,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210227,
+      "public8000Gate": false,
+      "sourceCharacters": 819
+    },
+    {
+      "index": 2,
+      "itemCode": "supplyshop:10028516",
+      "sourceHash": "db80b0194efc8bb4ead1a0a95a8aedf9080c0fdc3736cf1025d4deefa7625a81",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3510,
+        "output": 3000,
+        "total": 6510,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3510,
+          "output": 3000,
+          "total": 6510,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57521,
+          "output": 3000,
+          "total": 60521,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77094,
+          "output": 3000,
+          "total": 80094,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57521,
+          "output": 3000,
+          "total": 60521,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 207646,
+      "public8000Gate": false,
+      "sourceCharacters": 233
+    },
+    {
+      "index": 3,
+      "itemCode": "worktk:10014552",
+      "sourceHash": "14bc5946566c47b354d855ca2d38d763094de95dc07defc2a2fcd9c610853cbf",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4275,
+        "output": 3000,
+        "total": 7275,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4275,
+          "output": 3000,
+          "total": 7275,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58285,
+          "output": 3000,
+          "total": 61285,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77859,
+          "output": 3000,
+          "total": 80859,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58285,
+          "output": 3000,
+          "total": 61285,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210704,
+      "public8000Gate": false,
+      "sourceCharacters": 914
+    },
+    {
+      "index": 4,
+      "itemCode": "wishsun:10000100",
+      "sourceHash": "edd0b09ea86a0fefb917f92b4e6ad3624527f5f94eb0556deb86d537a5bdda19",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4976,
+        "output": 3000,
+        "total": 7976,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4976,
+          "output": 3000,
+          "total": 7976,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58987,
+          "output": 3000,
+          "total": 61987,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78560,
+          "output": 3000,
+          "total": 81560,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58987,
+          "output": 3000,
+          "total": 61987,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213510,
+      "public8000Gate": false,
+      "sourceCharacters": 1290
+    },
+    {
+      "index": 5,
+      "itemCode": "bos-shop:10000023",
+      "sourceHash": "e5d3383d301d4525463e4114a3e88a8608a1aa7c10e44ba61754f752033d23fd",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3722,
+        "output": 3000,
+        "total": 6722,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3722,
+          "output": 3000,
+          "total": 6722,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57732,
+          "output": 3000,
+          "total": 60732,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77305,
+          "output": 3000,
+          "total": 80305,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57732,
+          "output": 3000,
+          "total": 60732,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 208491,
+      "public8000Gate": false,
+      "sourceCharacters": 417
+    },
+    {
+      "index": 6,
+      "itemCode": "mtgec-beauty:10001348",
+      "sourceHash": "a1ab8f06809dabda1590d04e3aaa7e5c4c03934728e816de68afe0f874d40977",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3514,
+        "output": 3000,
+        "total": 6514,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3514,
+          "output": 3000,
+          "total": 6514,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57524,
+          "output": 3000,
+          "total": 60524,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77098,
+          "output": 3000,
+          "total": 80098,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57524,
+          "output": 3000,
+          "total": 60524,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 207660,
+      "public8000Gate": false,
+      "sourceCharacters": 262
+    },
+    {
+      "index": 7,
+      "itemCode": "besthouse:10000083",
+      "sourceHash": "1cb82391401081edb1582893dd04a1f0dae681a7a187a04274a103db3da7522f",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4007,
+        "output": 3000,
+        "total": 7007,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4007,
+          "output": 3000,
+          "total": 7007,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58018,
+          "output": 3000,
+          "total": 61018,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77591,
+          "output": 3000,
+          "total": 80591,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58018,
+          "output": 3000,
+          "total": 61018,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209634,
+      "public8000Gate": false,
+      "sourceCharacters": 947
+    },
+    {
+      "index": 8,
+      "itemCode": "e-kitchen:10079039",
+      "sourceHash": "27d2cefa4555f97a3284acef71057241209556192b9ea3c6c67ebabaa4e62156",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4752,
+        "output": 3000,
+        "total": 7752,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4752,
+          "output": 3000,
+          "total": 7752,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58762,
+          "output": 3000,
+          "total": 61762,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78335,
+          "output": 3000,
+          "total": 81335,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58762,
+          "output": 3000,
+          "total": 61762,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 212611,
+      "public8000Gate": false,
+      "sourceCharacters": 1335
+    },
+    {
+      "index": 9,
+      "itemCode": "risu-onlineshop:10002384",
+      "sourceHash": "d5571c35e2217ed68b1460c7ce56b341b2c5f9753d4a640c510120497287c327",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4523,
+        "output": 3000,
+        "total": 7523,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4523,
+          "output": 3000,
+          "total": 7523,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58533,
+          "output": 3000,
+          "total": 61533,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78107,
+          "output": 3000,
+          "total": 81107,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58533,
+          "output": 3000,
+          "total": 61533,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 211696,
+      "public8000Gate": false,
+      "sourceCharacters": 1128
+    },
+    {
+      "index": 10,
+      "itemCode": "snowfoxskincare:10000116",
+      "sourceHash": "50f968b600eccf2793d66b29ff22c8f3173c5279043e920c32618e15605d5514",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4867,
+        "output": 3000,
+        "total": 7867,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4867,
+          "output": 3000,
+          "total": 7867,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58877,
+          "output": 3000,
+          "total": 61877,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78450,
+          "output": 3000,
+          "total": 81450,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58877,
+          "output": 3000,
+          "total": 61877,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213071,
+      "public8000Gate": false,
+      "sourceCharacters": 1363
+    },
+    {
+      "index": 11,
+      "itemCode": "emoor-nedogko:10000048",
+      "sourceHash": "4b26a861e74193a08056a6672de2001d31dbf48d4731b6bb97f2e617d16e5d71",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 5059,
+        "output": 3000,
+        "total": 8059,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 5059,
+          "output": 3000,
+          "total": 8059,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 59069,
+          "output": 3000,
+          "total": 62069,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78643,
+          "output": 3000,
+          "total": 81643,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 59069,
+          "output": 3000,
+          "total": 62069,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213840,
+      "public8000Gate": false,
+      "sourceCharacters": 1368
+    },
+    {
+      "index": 12,
+      "itemCode": "astyone0728:10000001",
+      "sourceHash": "5dd7f178ccf9ad9acae91ba8b4bd5b50fd6090d0eec3cf7cde0754a37561db44",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4858,
+        "output": 3000,
+        "total": 7858,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4858,
+          "output": 3000,
+          "total": 7858,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58868,
+          "output": 3000,
+          "total": 61868,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78442,
+          "output": 3000,
+          "total": 81442,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58868,
+          "output": 3000,
+          "total": 61868,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213036,
+      "public8000Gate": false,
+      "sourceCharacters": 1295
+    },
+    {
+      "index": 13,
+      "itemCode": "myhomeshop:10000326",
+      "sourceHash": "3f94dd3b10702529f694d8da4920d6b2c8bb24d97024cda4ceecdbcd246268cd",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4966,
+        "output": 3000,
+        "total": 7966,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4966,
+          "output": 3000,
+          "total": 7966,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58976,
+          "output": 3000,
+          "total": 61976,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78549,
+          "output": 3000,
+          "total": 81549,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58976,
+          "output": 3000,
+          "total": 61976,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213467,
+      "public8000Gate": false,
+      "sourceCharacters": 1363
+    },
+    {
+      "index": 14,
+      "itemCode": "irisplaza-r:10170526",
+      "sourceHash": "b1f1708f3f01a7b6f70caecd97eaa226f144b41d1ec31fe52222d470bda9f275",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4743,
+        "output": 3000,
+        "total": 7743,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4743,
+          "output": 3000,
+          "total": 7743,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58754,
+          "output": 3000,
+          "total": 61754,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78327,
+          "output": 3000,
+          "total": 81327,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58754,
+          "output": 3000,
+          "total": 61754,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 212578,
+      "public8000Gate": false,
+      "sourceCharacters": 1288
+    },
+    {
+      "index": 15,
+      "itemCode": "arkham:10000161",
+      "sourceHash": "c2720462c0075624d3bb29606ff7d700e1147825ee45826877e000275f2a1e35",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4207,
+        "output": 3000,
+        "total": 7207,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4207,
+          "output": 3000,
+          "total": 7207,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58217,
+          "output": 3000,
+          "total": 61217,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77791,
+          "output": 3000,
+          "total": 80791,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58217,
+          "output": 3000,
+          "total": 61217,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210432,
+      "public8000Gate": false,
+      "sourceCharacters": 738
+    },
+    {
+      "index": 16,
+      "itemCode": "high-broad:10000679",
+      "sourceHash": "698b226f5fa67a1da8d477c2b02ee5b36868b7a5fc7a79c86495d4f1472110c5",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4924,
+        "output": 3000,
+        "total": 7924,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4924,
+          "output": 3000,
+          "total": 7924,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58935,
+          "output": 3000,
+          "total": 61935,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78508,
+          "output": 3000,
+          "total": 81508,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58935,
+          "output": 3000,
+          "total": 61935,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213302,
+      "public8000Gate": false,
+      "sourceCharacters": 1271
+    },
+    {
+      "index": 17,
+      "itemCode": "arqs01:10000087",
+      "sourceHash": "5cec05e5b17b59bd103537415f7f2049b0f65f765ecd14a3b82ffbd168300603",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4128,
+        "output": 3000,
+        "total": 7128,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4128,
+          "output": 3000,
+          "total": 7128,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58138,
+          "output": 3000,
+          "total": 61138,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77712,
+          "output": 3000,
+          "total": 80712,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58138,
+          "output": 3000,
+          "total": 61138,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210116,
+      "public8000Gate": false,
+      "sourceCharacters": 712
+    },
+    {
+      "index": 18,
+      "itemCode": "shopworld:10138423",
+      "sourceHash": "9463a0f76ac82a110a4a752c69def86f9742789597fd237250b1e9b602be1a52",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4102,
+        "output": 3000,
+        "total": 7102,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4102,
+          "output": 3000,
+          "total": 7102,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58113,
+          "output": 3000,
+          "total": 61113,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77686,
+          "output": 3000,
+          "total": 80686,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58113,
+          "output": 3000,
+          "total": 61113,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210014,
+      "public8000Gate": false,
+      "sourceCharacters": 799
+    },
+    {
+      "index": 19,
+      "itemCode": "satiwel:10002945",
+      "sourceHash": "5bf011eb72f5b9b16ad05ac23776b05b709d5a159df22636c7d26972b31d43ad",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4157,
+        "output": 3000,
+        "total": 7157,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4157,
+          "output": 3000,
+          "total": 7157,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58168,
+          "output": 3000,
+          "total": 61168,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77741,
+          "output": 3000,
+          "total": 80741,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58168,
+          "output": 3000,
+          "total": 61168,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210234,
+      "public8000Gate": false,
+      "sourceCharacters": 849
+    },
+    {
+      "index": 20,
+      "itemCode": "pc2b:10001078",
+      "sourceHash": "f98e79eb36b88ffb9ed2992b282a93c7d7ea39e53ca5a994d7d768a296c0b86a",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4148,
+        "output": 3000,
+        "total": 7148,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4148,
+          "output": 3000,
+          "total": 7148,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58159,
+          "output": 3000,
+          "total": 61159,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77732,
+          "output": 3000,
+          "total": 80732,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58159,
+          "output": 3000,
+          "total": 61159,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210198,
+      "public8000Gate": false,
+      "sourceCharacters": 725
+    },
+    {
+      "index": 21,
+      "itemCode": "gogo1102:10000190",
+      "sourceHash": "f11ea9d1751f6e4c8852500b5deab3021db2f4fddb20f73e1c1da1e809bd05ff",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4076,
+        "output": 3000,
+        "total": 7076,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4076,
+          "output": 3000,
+          "total": 7076,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58087,
+          "output": 3000,
+          "total": 61087,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77660,
+          "output": 3000,
+          "total": 80660,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58087,
+          "output": 3000,
+          "total": 61087,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209910,
+      "public8000Gate": false,
+      "sourceCharacters": 630
+    },
+    {
+      "index": 22,
+      "itemCode": "bos-shop:10000024",
+      "sourceHash": "43ba738679ed7863f774a97a6dcc13dca3bb168496c23245ddcd57552f75cd56",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3724,
+        "output": 3000,
+        "total": 6724,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3724,
+          "output": 3000,
+          "total": 6724,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57735,
+          "output": 3000,
+          "total": 60735,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77308,
+          "output": 3000,
+          "total": 80308,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57735,
+          "output": 3000,
+          "total": 60735,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 208502,
+      "public8000Gate": false,
+      "sourceCharacters": 414
+    },
+    {
+      "index": 23,
+      "itemCode": "masayosiryouhin:10000072",
+      "sourceHash": "0458ac5c381d1e04b501e4aa510f5465ad1ab15504fbcd7a48871d2ee1ba98fa",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4339,
+        "output": 3000,
+        "total": 7339,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4339,
+          "output": 3000,
+          "total": 7339,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58350,
+          "output": 3000,
+          "total": 61350,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77923,
+          "output": 3000,
+          "total": 80923,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58350,
+          "output": 3000,
+          "total": 61350,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210962,
+      "public8000Gate": false,
+      "sourceCharacters": 913
+    },
+    {
+      "index": 24,
+      "itemCode": "furumiyashop:10000146",
+      "sourceHash": "3c3d03fff21277f82d24589e6de417c833c59f6f76cf3f57b57903f26847af8e",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3973,
+        "output": 3000,
+        "total": 6973,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3973,
+          "output": 3000,
+          "total": 6973,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57983,
+          "output": 3000,
+          "total": 60983,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77556,
+          "output": 3000,
+          "total": 80556,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57983,
+          "output": 3000,
+          "total": 60983,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209495,
+      "public8000Gate": false,
+      "sourceCharacters": 1384
+    },
+    {
+      "index": 25,
+      "itemCode": "doshisha-marche:10000227",
+      "sourceHash": "eec133cd037ce43b91e5b69e9a1878977c6d9fa32dec55b22787ac2dc62f1e97",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4890,
+        "output": 3000,
+        "total": 7890,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4890,
+          "output": 3000,
+          "total": 7890,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58900,
+          "output": 3000,
+          "total": 61900,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78474,
+          "output": 3000,
+          "total": 81474,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58900,
+          "output": 3000,
+          "total": 61900,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213164,
+      "public8000Gate": false,
+      "sourceCharacters": 1355
+    },
+    {
+      "index": 26,
+      "itemCode": "exception5251:10000379",
+      "sourceHash": "bf905839098edcca4fca9a174c9196f580cb1e1475fce7dc4cf6fe3b3394ed73",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3698,
+        "output": 3000,
+        "total": 6698,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3698,
+          "output": 3000,
+          "total": 6698,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57709,
+          "output": 3000,
+          "total": 60709,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77282,
+          "output": 3000,
+          "total": 80282,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57709,
+          "output": 3000,
+          "total": 60709,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 208398,
+      "public8000Gate": false,
+      "sourceCharacters": 401
+    },
+    {
+      "index": 27,
+      "itemCode": "40s-skincare:10000159",
+      "sourceHash": "ab945566f755b57a3dd9de6c80892154037307af46e8565506926c6590dd64be",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4929,
+        "output": 3000,
+        "total": 7929,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4929,
+          "output": 3000,
+          "total": 7929,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58939,
+          "output": 3000,
+          "total": 61939,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78513,
+          "output": 3000,
+          "total": 81513,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58939,
+          "output": 3000,
+          "total": 61939,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213320,
+      "public8000Gate": false,
+      "sourceCharacters": 1354
+    },
+    {
+      "index": 28,
+      "itemCode": "auc-r-style:10000367",
+      "sourceHash": "7880932030d3db568b848dbf05126991382f81e00bbb5e1b3ac1b9f4cc6279c1",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4739,
+        "output": 3000,
+        "total": 7739,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4739,
+          "output": 3000,
+          "total": 7739,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58749,
+          "output": 3000,
+          "total": 61749,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78322,
+          "output": 3000,
+          "total": 81322,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58749,
+          "output": 3000,
+          "total": 61749,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 212559,
+      "public8000Gate": false,
+      "sourceCharacters": 1320
+    },
+    {
+      "index": 29,
+      "itemCode": "goodgoods-center:10000193",
+      "sourceHash": "96806ee7cd8771dd9b50ee0d0fdc32a20b4303f43e7d5d32afbc16d417a84fa9",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4658,
+        "output": 3000,
+        "total": 7658,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4658,
+          "output": 3000,
+          "total": 7658,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58669,
+          "output": 3000,
+          "total": 61669,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78242,
+          "output": 3000,
+          "total": 81242,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58669,
+          "output": 3000,
+          "total": 61669,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 212238,
+      "public8000Gate": false,
+      "sourceCharacters": 1127
+    },
+    {
+      "index": 30,
+      "itemCode": "mpowjapan:10000907",
+      "sourceHash": "e613a48114820df2669824ffaf0ec41182347c6e34901ed488f12f4ad653a203",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4865,
+        "output": 3000,
+        "total": 7865,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4865,
+          "output": 3000,
+          "total": 7865,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58875,
+          "output": 3000,
+          "total": 61875,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78449,
+          "output": 3000,
+          "total": 81449,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58875,
+          "output": 3000,
+          "total": 61875,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 213064,
+      "public8000Gate": false,
+      "sourceCharacters": 1346
+    },
+    {
+      "index": 31,
+      "itemCode": "fujisports-r:10054189",
+      "sourceHash": "461fa63b2da57286d9901fedb4ae5f5294469566420f2a9e784a307b38f4491f",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4363,
+        "output": 3000,
+        "total": 7363,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4363,
+          "output": 3000,
+          "total": 7363,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58374,
+          "output": 3000,
+          "total": 61374,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77947,
+          "output": 3000,
+          "total": 80947,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58374,
+          "output": 3000,
+          "total": 61374,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 211058,
+      "public8000Gate": false,
+      "sourceCharacters": 826
+    },
+    {
+      "index": 32,
+      "itemCode": "repeat7:10002729",
+      "sourceHash": "b8589597cb1a1b8a4fac722e4cfc6cbc44698d2b5f7a3b168aa75a0815c38b70",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3840,
+        "output": 3000,
+        "total": 6840,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3840,
+          "output": 3000,
+          "total": 6840,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57851,
+          "output": 3000,
+          "total": 60851,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77424,
+          "output": 3000,
+          "total": 80424,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57851,
+          "output": 3000,
+          "total": 60851,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 208966,
+      "public8000Gate": false,
+      "sourceCharacters": 449
+    },
+    {
+      "index": 33,
+      "itemCode": "bbtown:10225214",
+      "sourceHash": "7e7835835783185ae0671304b37457411f3580c58339ff3654960fbdc5fe1538",
+      "missingOriginalFields": [
+        "catchcopy"
+      ],
+      "estimateScope": "LOWER_BOUND: absent original fields are NOT established empty; no execution input",
+      "sourceFieldsAvailable": false,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4657,
+        "output": 3000,
+        "total": 7657,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4657,
+          "output": 3000,
+          "total": 7657,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58667,
+          "output": 3000,
+          "total": 61667,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 78240,
+          "output": 3000,
+          "total": 81240,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58667,
+          "output": 3000,
+          "total": 61667,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 212231,
+      "public8000Gate": false,
+      "sourceCharacters": 1351
+    },
+    {
+      "index": 34,
+      "itemCode": "daiya:10001447",
+      "sourceHash": "b7bea954ecc18de11fe3e2a5e70aae17539f2796e476a92f659681be0dca10dd",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 7216,
+        "output": 3000,
+        "total": 10216,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7216,
+          "output": 3000,
+          "total": 10216,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61227,
+          "output": 3000,
+          "total": 64227,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 80800,
+          "output": 3000,
+          "total": 83800,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61227,
+          "output": 3000,
+          "total": 64227,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 222470,
+      "public8000Gate": false,
+      "sourceCharacters": 3198
+    },
+    {
+      "index": 35,
+      "itemCode": "daiya:10001030",
+      "sourceHash": "352c1580954934e2a9b457d35c030500e3ce1d24e5ef851b7d5ed726a089f468",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 7502,
+        "output": 3000,
+        "total": 10502,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7502,
+          "output": 3000,
+          "total": 10502,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61512,
+          "output": 3000,
+          "total": 64512,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 81085,
+          "output": 3000,
+          "total": 84085,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61512,
+          "output": 3000,
+          "total": 64512,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 223611,
+      "public8000Gate": false,
+      "sourceCharacters": 3526
+    },
+    {
+      "index": 36,
+      "itemCode": "ipow:10000579",
+      "sourceHash": "27dfc3fe6fa2928b1c55d0eada7ecb0f929384ff47d00d1ae4b9621660e9356e",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3914,
+        "output": 3000,
+        "total": 6914,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3914,
+          "output": 3000,
+          "total": 6914,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57924,
+          "output": 3000,
+          "total": 60924,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77498,
+          "output": 3000,
+          "total": 80498,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57924,
+          "output": 3000,
+          "total": 60924,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209260,
+      "public8000Gate": false,
+      "sourceCharacters": 579
+    },
+    {
+      "index": 37,
+      "itemCode": "linofle:10000458",
+      "sourceHash": "c08c38a3f04d790e8ab4ad7124cc6448b8d7fc7110a128a448f52ad1079ff71a",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4115,
+        "output": 3000,
+        "total": 7115,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4115,
+          "output": 3000,
+          "total": 7115,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58126,
+          "output": 3000,
+          "total": 61126,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77699,
+          "output": 3000,
+          "total": 80699,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58126,
+          "output": 3000,
+          "total": 61126,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 210066,
+      "public8000Gate": false,
+      "sourceCharacters": 675
+    },
+    {
+      "index": 38,
+      "itemCode": "yukaiya:10001267",
+      "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 3423,
+        "output": 3000,
+        "total": 6423,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3423,
+          "output": 3000,
+          "total": 6423,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57433,
+          "output": 3000,
+          "total": 60433,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77006,
+          "output": 3000,
+          "total": 80006,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57433,
+          "output": 3000,
+          "total": 60433,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 207295,
+      "public8000Gate": false,
+      "sourceCharacters": 145
+    },
+    {
+      "index": 39,
+      "itemCode": "living-mahoroba:10015748",
+      "sourceHash": "038a5a90094455cc7a863a46de3379ef69021af1fe9de20cf3657969e22363ce",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 5808,
+        "output": 3000,
+        "total": 8808,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 5808,
+          "output": 3000,
+          "total": 8808,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 59818,
+          "output": 3000,
+          "total": 62818,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 79392,
+          "output": 3000,
+          "total": 82392,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 59818,
+          "output": 3000,
+          "total": 62818,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 216836,
+      "public8000Gate": false,
+      "sourceCharacters": 2046
+    },
+    {
+      "index": 40,
+      "itemCode": "daiya:10001455",
+      "sourceHash": "4a5e40fe458a63280c1a75b73d53fb817f6dfdecd04ea25a39e7609cf6685c12",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4084,
+        "output": 3000,
+        "total": 7084,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4084,
+          "output": 3000,
+          "total": 7084,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58094,
+          "output": 3000,
+          "total": 61094,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77668,
+          "output": 3000,
+          "total": 80668,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58094,
+          "output": 3000,
+          "total": 61094,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209940,
+      "public8000Gate": false,
+      "sourceCharacters": 656
+    },
+    {
+      "index": 41,
+      "itemCode": "ritoashop:10000039",
+      "sourceHash": "deeeb8f7be43ab1b3d03319ed513630d7af9b0607aca8167189b5062da39d0eb",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 7134,
+        "output": 3000,
+        "total": 10134,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7134,
+          "output": 3000,
+          "total": 10134,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61144,
+          "output": 3000,
+          "total": 64144,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 80717,
+          "output": 3000,
+          "total": 83717,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61144,
+          "output": 3000,
+          "total": 64144,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 222139,
+      "public8000Gate": false,
+      "sourceCharacters": 3448
+    },
+    {
+      "index": 42,
+      "itemCode": "brian:10001257",
+      "sourceHash": "1dca4b426606f785c9df1fe90f4743f60363ed5e86619eec1ed1310f748a8ecf",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 4011,
+        "output": 3000,
+        "total": 7011,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4011,
+          "output": 3000,
+          "total": 7011,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58021,
+          "output": 3000,
+          "total": 61021,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77594,
+          "output": 3000,
+          "total": 80594,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58021,
+          "output": 3000,
+          "total": 61021,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 209647,
+      "public8000Gate": false,
+      "sourceCharacters": 680
+    },
+    {
+      "index": 43,
+      "itemCode": "lebenwood:10004953",
+      "sourceHash": "4060fac23d780ac3021b97ed5d2704a3c6654bb136046cab34dba10a0f9a591a",
+      "missingOriginalFields": [],
+      "estimateScope": "all four source fields retained; baseline request provenance still unpaired",
+      "sourceFieldsAvailable": true,
+      "comparisonEligible": false,
+      "comparisonBlocker": "Exact original baseline request including catchcopy and generation conditions not yet paired with eligible baseline output",
+      "initial": {
+        "input": 6012,
+        "output": 3000,
+        "total": 9012,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "schemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 6012,
+          "output": 3000,
+          "total": 9012,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 60022,
+          "output": 3000,
+          "total": 63022,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 79595,
+          "output": 3000,
+          "total": 82595,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 60022,
+          "output": 3000,
+          "total": 63022,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "totalFourStageEnvelope": 217651,
+      "public8000Gate": false,
+      "sourceCharacters": 2483
+    }
+  ]
+}

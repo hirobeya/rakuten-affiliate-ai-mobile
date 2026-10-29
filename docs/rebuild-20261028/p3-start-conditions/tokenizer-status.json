@@ -1,0 +1,25 @@
+{
+  "availableCompatibleTokenizer": false,
+  "cachedRankFilesFound": false,
+  "testedPackage": "tiktoken==0.12.0",
+  "attempts": [
+    {
+      "python": "/usr/bin/python3",
+      "result": "pip not installed"
+    },
+    {
+      "python": "primary runtime Python",
+      "result": "No matching distribution found; available versions none"
+    },
+    {
+      "python": "primary runtime Python --isolated with explicit https://pypi.org/simple",
+      "result": "No matching distribution found; available versions none"
+    }
+  ],
+  "rootCauseEstablished": "No accessible package distribution from this execution environment; pip output does not distinguish index filtering vs network policy. Not evidence package does not exist.",
+  "ranks": "not acquired",
+  "modelTemplate": "not acquired or verified",
+  "providerTemplateAndSchema": "not public-reproduced",
+  "certifiedInputUpperBound": null,
+  "heuristicForAdmission": false
+}

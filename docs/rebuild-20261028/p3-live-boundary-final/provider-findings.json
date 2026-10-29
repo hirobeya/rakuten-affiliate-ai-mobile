@@ -1,0 +1,26 @@
+{
+  "checkedOn": "2026-10-29 JST",
+  "model": "openai/gpt-oss-120b",
+  "api": "POST https://api.groq.com/openai/v1/chat/completions",
+  "findings": [
+    {"topic":"role framing and assistant prefix", "officialConfirmation":"API accepts role messages. Public OpenAI Harmony implementation describes its own tokenizer/format, not the deployed Groq template.", "providerTokenFormulaVerified":false},
+    {"topic":"strict schema", "officialConfirmation":"Groq documents constrained decoding and strict support for gpt-oss-120b.", "promptInjectionOrDuplicationAccountingVerified":false, "additionalRateCostBound":null},
+    {"topic":"tools and extra instructions", "clientWire":"Two messages, no tools/search/compound configuration; unchanged hash verified.", "providerAddedInstructionsVerified":false},
+    {"topic":"non-inference input count/preflight", "officialEndpointLocated":false, "scope":"No documented method located in inspected API reference, SDK documentation and targeted official searches. Not a claim no internal method exists. No endpoint probes performed."},
+    {"topic":"RPM/TPM", "officialConfirmation":"Organization and project ceilings, combined TPM and optional org ITPM/OTPM, 429 on excess, documented header units.", "sendTimeReservationFormulaVerified":false},
+    {"topic":"reasoning/output", "officialConfirmation":"Chat max_completion_tokens caps generated tokens. Reasoning docs describe reasoning as token output; medium supported. Preserve output reservation 3000 including reasoning; do not add a separate free reasoning allowance.", "exactReasoningRatio":null},
+    {"topic":"SDK retries", "officialConfirmation":"groq-python documents two retries by default including 429. Existing direct transport retained; SDK not introduced.", "configuredAutoRetries":0}
+  ],
+  "sources": [
+    "https://console.groq.com/docs/api-reference",
+    "https://console.groq.com/docs/structured-outputs",
+    "https://console.groq.com/docs/reasoning",
+    "https://console.groq.com/docs/rate-limits",
+    "https://console.groq.com/docs/projects",
+    "https://github.com/openai/gpt-oss/blob/main/gpt_oss/tokenizer.py",
+    "https://github.com/groq/groq-python",
+    "https://groq.com/contact"
+  ],
+  "supportInquirySent": false,
+  "inferenceRequests": 0
+}

@@ -1,0 +1,24 @@
+件名：gpt-oss-120b／strict JSON schemaの事前token上限と初回校正について
+
+Groqサポートご担当者様
+
+以下の凍結リクエストを1回だけ実行する前に、容量判定の公式な根拠を確認したく、ご教示ください。まだ実行していません。
+
+API：POST /openai/v1/chat/completions
+model：openai/gpt-oss-120b
+messages：systemとuserの2件
+response_format：strict JSON schema
+reasoning_effort：medium
+max_completion_tokens：3000
+tools／search／compound設定：なし
+wire hash：ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053
+ローカル可視component計数：2527 tokens（provider prompt_tokensとは見なしていません）
+仮予約：入力5000＋出力3000。実アカウントの枠や残量とは別の計画値です。
+
+1. strict schemaを含むこのリクエストについて、推論生成をせずprompt_tokensまたは保証上限を取得できる公式計数／preflight手段はありますか。endpoint、利用条件、資料を教えてください。
+2. role framing、assistant prefix、追加system指示、schemaの展開・挿入・複製は入力へどう計上されますか。完全内部式が非公開なら、このリクエストに適用できる追加計上の保証上限を提示できますか。
+3. 事前計数が困難な場合、他callerを停止した検証窓で1回の校正を安全に行うprovider保証の代替制御はありますか。単に429で拒否されることと、消費を保証上限内へ制御できることを分けて教えてください。
+4. TPM／ITPM／OTPMと日次枠について、受付時の予約と完了時の精算は、実入力、max_completion_tokens、推論token、実usage、失敗／429／timeoutをどう扱いますか。推論は3000の生成上限に含まれるという理解でよいでしょうか。
+5. Prompt Caching資料には、ヒットが保証されず、cached tokensは処理後に制限値から差し引かれるとあります。初回の事前判定はキャッシュ減額0で全入力を予約する方針ですが、正しいでしょうか。安全に減額できる公式事前保証がある場合、その条件と各rate枠への適用を教えてください。
+
+公開資料または対象model/API/schemaに適用できる公式回答をお願いします。必要であれば、承認済みの公開商品payload/schemaを別途提示できます。APIキー、Authorization header、環境変数、認証URLは添付しません。

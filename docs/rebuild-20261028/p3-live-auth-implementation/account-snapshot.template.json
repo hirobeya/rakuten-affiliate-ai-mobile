@@ -1,0 +1,97 @@
+{
+  "grant": {
+    "mode": "live-one-call",
+    "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+    "model": "openai/gpt-oss-120b",
+    "maxRequests": 1,
+    "stage": "draft",
+    "experimentKind": "limited-calibration",
+    "approvalReference": "User conditional one-call authorization in this conversation, 2026-10-29",
+    "uncertainConsumptionAccepted": true,
+    "expiresAt": null
+  },
+  "evidence": {
+    "kind": "limited-experiment-estimate",
+    "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+    "inputReservation": 5000,
+    "providerBoundCertified": false,
+    "uncertaintyAcknowledged": true
+  },
+  "account": {
+    "mode": "live-calibration",
+    "organization": "Personal",
+    "projectName": "Default Project",
+    "id": null,
+    "day": null,
+    "context": 131072,
+    "input": 128072,
+    "output": 3000,
+    "perRequest": 8000,
+    "rpm": 30,
+    "tpm": 8000,
+    "dailyTokens": 200000,
+    "dailyRequests": 1000,
+    "otherTokens": null,
+    "otherRequests": null,
+    "otherWindowTokens": null,
+    "otherWindowRequests": null,
+    "validUntil": null,
+    "stageInputs": {
+      "draft": 5000,
+      "review": 5000,
+      "rewrite": 5000,
+      "rereview": 5000
+    },
+    "splitApplicability": null,
+    "splitTokens": null,
+    "verification": {
+      "observedAt": null,
+      "confirmedBy": null,
+      "source": null,
+      "resetDescription": null,
+      "unresolvedRequests": null,
+      "unresolvedReservations": null
+    },
+    "project": {
+      "rpm": 30,
+      "tpm": 8000,
+      "dailyTokens": 200000,
+      "dailyRequests": 1000,
+      "otherTokens": null,
+      "otherRequests": null,
+      "otherWindowTokens": null,
+      "otherWindowRequests": null
+    }
+  },
+  "isolation": {
+    "mode": "live-calibration",
+    "allCallersPaused": null,
+    "observedAt": null,
+    "exclusiveUntil": null,
+    "coverage": null,
+    "confirmedBy": null,
+    "holdUntilReconciled": true,
+    "callers": {
+      "production": {
+        "paused": null,
+        "evidence": null
+      },
+      "preview": {
+        "paused": null,
+        "evidence": null
+      },
+      "actions": {
+        "paused": null,
+        "evidence": null
+      },
+      "local-cli": {
+        "paused": null,
+        "evidence": null
+      },
+      "other-playground": {
+        "paused": null,
+        "evidence": null
+      }
+    }
+  }
+}

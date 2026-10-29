@@ -1,0 +1,138 @@
+[
+  {
+    "id": "0d887f2c325d0cf7",
+    "sourceHash": "f568fd4f5a7b204b67a65677db791301e9bd18fed9160751fff10d466c1903bf",
+    "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+    "oldSentences": [
+      "刺繍キットで初心者が刺繍を始めるとき、カード巻きタイプの刺繍糸が整然と並んでいるので、必要な色をすぐに取り出せます。"
+    ],
+    "existingMechanical": [],
+    "newRawOldDraftRejection": {
+      "ok": false,
+      "failures": [
+        {
+          "rule": "invalid_structure"
+        }
+      ]
+    },
+    "requiredDiagnosticLoci": [
+      "sellingProduct/owners:販売本体と所有者",
+      "features.scope:対象/部位/条件/否定/程度",
+      "relations:特徴→意図の意味関係",
+      "bindings.clauses:本文の全事実節",
+      "quality.choice:固有の選択理由"
+    ],
+    "knownConcern": "必要な色をすぐ取り出すという結果と、糸が整然と並ぶという特徴の含意を全文審査する必要あり",
+    "limitation": "Human-authored diagnostic concern, not a new model verdict. Missing plan rejects legacy data but does not prove semantic improvement."
+  },
+  {
+    "id": "2be880f2f1d13c45",
+    "sourceHash": "b774fe117a652ded9bff2e5698899ad8f76f0c0524906e6954e3acb35bcd0b72",
+    "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+    "oldSentences": [
+      "授乳時に胸の上布をそのまま授乳ケープとして使えるマタニティワンピースなので、来客や急な授乳でも着替えずにすぐ対応できます。"
+    ],
+    "existingMechanical": [],
+    "newRawOldDraftRejection": {
+      "ok": false,
+      "failures": [
+        {
+          "rule": "invalid_structure"
+        }
+      ]
+    },
+    "requiredDiagnosticLoci": [
+      "sellingProduct/owners:販売本体と所有者",
+      "features.scope:対象/部位/条件/否定/程度",
+      "relations:特徴→意図の意味関係",
+      "bindings.clauses:本文の全事実節",
+      "quality.choice:固有の選択理由"
+    ],
+    "knownConcern": "胸の上布/ケープの所有者と適用範囲、着替え不要/すぐ対応の程度を分離して審査する必要あり",
+    "limitation": "Human-authored diagnostic concern, not a new model verdict. Missing plan rejects legacy data but does not prove semantic improvement."
+  },
+  {
+    "id": "5c54cb7abfb6f6b3",
+    "sourceHash": "2a5642bcea7c5f0b141b65d7899d33c47b313a111a7fddf080ec89391cde9c10",
+    "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+    "oldSentences": [
+      "細かい網目の洗濯ネットは、洗濯時に衣類の型崩れや他の洗濯物との絡みを防ぎます。"
+    ],
+    "existingMechanical": [],
+    "newRawOldDraftRejection": {
+      "ok": false,
+      "failures": [
+        {
+          "rule": "invalid_structure"
+        }
+      ]
+    },
+    "requiredDiagnosticLoci": [
+      "sellingProduct/owners:販売本体と所有者",
+      "features.scope:対象/部位/条件/否定/程度",
+      "relations:特徴→意図の意味関係",
+      "bindings.clauses:本文の全事実節",
+      "quality.choice:固有の選択理由"
+    ],
+    "knownConcern": "機能の説明だけで具体的な選択意図との関係が本文にあるかをquality.choiceで審査する必要あり",
+    "limitation": "Human-authored diagnostic concern, not a new model verdict. Missing plan rejects legacy data but does not prove semantic improvement."
+  },
+  {
+    "id": "6ae52c7dda3e2335",
+    "sourceHash": "5f1d77b31f461347db95a67652084ea42399b831b68d8c3d969bd3916d095cf4",
+    "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+    "oldSentences": [
+      "旅行先で衣類を整理したいときは、サイズ組み合わせ自由な洗濯ネットが便利です。"
+    ],
+    "existingMechanical": [
+      {
+        "rule": "restated_purchase_reason",
+        "sentence": null,
+        "detail": "configuration_with_generic_convenience_only。特徴を願望と説明で繰り返さず、原文で支えられる具体的な使用意図と特徴の関係を伝える。関係が不明なら効果を作らない。"
+      }
+    ],
+    "newRawOldDraftRejection": {
+      "ok": false,
+      "failures": [
+        {
+          "rule": "invalid_structure"
+        }
+      ]
+    },
+    "requiredDiagnosticLoci": [
+      "sellingProduct/owners:販売本体と所有者",
+      "features.scope:対象/部位/条件/否定/程度",
+      "relations:特徴→意図の意味関係",
+      "bindings.clauses:本文の全事実節",
+      "quality.choice:固有の選択理由"
+    ],
+    "knownConcern": "サイズ組合せ自由から旅行先の衣類整理の便利さへの意味関係が支えられているかをrelationsで審査する必要あり",
+    "limitation": "Human-authored diagnostic concern, not a new model verdict. Missing plan rejects legacy data but does not prove semantic improvement."
+  },
+  {
+    "id": "c64cbb7d11333945",
+    "sourceHash": "f00798348ea8a767d3d49018c1065127c10d3fb40dba031bc05ab4c974c38b71",
+    "sourceStatus": "name/caption match archived source; catchcopy reconstructed, original request not retained",
+    "oldSentences": [
+      "洗濯ネットを使えば、シワが気になるワイシャツやブラウスをクルクル巻くだけで、洗濯時のシワや型くずれを抑えられます。"
+    ],
+    "existingMechanical": [],
+    "newRawOldDraftRejection": {
+      "ok": false,
+      "failures": [
+        {
+          "rule": "invalid_structure"
+        }
+      ]
+    },
+    "requiredDiagnosticLoci": [
+      "sellingProduct/owners:販売本体と所有者",
+      "features.scope:対象/部位/条件/否定/程度",
+      "relations:特徴→意図の意味関係",
+      "bindings.clauses:本文の全事実節",
+      "quality.choice:固有の選択理由"
+    ],
+    "knownConcern": "原文の洗濯方法とシワ/型崩れの作用・対象・条件が本文の全節で一致するか審査する必要あり",
+    "limitation": "Human-authored diagnostic concern, not a new model verdict. Missing plan rejects legacy data but does not prove semantic improvement."
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "path": "docs/rebuild-20261028/p3a/capacity.json",
+    "unchanged": true,
+    "sha256": "604781004cfda748d9a36f46422ebcd578b5da9439985b2a947edb6a94f32acf"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/contract-addendum.md",
+    "unchanged": true,
+    "sha256": "01585010dd43d7867a65403ff10e2af1a6239e86c87b0bac0cc6c958bc55bade"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/core-tests.tap",
+    "unchanged": true,
+    "sha256": "581af052cb605bfc67d9c09a1293538f4e0d4f3ecee2eec6bfe6654a010faf15"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/isolation.json",
+    "unchanged": true,
+    "sha256": "2bd6256aaa2f2b33dccf09748ee7a07bf8e0e07d185b3dd326b2185996dc68d9"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run/8ad2365185d61e2f1fd2a23c0e886cafb9a5783fa4797cfb66587c4d38a8cacd.json",
+    "unchanged": true,
+    "sha256": "6592ac60323110154f2471f15111e1cfe6613e91b4b8104d20b76757a1cb7a43"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run/ledger.json",
+    "unchanged": true,
+    "sha256": "7c83a1738e291d25915a06037eaaad22afe2e08c39f2af433c021bab2685e84f"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819/875ce684e8c03540e8a9f0652a1876f051e1b643a89cecdefdcfc8f60b9544f7.json",
+    "unchanged": true,
+    "sha256": "4cefcf03e9df5ecd17690c3e2eb7738fbf56b0fa7ee8c1202003a4dee0398e79"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819/ledger.json",
+    "unchanged": true,
+    "sha256": "1e13e61df7345d8ede77a24e61929de8cc10c2896da15b1d0e6bb8adfb25802b"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88/a93916c4863cdb76c3a1d064ffb1f11865f35be96aa5bf7070ee6825ad3e9c4f.json",
+    "unchanged": true,
+    "sha256": "2bfdbfe88c3be580b93c3f591b373fd557fe808d870a58a102a41ed04587c8eb"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88/ledger.json",
+    "unchanged": true,
+    "sha256": "502743f4f2c05c484ad8d06ee7e4c3d356f84e098ec1c29b6ff0aea651bb1754"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/mock-trace.json",
+    "unchanged": true,
+    "sha256": "e123fb8bdcc02ca1b3023cfff66a9603f64620066be6de731f678d32ec1f6420"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/p3b-plan.md",
+    "unchanged": true,
+    "sha256": "7e445264d22629a18fbb42449118123c7c5bfc74c28f1ba7c7f2f0b4e5363dc0"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/regression-tests.tap",
+    "unchanged": true,
+    "sha256": "d3ab69ffab9395b72f786808e8dcde378c77038314d8f942746becf7a70311fd"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/report.md",
+    "unchanged": true,
+    "sha256": "9020ead4a3f8a96f2fe2c3ad4454536c458706e60349937bd4f17f69d63f2f87"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3a/saved-failure-diagnostics.json",
+    "unchanged": true,
+    "sha256": "1157738f13f1e7fb74f4e02bf75ccc636e573352b6541bf182a734fb84a96951"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/capacity.json",
+    "unchanged": true,
+    "sha256": "52b44ad0b84a66a4cd029ec99eb356632adee668c809a971494d69dc9bc0854a"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/core-tests.tap",
+    "unchanged": true,
+    "sha256": "64a87f653790150bc21242a54b3f926072c4b8ae92323b0583d10c53ec18d3fd"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/isolation.json",
+    "unchanged": true,
+    "sha256": "5ddffd218db82d2d5032dbb02a01e4ec264f52098b7b0aa4999497de36b64c80"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/new-tests.tap",
+    "unchanged": true,
+    "sha256": "ea28c0af470012477c4f9bbf90f7e30892614abdd027f881253b18399f1f2d66"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/p3a-preservation.json",
+    "unchanged": true,
+    "sha256": "ccab2408c69859d1a2db1689ac76876d41168bf39156fefbd8b82ed95699e887"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/regression-tests.tap",
+    "unchanged": true,
+    "sha256": "1981d07b7e982466d4250ba018ced36eaaaf049b94c9d1faff18614d4f1eb088"
+  },
+  {
+    "path": "docs/rebuild-20261028/p3-preflight/report.md",
+    "unchanged": true,
+    "sha256": "9ff63fc2524b35735485cd17cfcde4b3df995d65db15f1a9cf4ccb14cb598bac"
+  }
+]

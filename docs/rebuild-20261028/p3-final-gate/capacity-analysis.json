@@ -1,0 +1,2753 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "api": "Chat Completions POST /openai/v1/chat/completions (intended request shape and legacy semantic provider); no live adapter in new core",
+  "maxOutput": 3000,
+  "complete": [
+    {
+      "itemCode": "daiya:10001447",
+      "itemName": "★送料無料★【ブラ 洗濯ネット 型崩れ 防止】サボるん ブラジャー 洗濯 ネット 型 崩れ しない ドラム式 洗濯機 たたき洗い 手洗い おしゃれ着 ランジェリー メッシュ ホームクリーニング かわいい ハート ブラジャー用 洗濯機で洗える",
+      "sourceHash": "b7bea954ecc18de11fe3e2a5e70aae17539f2796e476a92f659681be0dca10dd",
+      "sourceCharacters": {
+        "itemCode": 14,
+        "itemName": 120,
+        "itemCaption": 3008,
+        "catchcopy": 56
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 322,
+            "asciiUnits": 25,
+            "nonAsciiUtf16Units": 99,
+            "heuristicWeight": 144.85
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8180,
+            "asciiUnits": 426,
+            "nonAsciiUtf16Units": 2586,
+            "heuristicWeight": 3726.8999999999996
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 160,
+            "asciiUnits": 10,
+            "nonAsciiUtf16Units": 50,
+            "heuristicWeight": 72.5
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.4000000000005457,
+        "estimate": {
+          "input": 7216,
+          "output": 3000,
+          "total": 10216,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18099,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 322,
+            "asciiUnits": 25,
+            "nonAsciiUtf16Units": 99,
+            "heuristicWeight": 144.85
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8180,
+            "asciiUnits": 426,
+            "nonAsciiUtf16Units": 2586,
+            "heuristicWeight": 3726.8999999999996
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 160,
+            "asciiUnits": 10,
+            "nonAsciiUtf16Units": 50,
+            "heuristicWeight": 72.5
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.6500000000005457,
+        "estimate": {
+          "input": 7219,
+          "output": 3000,
+          "total": 10219,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18110,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 3948.7499999999995,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 3945,
+      "totalMinusAssumed8000": 2216,
+      "assumed8000Fits": false,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 481444,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 697342,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 481444,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "daiya:10001030",
+      "itemName": "★送料無料★【布団も洗える! 当店限定商品 70cm】大きくふくらむ洗濯ネット | 衣替え 洗濯ネット 洗濯ネット特大 布団用 乾燥機対応 大型 大容量 布団 毛布 寝具用 掛け布団 タオル ドラム式 まとめ洗い 洗濯用品 寝具 人気",
+      "sourceHash": "352c1580954934e2a9b457d35c030500e3ce1d24e5ef851b7d5ed726a089f468",
+      "sourceCharacters": {
+        "itemCode": 14,
+        "itemName": 117,
+        "itemCaption": 3312,
+        "catchcopy": 83
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 303,
+            "asciiUnits": 30,
+            "nonAsciiUtf16Units": 91,
+            "heuristicWeight": 134.89999999999998
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8831,
+            "asciiUnits": 558,
+            "nonAsciiUtf16Units": 2758,
+            "heuristicWeight": 4000.7
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 213,
+            "asciiUnits": 24,
+            "nonAsciiUtf16Units": 63,
+            "heuristicWeight": 94.19999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.8500000000003638,
+        "estimate": {
+          "input": 7502,
+          "output": 3000,
+          "total": 10502,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18784,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 303,
+            "asciiUnits": 30,
+            "nonAsciiUtf16Units": 91,
+            "heuristicWeight": 134.89999999999998
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8831,
+            "asciiUnits": 558,
+            "nonAsciiUtf16Units": 2758,
+            "heuristicWeight": 4000.7
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 213,
+            "asciiUnits": 24,
+            "nonAsciiUtf16Units": 63,
+            "heuristicWeight": 94.19999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.1000000000003638,
+        "estimate": {
+          "input": 7504,
+          "output": 3000,
+          "total": 10504,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18795,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 4234.299999999999,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 4231,
+      "totalMinusAssumed8000": 2502,
+      "assumed8000Fits": false,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 482129,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 698027,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 482129,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "ipow:10000579",
+      "itemName": "【8枚セット】【送料無料】ipow 洗濯ネット ランドリーネット 洗濯バッグ ブラジャーネット 洗濯用品 衣類 下着 靴下 シャツ など適用 トラベルポーチ 型崩れ防止 細かい網目 丈夫 家庭用",
+      "sourceHash": "27dfc3fe6fa2928b1c55d0eada7ecb0f929384ff47d00d1ae4b9621660e9356e",
+      "sourceCharacters": {
+        "itemCode": 13,
+        "itemName": 97,
+        "itemCaption": 443,
+        "catchcopy": 26
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 17,
+            "asciiUnits": 17,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.25
+          },
+          "source.itemName": {
+            "utf8Bytes": 255,
+            "asciiUnits": 24,
+            "nonAsciiUtf16Units": 77,
+            "heuristicWeight": 113.8
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1111,
+            "asciiUnits": 112,
+            "nonAsciiUtf16Units": 335,
+            "heuristicWeight": 496.99999999999994
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 72,
+            "asciiUnits": 9,
+            "nonAsciiUtf16Units": 21,
+            "heuristicWeight": 31.65
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.4499999999998181,
+        "estimate": {
+          "input": 3914,
+          "output": 3000,
+          "total": 6914,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 10874,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 17,
+            "asciiUnits": 17,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.25
+          },
+          "source.itemName": {
+            "utf8Bytes": 255,
+            "asciiUnits": 24,
+            "nonAsciiUtf16Units": 77,
+            "heuristicWeight": 113.8
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1111,
+            "asciiUnits": 112,
+            "nonAsciiUtf16Units": 335,
+            "heuristicWeight": 496.99999999999994
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 72,
+            "asciiUnits": 9,
+            "nonAsciiUtf16Units": 21,
+            "heuristicWeight": 31.65
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.6999999999998181,
+        "estimate": {
+          "input": 3917,
+          "output": 3000,
+          "total": 6917,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 10885,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 646.6999999999999,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 643,
+      "totalMinusAssumed8000": -1086,
+      "assumed8000Fits": true,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 474219,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 690117,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 474219,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "linofle:10000458",
+      "itemName": "【楽天1位】洗濯ネット サイズ組み合わせ自由 選べる6枚セット ランドリーネット 洗濯 ネット 角型 洗濯用品 型崩れ防止 丈夫 細かい 網目 トラベル 使いやすい ランドリー 小 送料無料",
+      "sourceHash": "c08c38a3f04d790e8ab4ad7124cc6448b8d7fc7110a128a448f52ad1079ff71a",
+      "sourceCharacters": {
+        "itemCode": 16,
+        "itemName": 95,
+        "itemCaption": 551,
+        "catchcopy": 13
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 20,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5
+          },
+          "source.itemName": {
+            "utf8Bytes": 253,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 77,
+            "heuristicWeight": 113.3
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1551,
+            "asciiUnits": 57,
+            "nonAsciiUtf16Units": 498,
+            "heuristicWeight": 711.4499999999999
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 41,
+            "asciiUnits": 5,
+            "nonAsciiUtf16Units": 12,
+            "heuristicWeight": 18.049999999999997
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.3500000000003638,
+        "estimate": {
+          "input": 4115,
+          "output": 3000,
+          "total": 7115,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11284,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 20,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5
+          },
+          "source.itemName": {
+            "utf8Bytes": 253,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 77,
+            "heuristicWeight": 113.3
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1551,
+            "asciiUnits": 57,
+            "nonAsciiUtf16Units": 498,
+            "heuristicWeight": 711.4499999999999
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 41,
+            "asciiUnits": 5,
+            "nonAsciiUtf16Units": 12,
+            "heuristicWeight": 18.049999999999997
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.6000000000003638,
+        "estimate": {
+          "input": 4118,
+          "output": 3000,
+          "total": 7118,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11295,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 847.7999999999998,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 844,
+      "totalMinusAssumed8000": -885,
+      "assumed8000Fits": true,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 474629,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 690527,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 474629,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "yukaiya:10001267",
+      "itemName": "【 楽天1位受賞★レビュー特典付き 】＼クーポンで最大20％OFF！／洗濯ネット ランドリーネット 大型 ニット 6枚セット 下着 形崩れ防止 洗濯用品 家庭用品 トラベルポーチ 収納ネット RP1",
+      "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+      "sourceCharacters": {
+        "itemCode": 16,
+        "itemName": 99,
+        "itemCaption": 0,
+        "catchcopy": 30
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 20,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5
+          },
+          "source.itemName": {
+            "utf8Bytes": 255,
+            "asciiUnits": 27,
+            "nonAsciiUtf16Units": 76,
+            "heuristicWeight": 113.14999999999999
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 4,
+            "asciiUnits": 4,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 82,
+            "asciiUnits": 10,
+            "nonAsciiUtf16Units": 24,
+            "heuristicWeight": 36.099999999999994
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.900000000000091,
+        "estimate": {
+          "input": 3423,
+          "output": 3000,
+          "total": 6423,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 9780,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 20,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5
+          },
+          "source.itemName": {
+            "utf8Bytes": 255,
+            "asciiUnits": 27,
+            "nonAsciiUtf16Units": 76,
+            "heuristicWeight": 113.14999999999999
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 4,
+            "asciiUnits": 4,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 82,
+            "asciiUnits": 10,
+            "nonAsciiUtf16Units": 24,
+            "heuristicWeight": 36.099999999999994
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.15000000000009095,
+        "estimate": {
+          "input": 3425,
+          "output": 3000,
+          "total": 6425,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 9791,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 155.25,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 152,
+      "totalMinusAssumed8000": -1577,
+      "assumed8000Fits": true,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 473125,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 689023,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 473125,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "living-mahoroba:10015748",
+      "itemName": "洗濯ネット 角型 マチアリ コットンラッセル レース編み Mサイズ Lサイズ 天然素材 綿100 % 岩本繊維 【 日本製 】やさしい洗濯ネット コットン 天然 綿 綿100 コットン100 コットン100％",
+      "sourceHash": "038a5a90094455cc7a863a46de3379ef69021af1fe9de20cf3657969e22363ce",
+      "sourceCharacters": {
+        "itemCode": 24,
+        "itemName": 104,
+        "itemCaption": 1861,
+        "catchcopy": 57
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 28,
+            "asciiUnits": 28,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 7
+          },
+          "source.itemName": {
+            "utf8Bytes": 248,
+            "asciiUnits": 38,
+            "nonAsciiUtf16Units": 70,
+            "heuristicWeight": 107.5
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 5155,
+            "asciiUnits": 220,
+            "nonAsciiUtf16Units": 1645,
+            "heuristicWeight": 2358
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 153,
+            "asciiUnits": 15,
+            "nonAsciiUtf16Units": 46,
+            "heuristicWeight": 68.14999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.5,
+        "estimate": {
+          "input": 5808,
+          "output": 3000,
+          "total": 8808,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 15003,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 28,
+            "asciiUnits": 28,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 7
+          },
+          "source.itemName": {
+            "utf8Bytes": 248,
+            "asciiUnits": 38,
+            "nonAsciiUtf16Units": 70,
+            "heuristicWeight": 107.5
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 5155,
+            "asciiUnits": 220,
+            "nonAsciiUtf16Units": 1645,
+            "heuristicWeight": 2358
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 153,
+            "asciiUnits": 15,
+            "nonAsciiUtf16Units": 46,
+            "heuristicWeight": 68.14999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.75,
+        "estimate": {
+          "input": 5811,
+          "output": 3000,
+          "total": 8811,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 15014,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 2540.65,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 2537,
+      "totalMinusAssumed8000": 808,
+      "assumed8000Fits": false,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 478348,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 694246,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 478348,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "daiya:10001455",
+      "itemName": "★送料無料★【お買得3枚セット】 シャツ用洗濯ネット 洗濯シワ防止 3枚組 | シャツ用 ワイシャツ Yシャツ yシャツブラウス 便利グッズ ドラム式 単身赴任 ネット 洗濯 ランドリーネット 洗濯ネット おしゃれ着 洗濯用品",
+      "sourceHash": "4a5e40fe458a63280c1a75b73d53fb817f6dfdecd04ea25a39e7609cf6685c12",
+      "sourceCharacters": {
+        "itemCode": 14,
+        "itemName": 113,
+        "itemCaption": 487,
+        "catchcopy": 42
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 299,
+            "asciiUnits": 26,
+            "nonAsciiUtf16Units": 91,
+            "heuristicWeight": 133.89999999999998
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1384,
+            "asciiUnits": 44,
+            "nonAsciiUtf16Units": 447,
+            "heuristicWeight": 636.8
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 98,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 26,
+            "heuristicWeight": 41.4
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.5500000000001819,
+        "estimate": {
+          "input": 4084,
+          "output": 3000,
+          "total": 7084,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11218,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 299,
+            "asciiUnits": 26,
+            "nonAsciiUtf16Units": 91,
+            "heuristicWeight": 133.89999999999998
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1384,
+            "asciiUnits": 44,
+            "nonAsciiUtf16Units": 447,
+            "heuristicWeight": 636.8
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 98,
+            "asciiUnits": 20,
+            "nonAsciiUtf16Units": 26,
+            "heuristicWeight": 41.4
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.8000000000001819,
+        "estimate": {
+          "input": 4087,
+          "output": 3000,
+          "total": 7087,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11229,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 816.5999999999999,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 813,
+      "totalMinusAssumed8000": -916,
+      "assumed8000Fits": true,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 474563,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 690461,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 474563,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "ritoashop:10000039",
+      "itemName": "洗濯ネット ランドリーネット 衣類 を守る 型崩れ防止 ハニカム素材 メッシュ 耐久性 丈夫 長持ち 繰り返し使える 角型 家庭用 家庭 洗濯用ネット Tシャツ 下着 靴下 1000円ポッキリ 1000円ぽっきり ドラム式 旅行 持ち運び 白 ホワイト 中サイズ 大 30×40cm 50×60cm",
+      "sourceHash": "deeeb8f7be43ab1b3d03319ed513630d7af9b0607aca8167189b5062da39d0eb",
+      "sourceCharacters": {
+        "itemCode": 18,
+        "itemName": 149,
+        "itemCaption": 3178,
+        "catchcopy": 103
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 22,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 351,
+            "asciiUnits": 53,
+            "nonAsciiUtf16Units": 100,
+            "heuristicWeight": 153.25
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8056,
+            "asciiUnits": 744,
+            "nonAsciiUtf16Units": 2438,
+            "heuristicWeight": 3599.2
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 249,
+            "asciiUnits": 36,
+            "nonAsciiUtf16Units": 71,
+            "heuristicWeight": 108.39999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.8000000000010914,
+        "estimate": {
+          "input": 7134,
+          "output": 3000,
+          "total": 10134,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18097,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 22,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 351,
+            "asciiUnits": 53,
+            "nonAsciiUtf16Units": 100,
+            "heuristicWeight": 153.25
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 8056,
+            "asciiUnits": 744,
+            "nonAsciiUtf16Units": 2438,
+            "heuristicWeight": 3599.2
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 249,
+            "asciiUnits": 36,
+            "nonAsciiUtf16Units": 71,
+            "heuristicWeight": 108.39999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.050000000001091394,
+        "estimate": {
+          "input": 7136,
+          "output": 3000,
+          "total": 10136,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 18108,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 3866.35,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 3863,
+      "totalMinusAssumed8000": 2134,
+      "assumed8000Fits": false,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 481442,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 697340,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 481442,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "brian:10001257",
+      "itemName": "【お買い物マラソン 5％クーポン】 【全3色】 ランドリーネット 洗濯ネット 洗濯袋 細かい網目 形崩れ防止 収納ネット 四角 極小型 小型 中型 大型 特大 超特大型 極大 ブラジャー 布団用 毛布 下着 洗濯用品 家庭用品 トラベルポーチ グレー ピンク ライトグリー",
+      "sourceHash": "1dca4b426606f785c9df1fe90f4743f60363ed5e86619eec1ed1310f748a8ecf",
+      "sourceCharacters": {
+        "itemCode": 14,
+        "itemName": 136,
+        "itemCaption": 479,
+        "catchcopy": 51
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 356,
+            "asciiUnits": 32,
+            "nonAsciiUtf16Units": 108,
+            "heuristicWeight": 159.2
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1163,
+            "asciiUnits": 139,
+            "nonAsciiUtf16Units": 344,
+            "heuristicWeight": 516.3499999999999
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 141,
+            "asciiUnits": 12,
+            "nonAsciiUtf16Units": 43,
+            "heuristicWeight": 63.199999999999996
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.900000000000091,
+        "estimate": {
+          "input": 4011,
+          "output": 3000,
+          "total": 7011,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11097,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 18,
+            "asciiUnits": 18,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 4.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 356,
+            "asciiUnits": 32,
+            "nonAsciiUtf16Units": 108,
+            "heuristicWeight": 159.2
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 1163,
+            "asciiUnits": 139,
+            "nonAsciiUtf16Units": 344,
+            "heuristicWeight": 516.3499999999999
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 141,
+            "asciiUnits": 12,
+            "nonAsciiUtf16Units": 43,
+            "heuristicWeight": 63.199999999999996
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.15000000000009095,
+        "estimate": {
+          "input": 4013,
+          "output": 3000,
+          "total": 7013,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 11108,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 743.25,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 740,
+      "totalMinusAssumed8000": -989,
+      "assumed8000Fits": true,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 474442,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 690340,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 474442,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    },
+    {
+      "itemCode": "lebenwood:10004953",
+      "itemName": "【楽天15冠1位 x 専門家監修】3枚入り 洗濯ネットセット ランドリーネット 収納 ブラジャー 帽子 メッシュネット 乾燥機対応 ドラム式 大 中 小 ブラ用洗濯ネット 洗濯袋 中目 セーター用 洗濯物袋 ハニカムメッシュネット 送料無料",
+      "sourceHash": "4060fac23d780ac3021b97ed5d2704a3c6654bb136046cab34dba10a0f9a591a",
+      "sourceCharacters": {
+        "itemCode": 18,
+        "itemName": 120,
+        "itemCaption": 2246,
+        "catchcopy": 99
+      },
+      "draft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 267,
+            "asciiUnits": 267,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 66.75
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 22,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 314,
+            "asciiUnits": 29,
+            "nonAsciiUtf16Units": 95,
+            "heuristicWeight": 140.25
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 5616,
+            "asciiUnits": 565,
+            "nonAsciiUtf16Units": 1685,
+            "heuristicWeight": 2500.25
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 229,
+            "asciiUnits": 40,
+            "nonAsciiUtf16Units": 63,
+            "heuristicWeight": 98.19999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.9500000000007276,
+        "estimate": {
+          "input": 6012,
+          "output": 3000,
+          "total": 9012,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 15600,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "wireDraft": {
+        "parts": {
+          "framing": {
+            "utf8Bytes": 278,
+            "asciiUnits": 278,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 69.5
+          },
+          "fixedPrompt": {
+            "utf8Bytes": 2103,
+            "asciiUnits": 201,
+            "nonAsciiUtf16Units": 634,
+            "heuristicWeight": 937.8499999999999
+          },
+          "source.itemCode": {
+            "utf8Bytes": 22,
+            "asciiUnits": 22,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 5.5
+          },
+          "source.itemName": {
+            "utf8Bytes": 314,
+            "asciiUnits": 29,
+            "nonAsciiUtf16Units": 95,
+            "heuristicWeight": 140.25
+          },
+          "source.itemCaption": {
+            "utf8Bytes": 5616,
+            "asciiUnits": 565,
+            "nonAsciiUtf16Units": 1685,
+            "heuristicWeight": 2500.25
+          },
+          "source.catchcopy": {
+            "utf8Bytes": 229,
+            "asciiUnits": 40,
+            "nonAsciiUtf16Units": 63,
+            "heuristicWeight": 98.19999999999999
+          },
+          "conditions": {
+            "utf8Bytes": 2,
+            "asciiUnits": 2,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 0.5
+          },
+          "schema": {
+            "utf8Bytes": 7047,
+            "asciiUnits": 7047,
+            "nonAsciiUtf16Units": 0,
+            "heuristicWeight": 1761.75
+          }
+        },
+        "overheadHeuristic": 500,
+        "rounding": 0.2000000000007276,
+        "estimate": {
+          "input": 6014,
+          "output": 3000,
+          "total": 9014,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        "serializedBytes": 15611,
+        "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+      },
+      "sourceWeight": 2744.2,
+      "emptySourceBaseline": {
+        "input": 3271,
+        "output": 3000,
+        "total": 6271,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "deltaFromEmptySource": 2741,
+      "totalMinusAssumed8000": 1012,
+      "assumed8000Fits": false,
+      "explanation": "Initial payload has no candidate or internal plan. Source growth consumes headroom above fixed prompt/schema/framing/500 plus output reservation 3000. Heuristic only; 8000 is assumed/public TPM, not model context.",
+      "future": [
+        {
+          "stage": "review",
+          "serializedBytesUpper": 478945,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rewrite",
+          "serializedBytesUpper": 694843,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 108033,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        },
+        {
+          "stage": "rereview",
+          "serializedBytesUpper": 478945,
+          "candidateCompactJsonBytesUpper": 231505,
+          "failuresCompactJsonBytesUpper": 0,
+          "providerInputTokensUpper": null,
+          "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+        }
+      ],
+      "providerInputTokens": null,
+      "compatibilityTokenizer": null,
+      "liveAdmission": false
+    }
+  ],
+  "incomplete": [
+    {
+      "itemCode": "pasoro:10001354",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "e-kurashi:10019512",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "supplyshop:10028516",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "worktk:10014552",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "bos-shop:10000023",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "mtgec-beauty:10001348",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "risu-onlineshop:10002384",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "snowfoxskincare:10000116",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "astyone0728:10000001",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "myhomeshop:10000326",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "irisplaza-r:10170526",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "high-broad:10000679",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "arqs01:10000087",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "satiwel:10002945",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "pc2b:10001078",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "gogo1102:10000190",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "bos-shop:10000024",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "masayosiryouhin:10000072",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "furumiyashop:10000146",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "doshisha-marche:10000227",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "exception5251:10000379",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "40s-skincare:10000159",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "auc-r-style:10000367",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "goodgoods-center:10000193",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "mpowjapan:10000907",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "fujisports-r:10054189",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "repeat7:10002729",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    },
+    {
+      "itemCode": "bbtown:10225214",
+      "missing": [
+        "catchcopy"
+      ],
+      "requestBuilt": false
+    }
+  ],
+  "savedMockCandidates": [
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run/8ad2365185d61e2f1fd2a23c0e886cafb9a5783fa4797cfb66587c4d38a8cacd.json",
+      "provenance": "P3-A deterministic mock, not live generation",
+      "schemaValid": true,
+      "candidateCompactBytes": 2322,
+      "reviewCompactBytes": 3969,
+      "stages": [
+        {
+          "stage": "review",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rewrite",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 361,
+              "asciiUnits": 361,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 90.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 2103,
+              "asciiUnits": 201,
+              "nonAsciiUtf16Units": 634,
+              "heuristicWeight": 937.8499999999999
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "diagnostics": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "repairInstruction": {
+              "utf8Bytes": 112,
+              "asciiUnits": 112,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 28
+            },
+            "schema": {
+              "utf8Bytes": 7047,
+              "asciiUnits": 7047,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1761.75
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.20000000000027285,
+          "estimate": {
+            "input": 4236,
+            "output": 3000,
+            "total": 7236,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12299,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rereview",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        }
+      ]
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819/875ce684e8c03540e8a9f0652a1876f051e1b643a89cecdefdcfc8f60b9544f7.json",
+      "provenance": "P3-A deterministic mock, not live generation",
+      "schemaValid": true,
+      "candidateCompactBytes": 2322,
+      "reviewCompactBytes": 3969,
+      "stages": [
+        {
+          "stage": "review",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rewrite",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 361,
+              "asciiUnits": 361,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 90.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 2103,
+              "asciiUnits": 201,
+              "nonAsciiUtf16Units": 634,
+              "heuristicWeight": 937.8499999999999
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "diagnostics": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "repairInstruction": {
+              "utf8Bytes": 112,
+              "asciiUnits": 112,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 28
+            },
+            "schema": {
+              "utf8Bytes": 7047,
+              "asciiUnits": 7047,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1761.75
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.20000000000027285,
+          "estimate": {
+            "input": 4236,
+            "output": 3000,
+            "total": 7236,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12299,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rereview",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        }
+      ]
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88/a93916c4863cdb76c3a1d064ffb1f11865f35be96aa5bf7070ee6825ad3e9c4f.json",
+      "provenance": "P3-A deterministic mock, not live generation",
+      "schemaValid": true,
+      "candidateCompactBytes": 2322,
+      "reviewCompactBytes": 3969,
+      "stages": [
+        {
+          "stage": "review",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rewrite",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 361,
+              "asciiUnits": 361,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 90.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 2103,
+              "asciiUnits": 201,
+              "nonAsciiUtf16Units": 634,
+              "heuristicWeight": 937.8499999999999
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "diagnostics": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "repairInstruction": {
+              "utf8Bytes": 112,
+              "asciiUnits": 112,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 28
+            },
+            "schema": {
+              "utf8Bytes": 7047,
+              "asciiUnits": 7047,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1761.75
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.20000000000027285,
+          "estimate": {
+            "input": 4236,
+            "output": 3000,
+            "total": 7236,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12299,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        },
+        {
+          "stage": "rereview",
+          "parts": {
+            "framing": {
+              "utf8Bytes": 321,
+              "asciiUnits": 321,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 80.25
+            },
+            "fixedPrompt": {
+              "utf8Bytes": 1956,
+              "asciiUnits": 345,
+              "nonAsciiUtf16Units": 537,
+              "heuristicWeight": 838.05
+            },
+            "source.itemCode": {
+              "utf8Bytes": 18,
+              "asciiUnits": 18,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 4.5
+            },
+            "source.itemName": {
+              "utf8Bytes": 19,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 5,
+              "heuristicWeight": 8
+            },
+            "source.itemCaption": {
+              "utf8Bytes": 64,
+              "asciiUnits": 7,
+              "nonAsciiUtf16Units": 19,
+              "heuristicWeight": 28.349999999999998
+            },
+            "source.catchcopy": {
+              "utf8Bytes": 4,
+              "asciiUnits": 4,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1
+            },
+            "conditions": {
+              "utf8Bytes": 2,
+              "asciiUnits": 2,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 0.5
+            },
+            "internalPlan": {
+              "utf8Bytes": 2194,
+              "asciiUnits": 1360,
+              "nonAsciiUtf16Units": 278,
+              "heuristicWeight": 729.2
+            },
+            "generatedBody": {
+              "utf8Bytes": 373,
+              "asciiUnits": 130,
+              "nonAsciiUtf16Units": 81,
+              "heuristicWeight": 145.89999999999998
+            },
+            "schema": {
+              "utf8Bytes": 7514,
+              "asciiUnits": 7514,
+              "nonAsciiUtf16Units": 0,
+              "heuristicWeight": 1878.5
+            }
+          },
+          "overheadHeuristic": 500,
+          "rounding": 0.75,
+          "estimate": {
+            "input": 4215,
+            "output": 3000,
+            "total": 7215,
+            "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+          },
+          "serializedBytes": 12465,
+          "classification": "additive partition of serialized HTTP JSON heuristic, NOT model prompt tokenization"
+        }
+      ]
+    }
+  ],
+  "schemaBounds": {
+    "writerCompactJsonBytes": 231505,
+    "reviewCompactJsonBytes": 197640,
+    "providerTokenBounds": null
+  },
+  "tokenizer": {
+    "systemPython": false,
+    "primaryRuntimePython": false,
+    "nodePackagesFound": false,
+    "status": "not locally available; no compatible encoding ranks cached in searched workspace/runtime",
+    "officialEncoding": "o200k_harmony",
+    "providerChatTemplateVerified": false
+  },
+  "gate": "HOLD",
+  "realGroqCalls": 0,
+  "dbCalls": 0
+}

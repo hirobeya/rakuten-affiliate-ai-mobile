@@ -1,0 +1,57 @@
+{
+  "confirmationDate": "2026-10-29",
+  "provenance": "User explicit report of authenticated Groq Console screenshots in current instruction; screenshots not independently reopened in this run",
+  "organization": {
+    "name": "Personal",
+    "visibleOrganizations": [
+      "Personal"
+    ],
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "itpmApplicable": null,
+    "itpm": null,
+    "otpm": null
+  },
+  "project": {
+    "name": "Default Project",
+    "showAllProjectsEnabled": true,
+    "visibleProjects": [
+      "Default Project"
+    ],
+    "customRateLimits": false,
+    "display": "No custom rate limits set for this project.",
+    "effectiveLimitSource": "organization base limits; user-confirmed inheritance"
+  },
+  "usageObservation": {
+    "selectedDate": "2026-10-29",
+    "filter": "Today",
+    "displayTimezone": "UTC",
+    "projectDisplay": "No usage data on this project for today.",
+    "allProjectsDisplay": "No usage data on this project for today.",
+    "reportedPossibleDelayMinutes": 15,
+    "historicalUsagePresent": true,
+    "historicalExampleDates": [
+      "October 2",
+      "October 6"
+    ],
+    "observedAtExact": null,
+    "note": "Display absence only; neither zero current consumption nor exact remaining capacity certified"
+  },
+  "remaining": {
+    "minuteTokens": null,
+    "dayTokens": null,
+    "minuteRequests": null,
+    "dayRequests": null,
+    "reset": null,
+    "unresolvedSends": null,
+    "otherCallerUsage": null,
+    "pendingReservations": null,
+    "snapshotValidUntil": null
+  },
+  "exclusiveWindowConfirmed": false,
+  "liveAuthorized": false,
+  "gate": "HOLD"
+}

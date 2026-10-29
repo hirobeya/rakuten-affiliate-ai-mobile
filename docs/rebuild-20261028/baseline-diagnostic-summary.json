@@ -1,0 +1,59 @@
+{
+  "sourceProducts": 44,
+  "localByCohort": {
+    "existing-development": {
+      "total": 17,
+      "ready": 2
+    },
+    "previously-unseen-now-diagnostic": {
+      "total": 17,
+      "ready": 0
+    },
+    "frozen-washnet10": {
+      "total": 10,
+      "ready": 3
+    }
+  },
+  "savedJobs": 22,
+  "sourceProductsWithSavedDrafts": 18,
+  "uniqueDraftReviewPairs": 38,
+  "machinePassBefore": 18,
+  "machinePassAfter": 18,
+  "withSavedReview": 21,
+  "withoutSavedReview": 17,
+  "publicationBefore": {
+    "blocked": 31,
+    "ready": 7
+  },
+  "publicationAfter": {
+    "blocked": 32,
+    "ready": 6
+  },
+  "machineFailures": {
+    "unsupported_prevention_result": 3,
+    "final_copy_guard": 5,
+    "prohibited_expression": 1,
+    "number_without_evidence": 3,
+    "measurement_without_evidence": 2,
+    "product_identity_missing_from_post": 11,
+    "catalogue_only_copy": 1,
+    "unsupported_result": 1,
+    "unsafe_operation": 1,
+    "restated_purchase_reason": 1
+  },
+  "reviewFailures": {
+    "target_not_supported": 1,
+    "conditions_not_supported": 2,
+    "review_evidence_not_in_source": 3,
+    "degree_not_supported": 6,
+    "quality_reason_unclear": 1,
+    "degree_unclear": 1,
+    "quality_identity_not_supported": 3,
+    "product_not_supported": 1,
+    "conditions_unclear": 1
+  },
+  "reviewRequestAbove8000": 9,
+  "rewriteRequestAbove8000": 16,
+  "providerCallsThisEvaluation": 0,
+  "independentTwoRaterSixPass": null
+}

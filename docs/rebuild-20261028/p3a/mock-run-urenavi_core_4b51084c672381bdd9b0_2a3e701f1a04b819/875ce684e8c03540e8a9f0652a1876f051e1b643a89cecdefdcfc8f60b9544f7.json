@@ -1,0 +1,1126 @@
+{
+  "key": "875ce684e8c03540e8a9f0652a1876f051e1b643a89cecdefdcfc8f60b9544f7",
+  "version": "urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819",
+  "source": {
+    "itemCode": "offline:kettle",
+    "itemName": "電気ケトル",
+    "itemCaption": "忙しい朝にカップ1杯分が約85秒で沸騰する。",
+    "catchcopy": ""
+  },
+  "conditions": {},
+  "status": "ready",
+  "calls": [
+    {
+      "stage": "draft",
+      "attemptId": "63f4eec029027a2a31c6344e2d5996e0fa94d63fc0ddd97bc3478249bf824afb",
+      "status": "received",
+      "estimate": {
+        "input": 3309,
+        "output": 3000,
+        "total": 6309,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 100,
+        "total_tokens": 200
+      }
+    },
+    {
+      "stage": "review",
+      "attemptId": "1a74f4aeb2ddc099d51eeecea87d519c7341c6629d1a7dcbbb54bd74f240df0b",
+      "status": "received",
+      "estimate": {
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 100,
+        "total_tokens": 200
+      }
+    },
+    {
+      "stage": "rewrite",
+      "attemptId": "80425c53a0911a2cfc6d7118af6399937bc38fcc0c903683a7ab377dc066a4f6",
+      "status": "received",
+      "estimate": {
+        "input": 4251,
+        "output": 3000,
+        "total": 7251,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 100,
+        "total_tokens": 200
+      }
+    },
+    {
+      "stage": "rereview",
+      "attemptId": "34af331adc14066bec664a03f617542dccc85a8c92f2734f671ff838112a0f08",
+      "status": "received",
+      "estimate": {
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 100,
+        "total_tokens": 200
+      }
+    }
+  ],
+  "history": [
+    {
+      "attempt": 0,
+      "draft": {
+        "plan": {
+          "sellingProduct": {
+            "id": "p",
+            "type": "電気ケトル",
+            "user": "お湯を用意する人",
+            "use": "湯沸かし",
+            "target": "水",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "verdict": "supported"
+          },
+          "owners": [
+            {
+              "id": "body",
+              "kind": "body",
+              "parentId": "p",
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "features": [
+            {
+              "id": "f",
+              "content": "カップ1杯分が約85秒で沸騰",
+              "ownerId": "body",
+              "scope": {
+                "model": "",
+                "size": "カップ1杯分",
+                "part": "本体",
+                "target": "水",
+                "conditions": "カップ1杯分",
+                "negation": "",
+                "degree": "約",
+                "measurements": "約85秒"
+              },
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "intentions": [
+            {
+              "id": "i",
+              "kind": "use",
+              "content": "忙しい朝にお湯を用意したい",
+              "hypothetical": true
+            }
+          ],
+          "relations": [
+            {
+              "id": "r",
+              "featureId": "f",
+              "intentionId": "i",
+              "meaning": "忙しい朝に必要なカップ1杯分のお湯を用意する目的に少量の沸騰時間が対応する",
+              "intentionBoundary": "忙しい朝にお湯を用意したいという仮定",
+              "notGuaranteed": "準備全体の即時完了を保証しない",
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "bindings": [
+            {
+              "sentence": 0,
+              "featureIds": [
+                "f"
+              ],
+              "relationIds": [
+                "r"
+              ],
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "clauses": [
+                {
+                  "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+                  "featureIds": [
+                    "f"
+                  ],
+                  "relationIds": [
+                    "r"
+                  ],
+                  "quotes": [
+                    {
+                      "field": "itemCaption",
+                      "start": 0,
+                      "end": 22,
+                      "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "product": {
+          "what": "電気ケトル",
+          "acts_on": "水",
+          "acts_on_quote": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+        },
+        "sentences": [
+          {
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "kinds": [
+              "spec",
+              "scene"
+            ],
+            "quotes": [
+              "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            ]
+          }
+        ]
+      },
+      "review": {
+        "legacy": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "sentences": [
+            {
+              "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+              "evidenceQuotes": [],
+              "reason": "mock: timing scope retained",
+              "target": "supported",
+              "part": "supported",
+              "conditions": "supported",
+              "negation": "supported",
+              "degree": "supported"
+            }
+          ],
+          "quality": {
+            "identity": "supported",
+            "reason": "supported",
+            "scene": "supported",
+            "natural": "supported",
+            "non_redundant": "supported",
+            "room_style": "supported"
+          }
+        },
+        "plan": [
+          {
+            "id": "p",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "body",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "f",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          }
+        ],
+        "quality": {
+          "understanding": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "specificity": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "choice": {
+            "verdict": "fail",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "audience_value": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "naturalness": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "grounded": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          }
+        }
+      },
+      "failures": [
+        {
+          "rule": "quality_choice"
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "draft": {
+        "plan": {
+          "sellingProduct": {
+            "id": "p",
+            "type": "電気ケトル",
+            "user": "お湯を用意する人",
+            "use": "湯沸かし",
+            "target": "水",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "verdict": "supported"
+          },
+          "owners": [
+            {
+              "id": "body",
+              "kind": "body",
+              "parentId": "p",
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "features": [
+            {
+              "id": "f",
+              "content": "カップ1杯分が約85秒で沸騰",
+              "ownerId": "body",
+              "scope": {
+                "model": "",
+                "size": "カップ1杯分",
+                "part": "本体",
+                "target": "水",
+                "conditions": "カップ1杯分",
+                "negation": "",
+                "degree": "約",
+                "measurements": "約85秒"
+              },
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "intentions": [
+            {
+              "id": "i",
+              "kind": "use",
+              "content": "忙しい朝にお湯を用意したい",
+              "hypothetical": true
+            }
+          ],
+          "relations": [
+            {
+              "id": "r",
+              "featureId": "f",
+              "intentionId": "i",
+              "meaning": "忙しい朝に必要なカップ1杯分のお湯を用意する目的に少量の沸騰時間が対応する",
+              "intentionBoundary": "忙しい朝にお湯を用意したいという仮定",
+              "notGuaranteed": "準備全体の即時完了を保証しない",
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "verdict": "supported"
+            }
+          ],
+          "bindings": [
+            {
+              "sentence": 0,
+              "featureIds": [
+                "f"
+              ],
+              "relationIds": [
+                "r"
+              ],
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ],
+              "clauses": [
+                {
+                  "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+                  "featureIds": [
+                    "f"
+                  ],
+                  "relationIds": [
+                    "r"
+                  ],
+                  "quotes": [
+                    {
+                      "field": "itemCaption",
+                      "start": 0,
+                      "end": 22,
+                      "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "product": {
+          "what": "電気ケトル",
+          "acts_on": "水",
+          "acts_on_quote": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+        },
+        "sentences": [
+          {
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "kinds": [
+              "spec",
+              "scene"
+            ],
+            "quotes": [
+              "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            ]
+          }
+        ]
+      },
+      "review": {
+        "legacy": {
+          "product": {
+            "what": "supported",
+            "acts_on": "supported"
+          },
+          "sentences": [
+            {
+              "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+              "evidenceQuotes": [],
+              "reason": "mock: timing scope retained",
+              "target": "supported",
+              "part": "supported",
+              "conditions": "supported",
+              "negation": "supported",
+              "degree": "supported"
+            }
+          ],
+          "quality": {
+            "identity": "supported",
+            "reason": "supported",
+            "scene": "supported",
+            "natural": "supported",
+            "non_redundant": "supported",
+            "room_style": "supported"
+          }
+        },
+        "plan": [
+          {
+            "id": "p",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "body",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "f",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "target": "supported",
+            "part": "supported",
+            "conditions": "supported",
+            "negation": "supported",
+            "degree": "supported",
+            "reason": "mock only: original scope and ownership retained",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ]
+          }
+        ],
+        "quality": {
+          "understanding": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "specificity": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "choice": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "audience_value": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "naturalness": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          },
+          "grounded": {
+            "verdict": "pass",
+            "sentence": 0,
+            "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+            "quotes": [
+              {
+                "field": "itemCaption",
+                "start": 0,
+                "end": 22,
+                "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+              }
+            ],
+            "reason": "mock only: exercise acceptance path, not real quality evidence"
+          }
+        }
+      },
+      "failures": []
+    }
+  ],
+  "budget": [
+    {
+      "stage": "draft",
+      "input": 3309,
+      "output": 3000,
+      "total": 6309,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+    },
+    {
+      "stage": "review",
+      "input": 57320,
+      "output": 3000,
+      "total": 60320,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+    },
+    {
+      "stage": "rewrite",
+      "input": 76893,
+      "output": 3000,
+      "total": 79893,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+    },
+    {
+      "stage": "rereview",
+      "input": 57320,
+      "output": 3000,
+      "total": 60320,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+    }
+  ],
+  "draft": {
+    "plan": {
+      "sellingProduct": {
+        "id": "p",
+        "type": "電気ケトル",
+        "user": "お湯を用意する人",
+        "use": "湯沸かし",
+        "target": "水",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "verdict": "supported"
+      },
+      "owners": [
+        {
+          "id": "body",
+          "kind": "body",
+          "parentId": "p",
+          "quotes": [
+            {
+              "field": "itemCaption",
+              "start": 0,
+              "end": 22,
+              "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            }
+          ],
+          "verdict": "supported"
+        }
+      ],
+      "features": [
+        {
+          "id": "f",
+          "content": "カップ1杯分が約85秒で沸騰",
+          "ownerId": "body",
+          "scope": {
+            "model": "",
+            "size": "カップ1杯分",
+            "part": "本体",
+            "target": "水",
+            "conditions": "カップ1杯分",
+            "negation": "",
+            "degree": "約",
+            "measurements": "約85秒"
+          },
+          "quotes": [
+            {
+              "field": "itemCaption",
+              "start": 0,
+              "end": 22,
+              "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            }
+          ],
+          "verdict": "supported"
+        }
+      ],
+      "intentions": [
+        {
+          "id": "i",
+          "kind": "use",
+          "content": "忙しい朝にお湯を用意したい",
+          "hypothetical": true
+        }
+      ],
+      "relations": [
+        {
+          "id": "r",
+          "featureId": "f",
+          "intentionId": "i",
+          "meaning": "忙しい朝に必要なカップ1杯分のお湯を用意する目的に少量の沸騰時間が対応する",
+          "intentionBoundary": "忙しい朝にお湯を用意したいという仮定",
+          "notGuaranteed": "準備全体の即時完了を保証しない",
+          "quotes": [
+            {
+              "field": "itemCaption",
+              "start": 0,
+              "end": 22,
+              "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            }
+          ],
+          "verdict": "supported"
+        }
+      ],
+      "bindings": [
+        {
+          "sentence": 0,
+          "featureIds": [
+            "f"
+          ],
+          "relationIds": [
+            "r"
+          ],
+          "quotes": [
+            {
+              "field": "itemCaption",
+              "start": 0,
+              "end": 22,
+              "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+            }
+          ],
+          "clauses": [
+            {
+              "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+              "featureIds": [
+                "f"
+              ],
+              "relationIds": [
+                "r"
+              ],
+              "quotes": [
+                {
+                  "field": "itemCaption",
+                  "start": 0,
+                  "end": 22,
+                  "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "product": {
+      "what": "電気ケトル",
+      "acts_on": "水",
+      "acts_on_quote": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+    },
+    "sentences": [
+      {
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "kinds": [
+          "spec",
+          "scene"
+        ],
+        "quotes": [
+          "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+        ]
+      }
+    ]
+  },
+  "review": {
+    "legacy": {
+      "product": {
+        "what": "supported",
+        "acts_on": "supported"
+      },
+      "sentences": [
+        {
+          "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+          "evidenceQuotes": [],
+          "reason": "mock: timing scope retained",
+          "target": "supported",
+          "part": "supported",
+          "conditions": "supported",
+          "negation": "supported",
+          "degree": "supported"
+        }
+      ],
+      "quality": {
+        "identity": "supported",
+        "reason": "supported",
+        "scene": "supported",
+        "natural": "supported",
+        "non_redundant": "supported",
+        "room_style": "supported"
+      }
+    },
+    "plan": [
+      {
+        "id": "p",
+        "target": "supported",
+        "part": "supported",
+        "conditions": "supported",
+        "negation": "supported",
+        "degree": "supported",
+        "reason": "mock only: original scope and ownership retained",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ]
+      },
+      {
+        "id": "body",
+        "target": "supported",
+        "part": "supported",
+        "conditions": "supported",
+        "negation": "supported",
+        "degree": "supported",
+        "reason": "mock only: original scope and ownership retained",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ]
+      },
+      {
+        "id": "f",
+        "target": "supported",
+        "part": "supported",
+        "conditions": "supported",
+        "negation": "supported",
+        "degree": "supported",
+        "reason": "mock only: original scope and ownership retained",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ]
+      },
+      {
+        "id": "r",
+        "target": "supported",
+        "part": "supported",
+        "conditions": "supported",
+        "negation": "supported",
+        "degree": "supported",
+        "reason": "mock only: original scope and ownership retained",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ]
+      }
+    ],
+    "quality": {
+      "understanding": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      },
+      "specificity": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      },
+      "choice": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      },
+      "audience_value": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      },
+      "naturalness": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      },
+      "grounded": {
+        "verdict": "pass",
+        "sentence": 0,
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "quotes": [
+          {
+            "field": "itemCaption",
+            "start": 0,
+            "end": 22,
+            "text": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+          }
+        ],
+        "reason": "mock only: exercise acceptance path, not real quality evidence"
+      }
+    }
+  },
+  "failures": [],
+  "output": {
+    "product": {
+      "what": "電気ケトル",
+      "acts_on": "水",
+      "acts_on_quote": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+    },
+    "sentences": [
+      {
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "kinds": [
+          "spec",
+          "scene"
+        ],
+        "quotes": [
+          "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+        ]
+      }
+    ]
+  }
+}

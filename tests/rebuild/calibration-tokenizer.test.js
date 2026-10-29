@@ -1,0 +1,8 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const base=path.resolve(__dirname,'../../scripts/rebuild/tokenizer-vendor'),manifest=require(base+'/manifest.json'),T=require(base+'/gpt-tokenizer-4.1.0/cjs/encoding/o200k_harmony.js');
+const encode=s=>T.encode(s,{disallowedSpecial:new Set()});
+test('pinned isolated runtime file hashes',()=>{for(const f of manifest.files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(base+'/gpt-tokenizer-4.1.0/'+f.path)).digest('hex'),f.sha256);});
+test('all ordinary rank bytes equal official OpenAI expected SHA256',()=>{const ranks=require(base+'/gpt-tokenizer-4.1.0/cjs/bpeRanks/o200k_base.js').default;assert.equal(ranks.length,199998);const hash=crypto.createHash('sha256');ranks.forEach((v,i)=>hash.update(Buffer.from(v).toString('base64')+' '+i+'\n'));assert.equal(hash.digest('hex'),'446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d');});
+test('ordinary text known vectors include Japanese and token-looking literals',()=>{assert.deepEqual(encode('こんにちは世界'),[95839,28428]);assert.deepEqual(encode('<|start|>system'),[27,91,5236,91,29,17360]);});
+test('all 19 saved wire bodies and components round trip without normalization',()=>{const all=require('../../docs/rebuild-20261028/p3-start-conditions/wire-payloads.json');assert.equal(all.length,19);for(const r of all)for(const text of [r.wire.serializedBody,...r.wire.body.messages.map(m=>m.content),JSON.stringify(r.wire.body.response_format)])assert.equal(T.decode(encode(text)),text);});

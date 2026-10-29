@@ -1,0 +1,25 @@
+{
+  "engineVersion": "urenavi_core_4b51084c672381bdd9b0_103c519a95d37587",
+  "environmentKeys": [
+    "HOME",
+    "LANG",
+    "PATH"
+  ],
+  "loadedModules": [
+    "scripts/rebuild/offline-guard.cjs",
+    "scripts/rebuild/final-gate-audit.cjs",
+    "lib/urenavi-core/contracts.js",
+    "lib/room-semantic-contract.js",
+    "public/purchase-copy-quality.js",
+    "public/fact-safety.js",
+    "lib/urenavi-core/external-schemas.json",
+    "lib/urenavi-core/capacity-analysis.js",
+    "lib/urenavi-core/local-engine.js",
+    "lib/urenavi-core/admission.js",
+    "lib/urenavi-core/chat-wire.js"
+  ],
+  "realGroqCalls": 0,
+  "dbCalls": 0,
+  "noTransportInvoked": true,
+  "kernelFirewallVerified": false
+}

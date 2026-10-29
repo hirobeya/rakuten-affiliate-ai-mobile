@@ -1,0 +1,24 @@
+Subject: Preflight token bounds and one-request calibration for gpt-oss-120b with strict JSON schema
+
+Hello Groq Support,
+
+Before executing one frozen request for capacity calibration, we would like an authoritative basis for admission control. The request has not been executed.
+
+API: POST /openai/v1/chat/completions
+Model: openai/gpt-oss-120b
+Messages: one system and one user message
+response_format: strict JSON schema
+reasoning_effort: medium
+max_completion_tokens: 3000
+Tools/search/compound configuration: none
+Wire hash: ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053
+Local visible-component count: 2527 tokens; we do not equate this with provider prompt_tokens.
+Provisional reservation: 5000 input plus 3000 output tokens. These are planning ceilings, not verified account limits or remaining quotas.
+
+1. Is there an official non-generating token-count or preflight facility that returns prompt_tokens or a guaranteed upper bound for this request, including strict schema? Please provide the endpoint, eligibility requirements and documentation.
+2. How are role framing, assistant prefixes, provider-added system instructions, and schema expansion/insertion/duplication counted? If the full internal formula is private, can you provide an applicable guaranteed upper bound on additional accounting?
+3. If preflight counting is unavailable, is there a provider-guaranteed alternative control for safely making exactly one calibration request in an exclusive window with other callers paused? Please distinguish rejection with 429 from a guaranteed bound on actual consumption.
+4. For TPM/ITPM/OTPM and daily quotas, how do admission-time reservations and completion-time reconciliation account for actual input, max_completion_tokens, reasoning tokens, actual usage, and errors/429/timeouts? Does the 3000 generation ceiling include reasoning tokens for this model?
+5. Your Prompt Caching documentation states that hits are not guaranteed and cached tokens are subtracted from limits after processing. We therefore plan to reserve the full input without any cache discount for the first request. Is this correct? If an official pre-request guarantee permits a safe deduction, what are its conditions and which quotas does it apply to?
+
+Please provide public documentation or an authoritative answer applicable to this model/API/schema configuration. If needed, we can separately provide an approved public-product payload/schema reproduction. We will not include API keys, Authorization headers, environment variables or authentication URLs.

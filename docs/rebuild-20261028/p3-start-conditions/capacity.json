@@ -1,0 +1,522 @@
+[
+  {
+    "itemCode": "daiya:10001447",
+    "sourceHash": "b7bea954ecc18de11fe3e2a5e70aae17539f2796e476a92f659681be0dca10dd",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 7219,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 10219,
+    "diagnosticExcess": 2219,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 481444,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 697342,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 481444,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "source + fixed instructions/schema + uncalibrated estimate + output reservation exceed assumed TPM",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "daiya:10001030",
+    "sourceHash": "352c1580954934e2a9b457d35c030500e3ce1d24e5ef851b7d5ed726a089f468",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 7504,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 10504,
+    "diagnosticExcess": 2504,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 482129,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 698027,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 482129,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "source + fixed instructions/schema + uncalibrated estimate + output reservation exceed assumed TPM",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "ipow:10000579",
+    "sourceHash": "27dfc3fe6fa2928b1c55d0eada7ecb0f929384ff47d00d1ae4b9621660e9356e",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 3917,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 6917,
+    "diagnosticExcess": 0,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 474219,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 690117,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 474219,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "heuristic fits only; provider count/account limits not certified",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "linofle:10000458",
+    "sourceHash": "c08c38a3f04d790e8ab4ad7124cc6448b8d7fc7110a128a448f52ad1079ff71a",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 4118,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 7118,
+    "diagnosticExcess": 0,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 474629,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 690527,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 474629,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "heuristic fits only; provider count/account limits not certified",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "yukaiya:10001267",
+    "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 3425,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 6425,
+    "diagnosticExcess": 0,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 473125,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 689023,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 473125,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "heuristic fits only; provider count/account limits not certified",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "living-mahoroba:10015748",
+    "sourceHash": "038a5a90094455cc7a863a46de3379ef69021af1fe9de20cf3657969e22363ce",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 5811,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 8811,
+    "diagnosticExcess": 811,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 478348,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 694246,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 478348,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "source + fixed instructions/schema + uncalibrated estimate + output reservation exceed assumed TPM",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "daiya:10001455",
+    "sourceHash": "4a5e40fe458a63280c1a75b73d53fb817f6dfdecd04ea25a39e7609cf6685c12",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 4087,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 7087,
+    "diagnosticExcess": 0,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 474563,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 690461,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 474563,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "heuristic fits only; provider count/account limits not certified",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "ritoashop:10000039",
+    "sourceHash": "deeeb8f7be43ab1b3d03319ed513630d7af9b0607aca8167189b5062da39d0eb",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 7136,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 10136,
+    "diagnosticExcess": 2136,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 481442,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 697340,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 481442,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "source + fixed instructions/schema + uncalibrated estimate + output reservation exceed assumed TPM",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "brian:10001257",
+    "sourceHash": "1dca4b426606f785c9df1fe90f4743f60363ed5e86619eec1ed1310f748a8ecf",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 4013,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 7013,
+    "diagnosticExcess": 0,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 474442,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 690340,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 474442,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "heuristic fits only; provider count/account limits not certified",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  },
+  {
+    "itemCode": "lebenwood:10004953",
+    "sourceHash": "4060fac23d780ac3021b97ed5d2704a3c6654bb136046cab34dba10a0f9a591a",
+    "inputTokens": null,
+    "diagnosticHeuristicInput": 6014,
+    "outputReservation": 3000,
+    "assumedTPM": 8000,
+    "diagnosticSingleRequest": 9014,
+    "diagnosticExcess": 1014,
+    "singleRequestCertified": false,
+    "scenarioPathBudget": {
+      "twoCalls": 16000,
+      "maxFourCalls": 32000,
+      "enforcedInputPerStage": 5000,
+      "type": "conditional rejection budget, not predicted usage or completion guarantee"
+    },
+    "future": [
+      {
+        "stage": "review",
+        "serializedBytesUpper": 478945,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rewrite",
+        "serializedBytesUpper": 694843,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 108033,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      },
+      {
+        "stage": "rereview",
+        "serializedBytesUpper": 478945,
+        "candidateCompactJsonBytesUpper": 231505,
+        "failuresCompactJsonBytesUpper": 0,
+        "providerInputTokensUpper": null,
+        "note": "Compact candidate object inside user JSON string; outer JSON escaping at most doubles compact JSON bytes. Not a token bound, not assumed compatible with 3000 output."
+      }
+    ],
+    "cause": "source + fixed instructions/schema + uncalibrated estimate + output reservation exceed assumed TPM",
+    "uncertainty": "no compatible tokenizer/ranks; provider schema/template and rate reservation not reproduced",
+    "measurementRequired": [
+      "prompt_tokens",
+      "completion_tokens and reasoning_tokens",
+      "finish_reason",
+      "stage actual input including candidate",
+      "live rate headers and remaining daily organization/project budget"
+    ]
+  }
+]

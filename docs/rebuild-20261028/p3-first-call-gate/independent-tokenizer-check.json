@@ -1,0 +1,10 @@
+{
+  "primary": "gpt-tokenizer@4.1.0 o200k_harmony ordinary text",
+  "independent": "js-tiktoken@1.0.21 o200k_base ordinary text; shares official merge ranks with harmony",
+  "independentArchiveSha256": "3b1f24b185565ca9a8d8f51466dfc4f99d67f1f05bc009258710ddb7a8d810fa",
+  "comparedTexts": 76,
+  "comparedTokenIds": true,
+  "allEqual": true,
+  "providerFramingVerified": false,
+  "temporaryIndependentDependencyOnly": true
+}

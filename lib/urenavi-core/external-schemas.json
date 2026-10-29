@@ -1,0 +1,253 @@
+{
+  "baseline": "f6f6c95b2e5322e872b2db8ab02b7c5bb4c3ddad",
+  "WRITER_SCHEMA": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "product",
+      "sentences"
+    ],
+    "properties": {
+      "product": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "acts_on_quote",
+          "what",
+          "acts_on"
+        ],
+        "properties": {
+          "acts_on_quote": {
+            "type": "string",
+            "maxLength": 260
+          },
+          "what": {
+            "type": "string",
+            "maxLength": 70
+          },
+          "acts_on": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      },
+      "sentences": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quotes",
+            "text",
+            "kinds"
+          ],
+          "properties": {
+            "quotes": {
+              "type": "array",
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "maxLength": 260
+              }
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 150
+            },
+            "kinds": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "spec",
+                  "benefit",
+                  "scene"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "REVIEW_SCHEMA": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "product",
+      "sentences",
+      "quality"
+    ],
+    "properties": {
+      "product": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "what",
+          "acts_on"
+        ],
+        "properties": {
+          "what": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "acts_on": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          }
+        }
+      },
+      "sentences": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "evidenceQuotes",
+            "reason",
+            "target",
+            "part",
+            "conditions",
+            "negation",
+            "degree"
+          ],
+          "properties": {
+            "text": {
+              "type": "string",
+              "maxLength": 150
+            },
+            "evidenceQuotes": {
+              "type": "array",
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "maxLength": 260
+              }
+            },
+            "reason": {
+              "type": "string",
+              "maxLength": 90
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "part": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "conditions": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "negation": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "degree": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "not_supported",
+                "unclear"
+              ]
+            }
+          }
+        }
+      },
+      "quality": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "identity",
+          "reason",
+          "scene",
+          "natural",
+          "non_redundant",
+          "room_style"
+        ],
+        "properties": {
+          "identity": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "scene": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "natural": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "non_redundant": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          },
+          "room_style": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "not_supported",
+              "unclear"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

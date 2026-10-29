@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-29 JST",
+  "startHead": "adb2f0fa6572770aa4a169b52efa3949b532fd73",
+  "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+  "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+  "payloadUnchanged": true,
+  "model": "openai/gpt-oss-120b",
+  "reasoningEffort": "medium",
+  "maxCompletionTokens": 3000,
+  "strict": true,
+  "roles": [
+    "system",
+    "user"
+  ],
+  "clientToolConfigurationPresent": [],
+  "localComponentTokens": 2527,
+  "localHttpJsonTokens": 2579,
+  "retokenized": false,
+  "provisionalReservation": {
+    "input": 5000,
+    "output": 3000,
+    "requests": 1,
+    "certifiedProviderInputUpper": null
+  },
+  "classification": {
+    "A": {
+      "complete": [
+        "frozen wire identity",
+        "one-call reservation/durable journals/locks",
+        "mock Bearer header and secret-free logs",
+        "cross-journal reconciliation",
+        "no-publication and success hold",
+        "retry0 timeout/429/unknown handling"
+      ],
+      "externalProviderDependency": [
+        "verified upper bound or official non-inference counting/preflight covering framing/schema and rate accounting"
+      ]
+    },
+    "B": {
+      "consoleAccessed": false,
+      "organizationLimits": null,
+      "projectLimits": null,
+      "currentUsage": null,
+      "resets": null,
+      "otherConsumption": null,
+      "unresolvedSends": null,
+      "exclusiveWindowConfirmed": false,
+      "required": "dated nonsecret Console record plus verified caller pause/in-flight reconciliation"
+    },
+    "C": {
+      "actualPromptTokens": null,
+      "actualCompletionTokens": null,
+      "reasoningTokens": null,
+      "actualHeaders": null,
+      "providerAuthenticationAccepted": null,
+      "firstCallFinishReason": null,
+      "note": "Measured only after separate authorization; not required as prior historical success. A provider-inclusive bounded envelope and known shared budget ARE preconditions."
+    }
+  },
+  "alternatives": [
+    {
+      "method": "provider-guaranteed upper bound or non-inference count/preflight",
+      "canReplaceFullTemplate": true,
+      "currentlyVerified": false
+    },
+    {
+      "method": "reserve entire confirmed model context envelope",
+      "canReplaceFullTemplate": "only with authoritative total-token/rate accounting bound and actual limits allowing it",
+      "fitsAssumed8000": false
+    },
+    {
+      "method": "exclusive org window plus server-side rejection",
+      "reducesConcurrencyRisk": true,
+      "certifiesInput5000": false,
+      "selected": false
+    },
+    {
+      "method": "treat 2473 slack as guaranteed overhead",
+      "selected": false,
+      "reason": "unverified"
+    },
+    {
+      "method": "change schema/source/output/model or use Batch/other org",
+      "selected": false,
+      "reason": "changes frozen experiment/authorized scope"
+    }
+  ],
+  "gate": "HOLD",
+  "liveAuthorization": null,
+  "liveEnabled": false,
+  "inferenceCalls": 0,
+  "dbCalls": 0,
+  "accountReads": 0
+}

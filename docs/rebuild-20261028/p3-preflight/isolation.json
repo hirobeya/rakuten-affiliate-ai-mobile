@@ -1,0 +1,30 @@
+{
+  "engineVersion": "urenavi_core_4b51084c672381bdd9b0_5a335129fd63844b",
+  "loadedModules": [
+    "scripts/rebuild/offline-guard.cjs",
+    "scripts/rebuild/preflight-audit.cjs",
+    "lib/urenavi-core/contracts.js",
+    "lib/room-semantic-contract.js",
+    "public/purchase-copy-quality.js",
+    "public/fact-safety.js",
+    "lib/urenavi-core/external-schemas.json",
+    "lib/urenavi-core/local-engine.js",
+    "lib/urenavi-core/admission.js",
+    "tests/rebuild/fixture.cjs"
+  ],
+  "environmentKeys": [
+    "HOME",
+    "LANG",
+    "PATH"
+  ],
+  "realGroqCalls": 0,
+  "dbCalls": 0,
+  "transport": "no transport invoked by capacity audit; tests deterministic mocks only",
+  "kernelFirewallVerified": false,
+  "tokenizers": {
+    "tiktoken": false,
+    "transformers": false,
+    "tokenizers": false
+  },
+  "liveMode": "rejected by admission validator; engine also requires offline guard"
+}

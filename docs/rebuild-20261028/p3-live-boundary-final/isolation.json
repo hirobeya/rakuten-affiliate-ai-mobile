@@ -1,0 +1,22 @@
+{
+  "envKeys": [
+    "PATH",
+    "HOME",
+    "LANG"
+  ],
+  "modules": [
+    "scripts/rebuild/offline-guard.cjs",
+    "scripts/rebuild/final-start-gate.cjs",
+    "lib/urenavi-core/contracts.js",
+    "lib/room-semantic-contract.js",
+    "public/purchase-copy-quality.js",
+    "public/fact-safety.js",
+    "lib/urenavi-core/external-schemas.json",
+    "lib/urenavi-core/chat-wire.js",
+    "lib/urenavi-core/capacity-analysis.js"
+  ],
+  "inferenceCalls": 0,
+  "dbCalls": 0,
+  "secretReads": 0,
+  "tokenizerReruns": 0
+}

@@ -1,0 +1,415 @@
+[
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow.json",
+    "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+    "stage": "generate",
+    "completion": 1603,
+    "reasoning": 1340
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow.json",
+    "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+    "stage": "generate",
+    "completion": 1052,
+    "reasoning": 745
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow.json",
+    "itemCode": "__semantic_preview__:room_contract_fffed2f9059bf4dc:ipow:10000579",
+    "stage": "verify",
+    "completion": 2032,
+    "reasoning": 1725
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+    "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+    "stage": "generate",
+    "completion": 1475,
+    "reasoning": 1181
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+    "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+    "stage": "generate",
+    "completion": 1324,
+    "reasoning": 1032
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261026-ipow-review-scope.json",
+    "itemCode": "__semantic_preview__:room_contract_d76985c9abed4603:ipow:10000579",
+    "stage": "verify",
+    "completion": 2198,
+    "reasoning": 1854
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261027-ipow-evidence-order.json",
+    "itemCode": "__semantic_preview__:room_contract_415ed0d8b7905ae5:ipow:10000579",
+    "stage": "generate",
+    "completion": 1771,
+    "reasoning": 1503
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261027-ipow-compact.json",
+    "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+    "stage": "generate",
+    "completion": 1320,
+    "reasoning": 981
+  },
+  {
+    "origin": "docs/measurements/room-copy-20261027-ipow-compact.json",
+    "itemCode": "__semantic_preview__:room_contract_980398d73e1361ab:ipow:10000579",
+    "stage": "generate",
+    "completion": 1498,
+    "reasoning": 1086
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_dc7629f4a4f41709:chatsuminosato:10000073",
+    "stage": "generate",
+    "completion": 920,
+    "reasoning": 748
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_dc7629f4a4f41709:chatsuminosato:10000073",
+    "stage": "verify",
+    "completion": 1663,
+    "reasoning": 1449
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+    "stage": "generate",
+    "completion": 785,
+    "reasoning": 606
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+    "stage": "verify",
+    "completion": 1647,
+    "reasoning": 1453
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+    "stage": "generate",
+    "completion": 823,
+    "reasoning": 595
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:daiya:10001030",
+    "stage": "verify",
+    "completion": 1433,
+    "reasoning": 1232
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+    "stage": "generate",
+    "completion": 1380,
+    "reasoning": 1260
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+    "stage": "verify",
+    "completion": 1239,
+    "reasoning": 1085
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:e-kurashi:10019512:fixed_1791064293884_02_3",
+    "stage": "generate",
+    "completion": 2056,
+    "reasoning": 1926
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+    "stage": "generate",
+    "completion": 1252,
+    "reasoning": 1032
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+    "stage": "verify",
+    "completion": 1587,
+    "reasoning": 1348
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:ecoflow:10000264",
+    "stage": "generate",
+    "completion": 1425,
+    "reasoning": 1123
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+    "stage": "generate",
+    "completion": 1150,
+    "reasoning": 977
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+    "stage": "generate",
+    "completion": 1304,
+    "reasoning": 1130
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:luckyspread:10000001",
+    "stage": "verify",
+    "completion": 1475,
+    "reasoning": 1309
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:moosoo:10000127",
+    "stage": "generate",
+    "completion": 1345,
+    "reasoning": 1135
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_6cab62347751b637:moosoo:10000127",
+    "stage": "verify",
+    "completion": 1383,
+    "reasoning": 1090
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+    "stage": "generate",
+    "completion": 948,
+    "reasoning": 727
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+    "stage": "generate",
+    "completion": 986,
+    "reasoning": 798
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_fd3e43a2d2ba15f7:ohstore:10558376",
+    "stage": "verify",
+    "completion": 1369,
+    "reasoning": 1124
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+    "stage": "generate",
+    "completion": 944,
+    "reasoning": 789
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+    "stage": "generate",
+    "completion": 529,
+    "reasoning": 370
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cd337c98feb23c86:pasoro:10001354",
+    "stage": "verify",
+    "completion": 1498,
+    "reasoning": 1252
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+    "stage": "generate",
+    "completion": 994,
+    "reasoning": 788
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+    "stage": "generate",
+    "completion": 992,
+    "reasoning": 779
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:pearls-ar:10001038",
+    "stage": "verify",
+    "completion": 1213,
+    "reasoning": 991
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+    "stage": "generate",
+    "completion": 1429,
+    "reasoning": 1349
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+    "stage": "generate",
+    "completion": 1234,
+    "reasoning": 1140
+  },
+  {
+    "origin": "archived-20261022/saved-real-groq-sample.json",
+    "itemCode": "__v3_preview__:__semantic_preview__:room_contract_6c911b227a31c6f1:supplyshop:10028516:fixed_1791064554837_03_3",
+    "stage": "verify",
+    "completion": 1751,
+    "reasoning": 1608
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ipow:10000579",
+    "stage": "generate",
+    "completion": 1157,
+    "reasoning": 985
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ipow:10000579",
+    "stage": "verify",
+    "completion": 1070,
+    "reasoning": 822
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:linofle:10000458",
+    "stage": "generate",
+    "completion": 927,
+    "reasoning": 788
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:linofle:10000458",
+    "stage": "verify",
+    "completion": 1164,
+    "reasoning": 983
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+    "stage": "generate",
+    "completion": 660,
+    "reasoning": 549
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+    "stage": "generate",
+    "completion": 835,
+    "reasoning": 719
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:yukaiya:10001267",
+    "stage": "verify",
+    "completion": 1193,
+    "reasoning": 1020
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+    "stage": "generate",
+    "completion": 1087,
+    "reasoning": 915
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+    "stage": "verify",
+    "completion": 1333,
+    "reasoning": 1058
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:living-mahoroba:10015748",
+    "stage": "generate",
+    "completion": 1250,
+    "reasoning": 1103
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+    "stage": "generate",
+    "completion": 1127,
+    "reasoning": 896
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+    "stage": "generate",
+    "completion": 1266,
+    "reasoning": 996
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:daiya:10001455",
+    "stage": "verify",
+    "completion": 1096,
+    "reasoning": 860
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+    "stage": "generate",
+    "completion": 987,
+    "reasoning": 834
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:ritoashop:10000039",
+    "stage": "generate",
+    "completion": 1123,
+    "reasoning": 928
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+    "stage": "generate",
+    "completion": 910,
+    "reasoning": 762
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+    "stage": "verify",
+    "completion": 1442,
+    "reasoning": 1251
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+    "stage": "generate",
+    "completion": 1021,
+    "reasoning": 872
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:brian:10001257",
+    "stage": "verify",
+    "completion": 1347,
+    "reasoning": 1098
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:lebenwood:10004953",
+    "stage": "generate",
+    "completion": 1108,
+    "reasoning": 915
+  },
+  {
+    "origin": "archived-20261022/live-current-groq.json",
+    "itemCode": "__semantic_preview__:room_contract_cb942fc4265728c2:lebenwood:10004953",
+    "stage": "verify",
+    "completion": 1245,
+    "reasoning": 1056
+  }
+]

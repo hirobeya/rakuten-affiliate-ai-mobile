@@ -1,0 +1,112 @@
+{
+  "name": "gpt-tokenizer",
+  "version": "4.1.0",
+  "encoding": "o200k_harmony",
+  "archiveSha256": "ec0f7e3eea8e4f56b30297af68e4a52629707bdc59530f4a82d81ac03aad4447",
+  "npmSha512Verified": true,
+  "officialRankSha256": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+  "mergeableRanks": 199998,
+  "officialRankEquality": "all 199998 entries exact bytes and rank; canonical serialization SHA256 matches OpenAI tiktoken 0.12.0 expected hash",
+  "files": [
+    {
+      "path": "cjs/encoding/o200k_harmony.js",
+      "sha256": "3cd18ce1f59958de217daaa65d68d79c1593e61988f7f81fc8394b1157953456"
+    },
+    {
+      "path": "cjs/constants.js",
+      "sha256": "d747c522a2929f29fef6ab1a766ef782476e9c162f3fe0888af6af90b940dfe5"
+    },
+    {
+      "path": "cjs/specialTokens.js",
+      "sha256": "5a8fb328eb537f72f9a2d3c7164ad8f97cccd4c81977bce65260f19963139d21"
+    },
+    {
+      "path": "cjs/GptEncoding.js",
+      "sha256": "7cd112ca72060cf89637b4803ca53f4ecdabdfa20e4e96c82be674f4dadcaf30"
+    },
+    {
+      "path": "cjs/utfUtil.js",
+      "sha256": "d34cfb6918fa7bf046feb129a69d05777ed2b72118b44c6f645a7218232245ed"
+    },
+    {
+      "path": "cjs/util.js",
+      "sha256": "6da2f6264ed9063a292f452f71ba6459ae7736f5e25e015246d8ec90acd73a09"
+    },
+    {
+      "path": "cjs/BytePairEncodingCore.js",
+      "sha256": "018835ef27727878031a0ae8112f0c210b96407ddd57ba8c3691ad76df077c8c"
+    },
+    {
+      "path": "cjs/encodingParams/constants.js",
+      "sha256": "c58f9959b5a453a6a671f801f49de7a10ae346c25088bcaca17b51fb4318c5ee"
+    },
+    {
+      "path": "cjs/encodingParams/unicode16Data.js",
+      "sha256": "68b961460ee1b0d3a3c1883ea699cd864b5111fa7d9a0a300dc67f38c6131b7c"
+    },
+    {
+      "path": "cjs/IncrementalTokenCounter.js",
+      "sha256": "e62f30836d8ac748b358c404d07856883efa22eb8c7200e7b7bd4e118f24d815"
+    },
+    {
+      "path": "cjs/functionCalling.js",
+      "sha256": "bb12dc5e4f28f8907e6ae2cca41bcbae04e03939d9c53f457ad1237ea08811bb"
+    },
+    {
+      "path": "cjs/mapping.js",
+      "sha256": "0d80352ef83947f174905d3245142915e28ff08bf550e5468869abac232fda02"
+    },
+    {
+      "path": "cjs/modelsChatEnabled.gen.js",
+      "sha256": "ab9d3d13706bc66f6188f9f347d774d0f82570b095e036d8024005871b7a9a1f"
+    },
+    {
+      "path": "cjs/modelsMap.js",
+      "sha256": "5181175c38e04fc3fbc47dbf369647482e256a6a759047bfe08ed0654cf8c501"
+    },
+    {
+      "path": "cjs/_virtual/_rolldown/runtime.js",
+      "sha256": "46e02fb67e02b9ee6c9cb8ad9c7ddfcd412a8f5209ca38634a69d82d5e679765"
+    },
+    {
+      "path": "cjs/modelParams.js",
+      "sha256": "c0fa809d5820dc7ae4c5d4c36e9f429042b17152b3d2075332b9ca3cbbb24be6"
+    },
+    {
+      "path": "cjs/encodingParams/cl100k_base.js",
+      "sha256": "e63ef6eea97a149df9edb3365c70905db0de1835fe8494689520f8ebec777977"
+    },
+    {
+      "path": "cjs/encodingParams/o200k_base.js",
+      "sha256": "9a48316dd68e55d1b8d846590e04bb69b41aedfb102b1b4e2f9a4cc825f95367"
+    },
+    {
+      "path": "cjs/encodingParams/o200k_harmony.js",
+      "sha256": "8b50084b095275d363b20c56f461c8969427d8bfae8ce35bf83fe68d67764b9e"
+    },
+    {
+      "path": "cjs/encodingParams/p50k_base.js",
+      "sha256": "2f31b07f17ef9343a76c645c43e781032adcb82d2f2651a4404029709488a1bc"
+    },
+    {
+      "path": "cjs/encodingParams/p50k_edit.js",
+      "sha256": "b732b85de784440d229ccef3eb630947bd8830cc2e8eaf7311d483a6b8ee69f4"
+    },
+    {
+      "path": "cjs/encodingParams/r50k_base.js",
+      "sha256": "f930070c43da6572302a54823b358889295effa7cdec5e8d970e623efd903060"
+    },
+    {
+      "path": "cjs/bpeRanks/o200k_base.js",
+      "sha256": "06a665b5a0fcecf000f0b641990bd6175edc3a4db905d72cf5fc30b66bacaf0b"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "55c0b09ede96ed11bd312d90b200d74807cad56415cb491a76364e6a537d3b92"
+    },
+    {
+      "path": "package.json",
+      "sha256": "ac1808a5b5b23e268bde3ae3ab28b421ebd1d489cf14bd4515de4702cc626708"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "warning": "ONLY deterministic mocks; all usage synthetic; NOT Groq quality or token measurements",
+  "trace": [
+    {
+      "stage": "draft",
+      "input": 3309,
+      "output": 3000,
+      "total": 6309,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+      "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+    },
+    {
+      "stage": "review",
+      "input": 4215,
+      "output": 3000,
+      "total": 7215,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+      "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+    },
+    {
+      "stage": "rewrite",
+      "input": 4251,
+      "output": 3000,
+      "total": 7251,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+      "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+    },
+    {
+      "stage": "rereview",
+      "input": 4215,
+      "output": 3000,
+      "total": 7215,
+      "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000",
+      "usage": "SYNTHETIC 100/100; NEVER MEASURED"
+    }
+  ],
+  "status": "ready",
+  "output": {
+    "product": {
+      "what": "電気ケトル",
+      "acts_on": "水",
+      "acts_on_quote": "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+    },
+    "sentences": [
+      {
+        "text": "忙しい朝にお湯を用意したいとき、カップ1杯分を約85秒で沸かせる電気ケトルです。",
+        "kinds": [
+          "spec",
+          "scene"
+        ],
+        "quotes": [
+          "忙しい朝にカップ1杯分が約85秒で沸騰する。"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,797 @@
+✔ late render decorator preserves restore/no-AI options and return value (8.813333ms)
+✔ login decoration reflects closed sales without a dead payment link or old price (2.429189ms)
+✔ loading the complete legacy decorator cannot replace current comparison semantics (3.672306ms)
+ai-route-metrics.test.js: PASS
+✔ tests/ai-route-metrics.test.js (168.146977ms)
+✔ verified free account can enter app without changing paid status or issuing paid device cookie (6.231197ms)
+✔ invalid session and entitlement outage never fall back to free (4.899159ms)
+✔ existing paid/owner app session keeps entitlement and remembered device behavior (5.327125ms)
+✔ free UI cannot use copy shortcuts or expose a locally generated post (4.50298ms)
+✔ auth URL cleanup preserves handoff until the deferred approval finishes, then removes it (3.137642ms)
+✔ cleanup never preserves invalid, duplicated, or unrelated authentication query values (2.366997ms)
+✔ Preview device approval uses its own logged-in origin and retains the production option (3.219584ms)
+PASS blocks waterproof-to-reassurance
+PASS blocks smartphone-to-effort
+PASS blocks storage-to-tidy
+PASS blocks breathable-to-comfort
+PASS allows evidence-only selection 防水
+PASS allows evidence-only selection スマホ対応
+PASS allows evidence-only selection 収納付き
+PASS allows evidence-only selection 通気性
+PASS cross-category grounded storage
+PASS cross-category grounded cleaning
+PASS cross-category grounded pet
+PASS cross-category grounded beauty
+PASS cross-category grounded kitchen
+PASS cross-category grounded appliance
+PASS cross-category grounded fashion
+PASS cross-category grounded motorcycle
+PASS cross-category grounded food
+PASS cross-category grounded daily-goods
+PASS cross-category grounded furniture
+PASS cross-category grounded outdoor
+PASS cross-category grounded pc
+PASS cross-category grounded car
+PASS cross-category grounded baby
+PASS cross-category grounded laundry
+PASS cross-category grounded charging
+PASS accident regression bike-glove
+PASS accident regression baseball-glove
+PASS accident regression storage-bench
+PASS accident regression mop-holder
+PASS accident regression bos
+PASS accident regression drive-bed
+PASS accident regression electric-mop
+Benefit grounding passed: 4 blocked counterexamples + 17 cross-category cases + 7 accident regressions
+✔ tests/benefit-grounding.test.js (244.393206ms)
+PASS product cache key is itemCode plus normalized title/caption hash
+PASS cache key has no prompt or validation version component
+PASS image cache removes presentation size parameters but preserves identity parameters
+PASS product type key is normalized and reusable across equivalent spellings
+PASS unknown result has a short TTL while successful product understanding is long lived
+PASS expired cache rows are rejected at read time
+PASS store separates product, image and type knowledge tables
+✔ tests/cache-v2.test.js (147.513637ms)
+✔ an empty normal search never overwrites the clipboard with an empty successful export (4.512655ms)
+✔ batch creates fresh results without an asynchronous clipboard attempt, then explicit copy writes those results (4.36155ms)
+✔ clipboard denial preserves visible new results, reports failure, and never reports old contents as copied (2.51002ms)
+✔ actual debug export preserves long generation sources and excludes unrelated private state (4.708175ms)
+✔ replay refuses incomplete or failed batch exports rather than pretending they contain full evidence (0.766018ms)
+Search request failed upstream_error
+✔ approved paid device and verified bearer use the same real user ID and atomic search quota (22.396164ms)
+✔ missing or forged device cannot reach user lookup, quota, or product API (1.794736ms)
+✔ device requires current paid entitlement and never creates free access (1.29251ms)
+✔ free bearer remains entitlement-independent and an invalid bearer cannot use cookie fallback (3.166163ms)
+✔ expired remembered device cannot reach identity lookup or search (1.062038ms)
+✔ lookup must return one exact confirmed non-banned identity, not a related email or client ID (7.486463ms)
+✔ lookup outage does not become an expired login, and quota exhaustion does not call product API (2.05962ms)
+✔ recorded asterisk source dimensions support equivalent multiplication-sign lengths (16.893209ms)
+✔ dimension equivalence still rejects changed units, unsupported values, and non-length inheritance (5.767569ms)
+✔ durable restoration uses display-only render and preserves the saved keyword (6.068156ms)
+✔ returning to an existing result never replaces it or restarts generation (1.869057ms)
+✔ late saved-session response cannot overwrite a search made while loading (2.131597ms)
+✔ late restore cannot overwrite edited fields or a changed account (7.34382ms)
+✔ search or generation in progress prevents restoration, including after the fetch starts (6.335252ms)
+✔ cross-device platform restoration uses the view-only renderer instead of clicking a generation control (2.344283ms)
+✔ invalid-link diagnostics distinguish fixed causes without revealing submitted credentials (2.546092ms)
+✔ same-provider magic link is verified by SDK without following its redirect (1.301894ms)
+✔ untrusted providers, callbacks, recovery, duplicate or malformed credentials are rejected before SDK (1.025503ms)
+✔ provider rejection and missing sessions never create a successful login (0.451962ms)
+✔ actual login handler clears the credential and restores controls after failed verification (4.652802ms)
+✔ only explicit provider codes determine expiry and rate limit messages; secrets never reach UI (0.990352ms)
+✔ evidence-rich saved products are really evaluated instead of silently counting zero (251.124953ms)
+✔ existing genre corpus is preserved, unsupported inputs fail clearly (2.4704ms)
+✔ fixed weak local-ready posts defer while all five source-relation controls retain identical text (327.528492ms)
+✔ rejection is about missing relationships and never bans a useful configuration or compatibility itself (0.66631ms)
+FIXED780_LOCAL_GATE {"total":780,"localComplete":8,"groqNeeded":772,"localRate":0.0103,"byMethod":{"partner_reasoning":7,"validated_identity":1},"deferredReasons":{"identity_unresolved":516,"structured_value_deferred_by_quality_gate":37,"facts_without_purchase_value":65,"structured_not_ready":153,"partner_guarded_or_conflicting":1},"suspiciousCount":0,"suspicious":[]}
+✔ fixed 780 local gate keeps thin local completions at zero (3992.769151ms)
+FIXED780_ROUTING_DIAGNOSTICS {"total":780,"counts":{"identity_unresolved":516,"structured_value_deferred":37,"local_complete":8,"facts_without_purchase_value":65,"structured_not_ready":153,"partner_candidate_blocked_later":1},"examples":{"identity_unresolved":[{"category":"レディースファッション","itemCode":"furugi-abj:11195784","itemName":"OPAQUE オペーク チェック ロング スカート sizeM/黒x白 ■■ ☆ gfd0 レディース【USED】【中古】【古着】【ブランド古着買取・販売ABJ】","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"miz-design:10049443","itemName":"【送料無料】トップス カジュアル おしゃれ エレガント ドット シャツ 春秋 ファッション シンプル 風 サテン 長袖","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"ragtag:17696763","itemName":"ARTS&SCIENCE アーツアンドサイエンスパンツ（その他） レディース 1(S位) 紺【中古】【古着】","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"kanful:11978349","itemName":"【中古】plage / プラージュMoist V/N TEE半袖Tシャツ【cacgahae-l】","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"kansaisakabashop:10018216","itemName":"ポリエステル 旅行 プール 海水浴 ビーチ XL L M S 墨緑花 紫紅","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"erinbella:10000370","itemName":"【サイズオーダー】パーティードレス ショートドレス ミニ ミディアム イブニングドレス party dress 結婚式 披露宴 二次会 演奏会 フォーマル カラードレス 花嫁ドレス お呼ばれ オーダードレス TP0384","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"felixland:10023199","itemName":"サンダル レディース ぺたんこ 防水 ストラップ ベルトデザイン 滑り止め 36-40cm ブラック ピンク ホワイト カーキ 夏の外出 レイン対応 ビーチサンダル ルーム外履きにも使える","identity":"","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"goon00:10046695","itemName":"花柄刺繍ベスト レディース 婦人服 春物 春夏 トップス 服 シニア 羽織り 高齢者 ファッション 前開きベ 春夏 軽量 通気性 おしゃれ かわいい 上品 体型カバー 散歩 外出 冷房対策 母の日","identity":"","quote":"","axis":"","facts":[],"values":[]}],"structured_value_deferred":[{"category":"レディースファッション","itemCode":"takami-store:10062026","itemName":"ボアジャケット レディース ボアブルゾン ボアコート ブルゾン 防寒 フリース スタンドカラー ファー ふわふわ モコモコ 可愛い ゆったり 秋冬アウター 秋冬 冬 秋 春 春秋 秋冬春 防寒","identity":"ボアジャケット","quote":"","axis":"","facts":["秋冬"],"values":["秋冬向けの服を選ぶときに。"]},{"category":"レディースファッション","itemCode":"sshop1:10111139","itemName":"オフィス Tシャツ カジュアル レディース 丸首 パフスリーブ カットソー 半袖tシャツ ゆったり クルーネック パフ袖 体型カバー 半袖 無地 きれいめ 上品 ボリューム袖 コットン 綿 大人 シンプル 春 夏 トップス 通勤","identity":"Tシャツ","quote":"","axis":"","facts":["半袖","コットン"],"values":["半袖の服を探しているときに。","素材にコットンを選びたい方に。"]},{"category":"メンズファッション","itemCode":"inokoya:10346565","itemName":"Tシャツ メンズ 半袖 カットソー トップス 厚手 ゆったり 大きいサイズ ストリート系 アメカジ カジュアル プルオーバー 丸首 クルーネック コットン 綿 おしゃれ 通学 お出かけ 夏","identity":"Tシャツ","quote":"","axis":"","facts":["半袖","コットン"],"values":["半袖の服を探しているときに。","素材にコットンを選びたい方に。"]},{"category":"メンズファッション","itemCode":"mikanbako:10020460","itemName":"おもしろTシャツ みかん箱 【宴の始まりじゃー！】 ドライ生地 ポリエステル 文字Tシャツ プレゼント ふざけtシャツ 格言 名言 語録","identity":"おもしろTシャツ","quote":"","axis":"","facts":["ポリエステル"],"values":["素材にポリエステルを選びたい方に。"]},{"category":"メンズファッション","itemCode":"ajyuri:10480178","itemName":"Tシャツ メンズ 春夏 長袖 クルーネック スリムフィット アクリル 麻混紡 デザインプリント トップス カジュアル 抗菌 デイリーユース","identity":"Tシャツ","quote":"","axis":"","facts":["春夏","長袖"],"values":["春夏向けの服を選ぶときに。","長袖の服を探しているときに。"]},{"category":"メンズファッション","itemCode":"osakewalker:10007780","itemName":"アウトレット 50%OFF 裏毛パーカー パーカー メンズ トップス 長袖 無地 裏毛・メール便不可【Z】【251B】","identity":"裏毛パーカー","quote":"","axis":"","facts":["長袖"],"values":["長袖の服を探しているときに。"]},{"category":"メンズファッション","itemCode":"shadowtail:10488277","itemName":"ポロシャツ メンズ 長袖 コットン混紡 無地 厚手 春秋 トップス 抗菌 防臭 ノーアイロン 白 紺 グレー","identity":"ポロシャツ","quote":"","axis":"","facts":["長袖"],"values":["長袖の服を探しているときに。"]},{"category":"インナー・下着・ナイトウェア","itemCode":"gori:10012801","itemName":"パジャマ メンズ 薄手 春 夏 秋 長袖 長ズボン 2点セット ルームウェア 上下セット 春 夏 秋 冬 コットン 前開き パジャマ 男性 紳士 部屋","identity":"パジャマ","quote":"","axis":"","facts":["長袖","2点セット","コットン"],"values":["長袖の服を探しているときに。","2点セットです。","素材にコットンを選びたい方に。"]}],"local_complete":[{"category":"レディースファッション","itemCode":"remake-buddy:10445195","itemName":"レディース トップス 無袖 キャミソール プリーツ 収腰 デザイン ハイウエスト ワイドパンツ セットアップ 浅緑 ピンク 黒 気質 优雅 スタイル 私服 御姐風 春季 コレクション 切り替え デザイン 軽量 素材 ビッグシルエット 伸縮性 素材 日常使","identity":"トップス","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"shadowtail:11140118","itemName":"レディース ワンピース水着 連体 背中開き 三角 腹部カバー スリム ビキニ風 温泉 泳装 黒 白 米 純色 セクシー 保守 ジャカード ナイロン スパンデックス ポリエステル 無袖 胸パッド 無ワイヤー 200g プール ビーチ 水中運動 軽量 伸縮性","identity":"ワンピース水着","quote":"","axis":"","facts":[],"values":[]},{"category":"メンズファッション","itemCode":"mnshoten-osaka:10036928","itemName":"ストレッチパンツ 夏 メンズ 速乾 超伸縮 スキニーパンツ チノパンツ 薄手 9分丈 ストレッチ テーパードパンツ 薄手 チノパン ス","identity":"ストレッチパンツ","quote":"","axis":"","facts":[],"values":[]},{"category":"TV・オーディオ・カメラ","itemCode":"tr-jjstore:10054499","itemName":"セット 天体望遠鏡 スマホ 撮影 初心者 望遠鏡 天体 子供用 口径70MM 小学生 三脚 高さ調節可能 接眼レンズ 天体観測 検索 科学 知育 ス","identity":"天体望遠鏡","quote":"","axis":"","facts":[],"values":[]},{"category":"スマートフォン・タブレット","itemCode":"burigi666:10002708","itemName":"タブレットスタンド 卓上 タブレット スタンド 本立て ブックスタンド 書見台 ぶっくすたんど 卓上 譜面台 傾斜台 ノート PCスタンド 画板 ホルダー iPad スタンド 充電スタンド 角度調整可能 携帯便利 透明 クリア おしゃれ アクリル 韓国","identity":"タブレットスタンド","quote":"","axis":"","facts":[],"values":[]},{"category":"スイーツ・お菓子","itemCode":"aionline-japan:10002757","itemName":"家紋入りどら焼き 10個入り 化粧箱入り 短納期 オーダーメイド | 家紋 お菓子 和菓子 名入れ どらやき スイーツ 誕生日プレゼント メッセージ入り 還暦 古希 喜寿 傘寿 米寿 祝い お祝い 内祝い ギフト 贈り物 メッセージ 個包装 お盆 お供え 粗品 引き出物 引出物 お返し","identity":"家紋入りどら焼き","quote":"","axis":"","facts":[],"values":[]},{"category":"楽器・音響機器","itemCode":"kurashigakokoniaru:10000071","itemName":"移動式TVスタンド 可動式テレビ台 耐荷重50kg 高さ調整可能 キャスター付き 据え置きフロアスタンド オフィス リビング 寝室 多用途(ス","identity":"移動式TVスタンド","quote":"","axis":"","facts":[],"values":[]},{"category":"車用品・バイク用品","itemCode":"fleurette01:10155336","itemName":"後部座席用 収納ホック 車載ホルダー ヘッドレスト ホルダー 伸縮アームスタンド スマホ ホルダー ヘッドレスト 折り畳み 式 車用ホック 携帯電話のクリップ 娯楽も収納もできます 4イン…","identity":"車載ホルダー","quote":"","axis":"","facts":[],"values":[]}],"facts_without_purchase_value":[{"category":"レディースファッション","itemCode":"vectorpremium:19416696","itemName":"【中古】ブルーフロンス BLUE FRONCE デニムジャケット 長袖 胸ポケット 40 ベージュ /ML ■ECF006 レディース 【ベクトル 古着】 260910","identity":"デニムジャケット","quote":"","axis":"","facts":["長袖"],"values":[]},{"category":"バッグ・小物・ブランド雑貨","itemCode":"purebliss:10173427","itemName":"ベルト メンズ 自動バックル 合金メッキ メッシュ ビジネス 通勤 カジュアル 普段使い シンプル 欧米風 高級感 万能 黒 ブラウン 標準幅","identity":"合金メッキ","quote":"","axis":"","facts":["メッシュ"],"values":[]},{"category":"バッグ・小物・ブランド雑貨","itemCode":"ajyuri:10867941","itemName":"リュックサック キッズ 子供 男の子 女の子 恐竜 動物 キャラクター バックパック 幼稚園 遠足 軽量 防水 通気性 かわいい","identity":"リュックサック","quote":"","axis":"","facts":["防水"],"values":[]},{"category":"バッグ・小物・ブランド雑貨","itemCode":"shop-gfield:10025507","itemName":"仕事用 透明バッグ 痛バ 防水 透明 クリアバッグ 頑丈 抗菌 ショルダー クリア トートバッグ ファスナー付き 防水透明厚手 PVC 素材 大容量 トラベルかばん レディース 大きめ 整理 コスメ 化粧品 ジム 旅行 便利 プール 痛バッグ 鞄 女性用","identity":"透明バッグ","quote":"","axis":"","facts":["防水"],"values":[]},{"category":"バッグ・小物・ブランド雑貨","itemCode":"kansaisakabashop:10047533","itemName":"リュックサック 送料無料 リュック 撥水 学生 透明バッグ 大容量 オタクバッグ 痛バ 透明窓 クリアバッグ a4 推し活 バックパッ","identity":"リュックサック","quote":"","axis":"","facts":["撥水"],"values":[]},{"category":"腕時計","itemCode":"tokyoecstore:10139026","itemName":"AppleWatch用 バンド ケース カバー アップルウォッチ用カバー アップルウォッチケース iWatch 4 5 6 7 SE 対応 40/41/44/45mm フィルム 全面保護 耐衝撃 おしゃれ 薄型 バンド セット シリコン おしゃれ ベルト","identity":"AppleWatch用","quote":"","axis":"","facts":["45mm","シリコン"],"values":[]},{"category":"腕時計","itemCode":"giorno2020:10007029","itemName":"Fitbit inspire 2 対応バンド ナイロン 交換ベルト フィットビット アルタ Fitbit inspire ベルト Fitbit HR交換バンド スマートウォッチ バンド 交換ベルト 腕時計 バンド 交換用 高品質 耐久性 軽量 人気 腕時計バンド 時計ベルド 男女兼用 替えベルド","identity":"対応バンド","quote":"","axis":"","facts":["ナイロン"],"values":[]},{"category":"ジュエリー・アクセサリー","itemCode":"senbamuromachi:10028530","itemName":"【factoryzazie ファクトリーザジ 唐草透かしリング 「奇」】※商品の発送は、ご入金から10日前後になります。日本製 made in japan ハンドメイド 手作り 金 ゴールド 作家 職人 日本語 文字 アクセサリー 和 個性的","identity":"ファクトリーザジ","quote":"","axis":"","facts":["日本製"],"values":[]}],"structured_not_ready":[{"category":"レディースファッション","itemCode":"hayashop:10086032","itemName":"レディース 薄手 スカンツ ワイドパンツ 通気性 綿麻 女性 ガウチョパンツ きれいめ リネン 綿麻 コットンリネン スカーチョ ワイドパンツ ウェストゴム ウェスト紐 体型カバー 細見せ","identity":"ワイドパンツ","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"miyashop-01:11371633","itemName":"ワンピース レディース レトロ 花柄 Vネック 短袖 ロングドレス エレガント プリント ファッション スタイリッシュ 女性用 日常使い 膝下丈 軽やか シルエット","identity":"ワンピース","quote":"","axis":"","facts":[],"values":[]},{"category":"レディースファッション","itemCode":"vectorpremium:19206009","itemName":"【中古】インディヴィ INDIVI パンツ 38 茶 ブラウン チェック柄 クロップド丈 /AO42 ■GY70 レディース 【ベクトル 古着】 260623","identity":"インディヴィ","quote":"","axis":"","facts":[],"values":[]},{"category":"メンズファッション","itemCode":"orange-island:10779666","itemName":"メンズ Tシャツ 短袖 丸首 薄手 ゆったり レイヤード トップス 針織 セーター 若者 夏用 吸湿速乾 化繊混紡 ロブヘム 切り替え 色 ホワイト ピンク レッド ブラック ライトグレー ベージュ ライトグリーン ダークグレー ライトブルー キャメル","identity":"Tシャツ","quote":"","axis":"","facts":[],"values":[]},{"category":"メンズファッション","itemCode":"janworks:10016816","itemName":"ジャージ メッシュパンツ ズボン ロングパンツ パンツ ズボン 薄手 ジョガーパンツ スポーツ","identity":"メッシュパンツ","quote":"","axis":"","facts":[],"values":[]},{"category":"メンズファッション","itemCode":"mondeselection:10001884","itemName":"【送料無料】ワークパンツ 作業ズボン 作業着 夏用 スリム ボトムス 五分丈 半ズボン カーゴパンツ ショートパンツ ハーフパンツ","identity":"ワークパンツ","quote":"","axis":"","facts":[],"values":[]},{"category":"インナー・下着・ナイトウェア","itemCode":"powerful55:10019933","itemName":"メンズビキニ 男性下着 ティーバック Tバッグ ビキニブリーフ インナー ローカット 透け 老人の日","identity":"メンズビキニ","quote":"","axis":"","facts":[],"values":[]},{"category":"インナー・下着・ナイトウェア","itemCode":"shinri:10024355","itemName":"レギンス 裏起毛 ボトムス キッズ タイツ 子供 パンツ 女の子 100cm 110cm 120cm 130cm 140cm","identity":"レギンス","quote":"","axis":"","facts":[],"values":[]}],"partner_candidate_blocked_later":[{"category":"ペット・ペットグッズ","itemCode":"hoshisen:10000093","itemName":"犬 水飲み器 こぼれない ペット 給水器 犬 猫 ウォーターボウル 水飲みボウル フローティング 浮き皿 防溢れ 水はね防止 口周り濡れにくい 大容量 600ml 1200ml 電気不要 犬猫兼用 清潔 衛生的 浮いて調節 滑り止め ひっくり返らない 洗いやすい おしゃれ 小型犬 中型犬 皿","identity":"ペット給水器","quote":"容量 600ml","axis":"容量","facts":[],"values":[]}]}}
+✔ fixed 780 routing diagnostic classifies Groq-bound items by structural reason (4051.141707ms)
+✔ search uses independent verified identity and atomic quota (1.725794ms)
+✔ free search identity verifier is distinct from paid authorization (0.512101ms)
+✔ paid subscription authorization remains enforced independently (0.596106ms)
+FRESH_BLIND_LOCAL_20261004_REGRESSION [{"id":"fresh-umbrella-petina-bicolor","result":{"ok":true,"pending":false,"retryAfterMs":0,"phase":"local","version":"super-urenavi-v3-conditional-preview","model":"local","productType":{"specific":"折りたたみ傘","general":"unknown","quote":"折りたたみ傘","valid":true},"attributes":[{"name":"function","value":"折りたたみ","unit":"","qualifier":"","valueType":"text","quote":"折りたたみ","sourceIndex":0}],"decisionAxes":["折りたたみ","収納方法"],"verifiedAppeals":[{"index":0,"text":"折りたためる形で選びたいとき。折りたたみ","noHassle":"","scene":"折りたためる形で選びたいとき","attributeRefs":[],"strength":3,"verification":{"required":false,"supported":true,"keepDirectFact":true,"reason":"local_partner_grounded_angle"}}],"groq":{"pass1Calls":0,"pass2Calls":0,"totalCalls":0},"cacheStatus":"local","pass2Status":"not_needed","tier":"A","quality":{"status":"ready","text":"折りたためる形で選びたいとき。\n折りたたみ傘です。\n\n価格：4,180円\n\n※アフィリエイト広告を利用しています","reasons":[]},"variants":[{"index":1,"hookType":"scene","hook":"折りたためる形で選びたいとき","text":"折りたためる形で選びたいとき。\n折りたたみ傘です。\n\n価格：4,180円\n\n※アフィリエイト広告を利用しています"}],"local":{"route":"local","version":"2026-10-05-local-identity-arbitration-v8","method":"partner_reasoning","factCount":1,"valueCount":1,"partner":{"productType":"折りたたみ傘","actsOn":"雨や日差しから身を覆う用途","quote":"折りたたみ","kind":"signal"},"arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"折りたたみ傘","source":"rule","score":12},"runnerUp":null,"resolvedFamilyConflict":false,"candidates":[{"identity":"折りたたみ傘","source":"rule","score":12,"matchIndex":34,"method":null}]},"learnedIdentity":null}}},{"id":"fresh-humidifier-uhm-u01","result":null},{"id":"fresh-laptop-stand-elecom","result":{"ok":true,"pending":false,"retryAfterMs":0,"phase":"local","version":"super-urenavi-v3-conditional-preview","model":"local","productType":{"specific":"パソコンスタンド","general":"パソコンスタンド","quote":"パソコンスタンド","valid":true},"attributes":[{"name":"partner_signal","value":"折りたたみ","unit":"","qualifier":"","valueType":"text","quote":"折りたたみ","sourceIndex":0}],"decisionAxes":["収納形態"],"verifiedAppeals":[{"index":0,"text":"折りたためる形で選びたいなら。折りたたみ","noHassle":"","scene":"折りたためる形で選びたいなら","attributeRefs":[],"strength":3,"verification":{"required":false,"supported":true,"keepDirectFact":true,"reason":"local_partner_grounded_angle"}}],"groq":{"pass1Calls":0,"pass2Calls":0,"totalCalls":0},"cacheStatus":"local","pass2Status":"not_needed","tier":"A","quality":{"status":"ready","text":"折りたためる形で選びたいなら。\n折りたたみできるパソコンスタンドです。\n\n※アフィリエイト広告を利用しています","reasons":[]},"variants":[{"index":1,"hookType":"scene","hook":"折りたためる形で選びたいなら","text":"折りたためる形で選びたいなら。\n折りたたみできるパソコンスタンドです。\n\n※アフィリエイト広告を利用しています"}],"local":{"route":"local","version":"2026-10-05-local-identity-arbitration-v8","method":"partner_reasoning","factCount":1,"valueCount":0,"partner":{"productType":"パソコンスタンド","actsOn":"","quote":"折りたたみ","kind":"signal"},"arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"パソコンスタンド","source":"literal","score":11},"runnerUp":null,"resolvedFamilyConflict":false,"candidates":[{"identity":"パソコンスタンド","source":"literal","score":11,"matchIndex":5,"method":null}]},"learnedIdentity":null}}}]
+✔ first blind regressions remain safe after tighter zero-call fact boundary (103.13596ms)
+FRESH_HOLDOUT_LOCAL_20261004 [{"id":"holdout-ecoflow-river3plus","result":null},{"id":"holdout-welllife-neckpillow","result":null},{"id":"holdout-ashop-sh013-suitcase","result":null}]
+✔ fresh untouched holdout - record generalized zero-call result as-is (90.844878ms)
+FRESH_HOLDOUT10_LOCAL_20261004 {"frozen":true,"total":10,"zeroCallCount":3,"groqNeededCount":7,"zeroCallRate":0.3,"rows":[{"id":"h10-01","category":"自転車スマホホルダー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-02","category":"マグネットティッシュケース","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-03","category":"コードレス衣類スチーマー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-04","category":"折りたたみ踏み台","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-05","category":"電動コーヒーミル","zeroCall":true,"productType":"電動コーヒーミル","groqCalls":0,"decisionAxes":[],"text":"電動コーヒーミルです。\n\nコードをつながずに使うタイプです。\n\n商品の特徴\n・Type-C\n\n※アフィリエイト広告を利用しています"},{"id":"h10-06","category":"卓上加湿器","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-07","category":"ペット給水器フィルター","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h10-08","category":"ブックスタンド","zeroCall":true,"productType":"ブックスタンド","groqCalls":0,"decisionAxes":["角度調整"],"text":"角度を変えて使いたいなら。\n角度調整に対応したブックスタンドです。\n\n※アフィリエイト広告を利用しています"},{"id":"h10-09","category":"ハンディファン","zeroCall":true,"productType":"ハンディファン","groqCalls":0,"decisionAxes":["角度調整"],"text":"角度を変えて使いたいなら。\n角度調整に対応したハンディファンです。\n\n※アフィリエイト広告を利用しています"},{"id":"h10-10","category":"真空パック機","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null}]}
+✔ tenth untouched public holdout records first local result without tuning (172.868518ms)
+FRESH_HOLDOUT11_LOCAL_20261004 {"frozen":true,"total":10,"zeroCallCount":3,"groqNeededCount":7,"zeroCallRate":0.3,"rows":[{"id":"h11-01","category":"折りたたみ水切りラック","zeroCall":true,"productType":"水切りラック","groqCalls":0,"decisionAxes":["可変構造"],"text":"長さを変えて使いたいなら。\n伸縮タイプの水切りラックです。\n\n※アフィリエイト広告を利用しています"},{"id":"h11-02","category":"卓上クリーナー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-03","category":"ペット用ドライブシート","zeroCall":true,"productType":"ペット用ドライブシート","groqCalls":0,"decisionAxes":["収納形態"],"text":"折りたためる形で選びたいなら。\n折り畳みできるペット用ドライブシートです。\n\n※アフィリエイト広告を利用しています"},{"id":"h11-04","category":"LED懐中電灯","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-05","category":"電動鉛筆削り","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-06","category":"毛玉取り器","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-07","category":"ケーブルボックス","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-08","category":"オートソープディスペンサー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-09","category":"キッチンペーパーホルダー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h11-10","category":"電動ドライバー","zeroCall":true,"productType":"電動ドライバー","groqCalls":0,"decisionAxes":[],"text":"電動ドライバー\n\n充電して、コードをつながずに使うタイプです。\n\n※アフィリエイト広告を利用しています"}]}
+✔ eleventh untouched public holdout records first local result without tuning (174.716017ms)
+FRESH_HOLDOUT12_LOCAL_20261004 {"frozen":true,"total":10,"zeroCallCount":1,"groqNeededCount":9,"zeroCallRate":0.1,"rows":[{"id":"h12-01","category":"USBカップウォーマー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-02","category":"ラベルプリンター","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-03","category":"センサー式ゴミ箱","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-04","category":"マグネットスパイスラック","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-05","category":"電動缶切り","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-06","category":"靴乾燥機","zeroCall":true,"productType":"靴乾燥機","groqCalls":0,"decisionAxes":["収納形態"],"text":"折りたためる形で選びたいなら。\n折りたたみできる靴乾燥機です。\n\n※アフィリエイト広告を利用しています"},{"id":"h12-07","category":"ペットグルーミング掃除機","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-08","category":"自動給餌器","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-09","category":"折りたたみバケツ","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h12-10","category":"電動ミルクフォーマー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null}]}
+✔ final holdout12 records first local result before any tuning (101.195977ms)
+FRESH_HOLDOUT13_LOCAL_20261005 {"frozen":true,"total":10,"zeroCallCount":1,"groqNeededCount":9,"zeroCallRate":0.1,"rows":[{"id":"h13-01","category":"卓上製氷機","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-02","category":"ワイヤレスドアベル","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-03","category":"電動ワインデキャンタ","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-04","category":"コードレスグルーガン","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-05","category":"スマートキーファインダー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-06","category":"キッチンコンポストボックス","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-07","category":"車載ハンディ掃除機","zeroCall":true,"productType":"車載ハンディ掃除機","groqCalls":0,"decisionAxes":[],"text":"床の掃除に。\n充電して、コードをつながずに使うタイプです。\n\n車載ハンディ掃除機です。\n\n商品の特徴\n・Type-C\n・120W\n\n※アフィリエイト広告を利用しています"},{"id":"h13-08","category":"電気弁当箱","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-09","category":"モニターライト","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null},{"id":"h13-10","category":"自動泡ソープディスペンサー","zeroCall":false,"productType":null,"groqCalls":null,"decisionAxes":[],"text":null}]}
+✔ holdout13 records untouched first local result with no tuning (113.559506ms)
+FRESH_HOLDOUT2_LOCAL_20261004 [{"id":"holdout2-tiger-mcy-k060","result":null},{"id":"holdout2-nova-wxejxxx87","result":null},{"id":"holdout2-iris-slr-ex895","result":{"ok":true,"pending":false,"retryAfterMs":0,"phase":"local","version":"super-urenavi-v3-conditional-preview","model":"local","productType":{"specific":"ランドリーラック","general":"ランドリーラック","quote":"ランドリーラック","valid":true},"attributes":[{"name":"partner_signal","value":"伸縮","unit":"","qualifier":"","valueType":"text","quote":"伸縮","sourceIndex":0}],"decisionAxes":["可変構造"],"verifiedAppeals":[{"index":0,"text":"長さを変えて使いたいなら。伸縮","noHassle":"","scene":"長さを変えて使いたいなら","attributeRefs":[],"strength":3,"verification":{"required":false,"supported":true,"keepDirectFact":true,"reason":"local_partner_grounded_angle"}}],"groq":{"pass1Calls":0,"pass2Calls":0,"totalCalls":0},"cacheStatus":"local","pass2Status":"not_needed","tier":"A","quality":{"status":"ready","text":"長さを変えて使いたいなら。\n伸縮タイプのランドリーラックです。\n\n※アフィリエイト広告を利用しています","reasons":[]},"variants":[{"index":1,"hookType":"scene","hook":"長さを変えて使いたいなら","text":"長さを変えて使いたいなら。\n伸縮タイプのランドリーラックです。\n\n※アフィリエイト広告を利用しています"}],"local":{"route":"local","version":"2026-10-05-local-identity-arbitration-v8","method":"partner_reasoning","factCount":1,"valueCount":0,"partner":{"productType":"ランドリーラック","actsOn":"","quote":"伸縮","kind":"signal"},"arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"ランドリーラック","source":"rule","score":13},"runnerUp":null,"resolvedFamilyConflict":false,"candidates":[{"identity":"ランドリーラック","source":"rule","score":13,"matchIndex":4,"method":null}]},"learnedIdentity":null}}}]
+✔ second untouched fresh holdout - record first generalized zero-call result as-is (67.144292ms)
+FRESH_HOLDOUT3_LOCAL_20261004 [{"id":"holdout3-thermos-kfc-026","result":null},{"id":"holdout3-ohm-ds-ls16mug","result":null},{"id":"holdout3-shupatto-m","result":{"ok":true,"pending":false,"retryAfterMs":0,"phase":"local","version":"super-urenavi-v3-conditional-preview","model":"local","productType":{"specific":"エコバッグ","general":"unknown","quote":"エコバッグ","valid":true},"attributes":[{"name":"function","value":"折りたたみ","unit":"","qualifier":"","valueType":"text","quote":"折りたたみ","sourceIndex":0}],"decisionAxes":["収納形態"],"verifiedAppeals":[{"index":0,"text":"折りたためる形で選びたいなら。折りたたみ","noHassle":"","scene":"折りたためる形で選びたいなら","attributeRefs":[],"strength":3,"verification":{"required":false,"supported":true,"keepDirectFact":true,"reason":"local_partner_grounded_angle"}}],"groq":{"pass1Calls":0,"pass2Calls":0,"totalCalls":0},"cacheStatus":"local","pass2Status":"not_needed","tier":"A","quality":{"status":"ready","text":"折りたためる形で選びたいなら。\n折りたたみできるエコバッグです。\n\n※アフィリエイト広告を利用しています","reasons":[]},"variants":[{"index":1,"hookType":"scene","hook":"折りたためる形で選びたいなら","text":"折りたためる形で選びたいなら。\n折りたたみできるエコバッグです。\n\n※アフィリエイト広告を利用しています"}],"local":{"route":"local","version":"2026-10-05-local-identity-arbitration-v8","method":"partner_reasoning","factCount":1,"valueCount":1,"partner":{"productType":"エコバッグ","actsOn":"","quote":"折りたたみ","kind":"signal"},"arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"エコバッグ","source":"rule","score":12},"runnerUp":{"identity":"コンパクトバッグ","source":"repeated","score":11},"resolvedFamilyConflict":false,"candidates":[{"identity":"エコバッグ","source":"rule","score":12,"matchIndex":30,"method":null},{"identity":"コンパクトバッグ","source":"repeated","score":11,"matchIndex":19,"method":"repeated_title_support"}]},"learnedIdentity":null}}}]
+✔ third untouched fresh holdout - record first generalized zero-call result as-is (52.290188ms)
+FRESH_HOLDOUT4_PUBLIC_20261004 {"total":10,"zeroCallCount":2,"groqNeededCount":8,"zeroCallRate":0.2,"rows":[{"id":"holdout4-esr-airpods-pro3-case","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-sonic-ukasapo-pencilcase","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-luce-suitcase","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-takagi-hose-reel","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-manduka-yoga-towel","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-ohm-desk-light","zeroCall":true,"productType":"デスクライト","groqCalls":0,"text":"折りたためる形で選びたいなら。\n折り畳みできるデスクライトです。\n\n価格：2,728円\n\n※アフィリエイト広告を利用しています"},{"id":"holdout4-truelove-dog-harness","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-arnest-knife-sharpener","zeroCall":true,"productType":"たためるダイヤモンドシャープナー","groqCalls":0,"text":"折りたためる形で選びたいなら。\n折りたたみできるたためるダイヤモンドシャープナーです。\n\n※アフィリエイト広告を利用しています"},{"id":"holdout4-casio-waveceptor-watch","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout4-taiwan-esim","zeroCall":false,"productType":null,"groqCalls":null,"text":null}]}
+✔ fourth untouched public holdout - record first generalized zero-call result as-is (94.93115ms)
+FRESH_HOLDOUT5_PUBLIC_20261004 {"total":10,"zeroCallCount":0,"groqNeededCount":10,"zeroCallRate":0,"rows":[{"id":"holdout5-tanita-kd187wh","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-panasonic-ni-lc300","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-makita-up181dz","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-ulanzi-mt44b","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-shoe-laundry-net","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-richell-water-dish","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-sakuraku-draining-rack","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-yamazaki-ironing-board","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-eightex-chair-belt","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout5-nanolab-drying-plate","zeroCall":false,"productType":null,"groqCalls":null,"text":null}]}
+✔ fifth untouched public holdout - record first zero-call result as-is (81.657449ms)
+FRESH_HOLDOUT6_PUBLIC_20261004 {"total":10,"zeroCallCount":0,"groqNeededCount":10,"zeroCallRate":0,"rows":[{"id":"holdout6-tanita-bc768","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-timemore-s5","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-marna-doorstopper","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-iris-shoe-dryer","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-sakuraku-compression-box","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-yamazaki-bath-chair-sh25","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-soomloom-lumina5000","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-braun-oralb-io2","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-delonghi-ecam22020b","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"holdout6-omron-krd203","zeroCall":false,"productType":null,"groqCalls":null,"text":null}]}
+✔ sixth untouched public holdout - record first zero-call result as-is (103.306087ms)
+FRESH_HOLDOUT7_LOCAL_20261004 {"total":10,"zeroCallCount":0,"groqNeededCount":10,"zeroCallRate":0,"rows":[{"id":"h7-01","category":"電子体温計","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-02","category":"モニターアーム","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-03","category":"自動給餌器","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-04","category":"サーキュレーター","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-05","category":"分別ダストワゴン","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-06","category":"電気ケトル","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-07","category":"レインコート","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-08","category":"バックパック","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-09","category":"衣類乾燥除湿機","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h7-10","category":"低めの枕","zeroCall":false,"productType":null,"groqCalls":null,"text":null}]}
+✔ seventh untouched holdout - record zero-call result before live Groq (107.978605ms)
+FRESH_HOLDOUT8_LOCAL_20261004 {"total":10,"zeroCallCount":1,"groqNeededCount":9,"zeroCallRate":0.1,"rows":[{"id":"h8-01","category":"キッチンスケール","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-02","category":"折りたたみチェア","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-03","category":"水切りマット","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-04","category":"ペットキャリー","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-05","category":"ヘアドライヤー","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-06","category":"シューズラック","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-07","category":"電動ミル","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-08","category":"包丁スタンド","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-09","category":"ホットサンドメーカー","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h8-10","category":"ハンディファン","zeroCall":true,"productType":"ハンディファン","groqCalls":0,"text":"ハンディファンは、バッテリー容量は1500mAh・3000mAhの仕様があり、風量は100段階で調整できます。\n\n※アフィリエイト広告を利用しています"}]}
+✔ eighth untouched holdout - record zero-call result as-is (141.658308ms)
+FRESH_HOLDOUT9_LOCAL_20261004 {"total":10,"zeroCallCount":3,"groqNeededCount":7,"zeroCallRate":0.3,"rows":[{"id":"h9-01","category":"電動ワインオープナー","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-02","category":"電動空気入れ","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-03","category":"LED卓上ミラー","zeroCall":true,"productType":"卓上ミラー","groqCalls":0,"text":"卓上ミラーは、左側ミラーは2倍と3倍の拡大鏡で、LEDはワンタッチで点灯・消灯できます。\n\n※アフィリエイト広告を利用しています"},{"id":"h9-04","category":"ハンディクリーナー","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-05","category":"猫用爪とぎベッド","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-06","category":"8連洗濯ハンガー","zeroCall":true,"productType":"洗濯ハンガー","groqCalls":0,"text":"長さを変えて使いたいなら。\n伸縮式の洗濯ハンガーです。\n\n※アフィリエイト広告を利用しています"},{"id":"h9-07","category":"電子メモパッド","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-08","category":"スマホ三脚自撮り棒","zeroCall":true,"productType":"自撮り棒","groqCalls":0,"text":"長さを変えて使いたいなら。\n自撮り棒は、最大約130cmまで伸ばせ、1/4ネジを備えています。\n\n※アフィリエイト広告を利用しています"},{"id":"h9-09","category":"折りたたみ踏み台","zeroCall":false,"productType":null,"groqCalls":null,"text":null},{"id":"h9-10","category":"ラゲッジスケール","zeroCall":false,"productType":null,"groqCalls":null,"text":null}]}
+✔ ninth untouched holdout - record zero-call result as-is (81.135143ms)
+groq response error {"status":429,"attempt":0,"rateLimit":{"retry-after":"0"},"error":{"status":429,"category":"rate_limit","type":"rate_limit_error","code":null,"message":null}}
+groq response error {"status":429,"attempt":0,"rateLimit":{"retry-after":"614"},"error":{"status":429,"category":"rate_limit","type":"rate_limit_error","code":null,"message":null}}
+room-ai router failed {"message":"rate limited","status":429,"error":{"category":"rate_limit"}}
+✔ all active transports stop after one 429 and preserve Retry-After (1556.595737ms)
+✔ Preview 429 is an explicit failure, never polled again (7.016786ms)
+✔ legacy analysis stops before the image stage and returns 429 (1.859092ms)
+✔ type knowledge 429 is not a successful product response or zero-call claim (0.836593ms)
+✔ one UI operation stops remaining products after 429 in either route (3.52749ms)
+grounded-purchase-copy.test.js: PASS (18 synthetic contracts + adverse cases; not live model evaluation)
+✔ tests/grounded-purchase-copy.test.js (135.130219ms)
+HOLDOUT11_LOCAL_MISS_DIAGNOSTICS [{"id":"h11-01","category":"折りたたみ水切りラック","ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"水切りラック","chosenIdentity":"水切りラック","leadingIdentity":null,"leadingHypothesis":null,"leadingValidationMode":null,"leadingConflict":null,"leadingStructuredStatus":null,"leadingStructuredMethod":null,"leadingStructuredIdentity":null,"leadingStructuredFacts":[],"conflict":false,"specs":[],"structuredStatus":"ok","structuredMethod":"validated_identity","structuredIdentity":"水切りラック","structuredFacts":["折りたたみ","シリコン","52×42cm"],"zeroCall":true,"finalIdentity":"水切りラック"},{"id":"h11-02","category":"卓上クリーナー","ruleIdentity":null,"literalIdentity":"掃除機","repeatedIdentity":null,"chosenIdentity":"掃除機","leadingIdentity":"卓上クリーナー","leadingHypothesis":{"method":"leading_compound_family","supportCount":3,"sharedSuffix":"クリーナー","leading":true},"leadingValidationMode":"simple","leadingConflict":false,"leadingStructuredStatus":"ok","leadingStructuredMethod":"type_definition","leadingStructuredIdentity":"掃除機","leadingStructuredFacts":["充電式"],"conflict":true,"specs":[],"structuredStatus":"ok","structuredMethod":"type_definition","structuredIdentity":"掃除機","structuredFacts":["充電式"],"zeroCall":false,"finalIdentity":null},{"id":"h11-03","category":"ペット用ドライブシート","ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"シート","chosenIdentity":"シート","leadingIdentity":"ペット用ドライブシート","leadingHypothesis":{"method":"leading_compound_family","supportCount":2,"sharedSuffix":"ドライブシート","leading":true},"leadingValidationMode":"simple","leadingConflict":false,"leadingStructuredStatus":"ok","leadingStructuredMethod":"validated_identity","leadingStructuredIdentity":"ペット用ドライブシート","leadingStructuredFacts":["防水"],"conflict":true,"specs":[],"structuredStatus":"ok","structuredMethod":"validated_identity","structuredIdentity":"シート","structuredFacts":["防水"],"zeroCall":true,"finalIdentity":"ペット用ドライブシート"},{"id":"h11-05","category":"電動鉛筆削り","ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"電動鉛筆削り","chosenIdentity":"電動鉛筆削り","leadingIdentity":null,"leadingHypothesis":null,"leadingValidationMode":null,"leadingConflict":null,"leadingStructuredStatus":null,"leadingStructuredMethod":null,"leadingStructuredIdentity":null,"leadingStructuredFacts":[],"conflict":false,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"validated_identity","structuredIdentity":"電動鉛筆削り","structuredFacts":[],"zeroCall":false,"finalIdentity":null},{"id":"h11-06","category":"毛玉取り器","ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"毛玉クリーナー","chosenIdentity":"毛玉クリーナー","leadingIdentity":null,"leadingHypothesis":null,"leadingValidationMode":null,"leadingConflict":null,"leadingStructuredStatus":null,"leadingStructuredMethod":null,"leadingStructuredIdentity":null,"leadingStructuredFacts":[],"conflict":false,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"type_definition","structuredIdentity":"靴下","structuredFacts":[],"zeroCall":false,"finalIdentity":null},{"id":"h11-07","category":"ケーブルボックス","ruleIdentity":"収納ボックス","literalIdentity":"収納ボックス","repeatedIdentity":null,"chosenIdentity":"収納ボックス","leadingIdentity":"ケーブルボックス","leadingHypothesis":{"method":"leading_compound_family","supportCount":2,"sharedSuffix":"ボックス","leading":true},"leadingValidationMode":"simple","leadingConflict":false,"leadingStructuredStatus":"insufficient_evidence","leadingStructuredMethod":null,"leadingStructuredIdentity":null,"leadingStructuredFacts":[],"conflict":true,"specs":["37cm"],"structuredStatus":"insufficient_evidence","structuredMethod":null,"structuredIdentity":null,"structuredFacts":[],"zeroCall":false,"finalIdentity":null},{"id":"h11-08","category":"オートソープディスペンサー","ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"ソープディスペンサー","chosenIdentity":"ソープディスペンサー","leadingIdentity":"ソープディスペンサー","leadingHypothesis":{"method":"leading_compound_family","supportCount":3,"sharedSuffix":"ディスペンサー","leading":true},"leadingValidationMode":"simple","leadingConflict":false,"leadingStructuredStatus":"ok","leadingStructuredMethod":"validated_identity","leadingStructuredIdentity":"ソープディスペンサー","leadingStructuredFacts":["充電式","防水","300ml","壁掛け"],"conflict":false,"specs":["300ml"],"structuredStatus":"ok","structuredMethod":"validated_identity","structuredIdentity":"ソープディスペンサー","structuredFacts":["充電式","防水","300ml","壁掛け"],"zeroCall":false,"finalIdentity":null},{"id":"h11-09","category":"キッチンペーパーホルダー","ruleIdentity":null,"literalIdentity":"キッチンタオルスタンド","repeatedIdentity":null,"chosenIdentity":"キッチンタオルスタンド","leadingIdentity":"キッチンペーパーホルダー","leadingHypothesis":{"method":"leading_compound_family","supportCount":2,"sharedSuffix":"キッチンペーパーホルダー","leading":true},"leadingValidationMode":"simple","leadingConflict":false,"leadingStructuredStatus":"insufficient_evidence","leadingStructuredMethod":"type_definition","leadingStructuredIdentity":"タオル","leadingStructuredFacts":[],"conflict":true,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"type_definition","structuredIdentity":"キッチンタオルスタンド","structuredFacts":[],"zeroCall":false,"finalIdentity":null}]
+✔ diagnose holdout11 local misses after frozen first run (124.467613ms)
+HOLDOUT12_COMPOSITION_DIAGNOSTICS [{"id":"h12-03","rule":null,"literal":null,"repeated":"センサー式ゴミ箱","semantic":"センサー式ゴミ箱","selected":"センサー式ゴミ箱","arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"センサー式ゴミ箱","source":"repeated","score":16},"runnerUp":null,"resolvedFamilyConflict":false,"candidates":[{"identity":"センサー式ゴミ箱","source":"repeated","score":16,"matchIndex":0,"method":"evidence_backed_semantic_composition"}]},"structuredStatus":"ok","structuredIdentity":"センサー式ゴミ箱","structuredMethod":"validated_identity","structuredFacts":["充電式","15L"],"partner":null,"final":null,"facts":["充電式","15L"],"operators":[{"kind":"auto_open","term":"自動開閉"},{"kind":"rechargeable","term":"充電式"}],"candidates":[{"value":"センサー式ゴミ箱","total":6,"nounShape":2,"featurePenalty":0,"lexical":[]},{"value":"自動開閉","total":3.5,"nounShape":0,"featurePenalty":0,"lexical":[]},null,null,{"value":"ダストボックス","total":6,"nounShape":3,"featurePenalty":0,"lexical":[]}]},{"id":"h12-04","rule":null,"literal":null,"repeated":"収納ラック","semantic":"マグネットスパイスラック","selected":"マグネットスパイスラック","arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"マグネットスパイスラック","source":"semantic","score":15},"runnerUp":{"identity":"収納ラック","source":"repeated","score":12},"resolvedFamilyConflict":false,"candidates":[{"identity":"マグネットスパイスラック","source":"semantic","score":15,"matchIndex":0,"method":"evidence_backed_semantic_composition"},{"identity":"収納ラック","source":"repeated","score":12,"matchIndex":19,"method":"repeated_title_support"}]},"structuredStatus":"insufficient_evidence","structuredIdentity":"収納ラック","structuredMethod":"type_definition","structuredFacts":[],"partner":null,"final":null,"facts":["スチール"],"operators":[],"candidates":[{"value":"マグネットスパイスラック","total":10,"nounShape":3,"featurePenalty":0,"lexical":[{"token":"収納ラック","common":"ラック","length":3}]},null,null,{"value":"収納ラック","total":8,"nounShape":2,"featurePenalty":0,"lexical":[{"token":"マグネットスパイスラック","common":"ラック","length":3},{"token":"壁面収納","common":"収納","length":2}]},{"value":"調味料ラック","total":8,"nounShape":2,"featurePenalty":0,"lexical":[{"token":"マグネットスパイスラック","common":"ラック","length":3}]}]},{"id":"h12-07","rule":"掃除機","literal":"掃除機","repeated":"ペットグルーミング掃除機","semantic":"ペットグルーミング掃除機","selected":"ペットグルーミング掃除機","arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"ペットグルーミング掃除機","source":"repeated","score":18},"runnerUp":{"identity":"掃除機","source":"rule","score":6},"resolvedFamilyConflict":false,"candidates":[{"identity":"ペットグルーミング掃除機","source":"repeated","score":18,"matchIndex":0,"method":"evidence_backed_semantic_composition"},{"identity":"掃除機","source":"rule","score":6,"matchIndex":9,"method":null}]},"structuredStatus":"ok","structuredIdentity":"ペットグルーミング掃除機","structuredMethod":"type_definition","structuredFacts":["5点セット","収納付き"],"partner":null,"final":null,"facts":["5点セット"],"operators":[{"kind":"storage","term":"収納付き"}],"candidates":[{"value":"ペットグルーミング掃除機","total":9,"nounShape":2,"featurePenalty":0,"lexical":[{"token":"5点セット","common":"ット","length":2}]},null,null,null,null]},{"id":"h12-10","rule":null,"literal":null,"repeated":"電動ミルクフォーマー","semantic":"電動ミルクフォーマー","selected":"電動ミルクフォーマー","arbitration":{"version":"2026-10-05-local-identity-arbitration-v8","winner":{"identity":"電動ミルクフォーマー","source":"repeated","score":16},"runnerUp":null,"resolvedFamilyConflict":false,"candidates":[{"identity":"電動ミルクフォーマー","source":"repeated","score":16,"matchIndex":0,"method":"evidence_backed_semantic_composition"}]},"structuredStatus":"ok","structuredIdentity":"電動ミルクフォーマー","structuredMethod":"validated_identity","structuredFacts":["充電式","Type-C"],"partner":null,"final":null,"facts":["充電式","Type-C"],"operators":[{"kind":"rechargeable","term":"充電式"}],"candidates":[{"value":"電動ミルクフォーマー","total":6,"nounShape":2,"featurePenalty":0,"lexical":[]},{"value":"泡立て器","total":5.5,"nounShape":2,"featurePenalty":0,"lexical":[]},null,null,null]}]
+✔ diagnose remaining holdout12 composition misses without changing production logic (87.016171ms)
+HOLDOUT4_LOCAL_MISS_DIAGNOSTICS [{"id":"airpods-case","zeroCall":false,"ruleIdentity":null,"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"ESR AirPods Pro3 ケース Pro 3 Cyber MagSafe対応 フリックロックケース","structuredFacts":[],"structuredValues":[]},{"id":"pencilcase","zeroCall":false,"ruleIdentity":null,"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"筆箱 ソニック うかサポ Wシート補強 小学生 ペンケース","structuredFacts":[],"structuredValues":[]},{"id":"suitcase","zeroCall":false,"ruleIdentity":null,"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"日本ブランド スーツケース キャリーケース ファスナータイプ 大容量 容量拡張 ストッパー付 キャスター TSロック 4〜6泊 Mサイズ LW LUCE ルーチェ 5222-58","structuredFacts":[],"structuredValues":[]},{"id":"hose-reel","zeroCall":false,"ruleIdentity":null,"structuredStatus":"draft","structuredMethod":"source_label","structuredIdentity":"タカギ ホースリール コンパクトリール 10m 15m 選べるニップルセット 散水 ホース ハンガータイプ ベランダ 園芸 洗車 掃除","structuredFacts":["壁掛け"],"structuredValues":[]},{"id":"yoga-towel","zeroCall":false,"ruleIdentity":"ラグ","structuredStatus":"insufficient_evidence","structuredMethod":"type_definition","structuredIdentity":"タオル","structuredFacts":[],"structuredValues":[]},{"id":"desk-light","zeroCall":true,"ruleIdentity":"デスクライト","structuredStatus":"ok","structuredMethod":"validated_identity","structuredIdentity":"デスクライト","structuredFacts":["充電式","折り畳み"],"structuredValues":["充電して使うタイプです。","使わないときは折りたためます。"]},{"id":"dog-harness","zeroCall":false,"ruleIdentity":null,"structuredStatus":"draft","structuredMethod":"source_label","structuredIdentity":"Truelove公式 犬 ハーネス 軽い 小型犬 中型犬 クッション 立体構造 ライト＆ソフトハーネス ハッピーパターン TLH30131","structuredFacts":["メッシュ"],"structuredValues":[]},{"id":"knife-sharpener","zeroCall":true,"ruleIdentity":null,"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"逸品物創 たためるダイヤモンドシャープナー 包丁研ぎ器 コンパクト収納 折りたたみ式 77908","structuredFacts":[],"structuredValues":[]},{"id":"watch","zeroCall":false,"ruleIdentity":null,"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"カシオ ウェーブセプター WVA-M630L ソーラー腕時計 電波ソーラー腕時計 レザーバンド CASIO 太陽光充電","structuredFacts":[],"structuredValues":[]},{"id":"taiwan-esim","zeroCall":false,"ruleIdentity":null,"structuredStatus":"draft","structuredMethod":"source_label","structuredIdentity":"台湾 eSIM 7日間 プリペイドeSIM 旅行 即時利用 QRコード データ専用","structuredFacts":["20GB"],"structuredValues":[]}]
+✔ classify untouched holdout4 local misses without tuning (91.878415ms)
+HOLDOUT6_LOCAL_MISS_DIAGNOSTICS [{"id":"bc768","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":null,"chosenIdentity":null,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"タニタ 体組成計 体重計 スマホ連動 BC-768 パールホワイト メタリックブラック 体脂肪率 内臓脂肪レベル","structuredFacts":[]},{"id":"s5","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"手挽きコーヒーミル","chosenIdentity":"手挽きコーヒーミル","specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"type_definition","structuredIdentity":"手挽きコーヒーミル","structuredFacts":[]},{"id":"doorstopper","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"ドアストッパー","chosenIdentity":"ドアストッパー","specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"validated_identity","structuredIdentity":"ドアストッパー","structuredFacts":[]},{"id":"shoe-dryer","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"靴乾燥機","chosenIdentity":"靴乾燥機","specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"validated_identity","structuredIdentity":"靴乾燥機","structuredFacts":[]},{"id":"compression","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"衣類圧縮袋","chosenIdentity":"衣類圧縮袋","specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"validated_identity","structuredIdentity":"衣類圧縮袋","structuredFacts":[]},{"id":"bath-chair","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"マグネット風呂イス","chosenIdentity":"マグネット風呂イス","specs":["25cm"],"structuredStatus":"insufficient_evidence","structuredMethod":"validated_identity","structuredIdentity":"マグネット風呂イス","structuredFacts":[]},{"id":"oralb","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":null,"chosenIdentity":null,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"オーラルB iO2 電動歯ブラシ コスパモデル 電動歯みがき","structuredFacts":[]},{"id":"delonghi","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":"全自動コーヒーマシン","chosenIdentity":"全自動コーヒーマシン","specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"type_definition","structuredIdentity":"全自動コーヒーマシン","structuredFacts":[]},{"id":"omron","zeroCall":false,"ruleIdentity":null,"literalIdentity":null,"repeatedIdentity":null,"chosenIdentity":null,"specs":[],"structuredStatus":"insufficient_evidence","structuredMethod":"source_label","structuredIdentity":"オムロン 体重計 体組成計 KRD-203 カラダスキャン ダークブルー","structuredFacts":[]}]
+✔ classify sixth untouched holdout local misses without tuning (116.796184ms)
+HOLDOUT8_ZERO_SUCCESS_DIAGNOSTICS [{"id":"h8-10","category":"ハンディファン","finalType":"ハンディファン","ruleType":null,"literalType":null,"repeatedType":"ハンディファン","structuredIdentity":"扇風機","structuredMethod":"type_definition","structuredFacts":["3000mAh","コードレス"],"literalSpecs":["110g","3000mAh"],"text":"ハンディファンは、バッテリー容量は1500mAh・3000mAhの仕様があり、風量は100段階で調整できます。\n\n※アフィリエイト広告を利用しています"}]
+✔ diagnose untouched holdout8 zero-call successes before tuning (118.794353ms)
+✔ live sting harness has exactly 30 unique product families (1.292631ms)
+✔ live sting harness never auto-starts Groq on page load (0.355077ms)
+✔ live sting result keeps human persuasiveness score separate from safety evaluation (0.187869ms)
+live unknown 10 page test: PASS
+✔ tests/live-unknown-10-page.test.js (92.170018ms)
+✔ section headings, metadata, and keyword fragments cannot become completed caption prose (5.818614ms)
+✔ clean complete source claims remain candidates with or without final punctuation (1.307233ms)
+✔ server local-ready text must survive the unchanged final browser safety boundary (29.464866ms)
+✔ source table fragments, safety assurances and unclear washed parts require semantic review (0.89515ms)
+✔ complete source-associated use case competes with a known product title specification (40.876891ms)
+✔ unsafe or unrelated caption cannot displace a grounded title choice (13.833603ms)
+✔ promotional grades are never a whole product identity (9.830504ms)
+✔ caption publishing skips decorative promotions and guarantees but can select clean functional evidence (16.235542ms)
+✔ shared title keywords cannot promote another product or accessory claim to the main item (20.041776ms)
+FACTUAL_DRAFT_BOUNDARIES {"total":780,"drafts":158}
+✔ all factual-only corpus drafts retain source facts but cannot bypass the real app publication or AI routing gates (1393.876394ms)
+✔ factual draft requires verified generation; a 429 cannot return draft text as a publishable response (4.349373ms)
+✔ missing facts, conflicting identities and product accessories remain blocked rather than becoming factual drafts (11.365225ms)
+✔ standalone battery-powered wording can support an unknown product without inventing benefits (5.784544ms)
+✔ whole local partner path defers when battery mode is the only purchase reason (12.08473ms)
+✔ battery wording attached inside another noun is not treated as whole-product power mode (0.257863ms)
+✔ cordless is a specification, never a whole-product identity (1.155136ms)
+✔ semantic composer never promotes cordless as the product identity (7.964933ms)
+✔ whole local route never publishes cordless as product identity (22.20205ms)
+✔ unregistered source causal relationships survive extraction without inventing a benefit (39.461398ms)
+✔ causal wording alone never upgrades generic convenience or category usage (1.600267ms)
+✔ explicit configurable bundle remains an exact source reason across product types (20.726664ms)
+✔ final-local-risk candidates cannot displace a usable caption before ranking (7.425462ms)
+✔ electric kettle combines product scene and capacity choice without inventing speed (22.201875ms)
+✔ known folding signal avoids repeating folding already inside product identity (1.408823ms)
+✔ mobile battery combines real product scene with capacity choice and never invents charge count (1.549992ms)
+✔ motorcycle glove preserves parked smartphone safety intent over generic riding scene (1.775809ms)
+✔ component weight such as 5g propeller is not promoted into a product benefit (1.62228ms)
+✔ generic glove has no active partner knowledge and cannot guess the use (1.373781ms)
+✔ resolved storage bench never borrows storage-box knowledge and a bare unlabeled size may defer (8.821366ms)
+✔ unknown exact identity can turn a literal structural fact into a safe purchase axis (14.187378ms)
+✔ bare gram value defers when its semantic role is not proven (2.866108ms)
+✔ unknown exact identity combines explicit extendable structure with exact range naturally (13.918499ms)
+✔ explicit height adjustment becomes a natural generic decision axis without inventing comfort (11.809375ms)
+✔ remote feature remains a choice axis and never invents a usage outcome (10.783142ms)
+✔ negated or excluded purchase feature is never promoted and weak material alone defers (4.083457ms)
+✔ standalone material, washable wording, and pack count do not complete a purchase-reason post (11.534407ms)
+✔ family hypotheses compare different meanings instead of only individual facts (3.347133ms)
+✔ near-tied different meaning families defer when neither has stronger evidence (2.153179ms)
+✔ identity-only feature restatement cannot finish local generic copy (2.094192ms)
+✔ folding wording avoids repeating a feature already present in product identity (0.331973ms)
+✔ material wording uses natural Japanese grammar without changing evidence (0.873537ms)
+✔ extendable wording avoids awkward double specification while preserving exact feature (0.360876ms)
+✔ explicit capacity label gives an unknown product a safe semantic axis without exaggeration (67.102073ms)
+✔ explicit dimension label gives semantic size meaning but no use-case claim (4.370894ms)
+✔ size-only generic copy remains semantic but cannot finish the local publish path (11.670399ms)
+✔ explicit weight label is understood as weight but never turned into portability (10.41923ms)
+✔ semantic profile records dominant meaning and evidence breadth for unknown products (6.896455ms)
+✔ standalone rechargeable wording alone does not finish generic local copy (1.315655ms)
+✔ rechargeable wording attached to an accessory is not promoted to whole-product power source (0.938425ms)
+✔ standalone connector and caster restatements do not finish generic local copy (1.503644ms)
+✔ meaningful generic operators remain available (5.57983ms)
+✔ step adjustment requires an explicit adjustment target before local completion (0.404151ms)
+✔ weak bare environmental fact cannot borrow unrelated numeric support (1.336255ms)
+✔ rechargeable plus connector wording still does not finish without same-axis power support (0.796393ms)
+✔ rechargeable generic copy can finish when independently corroborated on the same power axis (10.790101ms)
+✔ caption-grounded generic reasoning works across unknown product types without category registration (7.821731ms)
+✔ caption capacity wording distinguishes storage amount from neutral product capacity (20.80483ms)
+✔ caption-grounded reasoning rejects unrelated cross-sell text (19.457578ms)
+✔ weak unrelated caption does not force local publication (1.864149ms)
+✔ noisy commerce metadata caption never becomes a ROOM purchase reason (10.895533ms)
+✔ numbered explanatory prose is not copied verbatim as a local purchase reason (24.256589ms)
+✔ raw washable, pack count, and unlabeled dimensions stay below local publication threshold (15.192582ms)
+✔ exact protection and washer compatibility wording can become a grounded local reason (17.369026ms)
+✔ source-quoted protection labels are safe drafts but not finished purchase reasons (76.898719ms)
+✔ unsupported outcomes and negated protection still fail their original guards (16.845743ms)
+✔ recorded original sources expose distinct local failures without changing publication (571.970626ms)
+✔ purpose-qualified identity and complete causal evidence survive into the same rendered post (56.210737ms)
+✔ local server and browser reject negated source facts across caption and catchcopy (135.180573ms)
+✔ unrelated negative condition does not erase a grounded purchase reason (2.94108ms)
+✔ trailing negative predicates in either supplementary source retain refusal (3.869109ms)
+LOCAL_ZERO_DIAG {"id":"laptop","local":null,"identity":"","copy":null}
+LOCAL_ZERO_DIAG {"id":"neck","local":null,"identity":"","copy":null}
+LOCAL_ZERO_DIAG {"id":"suitcase","local":null,"identity":"","copy":null}
+✔ diagnose local zero misses (2.744728ms)
+✔ purpose-qualified product names are preserved instead of shortened to a known suffix (21.299736ms)
+✔ different compounds sharing a noun core defer instead of dropping target context (0.35691ms)
+✔ longer explicit compound prevents generic shortening (0.196863ms)
+✔ already-specific compound is not blocked by its shorter noun (0.228028ms)
+✔ later descriptive prefix ending in the same leading identity is supporting repetition, not conflict (0.311543ms)
+✔ identity-plus-accessory suffix is still treated as a competing compound (0.388047ms)
+✔ holdout8 pet carrier no longer publishes generic carry-case identity locally (6.411136ms)
+✔ leading standalone identity may be repeated inside a later descriptive product name (0.20168ms)
+✔ leading standalone identity still rejects a later accessory compound (0.207798ms)
+✔ model number suffix is never published as a numeric spec (1.822428ms)
+✔ standalone measured capacity still remains eligible (0.568084ms)
+✔ numeric unit attached to a component noun is not sliced into a standalone fact (1.870028ms)
+✔ origin-only metadata cannot complete a zero-call ROOM post (16.053541ms)
+✔ equivalent volume spellings remain deduplicated facts without becoming a label-only finished post (43.360462ms)
+✔ grounded caption purchase reason completes locally with zero Groq calls (21.050716ms)
+✔ bare count or size facts cannot complete a local ROOM post (15.156999ms)
+✔ caption evidence does not turn bare dimensions or a negated claim into a purchase reason (13.67003ms)
+✔ sleeve or season labels alone remain drafts rather than zero-call completed posts (6.91893ms)
+✔ A/B writer payload differs only by partner decision guidance (6.380399ms)
+✔ partner knowledge is guidance, never product evidence (0.485201ms)
+✔ final verifier never receives partner knowledge as evidence (1.374231ms)
+✔ concrete grounded purchase axis outranks weak generic numeric angle (8.207113ms)
+✔ candidate absent from source is never publishable (1.175075ms)
+✔ unsupported persuasive wording is blocked by safety before persuasion can matter (0.600161ms)
+✔ grounded candidate gets full safety even when persuasion is modest (3.993323ms)
+✔ negated candidate is vetoed even when the word exists in source (0.709784ms)
+✔ weak numeric-only angle is withheld when confidence is low (2.040642ms)
+✔ product decision axis boosts the feature that matters for this product type (7.311321ms)
+✔ blocked inference wording is vetoed even when the underlying source feature exists (0.55869ms)
+✔ cliche wording is penalized instead of winning on marketing tone alone (0.974938ms)
+✔ adjustability is treated as a high-impact purchase family (0.550368ms)
+✔ independent range evidence reinforces extendable structure when ranking selfie stick reasons (3.082359ms)
+✔ direct adjustment beats connector detail for an unknown adjustable light (3.172383ms)
+✔ writing self-score detects tautology and cliche without changing safety evidence (0.360215ms)
+✔ diverse alternatives preserve different purchase families instead of three near-duplicates (2.94095ms)
+✔ very poor writing quality is withheld even when the quoted fact is grounded (1.144951ms)
+✔ live semantic generation infers and passes partner product type before Groq call (2.143685ms)
+✔ unknown product type does not invent partner knowledge (0.479562ms)
+preview-draft-pacing: PASS (deferred engine isolated, single-shot client, cancellation, no retry)
+✔ tests/preview-draft-pacing.test.js (232.981943ms)
+preview-handoff-polling.test.js: PASS
+✔ tests/preview-handoff-polling.test.js (110.955687ms)
+pro-candidate-ranker.test.js: PASS (API-independent ranking)
+Pro main UI does not require labor-intensive manual candidate entry
+Pro engagement ledger has explicit user-recorded like/follow/post activity
+Paid Pro Rakuten API source is blocked until approved
+Pro dashboard shows explicitly entered sales and engagement activity
+Single Urenavi interface shows product and ROOM workflow together
+Mobile initialization remains retryable after transient failures
+✔ tests/pro-candidate-ranker.test.js (128.976155ms)
+✔ reviewed past product types become active partner knowledge (2.073661ms)
+✔ descriptor-only past extraction is not promoted as product knowledge (0.578219ms)
+✔ derived exact title type can be inferred without semantic guessing (0.562526ms)
+✔ decision knowledge v1 loads active product reasoning context (2.088824ms)
+✔ generic glove knowledge never becomes active reasoning context (0.560603ms)
+✔ exact title product type selects partner knowledge automatically (0.84799ms)
+✔ reasoning context creates wording but never evidence or unsupported outcomes (0.278825ms)
+✔ active knowledge must include target scenes axes and blocked inference guards (0.214218ms)
+Shadow V2 regression: PASS
+✔ tests/product-shadow-v2.test.js (109.211396ms)
+✔ source bounds preserve complete evidence and never retain half a negative clause (1.281544ms)
+✔ search carries evidence after character 1200 into generation sources (1.97852ms)
+✔ oversize or non-text catchcopy is rejected before local/provider processing (0.696265ms)
+✔ integrated candidate ranking retains late source conditions just like normal search (19.151874ms)
+✔ knowledge is ranking-only and strips capability/claim phrases (3.200606ms)
+✔ cache hit uses zero Groq calls (0.537268ms)
+✔ cache miss does not call Groq unless explicitly allowed (0.209371ms)
+✔ new type generates once, validates, stores, then reuses cache (0.657957ms)
+✔ invalid knowledge is negative cached and not regenerated immediately (0.315439ms)
+✔ cache outage prevents Groq generation to avoid repeated paid calls (0.319645ms)
+PURCHASE_CORPUS_ROUTE_AUDIT {"total":780,"local":8,"semantic":772,"providerCalls":0}
+✔ all 780 source products reach local copy or the shared semantic path without spending provider quota while waiting (2150.084026ms)
+✔ variant feedback preserves scope through the existing one-rewrite path across unrelated categories (18.63745ms)
+✔ a selection appraisal cannot pass as the final purchase reason even with exact source evidence (0.662595ms)
+✔ a source-title product kind cannot disappear into an accessory-only post (1.066314ms)
+✔ a compound product identity summarized from source phrases must also remain in the post (0.69337ms)
+✔ rewrite context retrieves whole exact original sentences across categories without approving or changing the rejected quote (10.275316ms)
+✔ retrieval is bounded, source-only and absent for unrelated or already valid quotes (0.79401ms)
+RAKUTEN_MAJOR_GENRE_REPORT {"genreCount":39,"total":780,"generated":249,"fallback":531,"fallbackRate":0.6808,"genres":[{"genreId":"100371","genre":"レディースファッション","count":20,"generated":10,"fallback":10,"fallbackRate":0.5},{"genreId":"551177","genre":"メンズファッション","count":20,"generated":12,"fallback":8,"fallbackRate":0.4},{"genreId":"100433","genre":"インナー・下着・ナイトウェア","count":20,"generated":10,"fallback":10,"fallbackRate":0.5},{"genreId":"216131","genre":"バッグ・小物・ブランド雑貨","count":20,"generated":9,"fallback":11,"fallbackRate":0.55},{"genreId":"558885","genre":"靴","count":20,"generated":7,"fallback":13,"fallbackRate":0.65},{"genreId":"558929","genre":"腕時計","count":20,"generated":5,"fallback":15,"fallbackRate":0.75},{"genreId":"216129","genre":"ジュエリー・アクセサリー","count":20,"generated":4,"fallback":16,"fallbackRate":0.8},{"genreId":"100533","genre":"キッズ・ベビー・マタニティ","count":20,"generated":10,"fallback":10,"fallbackRate":0.5},{"genreId":"566382","genre":"おもちゃ","count":20,"generated":6,"fallback":14,"fallbackRate":0.7},{"genreId":"101070","genre":"スポーツ・アウトドア","count":20,"generated":4,"fallback":16,"fallbackRate":0.8},{"genreId":"562637","genre":"家電","count":20,"generated":6,"fallback":14,"fallbackRate":0.7},{"genreId":"211742","genre":"TV・オーディオ・カメラ","count":20,"generated":3,"fallback":17,"fallbackRate":0.85},{"genreId":"100026","genre":"パソコン・周辺機器","count":20,"generated":6,"fallback":14,"fallbackRate":0.7},{"genreId":"564500","genre":"スマートフォン・タブレット","count":20,"generated":3,"fallback":17,"fallbackRate":0.85},{"genreId":"565004","genre":"光回線・モバイル通信","count":20,"generated":13,"fallback":7,"fallbackRate":0.35},{"genreId":"100227","genre":"食品","count":20,"generated":9,"fallback":11,"fallbackRate":0.55},{"genreId":"551167","genre":"スイーツ・お菓子","count":20,"generated":9,"fallback":11,"fallbackRate":0.55},{"genreId":"100316","genre":"水・ソフトドリンク","count":20,"generated":5,"fallback":15,"fallbackRate":0.75},{"genreId":"510915","genre":"ビール・洋酒","count":20,"generated":13,"fallback":7,"fallbackRate":0.35},{"genreId":"510901","genre":"日本酒・焼酎","count":20,"generated":18,"fallback":2,"fallbackRate":0.1},{"genreId":"100804","genre":"インテリア・寝具・収納","count":20,"generated":8,"fallback":12,"fallbackRate":0.6},{"genreId":"215783","genre":"日用品雑貨・文房具・手芸","count":20,"generated":7,"fallback":13,"fallbackRate":0.65},{"genreId":"558944","genre":"キッチン用品・食器・調理器具","count":20,"generated":7,"fallback":13,"fallbackRate":0.65},{"genreId":"200162","genre":"本・雑誌・コミック","count":20,"generated":0,"fallback":20,"fallbackRate":1},{"genreId":"101240","genre":"CD・DVD","count":20,"generated":0,"fallback":20,"fallbackRate":1},{"genreId":"101205","genre":"テレビゲーム","count":20,"generated":0,"fallback":20,"fallbackRate":1},{"genreId":"101164","genre":"ホビー","count":20,"generated":2,"fallback":18,"fallbackRate":0.9},{"genreId":"112493","genre":"楽器・音響機器","count":20,"generated":3,"fallback":17,"fallbackRate":0.85},{"genreId":"101114","genre":"車・バイク","count":20,"generated":4,"fallback":16,"fallbackRate":0.8},{"genreId":"503190","genre":"車用品・バイク用品","count":20,"generated":8,"fallback":12,"fallbackRate":0.6},{"genreId":"100939","genre":"美容・コスメ・香水","count":20,"generated":11,"fallback":9,"fallbackRate":0.45},{"genreId":"100938","genre":"ダイエット・健康","count":20,"generated":9,"fallback":11,"fallbackRate":0.55},{"genreId":"551169","genre":"医薬品・コンタクト・介護","count":20,"generated":8,"fallback":12,"fallbackRate":0.6},{"genreId":"101213","genre":"ペット・ペットグッズ","count":20,"generated":6,"fallback":14,"fallbackRate":0.7},{"genreId":"100005","genre":"花・ガーデン・DIY","count":20,"generated":3,"fallback":17,"fallbackRate":0.85},{"genreId":"101438","genre":"サービス・リフォーム","count":20,"generated":5,"fallback":15,"fallbackRate":0.75},{"genreId":"111427","genre":"住宅・不動産","count":20,"generated":2,"fallback":18,"fallbackRate":0.9},{"genreId":"101381","genre":"カタログギフト・チケット","count":20,"generated":1,"fallback":19,"fallbackRate":0.95},{"genreId":"100000","genre":"百貨店・総合通販・ギフト","count":20,"generated":3,"fallback":17,"fallbackRate":0.85}]}
+RAKUTEN_MAJOR_GENRE_SAMPLE100 [{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"OPPO A79 A79 ケース カバー オッポ A79 スマホケース 三つ折りタイプ チワワ ちわわ 小型犬 犬 いぬ イラスト もふもふ 可愛い かわいい ゆるい ブラックタン レターケース 携帯ケース 携帯カバー","itemPrice":1980,"generated":false,"facts":[],"post":""},{"genreId":"510901","genre":"日本酒・焼酎","itemName":"紀土 カラクチキッド 720ml","itemPrice":1580,"generated":true,"facts":[],"post":"紀土 カラクチキッド\n\n商品の特徴\n・720ml\n\n価格：1,580円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100371","genre":"レディースファッション","itemName":"花柄刺繍ベスト レディース 婦人服 春物 春夏 トップス 服 シニア 羽織り 高齢者 ファッション 前開きベ 春夏 軽量 通気性 おしゃれ かわいい 上品 体型カバー 散歩 外出 冷房対策 母の日","itemPrice":2680,"generated":true,"facts":[],"post":"花柄刺繍ベスト 婦人服 春物 トップス 服 シニア 羽織り 高齢者 ファッション 前開きベ 通気性 上品 体型カバー 散歩 外出 冷房対策 母の日\n\n商品の特徴\n・春夏\n\n価格：2,680円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101205","genre":"テレビゲーム","itemName":"【中古】Wiiスポーツ リゾート (「Wiiモーションプラス (シロ) 」1個同梱)","itemPrice":4980,"generated":false,"facts":[],"post":""},{"genreId":"558885","genre":"靴","itemName":"パンプス レディース 中高齢者用 本革 ぺたんこ フラットシューズ 柔らかい 歩きやすい 疲れない 涼しい 穴あき 通気性 サンダル 快適 履きやすい 軽い 軽量 柔らか素材 コンフォートシューズ 婦人靴 お母さん用 通勤用 普段使い デイリーユース マ","itemPrice":5803,"generated":true,"facts":["本革"],"post":"パンプス 中高齢者用 ぺたんこ フラットシューズ 柔らかい 歩きやすい 疲れない 涼しい 穴あき 通気性 サンダル 快適 履きやすい 軽い 柔らか素材 コンフォートシューズ 婦人靴 お母さん用 通勤用 普段使い デイリーユース マ\n\n商品の特徴\n・本革\n\n価格：5,803円\n\n※アフィリエイト広告を利用しています"},{"genreId":"551167","genre":"スイーツ・お菓子","itemName":"ラ・ロシェル 坂井宏行シェフ監修 チョコレートパウンドケーキアソート SAD-BOA 内祝 内祝い お祝 御祝 記念品 出産内祝い プレゼント 快気祝い 粗供養 引出物","itemPrice":1263,"generated":false,"facts":[],"post":""},{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"SK11（エスケー11） スマホケース ダブル 4977292968799","itemPrice":1670,"generated":false,"facts":[],"post":""},{"genreId":"100433","genre":"インナー・下着・ナイトウェア","itemName":"靴下 男性用 コットン 抗菌 防臭 吸汗 中筒 リブソックス オールシーズン 普段使い ビジネス フォーマル カジュアル 白 グレー 黒 紺","itemPrice":2700,"generated":true,"facts":["コットン"],"post":"日々の着替えに。\nオールシーズン仕様です。\n\nコットンを使った靴下です。\n\n価格：2,700円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100316","genre":"水・ソフトドリンク","itemName":"日本銘水百選 屋久島縄文水1.5L×8本＜箱売り＞【1梱包となり同梱はできません】★屋久島の地下天然水。硬度10の超軟水です。pH(ペーハー)値6〜7★弱酸性〜中性。","itemPrice":3609,"generated":false,"facts":[],"post":""},{"genreId":"100939","genre":"美容・コスメ・香水","itemName":"チーク＆バリガラス コットン綿棒入れセットL フロストタイプ【バリ島直輸入】おしゃれ 綿棒 コットン入れ アメニティ コットンケース ガラスケース 蓋付き 洗面 リゾートホテル アジアンインテリア【バリ・アジアン雑貨バリパラダイス】","itemPrice":11880,"generated":false,"facts":[],"post":""},{"genreId":"215783","genre":"日用品雑貨・文房具・手芸","itemName":"（まとめ）ぺんてる 筆ペン XFP5F 極細顔料【×10セット】 (代引不可)","itemPrice":5702,"generated":false,"facts":[],"post":""},{"genreId":"100005","genre":"花・ガーデン・DIY","itemName":"【ポイント10倍】日東工器 ジェットブローチ ワンタッチタイプ重ね板用 25x50LW (16525)","itemPrice":15400,"generated":false,"facts":[],"post":""},{"genreId":"211742","genre":"TV・オーディオ・カメラ","itemName":"(まとめ) エレコム アンテナケーブルL型-ストレート 3m ブラック AV-ATLS30BK 1本 【×10セット】","itemPrice":25630,"generated":false,"facts":[],"post":""},{"genreId":"100316","genre":"水・ソフトドリンク","itemName":"創愛 AGF＆リプトン 珈琲・紅茶＆オリジナルケーキセット ASF-50 ギフト 贈り物 送料無料[24]","itemPrice":3556,"generated":false,"facts":[],"post":""},{"genreId":"101070","genre":"スポーツ・アウトドア","itemName":"【中古】 タイトリストスリーブ付き(GTS系) フジクラドライバー用 シャフト SPEEDER NX 60 (フレックスS)Bランク ゴルフクラブ","itemPrice":16428,"generated":false,"facts":[],"post":""},{"genreId":"503190","genre":"車用品・バイク用品","itemName":"ウェッズ ホイール レオニスMX クラウンマジェスタ 210系 トヨタ 20インチ 5H 1本 0037453 WEDS","itemPrice":44044,"generated":true,"facts":[],"post":"ウェッズ ホイール レオニスMX クラウンマジェスタ 210系 トヨタ 5H 0037453 WEDS\n\n商品の特徴\n・20インチ\n\n価格：44,044円\n\n※アフィリエイト広告を利用しています"},{"genreId":"510901","genre":"日本酒・焼酎","itemName":"れんと 25度 [紙パック] 1.8L 1800ml x 2本 送料無料(本州のみ) [奄美大島開運酒造 黒糖焼酎 こくとう焼酎 乙類 日本 鹿児島県 111705]ギフト プレゼント 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日","itemPrice":5197,"generated":true,"facts":[],"post":"れんと 25度 紙パック x 本州のみ 奄美大島開運酒造 黒糖焼酎 こくとう焼酎 乙類 日本 鹿児島県 111705 贈り物 お祝い 内祝い お返し 誕生日プレゼント 父の日 敬老の日\n\n商品の特徴\n・1.8L\n・1800ml\n\n価格：5,197円\n\n※アフィリエイト広告を利用しています"},{"genreId":"111427","genre":"住宅・不動産","itemName":"刷り込み板 9文字 H120mm　丸ゴシック体　吹き付け板　吹き付けプレート","itemPrice":27800,"generated":false,"facts":[],"post":""},{"genreId":"100433","genre":"インナー・下着・ナイトウェア","itemName":"パジャマ レディース 春夏 薄手 セット 蝶結び 襟口 長袖 ゆったり 部屋着 かわいい カートゥーン柄 リラックス","itemPrice":3901,"generated":true,"facts":[],"post":"日々の着替えに。\n\nパジャマです。\n\n商品の特徴\n・春夏\n・長袖\n\n価格：3,901円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100533","genre":"キッズ・ベビー・マタニティ","itemName":"個人宅配送不可 森田アルミ工業 極小アルミ巾木 アルベース albase 入隅部材L (2組入り) AL15I-S シルバー","itemPrice":11210,"generated":true,"facts":["2組入り"],"post":"個人宅配送不可 森田アルミ工業 極小アルミ巾木 アルベース albase 入隅部材L AL15I-S\n\n商品の特徴\n・2組入り\n\n価格：11,210円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101381","genre":"カタログギフト・チケット","itemName":"【ふるさと納税】FARM VILLA taku 宿泊チケット（一棟貸し素泊まり2泊） 竹下牧場 takeshita farm | ファーム ヴィラ 素泊まり 一棟 2泊 宿泊 チケット 2室 4名 高級 農家宿 北海道 中標津町 中標津【24032】","itemPrice":624000,"generated":false,"facts":[],"post":""},{"genreId":"100939","genre":"美容・コスメ・香水","itemName":"髭剃り シェーバー 電気 カミソリ ひげそり メンズ ポータブル コンパクト 回転式 6枚刃 ミニ 防水 小型 軽量 充電","itemPrice":3319,"generated":true,"facts":[],"post":"ひげのお手入れに。\n\nシェーバーです。\n\n商品の特徴\n・回転式\n・防水\n\n価格：3,319円\n\n※アフィリエイト広告を利用しています"},{"genreId":"510901","genre":"日本酒・焼酎","itemName":"【ふるさと納税】 美潮 純米吟醸3本セット 高知県 芸西村 返礼品 日本酒 お酒 仙頭酒造 ふるさと納税限定 720ml 飲み比べセット のみくらべ 雄町 きたしずく お祝い 贈答品 箱入り ギフト 贈り物 プレゼント 送料無料 お取り寄せ 飲みやすい甘口 果実味 お中元 御中元 のし","itemPrice":30000,"generated":true,"facts":[],"post":"ふるさと納税 美潮 純米吟醸3本セット 高知県 芸西村 返礼品 日本酒 お酒 仙頭酒造 ふるさと納税限定 飲み比べセット のみくらべ 雄町 きたしずく お祝い 贈答品 箱入り 贈り物 お取り寄せ 飲みやすい甘口 果実味 お中元 御中元 のし\n\n商品の特徴\n・720ml\n\n価格：30,000円\n\n※アフィリエイト広告を利用しています"},{"genreId":"558944","genre":"キッチン用品・食器・調理器具","itemName":"【田中糧機製作所】田中糧機 T 18-8 クッキー抜き型セット NO.2119 動物Aセット 6ヶ入","itemPrice":1081,"generated":false,"facts":[],"post":""},{"genreId":"100533","genre":"キッズ・ベビー・マタニティ","itemName":"期間限定【1000円OFF】クーポン！Jordan ナイキ GS エアジョーダン1 ミッド “グレー ホワイト/アンスラサイト“ Jordan 1 Mid “Light Smoke Grey (GS)“ Jordan 554725-078 大人も履ける キッズモデル レディース スニーカー キッズスニーカー ベビーシューズ","itemPrice":33200,"generated":false,"facts":[],"post":""},{"genreId":"551167","genre":"スイーツ・お菓子","itemName":"とらや 中形羊羹 4本入","itemPrice":11217,"generated":true,"facts":["4本入"],"post":"とらや 中形羊羹\n\n商品の特徴\n・4本入\n\n価格：11,217円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100938","genre":"ダイエット・健康","itemName":"【前十字靭帯】《固定用》膝サポーター｜ニーケアー・ACL","itemPrice":19800,"generated":false,"facts":[],"post":""},{"genreId":"100000","genre":"百貨店・総合通販・ギフト","itemName":"百貨店の進化 【電子書籍】[ 伊藤元重 ]","itemPrice":1980,"generated":false,"facts":[],"post":""},{"genreId":"101240","genre":"CD・DVD","itemName":"【中古】(非常に良い)永遠と一日 [DVD]","itemPrice":17955,"generated":false,"facts":[],"post":""},{"genreId":"503190","genre":"車用品・バイク用品","itemName":"後部座席用 収納ホック 車載ホルダー ヘッドレスト ホルダー 伸縮アームスタンド スマホ ホルダー ヘッドレスト 折り畳み 式 車用ホック 携帯電話のクリップ 娯楽も収納もできます 4イン…","itemPrice":2069,"generated":true,"facts":[],"post":"後部座席用 収納ホック 車載ホルダー ヘッドレスト ホルダー 伸縮アームスタンド スマホ 式 車用ホック 携帯電話のクリップ 娯楽も収納もできます 4イン…\n\n使わないときは折りたためます。\n\n価格：2,069円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101438","genre":"サービス・リフォーム","itemName":"道路表示シート (A～Z各種) 1文字 N 白 120×60 (835-078W) 安全用品・工事看板 交通標識・路面標示 路面表示用品 ローマ字シート","itemPrice":700,"generated":false,"facts":[],"post":""},{"genreId":"101114","genre":"車・バイク","itemName":"セキュリティステッカー(2代目BRZタイプ)","itemPrice":1320,"generated":false,"facts":[],"post":""},{"genreId":"211742","genre":"TV・オーディオ・カメラ","itemName":"【中古】【非常に良い】レグザ 65V型 有機ELテレビ 65X9400 4Kチューナー内蔵 外付けHDD タイムシフトマシン対応 (2020年モデル)","itemPrice":920260,"generated":false,"facts":[],"post":""},{"genreId":"101164","genre":"ホビー","itemName":"天下統一 【英】【ABYR-EN079】【N】_[中古]","itemPrice":30,"generated":false,"facts":[],"post":""},{"genreId":"503190","genre":"車用品・バイク用品","itemName":"自動車用バッテリー プリウス ZA-NHW20 2003〜2007 新車搭載:S34B20R 1個(寒冷地仕様) ECHNO HV/エクノHV 古河/FURUKAWA 品番:S34B20R 1個","itemPrice":21133,"generated":false,"facts":[],"post":""},{"genreId":"558944","genre":"キッチン用品・食器・調理器具","itemName":"メラミン ラーメン丼受皿 No.50 クリーム【調理器具 厨房用品 厨房機器 プロ 愛用 販売 なら 名調】","itemPrice":855,"generated":false,"facts":[],"post":""},{"genreId":"200162","genre":"本・雑誌・コミック","itemName":"Our Monthly Devotions 【電子書籍】[ Albert A. Lings ]","itemPrice":166,"generated":false,"facts":[],"post":""},{"genreId":"215783","genre":"日用品雑貨・文房具・手芸","itemName":"【J-725105】【桜井】アジャスタケース BS90K ブラック【製図用品】","itemPrice":5515,"generated":false,"facts":[],"post":""},{"genreId":"100316","genre":"水・ソフトドリンク","itemName":"inゼリー エネルギーBCAA 180g×6個入【4個セット】(4902888733925-4)","itemPrice":7440,"generated":true,"facts":["4個セット"],"post":"inゼリー エネルギーBCAA 180g×6個入 4902888733925-4\n\n商品の特徴\n・4個セット\n\n価格：7,440円\n\n※アフィリエイト広告を利用しています"},{"genreId":"216129","genre":"ジュエリー・アクセサリー","itemName":"イヤーカフ レディース 幾何学模様 シルバー パール 銀色 埋め込み 暗夜系 ヴィンテージ レトロ おしゃれ 通勤用 気質抜群 アクセサリー 普段使い お呼ばれ 結婚式 二次会 パーティー オフィス フォーマル シンプル 高見え 高級感 エレガント 大人","itemPrice":3400,"generated":false,"facts":[],"post":""},{"genreId":"101164","genre":"ホビー","itemName":"【中古】マジックザギャザリング/英語版/C/黒/基本セット2012 118/249[C]：【M12】Wring Flesh/肉体のねじ切り","itemPrice":200,"generated":false,"facts":[],"post":""},{"genreId":"100804","genre":"インテリア・寝具・収納","itemName":"川島織物セルコン オーダーカーテン FELTA(フェルタ)▼スタンダード縫製 下部3ッ巻(100mm) ウエイトバー付属【推奨仕様】 レースカーテン 約2.5倍ヒダ 片開き▼FT7608 防炎 ウォッシャブル【製品幅5巾 2410〜3000×製品高さ1610〜1800mm】","itemPrice":39567,"generated":true,"facts":[],"post":"川島織物セルコン オーダーカーテン FELTA フェルタ ▼スタンダード縫製 下部3ッ巻 ウエイトバー付属 推奨仕様 レースカーテン 約2.5倍ヒダ 片開き▼FT7608 防炎 ウォッシャブル 製品幅5巾 2410〜3000×製品高さ1610〜1800mm\n\n商品の特徴\n・100mm\n\n価格：39,567円\n\n※アフィリエイト広告を利用しています"},{"genreId":"565004","genre":"光回線・モバイル通信","itemName":"データ通信SIM カンボジア SIMカード 3GB 毎日 20日間 プリペイドSIM SIMカード SIMプリー 低速データ無制限 SIM データ専用 Cellcard","itemPrice":8110,"generated":true,"facts":[],"post":"データ通信SIM カンボジア SIMカード 毎日 20日間 プリペイドSIM SIMプリー 低速データ無制限 SIM データ専用 Cellcard\n\n商品の特徴\n・3GB\n\n価格：8,110円\n\n※アフィリエイト広告を利用しています"},{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"Xperia Ace SO-02L エクスペリア エース ストラップ付き so02l ケース ショルダー スマホ 落下防止 手帳型 マグネット式 ピタッと閉まる スマホカバー 肩掛け 斜めかけ 025848 線路　ぬいぐるみ　人形","itemPrice":2480,"generated":true,"facts":[],"post":"Xperia Ace SO-02L エクスペリア エース ストラップ付き so02l ケース ショルダー スマホ 手帳型 ピタッと閉まる スマホカバー 肩掛け 斜めかけ 025848 線路 ぬいぐるみ 人形\n\n商品の特徴\n・マグネット式\n\n価格：2,480円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100804","genre":"インテリア・寝具・収納","itemName":"パナソニック 配線金具【WTF7702F】コンセントプレート 簡易耐火用コンセントプレート ラウンド ベージュ","itemPrice":431,"generated":false,"facts":[],"post":""},{"genreId":"562637","genre":"家電","itemName":"TR FESTOOL セルフクリ-ン集塵フィルターバッグ CT 36 (5枚入) ［5枚入X1パック］","itemPrice":13556,"generated":true,"facts":["5枚入"],"post":"TR FESTOOL セルフクリ-ン集塵フィルターバッグ CT 36 ［5枚入X1パック］\n\n商品の特徴\n・5枚入\n\n価格：13,556円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100938","genre":"ダイエット・健康","itemName":"ハウスウェルネスフーズ株式会社メガシャキ 100ml×6本セット【RCP】【TKauto】","itemPrice":1657,"generated":false,"facts":[],"post":""},{"genreId":"566382","genre":"おもちゃ","itemName":"タカラトミー(TAKARA TOMY) T-SPARK ZOIDS ゾイド ハンターウルフ 警視庁仕様 2号機","itemPrice":6765,"generated":false,"facts":[],"post":""},{"genreId":"216129","genre":"ジュエリー・アクセサリー","itemName":"[Silvora] ピアス メンズ つけっぱなし ゴールド フープピアス レディース 小さい リングピアス k18金 ジルコニア 内径10mm 20G アクセサリー","itemPrice":4764,"generated":false,"facts":[],"post":""},{"genreId":"101438","genre":"サービス・リフォーム","itemName":"クリアアメリカンA4-10P ABW-30/茶/業務用/新品/小物送料対象商品","itemPrice":2970,"generated":false,"facts":[],"post":""},{"genreId":"558929","genre":"腕時計","itemName":"【送料無料】腕時計　ウォッチ　スワロフスキーブラックベルトピンクゴールドnuevo anuncioreloj swarovski crystalline 5275043 correa color negro pvd oro rosa","itemPrice":75980,"generated":false,"facts":[],"post":""},{"genreId":"100433","genre":"インナー・下着・ナイトウェア","itemName":"パジャマ　レディース　上下 春秋 女性用 クラウド コットン パジャマ 長袖 胸 パッド 付きの 大きいサイズ カーディガン 屋外で 着用 可能 グリーンの 民族 風 スーツ ホームウェア","itemPrice":5519,"generated":true,"facts":["コットン"],"post":"日々の着替えに。\n\nコットンを使ったパジャマです。\n\n商品の特徴\n・長袖\n\n価格：5,519円\n\n※アフィリエイト広告を利用しています"},{"genreId":"551167","genre":"スイーツ・お菓子","itemName":"前田製菓 3枚×7袋 カラッとおから 10個入","itemPrice":3164,"generated":false,"facts":[],"post":""},{"genreId":"211742","genre":"TV・オーディオ・カメラ","itemName":"HORIC DisplayPort→HDMI変換ケーブル 1m DPHA10-808BB(1本)【HORIC】","itemPrice":2406,"generated":false,"facts":[],"post":""},{"genreId":"211742","genre":"TV・オーディオ・カメラ","itemName":"Pro Ears Stealth28 ステルス28 HTBT/HT用 交換用 ウレタンフォーム イヤーチップ イヤーピース 2個×3ペア","itemPrice":847,"generated":false,"facts":[],"post":""},{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"P5倍15%OF Galaxy S26 Plus SC-52G SCG38 ケース カバー 手帳型 ベルトなし 磁石 上質レザー 手提げ 犬 いぬ Galaxy S26 Plusケース Galaxy S26 Plusカバー SC-52Gケース SC-52Gカバー SCG38ケース SCG38カバー \"4m-3-kei-17","itemPrice":1980,"generated":false,"facts":[],"post":""},{"genreId":"200162","genre":"本・雑誌・コミック","itemName":"Querkopf Wilson: Historischer Kriminalroman Bereicherte Ausgabe.【電子書籍】[ Mark Twain ]","itemPrice":150,"generated":false,"facts":[],"post":""},{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"スマホケース 液晶保護ガラスフィルム付 GALAXY A41 ギャラクシー エーフォーティーワン[SC-41A SCV48]docomo auいちごとチェック[ スマホカバー 携帯ケース 人気 定番 ]","itemPrice":3860,"generated":false,"facts":[],"post":""},{"genreId":"101438","genre":"サービス・リフォーム","itemName":"腰ケアパンツ 膝ラク LL ネイビー (878-48NB-L) 安全用品・工事看板 安全保護具","itemPrice":17600,"generated":true,"facts":[],"post":"日々の着替えに。\n\nパンツです。\n\n商品の特徴\n・LL\n\n価格：17,600円\n\n※アフィリエイト広告を利用しています"},{"genreId":"551167","genre":"スイーツ・お菓子","itemName":"【ギフト包装・のし紙無料】ひとくちクロワッサン ギフトセット DCR-BO(A4)","itemPrice":1100,"generated":false,"facts":[],"post":""},{"genreId":"101213","genre":"ペット・ペットグッズ","itemName":"スドー S-1041 エアセラS20 2個","itemPrice":508,"generated":false,"facts":[],"post":""},{"genreId":"100804","genre":"インテリア・寝具・収納","itemName":"ポスター ウォールステッカー シール式ステッカー 飾り 364×515mm B3 写真 フォト 壁 インテリア おしゃれ 剥がせる wall sticker poster 010498 蝶　模様　ピンク","itemPrice":1980,"generated":true,"facts":["364×515mm"],"post":"ポスター ウォールステッカー シール式ステッカー 飾り B3 写真 フォト 壁 インテリア 剥がせる wall sticker poster 010498 蝶 模様 ピンク\n\n商品の特徴\n・364×515mm\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100804","genre":"インテリア・寝具・収納","itemName":"アスワン オーダーカーテン オーセンス▼フラット縫製(形態安定加工なし) 約1倍 ヒダなし カーテン エルサム▼ドレープ Grand Harmony[noble]【カーテン幅5650〜7100×カン下寸法600〜1000mm】","itemPrice":47547,"generated":false,"facts":[],"post":""},{"genreId":"510915","genre":"ビール・洋酒","itemName":"ワイン ファンティ ポッジョ デッラ バディア NV 750ml 赤ワイン イタリア (f01-3724)","itemPrice":5500,"generated":true,"facts":[],"post":"ワイン ファンティ ポッジョ デッラ バディア NV 赤ワイン イタリア f01-3724\n\n商品の特徴\n・750ml\n\n価格：5,500円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101240","genre":"CD・DVD","itemName":"【和訳付】2025年 9月号 GQ HONGKONG SEVENTEEN S.COUPS セブンティーン","itemPrice":4780,"generated":false,"facts":[],"post":""},{"genreId":"551169","genre":"医薬品・コンタクト・介護","itemName":"【第1類医薬品】佐藤製薬 エンペシドL 6錠 【膣カンジダの再発治療薬】 ★セルフメディケーション税制対象商品 ※要メール返信","itemPrice":3080,"generated":false,"facts":[],"post":""},{"genreId":"566382","genre":"おもちゃ","itemName":"ZTTY ボクシンググローブ パンチンググローブ メッシュ通気性 子供 男女兼用(黒&金, 10oz)","itemPrice":5699,"generated":false,"facts":[],"post":""},{"genreId":"565004","genre":"光回線・モバイル通信","itemName":"【24時間QR自動先行即配】台湾 eSIM 20GB 7日間 プリペイドeSIM esim 旅行 即時利用 快適 simカード 快適 sim card QRコード 送料無料 データ専用 365日24時間 最速QR 自動発送","itemPrice":2350,"generated":true,"facts":[],"post":"24時間QR自動先行即配 台湾 eSIM 7日間 プリペイドeSIM 旅行 即時利用 快適 simカード sim card QRコード データ専用 365日24時間 最速QR 自動発送\n\n商品の特徴\n・20GB\n\n価格：2,350円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101213","genre":"ペット・ペットグッズ","itemName":"ドギーマンハヤシ MD1132 ロングマンテル 3.0mm「宅配便送料無料(B)」","itemPrice":4780,"generated":true,"facts":[],"post":"ドギーマンハヤシ MD1132 ロングマンテル B\n\n商品の特徴\n・3.0mm\n\n価格：4,780円\n\n※アフィリエイト広告を利用しています"},{"genreId":"101070","genre":"スポーツ・アウトドア","itemName":"スズキ 船外機 純正部品 11351-92F11 ガスケット,クランクケース","itemPrice":618,"generated":false,"facts":[],"post":""},{"genreId":"100938","genre":"ダイエット・健康","itemName":"デントクリア 酵素入り入れ歯洗浄剤 緑茶パワー 部分入れ歯・総入れ歯兼用 120錠入","itemPrice":779,"generated":true,"facts":["120錠入"],"post":"デントクリア 酵素入り入れ歯洗浄剤 緑茶パワー 部分入れ歯 総入れ歯兼用\n\n商品の特徴\n・120錠入\n\n価格：779円\n\n※アフィリエイト広告を利用しています"},{"genreId":"216129","genre":"ジュエリー・アクセサリー","itemName":"ベス バングススタイリングコーム シースルーバング用(1個)【ベス】","itemPrice":715,"generated":false,"facts":[],"post":""},{"genreId":"100938","genre":"ダイエット・健康","itemName":"[3個セット] 【ハーフサイズ】 ビオチン 5000mcg 60粒 NOW Foods Biotin 5000mcg 60vcaps","itemPrice":3705,"generated":true,"facts":["3個セット"],"post":"ハーフサイズ ビオチン 5000mcg 60粒 NOW Foods Biotin 60vcaps\n\n商品の特徴\n・3個セット\n\n価格：3,705円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100371","genre":"レディースファッション","itemName":"【中古】インディヴィ INDIVI パンツ 38 茶 ブラウン チェック柄 クロップド丈 /AO42 ■GY70 レディース 【ベクトル 古着】 260623","itemPrice":2000,"generated":false,"facts":[],"post":""},{"genreId":"565004","genre":"光回線・モバイル通信","itemName":"お買い物マラソン【P5倍】1ポット4カップセット 茶具 ホームホーム シンプルさ ティーセット セラミック ポータブル テリーヌ ティーポ","itemPrice":5380,"generated":true,"facts":["セラミック"],"post":"お買い物マラソン 1ポット4カップセット 茶具 ホームホーム シンプルさ ティーセット ポータブル テリーヌ ティーポ\n\n商品の特徴\n・セラミック\n\n価格：5,380円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100316","genre":"水・ソフトドリンク","itemName":"【パッションフラワー】量り売り 20g 30g 50g ｜ハーブティー シングル 落ち着く リラックス トケイソウ 健康 お茶 紅茶 注文梱包","itemPrice":716,"generated":false,"facts":[],"post":""},{"genreId":"100005","genre":"花・ガーデン・DIY","itemName":"TS DESIGN TS 4Dレディースパンツ 3L チャコールグレー ( 91121 3L 25 )","itemPrice":5614,"generated":true,"facts":[],"post":"日々の着替えに。\n\nパンツです。\n\n商品の特徴\n・3L\n\n価格：5,614円\n\n※アフィリエイト広告を利用しています"},{"genreId":"112493","genre":"楽器・音響機器","itemName":"バイオリンペグリーマー 金属部品 木製ハンドル バイオリン 修理工具 ペグ穴工具 調整ブロック チューニング安定 反復作業向け 操作性良好 ルシアー向け suitable 音楽店,出張修理,自宅整備,演奏前点検","itemPrice":6680,"generated":false,"facts":[],"post":""},{"genreId":"100533","genre":"キッズ・ベビー・マタニティ","itemName":"女の子 水着 セパレート キッズ ベビー水着 ラッシュガード 長袖 スイムウェア 上下セット キャップ付き 3点セット パンツ 子供用 セットアップ 紫外線対策 女児水着 小学生 保育園","itemPrice":3300,"generated":true,"facts":["3点セット"],"post":"日々の着替えに。\n\nパンツです。\n\n商品の特徴\n・長袖\n・3点セット\n\n価格：3,300円\n\n※アフィリエイト広告を利用しています"},{"genreId":"215783","genre":"日用品雑貨・文房具・手芸","itemName":"DUOFIRE 遮光シート 100%完全遮光フィルム 遮熱シート 断熱シート UVカット 目隠しシート 窓用フィルム (黒+シルバー 1.45x1m)","itemPrice":3324,"generated":true,"facts":["1.45x1m"],"post":"DUOFIRE 遮光シート 100%完全遮光フィルム 遮熱シート 断熱シート UVカット 目隠しシート 窓用フィルム 黒+シルバー\n\n商品の特徴\n・1.45x1m\n\n価格：3,324円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100227","genre":"食品","itemName":"丸美屋 ソフトふりかけ 牛カレー 28g×10個 送料無料","itemPrice":1591,"generated":false,"facts":[],"post":""},{"genreId":"215783","genre":"日用品雑貨・文房具・手芸","itemName":"デニムジャケット レディース 春秋物 Gジャン 切り替え 衬衫袖 コットン ゆったり 通勤 ポロネック デニムブルー","itemPrice":5359,"generated":true,"facts":["コットン"],"post":"デニムジャケット 春秋物 Gジャン 切り替え 衬衫袖 ゆったり 通勤 ポロネック デニムブルー\n\n商品の特徴\n・コットン\n\n価格：5,359円\n\n※アフィリエイト広告を利用しています"},{"genreId":"100533","genre":"キッズ・ベビー・マタニティ","itemName":"水泳バッグ キッズ 子供用 乾湿分離 防水 リュック カートーン ビーチ 大容量 ファスナー付き 立方体 ポリエステル ブルー ピンク","itemPrice":2900,"generated":true,"facts":["ポリエステル"],"post":"水泳バッグ キッズ 子供用 乾湿分離 リュック カートーン ビーチ 大容量 ファスナー付き 立方体 ピンク\n\n商品の特徴\n・防水\n・ポリエステル\n\n価格：2,900円\n\n※アフィリエイト広告を利用しています"},{"genreId":"562637","genre":"家電","itemName":"【メーカー純正品】ジャノメミシンJANOME家庭用ミシン『棒定規(キルトステッチ定規)』【ジグザグ振り幅最大7mm用水平全回転釜ミシン専用】ステッチガイド","itemPrice":572,"generated":false,"facts":[],"post":""},{"genreId":"101381","genre":"カタログギフト・チケット","itemName":"引き出物宅配便セット│引き出物セット 2品セット（ロフト 3800円 Aコース）｜引宅(ヒキタク)(引出物 引菓子 内祝 グルメ 手ぶら 結婚内祝い 結婚式 なびろめ ギフトセット)","itemPrice":6489,"generated":false,"facts":[],"post":""},{"genreId":"551177","genre":"メンズファッション","itemName":"＼P5倍 当店だけの大還元祭 期間限定 9/19〜9/27／スウェット トレーナー ヒップホップ チカーノ チカーナ chicano chicana ホーミー homies メキシコ ウエッサイ westcoast ブランド アパレル ファッション メンズ レディース アパレル ワンポイント","itemPrice":4950,"generated":false,"facts":[],"post":""},{"genreId":"100227","genre":"食品","itemName":"日清 MCTリセッタ(600g×20セット)","itemPrice":12003,"generated":false,"facts":[],"post":""},{"genreId":"510915","genre":"ビール・洋酒","itemName":"デザイン一新／ スラ・ヴィンヤード、ラサ　シラー 2022 赤 750ml／インドワイン","itemPrice":3880,"generated":true,"facts":[],"post":"デザイン一新 スラ ヴィンヤード、ラサ シラー 2022 インドワイン\n\n商品の特徴\n・750ml\n\n価格：3,880円\n\n※アフィリエイト広告を利用しています"},{"genreId":"564500","genre":"スマートフォン・タブレット","itemName":"Galaxy S23 Ultra SC-52D SCG20 用 ケース カバー 手帳型 マグネット式 ピタッと閉まる レザーケース sc52d カード収納 ポケット 006199 野球　イラスト","itemPrice":2180,"generated":true,"facts":[],"post":"Galaxy S23 Ultra SC-52D SCG20 用 ケース カバー 手帳型 ピタッと閉まる レザーケース sc52d カード収納 ポケット 006199 野球 イラスト\n\n商品の特徴\n・マグネット式\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています"},{"genreId":"566382","genre":"おもちゃ","itemName":"【中古】ポケモンカードゲーム シュバルゴ（Aランク） 【SM10a 031 / 054 U】 強化拡張パック ジージーエンド シングルカード","itemPrice":30,"generated":false,"facts":[],"post":""},{"genreId":"566382","genre":"おもちゃ","itemName":"【中古】(未使用・未開封品)トミカ ハイパーレスキュー ドライブヘッド シンクロ合体シリーズ サポートビークル 03 レスキューヘリコプター","itemPrice":19200,"generated":false,"facts":[],"post":""},{"genreId":"551167","genre":"スイーツ・お菓子","itemName":"ミンティア(MINTIA) カテキンミント 50粒 × 10個 アサヒグループ食品 緑茶風味","itemPrice":1528,"generated":false,"facts":[],"post":""},{"genreId":"100026","genre":"パソコン・周辺機器","itemName":"【中古】【非常に良い】M-K24KLC 大興 Taiko ソルボーネ SOLVONET-M　24内線増設ユニット　ビジネスフォン [オフィス用品]","itemPrice":17625,"generated":false,"facts":[],"post":""},{"genreId":"510915","genre":"ビール・洋酒","itemName":"《16,500円以上で送料無料》 セッラ モスカ カンノナウ ディ サルデーニャ 2024 Sella Mosca Cannonau di Sardegna 赤ワイン イタリア サルデーニャ","itemPrice":1969,"generated":false,"facts":[],"post":""},{"genreId":"101381","genre":"カタログギフト・チケット","itemName":"カタログギフト 送料無料 uluao (ウルアオ) Jessenia (ヘッセニア)+＜KOGANEAN＞こがねもなか・こいねり・どら各4個 内祝い お祝い 新築 出産 結婚式 快気祝い 引き出物 香典返し 満中陰志 おしゃれ ゴルフコンペ 20000円 2万円コース 結婚祝いギフト お中元 敬老の日","itemPrice":21065,"generated":false,"facts":[],"post":""},{"genreId":"551169","genre":"医薬品・コンタクト・介護","itemName":"コクヨ クリップボード（薄型・静音）A4横 ホワイト ヨハ-US73W 1枚","itemPrice":1010,"generated":false,"facts":[],"post":""},{"genreId":"112493","genre":"楽器・音響機器","itemName":"【中古】【非常に良い】SUZUKI スズキ マイクケーブル CI-5","itemPrice":7480,"generated":false,"facts":[],"post":""},{"genreId":"565004","genre":"光回線・モバイル通信","itemName":"WiFi レンタル 海外 アイスランド sim 内蔵 Wi-Fi 海外旅行wifi モバイル ルーター 海外旅行WiFi 9泊10日 wifi アイスランド simカード 10日間 ギガプラン 1日1GB800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド sim アイスランド 10日 ワイファイ","itemPrice":8800,"generated":true,"facts":["WiFi","Wi-Fi"],"post":"レンタル 海外 アイスランド sim 内蔵 海外旅行wifi モバイル ルーター 9泊10日 simカード 10日間 ギガプラン 1日1GB800円 レンタルWiFi海外 即日発送 wifiレンタル Wi-Fiレンタル プリペイド 10日 ワイファイ\n\n商品の特徴\n・WiFi\n\n価格：8,800円\n\n※アフィリエイト広告を利用しています"},{"genreId":"565004","genre":"光回線・モバイル通信","itemName":"MCO HDMIセレクタ フルHD対応 HDS-FH01/BK 1個 ■▼683-7807 【送料都度見積】","itemPrice":2002,"generated":false,"facts":[],"post":""},{"genreId":"558885","genre":"靴","itemName":"ローファー メンズ メンズローファー 靴 スリッポンシューズ 短靴 男性 スエード調 フラットシューズ ビジネスシューズ 黒 灰 通勤 通学 入学式 卒業式 学生靴 防滑底 スクール 外出 ドライビン","itemPrice":13072,"generated":false,"facts":[],"post":""}]
+✔ Rakuten major genres neutral copy structural validation >=700 fixed products (944.644363ms)
+✔ a later complete occurrence remains valid after an earlier partial occurrence (2.80665ms)
+✔ a complete product mention after a joined heading survives product identity validation (2.467356ms)
+✔ checking a restored result sends a read-only request and never resumes another product (3.852333ms)
+✔ the real UI request builder carries read-only intent to the existing API contract (3.821968ms)
+✔ restoring paused searches renders saved platforms without synthetic clicks or generation (1.919081ms)
+✔ each strict review request can only select the exact current draft sentences without changing response fields (806.127928ms)
+✔ an exact review may pass but typo, duplicate and unsupported-condition verdicts still veto publication (1.517451ms)
+✔ legacy records are invisible until claimed; migration keeps source and deduplicates activities (2.878149ms)
+✔ another account cannot import claimed legacy or see current records (0.541487ms)
+✔ conflicting revenue dates do not overwrite current values or claim the legacy (0.441338ms)
+✔ one atomic storage write prevents partial migration and source deletion when storage is full (0.478483ms)
+✔ corrupt source or invalid amount fails before migration and existing data survives (0.780803ms)
+✔ free Groq policy logs distinguish reference equivalent from unverified actual charge (1.155422ms)
+✔ backup excludes other accounts and restores unknown and zero without duplicate activities (0.894223ms)
+✔ conflicting backup fails atomically including unrelated new dates and activities (0.37558ms)
+✔ invalid backups and storage failure leave current records untouched (0.97296ms)
+✔ restore revalidates conflicts introduced after preview (0.647735ms)
+PASS evidence must be a contiguous source quote
+PASS number and unit must match evidence
+PASS validated itemCaption features are eligible for grounded phase1 post
+PASS feature text itself must be a contiguous source quote
+PASS clean product type stays valid when surrounding evidence contains promotion
+PASS AI selling points are evidence-gated and category independent
+PASS selling point text itself must be a source quote
+PASS selling point keeps full quote beyond forty characters and rejects mid-word truncation
+PASS brand-like transliteration is not accepted as product type
+PASS product type rejects truncation and spec-heavy phrases
+PASS generic descriptor-only product type is rejected
+PASS decorative brackets end a complete grounded selling point
+PASS incomplete selling point fragments are rejected
+PASS image product type conflict switches to fallback
+PASS invalid productType evidence is not trusted for heading
+PASS invalid feature evidence switches to fallback
+PASS phase1 post only uses eligible features and disclosure
+groq response meta {"attempt":0,"rateLimit":{}}
+PASS Groq caller uses Qwen 3.8 Responses API with structured output and image
+urenavi ai route {"route":"text","groqCalls":1,"cacheStatus":"miss","model":"qwen/qwen3.8-27b","elapsedMs":0,"mode":"simple","usage":{"input_tokens":100,"output_tokens":40},"rateLimit":{}}
+room-ai usage {"cacheStatus":"miss","aiCall":true,"model":"qwen/qwen3.8-27b","elapsedMs":0,"usage":{"input_tokens":100,"output_tokens":40},"mode":"simple","stages":{"textOnly":true,"imageAttempted":false,"textElapsedMs":0,"imageElapsedMs":0},"rateLimit":{}}
+PASS Production paid plan can use text-only AI
+PASS Production client enables AI only for paid plans while debug stays Preview owner only
+urenavi ai route {"route":"text","groqCalls":1,"cacheStatus":"miss","model":"qwen/qwen3.8-27b","elapsedMs":0,"mode":"simple","usage":{"input_tokens":100,"output_tokens":50},"rateLimit":{}}
+room-ai usage {"cacheStatus":"miss","aiCall":true,"model":"qwen/qwen3.8-27b","elapsedMs":0,"usage":{"input_tokens":100,"output_tokens":50},"mode":"simple","stages":{"textOnly":true,"imageAttempted":false,"textElapsedMs":0,"imageElapsedMs":0},"rateLimit":{}}
+PASS Preview owner mock invokes one AI request and validates output
+PASS non-allowlisted baseball usage phrase stays out of post facts
+PASS non-allowlisted smartphone compatibility phrase stays out of post facts
+PASS motorcycle glove evidence mismatch cannot reach full output
+PASS compact schema removes unknowns and limits features to three short fields
+PASS coverage counterexample glove versus glove case stays rejected
+PASS invalid numeric feature forces whole-product fallback even below half
+PASS invalid claim feature is dropped when multiple grounded facts remain
+PASS claim-only extraction still falls back
+PASS Groq error classifier maps safe categories
+PASS productType coverage allows >=90 percent character support and rejects lower coverage
+PASS partial feature fallback keeps product when less than half features invalid
+PASS half or more invalid features forces whole-product fallback
+PASS Groq schema/output budget stays below observed OTPM single-request limit
+PASS rule-first AI gate only calls Groq when rule analysis needs help
+PASS Groq caption input is capped for token control
+PASS AI targeting distinguishes safe fallback from AI-needed fallback
+PASS Retry-After parser supports seconds
+PASS Preview free tier keeps Groq text-only and does not escalate to image
+PASS Preview Groq retries json_validate_failed only once
+PASS two-stage Groq skips image when text validation is high and grounded
+PASS two-stage Groq adds image only after uncertain text stage
+PASS medium confidence is fixed fallback
+PASS image type allows a shared noun core but rejects unrelated type
+PASS productType cannot expand beyond evidence
+PASS cache caption normalization keeps equivalent whitespace on one key
+room-ai cache read unavailable Database request failed (404)
+room-ai cache write unavailable Database request failed (404)
+urenavi ai route {"route":"text","groqCalls":1,"cacheStatus":"unavailable","model":"qwen/qwen3.8-27b","elapsedMs":1,"mode":"simple","usage":null,"rateLimit":{}}
+room-ai usage {"cacheStatus":"unavailable","aiCall":true,"model":"qwen/qwen3.8-27b","elapsedMs":1,"usage":null,"mode":"simple","stages":{"textOnly":true,"imageAttempted":false,"textElapsedMs":1,"imageElapsedMs":0},"rateLimit":{}}
+PASS missing cache table behaves as cache unavailable and still calls Groq
+PASS product type must exist exactly in its declared source
+PASS shipping language is never eligible for posting
+PASS low confidence always falls back
+PASS productType promotional or claim text is rejected
+PASS cache hash is stable and includes itemCode name and image
+urenavi ai route {"route":"cache","groqCalls":0,"cacheStatus":"hit","model":"qwen/qwen3.8-27b","mode":"simple"}
+room-ai usage {"cacheStatus":"hit","aiCall":false,"model":"qwen/qwen3.8-27b","mode":"simple"}
+PASS cache hit bypasses quota image and Groq but revalidates evidence
+PASS Preview app keeps AI gate default OFF and routes all three media through one resolver
+PASS client copy accepts only verified AI or the same grounded local assessment
+PASS validation cache hash includes prompt and rule versions
+PASS AI sales copy is grounded and legacy wrong audience is gated
+PASS new AI versions invalidate stale cache and caption facts can be posted
+PASS AI-needed products hide unfinished fallback copy until validation completes
+PASS AI stays fact-only and client benefit copy expands only verified safe facts
+PASS sales copy uses validated AI facts without obsolete grounded helper path
+PASS valid non-spec AI evidence is preserved for copy but not promoted to strict spec fact
+PASS Groq eligibleForPost uses strict spec allowlist
+PASS Groq material facts reject modified wording in evidence
+PASS daily limit blocks AI call
+ROOM AI phase1 regression passed
+✔ tests/room-ai-phase1.test.js (154.629638ms)
+✔ only a persisted known completion inside the exact sent lease reconciles budget without calls or quota refunds (2.353897ms)
+✔ elapsed time, missing usage, wrong time, multiple completions and uncertain consumption never clear a sent lease (1.452684ms)
+✔ active and waiting batches cannot be reset by another candidate click (4.694836ms)
+✔ preparation rechecks posted products, deduplicates URL/code and caps at three (2.091146ms)
+✔ empty selection makes no generation request and completed batches permit a new selection (0.915343ms)
+✔ actual pause and resume controls preserve 429 stop and require pending verification first (1.17426ms)
+✔ real search handler refuses replacement while a provider request is active and honors pending discard choice (1.063485ms)
+✔ catchcopy is accepted only as actual product-source evidence (4.055353ms)
+✔ semantic writer and reviewer receive identical catchcopy (0.337823ms)
+✔ catchcopy cannot authorize facts absent from any source (0.604591ms)
+✔ semantic inspection blocks quotes cut before trailing negation (5.572072ms)
+✔ semantic inspection preserves an explicitly stated negative limitation (0.471383ms)
+✔ batch pauses on incomplete verification and does not resume automatically after auth/visibility (4.399746ms)
+✔ provider 429 terminates all remaining products with no automatic follow-up (1.161551ms)
+✔ starting again while a batch is active dispatches no duplicate product request (0.787784ms)
+✔ manual pause preserves completed product and resumes only unprocessed products (1.385555ms)
+✔ 429 still stops remaining items when manual pause was requested simultaneously (1.184765ms)
+✔ completed blocked products are not labelled successful posts, and missing verdicts remain unknown (2.67069ms)
+✔ coexisting attributes need the same positive source relation; unrelated provision claims still fail (9.142001ms)
+✔ the existing browser copy guard rejects an ungrounded term before the server calls a draft ready (2.209212ms)
+✔ existing one-rewrite flow receives the final copy rejection and publishes only a corrected reviewed post (11.184405ms)
+✔ actual local route completes a concrete source use relation without quota, cache or provider access (52.823549ms)
+✔ actual local deferral reaches existing writer and review and then reuses completion (27.52256ms)
+✔ Preview canonical writer and every-sentence reviewer publish only verified text and reuse cache (7.887592ms)
+✔ pending verification never publishes or calls verifier before required wait; read-only costs zero (2.070274ms)
+✔ 429 stops once, records unknown billed usage, never calls subsequent stage (1.012939ms)
+✔ Production and non-owner calls cannot use new Preview endpoint (0.51651ms)
+✔ safe local completion is preserved with no Groq call; client sends one request on 202 and 429 (1.041973ms)
+✔ cost measurement leaves unknown models or token counts unknown and includes output reasoning tokens (0.511763ms)
+✔ public copy URL reuses the existing function and rejects production dispatch (1.128171ms)
+✔ semantic generator requires evidenced purchase value, not generic one-line usage (0.810728ms)
+PASS clean-window - category cleaning
+RESULT {"id":"clean-window","category":"cleaning","usage":"window_screen","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS clean-glove - category cleaning
+RESULT {"id":"clean-glove","category":"cleaning","usage":"glove","ambiguous":false,"outputMode":"full","allowlisted":["6枚セット"],"copy":"お掃除 手袋 マイクロファイバー クロス 掃除グッズ 大掃除便利グッズ ほこり取り イエロー\n\n商品の特徴\n・6枚セット\n\n価格：2,480円\n\n※アフィリエイト広告を利用しています"}
+PASS clean-cloth - category cleaning
+RESULT {"id":"clean-cloth","category":"cleaning","usage":"cloth","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS pet-grooming - category pet
+RESULT {"id":"pet-grooming","category":"pet","usage":"grooming","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS beauty-roller - category beauty
+RESULT {"id":"beauty-roller","category":"beauty","usage":"face_roller","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS beauty-peeling - category beauty
+RESULT {"id":"beauty-peeling","category":"beauty","usage":"face_peeling","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"ウォーターピーリング 美顔器 楽天5冠 プロ美容家監修 RELX リラクス 超軽量 超音波 美容グッズ ウォーターピーラー 洗顔ピーラー 毛穴ケア ピーリング 家庭用 超音波ピーリング 目元ケア ems イオン 美容家電\n\n商品の特徴\n・70g\n\n価格：3,490円\n\n※アフィリエイト広告を利用しています"}
+PASS beauty-kassa - category beauty
+RESULT {"id":"beauty-kassa","category":"beauty","usage":"kassa","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS pet-water - category pet
+RESULT {"id":"pet-water","category":"pet","usage":"water","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS pet-toilet - category pet
+RESULT {"id":"pet-toilet","category":"pet","usage":"toilet","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS pet-bed - category pet
+RESULT {"id":"pet-bed","category":"pet","usage":"bed","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ペットが過ごす場所に。\n\nペットベッドです。\n\n商品の特徴\n・オールシーズン\n・洗える\n\n価格：1,650円\n\n※アフィリエイト広告を利用しています"}
+PASS battery-cable - category charging
+RESULT {"id":"battery-cable","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS counter-pet-bottle - category unknown
+RESULT {"id":"counter-pet-bottle","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":["日本製"],"copy":"ペットボトル用 コップセット コンパクト便 キャラクター グッズ ペットボトル キャップ コップ プラコップ プラスチック プラ カップ パッキン付き 口を付けない 直接飲まない オーエスケー OSK\n\n商品の特徴\n・日本製\n\n価格：928円\n\n※アフィリエイト広告を利用しています"}
+PASS counter-nekoze - category unknown
+RESULT {"id":"counter-nekoze","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS counter-battery-case - category accessory
+RESULT {"id":"counter-battery-case","category":"accessory","usage":"mobile_battery_case","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS counter-rechargeable-vacuum - category cleaning
+RESULT {"id":"counter-rechargeable-vacuum","category":"cleaning","usage":"vacuum","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"床の掃除に。\n充電して、コードをつながずに使うタイプです。\n\n掃除機です。\n\n商品の特徴\n・540g\n\n価格：4,680円\n\n※アフィリエイト広告を利用しています"}
+PASS counter-storage-bed - category furniture
+RESULT {"id":"counter-storage-bed","category":"furniture","usage":"storage_bed","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"ベッド USB 2コンセント 宮付き シングル セミダブル ダブル クイーン キング すのこベッド ベッドフレーム ベット シングルベッド セミダブルベッド ダブルベッド 引き出し付き 収納ベッド 収納付きベッド\n\n商品の特徴\n・収納付き\n\n価格：19,999円\n\n※アフィリエイト広告を利用しています"}
+PASS counter-pet-hair-brush - category ambiguous
+RESULT {"id":"counter-pet-hair-brush","category":"ambiguous","usage":"ambiguous","ambiguous":true,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS live-battery-rank3-anker-nano - category charging
+RESULT {"id":"live-battery-rank3-anker-nano","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":["USB-C"],"copy":"外出先での充電に。\n\nモバイルバッテリーです。\n\n商品の特徴\n・USB-C\n・5000mAh\n\n価格：2,990円\n\n※アフィリエイト広告を利用しています"}
+PASS live-battery-rank5-anker-zolo - category charging
+RESULT {"id":"live-battery-rank5-anker-zolo","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS live-battery-rank6-cio - category charging
+RESULT {"id":"live-battery-rank6-cio","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":["Type-C"],"copy":"外出先での充電に。\n\nモバイルバッテリーです。\n\n商品の特徴\n・Type-C\n・10000mAh\n・35W\n\n価格：6,281円\n\n※アフィリエイト広告を利用しています"}
+PASS live-battery-rank7-motteru - category charging
+RESULT {"id":"live-battery-rank7-motteru","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS live-battery-rank8-aircon - category unknown
+RESULT {"id":"live-battery-rank8-aircon","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"公式ショップ 空調服 R バッテリーセット BT25212 ハイパワー\n\n商品の特徴\n・25V\n\n※アフィリエイト広告を利用しています"}
+PASS live-battery-rank10-anker-fusion - category charging
+RESULT {"id":"live-battery-rank10-anker-fusion","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":["USB-C"],"copy":""}
+PASS live-cleaning-rank7-mop-holder - category storage
+RESULT {"id":"live-cleaning-rank7-mop-holder","category":"storage","usage":"cleaning_tool_holder","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"掃除道具のモップを掛けておく場所に。\n\nモップハンガーです。\n\n商品の特徴\n・キャスター付き\n\n価格：12,980円\n\n※アフィリエイト広告を利用しています"}
+PASS live-pet-rank2-bos - category unknown
+RESULT {"id":"live-pet-rank2-bos","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":["90枚入り"],"copy":"ペットの排泄物を入れる袋に。\n\n袋です。\n\n商品の特徴\n・90枚入り\n\n※アフィリエイト広告を利用しています"}
+PASS M1 - category charging
+RESULT {"id":"M1","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"外出先での充電に。\n\nモバイルバッテリーです。\n\n商品の特徴\n・60000mAh\n\n※アフィリエイト広告を利用しています"}
+PASS M3 - category charging
+RESULT {"id":"M3","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS M5 - category charging
+RESULT {"id":"M5","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS M6 - category charging
+RESULT {"id":"M6","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS M7 - category charging
+RESULT {"id":"M7","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS M8 - category charging
+RESULT {"id":"M8","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS M10 - category charging
+RESULT {"id":"M10","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS C7 - category storage
+RESULT {"id":"C7","category":"storage","usage":"cleaning_tool_holder","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"掃除道具のモップを掛けておく場所に。\n\nモップハンガーです。\n\n商品の特徴\n・キャスター付き\n\n※アフィリエイト広告を利用しています"}
+PASS P2 - category unknown
+RESULT {"id":"P2","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":["200枚入り"],"copy":"ペットの排泄物を入れる袋に。\n\nうんち袋です。\n\n商品の特徴\n・200枚入り\n\n※アフィリエイト広告を利用しています"}
+PASS pet-hygiene-wipe-conflict - category ambiguous
+RESULT {"id":"pet-hygiene-wipe-conflict","category":"ambiguous","usage":"ambiguous","ambiguous":true,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS counter-power-bank-case - category accessory
+RESULT {"id":"counter-power-bank-case","category":"accessory","usage":"mobile_battery_case","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS counter-powerbank-pouch - category accessory
+RESULT {"id":"counter-powerbank-pouch","category":"accessory","usage":"mobile_battery_case","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS P4 - category unknown
+RESULT {"id":"P4","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS C4 - category unknown
+RESULT {"id":"C4","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":["日本製"],"copy":"搬入設置無料 掃除用具入れ ロッカー 掃除道具入れ スイッパー ホワイトグレー スチールロッカー 掃除用具ロッカー 保管庫 オフィス 会社 学校 SY-45\n\n商品の特徴\n・日本製\n\n※アフィリエイト広告を利用しています"}
+PASS S5 - category storage
+RESULT {"id":"S5","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\n使わないときは折りたためます。\n\n収納ボックスです。\nキャスターで移動できるタイプです。\n\n※アフィリエイト広告を利用しています"}
+PASS B-M3 - category charging
+RESULT {"id":"B-M3","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS S1 - category storage
+RESULT {"id":"S1","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":["日本製"],"copy":"ものを入れる収納を用意したいときに。\n\n収納ボックスです。\n\n商品の特徴\n・日本製\n・50cm\n\n価格：5,780円\n\n※アフィリエイト広告を利用しています"}
+PASS S6 - category storage
+RESULT {"id":"S6","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":["日本製"],"copy":"ものを入れる収納を用意したいときに。\n\n収納ボックスです。\n\n商品の特徴\n・日本製\n\n※アフィリエイト広告を利用しています"}
+PASS S8 - category storage
+RESULT {"id":"S8","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"fallback","allowlisted":["木製"],"copy":"座る場所と収納を一緒に用意したいときに。\n使わないときは折りたためます。\n\n木製の収納ベンチです。\n\n※アフィリエイト広告を利用しています"}
+PASS S2 - category storage
+RESULT {"id":"S2","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\nキャスターで移動できるタイプです。\n\n収納ボックスです。\n使わないときは折りたためます。\n\n※アフィリエイト広告を利用しています"}
+PASS S3 - category storage
+RESULT {"id":"S3","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\n使わないときは折りたためます。\n\n収納ボックスです。\nキャスターで移動できるタイプです。\n\n※アフィリエイト広告を利用しています"}
+PASS S4 - category storage
+RESULT {"id":"S4","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\n使わないときは折りたためます。\n\n収納ボックスです。\nキャスターで移動できるタイプです。\n\n※アフィリエイト広告を利用しています"}
+PASS S9 - category storage
+RESULT {"id":"S9","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\nキャスターで移動できるタイプです。\n\n収納ボックスです。\n\n※アフィリエイト広告を利用しています"}
+PASS S10 - category storage
+RESULT {"id":"S10","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"full","allowlisted":["日本製"],"copy":"ものを入れる収納を用意したいときに。\n\n収納ボックスです。\n\n商品の特徴\n・日本製\n\n※アフィリエイト広告を利用しています"}
+PASS P1 - category pet
+RESULT {"id":"P1","category":"pet","usage":"drive_bed","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS P9 - category pet
+RESULT {"id":"P9","category":"pet","usage":"bed","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":""}
+PASS P10 - category pet
+RESULT {"id":"P10","category":"pet","usage":"bed","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"ペットが過ごす場所に。\n\nペットベッドです。\n\n商品の特徴\n・洗える\n・オールシーズン\n\n※アフィリエイト広告を利用しています"}
+PASS P8 - category unknown
+RESULT {"id":"P8","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":["木製"],"copy":"ご好評です 5段階調整 ペットフードスタンド ごはん入れ 犬 餌入れ 猫 えさ 台 餌やり エサ入れ ペット用品 ペット 餌 ネコ 食器スタンド ペットフード 入れ ペットフードボウル 滑り止め ステンレスボール付 直送w\n\n商品の特徴\n・木製\n\n※アフィリエイト広告を利用しています"}
+PASS special-battery-electric-blanket - category charging
+RESULT {"id":"special-battery-electric-blanket","category":"charging","usage":"mobile_battery","ambiguous":false,"outputMode":"fallback","allowlisted":["USB-C"],"copy":"外出先での充電に。\n\nモバイルバッテリーです。\n\n商品の特徴\n・USB-C\n・30000mAh\n\n※アフィリエイト広告を利用しています"}
+PASS known-storage-bench-r1 - category storage
+RESULT {"id":"known-storage-bench-r1","category":"storage","usage":"storage_box","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS known-mop-holder-r1 - category storage
+RESULT {"id":"known-mop-holder-r1","category":"storage","usage":"cleaning_tool_holder","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":""}
+PASS known-kitchen-1 - category storage
+RESULT {"id":"known-kitchen-1","category":"storage","usage":"generic_storage","ambiguous":false,"outputMode":"fallback","allowlisted":["木製"],"copy":"キッチンボード 天板付き 収納棚 キッチンワゴン 桐製 引き出し 収納 キッチン収納 キッチンラック キッチンカウンター 食器棚 台所 ダイニング ナチュラル KWG450008\n\n商品の特徴\n・キャスター付き\n・木製\n\n※アフィリエイト広告を利用しています"}
+PASS known-kitchen-2 - category storage
+RESULT {"id":"known-kitchen-2","category":"storage","usage":"generic_storage","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"9 24 59迄 ワゴン 扉付き キッチンワゴン 高さを変えられる バスケットトローリー 幅46 奥行38 高さ85.5cm 全体耐荷重60kg ランドセル ベビーワゴン オムツ キッチン 洗面所 ワゴン収納 山善 YAMAZEN 0918P\n\n商品の特徴\n・キャスター付き\n\n※アフィリエイト広告を利用しています"}
+PASS known-laundry-1 - category unknown
+RESULT {"id":"known-laundry-1","category":"unknown","usage":"unknown","ambiguous":false,"outputMode":"fallback","allowlisted":[],"copy":"山崎実業 ランドリーバスケット 洗濯かご 折りたたみランドリーバスケット 洗濯物入れ ランドリーボックス 持ち手 yamazaki タワーシリーズ tower タワー 5661 5662 4903208056618 4903208056625\n\n商品の特徴\n・折りたたみ\n\n※アフィリエイト広告を利用しています"}
+PASS known-laundry-9 - category ambiguous
+RESULT {"id":"known-laundry-9","category":"ambiguous","usage":"ambiguous","ambiguous":true,"outputMode":"fallback","allowlisted":[],"copy":"ものを入れる収納を用意したいときに。\n使わないときは折りたためます。\n\n収納ボックスです。\n\n商品の特徴\n・防水\n・洗える\n\n※アフィリエイト広告を利用しています"}
+PASS known-electric-1 - category cleaning
+RESULT {"id":"known-electric-1","category":"cleaning","usage":"mop","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"床の掃除に。\n充電して、コードをつながずに使うタイプです。\n\n電動モップです。\n\n※アフィリエイト広告を利用しています"}
+PASS known-electric-3 - category cleaning
+RESULT {"id":"known-electric-3","category":"cleaning","usage":"mop","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"床の掃除に。\n充電して、コードをつながずに使うタイプです。\n\n電動モップです。\n\n※アフィリエイト広告を利用しています"}
+PASS known-electric-4 - category cleaning
+RESULT {"id":"known-electric-4","category":"cleaning","usage":"mop","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"床の掃除に。\nコードをつながずに使うタイプです。\n\n電動モップです。\n\n※アフィリエイト広告を利用しています"}
+PASS known-electric-6 - category cleaning
+RESULT {"id":"known-electric-6","category":"cleaning","usage":"mop","ambiguous":false,"outputMode":"full","allowlisted":[],"copy":"床の掃除に。\n充電して、コードをつながずに使うタイプです。\n\n電動モップです。\n\n商品の特徴\n・回転式\n・160ml\n\n※アフィリエイト広告を利用しています"}
+ROOM copy regression passed
+✔ tests/room-copy-regression.test.js (356.207485ms)
+✔ a verified AI result belongs to the active product, never another product at the same rank (2.627705ms)
+✔ batch export cannot label another search with the current screen AI result (2.676799ms)
+✔ request usage totals measured stages without exposing account hash or claiming invoice (1.830327ms)
+✔ failed call with unknown usage makes total unknown rather than dropping consumption (0.185046ms)
+✔ local and cached requests have measured zero provider calls (0.231454ms)
+✔ provider failure diagnostics preserve status and stop once without leaking provider details (0.883096ms)
+✔ writer selects evidence before prose using the same external fields (1.864258ms)
+✔ recorded live failures receive exact source locations without rewriting sources or approving claims (9.706093ms)
+✔ initial requests for the recorded product fit the previously observed 8000 token window estimate (1.100529ms)
+✔ source locations never repair invented quotes or conceal model and negation restrictions (2.124525ms)
+✔ Production and non-owner requests cannot read cases, cache or send review calls (2.665842ms)
+✔ one immutable recorded review is cached, charged once, and never returned as publishable text (7.447147ms)
+✔ status checks and shared waits spend neither quota nor calls; unapproved inputs are refused (1.283893ms)
+✔ review prompt comparison budgets the same chosen prompt it actually sends; default remains fixed (810.788621ms)
+✔ shared budget release finishes before the HTTP response is sent (2.370133ms)
+room-live-replay: PASS (recorded server-veto regressions; not a fresh model evaluation)
+✔ tests/room-live-replay.test.js (125.265258ms)
+✔ record only after opening, survive reload, reject duplicate completion, allow explicit undo (20.830288ms)
+✔ return activity priority, normalized duplicates, next-day likes and lifetime follow dedupe (1.902415ms)
+✔ owner isolation, storage failure leaves prior data intact, corrupted data is not overwritten (0.852831ms)
+✔ block unsafe URLs, lookalike hosts, credentials and unsupported paths (0.426105ms)
+✔ undo cannot bypass duplicate prevention and keeps both histories unchanged (0.790989ms)
+✔ skipped follow cannot be restored alongside a different follow candidate for same ROOM (0.350151ms)
+✔ undo on a later day still rejects another completed like on the original completion day (1.183003ms)
+✔ product code and canonical product URL share identity; unsafe and unknown identity rejected (1.891258ms)
+✔ copy never means posted; confirmation prevents duplicate and undo restores eligibility (1.67111ms)
+✔ per-account data stays separate after reloading and storage failures are surfaced (0.493616ms)
+✔ unknown differs from zero; corrections replace same product date without double counting (22.162062ms)
+✔ JST date boundary and app integration preserve explicit post confirmation (2.89285ms)
+✔ observed reward per hour uses only paired dates and cannot fill missing effort (0.471612ms)
+✔ posted dedupe fails closed when account storage cannot be read (0.42326ms)
+✔ pending draft shows next stage and a fixed device-local resumption time without scheduling requests (20.826591ms)
+✔ elapsed wait invites only explicit continuation and retains incomplete status (0.273508ms)
+✔ a request larger than an observed window cannot be admitted after reset or from legacy product progress (2.569779ms)
+✔ provider capacity survives later missing headers while fitting requests remain admissible (1.178336ms)
+✔ remaining tokens survive completion of one product and gate another before quota or provider consumption (6.483841ms)
+✔ two independent server instances cannot both reserve a provider call (0.465534ms)
+✔ an active call holds a shared lease across products, and quota rejection releases it without inventing usage (2.648876ms)
+✔ 429 propagates once, publishes shared cooldown, and never schedules a retry (3.414488ms)
+✔ read-only and completed cached drafts do not acquire a lease or spend quota (2.036905ms)
+✔ expired observations and unknown headers with KNOWN usage retain pacing; models keep separate observations (0.729337ms)
+✔ coordination database outage fails closed before quota and provider calls (0.600766ms)
+✔ database adapter stores no secret and performs a conditional revision update (1.111757ms)
+✔ a denied lease never overwrites product progress from another in-flight server (0.502369ms)
+✔ actual HTTP handler carries a shared wait across products with zero extra quota and zero invented usage (12.958078ms)
+✔ a crashed or stale lease expires without allowing its old owner to overwrite a new reservation (0.390933ms)
+✔ a worker that read old product progress rechecks after reservation and does not regenerate completed work (0.660594ms)
+✔ a successful send followed by failed progress save blocks later sends even after lease and cooldown expiry (1.628376ms)
+✔ unknown consumption and a crashed marked send cannot become zero consumption when time passes (0.495768ms)
+✔ the provider lease remains held until product progress has been saved (1.270764ms)
+✔ an unfinished stored execution at four sends cannot spend a fifth quota or provider call (0.680093ms)
+✔ AI approval cannot bypass the same feature-restatement veto used for local posts (7.710418ms)
+✔ the veto preserves concrete use relationships and does not certify source support (1.070135ms)
+✔ the existing rewrite receives the rejection; repeated weak drafts never publish (3.661777ms)
+✔ the recorded configurable-assortment false approval is vetoed without blocking positive controls (5.655617ms)
+✔ verbatim seller promotion cannot substitute for a purchase reason even with unanimous AI approval (1.474507ms)
+✔ both legacy export formats restore onto another device and repeat import is idempotent (5.97241ms)
+✔ state conflict and corrected result conflict reject entire import without partial mutation (0.827423ms)
+✔ malformed input, wrong format, dangling results, invalid date and unsafe ROOM URLs fail (1.149042ms)
+✔ same ROOM action under different IDs rejected; different-day completed likes preserved (18.072588ms)
+✔ storage failure and account separation preserve records (0.670739ms)
+✔ actual restore UI handlers reject account changes and edited previews then refresh after restore (2.606243ms)
+✔ recorded live review mistakes never become implicit approval or a claimed improvement (7.377603ms)
+room-semantic-client: PASS (verified canonical contract; no automatic polling)
+✔ tests/room-semantic-client.test.js (85.076837ms)
+room-semantic-contract: PASS (known counterexamples, source-added proof, no missing-question bypass)
+✔ tests/room-semantic-contract.test.js (100.278123ms)
+room-semantic-engine: PASS (header waits, deduplication, one rewrite, no failed publication)
+✔ tests/room-semantic-engine.test.js (111.155261ms)
+room-semantic-provider: PASS (strict chat schema, semantic entailment guard, reasoning excluded)
+✔ tests/room-semantic-provider.test.js (95.566002ms)
+✔ provider limit, active generation and pending review take precedence over new tasks (1.06713ms)
+✔ unconfirmed posts precede pending interactions; missing revenue differs from confirmed zero (0.172677ms)
+✔ failed products are visible; recommendations never fabricate unknown revenue (0.219947ms)
+✔ real dashboard uses both product and interaction states and exposes corrupt data without false zero (20.009936ms)
+semantic-room-draft: PASS (17 synthetic categories; mock verifier, not live quality approval)
+✔ tests/semantic-room-draft.test.js (122.085847ms)
+✔ all three source fields bind persisted product state; equivalent whitespace reuses it (3.996716ms)
+✔ semantic done result cannot bypass generation after catchcopy changes or is removed (9.644381ms)
+✔ rate estimate includes the exact sent system/user messages and strict schema for each stage (806.949249ms)
+✔ recorded failed generation fits the observed window without removing source, feedback or output allowance (5.689735ms)
+✔ saved description-bearing development and unseen inputs fit generation without source truncation (5.33705ms)
+✔ component listed inside starter kit cannot become whole-product identity (11.90514ms)
+✔ a product whose identity itself is a set is not rejected as a mere component (0.15425ms)
+✔ independent repeated title support outranks a longer suffix supported only by a component phrase (2.304123ms)
+✔ three independent expressions sharing a three-character leading stem can support the leading whole-product identity (0.646233ms)
+✔ a short two-character stem needs four independent expressions before it can support the leading identity (0.73166ms)
+✔ generic two-character prefix with weak repetition never promotes an unknown leading product (2.69134ms)
+✔ two independent later tokens can support different parts of a specific leading identity (0.863797ms)
+✔ company-like leading names are never promoted by distributed support (0.833201ms)
+SHARED_PURCHASE_REASON_CORPUS {"total":780,"ready":8}
+✔ bare sleeve, season, material, size, washable and charging labels cannot bypass the real browser gate (66.626174ms)
+✔ independent supported purchase reasons survive alongside weak supplemental material facts (17.465815ms)
+✔ multiple supported reasons without a scene render independently and do not fall through to unnecessary AI (5.864639ms)
+✔ every publication reason uses real source facts and the same strength rule across the fixed corpus (189.181223ms)
+✔ related-product caption facts cannot become a completed local browser post (23.82215ms)
+✔ unassociated supplemental material also prevents local publication while direct title proofs still work (1.37976ms)
+✔ exact specific product noun shared by title and caption becomes a high-confidence hypothesis (4.321856ms)
+✔ specific shared selfie-stick noun can be selected without inventing smartphone compatibility (0.460056ms)
+✔ generic nouns such as bed case or mirror are never promoted by agreement alone (0.302611ms)
+✔ title-only product noun is not enough for source agreement (0.243483ms)
+✔ near-tied competing shared identities defer instead of guessing (0.47024ms)
+Structured copy: 15 categories + 14 adverse/guard cases PASS
+Source label, material role, accessory and combined value regressions PASS
+Cross-category promotional identity and independent safety guard regressions PASS
+Shared draft route and separate publication gate PASS
+✔ tests/structured-room-copy.test.js (175.242472ms)
+urenavi ai route {"route":"local","groqCalls":0,"cacheStatus":"miss","model":"local","mode":"simple","localVersion":"2026-09-26-local-types-v1"}
+urenavi ai route {"route":"text","groqCalls":1,"cacheStatus":"miss","model":"mock","elapsedMs":1,"mode":"simple","usage":null,"rateLimit":{}}
+urenavi ai route {"route":"cache","groqCalls":1,"cacheStatus":"image_hit","model":"mock","elapsedMs":0,"mode":"simple","imageCacheHit":true}
+urenavi ai route {"route":"image","groqCalls":2,"cacheStatus":"miss","model":"mock","elapsedMs":0,"mode":"simple","usage":null,"rateLimit":{}}
+✔ local allowlist resolves exact grounded type without guessing accessories (4.045247ms)
+✔ cached image hint can only promote a type that exists in current source (0.663929ms)
+✔ router order is product cache then local and local consumes zero Groq quota (2.663929ms)
+✔ valid text Groq result stops before image (0.791349ms)
+✔ image cache hit prevents a second Groq call (0.67135ms)
+✔ uncertain text with no image cache escalates to image exactly once (2.659908ms)
+urenavi type knowledge {"productType":"電気ケトル","status":"generated","groqCalls":1,"route":"local"}
+urenavi type knowledge {"productType":"電気ケトル","status":"hit","groqCalls":0,"route":"local"}
+urenavi type knowledge {"productType":"電気ケトル","status":"generated","groqCalls":1,"route":"text"}
+urenavi type knowledge {"productType":"電気ケトル","status":"hit","groqCalls":0,"route":"text"}
+urenavi type knowledge {"productType":"電気ケトル","status":"hit","groqCalls":0,"route":"cache"}
+urenavi type knowledge {"productType":"電気ケトル","status":"generated","groqCalls":1,"route":"cache"}
+✔ validated local route learns type knowledge once, then reuses it (3.245255ms)
+✔ text route learns a new type once and attaches ranking-only knowledge (0.8188ms)
+✔ cached knowledge on cache route is reused with zero Groq (0.43673ms)
+✔ cache route generates once when product understanding exists but type knowledge does not (0.484222ms)
+✔ invalid or failed product understanding never triggers type knowledge (0.28218ms)
+super-urenavi-v3-copy.test.js: PASS
+✔ tests/super-urenavi-v3-copy.test.js (109.570604ms)
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"local","pass1Calls":0,"pass2Calls":0,"imageCalls":0,"totalGroqCalls":0,"cacheStatus":"local","outputTier":"A","hookType":"scene","decisionAxis":"","machineValidationPassed":true,"copied":false,"elapsedMs":3}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":0,"imageCalls":0,"totalGroqCalls":1,"cacheStatus":"miss","outputTier":"B","hookType":"none","decisionAxis":"容量","machineValidationPassed":true,"copied":false,"elapsedMs":5}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":1,"imageCalls":0,"totalGroqCalls":2,"cacheStatus":"miss","outputTier":"A","hookType":"scene","decisionAxis":"温度設定","machineValidationPassed":true,"copied":false,"elapsedMs":4}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":0,"imageCalls":0,"totalGroqCalls":1,"cacheStatus":"miss","outputTier":"B","hookType":"none","decisionAxis":"容量","machineValidationPassed":true,"copied":false,"elapsedMs":2}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":0,"imageCalls":0,"totalGroqCalls":1,"cacheStatus":"miss","outputTier":"B","hookType":"none","decisionAxis":"容量","machineValidationPassed":true,"copied":false,"elapsedMs":3}
+super-urenavi-v3-endpoint.test.js: PASS
+✔ tests/super-urenavi-v3-endpoint.test.js (183.851842ms)
+super-urenavi-v3 cache write unavailable db down
+super-urenavi-v3 cache write unavailable db down
+super-urenavi-v3 cache write unavailable write down
+super-urenavi-v3-engine.test.js: PASS
+✔ tests/super-urenavi-v3-engine.test.js (98.903558ms)
+super-urenavi-v3-groq.test.js: PASS
+✔ tests/super-urenavi-v3-groq.test.js (4101.404872ms)
+super-urenavi-v3-live30-page.test.js: PASS
+✔ tests/super-urenavi-v3-live30-page.test.js (83.613997ms)
+super-urenavi-v3-metrics.test.js: PASS
+✔ tests/super-urenavi-v3-metrics.test.js (73.80448ms)
+super-urenavi-v3-understanding.test.js: PASS
+✔ tests/super-urenavi-v3-understanding.test.js (74.62925ms)
+super-urenavi-v3-verifier.test.js: PASS
+✔ tests/super-urenavi-v3-verifier.test.js (73.330806ms)
+✔ unregistered categories use the semantic contract instead of grammar-based local approval: 焙じ茶 (12.458523ms)
+✔ unregistered categories use the semantic contract instead of grammar-based local approval: 刺繍キット (3.360063ms)
+✔ unregistered categories use the semantic contract instead of grammar-based local approval: 型紙集 (1.036239ms)
+✔ unregistered categories use the semantic contract instead of grammar-based local approval: ギフトボックス (0.714552ms)
+✔ unregistered categories use the semantic contract instead of grammar-based local approval: 調整台 (0.736374ms)
+✔ complete caption purchase reason outranks a known title capacity label (5.768623ms)
+✔ short complete local source sentence reaches copy boundary only with its exact server result (25.779007ms)
+✔ short local proof uses the same NFKC and whitespace normalization as its server source check (11.526229ms)
+✔ safe literal protection labels fail purchase quality in local, machine and final browser paths (10.516016ms)
+✔ a source relationship hint never overrides promotional, part, negative or unsupported evidence (1.987404ms)
+✔ seller actions never become actions performed by a product across categories (0.656365ms)
+✔ generic promotional enjoyment and seller stories never become local purchase reasons (2.020723ms)
+✔ unknown category catalogue draft uses existing bounded rewrite and five-question review before exact UI copy (6.113665ms)
+unknown universal finish: PASS
+✔ tests/unknown-universal-finish.test.js (97.007445ms)
+UNSEEN_LOCAL_ZERO_CALL_RATE_20261004 {"total":17,"zeroCallCount":0,"groqNeededCount":17,"zeroCallRate":0,"rows":[{"id":"u01","category":"バイクグローブ","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u02","category":"収納ベンチ","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u03","category":"モップハンガー","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u04","category":"空調服バッテリー","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u05","category":"ペット毛取りグローブ","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u06","category":"BOS袋","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u07","category":"美顔ローラー","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u08","category":"モバイルバッテリー","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u09","category":"フライパン","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u10","category":"収納ボックス","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u11","category":"ヘアブラシ","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u12","category":"ペットベッド","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u13","category":"靴下","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u14","category":"電気ケトル","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u15","category":"食品","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u16","category":"掃除用グローブ","zeroCall":false,"productType":null,"text":null,"arbitration":null},{"id":"u17","category":"スポーツ用グローブ","zeroCall":false,"productType":null,"text":null,"arbitration":null}]}
+✔ measure generalized zero-call rate on reviewed unseen products without tuning (134.421887ms)
+BENEFIT_GUARD_780_DIFF {"total":780,"generated":249,"changed":1,"stopped":0,"changedSamples":[{"genre":"美容・コスメ・香水","itemName":"髭剃り シェーバー 電気 カミソリ ひげそり メンズ ポータブル コンパクト 回転式 6枚刃 ミニ 防水 小型 軽量 充電","before":"ひげのお手入れに。\n\nシェーバーです。\n\n商品の特徴\n・回転式\n・防水\n\n価格：3,319円\n\n※アフィリエイト広告を利用しています","after":"シェーバーです。\n\n商品の特徴\n・回転式\n・防水\n\n価格：3,319円\n\n※アフィリエイト広告を利用しています"}]}
+✔ temperature alone cannot invent heat retention (1.422984ms)
+✔ weight alone cannot invent carrying benefit (0.259206ms)
+✔ runtime benefit wording is allowed only when the source itself says it (0.142111ms)
+✔ verified quote is preserved when an unsupported benefit sentence is removed (0.322779ms)
+✔ fixed 780 products have no unsupported benefit after guard and emit before-after report (259.14698ms)
+✔ one integrated app exposes five task tabs without enabling billing (1.926863ms)
+✔ tab change script is syntactically valid and direct anchors target existing IDs (2.945627ms)
+✔ ROOM management screens explain steps and retain their operational controls (0.451731ms)
+✔ management flow prioritizes confirmation and keeps legacy records secondary (0.206406ms)
+✔ outcomes navigation provides evidence-bounded next choice (0.301619ms)
+✔ exchange shortcuts and earnings follow-up remain in the same app (0.348468ms)
+✔ reusing a past ROOM contact keeps URL entry optional and retains duplicate validation (0.739019ms)
+✔ saved ROOM contacts can be searched and reused without manual URL input (0.370501ms)
+✔ ROOM engagement prioritizes four activities and keeps contact lookup secondary (0.318223ms)
+✔ copy tab has no redundant next-product control (0.424771ms)
+✔ preview version identifies stale iPhone sessions and weak copy is blocked (0.401927ms)
+✔ weak copy from the reported washing-net screen is not publish-ready (12.602787ms)
+✔ restored search never creates a next-product button or marks a product posted (0.450269ms)
+✔ only contract-verified AI may bypass local evidence gate (0.217113ms)
+✔ Rakuten product link restores by stable action role rather than button label (0.339024ms)
+✔ all copy shortcuts recheck product readiness before touching clipboard (0.248209ms)
+✔ return-state does not hijack internal work tabs or Rakuten new-tab links (0.18849ms)
+✔ actual copy-quality guard rejects generic laundry copy and ungrounded local spec-only copy (1.00942ms)
+✔ local readiness requires the exact grounded copy assessed for the current product (2.475619ms)
+✔ unresolved local spec alone cannot bypass Groq fallback, grounded copy can (1.415954ms)
+✔ owner Preview does not force Groq when grounded local copy is ready (0.912396ms)
+✔ legacy product-search suppression preserves work navigation and ROOM contacts (2.696327ms)
+✔ verified copy flows through explicit posting, duplicate exclusion, exchange, corrected outcomes and another-device restore (61.760281ms)
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"local","pass1Calls":0,"pass2Calls":0,"imageCalls":0,"totalGroqCalls":0,"cacheStatus":"local","outputTier":"A","hookType":"unknown","decisionAxis":"","machineValidationPassed":true,"copied":false,"elapsedMs":0}
+✔ verified identity cache only reuses valid or explicit identity-only rows with exact title match (2.265126ms)
+✔ rememberValidatedIdentity stores only a verified concrete AI identity and reuses it (0.333355ms)
+✔ learned identity never lowers the purchase-reason threshold or turns an accessory into the whole product (59.236847ms)
+✔ preview handler consults learned identity after local miss and skips AI analysis when reuse is safe (1.979391ms)
+✔ exact whole source sentences can skip pass2 (3.740218ms)
+✔ semantic paraphrase still requires pass2 (1.051663ms)
+✔ positive claim inverted from negative source cannot skip pass2 (1.257659ms)
+✔ engine completes exact direct proof with one Groq call and zero pass2 calls (3.61371ms)
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":1,"imageCalls":0,"totalGroqCalls":2,"cacheStatus":"miss","outputTier":"A","hookType":"none","decisionAxis":"","machineValidationPassed":true,"copied":false,"elapsedMs":15}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":1,"imageCalls":0,"totalGroqCalls":2,"cacheStatus":"miss","outputTier":"A","hookType":"scene","decisionAxis":"","machineValidationPassed":true,"copied":false,"elapsedMs":3}
+urenavi v3 usage {"schema":"super_urenavi_v3_usage_v1","route":"text","pass1Calls":1,"pass2Calls":1,"imageCalls":0,"totalGroqCalls":2,"cacheStatus":"miss","outputTier":"A","hookType":"scene","decisionAxis":"","machineValidationPassed":true,"copied":false,"elapsedMs":1}
+✔ Preview UI uses explicit canonical adapter and preserves tested local V3 rendering (1.95816ms)
+✔ legacy V3 endpoint remains unchanged while the integrated endpoint owns semantic generation (0.360285ms)
+✔ tier A without a composed variant is not reported as ready (16.939823ms)
+✔ ready V3 response preserves publication ledger and exactly one rendered variant (3.501473ms)
+✔ V3 blocks a display variant different from verified publication text (1.40645ms)
+✔ stale legacy generatedCopy is never a publication source in active V3 Preview (0.689054ms)
+✔ restored search results never auto-run V3 AI (0.810485ms)
+✔ mobile AI queue blocks premature debug export and can resume unfinished active work (0.593071ms)
+✔ Pro candidates enter the gated writer as a bounded batch (0.893748ms)
+✔ type knowledge ranks relevant grounded facts before weaker facts (2.932067ms)
+✔ ranked post starts from type situation and uses only source-grounded facts (13.642753ms)
+✔ unsafe type knowledge phrases are not remembered (0.187649ms)
+✔ ranking rules live in data file, not product-name branches (0.315549ms)
+✔ live washing-net rank2 keeps metadata out of its draft and defers weak label copy (88.27254ms)
+✔ live washing-net rank3 completes from direct caption evidence (22.352485ms)
+✔ live washing-net rank4 does not publish promotional prose or a protection-label draft (37.229122ms)
+✔ live washing-net rank5 does not collapse to washable-only copy (25.836063ms)
+✔ live washing-net rank6 uses structure reason instead of size-only copy (30.364993ms)
+✔ live washing-net rank7 can stay local on explicit double-structure evidence (20.514585ms)
+✔ live washing-net rank8 does not publish pack-count or protection-label copy (17.722336ms)
+✔ live washing-net rank9 completes locally from direct capacity evidence (11.859704ms)
+✔ live washing-net rank10 defers protection-label draft for semantic review (24.140022ms)
+ℹ tests 454
+ℹ suites 0
+ℹ pass 454
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9342.04815

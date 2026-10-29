@@ -1,0 +1,70 @@
+{
+  "observedAt": "2026-10-29T12:05:25.303Z",
+  "vercelProduction": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "## Runtime Log Counts\n\n**Project:** prj_SAJCw9vvSR79pNT3gJCNcXWItGs8\n**Grouped by:** requestPath\n**Showing:** Top 25 groups by log count; this may omit other groups.\n\n| requestPath | count |\n|---|---|"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    }
+  },
+  "vercelPreview": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "## Runtime Log Counts\n\n**Project:** prj_SAJCw9vvSR79pNT3gJCNcXWItGs8\n**Grouped by:** requestPath\n**Showing:** Top 25 groups by log count; this may omit other groups.\n\n| requestPath | count |\n|---|---|"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    }
+  },
+  "githubScopedWorkflows": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "workflow_runs": [
+          {
+            "id": 40430144274,
+            "name": "Verify Urenavi",
+            "status": "completed",
+            "conclusion": "success",
+            "run_number": 3665,
+            "jobs_url": "https://api.github.com/repos/hirobeya/rakuten-affiliate-ai-mobile/actions/runs/40430144274/jobs",
+            "logs_url": "https://api.github.com/repos/hirobeya/rakuten-affiliate-ai-mobile/actions/runs/40430144274/logs",
+            "workflow_id": 351280010
+          },
+          {
+            "id": 40430144276,
+            "name": "ROOM Copy Regression",
+            "status": "completed",
+            "conclusion": "failure",
+            "run_number": 2924,
+            "jobs_url": "https://api.github.com/repos/hirobeya/rakuten-affiliate-ai-mobile/actions/runs/40430144276/jobs",
+            "logs_url": "https://api.github.com/repos/hirobeya/rakuten-affiliate-ai-mobile/actions/runs/40430144276/logs",
+            "workflow_id": 362439096
+          }
+        ]
+      },
+      "isError": false
+    }
+  },
+  "githubScope": "PR-triggered first-page workflows only for f6f6c95b2e5322e872b2db8ab02b7c5bb4c3ddad; not all active repository runs",
+  "groqConsole": "https://console.groq.com/home displayed Log In; no authenticated admin data read",
+  "allCallersStoppedProven": false,
+  "inferenceCalls": 0,
+  "dbCalls": 0
+}

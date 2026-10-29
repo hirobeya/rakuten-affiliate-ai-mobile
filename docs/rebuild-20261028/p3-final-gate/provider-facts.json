@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-28 JST",
+  "sources": [
+    {"url":"https://console.groq.com/docs/model/openai/gpt-oss-120b","facts":{"model":"openai/gpt-oss-120b","contextTokens":131072,"maxOutputTokens":65536}},
+    {"url":"https://console.groq.com/docs/rate-limits","facts":{"publishedFreePlanExample":{"rpm":30,"rpd":1000,"tpm":8000,"tpd":200000},"actualAccountValues":null,"separateInputOutputMinuteLimitsPossible":true,"organizationLimitsApply":true,"remainingTokensHeaderScope":"TPM","remainingRequestsHeaderScope":"RPD","exactTokenizerAndReservationAlgorithm":null}},
+    {"url":"https://console.groq.com/docs/projects","facts":{"customProjectLimitsPossible":true,"organizationCeilingStillApplies":true,"itpmOtpmOrganizationOnly":true,"actualProjectValues":null}},
+    {"url":"https://console.groq.com/docs/api-reference","facts":{"api":"POST /openai/v1/chat/completions","preferredOutputLimitField":"max_completion_tokens","deprecatedOutputLimitField":"max_tokens","usageFields":["prompt_tokens","completion_tokens","total_tokens"],"exactSchemaToPromptTransformation":null}},
+    {"url":"https://console.groq.com/docs/reasoning","facts":{"reasoningMayBeSeparateFromMessageContent":true,"onlyVisibleJsonSizeIsInsufficientToDetermineTotalGenerationTokens":true}},
+    {"url":"https://github.com/openai/gpt-oss/blob/main/gpt_oss/tokenizer.py","facts":{"encoding":"o200k_harmony","groqChatTemplateMatchVerified":false}},
+    {"url":"https://github.com/openai/tiktoken/blob/main/tiktoken_ext/openai_public.py","facts":{"o200kHarmonyAvailableInOfficialImplementation":true,"localPackageInstalled":false}}
+  ],
+  "localTokenizerAcquisition": {
+    "initialSearch":"tiktoken/tokenizers/transformers unavailable in primary Python; no matching cached tokenizer ranks in workspace or primary Node dependencies",
+    "isolatedInstallAttempt":"tiktoken==0.12.0 into task scratch with env allowlist, no service credentials",
+    "result":"No matching distribution found; no package installed",
+    "providerCountUnavailable":true,
+    "inferenceRequests":0
+  },
+  "accountCheckWithoutSecrets": [
+    "Console organization Limits: selected model RPM/RPD/TPM/TPD, ITPM/OTPM breakdown, reset semantics and check timestamp",
+    "Selected project model Limits: all configured narrower limits; record organization and project identity without API keys",
+    "Usage/Logs: used and reserved totals plus all other callers, measurement timestamp, remaining windows/day",
+    "Confirm fixed organization-wide ledger and participating callers, or pause other callers for approved test window",
+    "Do not open/export API keys or environment secret values",
+    "After separate approval only: reconcile returned usage and rate headers; header remaining tokens is TPM, not TPD"
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "startHead": "adb2f0fa6572770aa4a169b52efa3949b532fd73",
+  "allMatch": true,
+  "files": [
+    {
+      "path": "docs/rebuild-20261028/baseline-diagnostic-summary.json",
+      "sha256": "db7ec67baa3cb272ace1f8405d6d1fde73718c77a7d3018702afbf95d7621a5b",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/baseline-replay.json",
+      "sha256": "66ce26d3c97df40ca43185a5c46de59168c7c23a85fcd4601a5a0046c8256aa3",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/baseline-tests.tap",
+      "sha256": "268c65181977f3db3759fd98ea9a04754f1e1df3cda465c6b60c4a72e6a657d7",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/capacity-evidence.json",
+      "sha256": "14c0e46948428e6f892e28e9de940372aa7c341a06170aea5c3c6e98ff5b8629",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/capacity-summary.json",
+      "sha256": "182eac25d1fc42c4644c49a871e65b539c9999181fc8630f28bff1bca4e251c2",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/implementation-contract.md",
+      "sha256": "1ffa80264a4abfa5a85b188441188160e49f693243ffe267ec54b349691ee1a5",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/offline-guard.cjs",
+      "sha256": "e7da1b865344712705b9922fb46bd08f707789c2bff9f1c233fd78d64aabbb78",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/audit-summary.jsonl",
+      "sha256": "264944901d8d15507863e829f7d57b445aca265995ef4f30afe46f7c9ea95c8c",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/capacity-analysis.json",
+      "sha256": "39a282d4676e03f6cb31938025eba0b526638563a7690ba8e9a0d63b6669e6a4",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/isolation.json",
+      "sha256": "388bb5791d8eb1e33d4d9827243895d8c54bdd80bfefe01432b12f5af0d070ee",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/new-tests.tap",
+      "sha256": "81ea5da74c645439bde20c2d47cf6445507a74c48159cc62e5e4dccfd17aef2b",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/preservation.json",
+      "sha256": "a18bf478a22fccffe49e85c74c4c3091dc0e89e174d3e1fe605c051db4c401ba",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/product-table.md",
+      "sha256": "00533630699afdc88cafe1a64242ae590a40f18617a7d1ce0abfbe43887c75c2",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/provider-facts.json",
+      "sha256": "60464a20a28307dabd47203b2bc1ab4535eee6358e6498d4ea94eb587187dfcb",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/regression-tests.tap",
+      "sha256": "f3908133e289b02906ad206c2b477b74957864f308477d654cac5ef3b829e8ff",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/report.md",
+      "sha256": "81e4f3c3b0685ff9eb72810d4b2639e11a2e0679be39fdb641b82c6dc7b56943",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/account-checklist.json",
+      "sha256": "42a843695c06fdb0eb2bf556748d488c1554f3ffe59c404028ce1e9730368b81",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/first-call-plan.json",
+      "sha256": "9e3caeed240a04e01270151ecd0b8c0935e6c83b85c14a284e603273d18ea778",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/independent-tokenizer-check.json",
+      "sha256": "44cc0f1a1f00c1b2c94035d9079b29fb40fc7ab7667cd1c9047348ca6b7d7dc8",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/isolation.json",
+      "sha256": "b40ae53ff1666c9d5488482a5ee6ab70d9440b5ad3c31189a4455016cd5adbd8",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/new-tests.tap",
+      "sha256": "978c523053b7d74352452a62ec00eea9412b2abaf7022db04e0f9c2f6015221b",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/preservation.json",
+      "sha256": "d6abcd53d7ce9987010dc6f36b36fc0c9874683a3c0ed078278abeeef8093db9",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/regression-tests.tap",
+      "sha256": "9d3bb91161447fb7e2358ee797488a29c32dcb2c6e46466669f0c616bfece367",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/report.md",
+      "sha256": "907c849eba1995d490eab039427d17285be60f72f09dcbe561450643e17b8553",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-first-call-gate/token-counts.json",
+      "sha256": "2e44a11c829427187846cd4c7f0a9f20e930b40ce3e67d474c3a56f2f425f0ed",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/capacity.json",
+      "sha256": "52b44ad0b84a66a4cd029ec99eb356632adee668c809a971494d69dc9bc0854a",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/core-tests.tap",
+      "sha256": "64a87f653790150bc21242a54b3f926072c4b8ae92323b0583d10c53ec18d3fd",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/isolation.json",
+      "sha256": "5ddffd218db82d2d5032dbb02a01e4ec264f52098b7b0aa4999497de36b64c80",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/new-tests.tap",
+      "sha256": "ea28c0af470012477c4f9bbf90f7e30892614abdd027f881253b18399f1f2d66",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/p3a-preservation.json",
+      "sha256": "ccab2408c69859d1a2db1689ac76876d41168bf39156fefbd8b82ed95699e887",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/regression-tests.tap",
+      "sha256": "1981d07b7e982466d4250ba018ced36eaaaf049b94c9d1faff18614d4f1eb088",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/report.md",
+      "sha256": "9ff63fc2524b35735485cd17cfcde4b3df995d65db15f1a9cf4ccb14cb598bac",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/capacity.json",
+      "sha256": "ae3cd8362daa2ec245046905f0389215b875f3c7b5cf1e4803cc6773dc4ed5fb",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/comparison.json",
+      "sha256": "677cf188fb6579a7d480e99f206681654818919f7a2ad7377f395d3e7e73d576",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/historical-reasoning.json",
+      "sha256": "0176f5e083676fce573d25ab933086303b1deed20e5170a8df74bf64d50afdd0",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/isolation.json",
+      "sha256": "321c12108439d7252a3d4aae7378bba3d28bd75cdaf6e5678f130a529196560f",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/new-tests.tap",
+      "sha256": "3ccbb5329fa8d63a641d20a440840f5bc7dad52ff29986a2df107067c03f9ea5",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/preservation.json",
+      "sha256": "acc0063f5abb604bfedd359fa877cd10b3fc4ea59660d77bb7bf0b1e346c149b",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/regression-tests.tap",
+      "sha256": "70f65164016e04860d9a438907f6a5af204eb885ff36a7fcc406cb77eb8a8e20",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/report.md",
+      "sha256": "7b101b0d9a8563e75c595e4afebfb3d1a4ef6694c605d40e596cdf78b16ce868",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/tokenizer-status.json",
+      "sha256": "42096eda9099f9f5eb3734195d1f9819023ac8a95c7abaf683a060ff6c1cfe4f",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-start-conditions/wire-payloads.json",
+      "sha256": "31f2beddfc83dec1fefde9241b2d7a501f750a871d73b73c83fa56e505591c18",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/capacity.json",
+      "sha256": "604781004cfda748d9a36f46422ebcd578b5da9439985b2a947edb6a94f32acf",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/contract-addendum.md",
+      "sha256": "01585010dd43d7867a65403ff10e2af1a6239e86c87b0bac0cc6c958bc55bade",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/core-tests.tap",
+      "sha256": "581af052cb605bfc67d9c09a1293538f4e0d4f3ecee2eec6bfe6654a010faf15",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/isolation.json",
+      "sha256": "2bd6256aaa2f2b33dccf09748ee7a07bf8e0e07d185b3dd326b2185996dc68d9",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819/875ce684e8c03540e8a9f0652a1876f051e1b643a89cecdefdcfc8f60b9544f7.json",
+      "sha256": "4cefcf03e9df5ecd17690c3e2eb7738fbf56b0fa7ee8c1202003a4dee0398e79",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_2a3e701f1a04b819/ledger.json",
+      "sha256": "1e13e61df7345d8ede77a24e61929de8cc10c2896da15b1d0e6bb8adfb25802b",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88/a93916c4863cdb76c3a1d064ffb1f11865f35be96aa5bf7070ee6825ad3e9c4f.json",
+      "sha256": "2bfdbfe88c3be580b93c3f591b373fd557fe808d870a58a102a41ed04587c8eb",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run-urenavi_core_4b51084c672381bdd9b0_dcc3a450ef1eed88/ledger.json",
+      "sha256": "502743f4f2c05c484ad8d06ee7e4c3d356f84e098ec1c29b6ff0aea651bb1754",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run/8ad2365185d61e2f1fd2a23c0e886cafb9a5783fa4797cfb66587c4d38a8cacd.json",
+      "sha256": "6592ac60323110154f2471f15111e1cfe6613e91b4b8104d20b76757a1cb7a43",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-run/ledger.json",
+      "sha256": "7c83a1738e291d25915a06037eaaad22afe2e08c39f2af433c021bab2685e84f",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/mock-trace.json",
+      "sha256": "e123fb8bdcc02ca1b3023cfff66a9603f64620066be6de731f678d32ec1f6420",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/p3b-plan.md",
+      "sha256": "7e445264d22629a18fbb42449118123c7c5bfc74c28f1ba7c7f2f0b4e5363dc0",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/regression-tests.tap",
+      "sha256": "d3ab69ffab9395b72f786808e8dcde378c77038314d8f942746becf7a70311fd",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/report.md",
+      "sha256": "9020ead4a3f8a96f2fe2c3ad4454536c458706e60349937bd4f17f69d63f2f87",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/saved-failure-diagnostics.json",
+      "sha256": "1157738f13f1e7fb74f4e02bf75ccc636e573352b6541bf182a734fb84a96951",
+      "matchesStart": true
+    },
+    {
+      "path": "docs/rebuild-20261028/report.md",
+      "sha256": "2e5231ea5bae4719c085d12665d14ae90f67435780de654418dd94531ffe7d2c",
+      "matchesStart": true
+    }
+  ]
+}

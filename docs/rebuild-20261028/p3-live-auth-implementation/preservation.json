@@ -1,0 +1,26 @@
+{
+  "startHead": "d01983d7b9090c8089cd498c4348f6f4e102d364",
+  "priorEvidenceFilesCompared": 96,
+  "priorEvidenceChanged": [],
+  "protectedFilesUnchanged": [
+    "lib/urenavi-core/contracts.js",
+    "lib/urenavi-core/chat-wire.js",
+    "scripts/rebuild/offline-guard.cjs"
+  ],
+  "realInferenceCalls": 0,
+  "realStateDirectoryExists": false,
+  "newTests": 229,
+  "regressionTests": 454,
+  "pass": 683,
+  "fail": 0,
+  "skip": 0,
+  "cancel": 0,
+  "credentialMetadata": {
+    "production": "sensitive, present",
+    "preview": "sensitive, present",
+    "decrypted": false,
+    "runtimeCredentialPresent": false
+  },
+  "usage": null,
+  "httpStatus": null
+}

@@ -1,0 +1,40 @@
+{
+  "instructions": "All null values block live. Do not read API Keys, secrets, env vars. Record public limit and nonsecret usage only.",
+  "organization": {
+    "reference": null,
+    "model": "openai/gpt-oss-120b",
+    "rpm": null,
+    "tpm": null,
+    "rpd": null,
+    "tpd": null,
+    "itpmApplicable": null,
+    "itpm": null,
+    "otpm": null,
+    "minuteConsumedAndReserved": null,
+    "dayConsumedAndReserved": null,
+    "resetAtAndTimezone": null
+  },
+  "project": {
+    "reference": null,
+    "rpm": null,
+    "tpm": null,
+    "rpd": null,
+    "tpd": null,
+    "minuteConsumedAndReserved": null,
+    "dayConsumedAndReserved": null,
+    "resetAtAndTimezone": null
+  },
+  "sharedConsumers": {
+    "allKnown": null,
+    "callersPaused": null,
+    "otherReservedTokens": null,
+    "otherActualTokens": null,
+    "otherRequests": null,
+    "exclusiveWindowStart": null,
+    "exclusiveWindowEnd": null,
+    "controllerAndCanonicalJournal": null
+  },
+  "observedAt": null,
+  "validUntil": null,
+  "modelAllowed": null
+}

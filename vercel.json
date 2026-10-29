@@ -65,7 +65,8 @@
   },
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": true,
+      "rebuild/urenavi-core-20261028": false
     }
   }
 }

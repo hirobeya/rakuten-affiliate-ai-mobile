@@ -1,0 +1,1900 @@
+{
+  "summary": {
+    "date": "2026-10-28 JST",
+    "complete": 10,
+    "incomplete": 34,
+    "initialHeuristicFits8000": 5,
+    "liveAdmitted": 0,
+    "gate": "HOLD / capacity not certified",
+    "scenarioInputs": {
+      "draft": 5000,
+      "review": 5000,
+      "rewrite": 5000,
+      "rereview": 5000
+    },
+    "scenarioReservationTwo": 16000,
+    "scenarioReservationFour": 32000,
+    "frozenSha256": "15889332dd8ad1320220138dea1f47dcac3cb7b136fcf2b3bb8fb0012424f48b",
+    "realUsage": null,
+    "reduction": null,
+    "target2222Proven": false
+  },
+  "products": [
+    {
+      "index": 0,
+      "itemCode": "pasoro:10001354",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 1,
+      "itemCode": "e-kurashi:10019512",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 2,
+      "itemCode": "supplyshop:10028516",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 3,
+      "itemCode": "worktk:10014552",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 4,
+      "itemCode": "wishsun:10000100",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 5,
+      "itemCode": "bos-shop:10000023",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 6,
+      "itemCode": "mtgec-beauty:10001348",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 7,
+      "itemCode": "besthouse:10000083",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 8,
+      "itemCode": "e-kitchen:10079039",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 9,
+      "itemCode": "risu-onlineshop:10002384",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 10,
+      "itemCode": "snowfoxskincare:10000116",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 11,
+      "itemCode": "emoor-nedogko:10000048",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 12,
+      "itemCode": "astyone0728:10000001",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 13,
+      "itemCode": "myhomeshop:10000326",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 14,
+      "itemCode": "irisplaza-r:10170526",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 15,
+      "itemCode": "arkham:10000161",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 16,
+      "itemCode": "high-broad:10000679",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 17,
+      "itemCode": "arqs01:10000087",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 18,
+      "itemCode": "shopworld:10138423",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 19,
+      "itemCode": "satiwel:10002945",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 20,
+      "itemCode": "pc2b:10001078",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 21,
+      "itemCode": "gogo1102:10000190",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 22,
+      "itemCode": "bos-shop:10000024",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 23,
+      "itemCode": "masayosiryouhin:10000072",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 24,
+      "itemCode": "furumiyashop:10000146",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 25,
+      "itemCode": "doshisha-marche:10000227",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 26,
+      "itemCode": "exception5251:10000379",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 27,
+      "itemCode": "40s-skincare:10000159",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 28,
+      "itemCode": "auc-r-style:10000367",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 29,
+      "itemCode": "goodgoods-center:10000193",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 30,
+      "itemCode": "mpowjapan:10000907",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 31,
+      "itemCode": "fujisports-r:10054189",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 32,
+      "itemCode": "repeat7:10002729",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 33,
+      "itemCode": "bbtown:10225214",
+      "missing": [
+        "catchcopy"
+      ],
+      "admitted": false,
+      "scope": "incomplete original; no source normalization or payload construction",
+      "stages": null,
+      "pathBudget": null,
+      "reason": "source_field_missing"
+    },
+    {
+      "index": 34,
+      "itemCode": "daiya:10001447",
+      "sourceHash": "b7bea954ecc18de11fe3e2a5e70aae17539f2796e476a92f659681be0dca10dd",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 7216,
+          "outputReservation": 3000,
+          "heuristicTotal": 10216,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18099,
+            "systemContentBytes": 2098,
+            "userContentBytes": 8762,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 8725,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8122,
+          "outputReservation": 3000,
+          "heuristicTotal": 11122,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21040,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11097,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 8725,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8162,
+          "outputReservation": 3000,
+          "heuristicTotal": 11162,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 20949,
+            "systemContentBytes": 2098,
+            "userContentBytes": 11306,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 8725,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8122,
+          "outputReservation": 3000,
+          "heuristicTotal": 11122,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21040,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11097,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 8725,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7216,
+          "output": 3000,
+          "total": 10216,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61227,
+          "output": 3000,
+          "total": 64227,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 80800,
+          "output": 3000,
+          "total": 83800,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61227,
+          "output": 3000,
+          "total": 64227,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": false
+    },
+    {
+      "index": 35,
+      "itemCode": "daiya:10001030",
+      "sourceHash": "352c1580954934e2a9b457d35c030500e3ce1d24e5ef851b7d5ed726a089f468",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 7502,
+          "outputReservation": 3000,
+          "heuristicTotal": 10502,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18784,
+            "systemContentBytes": 2098,
+            "userContentBytes": 9447,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 9410,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8407,
+          "outputReservation": 3000,
+          "heuristicTotal": 11407,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21725,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11782,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 9410,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8447,
+          "outputReservation": 3000,
+          "heuristicTotal": 11447,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21634,
+            "systemContentBytes": 2098,
+            "userContentBytes": 11991,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 9410,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8407,
+          "outputReservation": 3000,
+          "heuristicTotal": 11407,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21725,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11782,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 9410,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7502,
+          "output": 3000,
+          "total": 10502,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61512,
+          "output": 3000,
+          "total": 64512,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 81085,
+          "output": 3000,
+          "total": 84085,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61512,
+          "output": 3000,
+          "total": 64512,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": false
+    },
+    {
+      "index": 36,
+      "itemCode": "ipow:10000579",
+      "sourceHash": "27dfc3fe6fa2928b1c55d0eada7ecb0f929384ff47d00d1ae4b9621660e9356e",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 3914,
+          "outputReservation": 3000,
+          "heuristicTotal": 6914,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 10874,
+            "systemContentBytes": 2098,
+            "userContentBytes": 1537,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1500,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4820,
+          "outputReservation": 3000,
+          "heuristicTotal": 7820,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 13815,
+            "systemContentBytes": 1951,
+            "userContentBytes": 3872,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1500,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4860,
+          "outputReservation": 3000,
+          "heuristicTotal": 7860,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 13724,
+            "systemContentBytes": 2098,
+            "userContentBytes": 4081,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1500,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4820,
+          "outputReservation": 3000,
+          "heuristicTotal": 7820,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 13815,
+            "systemContentBytes": 1951,
+            "userContentBytes": 3872,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1500,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3914,
+          "output": 3000,
+          "total": 6914,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57924,
+          "output": 3000,
+          "total": 60924,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77498,
+          "output": 3000,
+          "total": 80498,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57924,
+          "output": 3000,
+          "total": 60924,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": true
+    },
+    {
+      "index": 37,
+      "itemCode": "linofle:10000458",
+      "sourceHash": "c08c38a3f04d790e8ab4ad7124cc6448b8d7fc7110a128a448f52ad1079ff71a",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 4115,
+          "outputReservation": 3000,
+          "heuristicTotal": 7115,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 11284,
+            "systemContentBytes": 2098,
+            "userContentBytes": 1947,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1910,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 5021,
+          "outputReservation": 3000,
+          "heuristicTotal": 8021,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14225,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4282,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1910,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 5061,
+          "outputReservation": 3000,
+          "heuristicTotal": 8061,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14134,
+            "systemContentBytes": 2098,
+            "userContentBytes": 4491,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1910,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 5021,
+          "outputReservation": 3000,
+          "heuristicTotal": 8021,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14225,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4282,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1910,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4115,
+          "output": 3000,
+          "total": 7115,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58126,
+          "output": 3000,
+          "total": 61126,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77699,
+          "output": 3000,
+          "total": 80699,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58126,
+          "output": 3000,
+          "total": 61126,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": true
+    },
+    {
+      "index": 38,
+      "itemCode": "yukaiya:10001267",
+      "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 3423,
+          "outputReservation": 3000,
+          "heuristicTotal": 6423,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 9780,
+            "systemContentBytes": 2098,
+            "userContentBytes": 443,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 406,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4328,
+          "outputReservation": 3000,
+          "heuristicTotal": 7328,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 12721,
+            "systemContentBytes": 1951,
+            "userContentBytes": 2778,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 406,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4368,
+          "outputReservation": 3000,
+          "heuristicTotal": 7368,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 12630,
+            "systemContentBytes": 2098,
+            "userContentBytes": 2987,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 406,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4328,
+          "outputReservation": 3000,
+          "heuristicTotal": 7328,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 12721,
+            "systemContentBytes": 1951,
+            "userContentBytes": 2778,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 406,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 3423,
+          "output": 3000,
+          "total": 6423,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 57433,
+          "output": 3000,
+          "total": 60433,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77006,
+          "output": 3000,
+          "total": 80006,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 57433,
+          "output": 3000,
+          "total": 60433,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": true
+    },
+    {
+      "index": 39,
+      "itemCode": "living-mahoroba:10015748",
+      "sourceHash": "038a5a90094455cc7a863a46de3379ef69021af1fe9de20cf3657969e22363ce",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 5808,
+          "outputReservation": 3000,
+          "heuristicTotal": 8808,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 15003,
+            "systemContentBytes": 2098,
+            "userContentBytes": 5666,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 5629,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6714,
+          "outputReservation": 3000,
+          "heuristicTotal": 9714,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 17944,
+            "systemContentBytes": 1951,
+            "userContentBytes": 8001,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 5629,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6754,
+          "outputReservation": 3000,
+          "heuristicTotal": 9754,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 17853,
+            "systemContentBytes": 2098,
+            "userContentBytes": 8210,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 5629,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6714,
+          "outputReservation": 3000,
+          "heuristicTotal": 9714,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 17944,
+            "systemContentBytes": 1951,
+            "userContentBytes": 8001,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 5629,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 5808,
+          "output": 3000,
+          "total": 8808,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 59818,
+          "output": 3000,
+          "total": 62818,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 79392,
+          "output": 3000,
+          "total": 82392,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 59818,
+          "output": 3000,
+          "total": 62818,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": false
+    },
+    {
+      "index": 40,
+      "itemCode": "daiya:10001455",
+      "sourceHash": "4a5e40fe458a63280c1a75b73d53fb817f6dfdecd04ea25a39e7609cf6685c12",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 4084,
+          "outputReservation": 3000,
+          "heuristicTotal": 7084,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 11218,
+            "systemContentBytes": 2098,
+            "userContentBytes": 1881,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1844,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4989,
+          "outputReservation": 3000,
+          "heuristicTotal": 7989,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14159,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4216,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1844,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 5030,
+          "outputReservation": 3000,
+          "heuristicTotal": 8030,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14068,
+            "systemContentBytes": 2098,
+            "userContentBytes": 4425,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1844,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4989,
+          "outputReservation": 3000,
+          "heuristicTotal": 7989,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14159,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4216,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1844,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4084,
+          "output": 3000,
+          "total": 7084,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58094,
+          "output": 3000,
+          "total": 61094,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77668,
+          "output": 3000,
+          "total": 80668,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58094,
+          "output": 3000,
+          "total": 61094,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": true
+    },
+    {
+      "index": 41,
+      "itemCode": "ritoashop:10000039",
+      "sourceHash": "deeeb8f7be43ab1b3d03319ed513630d7af9b0607aca8167189b5062da39d0eb",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 7134,
+          "outputReservation": 3000,
+          "heuristicTotal": 10134,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18097,
+            "systemContentBytes": 2098,
+            "userContentBytes": 8760,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 8723,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8039,
+          "outputReservation": 3000,
+          "heuristicTotal": 11039,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21038,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11095,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 8723,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8080,
+          "outputReservation": 3000,
+          "heuristicTotal": 11080,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 20947,
+            "systemContentBytes": 2098,
+            "userContentBytes": 11304,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 8723,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 8039,
+          "outputReservation": 3000,
+          "heuristicTotal": 11039,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 21038,
+            "systemContentBytes": 1951,
+            "userContentBytes": 11095,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 8723,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 7134,
+          "output": 3000,
+          "total": 10134,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 61144,
+          "output": 3000,
+          "total": 64144,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 80717,
+          "output": 3000,
+          "total": 83717,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 61144,
+          "output": 3000,
+          "total": 64144,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": false
+    },
+    {
+      "index": 42,
+      "itemCode": "brian:10001257",
+      "sourceHash": "1dca4b426606f785c9df1fe90f4743f60363ed5e86619eec1ed1310f748a8ecf",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 4011,
+          "outputReservation": 3000,
+          "heuristicTotal": 7011,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 11097,
+            "systemContentBytes": 2098,
+            "userContentBytes": 1760,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1723,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4916,
+          "outputReservation": 3000,
+          "heuristicTotal": 7916,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14038,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4095,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1723,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4956,
+          "outputReservation": 3000,
+          "heuristicTotal": 7956,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 13947,
+            "systemContentBytes": 2098,
+            "userContentBytes": 4304,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 1723,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 4916,
+          "outputReservation": 3000,
+          "heuristicTotal": 7916,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": true,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 14038,
+            "systemContentBytes": 1951,
+            "userContentBytes": 4095,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 1723,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 4011,
+          "output": 3000,
+          "total": 7011,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 58021,
+          "output": 3000,
+          "total": 61021,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 77594,
+          "output": 3000,
+          "total": 80594,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 58021,
+          "output": 3000,
+          "total": 61021,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": true
+    },
+    {
+      "index": 43,
+      "itemCode": "lebenwood:10004953",
+      "sourceHash": "4060fac23d780ac3021b97ed5d2704a3c6654bb136046cab34dba10a0f9a591a",
+      "missing": [],
+      "admitted": false,
+      "reason": "capacity_unverified; tokenizer/provider accounting/account remaining unknown",
+      "stages": [
+        {
+          "stage": "draft",
+          "scope": "saved full source, actual initial payload",
+          "inputEstimate": 6012,
+          "outputReservation": 3000,
+          "heuristicTotal": 9012,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 15600,
+            "systemContentBytes": 2098,
+            "userContentBytes": 6263,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 6226,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": true
+        },
+        {
+          "stage": "review",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6917,
+          "outputReservation": 3000,
+          "heuristicTotal": 9917,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18541,
+            "systemContentBytes": 1951,
+            "userContentBytes": 8598,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 6226,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rewrite",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6957,
+          "outputReservation": 3000,
+          "heuristicTotal": 9957,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18450,
+            "systemContentBytes": 2098,
+            "userContentBytes": 8807,
+            "schemaSerializedBytes": 7047,
+            "sourceNestedBytes": 6226,
+            "candidateNestedBytes": 0,
+            "feedbackNestedBytes": 2532,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        },
+        {
+          "stage": "rereview",
+          "scope": "synthetic candidate shape substituted; NOT this product generation or forecast",
+          "inputEstimate": 6917,
+          "outputReservation": 3000,
+          "heuristicTotal": 9917,
+          "scenarioInputBudget": 5000,
+          "scenarioTotalBudget": 8000,
+          "heuristicFitsScenario": false,
+          "actualInputTokens": null,
+          "actualUsage": null,
+          "parts": {
+            "fullSerializedBytes": 18541,
+            "systemContentBytes": 1951,
+            "userContentBytes": 8598,
+            "schemaSerializedBytes": 7514,
+            "sourceNestedBytes": 6226,
+            "candidateNestedBytes": 2322,
+            "feedbackNestedBytes": 0,
+            "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+          },
+          "actualFutureInputKnown": false
+        }
+      ],
+      "pathBudget": {
+        "twoStage": 16000,
+        "fourStage": 32000,
+        "type": "enforced scenario budget, NOT future size upper bound or prediction",
+        "completionGuaranteed": false
+      },
+      "oldSchemaEnvelope": [
+        {
+          "stage": "draft",
+          "input": 6012,
+          "output": 3000,
+          "total": 9012,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "review",
+          "input": 60022,
+          "output": 3000,
+          "total": 63022,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rewrite",
+          "input": 79595,
+          "output": 3000,
+          "total": 82595,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        },
+        {
+          "stage": "rereview",
+          "input": 60022,
+          "output": 3000,
+          "total": 63022,
+          "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+        }
+      ],
+      "initialHeuristicFits8000": false
+    }
+  ],
+  "mockRequests": [
+    {
+      "stage": "draft",
+      "heuristic": {
+        "input": 3309,
+        "output": 3000,
+        "total": 6309,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "parts": {
+        "fullSerializedBytes": 9524,
+        "systemContentBytes": 2098,
+        "userContentBytes": 187,
+        "schemaSerializedBytes": 7047,
+        "sourceNestedBytes": 150,
+        "candidateNestedBytes": 0,
+        "feedbackNestedBytes": 0,
+        "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+      }
+    },
+    {
+      "stage": "review",
+      "heuristic": {
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "parts": {
+        "fullSerializedBytes": 12465,
+        "systemContentBytes": 1951,
+        "userContentBytes": 2522,
+        "schemaSerializedBytes": 7514,
+        "sourceNestedBytes": 150,
+        "candidateNestedBytes": 2322,
+        "feedbackNestedBytes": 0,
+        "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+      }
+    },
+    {
+      "stage": "rewrite",
+      "heuristic": {
+        "input": 4244,
+        "output": 3000,
+        "total": 7244,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "parts": {
+        "fullSerializedBytes": 12328,
+        "systemContentBytes": 2098,
+        "userContentBytes": 2693,
+        "schemaSerializedBytes": 7047,
+        "sourceNestedBytes": 150,
+        "candidateNestedBytes": 0,
+        "feedbackNestedBytes": 2494,
+        "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+      }
+    },
+    {
+      "stage": "rereview",
+      "heuristic": {
+        "input": 4215,
+        "output": 3000,
+        "total": 7215,
+        "method": "ascii/4 + nonASCII*1.4 + 500; output reservation 3000"
+      },
+      "parts": {
+        "fullSerializedBytes": 12465,
+        "systemContentBytes": 1951,
+        "userContentBytes": 2522,
+        "schemaSerializedBytes": 7514,
+        "sourceNestedBytes": 150,
+        "candidateNestedBytes": 2322,
+        "feedbackNestedBytes": 0,
+        "note": "Nested component byte counts overlap userContentBytes; never add all columns. Full JSON serialization includes escaping and framing. Bytes are NOT tokens."
+      }
+    }
+  ]
+}
