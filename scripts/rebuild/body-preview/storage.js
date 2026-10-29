@@ -1,0 +1,1 @@
+(function(){'use strict';window.BodyPreviewStorage={getItem:k=>localStorage.getItem('body_fixture:'+k),setItem:(k,v)=>{if(document.getElementById('denySave').checked)throw Error('検証用：保存失敗（記録は変更していません）');localStorage.setItem('body_fixture:'+k,v);}};})();
