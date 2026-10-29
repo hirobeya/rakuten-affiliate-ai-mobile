@@ -1,0 +1,71 @@
+{
+  "observedAtUtc": "2026-10-29T13:28:24.943660+00:00",
+  "startHead": "996a9be22074f7a07789764a2bacbdbe101d8d63",
+  "localDeploymentSourceHead": "a246e42946d173f3edba5732f469f2eddd6c5226",
+  "publishedCommit": "9b27900c38156a94b8b1257113bf901d313c0276",
+  "publishedTree": "00fbed791c02a9b23522922126cd4836c57f7ef3",
+  "localSourceTree": "00fbed791c02a9b23522922126cd4836c57f7ef3",
+  "treeExactlyEqual": true,
+  "publishMethod": "GitHub connector (native git push lacked credentials); original local history retained",
+  "branch": "rebuild/urenavi-core-20261028",
+  "deployment": {
+    "id": "dpl_7kUeYSDm2SXEDnkqxTy3LocY6RSu",
+    "url": "https://rakuten-affiliate-ai-mobile-rk4ub6uac-hirobeya-6572.vercel.app",
+    "target": "staging (Vercel API Preview target)",
+    "readyState": "READY",
+    "rootDirectory": "scripts/rebuild/preview",
+    "sourceCommit": "9b27900c38156a94b8b1257113bf901d313c0276"
+  },
+  "runtimeStatus": {
+    "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+    "groqCredentialPresent": true,
+    "storageConnected": false,
+    "inferenceEnabled": false,
+    "publication": false,
+    "maxRequests": 1,
+    "maxCompletionTokens": 1000
+  },
+  "anonymousAccess": {
+    "status": 302,
+    "redirectHost": "vercel.com"
+  },
+  "existingAccessRoute": {
+    "path": "/api/access",
+    "status": 404
+  },
+  "blobCreation": {
+    "success": false,
+    "status": 403,
+    "reason": "Vercel connector permission to create blob denied",
+    "created": false,
+    "browserFallbackUsed": false
+  },
+  "inferenceCalls": 0,
+  "dbCalls": 0,
+  "testResults": {
+    "new": 236,
+    "regression": 454,
+    "pass": 690,
+    "fail": 0,
+    "skip": 0
+  },
+  "previousEvidenceFilesUnchanged": 104,
+  "mainBeforeAndAfter": "3fb18811de413448384317f2beead78cd29a2ae3",
+  "productionPrimaryAliasDeployment": "dpl_AVuWnmKJnhMWYoFaPFtyon92yQCr",
+  "productionIncident": {
+    "sharedTeamAlias": "rakuten-affiliate-ai-mobile-hirobeya-6572.vercel.app",
+    "automaticallyAssignedToPreview": true,
+    "restoredToExistingDeployment": "dpl_AVuWnmKJnhMWYoFaPFtyon92yQCr",
+    "restorationVerified": true,
+    "actualUserImpactMeasured": false
+  },
+  "projectUpdatedAtBeforeAndAfter": 1792487313734,
+  "deploymentProtection": {
+    "enabled": true,
+    "deploymentType": "all_except_custom_domains",
+    "changed": false
+  },
+  "readGroqKeyValue": false,
+  "createdOrChangedGroqKey": false,
+  "mergePerformed": false
+}

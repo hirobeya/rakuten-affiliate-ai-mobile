@@ -1,0 +1,15 @@
+✔ isolated status exposes credential presence only; cannot execute through posted permission (1.092091ms)
+✔ Production, unrelated branch and missing isolation marker are refused before any storage or Groq (0.208329ms)
+✔ runtime arming alone is insufficient: execution secret and verified facts required (0.400507ms)
+✔ remote create-only claim survives independent instances and disallows duplicates forever (21.867414ms)
+✔ persisted journal uses conditional overwrite and rejects stale or missing read-back before local save (7.288733ms)
+✔ storage-only probes cannot consume real claim or call inference, even concurrently (1.117172ms)
+✔ isolated deployment config has only calibration API, no existing app routes or cron (0.514856ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 112.373865
