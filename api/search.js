@@ -825,6 +825,12 @@ function createHandler(deps={}){
     pool
     .slice(0,10);
 
+    // Server-injected Preview persistence, before display normalization.
+    if(typeof deps.captureSources==='function'){
+      if(process.env.VERCEL_ENV!=='preview')throw Error('preview_source_capture_only');
+      await deps.captureSources({authorization:auth,keyword,items:selected});
+    }
+
     const uniqueGenreIds=[...new Set(selected.map(x=>String(x.genreId||'')).filter(Boolean))];
     const genrePairs=await Promise.all(
       uniqueGenreIds.map(async id=>[id,await fetchGenreMeta(id,appId,accessKey)])
