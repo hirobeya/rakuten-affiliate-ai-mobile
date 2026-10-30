@@ -1,0 +1,2 @@
+'use strict';
+module.exports=(req,res)=>{res.setHeader('Cache-Control','no-store');return res.status(200).json({preview:process.env.VERCEL_ENV==='preview',approvedUserConfigured:!!process.env.URENAVI_SEARCH_VERIFICATION_USER_ID,privateStoreMatched:process.env.BLOB_STORE_ID==='store_sGSByr5MbYbxbENt',sourceWritesEnabled:process.env.URENAVI_SEARCH_SOURCE_WRITES==='approved-own-source',inferenceEnabled:false});};
