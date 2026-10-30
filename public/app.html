@@ -2841,8 +2841,14 @@ async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
     const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),catchcopy:String(item?.catchcopy||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),...(statusOnly?{statusOnly:true}:{})};
+    // An isolated deployment may only narrow this path to completed-cache reads.
+    const completedOnly=document.documentElement?.dataset?.completedCoreOnly==='true';
+    if(completedOnly){
+      if(typeof item?.itemCode!=='string'||typeof item?.itemName!=='string'||typeof item?.itemCaption!=='string'||typeof item?.catchcopy!=='string')throw new Error('complete_source_required');
+      Object.assign(payload,{itemCode:item.itemCode,itemName:item.itemName,itemCaption:item.itemCaption,catchcopy:item.catchcopy,completedCoreOnly:true});
+    }
     let r,d;
-    if(usePurchasePlan){
+    if(usePurchasePlan||completedOnly){
       const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
       r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
     }else{
@@ -2852,7 +2858,7 @@ async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
       r={status:503,ok:false};
       d={message:'検証済み投稿文の提供準備中です。AIの利用枠は消費していません。'};
     }
-    if(generation!==aiRunGeneration) return;
+    if(generation!==aiRunGeneration||(completedOnly&&lastSearchItems[index]!==item)) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
