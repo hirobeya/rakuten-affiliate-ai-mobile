@@ -9,6 +9,13 @@ html=html.replace(/<script src="\/access-guard[^>]*><\/script>/,'');
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');
+// Passive Preview-only observations: fixed status enums, no credentials, no new Auth calls.
+fs.copyFileSync(path.join(__dirname,'auth-observation.js'),out+'/auth-observation.js');
+html=html.replace('<script>','<script src="/auth-observation.js"></script><script>');
+html=html.replace('storage:window.localStorage','storage:UrenaviAuthObservation.storage(window.localStorage)');
+html=html.replace('const authGate=', 'UrenaviAuthObservation.watch(sb.auth);\nconst authGate=');
+html=html.replace("if(generation!==accessGeneration) return;\n    if(response.status===401", "UrenaviAuthObservation.access(response.status);\n    if(generation!==accessGeneration) return;\n    if(response.status===401");
+html=html.replace('<div id="authMsg"', '<pre id="authObservation" aria-label="Preview認証処理の観測状態">認証処理は未観測です。秘密情報は表示しません。</pre><div id="authMsg"');
 let n=0;html=html.replace(/<script>([\s\S]*?)<\/script>/g,(_,code)=>{const file='app-inline-'+(++n)+'.js';fs.writeFileSync(out+'/'+file,code);return '<script src="/'+file+'"></script>';});
 fs.writeFileSync(out+'/index.html',html);fs.writeFileSync(out+'/app.html',html);
 console.log('Existing app UI, real auth/search, completed-cache-only, no fixture or inference routes.');

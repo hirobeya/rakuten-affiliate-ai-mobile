@@ -10,7 +10,7 @@ test('real-search deployment uses original app and auth, with no synthetic data 
  const html=fs.readFileSync(out+'/index.html','utf8'),script=fs.readFileSync(out+'/app-inline-1.js','utf8');
  assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
  assert.ok(!html.includes('fixture-items.js'));assert.ok(!html.includes('isolation.js'));assert.ok(!html.includes('/access-guard.js'));
- assert.ok(script.includes('supabase.createClient'));assert.ok(script.includes("'/api/search?'+"));assert.ok(script.includes('completed-cache-only'));assert.ok(script.includes('autoAi=false'));assert.ok(!script.includes('AppFixtureItems'));
+ assert.ok(html.includes('authObservation'));assert.ok(html.includes('/auth-observation.js'));assert.ok(script.includes('UrenaviAuthObservation.watch(sb.auth)'));assert.ok(script.includes('UrenaviAuthObservation.access(response.status)'));assert.ok(script.includes('supabase.createClient'));assert.ok(script.includes("'/api/search?'+"));assert.ok(script.includes('completed-cache-only'));assert.ok(script.includes('autoAi=false'));assert.ok(!script.includes('AppFixtureItems'));
  }finally{fs.rmSync(out,{recursive:true,force:true});}
 });
 test('real-search access route rejects all write/payment actions before authorization',async()=>{
