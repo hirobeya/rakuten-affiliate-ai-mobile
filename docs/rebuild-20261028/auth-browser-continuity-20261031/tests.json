@@ -1,0 +1,16 @@
+{
+  "core": {
+    "pass": 248,
+    "fail": 0,
+    "skip": 0
+  },
+  "regression": {
+    "pass": 464,
+    "fail": 0,
+    "skip": 0
+  },
+  "network": "blocked",
+  "new_test_cases": 0,
+  "modified_existing_case": "Preview instructions and original app isolation",
+  "real_authentication": "not_verified"
+}

@@ -6,6 +6,15 @@ let html=fs.readFileSync(root+'/public/app.html','utf8');
 html=html.replace('<html lang="ja">','<html lang="ja" data-completed-core-only="true">');
 // Keep real Supabase login. Omit the old device/payment/handoff decorator only in this isolated build.
 html=html.replace(/<script src="\/access-guard[^>]*><\/script>/,'');
+// Keep verification in the already-open, protected Preview browser. Opening a
+// one-use email link elsewhere can consume it before that browser has a session.
+// Only Preview guidance changes; the existing SDK verifier and acceptance rules
+// remain identical to public/app.html.
+html=html.replace('<details style="margin-top:12px;font-size:13px;line-height:1.6">', '<details open style="margin-top:12px;font-size:13px;line-height:1.6">');
+html=html.replace('<summary>メールを開いてもログインできない場合</summary>', '<summary>このPreviewのログイン手順</summary>');
+html=html.replace('メール内のログインボタンを長押ししてリンクをコピーし、ここに貼り付けてください。このブラウザで認証します。', '最新メールの「Sign in」はタップして開かず、長押ししてリンクをコピーしてください。メール送信に使ったこの画面へ戻り、下の欄に貼り付けて認証してください。すでに開いたリンクは再利用できません。リンクはチャットへ送らないでください。');
+html=html.replace('メールに届いたリンクを押すとログインできます。', 'このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。');
+html=html.replace('ログインリンクを送信しました。メールを確認して、届いたリンクを押してください。', 'ログインリンクを送信しました。「Sign in」を開かずに長押しでリンクをコピーし、この画面の欄に貼り付けて認証してください。');
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');
