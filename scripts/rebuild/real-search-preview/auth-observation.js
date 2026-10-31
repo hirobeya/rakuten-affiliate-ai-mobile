@@ -13,8 +13,9 @@
    removeItem(key){try{const result=delegate.removeItem(key);set('storageWrite','removed');return result;}catch(e){set('storageWrite','failed');throw e;}}
   };}
   function watch(auth){
-   for(const name of ['verifyOtp','getSession']){
-    const original=auth[name].bind(auth),key=name==='verifyOtp'?'verification':'session';
+   for(const name of ['verifyOtp','signInWithPassword','getSession']){
+    if(typeof auth[name]!=='function')continue;
+    const original=auth[name].bind(auth),key=name==='getSession'?'session':'verification';
     auth[name]=async(...args)=>{set(key,'pending');try{const result=await original(...args);set(key,present(result));return result;}catch(e){set(key,'failed');throw e;}};
    }
    auth.onAuthStateChange((event,session)=>{

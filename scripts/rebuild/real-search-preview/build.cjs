@@ -15,6 +15,16 @@ html=html.replace('<summary>メールを開いてもログインできない場�
 html=html.replace('メール内のログインボタンを長押ししてリンクをコピーし、ここに貼り付けてください。このブラウザで認証します。', '最新メールの「Sign in」はタップして開かず、長押ししてリンクをコピーしてください。メール送信に使ったこの画面へ戻り、下の欄に貼り付けて認証してください。すでに開いたリンクは再利用できません。リンクはチャットへ送らないでください。');
 html=html.replace('メールに届いたリンクを押すとログインできます。', 'このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。');
 html=html.replace('ログインリンクを送信しました。メールを確認して、届いたリンクを押してください。', 'ログインリンクを送信しました。「Sign in」を開かずに長押しでリンクをコピーし、この画面の欄に貼り付けて認証してください。');
+// The verified account already has a password. This Preview uses the existing
+// password grant to avoid the broken cross-browser email/SSO return path.
+// Production app, Auth configuration and Deployment Protection are unchanged.
+html=html.replace('<button id="loginBtn" class="authBtn">', '<label for="previewLoginPassword">ウレナビの登録済みパスワード</label><input id="previewLoginPassword" type="password" autocomplete="current-password"><button id="previewPasswordLogin" type="button" class="authBtn">パスワードでログイン</button><p class="authNote">GoogleやVercelのパスワードとは別です。新規発行・変更は行いません。</p><button id="loginBtn" class="authBtn" hidden>');
+html=html.replace('<details open style="margin-top:12px;', '<details hidden style="margin-top:12px;');
+html=html.replace('ログイン用のリンクをメールで送ります。','このPreviewは登録済みパスワードでログインします。');
+html=html.replace('パスワードは不要です。','登録済みパスワードが不明な場合は、推測で繰り返し入力しないでください。');
+html=html.replace('このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。','認証メールの再送やリンクのコピーは必要ありません。');
+fs.copyFileSync(path.join(__dirname,'password-login.js'),out+'/password-login.js');
+html=html.replace('</body>','<script src="/password-login.js"></script></body>');
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');
