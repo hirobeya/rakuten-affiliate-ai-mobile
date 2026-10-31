@@ -1135,6 +1135,7 @@ document.getElementById('verifyEmailLoginLink').addEventListener('click',async()
   const input=document.getElementById('emailLoginLink'),button=document.getElementById('verifyEmailLoginLink');
   if(button.disabled)return;
   button.disabled=true;
+  retainedAuthError='';
   accessGeneration++; // Ignore an older startup check while this explicit login runs.
   try{
     setAuthMessage('ログインリンクを確認しています。');
@@ -1142,7 +1143,8 @@ document.getElementById('verifyEmailLoginLink').addEventListener('click',async()
     const session=await authDeadline(UrenaviEmailLinkLogin.signIn(value,{supabaseUrl:SUPABASE_URL,auth:sb.auth}),12000);
     await showApp(session);
   }catch(error){
-    setAuthMessage(UrenaviEmailLinkLogin.errorMessage(error),'err');
+    retainedAuthError=UrenaviEmailLinkLogin.errorMessage(error);
+    setAuthMessage(retainedAuthError,'err');
   }finally{input.value='';button.disabled=false;}
 });
 
@@ -1190,6 +1192,7 @@ function showLogin(
 ){
 
   accessGeneration++;
+  if(!message&&retainedAuthError){message=retainedAuthError;type='err';}
   lastSearchItems=[];
   lastSearchKeyword='';
   aiRoomResults=new Map();
@@ -1212,6 +1215,8 @@ function showLogin(
 }
 
 
+// Sanitized UI text only; never retain callback URLs, codes, tokens or descriptions.
+let retainedAuthError='';
 let accessGeneration=0;
 let lastSearchItems=[];
 let lastSearchKeyword='';
@@ -1280,6 +1285,7 @@ async function showApp(session) {
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
     await updateDebugExportAccess();
+    retainedAuthError='';
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
@@ -1385,7 +1391,7 @@ function getUrlAuthError(){
   ){
 
     return(
-      'ログインリンクの有効期限が切れています。新しいログインリンクを送ってください。'
+      'ログインリンクの有効期限が切れたか、すでに使用されています。最新の未使用リンクを確認してください。'
     );
 
   }
@@ -1553,6 +1559,7 @@ async function logout(
   message=''
 ){
   accessGeneration++;
+  retainedAuthError='';
   try{UrenaviReturnState.clear(sessionStorage);}catch{}
   try{
 
@@ -1592,6 +1599,7 @@ async function checkAuth(){
     urlError
   ){
 
+    retainedAuthError=urlError;
     cleanAuthUrl();
 
     showLogin(
@@ -1756,6 +1764,7 @@ async()=>{
   }
 
 
+  retainedAuthError='';
   sendingLogin=
   true;
 

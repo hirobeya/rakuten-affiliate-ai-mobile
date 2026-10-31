@@ -1,0 +1,30 @@
+{
+  "core": {
+    "sha256": "d5ed3459b3ec84428d8b9e17a04fb0a01dbc80d3ecb909078f5c083c00dc9c4f",
+    "summary": [
+      "✔ real-search access route rejects all write/payment actions before authorization (33.496348ms)",
+      "ℹ tests 248",
+      "ℹ suites 0",
+      "ℹ pass 248",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 746.231889"
+    ]
+  },
+  "regression": {
+    "sha256": "a7f363d22d5c6f0c596d06976c0a2878175c9fa656b2d7d810a3d572d5a66411",
+    "summary": [
+      "✔ live washing-net rank10 defers protection-label draft for semantic review (15.619184ms)",
+      "ℹ tests 464",
+      "ℹ suites 0",
+      "ℹ pass 464",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 8020.007099"
+    ]
+  }
+}
