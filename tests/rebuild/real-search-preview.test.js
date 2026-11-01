@@ -11,10 +11,20 @@ test('real-search deployment uses original app and auth, with no synthetic data 
  assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
  assert.ok(!html.includes('fixture-items.js'));assert.ok(!html.includes('isolation.js'));assert.ok(!html.includes('/access-guard.js'));
  assert.ok(html.includes('<details hidden '));assert.ok(html.includes('id="loginBtn" class="authBtn" hidden'));assert.ok(html.includes('id="previewLoginPassword"'));assert.ok(html.includes('/password-login.js'));
+ assert.ok(html.includes('id="previewSendCode" type="button" class="authBtn" disabled'));assert.ok(html.includes('id="previewEmailCode"'));assert.ok(html.includes('/email-code-login.js'));
  assert.ok(script.includes('「Sign in」を開かずに長押し'));assert.ok(!script.includes('届いたリンクを押してください。'));
  assert.ok(fs.readFileSync(path.resolve(root,'../../../public/app.html'),'utf8').includes('届いたリンクを押してください。'));
  assert.ok(html.includes('authObservation'));assert.ok(html.includes('/auth-observation.js'));assert.ok(script.includes('UrenaviAuthObservation.watch(sb.auth)'));assert.ok(script.includes('UrenaviAuthObservation.access(response.status)'));assert.ok(script.includes('supabase.createClient'));assert.ok(script.includes("'/api/search?'+"));assert.ok(script.includes('completed-cache-only'));assert.ok(script.includes('autoAi=false'));assert.ok(!script.includes('AppFixtureItems'));
  }finally{fs.rmSync(out,{recursive:true,force:true});}
+});
+test('OTP readiness is explicit, Preview-only and bound to the recovery branch',()=>{
+ const h=require(root+'/api/runtime-env'),keys=['VERCEL_ENV','VERCEL_GIT_COMMIT_REF','URENAVI_PREVIEW_EMAIL_OTP'],previous=keys.map(k=>process.env[k]);
+ try{
+  for(const [environment,branch,approval,expected] of [['preview','recovery/urenavi-core-20261030','',false],['production','recovery/urenavi-core-20261030','smtp-and-template-verified',false],['preview','main','smtp-and-template-verified',false],['preview','recovery/urenavi-core-20261030','smtp-and-template-verified',true]]){
+   [process.env.VERCEL_ENV,process.env.VERCEL_GIT_COMMIT_REF,process.env.URENAVI_PREVIEW_EMAIL_OTP]=[environment,branch,approval];
+   const r={setHeader(){},status(){return this;},json(v){this.body=v;}};h({},r);assert.equal(r.body.emailOtpReady,expected);assert.equal(r.body.inferenceEnabled,false);
+  }
+ }finally{keys.forEach((k,i)=>{if(previous[i]===undefined)delete process.env[k];else process.env[k]=previous[i];});}
 });
 test('real-search access route rejects all write/payment actions before authorization',async()=>{
  const r={setHeader(){},status(n){this.code=n;return this;},json(v){this.body=v;}};const h=require(root+'/api/access');await h({method:'POST',query:{action:'upgrade-pro'}},r);assert.equal(r.code,403);

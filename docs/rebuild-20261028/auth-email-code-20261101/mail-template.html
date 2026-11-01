@@ -1,0 +1,10 @@
+{{ if eq .RedirectTo "https://rakuten-affiliate-ai-mobile-git-recovery-u-aa2890-hirobeya-6572.vercel.app/app.html" }}
+<h2>ウレナビ 検証用ログインコード</h2>
+<p>ログインを開始したPreview画面の確認コード欄に入力してください。</p>
+<p style="font-size:28px;letter-spacing:4px">{{ .Token }}</p>
+<p>このコードは一度だけ使用できます。チャットや第三者には送らないでください。</p>
+{{ else }}
+<h2>Your sign-in link</h2>
+<p>Follow the link below to sign in. This link expires shortly and can only be used once.</p>
+<p><a href="{{ .ConfirmationURL }}">Sign in</a></p>
+{{ end }}

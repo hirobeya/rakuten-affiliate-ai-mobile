@@ -25,6 +25,14 @@ html=html.replace('パスワードは不要です。','登録済みパスワー�
 html=html.replace('このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。','認証メールの再送やリンクのコピーは必要ありません。');
 fs.copyFileSync(path.join(__dirname,'password-login.js'),out+'/password-login.js');
 html=html.replace('</body>','<script src="/password-login.js"></script></body>');
+// The approved OTP transition remains inactive until the sender and shared
+// template are configured and verified. No fallback email is sent on load.
+html=html.replace('<label for="previewLoginPassword">','<section aria-label="メール確認コードでログイン"><button id="previewSendCode" type="button" class="authBtn" disabled>確認コードを送る</button><label for="previewEmailCode">メールの確認コード</label><input id="previewEmailCode" type="password" inputmode="numeric" autocomplete="one-time-code"><button id="previewVerifyCode" type="button" class="authBtn" disabled>確認コードでログイン</button><p class="authNote">メールの数字を入力します。リンクは開きません。</p></section><details><summary>登録済みパスワードを使う</summary><label for="previewLoginPassword">');
+html=html.replace('<button id="loginBtn" class="authBtn" hidden>','</details><button id="loginBtn" class="authBtn" hidden>');
+html=html.replace('このPreviewは登録済みパスワードでログインします。','このPreviewはメールの確認コードでログインします。送信元設定が完了するまで利用できません。');
+html=html.replace('メールのリンクを開いたブラウザでログイン状態が保存されます。','ログインしたブラウザにだけログイン状態が保存されます。');
+fs.copyFileSync(path.join(__dirname,'email-code-login.js'),out+'/email-code-login.js');
+html=html.replace('</body>','<script src="/email-code-login.js"></script></body>');
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');

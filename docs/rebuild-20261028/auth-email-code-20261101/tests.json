@@ -1,0 +1,15 @@
+{
+  "core": {
+    "pass": 256,
+    "fail": 0,
+    "skip": 0
+  },
+  "regression": {
+    "pass": 464,
+    "fail": 0,
+    "skip": 0
+  },
+  "realEmailCodeLogin": "not_run",
+  "smtpChanged": false,
+  "emailOtpReady": false
+}
