@@ -10,10 +10,10 @@ test('real-search deployment uses original app and auth, with no synthetic data 
  const html=fs.readFileSync(out+'/index.html','utf8'),script=fs.readFileSync(out+'/app-inline-1.js','utf8');
  assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
  assert.ok(!html.includes('fixture-items.js'));assert.ok(!html.includes('isolation.js'));assert.ok(!html.includes('/access-guard.js'));
- assert.ok(html.includes('<details hidden '));assert.ok(html.includes('id="loginBtn" class="authBtn">'));
+ assert.ok(html.includes('id="previewCallbackRecovery" hidden'));assert.ok(html.includes('id="loginBtn" class="authBtn">'));
  assert.ok(!html.includes('/email-code-login.js'));assert.ok(!html.includes('/password-login.js'));
  assert.ok(html.includes('新しいサービス登録は不要'));assert.ok(script.includes("flowType:'pkce'"));assert.ok(script.includes('detectSessionInUrl:true'));
- assert.ok(script.includes('同じSafari'));assert.ok(!script.includes('「Sign in」を開かずに長押し'));
+ assert.ok(html.includes('/auth-callback-recovery.js'));assert.ok(!script.includes('UrenaviEmailLinkLogin.signIn'));assert.ok(fs.readdirSync(out).filter(n=>/^app-inline-.*js$/.test(n)).some(n=>fs.readFileSync(path.join(out,n),'utf8').includes('UrenaviPreviewCallback.mount')));assert.ok(!script.includes('「Sign in」を開かずに長押し'));
  assert.ok(script.includes('previewLoginUncertain'));assert.ok(script.includes('authDeadline(sb.auth.signInWithOtp({'));
  assert.ok(fs.readFileSync(path.resolve(root,'../../../public/app.html'),'utf8').includes('届いたリンクを押してください。'));
  assert.ok(html.includes('authObservation'));assert.ok(html.includes('/auth-observation.js'));assert.ok(script.includes('UrenaviAuthObservation.watch(sb.auth)'));assert.ok(script.includes('UrenaviAuthObservation.access(response.status)'));assert.ok(script.includes('supabase.createClient'));assert.ok(script.includes("'/api/search?'+"));assert.ok(script.includes('completed-cache-only'));assert.ok(script.includes('autoAi=false'));assert.ok(!script.includes('AppFixtureItems'));
@@ -45,9 +45,9 @@ function senderHarness({origin='https://rakuten-affiliate-ai-mobile-git-recovery
   const button={disabled:false,textContent:''};
   const context={loginBtn:button,loginEmail:{value:'synthetic@example.invalid'},location:{origin},window:{location:{origin}},navigator:{onLine:true},Date,
    getNextSendTime:()=>next,startSendCooldown:()=>{cooldowns++;next=Date.now()+60000;},setAuthMessage:s=>{message=s;},authDeadline:deadline,
-   setTimeout:()=>1,clearTimeout(){},console:{error:v=>logs.push(v)},
+   previewCallbackRecovery:{refresh:async()=>{}},setTimeout:()=>1,clearTimeout(){},console:{error:v=>logs.push(v)},
    sb:{auth:{signInWithOtp:async args=>{calls++;assert.equal(args.options.shouldCreateUser,false);assert.equal(args.options.emailRedirectTo,origin+'/app.html');return send(args);}}}};
-  vm.createContext(context);vm.runInContext("let sendingLogin=false,previewLoginUncertain=false,retainedAuthError='',sendTimer=null;const SEND_COOLDOWN_MS=60000;",context);
+  vm.createContext(context);vm.runInContext("let sendingLogin=false,previewLoginUncertain=false,previewCallbackBlocksSend=false,retainedAuthError='',sendTimer=null;const SEND_COOLDOWN_MS=60000;",context);
   vm.runInContext(buttonCode+sendCode,context);
   return {button,calls:()=>calls,message:()=>message,cooldowns:()=>cooldowns,logs};
  }finally{fs.rmSync(out,{recursive:true,force:true});}
@@ -57,7 +57,7 @@ test('PKCE sender refuses a different origin and sends only once while pending o
  let finish;const x=senderHarness({send:()=>new Promise(r=>{finish=r;})});
  const pending=x.button.onclick();await x.button.onclick();assert.equal(x.calls(),1);
  finish({error:null});await pending;await x.button.onclick();assert.equal(x.calls(),1);assert.equal(x.cooldowns(),1);
- assert.match(x.message(),/同じ|この画面を開いたSafari/);
+ assert.match(x.message(),/元の画面/);
 });
 test('uncertain email send stops further sends and never logs a provider credential',async()=>{
  for(const failure of [Error('認証確認が時間内に完了しませんでした。'),new TypeError('synthetic-private-provider-detail')]){
