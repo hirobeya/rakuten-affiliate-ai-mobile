@@ -64,14 +64,15 @@
    const s=c.observe();
    try{
     const result=await deadline(auth.getSession(),12000);
+    // SDK initialization has settled. Remove callback/error parameters even
+    // when its exchange failed; retain only the validated return in memory.
+    if(captured&&captured.kind!=='none')history.replaceState({},document.title,'/app.html');
     if(result?.data?.session){captured=null;relay.hidden=true;details.hidden=true;input.value='';return;}
    }catch{onStatus('認証状態を確認できません。再送せず停止してください。');return;}
    const hasOwn=captured?.result&&captured.initialVerifier==='present';
    if(captured?.result&&captured.initialVerifier==='absent'){
     relay.hidden=false;details.hidden=true;
-    // This SDK cannot exchange without the originating verifier. Remove the
-    // captured code from the visible URL; keep it only for the user's copy.
-    history.replaceState({},document.title,'/app.html');
+    // The original verifier remains necessary; no exchange occurs here.
     onStatus('認証後の戻り情報はありますが、送信時の確認情報がこのブラウザにありません。下の「戻り情報をコピー」で、元の画面へ戻して完了できます。メールのSign inは開き直さないでください。');
    }else if(hasOwn){
     relay.hidden=true;details.hidden=true;onStatus('戻り情報と送信時の確認情報はありますが、ログイン状態を作れませんでした。再送せず停止してください。');

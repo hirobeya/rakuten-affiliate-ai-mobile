@@ -42,3 +42,12 @@ test('different-browser page copies returned code only on click, removes URL cre
  await nodes.get('previewCopyCallback').click();assert.match(messages.at(-1),/コピーが許可されません/);assert.ok(!messages.join().includes('synthetic-private'));assert.equal(exchanges,0);
  refuse=false;await nodes.get('previewCopyCallback').click();assert.equal(clipboardValue,callback);assert.equal(exchanges,0);assert.ok(!nodes.get('previewCallbackObservation').textContent.includes('synthetic-callback'));
 });
+test('settled unsuccessful same-browser callback removes code URL without retrying exchange or sending mail',async()=>{
+ const fs=require('node:fs'),vm=require('node:vm'),nodes=new Map();let cleaned='',exchanges=0,messages=[];
+ for(const id of ['previewCallbackRecovery','previewReturnedCallback','previewCompleteCallback','previewCallbackRelay','previewCopyCallback','previewCallbackObservation'])nodes.set(id,{hidden:true,value:'',textContent:'',disabled:false,addEventListener(event,fn){this[event]=fn;}});
+ const w={location:{href:callback},localStorage:ownStore,addEventListener(){}};
+ const context={URL,window:w,document:{title:'Synthetic Preview',getElementById:id=>nodes.get(id)},history:{replaceState(_,__,url){cleaned=url;}},navigator:{clipboard:{writeText(){throw Error('unexpected copy');}}}};
+ vm.createContext(context);vm.runInContext(fs.readFileSync('scripts/rebuild/real-search-preview/auth-callback-recovery.js','utf8'),context);
+ const c=context.window.UrenaviPreviewCallback.mount({auth:{getSession:async()=>({data:{session:null}}),exchangeCodeForSession:async()=>{exchanges++;}},storage:ownStore,deadline:p=>p,onSession(){throw Error('unexpected session');},onStatus:m=>messages.push(m)});
+ await c.refresh();assert.equal(cleaned,'/app.html');assert.equal(exchanges,0);assert.equal(nodes.get('previewCallbackRelay').hidden,true);assert.equal(nodes.get('previewCallbackRecovery').hidden,true);assert.ok(messages.some(x=>x.includes('再送せず停止')));assert.ok(!messages.join().includes('synthetic-callback'));
+});
