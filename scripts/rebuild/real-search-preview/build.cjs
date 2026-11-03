@@ -31,7 +31,7 @@ html=html.replace('startSendCooldown();\n\n\n    setAuthMessage(', 'startSendCoo
 // Use the stable origin, so a unique deployment URL cannot create a verifier
 // that the stable callback origin cannot read. Fail closed before any send.
 html=html.replace('let sendingLogin=false;', 'let sendingLogin=false;\nlet previewLoginUncertain=false;\nconst previewCallbackBlocksSend=UrenaviPreviewCallback.sendBlocked();');
-html=html.replace('function updateLoginButton(){', 'function updateLoginButton(){\n  if(previewCallbackBlocksSend){loginBtn.disabled=true;loginBtn.textContent="メール確認済み・再送しません";return;}\n  if(previewLoginUncertain){loginBtn.disabled=true;loginBtn.textContent="送信結果が不明です";return;}');
+html=html.replace('function updateLoginButton(){', 'function updateLoginButton(){\n  if(previewCallbackBlocksSend){loginBtn.disabled=true;loginBtn.textContent="戻り情報あり・再送しません";return;}\n  if(previewLoginUncertain){loginBtn.disabled=true;loginBtn.textContent="送信結果が不明です";return;}');
 html=html.replace('async()=>{\n\n  if(\n    sendingLogin', 'async()=>{\n\n  if(previewLoginUncertain||previewCallbackBlocksSend)return;\n  if(location.origin!=="https://rakuten-affiliate-ai-mobile-git-recovery-u-aa2890-hirobeya-6572.vercel.app"){setAuthMessage("固定の検証URLからログインしてください。","err");return;}\n  if(\n    sendingLogin');
 html=html.replace('await sb.auth.signInWithOtp({', 'await authDeadline(sb.auth.signInWithOtp({');
 html=html.replace('emailRedirectTo:redirectTo\n      }\n\n    });','emailRedirectTo:redirectTo\n      }\n\n    }),12000);');

@@ -72,7 +72,7 @@
     // This SDK cannot exchange without the originating verifier. Remove the
     // captured code from the visible URL; keep it only for the user's copy.
     history.replaceState({},document.title,'/app.html');
-    onStatus('メールの確認は終わっていますが、送信時の確認情報がこのブラウザにありません。下の「戻り情報をコピー」で、元の画面へ戻して完了できます。メールのSign inは開き直さないでください。');
+    onStatus('認証後の戻り情報はありますが、送信時の確認情報がこのブラウザにありません。下の「戻り情報をコピー」で、元の画面へ戻して完了できます。メールのSign inは開き直さないでください。');
    }else if(hasOwn){
     relay.hidden=true;details.hidden=true;onStatus('戻り情報と送信時の確認情報はありますが、ログイン状態を作れませんでした。再送せず停止してください。');
    }else if(s.verifier==='present'){
