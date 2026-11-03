@@ -47,14 +47,15 @@ function intentScore(item,keyword){
   return clamp(s);
 }
 
-module.exports=async function(req,res){
+function createHandler(searchHandler=search){
+return async function(req,res){
   let statusCode=200,payload=null;
   const proxy={
     setHeader:(...a)=>res.setHeader(...a),
     status(code){statusCode=code;return this;},
     json(data){payload=data;return data;}
   };
-  await search(req,proxy);
+  await searchHandler(req,proxy);
   if(statusCode!==200||!payload||!Array.isArray(payload.items)) return res.status(statusCode).json(payload||{});
 
   const keyword=String(req.query.keyword||'');
@@ -83,3 +84,7 @@ module.exports=async function(req,res){
   const cleaned=items.map(({_intent,_adjusted,_role,...x})=>x);
   return res.status(200).json({...payload,items:cleaned});
 };
+
+}
+module.exports=createHandler();
+module.exports.createHandler=createHandler;

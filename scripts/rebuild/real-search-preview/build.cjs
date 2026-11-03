@@ -49,6 +49,10 @@ sendCode=sendCode.replace('const status=', `if(e?.message==='認証確認が時�
 html=html.slice(0,sendStart)+sendCode+html.slice(sendEnd);
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
+// A five-search debug batch exceeds the owner's approved two-search run.
+// Keep single-search and export-of-existing-results; do not change limit30.
+html=html.replace('<button id="debugBatchBtn" type="button"','<button id="debugBatchBtn" type="button" disabled hidden');
+html=html.replace('async function copyBatchDebugValidation(){', 'async function copyBatchDebugValidation(){\n  document.getElementById("debugJsonMeta").textContent="このPreviewでは一括検索を実行しません。本人の単一検索のみ確認します。";return;');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');
 // Passive Preview-only observations: fixed status enums, no credentials, no new Auth calls.
 fs.copyFileSync(path.join(__dirname,'auth-observation.js'),out+'/auth-observation.js');

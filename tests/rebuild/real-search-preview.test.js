@@ -3,12 +3,12 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const root=path.resolve(__dirname,'../../scripts/rebuild/real-search-preview');
 test('real-search deployment uses original app and auth, with no synthetic data or generation routes',()=>{
  const config=JSON.parse(fs.readFileSync(root+'/vercel.json'));assert.equal(config.crons,undefined);assert.equal(config.rewrites,undefined);
- assert.deepEqual(fs.readdirSync(root+'/api').sort(),['access.js','room-copy.js','runtime-env.js','search.js']);
+ assert.deepEqual(fs.readdirSync(root+'/api').sort(),['access.js','room-copy.js','runtime-env.js','search-v2.js','search.js']);
  const out=fs.mkdtempSync(path.join(os.tmpdir(),'real-ui-'));try{
  const fakeFs={...fs,mkdirSync(){},writeFileSync(name,value){fs.writeFileSync(path.join(out,path.basename(name)),value);},copyFileSync(a,b){fs.copyFileSync(a,path.join(out,path.basename(b)));}};
  const code=fs.readFileSync(root+'/build.cjs','utf8');vm.runInNewContext(code,{require:name=>name==='node:fs'?fakeFs:require(name),__dirname:root,console:{log(){}}});
  const html=fs.readFileSync(out+'/index.html','utf8'),script=fs.readFileSync(out+'/app-inline-1.js','utf8');
- assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
+ assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('id="debugBatchBtn" type="button" disabled hidden'));assert.ok(script.includes('このPreviewでは一括検索を実行しません。'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
  assert.ok(!html.includes('fixture-items.js'));assert.ok(!html.includes('isolation.js'));assert.ok(!html.includes('/access-guard.js'));
  assert.ok(html.includes('id="previewCallbackRecovery" hidden'));assert.ok(html.includes('id="loginBtn" class="authBtn">'));
  assert.ok(!html.includes('/email-code-login.js'));assert.ok(!html.includes('/password-login.js'));
