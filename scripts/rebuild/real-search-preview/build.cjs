@@ -6,33 +6,35 @@ let html=fs.readFileSync(root+'/public/app.html','utf8');
 html=html.replace('<html lang="ja">','<html lang="ja" data-completed-core-only="true">');
 // Keep real Supabase login. Omit the old device/payment/handoff decorator only in this isolated build.
 html=html.replace(/<script src="\/access-guard[^>]*><\/script>/,'');
-// Keep verification in the already-open, protected Preview browser. Opening a
-// one-use email link elsewhere can consume it before that browser has a session.
-// Only Preview guidance changes; the existing SDK verifier and acceptance rules
-// remain identical to public/app.html.
-html=html.replace('<details style="margin-top:12px;font-size:13px;line-height:1.6">', '<details open style="margin-top:12px;font-size:13px;line-height:1.6">');
-html=html.replace('<summary>メールを開いてもログインできない場合</summary>', '<summary>このPreviewのログイン手順</summary>');
-html=html.replace('メール内のログインボタンを長押ししてリンクをコピーし、ここに貼り付けてください。このブラウザで認証します。', '最新メールの「Sign in」はタップして開かず、長押ししてリンクをコピーしてください。メール送信に使ったこの画面へ戻り、下の欄に貼り付けて認証してください。すでに開いたリンクは再利用できません。リンクはチャットへ送らないでください。');
-html=html.replace('メールに届いたリンクを押すとログインできます。', 'このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。');
-html=html.replace('ログインリンクを送信しました。メールを確認して、届いたリンクを押してください。', 'ログインリンクを送信しました。「Sign in」を開かずに長押しでリンクをコピーし、この画面の欄に貼り付けて認証してください。');
-// The verified account already has a password. This Preview uses the existing
-// password grant to avoid the broken cross-browser email/SSO return path.
-// Production app, Auth configuration and Deployment Protection are unchanged.
-html=html.replace('<button id="loginBtn" class="authBtn">', '<label for="previewLoginPassword">ウレナビの登録済みパスワード</label><input id="previewLoginPassword" type="password" autocomplete="current-password"><button id="previewPasswordLogin" type="button" class="authBtn">パスワードでログイン</button><p class="authNote">GoogleやVercelのパスワードとは別です。新規発行・変更は行いません。</p><button id="loginBtn" class="authBtn" hidden>');
-html=html.replace('<details open style="margin-top:12px;', '<details hidden style="margin-top:12px;');
-html=html.replace('ログイン用のリンクをメールで送ります。','このPreviewは登録済みパスワードでログインします。');
-html=html.replace('パスワードは不要です。','登録済みパスワードが不明な場合は、推測で繰り返し入力しないでください。');
-html=html.replace('このPreviewでは、未使用のメールリンクを上の欄に貼り付けて認証します。','認証メールの再送やリンクのコピーは必要ありません。');
-fs.copyFileSync(path.join(__dirname,'password-login.js'),out+'/password-login.js');
-html=html.replace('</body>','<script src="/password-login.js"></script></body>');
-// The approved OTP transition remains inactive until the sender and shared
-// template are configured and verified. No fallback email is sent on load.
-html=html.replace('<label for="previewLoginPassword">','<section aria-label="メール確認コードでログイン"><button id="previewSendCode" type="button" class="authBtn" disabled>確認コードを送る</button><label for="previewEmailCode">メールの確認コード</label><input id="previewEmailCode" type="password" inputmode="numeric" autocomplete="one-time-code"><button id="previewVerifyCode" type="button" class="authBtn" disabled>確認コードでログイン</button><p class="authNote">メールの数字を入力します。リンクは開きません。</p></section><details><summary>登録済みパスワードを使う</summary><label for="previewLoginPassword">');
-html=html.replace('<button id="loginBtn" class="authBtn" hidden>','</details><button id="loginBtn" class="authBtn" hidden>');
-html=html.replace('このPreviewは登録済みパスワードでログインします。','このPreviewはメールの確認コードでログインします。送信元設定が完了するまで利用できません。');
-html=html.replace('メールのリンクを開いたブラウザでログイン状態が保存されます。','ログインしたブラウザにだけログイン状態が保存されます。');
-fs.copyFileSync(path.join(__dirname,'email-code-login.js'),out+'/email-code-login.js');
-html=html.replace('</body>','<script src="/email-code-login.js"></script></body>');
+// Preview-only PKCE uses the existing Supabase mail sender and default template.
+// The auth code is exchanged by the pinned SDK using this browser's verifier.
+// No SMTP, shared template, allowlist or Deployment Protection change is required.
+html=html.replace('detectSessionInUrl:true,', "detectSessionInUrl:true,\n      flowType:'pkce',");
+html=html.replace('<details style="margin-top:12px;font-size:13px;line-height:1.6">','<details hidden style="margin-top:12px;font-size:13px;line-height:1.6">');
+html=html.replace('ログイン用のリンクをメールで送ります。','既存のメール送信でログインします。新しいサービス登録は不要です。');
+html=html.replace('メールに届いたリンクを押すとログインできます。','この画面をSafariで開いて送信し、メールのリンクも同じSafariで開いてください。');
+html=html.replace('メールのリンクを開いたブラウザでログイン状態が保存されます。','送信を始めたブラウザの確認情報と、メールのリンクの両方で認証します。');
+html=html.replace('SafariとGmail内ブラウザなど、別のブラウザ間ではログイン状態は共有されません。','別のブラウザでは認証を完了できません。メールのリンクは送信に使ったSafariで開いてください。');
+html=html.replace('ログインリンクを送信しました。メールを確認して、届いたリンクを押してください。','ログインメールを送信しました。メールのリンクを、この画面を開いたSafariで開いてください。リンクやコードをチャットに送らないでください。');
+// Use the stable origin, so a unique deployment URL cannot create a verifier
+// that the stable callback origin cannot read. Fail closed before any send.
+html=html.replace('let sendingLogin=false;', 'let sendingLogin=false;\nlet previewLoginUncertain=false;');
+html=html.replace('function updateLoginButton(){', 'function updateLoginButton(){\n  if(previewLoginUncertain){loginBtn.disabled=true;loginBtn.textContent="送信結果が不明です";return;}');
+html=html.replace('async()=>{\n\n  if(\n    sendingLogin', 'async()=>{\n\n  if(previewLoginUncertain)return;\n  if(location.origin!=="https://rakuten-affiliate-ai-mobile-git-recovery-u-aa2890-hirobeya-6572.vercel.app"){setAuthMessage("固定の検証URLからログインしてください。","err");return;}\n  if(\n    sendingLogin');
+html=html.replace('await sb.auth.signInWithOtp({', 'await authDeadline(sb.auth.signInWithOtp({');
+html=html.replace('emailRedirectTo:redirectTo\n      }\n\n    });','emailRedirectTo:redirectTo\n      }\n\n    }),12000);');
+// Sanitize only the login-send catch. Timeout/network uncertainty disables
+// further sends in this page; getSession still permits a later valid callback.
+const sendStart=html.indexOf('loginBtn.onclick='),sendEnd=html.indexOf("loginEmail.addEventListener(",sendStart);
+let sendCode=html.slice(sendStart,sendEnd);
+sendCode=sendCode.replace(/console\.error\(\s*e\s*\);/g,'');
+sendCode=sendCode.replace('const status=', `if(e?.message==='認証確認が時間内に完了しませんでした。'||e?.name==='TypeError'){
+      previewLoginUncertain=true;
+      setAuthMessage('送信結果を確認できませんでした。自動再送はしません。届いたメールがある場合は同じSafariで開いてください。','err');
+      return;
+    }
+    const status=`);
+html=html.slice(0,sendStart)+sendCode+html.slice(sendEnd);
 html=html.replace('{autoAi=true,restored=false,keyword=lastSearchKeyword}={}','{autoAi=false,restored=false,keyword=lastSearchKeyword}={}');
 html=html.replace('function aiTargetDecision(item){','function aiTargetDecision(item){ if(document.documentElement.dataset.completedCoreOnly==="true")return {callAi:true,reasons:["completed-cache-only"]};');
 html=html.replace('<nav id="urenaviWorkTabs"','<section class="box"><b>実商品検索の限定検証</b><p>本人の実検索は累計2回まで。Groq生成・決済・cronは無効です。新規生成は行わず、完成cacheがない商品は本文を表示しません。</p></section><nav id="urenaviWorkTabs"');

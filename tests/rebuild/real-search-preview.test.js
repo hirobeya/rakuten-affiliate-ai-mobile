@@ -10,9 +10,11 @@ test('real-search deployment uses original app and auth, with no synthetic data 
  const html=fs.readFileSync(out+'/index.html','utf8'),script=fs.readFileSync(out+'/app-inline-1.js','utf8');
  assert.ok(html.includes('data-completed-core-only="true"'));assert.ok(html.includes('https://cdn.jsdelivr.net/npm/@supabase/'));assert.ok(html.includes('実商品検索の限定検証'));
  assert.ok(!html.includes('fixture-items.js'));assert.ok(!html.includes('isolation.js'));assert.ok(!html.includes('/access-guard.js'));
- assert.ok(html.includes('<details hidden '));assert.ok(html.includes('id="loginBtn" class="authBtn" hidden'));assert.ok(html.includes('id="previewLoginPassword"'));assert.ok(html.includes('/password-login.js'));
- assert.ok(html.includes('id="previewSendCode" type="button" class="authBtn" disabled'));assert.ok(html.includes('id="previewEmailCode"'));assert.ok(html.includes('/email-code-login.js'));
- assert.ok(script.includes('「Sign in」を開かずに長押し'));assert.ok(!script.includes('届いたリンクを押してください。'));
+ assert.ok(html.includes('<details hidden '));assert.ok(html.includes('id="loginBtn" class="authBtn">'));
+ assert.ok(!html.includes('/email-code-login.js'));assert.ok(!html.includes('/password-login.js'));
+ assert.ok(html.includes('新しいサービス登録は不要'));assert.ok(script.includes("flowType:'pkce'"));assert.ok(script.includes('detectSessionInUrl:true'));
+ assert.ok(script.includes('同じSafari'));assert.ok(!script.includes('「Sign in」を開かずに長押し'));
+ assert.ok(script.includes('previewLoginUncertain'));assert.ok(script.includes('authDeadline(sb.auth.signInWithOtp({'));
  assert.ok(fs.readFileSync(path.resolve(root,'../../../public/app.html'),'utf8').includes('届いたリンクを押してください。'));
  assert.ok(html.includes('authObservation'));assert.ok(html.includes('/auth-observation.js'));assert.ok(script.includes('UrenaviAuthObservation.watch(sb.auth)'));assert.ok(script.includes('UrenaviAuthObservation.access(response.status)'));assert.ok(script.includes('supabase.createClient'));assert.ok(script.includes("'/api/search?'+"));assert.ok(script.includes('completed-cache-only'));assert.ok(script.includes('autoAi=false'));assert.ok(!script.includes('AppFixtureItems'));
  }finally{fs.rmSync(out,{recursive:true,force:true});}
@@ -28,4 +30,43 @@ test('OTP readiness is explicit, Preview-only and bound to the recovery branch',
 });
 test('real-search access route rejects all write/payment actions before authorization',async()=>{
  const r={setHeader(){},status(n){this.code=n;return this;},json(v){this.body=v;}};const h=require(root+'/api/access');await h({method:'POST',query:{action:'upgrade-pro'}},r);assert.equal(r.code,403);
+});
+
+// Exercise the emitted sender, rather than a second implementation of login.
+function senderHarness({origin='https://rakuten-affiliate-ai-mobile-git-recovery-u-aa2890-hirobeya-6572.vercel.app',send=async()=>({error:null}),deadline=p=>p}={}){
+ const out=fs.mkdtempSync(path.join(os.tmpdir(),'pkce-send-'));
+ try{
+  const fakeFs={...fs,mkdirSync(){},writeFileSync(n,v){fs.writeFileSync(path.join(out,path.basename(n)),v);},copyFileSync(a,b){fs.copyFileSync(a,path.join(out,path.basename(b)));}};
+  vm.runInNewContext(fs.readFileSync(root+'/build.cjs','utf8'),{require:n=>n==='node:fs'?fakeFs:require(n),__dirname:root,console:{log(){}}});
+  const script=fs.readFileSync(out+'/app-inline-1.js','utf8');
+  const buttonCode=script.slice(script.indexOf('function updateLoginButton(){'),script.indexOf('async function logout('));
+  const sendCode=script.slice(script.indexOf('loginBtn.onclick='),script.indexOf('loginEmail.addEventListener('));
+  let calls=0,next=0,message='',cooldowns=0,logs=[];
+  const button={disabled:false,textContent:''};
+  const context={loginBtn:button,loginEmail:{value:'synthetic@example.invalid'},location:{origin},window:{location:{origin}},navigator:{onLine:true},Date,
+   getNextSendTime:()=>next,startSendCooldown:()=>{cooldowns++;next=Date.now()+60000;},setAuthMessage:s=>{message=s;},authDeadline:deadline,
+   setTimeout:()=>1,clearTimeout(){},console:{error:v=>logs.push(v)},
+   sb:{auth:{signInWithOtp:async args=>{calls++;assert.equal(args.options.shouldCreateUser,false);assert.equal(args.options.emailRedirectTo,origin+'/app.html');return send(args);}}}};
+  vm.createContext(context);vm.runInContext("let sendingLogin=false,previewLoginUncertain=false,retainedAuthError='',sendTimer=null;const SEND_COOLDOWN_MS=60000;",context);
+  vm.runInContext(buttonCode+sendCode,context);
+  return {button,calls:()=>calls,message:()=>message,cooldowns:()=>cooldowns,logs};
+ }finally{fs.rmSync(out,{recursive:true,force:true});}
+}
+test('PKCE sender refuses a different origin and sends only once while pending or cooling down',async()=>{
+ const foreign=senderHarness({origin:'https://unrelated.example.invalid'});await foreign.button.onclick();assert.equal(foreign.calls(),0);
+ let finish;const x=senderHarness({send:()=>new Promise(r=>{finish=r;})});
+ const pending=x.button.onclick();await x.button.onclick();assert.equal(x.calls(),1);
+ finish({error:null});await pending;await x.button.onclick();assert.equal(x.calls(),1);assert.equal(x.cooldowns(),1);
+ assert.match(x.message(),/同じ|この画面を開いたSafari/);
+});
+test('uncertain email send stops further sends and never logs a provider credential',async()=>{
+ for(const failure of [Error('認証確認が時間内に完了しませんでした。'),new TypeError('synthetic-private-provider-detail')]){
+  const x=senderHarness({deadline:()=>Promise.reject(failure)});await x.button.onclick();await x.button.onclick();
+  assert.equal(x.calls(),1);assert.equal(x.button.disabled,true);assert.equal(x.cooldowns(),0);assert.equal(x.logs.length,0);
+  assert.ok(!x.message().includes('synthetic-private'));assert.match(x.message(),/送信結果を確認できません/);
+ }
+});
+test('provider rate limit remains a stopped send with no automatic retry',async()=>{
+ const x=senderHarness({send:async()=>({error:{status:429,code:'over_email_send_rate_limit',message:'synthetic-private-provider-detail'}})});
+ await x.button.onclick();await x.button.onclick();assert.equal(x.calls(),1);assert.equal(x.cooldowns(),1);assert.equal(x.logs.length,0);assert.ok(!x.message().includes('synthetic-private'));
 });
