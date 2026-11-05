@@ -1285,6 +1285,7 @@ async function showApp(session) {
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
     await updateDebugExportAccess();
+    if(generation!==accessGeneration) return;
     retainedAuthError='';
     authGate.style.display='none';
     appRoot.style.display='block';
@@ -2372,10 +2373,13 @@ async function updateDebugExportAccess(){
   let preview=false;
   let runtimeKnown=false;
   try{
-    const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
-    const d=await r.json().catch(()=>({}));
-    runtimeKnown=r.ok && typeof d.preview==='boolean';
-    preview=runtimeKnown && d.preview===true;
+    const d=await authDeadline((async()=>{
+      const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
+      const body=await r.json().catch(()=>({}));
+      return {ok:r.ok,body};
+    })(),5000);
+    runtimeKnown=d.ok && typeof d.body.preview==='boolean';
+    preview=runtimeKnown && d.body.preview===true;
   }catch{
     preview=false;
     runtimeKnown=false;
