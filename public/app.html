@@ -2846,8 +2846,15 @@ function updateAiPanel(index){
 }
 
 async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
+  function completedReadFailureMessage(status,code){
+  if(status===404&&code==='completed_core_cache_miss')return 'この商品の完成済み投稿文はまだ保存されていません。この検証画面では新しく生成しません。';
+  if(status===401||status===403)return '保存済み投稿文を表示するための利用許可を確認できません。';
+  if(status===409&&code==='completed_core_result_rejected')return '保存済み投稿文を安全に確認できないため、表示を停止しました。';
+  return '保存済み投稿文を取得できませんでした。投稿文は表示していません。';
+  }
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
-  aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
+  const completedOnly=document.documentElement?.dataset?.completedCoreOnly==='true';
+  aiRoomResults.set(index,{state:'loading',...(completedOnly?{message:'保存済み投稿文を確認中…'}:{})});updateAiPanel(index);
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),usePurchasePlan?240000:12000);
   try{
     const headers={'Content-Type':'application/json'};
@@ -2855,14 +2862,13 @@ async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
     const imageUrl=firstImageUrl(item);
     const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),catchcopy:String(item?.catchcopy||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),...(statusOnly?{statusOnly:true}:{})};
     // An isolated deployment may only narrow this path to completed-cache reads.
-    const completedOnly=document.documentElement?.dataset?.completedCoreOnly==='true';
     if(completedOnly){
       if(typeof item?.itemCode!=='string'||typeof item?.itemName!=='string'||typeof item?.itemCaption!=='string'||typeof item?.catchcopy!=='string')throw new Error('complete_source_required');
       Object.assign(payload,{itemCode:item.itemCode,itemName:item.itemName,itemCaption:item.itemCaption,catchcopy:item.catchcopy,completedCoreOnly:true});
     }
     let r,d;
     if(usePurchasePlan||completedOnly){
-      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message={generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…';aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
+      const result=await RoomPreviewRequest.run(payload,{headers,signal:controller.signal,isCurrent:()=>generation===aiRunGeneration,onStage:phase=>{const message=completedOnly?'保存済み投稿文を確認中…':({generation:'投稿文を生成中…',verification:'内容を確認中…',regeneration:'投稿文を再作成中…',reverification:'再作成した内容を確認中…'}[phase]||'投稿文を準備中…');aiRoomResults.set(index,{state:'loading',message});updateAiPanel(index);}});
       r={status:result.status,ok:result.status>=200&&result.status<300};d=result.data;
     }else{
       // The legacy endpoint does not return the verified room_contract_ payload.
@@ -2875,12 +2881,12 @@ async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       const previewMessage=r.status===429?(Number(d.retryAfterMs)>0?'AIの利用上限に達しました。再利用まで約'+Math.ceil(Number(d.retryAfterMs)/60000)+'分待ちです。投稿文はまだ完成していません。':'AIの利用上限で待機が必要です。投稿文はまだ完成していません。'):'商品を選ぶ理由の確認に失敗したため、投稿文を生成していません。';
-      aiRoomResults.set(index,{state:'error',message:usePurchasePlan?previewMessage:message,status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
+      aiRoomResults.set(index,{state:'error',message:completedOnly?completedReadFailureMessage(r.status,d.message):(usePurchasePlan?previewMessage:message),status:r.status,upstreamStatus:d.upstreamStatus,data:{resourceUsage:d.resourceUsage||null}});
     }else if(r.status===202||d.pending===true)aiRoomResults.set(index,{state:'pending',data:d,resumeAfter:Date.now()+Math.max(0,Number(d.retryAfterMs)||0)});
     else aiRoomResults.set(index,{state:'done',data:d});
   }catch(e){
     if(generation!==aiRunGeneration) return;
-    aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+    aiRoomResults.set(index,{state:'error',message:completedOnly?completedReadFailureMessage(null,null):(e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。'),status:null});
     // A pending draft must not survive a failed verification as a cached result.
   }finally{
     clearTimeout(timer);
