@@ -2,7 +2,7 @@
   "version": 2,
   "installCommand": "npm ci --ignore-scripts",
   "buildCommand": "node reconcile-once.cjs",
-  "env": { "URENAVI_CALIBRATION_ISOLATED_PREVIEW": "1", "URENAVI_CALIBRATION_LIVE": "disabled" },
+  "env": { "URENAVI_CALIBRATION_ISOLATED_PREVIEW": "1", "URENAVI_CALIBRATION_LIVE": "disabled", "URENAVI_COMPARISON_LIVE": "disabled" },
   "functions": { "api/calibration.js": { "maxDuration": 60 } },
   "headers": [ { "source": "/(.*)", "headers": [
     { "key": "Cache-Control", "value": "no-store" },

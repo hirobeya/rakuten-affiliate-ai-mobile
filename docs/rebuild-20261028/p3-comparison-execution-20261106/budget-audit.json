@@ -1,0 +1,45 @@
+{
+  "baseWireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+  "experimentId": "db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71",
+  "authorizedOutputChange": false,
+  "providerInputUpperCertified": false,
+  "priorMeasuredInput": 2729,
+  "localVisibleComponents": 2527,
+  "countMethod": "vendored o200k_harmony of literal messages and full serialized response_format; not provider template",
+  "inputReservation": 5000,
+  "marginOverPriorMeasuredInput": 2271,
+  "providerOverheadUpper": null,
+  "variants": [
+    {
+      "output": 3000,
+      "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+      "wholeHttpJsonLocalTokens": 2579,
+      "proposedTotal": 8000,
+      "nominalHeadroom": 0,
+      "maximumProviderInputAtOtherwiseIdleTPM": 5000,
+      "maximumUnknownOverheadAboveVisibleAtIdleTPM": 2473,
+      "requiresInputUpperFor5000Reservation": 2473,
+      "enabledRuntime": true,
+      "currentInputSafetyPassed": false,
+      "judgment": "single-variable comparator; exact TPM boundary, requires certified input<=5000 and all other minute use=0"
+    },
+    {
+      "output": 2500,
+      "wireHash": "55767e29fac698c1d24af6ac0122d99eada61a5e7b4b78c931cc1226030fb5fc",
+      "wholeHttpJsonLocalTokens": 2579,
+      "proposedTotal": 7500,
+      "nominalHeadroom": 500,
+      "maximumProviderInputAtOtherwiseIdleTPM": 5500,
+      "maximumUnknownOverheadAboveVisibleAtIdleTPM": 2973,
+      "requiresInputUpperFor5000Reservation": 2473,
+      "enabledRuntime": false,
+      "currentInputSafetyPassed": false,
+      "judgment": "500 extra nominal headroom, but same input uncertainty remains; requires separate output-budget approval and is not executable"
+    }
+  ],
+  "oldRetainedDaily": 6000,
+  "oldActualSeparatelyAdded": false,
+  "currentOrganizationSnapshot": null,
+  "approval": null,
+  "inferenceCalls": 0
+}

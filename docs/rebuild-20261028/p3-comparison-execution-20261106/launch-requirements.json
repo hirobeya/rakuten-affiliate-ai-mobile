@@ -1,0 +1,14 @@
+{
+  "purpose": "Non-executable launch checklist. Null facts and false approval deliberately fail the gate.",
+  "action": "execute-comparison",
+  "requiredRuntimeArming": "URENAVI_COMPARISON_LIVE=approved-one-call only after separate explicit approval; currently disabled",
+  "snapshot": {
+    "grant": {"mode":"live-one-call","experimentId":"db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71","wireHash":"ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053","model":"openai/gpt-oss-120b","stage":"draft","maxRequests":1,"maxCompletionTokens":3000,"inputReservation":5000,"receiptHash":null,"explicitUserApproval":false,"approvalReference":null,"expiresAt":null},
+    "inputProof": {"kind":"provider-input-upper-bound","wireHash":"ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053","model":"openai/gpt-oss-120b","upperTokens":null,"providerTemplateIncluded":null,"schemaIncluded":null,"providerRateAccountingIncluded":null,"source":null,"reference":null,"confirmedBy":null,"observedAt":null,"validUntil":null},
+    "account":null,
+    "capacityProof":null,
+    "isolation":null
+  },
+  "inferenceCalls":0,
+  "publication":false
+}
