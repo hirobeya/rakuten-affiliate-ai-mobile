@@ -35,7 +35,7 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
   try{
    // Never expire or delete the remote claim. Crash/redeploy/unknown state cannot reopen the experiment.
    await persistence.claim(f);
-   const result=await run({...f,directory:L.STATE_DIRECTORY,item:source,runtimeMode:'live-calibration',calibrationProfile:'first-call-1000',liveAuthorization:L.authorizationFromEnvironment,clock,save:persistence.save,transportSave:persistence.save});
+   const result=await run({...f,directory:L.STATE_DIRECTORY,item:source,runtimeMode:'live-calibration',calibrationProfile:'first-call-1000',liveAuthorization:L.authorizationFromEnvironment,clock,save:persistence.save,transportSave:persistence.save,evaluationCapture:true});
    return reply(200,result);
   }catch{return reply(409,{status:'calibration_hold_do_not_retry',publication:false});}
  };

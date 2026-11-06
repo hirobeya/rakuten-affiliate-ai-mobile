@@ -10,7 +10,7 @@ async function main(){
  const source=require('../../docs/rebuild-20261028/p3-first-call-gate/first-call-plan.json').selected.source;
  L.validate({...facts,directory:L.STATE_DIRECTORY,wireHash:L.WIRE_HASH,now:Date.now(),calibrationProfile:'first-call-1000',liveAuthorization:L.authorizationFromEnvironment,mockAuthentication:null});
  if(!process.env.GROQ_API_KEY)throw Error('runtime_authentication_not_connected');
- const result=await R.run({...facts,directory:L.STATE_DIRECTORY,item:source,runtimeMode:'live-calibration',calibrationProfile:'first-call-1000',liveAuthorization:L.authorizationFromEnvironment});
+ const result=await R.run({...facts,directory:L.STATE_DIRECTORY,item:source,runtimeMode:'live-calibration',calibrationProfile:'first-call-1000',liveAuthorization:L.authorizationFromEnvironment,evaluationCapture:true});
  process.stdout.write(JSON.stringify(result)+'\n');
 }
 main().catch(()=>{process.stderr.write('calibration_not_completed_inspect_usage_only_journals_do_not_retry\n');process.exitCode=1;});
