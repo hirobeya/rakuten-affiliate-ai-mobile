@@ -18,6 +18,14 @@ test('runtime arming alone is insufficient: execution secret and verified facts 
  assert.equal(calls,0);
 });
 function blobMock(){const data=new Map();let version=0;return {data,async put(key,body,options){assert.equal(options.access,'private');assert.equal(options.addRandomSuffix,false);if(!options.allowOverwrite&&data.has(key))throw Error('exists');if(options.ifMatch&&data.get(key)?.etag!==options.ifMatch)throw Error('precondition');const etag='v'+(++version);data.set(key,{body,etag});return {etag};},async get(key,options){assert.equal(options.useCache,false);const value=data.get(key);return value?{statusCode:200,stream:new Blob([value.body]).stream(),blob:{etag:value.etag}}:null;}};}
+test('disarmed inspection requires execution secret and reads journals without claiming, writing or sending',async()=>{
+ const blob=blobMock();blob.data.set(P.PREFIX+'/calibration.json',{body:JSON.stringify({status:'unreconciled',requests:1,publication:false}),etag:'v1'});
+ blob.put=()=>assert.fail('inspection must not write');let calls=0;
+ const h=H.create({env:{...goodEnv,BLOB_STORE_ID:'synthetic',URENAVI_CALIBRATION_EXECUTION_SECRET:'private-inspect'},loadBlob:()=>blob,run:()=>{calls++;}});
+ const denied=response();await h({method:'POST',headers:{},body:{action:'inspect'}},denied);assert.equal(denied.code,403);
+ const r=response();await h({method:'POST',headers:{'x-urenavi-execution-secret':'private-inspect'},body:{action:'inspect'}},r);
+ assert.equal(r.code,200);assert.equal(r.body.journals.calibration.value.requests,1);assert.equal(r.body.journals.claim.exists,false);assert.equal(r.body.journals.transport.exists,false);assert.equal(calls,0);
+});
 test('remote create-only claim survives independent instances and disallows duplicates forever',async()=>{
  const blob=blobMock();const outcomes=await Promise.allSettled([P.create(blob).claim({approved:'synthetic'}),P.create(blob).claim({approved:'synthetic'})]);assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);assert.equal(outcomes.filter(x=>x.status==='rejected').length,1);await assert.rejects(P.create(blob).claim({approved:'different snapshot'}));
 });

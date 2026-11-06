@@ -21,7 +21,13 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    if(!storageConnected)return reply(503,{status:'private_storage_not_connected',inferenceEnabled:false});
    try{return reply(200,{...await P.create(loadBlob()).probe(body.probeId),inferenceCalls:0});}catch{return reply(409,{status:'storage_probe_hold',inferenceCalls:0});}
   }
-  // Today no arming env/secret is created; neither query flags nor posted permission can enable a send.
+  // Authenticated inspection is read-only, including after execution is disarmed.
+  if(body.action==='inspect'){
+   if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
+   if(!storageConnected)return reply(503,{status:'private_storage_not_connected'});
+   try{return reply(200,{status:'inspection',publication:false,journals:await P.create(loadBlob()).inspect()});}catch{return reply(409,{status:'inspection_unavailable_do_not_retry_execution'});}
+  }
+  // Neither query flags nor posted permission can enable a send.
   if(!armed)return reply(423,{status:'not_armed',inferenceEnabled:false,publication:false});
   if(body.action!=='execute'||!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
   if(!storageConnected||!env.GROQ_API_KEY)return reply(503,{status:'runtime_connection_incomplete'});

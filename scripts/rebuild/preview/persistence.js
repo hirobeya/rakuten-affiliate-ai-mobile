@@ -30,6 +30,16 @@ function create(blob,{directory=L.STATE_DIRECTORY}={}){
   await put(name,{version:1,probe:id,purpose:'storage-only-no-inference'});
   return {persistent:true,createOnly:true,readBack:true,probe:id};
  }
- return {claim,save,probe};
+ async function inspect(){
+  const result={};
+  for(const [key,file] of [['claim','claimed.json'],['calibration','calibration.json'],['transport','http/transport.json']]){
+   const r=await blob.get(PREFIX+'/'+file,{access:'private',useCache:false});
+   if(!r){result[key]={exists:false};continue;}
+   if(r.statusCode!==200||!r.stream)fail();
+   result[key]={exists:true,value:JSON.parse(await new Response(r.stream).text())};
+  }
+  return result;
+ }
+ return {claim,save,probe,inspect};
 }
 module.exports={create,PREFIX};
