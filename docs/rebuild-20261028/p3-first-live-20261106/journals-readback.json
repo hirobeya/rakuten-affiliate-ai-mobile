@@ -1,0 +1,73 @@
+{
+  "status": "inspection",
+  "publication": false,
+  "journals": {
+    "claim": {
+      "exists": true,
+      "value": {
+        "version": 1,
+        "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+        "snapshotHash": "3ed18722bb094a0cb4a53f5f5326bc5f27b56be1a90df66527b7d083e8e74b4a",
+        "state": "claimed_hold",
+        "publication": false
+      }
+    },
+    "calibration": {
+      "exists": true,
+      "value": {
+        "version": 1,
+        "spent": 0,
+        "reserved": 6000,
+        "requests": 1,
+        "events": [
+          {
+            "id": "cb0066a0360906c0af59f072607af5092899a31ae10e0e6e0772794c895cf2ce",
+            "at": 1793931666912,
+            "input": 5000,
+            "output": 1000,
+            "tokens": 6000,
+            "status": "pending"
+          }
+        ],
+        "lastClock": 1793931666912,
+        "halt": "calibration_stopped_hold",
+        "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+        "attemptId": "cb0066a0360906c0af59f072607af5092899a31ae10e0e6e0772794c895cf2ce",
+        "status": "unreconciled",
+        "publication": false,
+        "snapshotHashes": {
+          "grant": "3cd878cd449d4ee6b81e32256b5c4d3d43afdbacbfe8ba11446ccd3059493f77",
+          "evidence": "cfd6b932b7b38cf993bb942953c83b416afcd56541fe0d0dd7822d98ddaf6f54",
+          "account": "37919abd8d43fe1ad1c6d3722ffc7199799e00d6466157d5ab2999e1c6f057c0",
+          "isolation": "342804525c4b395f303c55800ee81bb6d4c68e31d7b87c30648e5075f3a807a1"
+        },
+        "runtimeMode": "live-calibration",
+        "calibrationProfile": "first-call-1000",
+        "providerBoundCertified": false
+      }
+    },
+    "transport": {
+      "exists": true,
+      "value": {
+        "version": 1,
+        "halt": "provider_http_error",
+        "attempts": {
+          "cb0066a0360906c0af59f072607af5092899a31ae10e0e6e0772794c895cf2ce": {
+            "stage": "draft",
+            "requestHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+            "status": "sent_unknown",
+            "httpStatus": 400,
+            "rateLimits": {
+              "requestLimit": 1000,
+              "requestRemaining": 999,
+              "tokenLimit": 8000,
+              "tokenRemaining": 4957,
+              "requestReset": "1m26.4s",
+              "tokenReset": "22.822s"
+            }
+          }
+        }
+      }
+    }
+  }
+}

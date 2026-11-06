@@ -1,0 +1,21 @@
+{
+  "source": "Groq Console Dashboard Logs, read-only browser observation",
+  "requestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+  "createdAt": "2026-11-06T02:21:07.188Z",
+  "model": "openai/gpt-oss-120b",
+  "httpStatus": 400,
+  "inputTokens": 2729,
+  "outputTokens": 1000,
+  "totalTokens": 3729,
+  "error": {
+    "code": "json_validate_failed",
+    "type": "invalid_request_error",
+    "message": "Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details."
+  },
+  "failedGenerationAvailable": false,
+  "apiReportedUsageAvailable": false,
+  "inferenceRequests": 1,
+  "retryRequests": 0,
+  "publication": false,
+  "reconciliation": "Console usage observed; transport cannot settle failed response using success-only reconciliation. Keep full 6000 reservation and permanent claim. Do not interpret spent=0 as zero provider consumption."
+}

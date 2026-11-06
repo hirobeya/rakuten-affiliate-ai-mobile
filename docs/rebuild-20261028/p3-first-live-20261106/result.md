@@ -1,0 +1,18 @@
+# 初回固定wire実測結果
+
+実行ソースSHA：71a0d231e380257a58893393f7dd07916cf1d14e。
+2026-11-06 11:21:07 JST、隔離Preview dpl_4Q7KqjCCxkGSgvT9GgmcmrtcNwB3。
+
+管理者が組織利用はウレナビのみ、全送信停止、最後の送信15分以上前・不明通信なしを確認。現在Usageの当日データなし、共有DB lease=null/uncertain=nullを読み取り照合。旧10月のusage欠落4件を現在の未処理要求と混同せず、その記録を消去していない。日次には保守的に8000 tokens/1 requestを別途控除。snapshotの既存ゲート事前判定を通過した。
+
+固定wire・商品・model・medium・1000を変更せずexecute POSTは1回のみ。HTTP台帳にGroq応答400、provider_http_error。Groq Consoleの対応する1行でjson_validate_failed、入力2729・出力1000を確認。出力が上限に達した事実と原因確定を区別し、上限不足とは断定しない。
+
+APIのエラー本文とfailed_generationは現行transportが保存せず、Consoleにもfailed_generationの実体は表示されなかった。本文は取得できず6軸すべて評価不能。校正未完了・公開不可。
+
+永続claim、calibration、transportのwire/attempt/予約を再配備後にprivate Blobから非キャッシュ読戻し。claim維持、requests=1、reserved=6000、unreconciled/pendingを維持。spent=0は台帳未精算値であり実消費0ではない。Console観測3729とAPI台帳の未精算を区別する。再送0、追加商品0。
+
+停止後の照合のためexecution secret必須の読み取り専用inspectを追加。台帳変更・claim再作成・推論呼出しなしのテストを追加し239件成功。最終CI2種成功を確認。
+
+PreviewのLIVE設定をdisabledへ変更し、inspect用deploymentでinferenceEnabled=falseを確認。旧実行deploymentは不変で、永久claimにより同じ実験の再実行を拒否する。main/Production/決済/DB/RLS/認証仕様変更なし。DB照会はSELECTのみ。
+
+残作業：失敗応答でもエラー詳細を安全に保存する共通処理を整備し、JSON失敗・途中出力を通信なしで検証する。固定wire変更や追加実測、予約解放、claim削除は今回実施していない。
