@@ -1,0 +1,43 @@
+{
+  "purpose": "Deliberately invalid pending approval template. This instruction does not authorize a send.",
+  "action": "execute-free-calibration",
+  "snapshot": {
+    "grant": {
+      "mode": "live-one-call",
+      "profile": "free-limited-calibration-v1",
+      "model": "openai/gpt-oss-120b",
+      "stage": "draft",
+      "experimentId": "db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71",
+      "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+      "maxRequests": 1,
+      "maxCompletionTokens": 3000,
+      "inputReservation": 5000,
+      "receiptHash": null,
+      "approvalReference": null,
+      "explicitUserApproval": false,
+      "estimatedInputAccepted": false,
+      "providerCountMayExceedReservationAccepted": false,
+      "noMinuteHeadroomAccepted": false,
+      "residualRiskApprovalReference": null,
+      "approvedExecutionSha": null,
+      "expiresAt": null
+    },
+    "inputProof": {
+      "kind": "fixed-wire-input-estimate",
+      "profile": "free-limited-calibration-v1",
+      "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+      "receiptHash": null,
+      "manifestHash": "d98aeb43c27db82ab870076db7b296d32173844634d1b109465a1cec6dc6042b",
+      "inputReservation": 5000,
+      "providerBoundCertified": false,
+      "upperTokens": null,
+      "observedAt": null,
+      "validUntil": null
+    },
+    "account": null,
+    "capacityProof": null,
+    "isolation": null
+  },
+  "newGroqInferenceCalls": 0,
+  "liveApproved": false
+}

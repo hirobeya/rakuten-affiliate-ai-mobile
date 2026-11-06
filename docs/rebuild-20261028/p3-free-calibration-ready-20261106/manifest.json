@@ -1,0 +1,22 @@
+{
+  "manifestHash": "d98aeb43c27db82ab870076db7b296d32173844634d1b109465a1cec6dc6042b",
+  "profile": "free-limited-calibration-v1",
+  "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+  "sourceHash": "1b142873671ba6906329a4217cc8c5a2811feba46c3fa27fdefcbd8ac2854c91",
+  "serializedUtf8Bytes": 9791,
+  "inputSizeCapBytes": 9791,
+  "localVisibleComponents": 2527,
+  "localWholeHttpTokens": 2579,
+  "tokenizer": "gpt-tokenizer-4.1.0/o200k_harmony",
+  "priorRequestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+  "priorMeasuredInput": 2729,
+  "inputReservation": 5000,
+  "outputLimit": 3000,
+  "totalReservation": 8000,
+  "providerBoundCertified": false,
+  "experimentId": "db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71",
+  "claimPrefix": "urenavi-output-budget-comparison/db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71",
+  "approval": null,
+  "runtimeArmed": false,
+  "inferenceCalls": 0
+}

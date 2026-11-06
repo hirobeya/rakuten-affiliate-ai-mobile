@@ -1,0 +1,38 @@
+{
+  "recordedAtJst": "2026-11-06T22:01:46.102630+09:00",
+  "source": "authenticated read-only Groq Console",
+  "organization": "Personal",
+  "project": "Default Project",
+  "currentPlanObserved": "Free",
+  "logsUrl": "https://console.groq.com/dashboard/logs?cursor=",
+  "showErrorsOnly": false,
+  "visibleLogRows": 3,
+  "latestRequest": {
+    "requestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+    "requestIdCopiedAndMatched": true,
+    "timeDisplayed": "2026/11/6 11:21:07",
+    "status": 400,
+    "inputTokens": 2729,
+    "outputTokens": 1000,
+    "totalTokens": 3729,
+    "error": "json_validate_failed"
+  },
+  "laterVisibleRequests": 0,
+  "earlierRowsDates": [
+    "2026/11/4 7:56:18",
+    "2026/11/4 7:51:26"
+  ],
+  "usageUrl": "https://console.groq.com/dashboard/usage?tab=activity",
+  "usagePeriod": "November2026 UTC",
+  "apiKeyRequestCountShown": 1,
+  "playgroundRequestsShown": 0,
+  "maximumUsageLagMinutes": 15,
+  "usageAndLogsCountsDiffer": true,
+  "currentRemainingTokens": null,
+  "currentMinuteOtherConsumptionVerified": false,
+  "organizationWideInFlightVerified": false,
+  "exclusiveWindowCurrentlyConfirmed": false,
+  "freeArmingEnvironmentVariablePresent": false,
+  "additionalInferenceCalls": 0,
+  "warning": "Visible completed logs do not prove all current callers paused or all organization in-flight requests zero. Do not convert delayed Usage or unknown remainder into zero consumption."
+}

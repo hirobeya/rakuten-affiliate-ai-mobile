@@ -1,0 +1,39 @@
+# Free限定校正profile・準備完了／実行未承認
+
+基準HEAD3401cc09deee73ecc432a07aeb44484ea44293a8。商品yukaiya:10001267、120B、medium、Schema/strict/promptは不変。旧1000から3000へのwireは既存のab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053を保持。追加推論0、プラン/Production/main/決済/DB/RLS/Auth仕様変更なし。
+
+## 限定変更
+
+free-limited-calibration-v1を比較専用に準備した。通常生成のadmission、旧1000経路、従来のprovider保証入力を要求する比較経路の入力証明条件は変更しない。推定profileはデフォルト無効で、新しいexecute-free-calibration actionと専用runtime flag、既存のoperator secret、期限内の新grantが全て必要。
+
+input5000は推定。過去provider実測2729、local成分和2527・HTTP JSON全体2579、送信bytes9791をmanifestへ固定。wire/sourceのhash一致とbytes上限をサーバーでも再検査。未知のprovider内部フレーム/計数増分は保証しない。manifestHashを台帳/claimに記録し、providerBoundCertified=false、verifiedInputUpper=null、inputReservationKind=estimateを維持する。upperTokens=5000など保証入力を装う値は拒否する。
+
+8,000の予約に対してorg TPM8,000、余裕0。Freeプランの確認、org/project双方のその他分間tokens=0かつrequests=0、現在残量>=8,000、全caller排他と未処理0、旧receiptの読戻し検証、通常のRPM/RPD/TPM/TPD/split/project判定を全て要求する。その他分間消費1token/1request、残量7999、usage未知、未処理/予約未知、遅延Usageしかない場合は停止。
+
+新grantには、通常の明示1回許可に加えて「入力5000を推定として受容」「provider計数超過の可能性を受容」「分間余裕0を受容」の3項目と、その承認参照を必須とした。この準備指示を承認済みとは扱わない。さらに承認対象SHAを実行環境のSHAと一致させる。
+
+## 送信制御・履歴
+
+新profileと既存3000比較は、同じ実験ID db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71 と同じcreate-only永久claimを共有する。profile名を変えて1通信枠を増やすことはできない。旧1000のclaimとは独立で、旧claim・6000拘束・精算証跡・HTTP/校正台帳は変更しない。旧実3729は6000に包含して日次へ一度だけ計上する。
+
+生成器の追加なし。既存request/transport、400観測、429停止、no retry、timeout/usage不明/保存失敗のhalt、非公開・未審査保存を再利用する。実input>5000またはoutput>3000/total>8000なら結果を公開せず停止し、8000の拘束を維持する。providerが超過計数を返した後の停止は、事前保証ではない。
+
+## 配備・有効化の分離
+
+現在のURENAVI_FREE_CALIBRATION_LIVE変数は、当該Preview branchに存在しないことを値を取得せずmetadataで確認。未設定は無効。旧校正/旧比較は既存のdisabled設定を維持する。今回新flagを作成・有効化しない。
+
+承認後はPreview専用の新flagをapproved-one-callに設定し、同じ承認済みSHAを再配備する方式とする。flagをコードへ固定して新commitを作る方法だと承認SHAが変わるため採用しない。通常Productionの環境変数や認証設定は変更しない。build時の旧receipt検証は、将来Free profileが有効になっても既存receiptの読取りのみを許し、未作成receiptを新規作成しない。
+
+今回の配備ではbuildの非キャッシュ読戻しで旧3記録/receiptの不変と、比較namespaceのclaim/校正/HTTP台帳の有無を確認する。この読取りは比較claimを実作成せず、Groqも呼ばない。最終SHA・GETのinferenceEnabled=false・実際のnamespace状態は最終回答で報告する。
+
+## 現在の使用状況
+
+今回のGroq Logs読み取りでは、最新は既存req_01m6qahsqme3yr5bqtzjq8skmz、HTTP400、2729+1000=3729。他の表示2件は11月4日。以後の追加要求は表示されていない。対象Request IDはコピーで全文一致確認。
+
+Usageは11月集計、API key count1/Playground0表示。Logs3件とは集計差があり、最大15分遅延も明示されている。これをcurrent minute使用0や現在残量8000としない。組織全体の未処理0と全caller排他はまだ確認されていない。実行直前の期限内証拠が必要であり、今回のUI観測は実行用snapshotではない。
+
+## 最終承認事項
+
+ユーザーが最終実行SHAと3000wireを指定し、最大1通信、推定入力5000/合計8000、超過/429/JSON失敗の残余リスクを明示承認する。その後も管理者の全送信元排他と未処理照合、Workの現在org/project/split容量・旧receipt・新claimの新規読戻し確認が不成立なら送信しない。
+
+承認後に実行ロジックを新たに作る作業は残さず、専用flagの設定、同一SHA再配備、期限内snapshotの確認、authenticated実行1回を残す。本文はprivate台帳から読み取り、別途6項目で品質評価する。検証成功だけで文章品質合格とはしない。
