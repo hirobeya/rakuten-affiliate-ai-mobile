@@ -1,0 +1,92 @@
+{
+  "classification": "C-under-current-free-and-no-unverified-upper-bound-policy",
+  "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+  "wireUtf8Bytes": 9791,
+  "wireChanged": false,
+  "strict": true,
+  "localEstimatesAreGuarantees": false,
+  "publicPreSendFullProviderTokenCountEndpointIdentified": false,
+  "absenceScope": "Reviewed public Groq API reference, not proof that Groq can never provide support/account-specific assurance.",
+  "providerExactCountRequirementOrigin": "application policy, not an official mandatory Groq client requirement",
+  "freePlan": {
+    "tpm": 8000,
+    "actualCurrentRemaining": null,
+    "variants": [
+      {
+        "output": 3000,
+        "inputReservation": 5000,
+        "total": 8000,
+        "headroom": 0,
+        "admissibleWithoutInputEvidence": false
+      },
+      {
+        "output": 2500,
+        "inputReservation": 5000,
+        "total": 7500,
+        "headroom": 500,
+        "admissibleWithoutInputEvidence": false,
+        "liveImplemented": false
+      }
+    ]
+  },
+  "alternatives": {
+    "empiricalExclusiveProbe": {
+      "proposedOnly": true,
+      "controls": [
+        "exact wire hash/byte envelope",
+        "prior measured input2729",
+        "input reservation5000",
+        "exclusive caller window",
+        "current capacity evidence",
+        "permanent claim",
+        "429/unknown-usage stop",
+        "no retries"
+      ],
+      "provesInputBelow5000": false,
+      "changesUnverifiedUpperBoundRisk": true,
+      "implemented": false,
+      "authorized": false
+    },
+    "contextEnvelopeOnLargerQuota": {
+      "proposedOnly": true,
+      "modelContext": 131072,
+      "inputReservation": 131072,
+      "outputReservation": 3000,
+      "totalReservation": 134072,
+      "publishedDeveloperTPM": 250000,
+      "nominalDeveloperHeadroom": 115928,
+      "oldRetainedDaily": 6000,
+      "combinedOldAndNewDaily": 140072,
+      "combinedWithDistinctHistorical8000": 148072,
+      "basis": "Published model context bounds modeled token volume. Reserve entire context as input plus capped output; deliberately do not subtract output from context. This is a conservative modeled-usage envelope, NOT an exact private admission-counter value or guarantee against provider rejection/429.",
+      "requires": [
+        "administrator approval before paid plan/account limit change",
+        "actual organization/project TPM and remaining >=134072 plus other minute usage",
+        "ITPM>=131072 and OTPM>=3000 if applicable",
+        "actual daily/per-request limits covering retained holds and new reservation",
+        "approved reservation-policy change; existing fixed8000 gate must not be bypassed",
+        "fresh no-inflight/exclusive evidence and separate one-call approval"
+      ],
+      "wireHashUnchanged": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+      "runtimeImplemented": false,
+      "authorized": false
+    }
+  },
+  "observationLimits": {
+    "oldFailedGenerationAvailable": false,
+    "oldFinishReasonAvailable": false,
+    "outputCapReached": true,
+    "capIsProvenRootCause": false,
+    "providerErrorBodyMayOmitUsage": true
+  },
+  "planChanged": false,
+  "reservationsReleased": 0,
+  "additionalGroqInferenceCalls": 0,
+  "liveApproved": false,
+  "officialSources": [
+    "https://console.groq.com/docs/api-reference",
+    "https://console.groq.com/docs/rate-limits",
+    "https://console.groq.com/docs/models",
+    "https://console.groq.com/docs/structured-outputs"
+  ]
+}
