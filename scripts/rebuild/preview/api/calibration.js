@@ -13,7 +13,7 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
   if(!isolated)return reply(403,{status:'isolated_preview_required',inferenceEnabled:false});
   const storageConnected=!!env.BLOB_STORE_ID||!!env.BLOB_READ_WRITE_TOKEN;
   const armed=env.URENAVI_CALIBRATION_LIVE==='approved-one-call'&&!!env.URENAVI_CALIBRATION_EXECUTION_SECRET;
-  if(req.method==='GET')return reply(200,{status:'preparation',wireHash:L.WIRE_HASH,model:'openai/gpt-oss-120b',maxCompletionTokens:1000,maxRequests:1,groqCredentialPresent:!!env.GROQ_API_KEY,storageConnected,inferenceEnabled:armed,publication:false});
+  if(req.method==='GET')return reply(200,{status:'preparation',sourceSha:env.VERCEL_GIT_COMMIT_SHA||null,wireHash:L.WIRE_HASH,model:'openai/gpt-oss-120b',maxCompletionTokens:1000,maxRequests:1,groqCredentialPresent:!!env.GROQ_API_KEY,storageConnected,inferenceEnabled:armed,publication:false});
   if(req.method!=='POST')return reply(405,{status:'method_not_allowed'});
   const body=req.body;
   if(!body||typeof body!=='object'||Array.isArray(body)||Buffer.byteLength(JSON.stringify(body))>65536)return reply(400,{status:'invalid_request'});
@@ -26,6 +26,12 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
    if(!storageConnected)return reply(503,{status:'private_storage_not_connected'});
    try{return reply(200,{status:'inspection',publication:false,journals:await P.create(loadBlob()).inspect()});}catch{return reply(409,{status:'inspection_unavailable_do_not_retry_execution'});}
+  }
+  if(body.action==='reconcile-failed-call'){
+   if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
+   if(armed||!storageConnected)return reply(423,{status:'reconciliation_requires_disarmed_connected_preview',publication:false});
+   try{const receipt=await P.create(loadBlob()).recordReconciliation(body.evidence);return reply(200,{status:'accounted_failure_originals_preserved',receipt,inferenceCalls:0,publication:false});}
+   catch{return reply(409,{status:'reconciliation_hold_originals_preserved',inferenceCalls:0,publication:false});}
   }
   // Neither query flags nor posted permission can enable a send.
   if(!armed)return reply(423,{status:'not_armed',inferenceEnabled:false,publication:false});

@@ -1,0 +1,50 @@
+{
+  "persistedToPrivateBlob": false,
+  "privateBlobFreshInspection": false,
+  "receipt": {
+    "version": 1,
+    "kind": "terminal_failed_calibration_external_reconciliation",
+    "requestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+    "wireHash": "351242d9c86b14994760b18621496db1f195f9d1f657db6317bb40f3062648b4",
+    "attemptId": "cb0066a0360906c0af59f072607af5092899a31ae10e0e6e0772794c895cf2ce",
+    "originalHashes": {
+      "claim": "e7efbdcecda04629c5ac82f619bb91f1a538f4cdf10f470bfdf6d41339b088b0",
+      "calibration": "5e25397a3615d99c63dce3642b8c0e18d8a37c520be33e16dce3828f8075e1a8",
+      "transport": "79098193ec7d354b41f2cac6986c24b8589e909d43ead6681d37f15f7bc170fd"
+    },
+    "providerEvidence": {
+      "requestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+      "model": "openai/gpt-oss-120b",
+      "httpStatus": 400,
+      "errorCode": "json_validate_failed",
+      "usage": {
+        "prompt_tokens": 2729,
+        "completion_tokens": 1000,
+        "total_tokens": 3729
+      },
+      "requestedAt": 1793931667000,
+      "observedAt": 1793966079655,
+      "source": "Groq Console Logs",
+      "confirmedBy": "Work read-only authenticated Console observation 2026-11-06 JST",
+      "terminalResponseConfirmed": true
+    },
+    "terminalHttpResponse": true,
+    "status": "accounted_failure_originals_preserved",
+    "reportedUsage": {
+      "prompt_tokens": 2729,
+      "completion_tokens": 1000,
+      "total_tokens": 3729
+    },
+    "originalReservation": 6000,
+    "retainedDailyEncumbrance": 6000,
+    "unusedConservativeHold": 2271,
+    "holdReleased": 0,
+    "requestCharge": 1,
+    "publication": false,
+    "sendPermission": false,
+    "currentMinuteUsage": null,
+    "currentInFlightRequests": null,
+    "currentCapacityVerified": false,
+    "note": "Receipt closes only this known terminal failure for accounting. Original pending/unreconciled evidence and permanent claim remain immutable; all 6000 stays encumbered. A fresh organization-wide no-inflight/usage/exclusivity check is required before any minute charge treatment or independent send."
+  }
+}

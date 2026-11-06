@@ -42,5 +42,7 @@ test('storage-only probes cannot consume real claim or call inference, even conc
  const blob=blobMock();let calls=0;const h=H.create({env:{...goodEnv,BLOB_STORE_ID:'synthetic-store'},loadBlob:()=>blob,run:()=>{calls++;}}),body={action:'storage-probe',probeId:'abcdef0123456789abcdef0123456789'},r1=response(),r2=response();await Promise.all([h({method:'POST',body},r1),h({method:'POST',body},r2)]);assert.deepEqual([r1.code,r2.code].sort(),[200,409]);assert.equal(calls,0);assert.equal(blob.data.has(P.PREFIX+'/claimed.json'),false);
 });
 test('isolated deployment config has only calibration API, no existing app routes or cron',()=>{
- const cfg=require('../../scripts/rebuild/preview/vercel.json');assert.equal(cfg.crons,undefined);assert.deepEqual(Object.keys(cfg.functions),['api/calibration.js']);assert.deepEqual(fs.readdirSync(path.join(__dirname,'../../scripts/rebuild/preview/api')),['calibration.js']);assert.equal(cfg.env.URENAVI_CALIBRATION_LIVE,undefined);assert.equal(cfg.env.URENAVI_CALIBRATION_EXECUTION_SECRET,undefined);
+ const cfg=require('../../scripts/rebuild/preview/vercel.json');assert.equal(cfg.crons,undefined);assert.deepEqual(Object.keys(cfg.functions),['api/calibration.js']);assert.deepEqual(fs.readdirSync(path.join(__dirname,'../../scripts/rebuild/preview/api')),['calibration.js']);assert.equal(cfg.env.URENAVI_CALIBRATION_LIVE,'disabled');assert.equal(cfg.env.URENAVI_CALIBRATION_EXECUTION_SECRET,undefined);
 });
+
+test('read-only status reports deployed SHA without enabling inference',async()=>{const r=response();await H.create({env:{...goodEnv,VERCEL_GIT_COMMIT_SHA:'a'.repeat(40)},run:()=>assert.fail('no send')})({method:'GET'},r);assert.equal(r.body.sourceSha,'a'.repeat(40));assert.equal(r.body.inferenceEnabled,false);});

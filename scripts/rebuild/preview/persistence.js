@@ -1,5 +1,6 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),C=require('../../../lib/urenavi-core/contracts'),L=require('../../../lib/urenavi-core/live-calibration');
+const R=require('../../../lib/urenavi-core/failed-calibration-reconciliation');
 const PREFIX='urenavi-first-call/'+L.WIRE_HASH;
 function fail(){throw Error('durable_calibration_hold');}
 function atomic(file,value){
@@ -40,6 +41,14 @@ function create(blob,{directory=L.STATE_DIRECTORY}={}){
   }
   return result;
  }
- return {claim,save,probe,inspect};
+ async function recordReconciliation(evidence){
+  const before=await inspect(),receipt=R.createReceipt(before,evidence),name=PREFIX+'/reconciliation-v1.json';
+  // Create-only evidence. No old claim/journal write, release or retry privilege.
+  await put(name,receipt);
+  const after=await inspect();
+  if(C.hash(before)!==C.hash(after))fail();
+  return receipt;
+ }
+ return {claim,save,probe,inspect,recordReconciliation};
 }
 module.exports={create,PREFIX};

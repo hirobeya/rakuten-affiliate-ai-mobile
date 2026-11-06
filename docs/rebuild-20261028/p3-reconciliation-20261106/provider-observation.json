@@ -1,0 +1,54 @@
+{
+  "recordedAt": "2026-11-06T11:54:39.655091+00:00",
+  "evidence": {
+    "requestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+    "model": "openai/gpt-oss-120b",
+    "httpStatus": 400,
+    "errorCode": "json_validate_failed",
+    "usage": {
+      "prompt_tokens": 2729,
+      "completion_tokens": 1000,
+      "total_tokens": 3729
+    },
+    "requestedAt": 1793931667000,
+    "observedAt": 1793966079655,
+    "source": "Groq Console Logs",
+    "confirmedBy": "Work read-only authenticated Console observation 2026-11-06 JST",
+    "terminalResponseConfirmed": true
+  },
+  "logs": {
+    "url": "https://console.groq.com/dashboard/logs?cursor=",
+    "filterShowErrorsOnly": false,
+    "pageSize": 50,
+    "visibleRows": 3,
+    "latestRowIsTarget": true,
+    "laterRowsObserved": 0,
+    "requestIdCopiedAndMatched": true,
+    "otherRows": [
+      "2026-11-04 07:56:18 JST HTTP200 input2149 output1178",
+      "2026-11-04 07:51:26 JST HTTP200 input2567 output1208"
+    ],
+    "scope": "Personal / Default Project. Does not certify organization-wide in-flight=0."
+  },
+  "usage": {
+    "url": "https://console.groq.com/dashboard/usage?tab=activity",
+    "month": "November 2026",
+    "apiKeyRequestCountShown": 1,
+    "playgroundRequestsShown": 0,
+    "maximumDisplayLagMinutes": 15,
+    "note": "Monthly count shown differs from three Logs rows. Not used as a current remaining counter."
+  },
+  "limits": {
+    "organization": "Personal",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "project": "Default Project",
+    "projectCustomLimits": false,
+    "remaining": null,
+    "reset": null
+  },
+  "privateBlobFreshInspection": false,
+  "currentExclusiveCallerWindowConfirmed": false
+}
