@@ -1,0 +1,31 @@
+{
+  "observedDateJst": "2026-11-06",
+  "recordedAtJst": "2026-11-06T21:46:17.437788+09:00",
+  "source": "authenticated read-only Groq Console UI",
+  "organization": "Personal",
+  "project": "Default Project",
+  "plan": "Free",
+  "planUrl": "https://console.groq.com/settings/billing/plans",
+  "freeCurrentPlanButtonObserved": true,
+  "developerUpgradeMessage": "Developer tier upgrades are temporarily unavailable due to high demand. We apologize for the inconvenience.",
+  "developerUpgradeCurrentlyAvailable": false,
+  "organizationLimits": {
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000
+  },
+  "projectCustomLimitsObserved": false,
+  "billingNavigationObserved": [
+    "Plans"
+  ],
+  "spendLimitControlsVisible": false,
+  "configuredSpendLimitUsd": null,
+  "notificationRecipientAndThresholdSettingsVerified": false,
+  "rateRemainingVerifiedForExecution": false,
+  "allCallersPausedVerifiedForExecution": false,
+  "planChanges": 0,
+  "billingChanges": 0,
+  "groqInferenceCalls": 0
+}

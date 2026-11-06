@@ -1,0 +1,232 @@
+{
+  "kind": "offline-proposal-not-authorization",
+  "model": "openai/gpt-oss-120b",
+  "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+  "prices": {
+    "inputUsdPerMillion": 0.15,
+    "outputUsdPerMillion": 0.6,
+    "inputNanoUsdPerToken": 150,
+    "outputNanoUsdPerToken": 600,
+    "cachedDiscountAssumed": false
+  },
+  "fxAssumption": {
+    "usdJpy": 150,
+    "marketRate": false,
+    "feesAndTaxesExcluded": true,
+    "sensitivity": [
+      {
+        "usdJpy": 130,
+        "reviewedAttemptJpy": 0.6772155
+      },
+      {
+        "usdJpy": 150,
+        "reviewedAttemptJpy": 0.7814025
+      },
+      {
+        "usdJpy": 170,
+        "reviewedAttemptJpy": 0.8855894999999999
+      }
+    ]
+  },
+  "scenarios": {
+    "draftOnly": {
+      "usageAssumption": "input2729 prior observed; output3000 hypothetical cap",
+      "perAttempt": {
+        "nanoUsd": 2209350,
+        "usd": 0.00220935,
+        "jpyIllustrative": 0.33140250000000004
+      },
+      "volumes": [
+        {
+          "productAttempts": 1,
+          "nanoUsd": 2209350,
+          "usd": 0.00220935,
+          "jpyIllustrative": 0.33140250000000004
+        },
+        {
+          "productAttempts": 10,
+          "nanoUsd": 22093500,
+          "usd": 0.0220935,
+          "jpyIllustrative": 3.314025
+        },
+        {
+          "productAttempts": 100,
+          "nanoUsd": 220935000,
+          "usd": 0.220935,
+          "jpyIllustrative": 33.14025
+        },
+        {
+          "productAttempts": 1000,
+          "nanoUsd": 2209350000,
+          "usd": 2.20935,
+          "jpyIllustrative": 331.40250000000003
+        }
+      ]
+    },
+    "generatedAndReviewed": {
+      "usageAssumption": "draft2729/3000 + hypothetical review8000/3000",
+      "perAttempt": {
+        "nanoUsd": 5209350,
+        "usd": 0.00520935,
+        "jpyIllustrative": 0.7814025
+      },
+      "volumes": [
+        {
+          "productAttempts": 1,
+          "nanoUsd": 5209350,
+          "usd": 0.00520935,
+          "jpyIllustrative": 0.7814025
+        },
+        {
+          "productAttempts": 10,
+          "nanoUsd": 52093500,
+          "usd": 0.0520935,
+          "jpyIllustrative": 7.814025
+        },
+        {
+          "productAttempts": 100,
+          "nanoUsd": 520935000,
+          "usd": 0.520935,
+          "jpyIllustrative": 78.14025000000001
+        },
+        {
+          "productAttempts": 1000,
+          "nanoUsd": 5209350000,
+          "usd": 5.20935,
+          "jpyIllustrative": 781.4024999999999
+        }
+      ]
+    },
+    "fourStages": {
+      "usageAssumption": "draft2729/3000 + three hypothetical stages each8000/3000",
+      "perAttempt": {
+        "nanoUsd": 11209350,
+        "usd": 0.01120935,
+        "jpyIllustrative": 1.6814025
+      },
+      "volumes": [
+        {
+          "productAttempts": 1,
+          "nanoUsd": 11209350,
+          "usd": 0.01120935,
+          "jpyIllustrative": 1.6814025
+        },
+        {
+          "productAttempts": 10,
+          "nanoUsd": 112093500,
+          "usd": 0.1120935,
+          "jpyIllustrative": 16.814025
+        },
+        {
+          "productAttempts": 100,
+          "nanoUsd": 1120935000,
+          "usd": 1.120935,
+          "jpyIllustrative": 168.14025
+        },
+        {
+          "productAttempts": 1000,
+          "nanoUsd": 11209350000,
+          "usd": 11.20935,
+          "jpyIllustrative": 1681.4025000000001
+        }
+      ]
+    }
+  },
+  "old400PaidEquivalentOnly": {
+    "nanoUsd": 1009350,
+    "usd": 0.00100935,
+    "jpyIllustrative": 0.1514025
+  },
+  "trial": {
+    "freeActualApiPriceUsd": 0,
+    "developerAtPriorInputAndFullOutput": {
+      "nanoUsd": 2209350,
+      "usd": 0.00220935,
+      "jpyIllustrative": 0.33140250000000004
+    },
+    "developerAtInput5000AndFullOutput": {
+      "nanoUsd": 2550000,
+      "usd": 0.00255,
+      "jpyIllustrative": 0.3825
+    },
+    "hypotheticalFinancialWorstCaseUsingFullContextPlusOutput": {
+      "nanoUsd": 21460800,
+      "usd": 0.0214608,
+      "jpyIllustrative": 3.2191199999999998
+    },
+    "proposedMoneyReservationUsd": 0.03,
+    "maxCalls": 1,
+    "approved": false
+  },
+  "economics": [
+    {
+      "monthlyProductAttempts": 100,
+      "subscriptionRevenueAssumptionJpy": 1480,
+      "apiCostJpy": 78.14025000000001,
+      "revenueLessApiJpy": 1401.85975,
+      "revenueLessApiPercent": 94.72025337837839,
+      "otherCostsExcluded": true
+    },
+    {
+      "monthlyProductAttempts": 300,
+      "subscriptionRevenueAssumptionJpy": 1480,
+      "apiCostJpy": 234.42075,
+      "revenueLessApiJpy": 1245.57925,
+      "revenueLessApiPercent": 84.16076013513513,
+      "otherCostsExcluded": true
+    },
+    {
+      "monthlyProductAttempts": 1000,
+      "subscriptionRevenueAssumptionJpy": 1480,
+      "apiCostJpy": 781.4024999999999,
+      "revenueLessApiJpy": 698.5975000000001,
+      "revenueLessApiPercent": 47.20253378378379,
+      "otherCostsExcluded": true
+    }
+  ],
+  "qualityAcceptance": {
+    "observedRate": null,
+    "illustrations": [
+      {
+        "assumedPassFraction": 1,
+        "conservativeReviewedAttemptCostPerAcceptedProductJpy": 0.7814025
+      },
+      {
+        "assumedPassFraction": 0.8,
+        "conservativeReviewedAttemptCostPerAcceptedProductJpy": 0.976753125
+      },
+      {
+        "assumedPassFraction": 0.5,
+        "conservativeReviewedAttemptCostPerAcceptedProductJpy": 1.562805
+      }
+    ],
+    "note": "Scenario allocation of all attempt cost to accepted output; not measured quality or an instruction to auto-retry."
+  },
+  "controls": {
+    "operatorTrialOrgMonthlyLimitUsdProposal": 1,
+    "providerLimitMinimumVerified": false,
+    "providerSpendReportingLagMinutes": [
+      10,
+      15
+    ],
+    "providerAlertsPercentProposal": [
+      50,
+      75,
+      90
+    ],
+    "applicationTrialCalls": 1,
+    "applicationTrialReservationUsdProposal": 0.03,
+    "perUserMonthlyUsdProposal": 1,
+    "monthlyAttemptCountProposal": 100,
+    "automaticCapIncrease": false,
+    "applicationBudgetRuntimeImplemented": false,
+    "defaultDenyUntilApproved": true,
+    "atomicOrganizationAndOwnerReservationRequired": true,
+    "unknownConsumptionRetainsFullReservation": true,
+    "oldTokenHold6000Preserved": true
+  },
+  "planChanged": false,
+  "outputBudgetChanged": false,
+  "additionalGroqInferenceCalls": 0,
+  "liveApproved": false
+}
