@@ -2,6 +2,11 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const O=require('../../lib/urenavi-core/error-observation'),T=require('../../lib/urenavi-core/isolated-transport'),C=require('../../lib/urenavi-core/contracts'),W=require('../../lib/urenavi-core/chat-wire'),{fixture}=require('./fixture.cjs');
 const req=()=>C.request('draft',fixture().item);
+test('full success journals also omit dedicated and nested reasoning while engine receives the original candidate',async t=>{
+ const draft=fixture().draft;draft.reasoning='hidden-root-canary';draft.product.reasoning='hidden-nested-canary';
+ const x=setup(t,async()=>({status:200,url:W.ENDPOINT,json:async()=>({model:C.MODEL,reasoning:'hidden-provider-canary',choices:[{finish_reason:'stop',message:{role:'assistant',reasoning:'hidden-message-canary',content:JSON.stringify(draft)}}],usage:{prompt_tokens:100,completion_tokens:100,total_tokens:200}})}));
+ const r=await x.send(req(),{stage:'draft',attemptId:'a'});assert.deepEqual(r.raw,draft);const j=JSON.stringify(x.read());for(const c of ['hidden-root-canary','hidden-nested-canary','hidden-provider-canary','hidden-message-canary'])assert.ok(!j.includes(c));assert.equal(x.read().attempts.a.response.sanitized,true);
+});
 function setup(t,http,extra={}){const directory=fs.mkdtempSync(path.join(os.tmpdir(),'urenavi-diagnostic-'));t.after(()=>fs.rmSync(directory,{recursive:true,force:true}));return {directory,send:T.create({directory,http,...extra}),read:()=>JSON.parse(fs.readFileSync(path.join(directory,'transport.json')))};}
 test('400 records safe error body, request ID and usage before halt, never retries or releases',async t=>{
  let calls=0;const draft=fixture().draft;const x=setup(t,async()=>{calls++;return {status:400,url:W.ENDPOINT,headers:{get:k=>k==='x-request-id'?'req_test':null},json:async()=>({error:{code:'json_validate_failed',type:'invalid_request_error',message:'Failed to validate JSON.',param:'response_format',failed_generation:JSON.stringify(draft)},usage:{prompt_tokens:2729,completion_tokens:1000,total_tokens:3729}})};},{journalMode:'usage-only'});

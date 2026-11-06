@@ -16,10 +16,10 @@ planの所有者・scope・引用・関係・bindingsを保持する構造は現
 ## 限定修正
 HTTP400を捨てる前に安全なエラー観測を永続保存。status/code/type/message/param、取得できたrequest ID、整合したusage、失敗分類を許可リストで記録。任意のproviderフィールド・既知Bearer値・APIkeyパターン・reasoning/analysisフィールドと明示マーカーを除去。failed_generation提供時は許可されたcandidate JSONを秘匿・reasoning除去後に保存し、元データそのままではないことを明示。
 不完全JSONなど安全にreasoningを分離できない文字列は本文を保存せず、提供有無・構文失敗分類・byte数のみ記録。非JSONエラー本文もそのまま保存しない。使用量欠落はnullであり0にしない。エラー観測は公開/コピー用のresponseへ昇格させない。
-429はエラー本文を待たず停止。観測保存失敗はlock保持。timeout後の遅延400本文は停止台帳を上書きしない。元のresponse_format/Schema/strict/上限/reasoning/プロンプト/生成器/予約規則は不変。
+429はエラー本文を待たず停止。観測保存失敗はlock保持。timeout後の遅延400本文は停止台帳を上書きしない。成功時のfull journalも専用reasoningと許可外フィールドを除去し、実際にengineへ返すcandidateは変更しない。元のresponse_format/Schema/strict/上限/reasoning設定/プロンプト/生成器/予約規則は不変。
 
 ## 検証
-中核250成功＋既存回帰454成功＝704成功、失敗0/skip0。通信遮断下。400保存、1000到達模擬、不完全JSON拒否、secret/reasoning除去、使用量未知、429即時停止、保存失敗lock、遅延応答、重複防止、private claim既存試験、固定wireハッシュ保全を含む。実測済み失敗の消費を今回再度推論したものではない。
+中核251成功＋既存回帰454成功＝705成功、失敗0/skip0。通信遮断下。400保存、1000到達模擬、不完全JSON拒否、secret/reasoning除去、使用量未知、429即時停止、保存失敗lock、遅延応答、重複防止、private claim既存試験、固定wireハッシュ保全を含む。実測済み失敗の消費を今回再度推論したものではない。
 
 ## 次回
 生成本体は原因未確定のため変更しない。観測修正版を使う新しい実験の明示承認が必要。既存claim再使用/削除と予約強制解放は禁止のまま。上限1000→3000だけを変える比較は、原因仮説を検証する別wireの案であり、採用済み修正でも成功保証でもない。実施には新wire/hash・新しい独立台帳/claim・新出力予約と組織残量・共有送信抑止を明示承認してから準備する。今回は未実装・未実行。
