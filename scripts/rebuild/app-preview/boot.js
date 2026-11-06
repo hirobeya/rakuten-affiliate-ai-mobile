@@ -7,6 +7,6 @@ if(window.AppIsolation){
  appRoot.prepend(banner);
  const reset=()=>{aiRunGeneration++;aiRoomResults.clear();aiRoomReviews.clear();lastSearchItems=[];document.getElementById('res').replaceChildren();userMail.textContent=window.AppIsolation.owner+'（模擬）';window.initRoomOutcomes(window.AppIsolation.owner);document.getElementById('outcomeMsg').textContent='';for(const id of ['outcomeBackup','accountBackupText']){const node=document.getElementById(id);if(node)node.value='';}};
  document.getElementById('fixtureOwner').onchange=e=>{window.AppIsolation.owner=e.target.value;reset();};reset();
- $('#go').onclick=()=>{lastSearchKeyword=k.value.trim()||'架空ケトル';render(window.AppFixtureItems.map(x=>({...x})),{autoAi:false});$('#st').textContent='架空の2候補です。実検索通信なし。';document.querySelector('[data-urenavi-tab="copy"]').click();};
+ $('#go').onclick=()=>{lastSearchKeyword=k.value.trim()||'架空ケトル';render(window.AppFixtureItems.map(x=>({...x})),{autoAi:true});$('#st').textContent='架空の2候補です。実検索通信なし。';document.querySelector('[data-urenavi-tab="copy"]').click();};
  window.addEventListener('room-outcomes-change',()=>{const expected=window.AppFixtureItems.filter(i=>!window.roomOutcomePosted(i));if(lastSearchItems.length&&expected.map(i=>i.itemCode).join('|')!==lastSearchItems.map(i=>i.itemCode).join('|'))render(window.AppFixtureItems.map(x=>({...x})),{autoAi:false});});
 }

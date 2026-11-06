@@ -10,4 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: node --test
+      - name: Verify isolated core with network and credential guard
+        run: bash scripts/rebuild/offline.sh --test tests/rebuild/*.test.js
+      - name: Verify existing regression with network guard
+        run: bash scripts/rebuild/regression.sh
