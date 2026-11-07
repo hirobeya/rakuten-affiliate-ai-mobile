@@ -25,11 +25,15 @@
 
 新方式のHTTP200は**管理対象の単発試行の事前検査合格**であり、`organizationCapacityGuaranteed:false`、`allCallersPaused:false`、`executionApprovalStillRequired:true`を明記する。混雑/未知消費が残っていても「残量がある」とは主張せず、providerの429拒否を許容して一度だけ試行する方針である。この保証範囲を認めない場合は新方式を実行せず、別途本体を含む共有ゲート適用が必要。
 
+承認後の実行接続も同一SHA内に準備した。`approved-comparison-once.cjs`は通常はno-op。新SHA/新方針の正式承認後だけ、当該Preview branchの`URENAVI_APPROVED_COMPARISON_GRANT`へ非秘密のgrant JSONと既存Free実行flagを設定して同一SHAを配備する。新しいgeneratorは作らず、既存の認証付きexecute APIを一度だけ呼ぶ。snapshot/入力予約/namespaceは実行環境で直前に読み直す。claimがある場合やgrant不足ならAPI呼出し前に停止し、API失敗時も再試行しない。承認のない今回、grant変数を作成せず実行flag無効を維持する。これにより実通信承認後に接続コードを変更して再びSHA承認を求める循環を避ける。
+
+実行時に`URENAVI_PRIVATE_CALIBRATION_REVIEW=include-unreviewed-candidate`を明示した場合だけ、成功後にprivate台帳を再読取りし、Schema適合済みの未審査candidateを非公開の実行ログへ取り出して品質評価できる。通常APIへ本文を返さず、失敗文・reasoningは取り出さない。公開採用は別審査。今回この設定も行わない。実行後はgrant/Free flag/一時検証先を解除する。永久claim・予約・監査記録は解除しない。
+
 実行には旧3リスク項目と新SHA承認に加え、grantの`capacityPolicy:provider-limited-one-shot-v1`、`providerLimitRejectionAccepted:true`、`unmanagedUsageUnknownAccepted:true`、`capacityPolicyApprovalReference`が必要。今回これらを承認済みと作成せず、推論無効を維持する。preflightと実送信の間の管理対象競合は永久claimが止める。管理外経路との競合は止めたと偽らず、新方針の承認に含める。
 
 現在プラン/制限の観測は最大24時間で失効する。実行前にWorkが読み取りを更新し、必要なら当該Preview branchだけの`URENAVI_GROQ_LIMIT_OBSERVATION`へ非秘密のJSONを設定し、同一SHAを再配備する。入力条件/wire/生成器を変更せず、観測更新のためだけに新SHA承認を要求する循環を避ける。新実験の事前検査snapshotは55秒で失効し、直前に再取得する。
 
-通信なし検証：中核452件、既存454件、合計906件成功・失敗0（新方式33件を含む）。実Previewのread-only helperは従来証拠欠落の412拒否と、新方式の200/未承認/未知使用量nullを両方検査し、旧台帳/新namespaceが変わらないことを確認する。生成成功や文章品質の達成をこの検査で代用しない。
+通信なし検証：中核464件、既存454件、合計918件成功・失敗0（新方式33件、実行接続12件を含む）。実Previewのread-only helperは従来証拠欠落の412拒否と、新方式の200/未承認/未知使用量nullを両方検査し、旧台帳/新namespaceが変わらないことを確認する。生成成功や文章品質の達成をこの検査で代用しない。
 
 今回の追加Groq通信は0。推論flagは変更しない。固定wire ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053、商品、medium、Schema/strict、入力推定5000・出力3000・予約8000は不変。新SHAの実通信には改めて明示承認が必要。
 
