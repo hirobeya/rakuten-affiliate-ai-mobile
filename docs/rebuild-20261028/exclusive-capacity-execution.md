@@ -42,6 +42,10 @@
 
 新しい`preflight-free-calibration` actionを既存operator認証で利用できる。推論flag無効のまま旧Private Blobと新claimを読み、実行SHA・wire・入力・全容量条件を検査する。claim/予約を作成せず、Groq keyも使用しない。200は`preflight_passed_not_send_permission`であり実行成功ではない。送信時にも同じ検査を繰り返す。
 
+参照専用preflightは新実通信承認より前に実施できる。専用actionのサーバー側でのみ`readOnlyFacts`を指定し、grant/risk承認を事実検査の前提にしない。200にも`executionApprovalStillRequired:true`を返す。実行action/runner/transportではこの設定を受け取らず、新SHAの明示承認・残余リスク受容・有効期限を引き続き必須とする。投稿bodyに同名flagを付けても実行条件は緩和されない。
+
+`preflight-readonly.cjs`は既存のruntime operator secretと短命OIDCを環境内だけで使い、同一SHAの隔離PreviewのHTTP参照/preflightだけを検証する。Groq keyの取得・表示、execute要求、flag有効化は行わない。`URENAVI_PREFLIGHT_TARGET`を当該Preview branchだけに一時設定してbuildで実行し、検証後に解除する。対象未指定時は送信しない。実データ不足を412、認証不一致を403として確認し、旧台帳と新claimを前後比較する。これは不足条件での実環境拒否検証であり、管理者の台帳/排他成立や容量合格の代用ではない。
+
 算出根拠・Request ID/usage一覧・証拠hashを新claim/校正台帳に保持する。任意の入力プロパティは監査記録に転記せず、reasoning等を保存しない。旧claim/HTTP/校正/receiptを変更しない。
 
 ## 次回に残る操作

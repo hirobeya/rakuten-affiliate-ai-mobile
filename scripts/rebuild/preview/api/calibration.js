@@ -49,9 +49,9 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    try{
     const store=Store.create(loadBlob()),evidence=await store.prior(),existing=await store.inspect();
     if(Object.values(existing).some(x=>x.exists))return reply(409,{status:'comparison_already_claimed_hold',inferenceCalls:0});
-    const facts=CP.validate({snapshot:body.snapshot,...evidence,estimateProfileEnabled:true,executionSha:env.VERCEL_GIT_COMMIT_SHA||null,now:clock()});
-    return reply(200,{status:'preflight_passed_not_send_permission',sourceSha:env.VERCEL_GIT_COMMIT_SHA,wireHash:CP.WIRE_HASH,reservation:facts.reservation,capacityBasis:facts.capacityBasis,oldRetainedDaily:facts.retainedDaily,expiresAt:facts.expiry,inferenceCalls:0,publication:false});
-   }catch{return reply(412,{status:'comparison_facts_unverified',inferenceCalls:0,publication:false});}
+    const facts=CP.validate({snapshot:body.snapshot,...evidence,estimateProfileEnabled:true,executionSha:env.VERCEL_GIT_COMMIT_SHA||null,now:clock(),readOnlyFacts:true});
+    return reply(200,{status:'preflight_passed_not_send_permission',executionApprovalStillRequired:true,sourceSha:env.VERCEL_GIT_COMMIT_SHA,wireHash:CP.WIRE_HASH,reservation:facts.reservation,capacityBasis:facts.capacityBasis,oldRetainedDaily:facts.retainedDaily,expiresAt:facts.expiry,inferenceCalls:0,publication:false});
+   }catch(e){const reason=['exclusive_ledger_evidence_unverified','comparison_one_call_permission_required','free_estimate_evidence_invalid','free_input_envelope_mismatch','comparison_account_scope_unverified','comparison_capacity_evidence_unverified','comparison_exclusivity_unverified','comparison_remaining_capacity'].includes(e?.message)?e.message:'evidence_unverified';return reply(412,{status:'comparison_facts_unverified',reason,inferenceCalls:0,publication:false});}
   }
   if(body.action==='execute-comparison'||body.action==='execute-free-calibration'){
    const free=body.action==='execute-free-calibration';
