@@ -41,16 +41,28 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    if(!storageConnected)return reply(503,{status:'private_storage_not_connected'});
    try{return reply(200,{status:'private_comparison_inspection',publication:false,journals:await Store.create(loadBlob()).inspect()});}catch{return reply(409,{status:'comparison_inspection_hold'});}
   }
+  // Same operator authentication, read-only verification. Works while all inference
+  // flags are disabled; never creates a claim/reservation or reads the Groq key.
+  if(body.action==='preflight-free-calibration'){
+   if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
+   if(armed||comparisonArmed||freeArmed||!storageConnected)return reply(423,{status:'preflight_requires_disarmed_connected_preview',inferenceCalls:0});
+   try{
+    const store=Store.create(loadBlob()),evidence=await store.prior(),existing=await store.inspect();
+    if(Object.values(existing).some(x=>x.exists))return reply(409,{status:'comparison_already_claimed_hold',inferenceCalls:0});
+    const facts=CP.validate({snapshot:body.snapshot,...evidence,estimateProfileEnabled:true,executionSha:env.VERCEL_GIT_COMMIT_SHA||null,now:clock()});
+    return reply(200,{status:'preflight_passed_not_send_permission',sourceSha:env.VERCEL_GIT_COMMIT_SHA,wireHash:CP.WIRE_HASH,reservation:facts.reservation,capacityBasis:facts.capacityBasis,oldRetainedDaily:facts.retainedDaily,expiresAt:facts.expiry,inferenceCalls:0,publication:false});
+   }catch{return reply(412,{status:'comparison_facts_unverified',inferenceCalls:0,publication:false});}
+  }
   if(body.action==='execute-comparison'||body.action==='execute-free-calibration'){
    const free=body.action==='execute-free-calibration';
    if(!(free?freeArmed:comparisonArmed))return reply(423,{status:free?'free_calibration_not_armed':'comparison_not_armed',inferenceEnabled:false,publication:false});
    if(armed||(free?comparisonArmed:freeArmed)||!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'exclusive_comparison_permission_required'});
    if(!storageConnected||!env.GROQ_API_KEY)return reply(503,{status:'runtime_connection_incomplete'});
-   const store=Store.create(loadBlob());let evidence;
+   const store=Store.create(loadBlob());let evidence,facts;
    const options={estimateProfileEnabled:free,executionSha:env.VERCEL_GIT_COMMIT_SHA||null};
-   try{evidence=await store.prior();CP.validate({snapshot:body.snapshot,...evidence,...options,now:clock()});}catch{return reply(412,{status:'comparison_facts_unverified',publication:false});}
+   try{evidence=await store.prior();facts=CP.validate({snapshot:body.snapshot,...evidence,...options,now:clock()});}catch{return reply(412,{status:'comparison_facts_unverified',publication:false});}
    try{
-    await store.claim(body.snapshot,evidence);
+    await store.claim(body.snapshot,evidence,{capacityBasis:facts.capacityBasis});
     const result=await comparisonRun({directory:CP.STATE_DIRECTORY,snapshot:body.snapshot,...evidence,...options,runtimeMode:'live',liveAuthorization:L.authorizationFromEnvironment,clock,save:store.save,transportSave:store.save});
     return reply(200,result);
    }catch{return reply(409,{status:'comparison_hold_do_not_retry',publication:false,copyable:false});}
