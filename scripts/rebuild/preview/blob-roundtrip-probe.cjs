@@ -8,7 +8,7 @@ async function probe({blob,env=process.env,id}){
  assertDisarmed(env);if(!/^[a-f0-9]{32}$/.test(id||''))throw Error('probe_id_required');
  const actual=Store.create(blob),before={...await actual.prior(),comparison:await actual.inspect()},prefix='urenavi-connection-probes/'+id,events=[],expected=new Map();
  function map(k){return k.startsWith(CP.PREFIX+'/')?prefix+k.slice(CP.PREFIX.length):k;}
- const isolated={async get(k,o){const key=map(k),r=await blob.get(key,o);if(r?.stream&&expected.has(key)){
+ const isolated={async head(k){return blob.head(map(k));},async get(k,o){const key=map(k),r=await blob.get(key,o);if(r?.stream&&expected.has(key)){
    const [a,b]=r.stream.tee(),text=await new Response(b).text(),want=expected.get(key);let equal=false;try{equal=C.hash(JSON.parse(text))===C.hash(JSON.parse(want.body));}catch{}
    let head=null;try{if(typeof blob.head==='function')head=await blob.head(key);}catch{}
    events.push({stage:'claim_readback',readTagLength:typeof r.blob?.etag==='string'?r.blob.etag.length:null,readTagEmpty:r.blob?.etag==='',headTagPresent:typeof head?.etag==='string',headMatchesPut:head?.etag===want.etag,putTagPresent:typeof want.etag==='string',readTagPresent:typeof r.blob?.etag==='string',exactTagMatch:want.etag===r.blob?.etag,strongTagEquivalent:strong(want.etag)!==null&&strong(want.etag)===strong(r.blob?.etag),bodyHashMatches:equal,putTagQuoted:typeof want.etag==='string'&&want.etag.startsWith('"'),readTagQuoted:typeof r.blob?.etag==='string'&&r.blob.etag.startsWith('"')});return {...r,stream:a};}return r;},

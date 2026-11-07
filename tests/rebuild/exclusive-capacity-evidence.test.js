@@ -19,7 +19,7 @@ function blob(f){
  const data=new Map(),writes=[];let version=0;
  for(const [key,file]of [['claim','claimed.json'],['calibration','calibration.json'],['transport','http/transport.json']])data.set(Old.PREFIX+'/'+file,{body:JSON.stringify(f.prior[key].value),etag:'old'});
  data.set(Old.PREFIX+'/reconciliation-v1.json',{body:JSON.stringify(f.receipt),etag:'receipt'});
- return {data,writes,async get(k,o){assert.equal(o.useCache,false);const d=data.get(k);return d?{statusCode:200,stream:new Blob([d.body]).stream(),blob:{etag:d.etag}}:null;},async put(k,body,o){assert.ok(k.startsWith(P.PREFIX+'/'));if(data.has(k)&&(!o.allowOverwrite||o.ifMatch!==data.get(k).etag))throw Error('CAS conflict');const etag='v'+(++version);data.set(k,{body,etag});writes.push(k);return {etag};}};
+ return {data,writes,async get(k,o){assert.equal(o.useCache,false);const d=data.get(k);return d?{statusCode:200,stream:new Blob([d.body]).stream(),blob:{etag:d.etag}}:null;},async head(k){const d=data.get(k);if(!d)throw Error("missing");return {etag:d.etag};},async put(k,body,o){assert.ok(k.startsWith(P.PREFIX+'/'));if(data.has(k)&&(!o.allowOverwrite||o.ifMatch!==data.get(k).etag))throw Error('CAS conflict');const etag='v'+(++version);data.set(k,{body,etag});writes.push(k);return {etag};}};
 }
 function env(armed=false){return {VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'rebuild/urenavi-core-20261028',VERCEL_GIT_COMMIT_SHA:SHA,URENAVI_CALIBRATION_ISOLATED_PREVIEW:'1',URENAVI_CALIBRATION_EXECUTION_SECRET:'synthetic-secret',URENAVI_FREE_CALIBRATION_LIVE:armed?'approved-one-call':undefined,BLOB_STORE_ID:'synthetic',GROQ_API_KEY:'synthetic-no-live-key'};}
 function live(f){f.snapshot.grant.mode='live-one-call';f.snapshot.account.mode='live-calibration';return f;}

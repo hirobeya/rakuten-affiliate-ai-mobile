@@ -5,6 +5,7 @@ const R=require('../../../../lib/urenavi-core/calibration-runner'),A=require('..
 const P=require('../persistence'),CP=require('../../../../lib/urenavi-core/comparison-policy'),CR=require('../../../../lib/urenavi-core/comparison-runner'),Store=require('../comparison-persistence');
 const F=require('../../../../lib/urenavi-core/free-calibration-profile');
 const N=require('../../../../lib/urenavi-core/provider-limited-calibration');
+const Dispatch=require('../../../../lib/urenavi-core/comparison-dispatch'),Diagnostics=require('../../../../lib/urenavi-core/comparison-diagnostics');
 const source=require('../../../../docs/rebuild-20261028/p3-first-call-gate/first-call-plan.json').selected.source;
 function secretEqual(a,b){if(typeof a!=='string'||typeof b!=='string'||!a)return false;const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length&&crypto.timingSafeEqual(x,y);}
 function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,comparisonRun=CR.run,clock=Date.now,limitEvidence=()=>env.URENAVI_GROQ_LIMIT_OBSERVATION?JSON.parse(env.URENAVI_GROQ_LIMIT_OBSERVATION):require('../../../../docs/rebuild-20261028/provider-limited-account.json')}={}){
@@ -37,6 +38,12 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    try{const receipt=await P.create(loadBlob()).recordReconciliation(body.evidence);return reply(200,{status:'accounted_failure_originals_preserved',receipt,inferenceCalls:0,publication:false});}
    catch{return reply(409,{status:'reconciliation_hold_originals_preserved',inferenceCalls:0,publication:false});}
   }
+  if(body.action==='probe-comparison-connection'){
+   if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
+   if(armed||comparisonArmed||freeArmed||env.URENAVI_APPROVED_COMPARISON_GRANT||!storageConnected)return reply(423,{status:'probe_requires_disarmed_connected_preview',inferenceCalls:0});
+   try{return reply(200,await require('../connection-probe.cjs').probe({blob:loadBlob(),env,id:body.probeId,scenario:body.scenario,clock}));}
+   catch(e){return reply(409,{status:'connection_probe_hold',...Diagnostics.summary(e),inferenceCalls:0,publication:false,copyable:false});}
+  }
   if(body.action==='inspect-comparison'){
    if(!secretEqual(req.headers?.['x-urenavi-execution-secret'],env.URENAVI_CALIBRATION_EXECUTION_SECRET))return reply(403,{status:'execution_permission_required'});
    if(!storageConnected)return reply(503,{status:'private_storage_not_connected'});
@@ -65,10 +72,9 @@ function create({env=process.env,loadBlob=()=>require('@vercel/blob'),run=R.run,
    const options={estimateProfileEnabled:free,executionSha:env.VERCEL_GIT_COMMIT_SHA||null};
    try{evidence=await store.prior();options.managedNamespace=await store.inspect();facts=CP.validate({snapshot:body.snapshot,...evidence,...options,now:clock()});}catch{return reply(412,{status:'comparison_facts_unverified',publication:false});}
    try{
-    await store.claim(body.snapshot,evidence,{capacityBasis:facts.capacityBasis});
-    const result=await comparisonRun({directory:CP.STATE_DIRECTORY,snapshot:body.snapshot,...evidence,...options,runtimeMode:'live',liveAuthorization:L.authorizationFromEnvironment,clock,save:store.save,transportSave:store.save});
+    const result=await Dispatch.dispatch({store,comparisonRun,snapshot:body.snapshot,evidence,facts,options,clock,liveAuthorization:L.authorizationFromEnvironment});
     return reply(200,result);
-   }catch{return reply(409,{status:'comparison_hold_do_not_retry',publication:false,copyable:false});}
+   }catch(e){const diagnostic=Diagnostics.summary(e);console.warn('comparison_hold',JSON.stringify(diagnostic));return reply(409,{status:'comparison_hold_do_not_retry',...diagnostic,publication:false,copyable:false});}
   }
   if(comparisonArmed||freeArmed)return reply(423,{status:'old_experiment_disabled_during_comparison',publication:false});
   // Neither query flags nor posted permission can enable a send.
