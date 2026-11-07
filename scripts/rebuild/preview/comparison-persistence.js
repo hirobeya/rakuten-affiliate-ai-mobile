@@ -1,7 +1,7 @@
 'use strict';
 // Only the fixed comparison namespace is writable; old evidence is read-only.
 const fs=require('node:fs'),path=require('node:path'),C=require('../../../lib/urenavi-core/contracts'),CP=require('../../../lib/urenavi-core/comparison-policy'),R=require('../../../lib/urenavi-core/failed-calibration-reconciliation'),Old=require('./persistence');
-const D=require('../../../lib/urenavi-core/comparison-diagnostics');
+const D=require('../../../lib/urenavi-core/comparison-diagnostics'),Resume=require('../../../lib/urenavi-core/comparison-resume');
 function fail(){throw Error('comparison_persistence_hold');}
 function create(blob,{directory=CP.STATE_DIRECTORY}={}){
  const versions=new Map();
@@ -28,6 +28,18 @@ function create(blob,{directory=CP.STATE_DIRECTORY}={}){
  }
  async function save(file,value){const relative=path.relative(directory,file);if(!['calibration.json',path.join('http','transport.json')].includes(relative))fail();await put(CP.PREFIX+'/'+relative.split(path.sep).join('/'),value,true);fs.mkdirSync(path.dirname(file),{recursive:true,mode:0o700});const tmp=file+'.tmp',fd=fs.openSync(tmp,'w',0o600);try{fs.writeFileSync(fd,JSON.stringify(value));fs.fsyncSync(fd);}finally{fs.closeSync(fd);}fs.renameSync(tmp,file);}
  async function inspect(){const result={};for(const [key,file]of [['claim','claimed.json'],['calibration','calibration.json'],['transport','http/transport.json']]){const r=await blob.get(CP.PREFIX+'/'+file,{access:'private',useCache:false});if(!r){result[key]={exists:false};continue;}if(r.statusCode!==200||!r.stream)fail();result[key]={exists:true,value:JSON.parse(await new Response(r.stream).text())};}return result;}
- return {prior,claim,save,inspect};
+ async function inspectResume(){const result={};for(const [key,file]of [['attempt','attempt.json'],['handoff','handoff.json'],['terminal','terminal.json']]){const r=await blob.get(CP.PREFIX+'/resume-v1/'+file,{access:'private',useCache:false});if(!r){result[key]={exists:false};continue;}if(r.statusCode!==200||!r.stream)fail();result[key]={exists:true,value:JSON.parse(await new Response(r.stream).text())};}return result;}
+ async function acquireResume(context,snapshot,now){
+  const namespace=await inspect(),current=await prior();Resume.requireValid(context,namespace);
+  if(!Resume.unused(await inspectResume())||context.receiptHash!==C.hash(current.receipt))throw D.persistence('resume_acquire','resume_already_consumed');
+  // Create-only forever: even a readback failure or crash burns this one resume.
+  if(context.phase!=='evidence_ready')throw D.persistence('resume_acquire','resume_already_consumed');
+  const record={version:1,kind:Resume.KIND,state:'resume_acquired',resumeCount:1,maxResumes:1,experimentId:CP.EXPERIMENT_ID,wireHash:CP.WIRE_HASH,claimHash:context.claimHash,evidenceHash:context.evidenceHash,evidence:context.proof,nonInference:context.nonInference,executionSha:snapshot.grant.approvedExecutionSha,snapshotHash:C.hash(snapshot),acquiredAt:now,reservation:8000,additionalReservation:0,reservationDisposition:'carry_forward_existing_claim',publication:false,copyable:false};
+  await put(CP.PREFIX+'/resume-v1/attempt.json',record);return record;
+ }
+ async function resumeHandoff(attempt,now){const record={version:1,state:'runner_handoff',resumeCount:1,attemptHash:C.hash(attempt),claimHash:attempt.claimHash,at:now,publication:false};await put(CP.PREFIX+'/resume-v1/handoff.json',record);return record;}
+ async function resumeTerminal(attempt,{status,diagnostic=null},now){await put(CP.PREFIX+'/resume-v1/terminal.json',{version:1,state:status==='captured_unreviewed'?'completed_private':'stopped_do_not_retry',resumeCount:1,attemptHash:C.hash(attempt),claimHash:attempt.claimHash,at:now,diagnostic,publication:false,copyable:false});}
+ return {prior,claim,save,inspect,inspectResume,acquireResume,resumeHandoff,resumeTerminal};
+
 }
 module.exports={create};

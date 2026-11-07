@@ -2,7 +2,7 @@
 // Runtime adapter to the EXISTING authenticated API. No generator, retry loop,
 // arming operation or claim release. Default is no operation. The grant is
 // supplied only after a new explicit approval for this source SHA and policy.
-const C=require('../../../lib/urenavi-core/contracts'),P=require('../../../lib/urenavi-core/comparison-policy'),N=require('../../../lib/urenavi-core/provider-limited-calibration'),Store=require('./comparison-persistence'),H=require('./api/calibration');
+const C=require('../../../lib/urenavi-core/contracts'),P=require('../../../lib/urenavi-core/comparison-policy'),N=require('../../../lib/urenavi-core/provider-limited-calibration'),Store=require('./comparison-persistence'),H=require('./api/calibration'),Resume=require('../../../lib/urenavi-core/comparison-resume');
 const template=require('../../../docs/rebuild-20261028/p3-free-calibration-ready-20261106/approval-pending.json').snapshot;
 function fail(){throw Error('approved_comparison_hold_do_not_retry');}
 async function invoke({env=process.env,loadBlob=()=>require('@vercel/blob'),clock=Date.now,handlerFactory=H.create}={}){
@@ -12,16 +12,17 @@ async function invoke({env=process.env,loadBlob=()=>require('@vercel/blob'),cloc
  const grant=JSON.parse(raw),now=clock();
  if(grant?.mode!=='live-one-call'||grant.explicitUserApproval!==true||grant.approvedExecutionSha!==env.VERCEL_GIT_COMMIT_SHA||!/^[a-f0-9]{40}$/.test(env.VERCEL_GIT_COMMIT_SHA||'')||grant.capacityPolicy!==N.KIND||grant.providerLimitRejectionAccepted!==true||grant.unmanagedUsageUnknownAccepted!==true||!Number.isSafeInteger(grant.expiresAt)||grant.expiresAt<=now)fail();
  const blob=loadBlob(),store=Store.create(blob),evidence=await store.prior(),namespace=await store.inspect();
- if(!N.empty(namespace))fail();
+ const resumeContext=grant.resumePreSend===true?Resume.assess({namespace,audit:await store.inspectResume(),...evidence}):null;
+ if(!resumeContext&&!N.empty(namespace))fail();
  const accountEvidence=env.URENAVI_GROQ_LIMIT_OBSERVATION?JSON.parse(env.URENAVI_GROQ_LIMIT_OBSERVATION):require('../../../docs/rebuild-20261028/provider-limited-account.json');
- const snapshot=N.build({template,...evidence,namespace,accountEvidence,now,executionSha:env.VERCEL_GIT_COMMIT_SHA,prefix:P.PREFIX,wireHash:P.WIRE_HASH,experimentId:P.EXPERIMENT_ID});
+ const snapshot=N.build({template,...evidence,namespace,accountEvidence,now,executionSha:env.VERCEL_GIT_COMMIT_SHA,prefix:P.PREFIX,wireHash:P.WIRE_HASH,experimentId:P.EXPERIMENT_ID,resumeContext});
  Object.assign(snapshot.grant,grant);
  // Full permission, fixed-wire, estimate, policy, capacity and receipt validation
  // occurs here AND again in the API, runner and transport before the sole send.
- P.validate({snapshot,...evidence,managedNamespace:namespace,now,estimateProfileEnabled:true,executionSha:env.VERCEL_GIT_COMMIT_SHA});
+ P.validate({snapshot,...evidence,managedNamespace:namespace,now,estimateProfileEnabled:true,executionSha:env.VERCEL_GIT_COMMIT_SHA,resumeContext});
  let httpStatus,body;
  const res={setHeader(){},status(code){httpStatus=code;return this;},json(value){body=value;return this;}};
- await handlerFactory({env,loadBlob:()=>blob,clock})({method:'POST',headers:{'x-urenavi-execution-secret':env.URENAVI_CALIBRATION_EXECUTION_SECRET},body:{action:'execute-free-calibration',snapshot}},res);
+ await handlerFactory({env,loadBlob:()=>blob,clock})({method:'POST',headers:{'x-urenavi-execution-secret':env.URENAVI_CALIBRATION_EXECUTION_SECRET},body:{action:resumeContext?'resume-free-calibration':'execute-free-calibration',snapshot}},res);
  let privateReview;
  if(httpStatus===200&&env.URENAVI_PRIVATE_CALIBRATION_REVIEW==='include-unreviewed-candidate'){
   const records=await store.inspect(),evaluation=records.calibration?.value?.evaluation;

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "npm ci --ignore-scripts",
-  "buildCommand": "node reconcile-once.cjs && node preflight-readonly.cjs && node approved-comparison-once.cjs && node blob-roundtrip-probe.cjs && node connection-probe-http.cjs",
+  "buildCommand": "node reconcile-once.cjs && node preflight-readonly.cjs && node approved-comparison-once.cjs && node blob-roundtrip-probe.cjs && node connection-probe-http.cjs && node resume-probe-http.cjs",
   "env": { "URENAVI_CALIBRATION_ISOLATED_PREVIEW": "1", "URENAVI_CALIBRATION_LIVE": "disabled", "URENAVI_COMPARISON_LIVE": "disabled" },
   "functions": { "api/calibration.js": { "maxDuration": 60 } },
   "headers": [ { "source": "/(.*)", "headers": [

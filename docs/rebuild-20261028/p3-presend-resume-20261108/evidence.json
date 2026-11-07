@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "kind": "comparison-presend-stop-evidence-v1",
+  "experimentId": "db7b2b6a471efa3e5590820cab3f20b4f4a5b720ad4103985a4328bec9b87d71",
+  "wireHash": "ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053",
+  "claimHash": "508ede79a5936224c36b22326f77baa08c66c25f8f7637797599f985d9a24dc4",
+  "originalSha": "d6219c7540ec8354d397ca72429ea8cd3793a9ab",
+  "apiEvidence": {
+    "deploymentId": "dpl_YKauwmViqX4nFzeGKPvAHiirYvPL",
+    "apiStatus": 409,
+    "requestResultHash": "fceda5a86969c213e0cb9d0537d2c73766d19f54a0e8feaafd63995eb3c55267",
+    "source": "Vercel persisted build output, re-read 2026-11-08 JST"
+  },
+  "codeEvidence": {
+    "stopPhase": "claim_readback",
+    "cause": "GET response ETag differs from PUT storage version; HEAD matches PUT and body hash matches",
+    "reproducedSha": "9bdf7032004e4d64656b7f15d09a7e36943c6067",
+    "fixedAndVerifiedSha": "d80ae14f9d00c5c4004e1310639c34a1de8a15ce",
+    "ordering": [
+      "await remote claim PUT and readback",
+      "invoke runner",
+      "await calibration reservation save",
+      "await HTTP sent_unknown save",
+      "invoke provider HTTP"
+    ],
+    "noDeletionPath": true
+  },
+  "providerEvidence": {
+    "source": "authenticated Groq Console Logs, Personal / Default Project",
+    "observedAt": "2026-11-08 JST; read-only observation in this task",
+    "newestDisplayedTime": "2026/11/6 11:21:07",
+    "newestDisplayedRequestId": "req_0...skmz",
+    "historicalFullRequestId": "req_01m6qahsqme3yr5bqtzjq8skmz",
+    "fullIdReobtained": false,
+    "httpStatus": 400,
+    "inputTokens": 2729,
+    "outputTokens": 1000,
+    "error": "json_validate_failed",
+    "displayedRows": 3,
+    "olderRows": "two HTTP 200 requests dated 2026/11/4; not treated as zero usage",
+    "newerRequestDisplayed": false,
+    "completenessGuaranteed": false,
+    "role": "corroboration, never sole proof of no send"
+  },
+  "oldRecordsHash": "1a0c9e733844f40332194dc5e713ee00e590c578491d7eb03bbe39ef636ee0fc",
+  "oldReceiptHash": "ff1f87648c74cfbce988a79f2503fcbe5b36287a5fb65d2df6c088391f8c6956",
+  "reservation": {
+    "claimRecorded": 8000,
+    "calibrationJournalCreated": false,
+    "release": 0,
+    "additionalOnResume": 0
+  },
+  "conclusion": "correlated pre-runner stop; not a guarantee about unmanaged callers",
+  "liveExecutionApproval": false
+}
