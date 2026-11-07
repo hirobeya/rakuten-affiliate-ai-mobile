@@ -1,0 +1,17 @@
+{
+  "source": "authenticated Groq Console read-only",
+  "organization": "Personal",
+  "project": "Default Project",
+  "plan": "Free",
+  "model": "openai/gpt-oss-120b",
+  "rpm": 30,
+  "rpd": 1000,
+  "tpm": 8000,
+  "tpd": 200000,
+  "projectCustomLimits": false,
+  "splitApplicability": "unknown",
+  "observedAt": 1794051919492,
+  "validUntil": 1794138319492,
+  "reference": "https://console.groq.com/settings/billing/plans ; https://console.groq.com/settings/limits ; https://console.groq.com/settings/project/limits",
+  "note": "Free Current Plan and combined limits observed. No separate input/output count certified. No usage or in-flight count inferred."
+}

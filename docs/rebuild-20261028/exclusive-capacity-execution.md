@@ -1,5 +1,36 @@
 # Free限定校正：観測可能な証跡による実行条件
 
+2026-11-07改訂：以下の完全台帳/排他方式は**組織全体の事前余力を保証する従来方式**として残す。今回、比較専用に`provider-limited-one-shot-v1`を追加した。これは「管理対象の1通信と予約・消費照合を保証し、未知の組織使用量についてはGroq自身の制限判定に従い、429で即停止する」別の承認対象である。全組織の空き枠・排他を保証したとは扱わず、従来の保証と同等と表示しない。旧SHA/旧方式の承認で有効にならない。
+
+## 改訂：管理範囲を限定した単発試行
+
+- A（公式）：組織/モデルのRPM・RPD・TPM・TPD、適用時の入出力別制限。providerが制限超過を429で拒否する。Freeの現在プラン・30/1000/8000/200000はアカウント画面で再確認した。split内訳は未確認のまま保持し、適用なしと推測しない。
+- B（維持する装置）：固定wire/9791bytes/推定5000+出力3000、送信前8000永続予約、既存create-only永久claim、旧失敗receipt検証、未処理/不明消費/保存失敗停止、429停止、no retry、非公開保存。これらは新方式でも既存runner/transportで実施する。
+- C（従来の独自要件）：24時間の全送信履歴完全証明・全caller停止・provider残量の送信前完全把握。同じ実験の重複防止には不可欠ではない。本体を変えず全組織保証を維持するには必要だが、管理対象の単発試行には要求しない。代わりに、**保証範囲が異なることと競合/拒否の可能性**を新しい実通信承認で明示受容する。
+
+### 現在の送信元と管理範囲
+
+|経路|今回確認した事実|新方式の管理範囲|
+|---|---|---|
+|Production|READY、実行SHA3fb18811de413448384317f2beead78cd29a2ae3。既存V3の既定モデルはqwen、設定上書きや呼出し可能性は否定しない|変更/停止せず、使用量・in-flight・排他を不明のまま保持|
+|隔離Preview|校正APIだけを配備。旧claim/receiptと比較namespaceをprivate Blobで確認可能。実行flagは無効|旧対象要求の照合・新実験のclaim/予約/消費・競合拒否を技術的に管理|
+|通常Preview|本体APIにGroq経路がある|全デプロイ停止とは主張しない。管理外として不明保持|
+|GitHub Actions|現在の2 workflowはオフライン/回帰検証。中核はnetwork/credential guard付き|CIを実推論送信元とは扱わない。他の人手起動の不存在を証明したとはしない|
+|このworkspace CLI|GROQ_API_KEY存在false。旧1000 CLIは許可snapshotとcredential必須|他端末のCLIまで停止したとは主張しない|
+|Playground/他アプリ|ウレナビだけを利用、管理者は手動生成していないという受領済み回答|回答を保持して再質問しない。技術的な全経路停止の証明にはしない|
+
+新preflightはoperator認証後にサーバー側で旧private receiptと比較namespaceを読み取り、`capacityMode:provider-limited-one-shot-v1`のsnapshotを組み立てる。claim・校正・HTTP記録が一つでもあれば拒否する。送信時にも再読取りし、claimは同じ既存の実験ID/namespaceを共有する。異なるmodeや同時要求で実測枠を増やせない。
+
+未知の組織消費・残量・未処理は**null**。ローカル会計のscopeは`controlled-calibration-only`。`otherWindowTokens:0`は空の管理対象namespaceと照合済み旧終端要求に限った値で、組織全体の使用量0ではない。旧3729は保持6000へ一度だけ包含、別の既知保持8000も保存する。新予約込みの既知拘束は22000だが、これを組織全体の日次消費上限と偽らない。
+
+新方式のHTTP200は**管理対象の単発試行の事前検査合格**であり、`organizationCapacityGuaranteed:false`、`allCallersPaused:false`、`executionApprovalStillRequired:true`を明記する。混雑/未知消費が残っていても「残量がある」とは主張せず、providerの429拒否を許容して一度だけ試行する方針である。この保証範囲を認めない場合は新方式を実行せず、別途本体を含む共有ゲート適用が必要。
+
+実行には旧3リスク項目と新SHA承認に加え、grantの`capacityPolicy:provider-limited-one-shot-v1`、`providerLimitRejectionAccepted:true`、`unmanagedUsageUnknownAccepted:true`、`capacityPolicyApprovalReference`が必要。今回これらを承認済みと作成せず、推論無効を維持する。preflightと実送信の間の管理対象競合は永久claimが止める。管理外経路との競合は止めたと偽らず、新方針の承認に含める。
+
+現在プラン/制限の観測は最大24時間で失効する。実行前にWorkが読み取りを更新し、必要なら当該Preview branchだけの`URENAVI_GROQ_LIMIT_OBSERVATION`へ非秘密のJSONを設定し、同一SHAを再配備する。入力条件/wire/生成器を変更せず、観測更新のためだけに新SHA承認を要求する循環を避ける。新実験の事前検査snapshotは55秒で失効し、直前に再取得する。
+
+通信なし検証：中核452件、既存454件、合計906件成功・失敗0（新方式33件を含む）。実Previewのread-only helperは従来証拠欠落の412拒否と、新方式の200/未承認/未知使用量nullを両方検査し、旧台帳/新namespaceが変わらないことを確認する。生成成功や文章品質の達成をこの検査で代用しない。
+
 今回の追加Groq通信は0。推論flagは変更しない。固定wire ab9f962665d02755d3e2fc683969472466e2da2964e7ce0cb7a13aa3d872d053、商品、medium、Schema/strict、入力推定5000・出力3000・予約8000は不変。新SHAの実通信には改めて明示承認が必要。
 
 ## 停止条件の分類と目的
