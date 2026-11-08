@@ -53,3 +53,23 @@ test('ordinary provider route remains unchanged when no writer strategy is suppl
  assert.deepEqual(standard.userPayload.itemName,item.itemName);
  assert.equal(standard.schemaName,'room_complete_post');
 });
+
+test('editorial evaluation never reads or overwrites a standard-writer cache entry',async()=>{
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ try{
+  const keys=[];
+  const store={loadProduct:async key=>{keys.push(key.itemCode);return null;}};
+  const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{id:'owner'}}),
+   store,provider:{model:'mock',requiredTokens:()=>0,call:async()=>{throw Error('unapproved model call');}},
+   consumeQuota:async()=>{throw Error('unapproved quota call');}});
+  for(const extra of [{}, {evaluationWriter:'editorial'}]){
+   const res=fakeRes();
+   await handler({method:'POST',body:{...item,evaluationRun:'same',statusOnly:true,...extra}},res);
+   assert.equal(res.statusCode,202);
+   assert.equal(res.payload.groq.totalCalls,0);
+  }
+  assert.equal(keys.length,2);
+  assert.notEqual(keys[0],keys[1]);
+  assert.match(keys[1],/editorial:same/);
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
