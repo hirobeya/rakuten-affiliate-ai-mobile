@@ -2700,7 +2700,7 @@ function readyV3Post(result){
   const text=String(result?.variants?.[0]?.text||'').trim();
   // Legacy V3 output must respect the same complete-ROOM length boundary
   // as the independently reviewed room_contract_ copy. Never cut a sentence.
-  return typeof RoomCopyResult!=='undefined'&&RoomCopyResult.fitsLength(text)?text:'';
+  return text.length<=500&&(typeof RoomCopyResult==='undefined'||RoomCopyResult.fitsLength(text))?text:'';
 }
 
 function aiSalesInsight(item,result){
@@ -3249,7 +3249,7 @@ function aiPostState(i){
 function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=null){
   // Applies to every local, legacy V3, and AI-generated route; a server
   // quality flag cannot license a post longer than the platform accepts.
-  if(typeof RoomCopyResult==='undefined'||!RoomCopyResult.fitsLength(String(text||'')))return true;
+  if(String(text||'').length>500 || (typeof RoomCopyResult!=='undefined'&&!RoomCopyResult.fitsLength(String(text||''))))return true;
   const body=String(text||'').replace(/※アフィリエイト広告を利用しています/g,'').replace(/価格[:：][^\n]*/g,'').trim();
   const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
   // Short prose needs an exact reviewed result. A server boolean alone is
@@ -3320,7 +3320,7 @@ function postDisplay(i,p='room'){
     &&s.state.data.quality.reasons.some(x=>x?.rule==='post_exceeds_room_limit');
   if(tooLong)return '楽天ROOMの投稿文字数に収まる文章を生成できなかったため、コピーを停止しました。文章を途中で切り詰めず、商品情報を再確認してください。';
   const text=String(post(i,p)||'').trim();
-  if(typeof RoomCopyResult==='undefined'||!RoomCopyResult.fitsLength(text))
+  if(text.length>500 || (typeof RoomCopyResult!=='undefined'&&!RoomCopyResult.fitsLength(text)))
     return '投稿文の全文が楽天ROOMの文字数上限を超えています。文章を途中で切り詰めず、投稿用に再生成してください。';
   return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
