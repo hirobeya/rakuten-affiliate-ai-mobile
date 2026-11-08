@@ -49,3 +49,18 @@ test('existing one-rewrite flow receives the final copy rejection and publishes 
   assert.equal(ui.roomCopyNeedsReview(text,item,true,res.body),false);
  }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
+
+test('grounded feature-presence phrasing is not confused with unsupported preparedness or effects',()=>{
+ const {unsupportedBenefitTerms,guardUnsupportedBenefitCopy}=require('../public/fact-safety');
+ const base={itemName:'温度調節 電気ケトル',itemCaption:'7段階温度調節、4時間保温機能付き'};
+ const neutral='4時間の保温機能を備えた電気ケトルです。';
+ assert.deepEqual(unsupportedBenefitTerms(neutral,base),[]);
+ assert.equal(guardUnsupportedBenefitCopy(base,neutral),neutral);
+ for(const [source,text] of [
+  [{...base,itemCaption:'保温機能はありません'},neutral],
+  [{...base,itemCaption:'保温機能は別売です'},neutral],
+  [{...base,itemCaption:'温度調節機能付き'},neutral],
+  [base,'災害への備えにもなり、停電でも使える電気ケトルです。'],
+  [base,'保温機能を備え、絶対にずっと熱いままです。']
+ ])assert.notDeepEqual(unsupportedBenefitTerms(text,source),[],JSON.stringify({source,text}));
+});
