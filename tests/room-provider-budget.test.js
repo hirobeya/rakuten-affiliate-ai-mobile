@@ -169,3 +169,14 @@ test('higher stored observation does not silently defeat Free reservation cap',a
  await assert.rejects(()=>p.acquire('generate',item('upgrade-not-approved'),{}),e=>e.status===503);
  assert.equal(store.read().lease,undefined);
 });
+
+test('20b model comparison cannot bypass the same Free token admission ceiling',async()=>{
+ const store=memory();
+ const tooLarge=withSharedBudget({model:'openai/gpt-oss-20b',requiredTokens:()=>8001},{store,now:()=>10000});
+ await assert.rejects(()=>tooLarge.acquire('generate',item('20b-over'),{}),e=>e.status===503);
+ assert.equal(store.read().lease,undefined);
+ const allowed=withSharedBudget({model:'openai/gpt-oss-20b',requiredTokens:()=>8000},{store,now:()=>10000});
+ const permit=await allowed.acquire('generate',item('20b-eligible'),{});
+ assert.equal(permit.waitMs,0);
+ await permit.release({called:false});
+});
