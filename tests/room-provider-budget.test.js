@@ -150,3 +150,22 @@ test('an unfinished stored execution at four sends cannot spend a fifth quota or
  x.args.store={loadProduct:async()=>({schema_version:VERSION,model:x.provider.model,raw_ai_json:{state:{stage:'generate',attempt:1,calls:Array.from({length:4},()=>({stage:'generate'})),startedAt:0}}}),saveProduct:async()=>{throw Error('must not save');}};
  await assert.rejects(()=>advance({...x.args,item:item(1)}),e=>e.status===429);assert.equal(x.calls.length,0);assert.equal(x.quotas.length,0);
 });
+
+test('first-ever 120b Free request cannot overbook TPM without known live headers',async()=>{
+ const store=memory();
+ const over=withSharedBudget({model:'openai/gpt-oss-120b',requiredTokens:()=>8001},{store,now:()=>10000});
+ await assert.rejects(()=>over.acquire('generate',item('oversized'),{}),e=>e.status===503);
+ assert.equal(store.read().lease,undefined,'no provider lease should be created');
+ assert.deepEqual(store.read().models,{},'no fabricated usage or limit observations');
+ const fit=withSharedBudget({model:'openai/gpt-oss-120b',requiredTokens:()=>7999},{store,now:()=>10000});
+ const reservation=await fit.acquire('generate',item('fit'),{});
+ assert.equal(reservation.waitMs,0);
+ await reservation.release({called:false});
+});
+test('higher stored observation does not silently defeat Free reservation cap',async()=>{
+ const store=memory(),old=await store.load();
+ await store.swap(old.revision,{...old,models:{'openai/gpt-oss-120b':{tokenLimit:20000,remainingTokens:20000,tokenResetAt:0}}});
+ const p=withSharedBudget({model:'openai/gpt-oss-120b',requiredTokens:()=>8100},{store,now:()=>20000});
+ await assert.rejects(()=>p.acquire('generate',item('upgrade-not-approved'),{}),e=>e.status===503);
+ assert.equal(store.read().lease,undefined);
+});
