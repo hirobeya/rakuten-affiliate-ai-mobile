@@ -83,9 +83,9 @@ test('three comparative writer strategies use different cache scopes without net
  }finally{if(prev===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=prev;}
 });
 
-test('guided mode cannot send without deployment-SHA-bound approval',async()=>{
- const prev=process.env.VERCEL_ENV,approved=process.env.URENAVI_GUIDED_EVAL_APPROVED_SHA,sha=process.env.VERCEL_GIT_COMMIT_SHA;
- process.env.VERCEL_ENV='preview';delete process.env.URENAVI_GUIDED_EVAL_APPROVED_SHA;
+test('both AI editorial modes cannot send without deployment-SHA-bound approval',async()=>{
+ const prev=process.env.VERCEL_ENV,approved=process.env.URENAVI_AI_WRITER_EVAL_APPROVED_SHA,sha=process.env.VERCEL_GIT_COMMIT_SHA;
+ process.env.VERCEL_ENV='preview';delete process.env.URENAVI_AI_WRITER_EVAL_APPROVED_SHA;
  process.env.VERCEL_GIT_COMMIT_SHA='a'.repeat(40);
  try{
   let auth=0,quota=0,provider=0;
@@ -94,18 +94,22 @@ test('guided mode cannot send without deployment-SHA-bound approval',async()=>{
    consumeQuota:async()=>{quota++;throw Error('quota used');},
    provider:{model:'mock',requiredTokens:()=>0,call:async()=>{provider++;throw Error('provider used');}},
    logCost:()=>{}});
-  const res=response();
-  await fn({method:'POST',body:{...item,evaluationRun:'same',evaluationWriter:'guided'}},res);
-  assert.equal(res.code,403);assert.equal(res.body.message,'guided_evaluation_not_approved');
+  for(const mode of ['editorial','guided']){
+   const res=response();
+   await fn({method:'POST',body:{...item,evaluationRun:'same',evaluationWriter:mode}},res);
+   assert.equal(res.code,403);assert.equal(res.body.message,'ai_writer_evaluation_not_approved');
+  }
   assert.equal(quota,0);assert.equal(provider,0);
-  process.env.URENAVI_GUIDED_EVAL_APPROVED_SHA='b'.repeat(40);
-  const other=response();
-  await fn({method:'POST',body:{...item,evaluationRun:'same',evaluationWriter:'guided'}},other);
-  assert.equal(other.code,403);assert.equal(quota,0);assert.equal(provider,0);
-  assert.equal(auth,2);
+  process.env.URENAVI_AI_WRITER_EVAL_APPROVED_SHA='b'.repeat(40);
+  for(const mode of ['editorial','guided']){
+   const other=response();
+   await fn({method:'POST',body:{...item,evaluationRun:'same',evaluationWriter:mode}},other);
+   assert.equal(other.code,403);assert.equal(quota,0);assert.equal(provider,0);
+  }
+  assert.equal(auth,4);
  }finally{
   if(prev===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=prev;
-  if(approved===undefined)delete process.env.URENAVI_GUIDED_EVAL_APPROVED_SHA;else process.env.URENAVI_GUIDED_EVAL_APPROVED_SHA=approved;
+  if(approved===undefined)delete process.env.URENAVI_AI_WRITER_EVAL_APPROVED_SHA;else process.env.URENAVI_AI_WRITER_EVAL_APPROVED_SHA=approved;
   if(sha===undefined)delete process.env.VERCEL_GIT_COMMIT_SHA;else process.env.VERCEL_GIT_COMMIT_SHA=sha;
  }
 });
