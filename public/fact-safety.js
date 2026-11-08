@@ -148,7 +148,7 @@
       const at=source.indexOf(feature);
       const before=source.slice(Math.max(0,at-3),at);
       const after=source.slice(at+feature.length,at+feature.length+16);
-      if(/(?:非|未|不)$/.test(before)||/^(?:なし|無し|はない|がない|はありません|がありません|未搭載|非対応|対象外|別売)/.test(after))return match;
+      if(/(?:非|未|不)$/.test(before)||/^(?:(?:は|が|を)?(?:なし|無し|ない|ありません|未搭載|非対応|対象外|別売))/.test(after))return match;
       return match.replace('備え','搭載');
     });
     return UNSUPPORTED_BENEFIT_TERMS.filter(term=>(term==='備え'?provisionText:t).includes(term)&&!source.includes(term));
