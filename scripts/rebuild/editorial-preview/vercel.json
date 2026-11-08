@@ -26,5 +26,6 @@
     "URENAVI_COMPARISON_LIVE": "disabled",
     "URENAVI_FREE_CALIBRATION_LIVE": "disabled",
     "URENAVI_APPROVED_COMPARISON_GRANT": ""
-  }
+  },
+  "outputDirectory": "public"
 }
