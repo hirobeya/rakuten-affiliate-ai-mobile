@@ -89,7 +89,7 @@ test('Production and non-owner calls cannot use new Preview endpoint',async()=>{
 test('safe local completion is preserved with no Groq call; client sends one request on 202 and 429',async()=>{
  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{
-  let calls=0;const logs=[];const local={ok:true,model:'local',quality:{status:'ready'},groq:{totalCalls:0}};
+  let calls=0;const logs=[];const localText='収納ボックスは折りたたみ可能なタイプです。';const local={ok:true,pending:false,model:'local',quality:{status:'ready',text:localText},variants:[{text:localText}],groq:{totalCalls:0}};
   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),localZeroCall:()=>local,provider:{call:async()=>{calls++;}},logCost:x=>logs.push(x)});
   const r=res();await handler({method:'POST',body:item},r);assert.equal(calls,0);const {resourceUsage,...copy}=r.body;assert.deepEqual(copy,local);assert.equal(resourceUsage.calls,0);assert.equal(logs[0].estimatedUsd,0);
   for(const status of [202,429]){let dispatched=0;await run(item,{fetchImpl:async url=>{dispatched++;assert.equal(url,'/api/room-copy');return {status,json:async()=>({pending:status===202})};},waitImpl:()=>assert.fail('no timed retry')});assert.equal(dispatched,1);}
