@@ -2803,7 +2803,10 @@ function updateAiPanel(index){
   }
   if(RoomCopyResult.canonical(result.data)){
     const data=result.data;
-    status.textContent=RoomCopyResult.ready(data)?'原文・全文章の意味・購入理由の確認を完了':'根拠を確認できないため、投稿文を採用していません。';
+    status.textContent=RoomCopyResult.ready(data)?'原文・全文章の意味・購入理由の確認を完了'
+      :(Array.isArray(data.quality?.reasons)&&data.quality.reasons.some(x=>x?.rule==='post_exceeds_room_limit')
+       ?'投稿文全体が楽天ROOMの文字数上限を超えたため、文章を切らずに不採用としました。'
+       :'根拠を確認できないため、投稿文を採用していません。');
     facts.innerHTML=RoomCopyResult.ledger(data).map(row=>'<div class="aiFact">'+esc(row.text)+'<br>'+row.facts.map(f=>esc(f.source)+': '+esc(f.quote)).join('<br>')+'</div>').join('');
     copy.textContent=RoomCopyResult.ready(data);return;
   }
@@ -3307,6 +3310,9 @@ function postDisplay(i,p='room'){
     if(s.state?.state==='error'||s.state?.state==='restored') return '';
     return '商品内容を確認中です。';
   }
+  const tooLong=Array.isArray(s.state?.data?.quality?.reasons)
+    &&s.state.data.quality.reasons.some(x=>x?.rule==='post_exceeds_room_limit');
+  if(tooLong)return '楽天ROOMの投稿文字数に収まる文章を生成できなかったため、コピーを停止しました。文章を途中で切り詰めず、商品情報を再確認してください。';
   const text=String(post(i,p)||'').trim();
   return roomCopyNeedsReview(text,i,isFullyReviewedCopyState(s),s.state?.data)?'この投稿文は購入メリットの根拠が不足しているため、まだコピーできません。商品情報を再確認してください。':text;
 }
