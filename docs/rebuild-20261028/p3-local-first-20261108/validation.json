@@ -1,1 +1,28 @@
-{"baselineCoreTests":506,"coreTests":592,"coreFailures":0,"existingRegressionTests":454,"existingRegressionFailures":0,"newTests":86,"groqCalls":0,"dbCalls":0,"blobWrites":0,"productionChanges":0,"qualityComplete":false,"ci":"pending_commit","preview":"pending_commit"}
+{
+  "baselineCoreTests": 506,
+  "coreTests": 595,
+  "coreFailures": 0,
+  "existingRegressionTests": 454,
+  "existingRegressionFailures": 0,
+  "newTests": 89,
+  "groqCalls": 0,
+  "dbCalls": 0,
+  "blobWrites": 0,
+  "productionChanges": 0,
+  "qualityComplete": false,
+  "ci": {
+    "verifiedCommit": "d34d832d0ba34b45811d2f9b618988836e5f4bd0",
+    "Verify Urenavi": "success",
+    "ROOM Copy Regression": "success",
+    "latestSourceChecks": "reported_at_completion"
+  },
+  "preview": {
+    "verifiedCommit": "d34d832d0ba34b45811d2f9b618988836e5f4bd0",
+    "id": "dpl_j9eiyNzGVHtoAWJYj1BTzpmYKpL4",
+    "status": "READY",
+    "target": null,
+    "healthHttpStatus": 200,
+    "healthInferenceEnabled": false,
+    "latestSourceDeployment": "reported_at_completion"
+  }
+}
