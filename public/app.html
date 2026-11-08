@@ -2840,7 +2840,7 @@ async function requestAiRoom(item,index,generation,{statusOnly=false}={}){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),catchcopy:String(item?.catchcopy||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),...(statusOnly?{statusOnly:true}:{})};
+    const payload={itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),catchcopy:String(item?.catchcopy||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),genreName:String(item?.genreName||''),genrePath:String(item?.genrePath||''),...(statusOnly?{statusOnly:true}:{})};
     // An isolated deployment may only narrow this path to completed-cache reads.
     const completedOnly=document.documentElement?.dataset?.completedCoreOnly==='true';
     if(completedOnly){
