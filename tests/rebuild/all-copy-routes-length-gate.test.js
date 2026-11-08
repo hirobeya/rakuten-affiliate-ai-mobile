@@ -28,6 +28,6 @@ test('all legacy/local and AI copy routes reject long text before even checking 
 });
 test('user-facing copy route renders explicit length error and never calls generic evidence error for overflow',()=>{
  assert.match(html,/function postDisplay\(i,p='room'\)/);
- assert.match(html,/if\(typeof RoomCopyResult==='undefined'\|\|!RoomCopyResult\.fitsLength\(text\)\)/);
+ assert.match(html,/if\(text\.length>500 \|\| \(typeof RoomCopyResult!=='undefined'&& !RoomCopyResult\.fitsLength\(text\)\)\)/);
  assert.match(html,/投稿文の全文が楽天ROOMの文字数上限を超えています/);
 });
