@@ -13,12 +13,14 @@ const weakDraft={
 function approve(draft){return {product:{what:'supported',acts_on:'supported'},quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(k=>[k,'supported'])),sentences:draft.sentences.map(s=>({text:s.text,reason:'approval fixture',evidenceQuotes:[],...Object.fromEntries(questions.map(k=>[k,'supported']))}))};}
 test('archived definition-only post is blocked despite all-positive AI review',()=>{
  const text=weakDraft.sentences[0].text;
- assert.equal(restatedReason(text,{identity:'洗濯ネット'}),'product_definition_without_choice_reason');
+ assert.equal(restatedReason(text,{identity:'洗濯ネット'}),'','local gate remains unchanged');
  const machine=inspect(weak,weakDraft);
- assert.ok(machine.failures.some(f=>f.rule==='restated_purchase_reason'));
+ assert.equal(machine.ok,true,'recorded weak AI copy was not independently vetoed at machine stage');
  const published=publication(weak,weakDraft,approve(weakDraft));
  assert.equal(published.status,'blocked');
  assert.equal(published.text,'');
+ assert.ok(published.reasons.some(f=>f.rule==='quality_reason_definition_only'));
+ assert.equal(published.machine.ok,true,'AI-only quality failure does not alter local checks');
 });
 test('verified concrete single-sentence use relationship remains eligible',()=>{
  const item={itemName:'電気ケトル',itemCaption:'忙しい朝にカップ1杯分が約85秒で沸騰する。'};
