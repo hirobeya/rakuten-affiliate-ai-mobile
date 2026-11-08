@@ -3,17 +3,17 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const {restatedReason}=require('../../public/purchase-copy-quality');
 const {inspect,publication,questions}=require('../../lib/room-semantic-contract');
 const weak={
- itemName:'洗濯ネット 選べる6枚セット',
- itemCaption:'サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。'
+ itemName:'IH対応フライパン',
+ itemCaption:'IH対応のフライパン。調理器具です。'
 };
 const weakDraft={
- product:{what:'洗濯ネット',acts_on:'衣類',acts_on_quote:weak.itemName},
- sentences:[{text:'洗濯ネットは、サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。',kinds:['spec'],quotes:[weak.itemCaption]}]
+ product:{what:'フライパン',acts_on:'食材',acts_on_quote:weak.itemName},
+ sentences:[{text:'フライパンは、IH対応の調理器具です。',kinds:['spec'],quotes:[weak.itemCaption]}]
 };
 function approve(draft){return {product:{what:'supported',acts_on:'supported'},quality:Object.fromEntries(['identity','reason','scene','natural','non_redundant','room_style'].map(k=>[k,'supported'])),sentences:draft.sentences.map(s=>({text:s.text,reason:'approval fixture',evidenceQuotes:[],...Object.fromEntries(questions.map(k=>[k,'supported']))}))};}
-test('archived definition-only post is blocked despite all-positive AI review',()=>{
+test('category-neutral product-definition-only post is blocked despite all-positive AI review',()=>{
  const text=weakDraft.sentences[0].text;
- assert.equal(restatedReason(text,{identity:'洗濯ネット'}),'','local gate remains unchanged');
+ assert.equal(restatedReason(text,{identity:'フライパン'}),'','local gate remains unchanged');
  const machine=inspect(weak,weakDraft);
  assert.equal(machine.ok,true,'recorded weak AI copy was not independently vetoed at machine stage');
  const published=publication(weak,weakDraft,approve(weakDraft));
