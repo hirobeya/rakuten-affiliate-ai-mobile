@@ -260,7 +260,7 @@ function resolveIdentityHint(item,learnedIdentity=''){
   return identity;
 }
 
-function localZeroCall(item,learnedIdentity='',diagnostics=null){
+function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={}){
   // Internal diagnostics expose the existing decision, never a second policy
   // or a bypass. The normal endpoint still receives exactly the same contract.
   const reject=(stage,reason)=>{
@@ -318,7 +318,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null){
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true});
   if(diagnostics) diagnostics.purchaseCandidate=proposedPartnerCopy?{
     text:proposedPartnerCopy.text,quote:proposedPartnerCopy.quote,source:proposedPartnerCopy.source||'itemName',
     kind:proposedPartnerCopy.kind,axes:proposedPartnerCopy.axisHints||[]

@@ -1,0 +1,9 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const H=require('../../scripts/rebuild/editorial-preview/api/generate');
+const env={VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'rebuild/urenavi-core-20261028',VERCEL_GIT_COMMIT_SHA:'a'.repeat(40)};
+function run(req,e=env){let result;const res={setHeader(){},status(code){this.code=code;return this;},json(body){result={code:this.code,body};return result;}};H.create(e)(req,res);return result;}
+test('Production and other branches cannot access the evaluation route',()=>{for(const e of [{...env,VERCEL_ENV:'production'},{...env,VERCEL_GIT_COMMIT_REF:'main'}])assert.equal(run({method:'GET'},e).code,403);});
+test('even live flags and credentials cannot enable the isolated endpoint',()=>{const r=run({method:'GET'},{...env,URENAVI_FREE_CALIBRATION_LIVE:'approved-one-call',GROQ_API_KEY:'synthetic-secret-not-used'});assert.equal(r.body.inferenceEnabled,false);assert.equal(r.body.sourceSha,env.VERCEL_GIT_COMMIT_SHA);assert.ok(!JSON.stringify(r).includes('synthetic-secret'));});
+test('POST returns an unapproved private candidate with no Groq calls',()=>{const item=require('../fixtures/room-products.json').find(r=>r.category==='収納ベンチ').item,r=run({method:'POST',body:{item}});assert.equal(r.code,200);assert.match(r.body.text,/座部を上げると/);assert.equal(r.body.qualityCertified,false);assert.equal(r.body.publication,false);assert.equal(r.body.copyable,false);assert.equal(r.body.groqCalls,0);});
+for(const body of [{item:{itemName:'x',itemCaption:''},permission:true},{item:{itemName:'x',itemCaption:'',learnedIdentity:'x'}},{item:{itemName:'x',itemCaption:''},mode:'paid'},{item:{itemName:'x',itemCaption:'',itemPrice:'100'}},null])test('posted flags and malformed data are rejected '+JSON.stringify(body),()=>assert.equal(run({method:'POST',body}).code,400));

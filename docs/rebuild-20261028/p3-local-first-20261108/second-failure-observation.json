@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "kind": "second_failed_call_user_observation_pending_provider_reconciliation",
+  "observation": {
+    "source": "user_formal_instruction_20261108",
+    "httpStatus": 400,
+    "reportedTotalTokens": 5729,
+    "outputLimit": 3000,
+    "schemaMode": "strict"
+  },
+  "previousEvidenceHashes": [
+    "ce7d7c1a208ef920d19ff7dfeda3b9ea84cbd5b22edb5d05b30a2a808524d216",
+    "6b4b284ec2438af198cb6641eccf31430a26850b37dc9b8fd0b586fb4223f5fd",
+    "67be1d8efafcf33ef7c07f86089e9c818d20011fc0b2fb33100df4b9b45df10b"
+  ],
+  "observationHash": "af46fce676e2bd84fe93886569823c28548f946c31fa15fcae35d6eeb7da3def",
+  "reportedTotalTokens": 5729,
+  "providerRequestId": null,
+  "usageBreakdown": null,
+  "verifiedProviderReceipt": false,
+  "originalJournalsChanged": false,
+  "originalClaimsChanged": false,
+  "retainedHolds": {
+    "firstCall": 6000,
+    "historicalSeparate": 8000,
+    "comparison": 8000
+  },
+  "holdReleased": 0,
+  "currentCapacityVerified": false,
+  "sendPermission": false,
+  "publication": false,
+  "requiredForVerifiedSettlement": [
+    "authenticated provider request ID and complete usage",
+    "matching immutable comparison claim, calibration and transport journal hashes",
+    "create-only receipt with confirmed noncached readback"
+  ],
+  "note": "User-reported usage is recorded once as evidence. It is not added to a held reservation a second time and does not imply currently available quota. No runtime ledger is settled by this document."
+}

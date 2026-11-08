@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "buildCommand": "node build.cjs",
+  "installCommand": "true",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "URENAVI_CALIBRATION_LIVE": "disabled",
+    "URENAVI_COMPARISON_LIVE": "disabled",
+    "URENAVI_FREE_CALIBRATION_LIVE": "disabled",
+    "URENAVI_APPROVED_COMPARISON_GRANT": ""
+  }
+}

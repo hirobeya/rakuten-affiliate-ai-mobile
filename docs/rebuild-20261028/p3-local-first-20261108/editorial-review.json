@@ -1,0 +1,109 @@
+{
+  "method": "Single assistant editorial review against frozen sources. Not blind, not a separate reviewer, not a customer test. Machine ready is separate.",
+  "reviewedGeneratedTexts": 6,
+  "allAxesPassBefore": 2,
+  "allAxesPassAfter": 2,
+  "fixedSetDenominator": 44,
+  "allAxesPassFraction": 0.045454545454545456,
+  "sourceUnsupportedClaimsObservedInReviewedTexts": 0,
+  "notGenerated": 38,
+  "attractivenessImprovementProven": false,
+  "rows": [
+    {
+      "itemCode": "e-kurashi:10019512",
+      "sourceHash": "53ed43af807ebab2d31a21daee117b4dd4e7dda24d85131bb82dd62947d318ce",
+      "text": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "座部を上げると、内部に物を収納可能",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "weak",
+        "audience_value": "weak",
+        "naturalness": "weak",
+        "grounded": "pass"
+      },
+      "reason": "座部の操作と収納先を原文どおり出力。比較上の選ぶ理由と魅力はまだ弱い。",
+      "allAxesPass": false
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "sourceHash": "8feceda4a576d16c2c678d8de74294ce6202d924230e82f7f39072ee875f3cda",
+      "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "pass",
+        "audience_value": "pass",
+        "naturalness": "weak",
+        "grounded": "pass"
+      },
+      "reason": "5本指と死角のブラッシングの関係は原文が支えるが、非常に・簡単の重複が残る。",
+      "allAxesPass": false
+    },
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "sourceHash": "1f29f4f34b3388a36f2b258f653b431f3687553a6edbba21e81ee68ce19924d8",
+      "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "pass",
+        "audience_value": "pass",
+        "naturalness": "fail",
+        "grounded": "pass"
+      },
+      "reason": "構造と作用は引用内だが、<3D構造体>という見出しが本文に残り、自然さが不十分。",
+      "allAxesPass": false
+    },
+    {
+      "itemCode": "daiya:10001447",
+      "sourceHash": "27624b7f2230c31c1bd77d36475c114b966a3aa265621de1f81c4571f896dd8d",
+      "text": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "pass",
+        "audience_value": "pass",
+        "naturalness": "pass",
+        "grounded": "pass"
+      },
+      "reason": "ハート型、カップを畳まず入れる操作、擦れ・ねじれへの関係を原文の範囲で保持。",
+      "allAxesPass": true
+    },
+    {
+      "itemCode": "daiya:10001030",
+      "sourceHash": "de603e6cff31f0810275d4bffb8481664f48bd98548c3eb0107a92a8542812f7",
+      "text": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "weak",
+        "audience_value": "pass",
+        "naturalness": "weak",
+        "grounded": "pass"
+      },
+      "reason": "容量に合わせてふくらむ関係は引用内。長い一文と汎用性に優れた新タイプという販促表現が残る。",
+      "allAxesPass": false
+    },
+    {
+      "itemCode": "daiya:10001455",
+      "sourceHash": "acaed8d3b43cd47ff45bbf44e211d682d0e2c40a63de5e63e39e498925720718",
+      "text": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+      "sourceQuote": "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。",
+      "axes": {
+        "understanding": "pass",
+        "specificity": "pass",
+        "choice": "pass",
+        "audience_value": "pass",
+        "naturalness": "pass",
+        "grounded": "pass"
+      },
+      "reason": "巻く操作、片寄り、シワ・型くずれ、アイロンの負担の関係を原文どおり保持。",
+      "allAxesPass": true
+    }
+  ]
+}
