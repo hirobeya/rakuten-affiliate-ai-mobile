@@ -17,6 +17,7 @@ const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
 const {catalogueOnly,restatedReason}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
+const {genreIdentity}=require('../lib/urenavi-core/genre-identity');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -471,7 +472,11 @@ function createHandler(deps={}){
         itemName:String(body.itemName||'').trim().slice(0,1000),
         itemCaption:String(body.itemCaption||'').slice(0,12000),
         itemPrice:Number(body.itemPrice)||0,
-        imageUrl:String(body.imageUrl||'').trim()
+        imageUrl:String(body.imageUrl||'').trim(),
+        // Rakuten-provided category is a hint only; title and local evidence
+        // must still independently support the item and finished copy.
+        genreName:typeof body.genreName==='string'?body.genreName.slice(0,100):'',
+        genrePath:typeof body.genrePath==='string'?body.genrePath.slice(0,600):''
       };
       if(!item.itemName) return json(res,400,{message:'itemName is required'});
 
@@ -489,6 +494,12 @@ function createHandler(deps={}){
         if(!localResult&&typeof store.findTypeIdentityInTitle==='function'){
           try{learnedIdentity=await store.findTypeIdentityInTitle(item.itemName);}catch(error){console.warn('super-urenavi-v3 learned identity lookup unavailable',error?.message||'unknown');}
           if(learnedIdentity) localResult=localFn(item,learnedIdentity);
+        }
+        if(!localResult){
+          const genre=genreIdentity(item);
+          if(genre) localResult=localFn(item,genre.identity,null,{editorial:true});
+          // A genre hint cannot turn a failed or factless local response into
+          // a success; publication still requires the existing local gates.
         }
         if(localResult){
           if(learnedIdentity&&localResult.local) localResult.local.learnedIdentity=learnedIdentity;
