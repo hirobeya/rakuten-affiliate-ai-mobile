@@ -3,7 +3,7 @@
  const MAX_ROOM_POST_CHARS=500;
  const DISCLOSURE='※アフィリエイト広告を利用しています';
  const compose=sentences=>sentences.map(s=>s.text.normalize('NFKC').replace(/[‐‑‒–—−]/g,'-').replace(/\s+/g,' ').trim()).join('\n\n')+'\n\n'+DISCLOSURE;
- const fitsLength=text=>typeof text==='string'&&Array.from(text).length<=MAX_ROOM_POST_CHARS;
+ const fitsLength=text=>typeof text==='string'&&text.length<=MAX_ROOM_POST_CHARS;
  const canonical=result=>String(result?.version||'').startsWith('room_contract_');
  function ready(result){
   if(!canonical(result)||result.ok!==true||result.pending!==false||result.quality?.status!=='ready'||result.quality?.machine?.ok!==true||result.quality?.review?.ok!==true)return '';
