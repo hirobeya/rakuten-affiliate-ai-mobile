@@ -22,7 +22,7 @@ const samples=[
 ];
 test('diagnostic: manually authored source-backed copy and machine boundary are independent',()=>{
  const results=[];
- for(const x of samples){const r=inspect(get(x.id),x.draft);results.push({id:x.id,ok:r.ok,failures:r.failures});}
+ for(const x of samples){const r=inspect(get(x.id),x.draft);results.push({id:x.id,ok:r.ok,failures:r.failures});assert.equal(r.ok,true,JSON.stringify({id:x.id,failures:r.failures}));}
  console.log('HUMAN_COPY_BOUNDARY_DIAGNOSTIC '+JSON.stringify(results));
  assert.equal(results.length,2);
 });
