@@ -39,7 +39,7 @@ test('browser rejects oversized even if server erroneously stamps ready, never c
 });
 test('fully checked multi-paragraph post remains untruncated',()=>{
  const texts=[
- '収納ケースは前面から開けられるタイプです。',
+ '収納ケースは前面から開けられるタイプです。使う場所や収納する物に合わせ、前面の開閉方法を確認したい人に向けた商品です。',
  '前面の開け方を確かめて選びたいときに。',
  '収納ケースの仕様を理解してから選ぶ人へ。',
  '商品の形状と使う場所を考えたいときに。',
