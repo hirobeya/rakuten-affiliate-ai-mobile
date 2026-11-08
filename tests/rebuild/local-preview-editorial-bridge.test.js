@@ -45,7 +45,7 @@ test('no result is promoted from an unverified second pass',async()=>{
   const calls=[];
   const handler=createHandler({
    authorize:async()=>({ok:true,plan:'owner',user:{id:'test-owner'}}),
-   localZeroCall:(i,identity,diagnostics,options)=>{calls.push(options?.editorial===true?'editorial':'normal');return {ok:true,pending:false,model:'local',quality:{status:'ready',text:'not bound'},variants:[{text:'different text'}],groq:{totalCalls:0}};},
+   localZeroCall:(i,identity,diagnostics,options)=>{calls.push(options?.editorial===true?'editorial':'normal');return options?.editorial===true?{ok:true,pending:false,model:'local',quality:{status:'ready',text:'not bound'},variants:[{text:'different text'}],groq:{totalCalls:0}}:null;},
    provider:{model:'mock',requiredTokens:()=>0,call:async()=>{throw Error('not approved');}},
    consumeQuota:async()=>false,
    store:{loadProduct:async()=>null},
