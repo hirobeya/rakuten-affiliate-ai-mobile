@@ -43,15 +43,6 @@
    if(compatibility&&lines.filter(x=>x.includes(compatibility[1])).length>=2)return 'repeated_use_and_identity_only';
   }
   const body=lines.join(' ');
-  // A standalone product definition is not a reason to choose it. This
-  // category-neutral veto addresses a recorded failure: a configured-set
-  // definition was accepted even though it named no relevant user intention.
-  // Do not reject a short sentence merely because it is short: concrete use
-  // relationships, outcomes and real occasions are assessed separately.
-  if(lines.length===1
-    &&/(?:は|なら|という)[^。！？]{3,}(?:です|となります)[。！!]?$/u.test(body)
-    &&!/(?:したい|とき|時に|方に|人に|際に|ため|ので|ことで|に合わせ|に応じ|できます|できる|しやす|防ぎ|防ぐ|減ら|取り出せ|使え|対応でき)/u.test(body))
-    return 'product_definition_without_choice_reason';
   // A configurable assortment followed only by "convenient" still does not
   // explain how the configuration serves the stated intention. This is a
   // structural veto across product kinds, not a category/brand exception.
