@@ -137,6 +137,20 @@
     for(const m of source.matchAll(/([^。！？、]{1,40}と[^。！？、]{1,30})を両立(?:しています|している|します|する|した)?(?=[。！？]|$)/g)){
       provisionText=provisionText.split(m[1]+'を兼ね備え').join(m[1]+'を両立');
     }
+    // A literal, positively specified function can be described as
+    // "機能を備えた" without implying any new outcome. Do not exempt the
+    // general phrase "備え" (e.g. disaster preparedness), negated specs,
+    // or unquoted/unlisted functions. The independent source/scope review
+    // remains mandatory even when this lexical false positive is avoided.
+    provisionText=provisionText.replace(/([\p{Script=Han}\p{Script=Katakana}ー]{2,14}機能)を備え(?:た|る|ています|ている)/gu,match=>{
+      const feature=match.match(/([\p{Script=Han}\p{Script=Katakana}ー]{2,14}機能)/u)?.[1]||'';
+      if(!feature||!source.includes(feature))return match;
+      const at=source.indexOf(feature);
+      const before=source.slice(Math.max(0,at-3),at);
+      const after=source.slice(at+feature.length,at+feature.length+16);
+      if(/(?:非|未|不)$/.test(before)||/^(?:なし|無し|はない|がない|はありません|がありません|未搭載|非対応|対象外|別売)/.test(after))return match;
+      return match.replace('備え','搭載');
+    });
     return UNSUPPORTED_BENEFIT_TERMS.filter(term=>(term==='備え'?provisionText:t).includes(term)&&!source.includes(term));
   }
 
