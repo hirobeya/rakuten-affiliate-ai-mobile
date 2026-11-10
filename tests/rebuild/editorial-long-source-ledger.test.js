@@ -38,3 +38,22 @@ test('negative condition within a long original remains in exact source snippets
  const restored=restore(draft,item);
  assert.equal(restored.sentences[0].quotes[0],negative.text);
 });
+
+test('compact model references save duplicate text while exact server citations remain unchanged',()=>{
+ const {forModel}=require('../../lib/urenavi-core/editorial-source-ledger');
+ const provider=require('../../lib/room-semantic-provider');
+ for(const item of products){
+  const full=build(item),compact=forModel(full);
+  assert.equal(compact.passages.length,full.passages.length);
+  for(let i=0;i<full.passages.length;i++){
+   const p=compact.passages[i],o=full.passages[i];
+   assert.equal(p.id,o.id);assert.equal(p.start,o.start);assert.equal(p.end,o.end);
+   assert.ok(p.preview.length<=85);
+   assert.equal(Object.hasOwn(p,'text'),false,'full evidence is not repeated in model ledger');
+  }
+  const r=provider.stageRequest('generate',item,{},provider.REVIEW_PROMPT,'editorial');
+  assert.equal(r.userPayload.itemCaption,item.itemCaption,'the full source is sent unchanged');
+  assert.equal(r.userPayload.itemName,item.itemName);
+  assert.deepEqual(r.schema.properties.sentences.items.properties.sourceIds.items.enum,full.passages.map(p=>p.id));
+ }
+});
