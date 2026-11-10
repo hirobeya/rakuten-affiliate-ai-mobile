@@ -415,12 +415,12 @@
         "item": {
           "itemCode": "givetopstore:45808434600",
           "itemName": "折りたたみメッシュ洗濯かご 自立式 フック付き",
-          "itemCaption": "折りたためる自立式のメッシュ洗濯かご。洗濯ネットとフックが付属。通気性を考慮したメッシュ構造で、衣類の収納や持ち運びに使用できます。底面を含むメッシュ素材のため、濡れた物の取扱いには注意が必要です。",
+          "itemCaption": "折りたたみ式で自立するメッシュ素材の洗濯かご。洗濯ネットとフック付き。通気性を重視したメッシュ構造で、軽量のランドリーバッグとして持ち運べる商品です。",
           "catchcopy": "",
           "itemPrice": 0
         },
         "sourceUrl": "https://item.rakuten.co.jp/givetopstore/45808434600/",
-        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "sourceType": "normalized_merchant_title_and_listing_facts_no_customer_reviews",
         "frozenAt": "2026-11-11",
         "humanChecked": false
       },
