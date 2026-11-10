@@ -10,6 +10,11 @@ const {compose}=require('../../lib/room-writer/compose');
 const B=require('../../lib/room-writer/budget');
 const SET=path.join(__dirname,'../../tests/room-writer/eval-set.json');
 const OUT=path.resolve(process.env.ROOM_WRITER_RESULT_FILE||'room-writer-e1-results.json');
+const LOCK=OUT+'.exclusive.lock';
+let lockFd=null;
+function claimExclusive(){try{lockFd=fs.openSync(LOCK,'wx',0o600);fs.writeSync(lockFd,String(process.pid)+'\n');fs.fsyncSync(lockFd);}catch{die('S3_EXCLUSIVE_LOCAL_LOCK_UNAVAILABLE');}}
+function releaseExclusive(){if(lockFd!==null){fs.closeSync(lockFd);lockFd=null;fs.unlinkSync(LOCK);}}
+
 const now=()=>Date.now();
 const number=x=>Number.isSafeInteger(Number(x))&&Number(x)>=0?Number(x):null;
 const isoDay=()=>new Date().toISOString().slice(0,10);
@@ -66,7 +71,9 @@ async function run(){
   process.stdout.write(JSON.stringify({mode:'offline_preflight',calls:0,entries:inspect},null,2)+'\n');
   return;
  }
- const p=preflight(),report=loadReport();
+ const p=preflight();
+ claimExclusive();
+ const report=loadReport();
  if(p.day===2&&(!report.days['1']||report.days['1']===isoDay()))die('S3_TWO_DISTINCT_DAYS_REQUIRED');
  if(p.day===1&&report.days['1'])die('S3_DAY1_ALREADY_FINISHED');
  const subset=list.slice((p.day-1)*20,p.day*20);
@@ -121,5 +128,6 @@ async function run(){
  }
  if(subset.every(row=>report.posts.some(x=>x.itemCode===row.item.itemCode&&x.state==='completed')))report.days[String(p.day)]=isoDay();
  save(report);
+ releaseExclusive(); // Leave lock on any error or uncertain usage; human reconciliation required.
 }
 run().catch(e=>{process.stderr.write(JSON.stringify({error:e.message,...(e.details||{})})+'\n');process.exitCode=1;});
