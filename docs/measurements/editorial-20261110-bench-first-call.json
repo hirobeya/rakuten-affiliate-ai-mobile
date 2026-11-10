@@ -1,0 +1,437 @@
+{
+  "observedAt": "2026-11-10",
+  "source": "Supabase read-only saved evaluation cache",
+  "baseSha": "a899530a5b23389b4d47f0dd40e6a45c8f0327a6",
+  "preview": "https://rakuten-affiliate-ai-mobile-gpu9ixhy9-hirobeya-6572.vercel.app",
+  "record": {
+    "cache_key": "4b46df929ecb9e1e27d527a57e34a93192bf9720446e28f782299e22f1bb7427",
+    "item_code": "__semantic_preview__:room_contract_9e55038ecce9ea88:e-kurashi:10019512:editorial:owner20261110_0",
+    "model": "openai/gpt-oss-120b",
+    "schema_version": "room_contract_9e55038ecce9ea88",
+    "raw_ai_json": {
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.072516576,
+              "total_time": 3.708206843,
+              "prompt_time": 0.107517274,
+              "total_tokens": 3371,
+              "prompt_tokens": 1678,
+              "completion_time": 3.600689569,
+              "completion_tokens": 1693,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1177
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 5092,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "14.842s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "1m26.4s",
+              "x-ratelimit-remaining-tokens": "6021",
+              "x-ratelimit-remaining-requests": "999"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "2人掛けの収納ベンチ",
+            "acts_on": "収納",
+            "acts_on_quote": "収納ベンチ 2人掛け"
+          },
+          "sentences": [
+            {
+              "text": "山善の収納ベンチ 2人掛けは、幅120×奥行37×高さ40cmのサイズで、リビングやカフェ風インテリアにぴったりです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "幅120×奥行37×高さ40cm"
+              ]
+            },
+            {
+              "text": "座部を上げるだけで内部に幅112×奥行29×深さ28cmの収納スペースが現れ、ブランケットや雑誌をすっきり隠せます。",
+              "kinds": [
+                "benefit",
+                "spec"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "収納部内寸：幅112 奥行29 深さ28cm"
+              ]
+            },
+            {
+              "text": "ゆったり2人掛けでソファ感覚の座り心地を提供し、座面高さ40cmの低め設計が目線を合わせやすく、くつろぎの時間に最適です。",
+              "kinds": [
+                "scene",
+                "benefit"
+              ],
+              "quotes": [
+                "ゆったり2人掛けできてソファ感覚で活躍",
+                "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+              ]
+            },
+            {
+              "text": "張り地はポリエステルまたは合成皮革、クッションはウレタンフォーム、フレームは天然木使用で、質感と耐久性を両立しています。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木"
+              ]
+            },
+            {
+              "text": "重量14kgとしっかりした作りながら完成品なので、組み立て不要ですぐに設置できます。",
+              "kinds": [
+                "benefit"
+              ],
+              "quotes": [
+                "重量14kg",
+                "完成品です"
+              ]
+            },
+            {
+              "text": "別売りのソファと合わせる場合、生地色に差があることをご留意ください。",
+              "kinds": [
+                "benefit"
+              ],
+              "quotes": [
+                "別売りのソファに合わせる際、本品とソファでは生地色の差がございます"
+              ]
+            }
+          ]
+        },
+        "stage": "generate",
+        "nextAt": 1794312183815,
+        "review": null,
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "14.842s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-remaining-tokens": "6021",
+          "x-ratelimit-remaining-requests": "999"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "2人掛けの収納ベンチ",
+                "acts_on": "収納",
+                "acts_on_quote": "収納ベンチ 2人掛け"
+              },
+              "sentences": [
+                {
+                  "text": "山善の収納ベンチ 2人掛けは、幅120×奥行37×高さ40cmのサイズで、リビングやカフェ風インテリアにぴったりです。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "幅120×奥行37×高さ40cm"
+                  ]
+                },
+                {
+                  "text": "座部を上げるだけで内部に幅112×奥行29×深さ28cmの収納スペースが現れ、ブランケットや雑誌をすっきり隠せます。",
+                  "kinds": [
+                    "benefit",
+                    "spec"
+                  ],
+                  "quotes": [
+                    "座部を上げると、内部に物を収納可能",
+                    "収納部内寸：幅112 奥行29 深さ28cm"
+                  ]
+                },
+                {
+                  "text": "ゆったり2人掛けでソファ感覚の座り心地を提供し、座面高さ40cmの低め設計が目線を合わせやすく、くつろぎの時間に最適です。",
+                  "kinds": [
+                    "scene",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "ゆったり2人掛けできてソファ感覚で活躍",
+                    "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+                  ]
+                },
+                {
+                  "text": "張り地はポリエステルまたは合成皮革、クッションはウレタンフォーム、フレームは天然木使用で、質感と耐久性を両立しています。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木"
+                  ]
+                },
+                {
+                  "text": "重量14kgとしっかりした作りながら完成品なので、組み立て不要ですぐに設置できます。",
+                  "kinds": [
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "重量14kg",
+                    "完成品です"
+                  ]
+                },
+                {
+                  "text": "別売りのソファと合わせる場合、生地色に差があることをご留意ください。",
+                  "kinds": [
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "別売りのソファに合わせる際、本品とソファでは生地色の差がございます"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "number_without_evidence",
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                "sentence": 0
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                "sentence": 1
+              },
+              {
+                "rule": "catalogue_only_copy",
+                "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+                "sentence": 2
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": false,
+          "flags": [
+            {
+              "rule": "scope_or_exclusion",
+              "quotes": [
+                {
+                  "end": 282,
+                  "quote": "別売りのソファに合わせる際、本品とソファでは生地色の差がございます",
+                  "start": 249,
+                  "source": "caption"
+                }
+              ],
+              "sentence": 5
+            },
+            {
+              "rule": "scene_needs_review"
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 44,
+                "quote": "幅120×奥行37×高さ40cm",
+                "start": 28,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 167,
+                "quote": "座部を上げると、内部に物を収納可能",
+                "start": 150,
+                "source": "caption"
+              },
+              {
+                "end": 239,
+                "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                "start": 217,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 187,
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "start": 168,
+                "source": "caption"
+              },
+              {
+                "end": 216,
+                "quote": "座面高さ40cmで、ソファシーンにも目線が合う低めの設計",
+                "start": 188,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 95,
+                "quote": "張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木",
+                "start": 55,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 51,
+                "quote": "重量14kg",
+                "start": 45,
+                "source": "caption"
+              },
+              {
+                "end": 112,
+                "quote": "完成品です",
+                "start": 107,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 282,
+                "quote": "別売りのソファに合わせる際、本品とソファでは生地色の差がございます",
+                "start": 249,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": [
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 0
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 1
+            },
+            {
+              "rule": "catalogue_only_copy",
+              "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+              "sentence": 2
+            }
+          ]
+        },
+        "quality": null,
+        "failures": [
+          {
+            "rule": "number_without_evidence",
+            "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+            "sentence": 0
+          },
+          {
+            "rule": "measurement_without_evidence",
+            "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+            "sentence": 1
+          },
+          {
+            "rule": "catalogue_only_copy",
+            "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+            "sentence": 2
+          }
+        ],
+        "startedAt": 1794312162645,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "2人掛けの収納ベンチ",
+            "acts_on": "収納",
+            "acts_on_quote": "収納ベンチ 2人掛け"
+          },
+          "sentences": [
+            {
+              "text": "山善の収納ベンチ 2人掛けは、幅120×奥行37×高さ40cmのサイズで、リビングやカフェ風インテリアにぴったりです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "幅120×奥行37×高さ40cm"
+              ]
+            },
+            {
+              "text": "座部を上げるだけで内部に幅112×奥行29×深さ28cmの収納スペースが現れ、ブランケットや雑誌をすっきり隠せます。",
+              "kinds": [
+                "benefit",
+                "spec"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "収納部内寸：幅112 奥行29 深さ28cm"
+              ]
+            },
+            {
+              "text": "ゆったり2人掛けでソファ感覚の座り心地を提供し、座面高さ40cmの低め設計が目線を合わせやすく、くつろぎの時間に最適です。",
+              "kinds": [
+                "scene",
+                "benefit"
+              ],
+              "quotes": [
+                "ゆったり2人掛けできてソファ感覚で活躍",
+                "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+              ]
+            },
+            {
+              "text": "張り地はポリエステルまたは合成皮革、クッションはウレタンフォーム、フレームは天然木使用で、質感と耐久性を両立しています。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木"
+              ]
+            },
+            {
+              "text": "重量14kgとしっかりした作りながら完成品なので、組み立て不要ですぐに設置できます。",
+              "kinds": [
+                "benefit"
+              ],
+              "quotes": [
+                "重量14kg",
+                "完成品です"
+              ]
+            },
+            {
+              "text": "別売りのソファと合わせる場合、生地色に差があることをご留意ください。",
+              "kinds": [
+                "benefit"
+              ],
+              "quotes": [
+                "別売りのソファに合わせる際、本品とソファでは生地色の差がございます"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": "収納ボックス"
+      }
+    },
+    "updated_at": "2026-11-10 12:02:48.973+00"
+  },
+  "independentEvaluation": {
+    "productUnderstanding": {
+      "pass": true,
+      "reason": "販売本体は2人掛け収納ベンチ、別売ソファも区別。"
+    },
+    "specificity": {
+      "pass": true,
+      "reason": "外寸、内寸、座面高、材質、完成品を具体的に記載。"
+    },
+    "purchaseReason": {
+      "pass": false,
+      "reason": "機能の紹介より仕様列挙と一般的な最適・ぴったりに偏り、根拠外の耐久性を購入理由に使用。"
+    },
+    "audienceSceneValue": {
+      "pass": false,
+      "reason": "リビング等の場面はあるが、座り心地や用途への最適性を原文より強く断定。"
+    },
+    "naturalness": {
+      "pass": false,
+      "reason": "『座り心地を提供』『質感と耐久性を両立』『ご留意ください』がカタログ調。"
+    },
+    "grounding": {
+      "pass": false,
+      "reason": "耐久性、しっかりした作り、ソファ感覚の座り心地、ブランケット・雑誌収納結果は原文で実証されていない。"
+    }
+  },
+  "decision": "rejected_not_integrated",
+  "nextState": "generate attempt 1; no further calls initiated by this agent"
+}
