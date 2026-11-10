@@ -33,9 +33,10 @@
  function clear(){stopped=false;$('state').textContent='';$('copy').textContent='未実行です。';$('details').textContent='未実行です。';controls()}
  $('product').addEventListener('change',clear);$('strategy').addEventListener('change',clear);
  async function authorization(){
-  const session=(await sb.auth.getSession()).data?.session;
-  if(!session?.access_token)throw Error('先に同じブラウザでウレナビへログインしてください。');
-  const header={'Authorization':'Bearer '+session.access_token};
+  const header={};
+  // The main app also supports its existing signed HttpOnly device cookie.
+  // Only the server can validate it; a missing SDK session is not a verdict.
+  try{const session=(await sb.auth.getSession()).data?.session;if(session?.access_token)header.Authorization='Bearer '+session.access_token;}catch{}
   const res=await fetch('/api/access?action=app-status',{headers:header,credentials:'include',cache:'no-store'});
   if(!res.ok)throw Error('オーナー権限を確認できませんでした。');
   const state=await res.json();
