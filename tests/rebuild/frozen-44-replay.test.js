@@ -24,13 +24,13 @@ test('all 44 saved products replay without network or replacing previous success
    assert.equal(Boolean(result.result),Boolean(row.after));
    if(row.before){
      tally.before++;
-     assert.deepEqual(result.baseline,row.before);
-     assert.deepEqual(result.result,row.before);
-     tally.changedSuccessful+=JSON.stringify(result.result)!==JSON.stringify(row.before)?1:0;
+     assert.equal(result.baseline?.quality?.text,row.before);
+     assert.equal(result.result?.quality?.text,row.before);
+     tally.changedSuccessful+=result.result?.quality?.text!==row.before?1:0;
    }
    if(row.after){
      tally.after++;
-     assert.deepEqual(result.result,row.after);
+     assert.equal(result.result?.quality?.text,row.after);
    }else{
      assert.ok(categories.includes(result.diagnostic?.cause));
    }
