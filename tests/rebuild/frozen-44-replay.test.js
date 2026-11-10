@@ -50,4 +50,5 @@ test('all 44 saved products replay without network or replacing previous success
  assert.ok(tally.after>=6,'no loss of previously rendered outputs');
  assert.equal(tally.changedSuccessful,0);
  assert.equal(tally.missingPrevious,0);
+ console.log('FROZEN_44_REPLAY',JSON.stringify(tally));
 });
