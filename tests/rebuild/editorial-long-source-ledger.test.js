@@ -48,8 +48,9 @@ test('compact model references save duplicate text while exact server citations 
   for(let i=0;i<full.passages.length;i++){
    const p=compact.passages[i],o=full.passages[i];
    assert.equal(p.id,o.id);assert.equal(p.start,o.start);assert.equal(p.end,o.end);
-   assert.ok(p.preview.length<=85);
+   assert.ok(p.preview.length<=49);
    assert.equal(Object.hasOwn(p,'text'),false,'full evidence is not repeated in model ledger');
+   assert.equal(p.partial,o.role==='unverified_partial_passage');
   }
   const r=provider.stageRequest('generate',item,{},provider.REVIEW_PROMPT,'editorial');
   assert.equal(r.userPayload.itemCaption,item.itemCaption,'the full source is sent unchanged');
