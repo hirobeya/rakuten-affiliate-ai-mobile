@@ -2,7 +2,7 @@
   "version": "room-writer-s1-public-holdout-v2",
   "sourceFrozenSha": "563e65e0339aa2e33708b998af7e4e47a884ccd3",
   "requiredCount": 40,
-  "status": "complete_pending_source_independent_review",
+  "status": "complete",
   "historical": {
     "count": 20,
     "maxPerCategory": 2,
@@ -255,7 +255,7 @@
     "entries": [],
     "explanation": "Existing room-unseen-products.json contains 17 items already in historical 44. Additional 20 independent unused full-source items have not been established."
   },
-  "sampling": "one per historical category then two additional distinct items from different categories; frozen before model tuning",
+  "sampling": "one per historical category then two additional distinct items from different categories; frozen before model tuning; source spot-check metadata fixed before provider generation",
   "holdout": {
     "count": 20,
     "entries": [
@@ -272,7 +272,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/hibari-sekinami/001-320/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "20～37cm",
+          "sourceUrl": "https://item.rakuten.co.jp/hibari-sekinami/001-320/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "sweet-sanjo:50013",
@@ -287,7 +296,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50013/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "18-8ステンレス",
+          "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50013/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "sweet-sanjo:50037",
@@ -302,7 +320,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50037/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "包丁差し",
+          "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50037/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "h2brothers:foldingchair001",
@@ -317,7 +344,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/h2brothers/foldingchair001/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "250kg",
+          "sourceUrl": "https://item.rakuten.co.jp/h2brothers/foldingchair001/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "la-ma:o100413-02",
@@ -332,7 +368,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/la-ma/o100413-02/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "140kg",
+          "sourceUrl": "https://item.rakuten.co.jp/la-ma/o100413-02/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "aurora77:szn-25zk0030",
@@ -347,7 +392,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/aurora77/szn-25zk0030/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "85kg",
+          "sourceUrl": "https://item.rakuten.co.jp/aurora77/szn-25zk0030/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "sanwadirect:200-stn083",
@@ -362,7 +416,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/200-stn083/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "134g",
+          "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/200-stn083/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "sanwadirect:led-desk5bk",
@@ -377,7 +440,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/led-desk5bk/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "13時間",
+          "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/led-desk5bk/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "kmmart:i-light-st02",
@@ -392,7 +464,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/kmmart/i-light-st02/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "125g",
+          "sourceUrl": "https://item.rakuten.co.jp/kmmart/i-light-st02/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "esco:ldlqfdb",
@@ -407,7 +488,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/esco/ldlqfdb/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "600lm",
+          "sourceUrl": "https://item.rakuten.co.jp/esco/ldlqfdb/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "givetopstore:45808434600",
@@ -422,7 +512,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/givetopstore/45808434600/",
         "sourceType": "normalized_merchant_title_and_listing_facts_no_customer_reviews",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "メッシュ",
+          "sourceUrl": "https://item.rakuten.co.jp/givetopstore/45808434600/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "longlife-global:rb23052501",
@@ -437,7 +536,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/longlife-global/rb23052501/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "227g",
+          "sourceUrl": "https://item.rakuten.co.jp/longlife-global/rb23052501/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "onips-vision:ots0059101",
@@ -452,7 +560,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/onips-vision/ots0059101/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "211g",
+          "sourceUrl": "https://item.rakuten.co.jp/onips-vision/ots0059101/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "captainstagstore:4976790737135",
@@ -467,7 +584,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/captainstagstore/4976790737135/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "700g",
+          "sourceUrl": "https://item.rakuten.co.jp/captainstagstore/4976790737135/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "labbing-store:pc1612",
@@ -482,7 +608,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/labbing-store/pc1612/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "120cm",
+          "sourceUrl": "https://item.rakuten.co.jp/labbing-store/pc1612/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "mujirushi-ryohin:4550584334627",
@@ -497,7 +632,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/mujirushi-ryohin/4550584334627/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "400ml",
+          "sourceUrl": "https://item.rakuten.co.jp/mujirushi-ryohin/4550584334627/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "livingut:475231",
@@ -512,7 +656,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/livingut/475231/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "300ml",
+          "sourceUrl": "https://item.rakuten.co.jp/livingut/475231/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "livingut:311445",
@@ -527,7 +680,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/livingut/311445/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "400ml",
+          "sourceUrl": "https://item.rakuten.co.jp/livingut/311445/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "hecmarket:jdf-hl8_sp",
@@ -542,7 +704,16 @@
         "sourceUrl": "https://item.rakuten.co.jp/hecmarket/jdf-hl8_sp/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "280ml",
+          "sourceUrl": "https://item.rakuten.co.jp/hecmarket/jdf-hl8_sp/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       },
       {
         "itemCode": "rcmd:b8-tume-15",
@@ -557,9 +728,18 @@
         "sourceUrl": "https://item.rakuten.co.jp/rcmd/b8-tume-15/",
         "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
         "frozenAt": "2026-11-11",
-        "humanChecked": false
+        "humanChecked": false,
+        "sourceAudit": {
+          "date": "2026-11-11",
+          "method": "independent_public_seller_listing_search_result_crosscheck",
+          "keyFact": "3.8kg",
+          "sourceUrl": "https://item.rakuten.co.jp/rcmd/b8-tume-15/",
+          "sourceNotRawAPI": true,
+          "manualHumanChecked": false,
+          "limitations": "Public search indexes may lag listing changes. Descriptions are normalized summaries, not untouched Rakuten API captions."
+        }
       }
     ]
   },
-  "methodology": "Historical20 are frozen items. Holdout20 are new public Rakuten merchant item URLs not in historical44; captions are normalized factual summaries of listing pages, not API itemCaption originals. Do not represent them as untouched raw Rakuten API descriptions; verify source freshness and independence before S3."
+  "methodology": "Pilot set: historical20 + 20 distinct new itemCode seller listings. All new entries crosschecked against independently retrieved public seller-page results for product identity and a representative fact. Captions remain pre-authored normalized summaries (NOT raw Rakuten API input). Human editorial grading and raw-API production validation remain outstanding."
 }
