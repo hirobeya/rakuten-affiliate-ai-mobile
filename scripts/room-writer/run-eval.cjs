@@ -14,9 +14,9 @@ const now=()=>Date.now();
 const number=x=>Number.isSafeInteger(Number(x))&&Number(x)>=0?Number(x):null;
 const isoDay=()=>new Date().toISOString().slice(0,10);
 const die=(code,details={})=>{const e=new Error(code);e.details=details;throw e;};
-function entries(){
+function entries(requireComplete=true){
  const data=JSON.parse(fs.readFileSync(SET,'utf8'));
- const a=data?.historical?.entries||[],b=data?.holdout?.entries||[];
+ const a=data?.historical?.entries||[],b=data?.unseen?.entries||[];
  const all=[...a,...b];
  const seen=new Set();
  for(const row of all){
@@ -24,7 +24,7 @@ function entries(){
   if(!item?.itemCode||typeof item.itemName!=='string'||typeof item.itemCaption!=='string'||seen.has(item.itemCode))die('eval_source_invalid_or_duplicate');
   seen.add(item.itemCode);
  }
- if(data.status!=='complete'||a.length!==20||b.length!==20||all.length!==40)die('S1_missing_20_independent_holdouts',{historical:a.length,holdout:b.length});
+ if(requireComplete&&(data.status!=='ready'||a.length!==20||b.length!==20||all.length!==40))die('S1_missing_20_independent_holdouts',{historical:a.length,holdout:b.length});
  if(new Set(all.map(x=>x.category)).size<8)die('S1_insufficient_genres');
  const counts={};for(const row of a)counts[row.category]=(counts[row.category]||0)+1;
  if(Object.values(counts).some(n=>n>2))die('S1_historical_category_cap_exceeded');
@@ -58,8 +58,9 @@ function estimate(request){
  return Math.ceil((s.length-nonAscii)/4+nonAscii*1.4+500);
 }
 async function run(){
- const list=entries(); // S1 must finish before provider can be used.
- if(!process.argv.includes('--live')){
+ const live=process.argv.includes('--live');
+ const list=entries(live); // S1 must finish before provider can be used.
+ if(!live){
   const inspect=list.map(row=>{const p=pack({catchcopy:'',...row.item}),b=build(p);
    return {itemCode:row.item.itemCode,category:row.category,facts:p.facts.length,incomplete:p.incomplete,held:b.hold,reason:b.reason};});
   process.stdout.write(JSON.stringify({mode:'offline_preflight',calls:0,entries:inspect},null,2)+'\n');
@@ -67,22 +68,22 @@ async function run(){
  }
  const p=preflight(),report=loadReport();
  if(p.day===2&&(!report.days['1']||report.days['1']===isoDay()))die('S3_TWO_DISTINCT_DAYS_REQUIRED');
- if(p.day===1&&report.posts.length)die('S3_DAY1_ALREADY_ATTEMPTED');
+ if(p.day===1&&report.days['1'])die('S3_DAY1_ALREADY_FINISHED');
  const subset=list.slice((p.day-1)*20,p.day*20);
  const seen=new Set(report.posts.map(r=>r.itemCode));
- let dayUsed=0,minuteUsed=0,remainingMinute=p.remainingMinute,remainingDaily=p.remainingDaily;
+ let dayUsed=report.posts.filter(x=>x.day===p.day&&Number.isSafeInteger(x.tokens)).reduce((n,x)=>n+x.tokens,0),minuteUsed=0,remainingMinute=p.remainingMinute,remainingDaily=p.remainingDaily;
  const observed=[],started=now();
  for(const row of subset){
-  if(seen.has(row.item.itemCode))die('S3_DUPLICATE_ITEM_BLOCKED');
+  if(seen.has(row.item.itemCode))continue; // completed distinct item, never resend
   const source=pack({catchcopy:'',...row.item});
   const draft=build(source);
   if(draft.hold){
-   report.posts.push({itemCode:row.item.itemCode,state:'completed',post:null,hold:draft.reason,tokens:0,latencyMs:0});save(report);continue;
+   report.posts.push({itemCode:row.item.itemCode,day:p.day,state:'completed',post:null,hold:draft.reason,tokens:0,latencyMs:0});save(report);continue;
   }
   const reserved=estimate(draft.request)+2000;
   const gate=B.budget({dayUsed,minuteUsed,inputEstimate:estimate(draft.request),unresolved:false,capacityObserved:true});
   if(!gate.allow||reserved>remainingMinute||reserved>remainingDaily){report.stopped='capacity_hold';save(report);die('S3_CAPACITY_INSUFFICIENT');}
-  const event={itemCode:row.item.itemCode,category:row.category,state:'attempt_started',post:null,
+  const event={itemCode:row.item.itemCode,category:row.category,day:p.day,state:'attempt_started',post:null,
    status:'pending',tokens:null,latencyMs:null,sha:crypto.createHash('sha256').update(JSON.stringify(draft.request)).digest('hex')};
   report.posts.push(event);save(report); // durable pre-send record; never retry after ambiguous crash
   const startedAt=now();let http=null,body=null,headers=null;
@@ -111,10 +112,14 @@ async function run(){
   event.status=verdict.status;event.state='completed';save(report);
   if(http===429){report.stopped='429';save(report);die('S3_429_NO_RETRY');}
   observed.push(settled.consumed);
-  if(observed.length===5&&observed.reduce((a,b)=>a+b,0)/5>6000){report.stopped='five_sample_mean_over_6000';save(report);die('S3_TOKEN_SAMPLE_STOP');}
+  const firstFive=report.posts.filter(x=>x.day===p.day&&Number.isSafeInteger(x.tokens)&&x.tokens>0).slice(0,5);
+  if(firstFive.length===5&&firstFive.reduce((a,b)=>a+b.tokens,0)/5>6000){report.stopped='five_sample_mean_over_6000';save(report);die('S3_TOKEN_SAMPLE_STOP');}
   if(now()-started>8*60*60*1000){report.stopped='execution_window_limit';save(report);die('S3_WINDOW_STOP');}
-  // There is intentionally no sleep-and-retry strategy. Insufficient TPM is a hold.
+  // At most ONE new provider call per invocation. A fresh capacity preflight
+  // is mandatory for each subsequent, distinct item; never retry this item.
+  break;
  }
- report.days[String(p.day)]=isoDay();save(report);
+ if(subset.every(row=>report.posts.some(x=>x.itemCode===row.item.itemCode&&x.state==='completed')))report.days[String(p.day)]=isoDay();
+ save(report);
 }
 run().catch(e=>{process.stderr.write(JSON.stringify({error:e.message,...(e.details||{})})+'\n');process.exitCode=1;});
