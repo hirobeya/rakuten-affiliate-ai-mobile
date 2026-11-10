@@ -1,0 +1,89 @@
+{
+  "purpose": "Human-authored source-grounded comparator, not a production template, proof of AI quality, independent multi-rater assessment, or a model-generated sample.",
+  "scope": "Two real frozen items previously involved in Groq comparison. Not auto-approved and never used as runtime per-item exceptions.",
+  "rubric": [
+    "productUnderstanding",
+    "concreteFeatures",
+    "purchaseReason",
+    "audienceUseSceneValue",
+    "naturalPersuasiveCopy",
+    "grounding"
+  ],
+  "examples": [
+    {
+      "itemCode": "e-kurashi:10019512",
+      "kind": "reference_not_model_output",
+      "post": "リビングに座る場所も収納も欲しいなら、山善の2人掛け収納ベンチ。座部を上げると内部に物をしまえます。幅120×奥行37×高さ40cm、収納部内寸は幅112・奥行29・深さ28cm。座面高さは40cmで、ソファと目線が合う低めの設計です。完成品なのも選ぶポイント。張り地はポリエステルまたは合成皮革で、別売りのソファと組み合わせる場合は生地色の差にご注意ください。\n\n※アフィリエイト広告を利用しています",
+      "evidence": [
+        {
+          "claim": "2人掛けと収納できる構造",
+          "quote": "座部を上げると、内部に物を収納可能"
+        },
+        {
+          "claim": "全体サイズ",
+          "quote": "本体サイズ 幅120×奥行37×高さ40cm"
+        },
+        {
+          "claim": "収納部内寸",
+          "quote": "収納部内寸：幅112 奥行29 深さ28cm"
+        },
+        {
+          "claim": "低い座面とソファとの目線",
+          "quote": "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+        },
+        {
+          "claim": "完成品",
+          "quote": "完成品です"
+        },
+        {
+          "claim": "張り地は2素材のいずれか",
+          "quote": "張り地: ポリエステル、または合成皮革"
+        },
+        {
+          "claim": "別売ソファとの生地色差",
+          "quote": "別売りのソファに合わせる際、本品とソファでは生地色の差がございます"
+        }
+      ],
+      "excludedUnproved": [
+        "耐久性が高い",
+        "安定感を提供",
+        "ブランケットが入ると断定",
+        "北欧の空間になじむと断定"
+      ]
+    },
+    {
+      "itemCode": "bos-shop:10000023",
+      "kind": "reference_not_model_output",
+      "post": "ニオイが気になるものを入れる袋を選ぶなら、BOSの防臭袋。こちらはSSサイズ（17×27cm）の200枚入りです。袋のカラーは4色から選べ、防臭力はいずれも同じと案内されています。使いたい大きさと好みの色を基準に選べるのがポイント。限定のストライプパッケージです。\n\n※アフィリエイト広告を利用しています",
+      "evidence": [
+        {
+          "claim": "防臭袋のブランドと枚数",
+          "quote": "臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚"
+        },
+        {
+          "claim": "袋サイズ",
+          "quote": "SSサイズ（17×27cm）"
+        },
+        {
+          "claim": "袋カラー4色",
+          "quote": "袋カラー：4色からお選びいただけます"
+        },
+        {
+          "claim": "防臭力と選択",
+          "quote": "防臭力はいずれも同じですので、お好みの袋サイズ・カラーからお選びください"
+        },
+        {
+          "claim": "限定ストライプパッケージ",
+          "quote": "【限定商品】ストライプパッケージ"
+        }
+      ],
+      "excludedUnproved": [
+        "おむつに使えると断定",
+        "生ごみに有効と断定",
+        "レジ処理用と断定",
+        "完全に無臭",
+        "検索用キーワードを商品用途として採用"
+      ]
+    }
+  ]
+}
