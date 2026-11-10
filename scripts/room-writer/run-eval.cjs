@@ -16,12 +16,12 @@ function claimExclusive(){try{lockFd=fs.openSync(LOCK,'wx',0o600);fs.writeSync(l
 function releaseExclusive(){if(lockFd!==null){fs.closeSync(lockFd);lockFd=null;fs.unlinkSync(LOCK);}}
 
 const now=()=>Date.now();
-const number=x=>Number.isSafeInteger(Number(x))&&Number(x)>=0?Number(x):null;
+const number=x=>x===null||x===undefined||String(x).trim()===''?null:(Number.isSafeInteger(Number(x))&&Number(x)>=0?Number(x):null);
 const isoDay=()=>new Date().toISOString().slice(0,10);
 const die=(code,details={})=>{const e=new Error(code);e.details=details;throw e;};
 function entries(requireComplete=true){
  const data=JSON.parse(fs.readFileSync(SET,'utf8'));
- const a=data?.historical?.entries||[],b=data?.unseen?.entries||[];
+ const a=data?.historical?.entries||[],b=data?.holdout?.entries||[];
  const all=[...a,...b];
  const seen=new Set();
  for(const row of all){
@@ -29,7 +29,7 @@ function entries(requireComplete=true){
   if(!item?.itemCode||typeof item.itemName!=='string'||typeof item.itemCaption!=='string'||seen.has(item.itemCode))die('eval_source_invalid_or_duplicate');
   seen.add(item.itemCode);
  }
- if(requireComplete&&(data.status!=='ready'||a.length!==20||b.length!==20||all.length!==40))die('S1_missing_20_independent_holdouts',{historical:a.length,holdout:b.length});
+ if(requireComplete&&(data.status!=='complete'||a.length!==20||b.length!==20||all.length!==40))die('S1_missing_20_independent_holdouts',{historical:a.length,holdout:b.length});
  if(new Set(all.map(x=>x.category)).size<8)die('S1_insufficient_genres');
  const counts={};for(const row of a)counts[row.category]=(counts[row.category]||0)+1;
  if(Object.values(counts).some(n=>n>2))die('S1_historical_category_cap_exceeded');
