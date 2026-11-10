@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
+<title>ウレナビ｜隔離AI文章実測</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f6f7f9;color:#172434;font:16px/1.65 system-ui,-apple-system,"Hiragino Sans",sans-serif}main{max-width:720px;margin:0 auto;padding:24px 16px 48px}h1{font-size:1.5rem}h2{font-size:1.1rem;margin:22px 0 8px}p{margin:8px 0 15px}label{display:block;font-weight:700;margin:16px 0 5px}select,button{width:100%;font:inherit;padding:12px;border:1px solid #a2adba;border-radius:10px;background:white}button{background:#17375d;color:#fff;font-weight:700;cursor:pointer;margin:9px 0}button:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#fff;color:#17375d}pre{background:white;border:1px solid #d6dfe8;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;min-height:55px}.muted{font-size:.9rem;color:#566575}.warn{border-left:3px solid #b7833d;padding-left:12px}a{color:#1c4d82}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script src="/room-copy-result.js"></script>
+</head><body><main>
+<p><a href="/app.html">ウレナビへ戻る</a></p>
+<h1>AI文章実測｜隔離Preview</h1>
+<p class="warn">オーナーだけが実行できる検証画面です。生成結果の合格は6項目の実務品質合格を意味しません。Groqの利用枠を消費する操作は明示的なボタンからのみ行い、自動再試行しません。</p>
+<p id="access" role="status">認証状態を確認しています。</p>
+<label for="product">検証する固定商品</label><select id="product"></select>
+<label for="strategy">生成方式</label><select id="strategy"><option value="editorial">編集者型（比較対象）</option><option value="standard">従来型（比較基準）</option></select>
+<button id="status" class="secondary" disabled>既存の結果を確認（Groq通信なし）</button>
+<button id="run" disabled>この方式を1回だけ進める（Groq利用の可能性あり）</button>
+<p id="state" role="status" aria-live="polite"></p>
+<h2>生成・審査済みの本文</h2><pre id="copy">未実行です。</pre>
+<h2>品質と根拠の検証情報</h2><pre id="details">未実行です。</pre>
+<p class="muted">202応答は作業途中です。必要な待機後、同じボタンで明示的に再開してください。429・通信エラーは自動再送しません。商品情報は検証画面の固定原文のみです。</p>
+</main><script>
+(()=>{
+ 'use strict';
+ const items=[{"itemCode":"e-kurashi:10019512","itemName":"収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】","itemCaption":"山善 YAMAZEN 収納ベンチ 2人掛け 本体サイズ 幅120×奥行37×高さ40cm 重量14kg 材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木 仕様 ●原産国：中国●完成品です 商品説明 ●ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子●座部を上げると、内部に物を収納可能●ゆったり2人掛けできてソファ感覚で活躍●座面高さ40cmで、ソファシーンにも目線が合う低めの設計●収納部内寸：幅112 奥行29 深さ28cm●座部厚6.5cm※別売りのソファに合わせる際、本品とソファでは生地色の差がございます。予めご了承下さいませ。※色目はモニターや撮影条件などから、実際の色と多少異なる場合があります。※2024年8月1日より、色バリエーションを新たに再販いたします。 商品補足説明 YAMAZEN ヤマゼン 山善 通販 ナチュラルインテリア 北欧インテリア 韓国インテリア 海外インテリア シンプルインテリア カフェ風インテリア インダストリアルインテリア 一人暮らし 一人暮らし部屋 一人暮らし女子 二人暮らし 同棲準備 賃貸インテリア 賃貸暮らし マイホーム 家づくり スツール 椅子 背もたれなし オットマン ソファ 1人掛け ソファー ベンチ 収納スツール 収納ベンチ 収納ボックス 収納 隠す収納 リビング収納 リビング 化粧台 XX616/IVP XX615/DBRP XX614/BKP S3B37/LGY S3B39/NV S3B38/GYお揃いのスツールタイプもございます⇒ インテリア ランキング","catchcopy":"","itemPrice":0},{"itemCode":"bos-shop:10000023","itemName":"【お得】 臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚 ｜ 日本製","itemCaption":"●【限定商品】ストライプパッケージ／袋カラー：4色からお選びいただけます。●【袋サイズ】SSサイズ（17×27cm）●防臭力はいずれも同じですので、お好みの袋サイズ・カラーからお選びください。 「検索用キーワード」 ボス 臭い 匂い ニオイ におい 臭わない 袋 レジ 処理 ゴミ 生 箱 おむつ うんち 生ゴミ ゴミ 対策 エコ 重曹 消臭剤 菌 虫 コバエ カラス 消し 新聞紙 収納 散歩 外出 旅行 おでかけ 車 用品 防災 備蓄 トイレ 持ち帰り 嘔吐 下痢 エチケット マナー おすすめ ランキング 人気 おしゃれ 祝 犬 ペット ドッグ シーツ 犬トイレ 小動物 糞 おしっこ 介護 施設 ケージ ゲージ ポーチ 猫 ねこ キャット 猫砂 猫トイレ 爪とぎ 病気 おから ひのき ペットシーツ 水槽","catchcopy":"","itemPrice":0}];
+ const $=id=>document.getElementById(id);
+ const sb=window.supabase.createClient('https://upooxcugrplfmjnqpuxs.supabase.co','sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storage:window.localStorage}});
+ items.forEach((x,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=x.itemCode+'｜'+x.itemName.slice(0,30);$('product').appendChild(o)});
+ let enabled=false,busy=false,stopped=false;
+ const controls=()=>{const ok=enabled&&!busy;$('status').disabled=!ok;$('run').disabled=!ok||stopped;};
+ const sid=()=>items[Number($('product').value)||0];
+ function runKey(){return 'owner20261110_'+String($('product').value||'0')}
+ function clear(){stopped=false;$('state').textContent='';$('copy').textContent='未実行です。';$('details').textContent='未実行です。';controls()}
+ $('product').addEventListener('change',clear);$('strategy').addEventListener('change',clear);
+ async function authorization(){
+  const session=(await sb.auth.getSession()).data?.session;
+  if(!session?.access_token)throw Error('先に同じブラウザでウレナビへログインしてください。');
+  const header={'Authorization':'Bearer '+session.access_token};
+  const res=await fetch('/api/access?action=app-status',{headers:header,credentials:'include',cache:'no-store'});
+  if(!res.ok)throw Error('オーナー権限を確認できませんでした。');
+  const state=await res.json();
+  if(state?.plan!=='owner')throw Error('オーナー専用の検証です。');
+  return header;
+ }
+ async function request(statusOnly){
+  if(!enabled||busy||(stopped&&!statusOnly))return;
+  busy=true;controls();$('state').textContent=statusOnly?'保存済みの結果を読み取っています。':'指定方式を1段階だけ実行中です。';
+  try{
+   const header=await authorization();
+   const item=sid();
+   const body={itemCode:item.itemCode,itemName:item.itemName,itemCaption:item.itemCaption,catchcopy:item.catchcopy,itemPrice:0,evaluationRun:runKey(),...(statusOnly?{statusOnly:true}:{}),...($('strategy').value==='editorial'?{evaluationWriter:'editorial'}:{})};
+   const response=await fetch('/api/room-copy',{method:'POST',credentials:'include',cache:'no-store',headers:{...header,'Content-Type':'application/json'},body:JSON.stringify(body)});
+   const data=await response.json().catch(()=>({}));
+   const ready=window.RoomCopyResult?.ready(data)||'';
+   const reasons=data?.quality?.reasons||[];
+   $('copy').textContent=ready||'公開できる本文はまだありません。';
+   $('details').textContent=JSON.stringify({httpStatus:response.status,phase:data.phase||null,status:data?.quality?.status||null,pending:data?.pending===true,model:data.model||null,requests:data?.groq?.totalCalls??null,resourceUsage:data?.resourceUsage||null,reasons,qualityReview:data?.quality?.review||null,sourceValidation:data?.quality?.machine||null,characterCount:ready.length,diagnostic:data?.message||null},null,2);
+   $('state').textContent=data?.pending===true?'まだ未完成です。確認済みの待機時間が過ぎたら、明示的に同じ方式を進めてください。待機時間目安 '+Math.ceil(Number(data.retryAfterMs||0)/1000)+' 秒':ready?'サーバー審査での投稿可を確認。ただし6項目の独立した人手品質評価は別途必要です。':data?.message||'本文は不採用または確認中です。';
+   if(response.status===429||response.status===403||response.status>=500||ready||data?.pending===false)stopped=true;
+  }catch(e){stopped=true;$('state').textContent='停止しました。自動再送はしません。'+String(e?.message||'通信エラー');}
+  finally{busy=false;controls();}
+ }
+ $('status').addEventListener('click',()=>request(true));
+ $('run').addEventListener('click',()=>request(false));
+ (async()=>{
+  try{const x=await fetch('/api/runtime-env',{cache:'no-store'});if(!x.ok||(await x.json())?.preview!==true)throw Error('隔離Previewのみ実行できます。');await authorization();enabled=true;$('access').textContent='隔離Previewとオーナー権限を確認しました。';}
+  catch(e){$('access').textContent=String(e?.message||'認証未確認');}
+  controls();
+ })();
+})();
+</script></body></html>
