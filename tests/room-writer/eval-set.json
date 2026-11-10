@@ -1,8 +1,8 @@
 {
-  "version": "room-writer-s1-partial-v1",
+  "version": "room-writer-s1-public-holdout-v2",
   "sourceFrozenSha": "563e65e0339aa2e33708b998af7e4e47a884ccd3",
   "requiredCount": 40,
-  "status": "incomplete_unseen_20_not_available",
+  "status": "complete_pending_source_independent_review",
   "historical": {
     "count": 20,
     "maxPerCategory": 2,
@@ -255,5 +255,311 @@
     "entries": [],
     "explanation": "Existing room-unseen-products.json contains 17 items already in historical 44. Additional 20 independent unused full-source items have not been established."
   },
-  "sampling": "one per historical category then two additional distinct items from different categories; frozen before model tuning"
+  "sampling": "one per historical category then two additional distinct items from different categories; frozen before model tuning",
+  "holdout": {
+    "count": 20,
+    "entries": [
+      {
+        "itemCode": "hibari-sekinami:001-320",
+        "category": "水切りラック",
+        "item": {
+          "itemCode": "hibari-sekinami:001-320",
+          "itemName": "HIBARI ラク伸び水切りラック 伸縮式 ステンレス",
+          "itemCaption": "シンク横・シンク渡しタイプの伸縮式水切りラック。幅は約57cm、高さは約17.2cm、伸縮幅は約20～37cm。食器をどかさず洗い物の量に合わせて広げられる構造。自動排水トレーとカトラリーケースが付いています。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/hibari-sekinami/001-320/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "sweet-sanjo:50013",
+        "category": "水切りラック",
+        "item": {
+          "itemCode": "sweet-sanjo:50013",
+          "itemName": "燕三条水切りラック スリム 伸縮 ステンレス 日本製",
+          "itemCaption": "シンク上に渡して使用する伸縮式の水切りラック。幅約42～62cm、奥行約24cm、高さ約13cm。本体の材質は18-8ステンレスで、日本の燕三条製。プラスチック製の箸立て1個が付属します。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50013/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "sweet-sanjo:50037",
+        "category": "水切りラック",
+        "item": {
+          "itemCode": "sweet-sanjo:50037",
+          "itemName": "燕三条水切りラック 伸縮式 ステンレス 箸立て 包丁差し付き",
+          "itemCaption": "シンクに渡して使用する伸縮式の水切りラック。幅約42～62cm、奥行約24cm、高さ約13cm。材質は18-8ステンレス。付属品はステンレス製の箸立て1個と包丁差し1個です。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/sweet-sanjo/50037/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "h2brothers:foldingchair001",
+        "category": "折りたたみ椅子",
+        "item": {
+          "itemCode": "h2brothers:foldingchair001",
+          "itemName": "ONE STEP 高さ調節可能 折りたたみ伸縮スツール",
+          "itemCaption": "高さを約8～43.5cmまで伸縮できる折りたたみ椅子。直径約26cm、重量約1.1kg、耐荷重約250kg。素材はABSとポリアミド。使い始めは開閉がしにくい場合があります。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/h2brothers/foldingchair001/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "la-ma:o100413-02",
+        "category": "折りたたみ椅子",
+        "item": {
+          "itemCode": "la-ma:o100413-02",
+          "itemName": "LAMA Store アウトドアチェア ローチェア 収納袋付き",
+          "itemCaption": "折りたたみ式のアウトドアチェア。使用時は幅54cm、奥行53cm、高さ61cm。収納時は幅55cm、奥行9cm、高さ59.5cm。重さ約2.1kg、耐荷重140kg。フレーム素材はアルミニウム合金、収納袋が付属します。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/la-ma/o100413-02/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "aurora77:szn-25zk0030",
+        "category": "折りたたみ椅子",
+        "item": {
+          "itemCode": "aurora77:szn-25zk0030",
+          "itemName": "折りたたみアウトドアチェア 収束袋一体型 超軽量",
+          "itemCaption": "収納袋と本体が一体化した折りたたみ椅子。使用時のサイズは約28×24×28cm、収納時は約28×11×5cm。重量約600g。耐荷重85kg（静荷重）。座面は600Dオックスフォードで、フレームはアルミとABSです。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/aurora77/szn-25zk0030/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "sanwadirect:200-stn083",
+        "category": "スマホスタンド",
+        "item": {
+          "itemCode": "sanwadirect:200-stn083",
+          "itemName": "サンワダイレクト アルミ製 回転式 折りたたみスマホスタンド 200-STN083",
+          "itemCaption": "台座が360度回転する2関節の折りたたみ式スマホスタンド。動画視聴、ビデオ通話、端末の展示に使用できます。材質はアルミニウムとシリコーンゴム。重量は約134g、スタンド時の高さは約10.5cmです。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/200-stn083/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "sanwadirect:led-desk5bk",
+        "category": "LEDデスクライト",
+        "item": {
+          "itemCode": "sanwadirect:led-desk5bk",
+          "itemName": "サンワサプライ 充電式 折りたたみLEDデスクライト LED-DESK5BK",
+          "itemCaption": "充電式のLEDデスクライト。USB Type-C接続に対応し、調色は3段階、調光は無段階。高演色Ra90。連続使用時間は最大約13時間ですが、最大輝度では約3時間です。付属品は長さ約0.8mの充電ケーブルです。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/sanwadirect/led-desk5bk/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "kmmart:i-light-st02",
+        "category": "LEDデスクライト",
+        "item": {
+          "itemCode": "kmmart:i-light-st02",
+          "itemName": "USB充電式LEDデスクライト 3段階調色 無段階調光 YJ-7070",
+          "itemCaption": "USB充電式の折りたたみLEDデスクライト。タッチ操作で点灯色を選び、長押しで調光できます。調色は3段階、調光は無段階。充電時間約3時間、連続使用時間約2～4時間。重量は約125gです。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/kmmart/i-light-st02/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "esco:ldlqfdb",
+        "category": "LEDデスクライト",
+        "item": {
+          "itemCode": "esco:ldlqfdb",
+          "itemName": "アイリスオーヤマ Qi充電機能付きLEDデスクライト LDL-QFD-B",
+          "itemCaption": "Qiワイヤレス充電機能とUSBポートを備えた折りたたみ式LEDデスクライト。全光束600lm、調光4段階。USB出力DC5V 1.2A。ワイヤレス充電とUSB出力の同時使用には対応していません。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/esco/ldlqfdb/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "givetopstore:45808434600",
+        "category": "洗濯かご",
+        "item": {
+          "itemCode": "givetopstore:45808434600",
+          "itemName": "折りたたみメッシュ洗濯かご 自立式 フック付き",
+          "itemCaption": "折りたためる自立式のメッシュ洗濯かご。洗濯ネットとフックが付属。通気性を考慮したメッシュ構造で、衣類の収納や持ち運びに使用できます。底面を含むメッシュ素材のため、濡れた物の取扱いには注意が必要です。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/givetopstore/45808434600/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "longlife-global:rb23052501",
+        "category": "洗濯かご",
+        "item": {
+          "itemCode": "longlife-global:rb23052501",
+          "itemName": "折りたたみランドリーバスケット メッシュ 自立式",
+          "itemCaption": "高反発の金属ワイヤーを骨組みに使用する折りたたみ洗濯かご。展開時のサイズは約58×36×36cm、重量約227g。開封・展開時にワイヤーの反発で勢いよく開く場合があり、顔や身体に当たらないよう注意が必要です。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/longlife-global/rb23052501/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "onips-vision:ots0059101",
+        "category": "洗濯かご",
+        "item": {
+          "itemCode": "onips-vision:ots0059101",
+          "itemName": "Onips Vision 折りたたみ洗濯かご メッシュ ナイロン製",
+          "itemCaption": "折りたたみ式のメッシュ洗濯かご。素材はナイロン。サイズは44×55×26cm、重量は約211g。カラーはグレー、ブラック、ベージュ。使わないときに折りたたんで収納できる設計です。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/onips-vision/ots0059101/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "captainstagstore:4976790737135",
+        "category": "アウトドアテーブル",
+        "item": {
+          "itemCode": "captainstagstore:4976790737135",
+          "itemName": "キャプテンスタッグ アルミロールテーブル M-3713 収納袋付き",
+          "itemCaption": "キャンプやツーリング向けのコンパクトなアルミロールテーブル。組立時は幅400×奥行290×高さ120mm。収納時は幅70×奥行60×長さ400mm。重量約700g、耐荷重約30kg。専用収納袋が付属します。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/captainstagstore/4976790737135/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "labbing-store:pc1612",
+        "category": "アウトドアテーブル",
+        "item": {
+          "itemCode": "labbing-store:pc1612",
+          "itemName": "折りたたみアウトドアテーブル 幅120cm 高さ3段階調整",
+          "itemCaption": "天板が折りたためる幅120cmのアウトドアテーブル。伸縮式の脚で高さを3段階に調節できます。組立時のサイズは約120×60×54.5／62.5／70.5cm。収納時は約60×60×7cm。重量約4kg、耐荷重約30kgです。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/labbing-store/pc1612/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "mujirushi-ryohin:4550584334627",
+        "category": "マグカップ",
+        "item": {
+          "itemCode": "mujirushi-ryohin:4550584334627",
+          "itemName": "無印良品 目盛り付き保温保冷蓋付きマグカップ シルバー 400ml",
+          "itemCaption": "真空断熱二重構造の蓋付きステンレス製マグカップ。内側に目盛りがあり、簡易なスライド式の蓋が付属します。容量は蓋使用時約400ml、蓋なし約500ml。食洗機と電子レンジは使用できません。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/mujirushi-ryohin/4550584334627/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "livingut:475231",
+        "category": "マグカップ",
+        "item": {
+          "itemCode": "livingut:475231",
+          "itemName": "蓋付き 真空断熱 ステンレスマグカップ 300ml セラミックコーティング",
+          "itemCaption": "本体内側にセラミックコーティングを施した蓋付きステンレスマグカップ。容量約300ml。保温効力は75度以上（1時間）、保冷効力は7度以下（1時間）。本体と蓋は食器洗い乾燥機に対応しています。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/livingut/475231/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "livingut:311445",
+        "category": "マグカップ",
+        "item": {
+          "itemCode": "livingut:311445",
+          "itemName": "V＆S 蓋付き真空断熱ステンレスマグカップ 400ml",
+          "itemCaption": "真空断熱構造の蓋付きステンレスマグカップ。容量約400ml。本体はステンレス鋼、飲み口とハンドルと蓋はポリプロピレン。食洗機と電子レンジには対応していません。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/livingut/311445/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "hecmarket:jdf-hl8_sp",
+        "category": "加湿器",
+        "item": {
+          "itemCode": "hecmarket:jdf-hl8_sp",
+          "itemName": "USB Type-C 超音波式 卓上加湿器 約280ml",
+          "itemCaption": "USB Type-C接続の超音波式卓上加湿器。水の容量は約280ml、加湿量は約25～60ml/h。連続と断続の2種類の加湿モード。使用時間は約2～8時間ですが、使用環境によって異なります。USBケーブルとスタンドが付属します。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/hecmarket/jdf-hl8_sp/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      },
+      {
+        "itemCode": "rcmd:b8-tume-15",
+        "category": "猫用品",
+        "item": {
+          "itemCode": "rcmd:b8-tume-15",
+          "itemName": "猫用自立型爪とぎ 強化ダンボール 両面リバーシブル",
+          "itemCaption": "自立型の猫用爪とぎ。爪とぎボードは両面使えるリバーシブル仕様。本体のサイズは幅約30×奥行40×高さ60cm、重量は約3.8kg。爪とぎ部分は強化ダンボール、本体はMDF製。",
+          "catchcopy": "",
+          "itemPrice": 0
+        },
+        "sourceUrl": "https://item.rakuten.co.jp/rcmd/b8-tume-15/",
+        "sourceType": "normalized_merchant_facts_from_public_rakuten_item_page",
+        "frozenAt": "2026-11-11",
+        "humanChecked": false
+      }
+    ]
+  },
+  "methodology": "Historical20 are frozen items. Holdout20 are new public Rakuten merchant item URLs not in historical44; captions are normalized factual summaries of listing pages, not API itemCaption originals. Do not represent them as untouched raw Rakuten API descriptions; verify source freshness and independence before S3."
 }
