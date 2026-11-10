@@ -1,0 +1,430 @@
+{
+  "executionSha": "f05d95e6c99522430d9a13dd6658cddf24fbff04",
+  "deployment": "dpl_DwifCAisGWw6atHLzsmuSQY67S88",
+  "record": {
+    "item_code": "__semantic_preview__:room_contract_0c736c45737b64ef:e-kurashi:10019512:editorial:owner20261110_0",
+    "state": {
+      "calls": [
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.155473129,
+            "total_time": 4.610178872,
+            "prompt_time": 0.139056259,
+            "total_tokens": 3805,
+            "prompt_tokens": 1678,
+            "completion_time": 4.471122613,
+            "completion_tokens": 2127,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1726
+            }
+          },
+          "attempt": 0,
+          "elapsedMs": 6086,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "15.254s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "1m26.4s",
+            "x-ratelimit-remaining-tokens": "5966",
+            "x-ratelimit-remaining-requests": "999"
+          }
+        },
+        {
+          "stage": "generate",
+          "usage": {
+            "queue_time": 0.249020569,
+            "total_time": 6.419736683,
+            "prompt_time": 0.106742972,
+            "total_tokens": 5259,
+            "prompt_tokens": 2305,
+            "completion_time": 6.312993711,
+            "completion_tokens": 2954,
+            "completion_tokens_details": {
+              "reasoning_tokens": 2515
+            }
+          },
+          "attempt": 1,
+          "elapsedMs": 8746,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "20.22s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "2m52.8s",
+            "x-ratelimit-remaining-tokens": "5304",
+            "x-ratelimit-remaining-requests": "998"
+          }
+        },
+        {
+          "error": "invalid_structured_output",
+          "stage": "verify",
+          "usage": null,
+          "attempt": 1,
+          "elapsedMs": 8165,
+          "rateLimits": {
+            "x-ratelimit-limit-tokens": "8000",
+            "x-ratelimit-reset-tokens": "44.467s",
+            "x-ratelimit-limit-requests": "1000",
+            "x-ratelimit-reset-requests": "4m19.2s",
+            "x-ratelimit-remaining-tokens": "2071",
+            "x-ratelimit-remaining-requests": "997"
+          }
+        }
+      ],
+      "draft": {
+        "product": {
+          "what": "2人掛け収納ベンチ",
+          "acts_on": "座る人と収納したい物",
+          "acts_on_quote": "座部を上げると、内部に物を収納可能"
+        },
+        "sentences": [
+          {
+            "text": "山善 YAMAZEN の収納ベンチは、幅120×奥行37×高さ40cm のサイズで、2人がゆったり座れるベンチでありながら、ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子として活躍します。",
+            "kinds": [
+              "spec",
+              "benefit"
+            ],
+            "quotes": [
+              "収納ベンチ 2人掛け",
+              "幅120×奥行37×高さ40cm",
+              "ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子"
+            ]
+          },
+          {
+            "text": "座部を上げると、内部に物を収納可能となり、収納部内寸：幅112 奥行29 深さ28cm のスペースでブランケットやクッションをすっきり隠すことができ、リビングでの整理整頓に活用できます。",
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "座部を上げると、内部に物を収納可能",
+              "収納部内寸：幅112 奥行29 深さ28cm"
+            ]
+          },
+          {
+            "text": "張り地はポリエステル、または合成皮革で、クッションはウレタンフォーム、座部厚6.5cm の柔らかさとフレームの天然木が安定感を提供し、北欧インテリアやカフェ風の空間にも自然に馴染みます。",
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "張り地: ポリエステル、または合成皮革",
+              "中材: ウレタンフォーム",
+              "座部厚6.5cm"
+            ]
+          }
+        ]
+      },
+      "stage": "done",
+      "nextAt": 0,
+      "review": null,
+      "attempt": 1,
+      "headers": {
+        "x-ratelimit-limit-tokens": "8000",
+        "x-ratelimit-reset-tokens": "44.467s",
+        "x-ratelimit-limit-requests": "1000",
+        "x-ratelimit-reset-requests": "4m19.2s",
+        "x-ratelimit-remaining-tokens": "2071",
+        "x-ratelimit-remaining-requests": "997"
+      },
+      "history": [
+        {
+          "draft": {
+            "product": {
+              "what": "2人掛け収納ベンチ",
+              "acts_on": "座る人と収納したい物",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "山善の収納ベンチは、ベンチ・オットマン・収納ボックスの3機能を1台で実現し、幅120×奥行37×高さ40cmのコンパクトサイズながら2人がゆったり座れる設計です。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子",
+                  "幅120×奥行37×高さ40cm"
+                ]
+              },
+              {
+                "text": "座部を上げると内部に幅112×奥行29×深さ28cmの収納スペースが現れ、ブランケットやクッションなど日常の小物をすっきり隠すことができます。",
+                "kinds": [
+                  "spec",
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              },
+              {
+                "text": "張り地はポリエステルまたは合成皮革で、クッションはウレタンフォーム、フレームは天然木製なので、座面厚6.5cmの柔らかさと安定感を兼ね備え、リビングやカフェ風インテリアに自然に馴染みます。",
+                "kinds": [
+                  "spec",
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "張り地: ポリエステル、または合成皮革",
+                  "中材: ウレタンフォーム",
+                  "フレーム: 天然木"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "attempt": 0,
+          "failures": [
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 0
+            },
+            {
+              "rule": "final_copy_guard",
+              "detail": "最終コピー時の既存安全チェックで止まる表現: 備え。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+              "sentence": 2
+            },
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 2
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 2
+            }
+          ]
+        },
+        {
+          "draft": {
+            "product": {
+              "what": "2人掛け収納ベンチ",
+              "acts_on": "座る人と収納したい物",
+              "acts_on_quote": "座部を上げると、内部に物を収納可能"
+            },
+            "sentences": [
+              {
+                "text": "山善 YAMAZEN の収納ベンチは、幅120×奥行37×高さ40cm のサイズで、2人がゆったり座れるベンチでありながら、ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子として活躍します。",
+                "kinds": [
+                  "spec",
+                  "benefit"
+                ],
+                "quotes": [
+                  "収納ベンチ 2人掛け",
+                  "幅120×奥行37×高さ40cm",
+                  "ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子"
+                ]
+              },
+              {
+                "text": "座部を上げると、内部に物を収納可能となり、収納部内寸：幅112 奥行29 深さ28cm のスペースでブランケットやクッションをすっきり隠すことができ、リビングでの整理整頓に活用できます。",
+                "kinds": [
+                  "spec",
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "座部を上げると、内部に物を収納可能",
+                  "収納部内寸：幅112 奥行29 深さ28cm"
+                ]
+              },
+              {
+                "text": "張り地はポリエステル、または合成皮革で、クッションはウレタンフォーム、座部厚6.5cm の柔らかさとフレームの天然木が安定感を提供し、北欧インテリアやカフェ風の空間にも自然に馴染みます。",
+                "kinds": [
+                  "spec",
+                  "benefit",
+                  "scene"
+                ],
+                "quotes": [
+                  "張り地: ポリエステル、または合成皮革",
+                  "中材: ウレタンフォーム",
+                  "座部厚6.5cm"
+                ]
+              }
+            ]
+          },
+          "review": null,
+          "attempt": 1,
+          "failures": [
+            {
+              "rule": "invalid_structured_output",
+              "detail": "verify returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field.",
+              "sentence": null
+            }
+          ]
+        }
+      ],
+      "machine": {
+        "ok": true,
+        "flags": [
+          {
+            "rule": "scene_needs_review"
+          }
+        ],
+        "bindings": [
+          [
+            {
+              "end": 10,
+              "quote": "収納ベンチ 2人掛け",
+              "start": 0,
+              "source": "name"
+            },
+            {
+              "end": 44,
+              "quote": "幅120×奥行37×高さ40cm",
+              "start": 28,
+              "source": "caption"
+            },
+            {
+              "end": 149,
+              "quote": "ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子",
+              "start": 119,
+              "source": "caption"
+            }
+          ],
+          [
+            {
+              "end": 167,
+              "quote": "座部を上げると、内部に物を収納可能",
+              "start": 150,
+              "source": "caption"
+            },
+            {
+              "end": 239,
+              "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+              "start": 217,
+              "source": "caption"
+            }
+          ],
+          [
+            {
+              "end": 74,
+              "quote": "張り地: ポリエステル、または合成皮革",
+              "start": 55,
+              "source": "caption"
+            },
+            {
+              "end": 86,
+              "quote": "中材: ウレタンフォーム",
+              "start": 74,
+              "source": "caption"
+            },
+            {
+              "end": 248,
+              "quote": "座部厚6.5cm",
+              "start": 240,
+              "source": "caption"
+            }
+          ]
+        ],
+        "failures": []
+      },
+      "quality": {
+        "text": "",
+        "ledger": [],
+        "status": "blocked",
+        "reasons": [
+          {
+            "rule": "invalid_structured_output",
+            "detail": "verify returned an invalid JSON structure. Output sentences as objects, never JSON-encoded strings; obey every required field.",
+            "sentence": null
+          }
+        ]
+      },
+      "failures": [
+        {
+          "rule": "number_without_evidence",
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+          "sentence": 0
+        },
+        {
+          "rule": "final_copy_guard",
+          "detail": "最終コピー時の既存安全チェックで止まる表現: 備え。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+          "sentence": 2
+        },
+        {
+          "rule": "number_without_evidence",
+          "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+          "sentence": 2
+        },
+        {
+          "rule": "measurement_without_evidence",
+          "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+          "sentence": 2
+        }
+      ],
+      "startedAt": 1794313320767,
+      "finishedAt": 1794313442222,
+      "rateRetries": 0,
+      "previousDraft": {
+        "product": {
+          "what": "2人掛け収納ベンチ",
+          "acts_on": "座る人と収納したい物",
+          "acts_on_quote": "座部を上げると、内部に物を収納可能"
+        },
+        "sentences": [
+          {
+            "text": "山善の収納ベンチは、ベンチ・オットマン・収納ボックスの3機能を1台で実現し、幅120×奥行37×高さ40cmのコンパクトサイズながら2人がゆったり座れる設計です。",
+            "kinds": [
+              "spec",
+              "benefit"
+            ],
+            "quotes": [
+              "ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子",
+              "幅120×奥行37×高さ40cm"
+            ]
+          },
+          {
+            "text": "座部を上げると内部に幅112×奥行29×深さ28cmの収納スペースが現れ、ブランケットやクッションなど日常の小物をすっきり隠すことができます。",
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "座部を上げると、内部に物を収納可能",
+              "収納部内寸：幅112 奥行29 深さ28cm"
+            ]
+          },
+          {
+            "text": "張り地はポリエステルまたは合成皮革で、クッションはウレタンフォーム、フレームは天然木製なので、座面厚6.5cmの柔らかさと安定感を兼ね備え、リビングやカフェ風インテリアに自然に馴染みます。",
+            "kinds": [
+              "spec",
+              "benefit",
+              "scene"
+            ],
+            "quotes": [
+              "張り地: ポリエステル、または合成皮革",
+              "中材: ウレタンフォーム",
+              "フレーム: 天然木"
+            ]
+          }
+        ]
+      },
+      "upstreamErrors": [
+        {
+          "error": {
+            "code": "json_validate_failed",
+            "type": "invalid_request_error",
+            "status": 400,
+            "message": "Generated JSON does not match the expected schema. Please adjust your prompt. See 'failed_generation' for more details. Error: jsonschema: '/sentences/2/text' does not validate with /properties/sentences/items/properties/text/enum: value must be one of '山善 YAMAZEN の収納ベンチは、幅120×奥行37×高さ40cm のサイズで、2人がゆったり座れるベンチでありながら、ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子として活躍します。', '座部を上げると、内部に物を収納可能となり、収納部内寸：幅112 奥行29 深さ28cm のスペースでブランケットやクッションをすっきり隠すことができ、リビングでの整理整頓に活用できます。', '張り地はポリエステル、または合成皮革で、クッションはウレタンフォーム、座部厚6.5cm ",
+            "category": "schema_error"
+          },
+          "stage": "verify",
+          "attempt": 1,
+          "failedGeneration": "{\"product\":{\"what\":\"supported\",\"acts_on\":\"supported\"},\"quality\":{\"identity\":\"supported\",\"reason\":\"supported\",\"scene\":\"supported\",\"natural\":\"supported\",\"non_redundant\":\"supported\",\"room_style\":\"supported\"},\"sentences\":[{\"text\":\"山善 YAMAZEN の収納ベンチは、幅120×奥行37×高さ40cm のサイズで、2人がゆったり座れるベンチでありながら、ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子として活躍します。\",\"evidenceQuotes\":[\"収納ベンチ 2人掛け\",\"幅120×奥行37×高さ40cm\",\"ベンチ、オットマン、オットマン、1台で3つの機能の便利な椅子\"],\"reason\":\"Describes size and multifunctional use of the bench.\",\"target\":\"supported\",\"part\":\"not_supported\",\"conditions\":\"supported\",\"negation\":\"supported\",\"degree\":\"supported\"},{\"text\":\"座部を上げると、内部に物を収納可能となり、収納部内寸：幅112 奥行29 深さ28cm のスペースでブランケットやクッションをすっきり隠すことができ、リビングでの整理整頓に活用できます。\",\"evidenceQuotes\":[\"座部を上げると、内部に物を収納可能\",\"収納部内寸:幅112 奥行29 深さ28cm\"],\"reason\":\"States storage function and dimensions for hidden items.\",\"target\":\"supported\",\"part\":\"not_supported\",\"conditions\":\"supported\",\"negation\":\"supported\",\"degree\":\"supported\"},{\"text\":\"張り地はポリエテ\\n\\nル、または合成皮革で、クッションはウレタンフォーム、座部厚6.5cm の柔らかさとフレームの天然木が安定感を提供し、北欧インテリアやカフェ風の空間にも自然に馴染みます。\",\"evidenceQuotes\":[\"張り地: ポリエステル、または合成皮革\",\"中材: ウレタンフォーム\",\"座部厚6.5cm\"],\"reason\":\"Describes material composition and aesthetic suitability.\",\"target\":\"supported\",\"part\":\"supported\",\"conditions\":\"supported\",\"negation\":\"supported\",\"degree\":\"supported\"}]}"
+        }
+      ],
+      "partnerProductType": "収納ボックス"
+    },
+    "updated_at": "2026-11-10 12:24:02.222+00"
+  },
+  "adoption": false,
+  "publicText": "",
+  "decision": "blocked; usage-unknown stop; no standard comparison or new inference"
+}
