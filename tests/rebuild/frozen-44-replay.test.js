@@ -11,6 +11,7 @@ test('all 44 saved products replay without network or replacing previous success
  assert.equal(frozen.rows.length,44);
  const unique=new Set();
  const tally={before:0,after:0,changedSuccessful:0,missingPrevious:0,unreviewed:0,proposals:0};
+ const newCandidates=[];
  for(const row of frozen.rows){
    assert.ok(!unique.has(row.item.itemCode),'duplicate item code');
    unique.add(row.item.itemCode);
@@ -39,6 +40,7 @@ test('all 44 saved products replay without network or replacing previous success
    }else{
      assert.equal(result.baseline,null,'new output must not replace a baseline success');
      assert.equal(result.qualityCertified,false,'new machine result is not certified six-axis quality');
+     newCandidates.push({itemCode:row.item.itemCode,category:row.category,text:result.result.quality.text,quote:result.result.local?.partner?.quote||null});
    }
    if(result.editorialProposal){
      tally.proposals++;
@@ -51,4 +53,5 @@ test('all 44 saved products replay without network or replacing previous success
  assert.equal(tally.changedSuccessful,0);
  assert.equal(tally.missingPrevious,0);
  console.log('FROZEN_44_REPLAY',JSON.stringify(tally));
+ console.log('FROZEN_44_NEW_CANDIDATES',JSON.stringify(newCandidates));
 });
