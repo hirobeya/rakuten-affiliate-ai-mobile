@@ -4,6 +4,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {generate}=require('../../lib/urenavi-core/last-resort');
+const C=require('../../lib/urenavi-core/contracts');
 const frozen=require('../../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 const categories=['A','B','D','F','G','H'];
 test('all 44 saved products replay without network or replacing previous successful copy',()=>{
@@ -17,7 +18,8 @@ test('all 44 saved products replay without network or replacing previous success
    assert.equal(result.groqCalls,0);
    assert.equal(result.apiCost,0);
    assert.equal(result.qualityCertified,false);
-   assert.equal(result.sourceHash,row.sourceHash);
+   assert.equal(row.sourceHash,C.hash(row.item));
+   assert.equal(result.sourceHash,C.hash(Object.fromEntries(['itemCode','itemName','itemCaption','catchcopy'].map(k=>[k,row.item[k]]))));
    assert.equal(Boolean(result.baseline),Boolean(row.before));
    assert.equal(Boolean(result.result),Boolean(row.after));
    if(row.before){
