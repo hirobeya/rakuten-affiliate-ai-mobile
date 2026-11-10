@@ -1,0 +1,36 @@
+{
+  "kind": "provider_console_usage_v1",
+  "model": "openai/gpt-oss-120b",
+  "markerHash": "01aeba5b0b772b6a36b89b6b5a918f9316f5708302cc42557d96de051be53bd5",
+  "recordHash": "55e897461a41047a99bf364b13aa25b583597f0474a5330dfe8a9e3d5ea7eb8d",
+  "cacheKey": "2ec14004d24cd0fd4622887648a5fd905bc5d6efec44dfc204cdd37bee9a7972",
+  "stage": "verify",
+  "attempt": 1,
+  "providerEvidence": {
+    "source": "authenticated_groq_console",
+    "organization": "Personal",
+    "project": "Default Project",
+    "model": "openai/gpt-oss-120b",
+    "httpStatus": 400,
+    "error": "json_validate_failed",
+    "requestedAt": "2026-11-10T12:23:56Z",
+    "matchingEntries": 1,
+    "reservedTotal": 7474,
+    "usage": {
+      "inputTokens": 2975,
+      "outputTokens": 2790,
+      "totalTokens": 5765
+    },
+    "reference": "https://console.groq.com/dashboard/logs?cursor=",
+    "displayedRequestId": "req_0...vaj5"
+  },
+  "usage": {
+    "inputTokens": 2975,
+    "outputTokens": 2790,
+    "totalTokens": 5765
+  },
+  "recordedAt": 1794314239224,
+  "refundTokens": 0,
+  "quotaRefund": 0,
+  "receiptHash": "5b2ee4ca26886e79cf5437ac0d333130b199acccaf89df8f2ae0c48c0aecd015"
+}
