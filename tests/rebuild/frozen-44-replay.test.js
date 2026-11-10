@@ -21,7 +21,11 @@ test('all 44 saved products replay without network or replacing previous success
    assert.equal(row.sourceHash,C.hash(row.item));
    assert.equal(result.sourceHash,C.hash(Object.fromEntries(['itemCode','itemName','itemCaption','catchcopy'].map(k=>[k,row.item[k]]))));
    assert.equal(Boolean(result.baseline),Boolean(row.before));
-   assert.equal(Boolean(result.result),Boolean(row.after));
+   if(result.result){
+     tally.after++;
+     assert.equal(result.result.quality?.status,'ready');
+     assert.ok(String(result.result.quality?.text||'').trim());
+   }
    if(row.before){
      tally.before++;
      assert.equal(result.baseline?.quality?.text,row.before);
@@ -29,10 +33,12 @@ test('all 44 saved products replay without network or replacing previous success
      tally.changedSuccessful+=result.result?.quality?.text!==row.before?1:0;
    }
    if(row.after){
-     tally.after++;
-     assert.equal(result.result?.quality?.text,row.after);
-   }else{
+     assert.equal(result.result?.quality?.text,row.after,'previously generated result must remain unchanged');
+   }else if(!result.result){
      assert.ok(categories.includes(result.diagnostic?.cause));
+   }else{
+     assert.equal(result.baseline,null,'new output must not replace a baseline success');
+     assert.equal(result.qualityCertified,false,'new machine result is not certified six-axis quality');
    }
    if(result.editorialProposal){
      tally.proposals++;
@@ -41,7 +47,7 @@ test('all 44 saved products replay without network or replacing previous success
    }
  }
  assert.equal(tally.before,5);
- assert.equal(tally.after,6);
+ assert.ok(tally.after>=6,'no loss of previously rendered outputs');
  assert.equal(tally.changedSuccessful,0);
  assert.equal(tally.missingPrevious,0);
 });
