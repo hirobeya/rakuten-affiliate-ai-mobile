@@ -5,7 +5,7 @@
  * Review of a generated result is separately budgeted at runtime.
  */
 const fs=require('node:fs'),path=require('node:path');
-const {createProvider,stageRequest,REVIEW_PROMPT}=require('../../lib/room-semantic-provider');
+const {createProvider,stageRequest,REVIEW_PROMPT,WRITER_SCHEMA}=require('../../lib/room-semantic-provider');
 const SOURCE=path.resolve(__dirname,'../../docs/evaluations/20261027-fixed/inputs.json');
 const modes=['standard','editorial','guided'];
 const threshold=8000; // historical Free TPM: an absolute theoretical limit, NOT current available balance
@@ -20,15 +20,18 @@ function audit(){
   const estimate=Object.fromEntries(modes.map(m=>[m,providers[m].requiredTokens('generate',item,{})]));
   const eligible=modes.filter(m=>estimate[m]<=threshold);
   const best=eligible.reduce((picked,m)=>!picked||estimate[m]<estimate[picked]?m:picked,null);
-  // The same product information and schema must reach all three candidates.
+  // Full product sources and output cap stay equal. Editorial now uses exact
+  // source IDs on the wire and restores the same canonical public contract.
   const requests=modes.map(m=>stageRequest('generate',item,{},REVIEW_PROMPT,m));
-  for(const request of requests){
+  for(const [index,request]of requests.entries()){
    if(request.userPayload.itemName!==item.itemName||request.userPayload.itemCaption!==item.itemCaption||request.userPayload.catchcopy!==(item.catchcopy||''))throw Error('source_truncated');
-   if(JSON.stringify(request.schema)!==JSON.stringify(requests[0].schema)||request.maxOutputTokens!==requests[0].maxOutputTokens)throw Error('non_comparable_schema');
+   const ledger=require('../../lib/urenavi-core/editorial-source-ledger');
+   const expected=modes[index]==='editorial'?ledger.schema(WRITER_SCHEMA,ledger.build(item)):WRITER_SCHEMA;
+   if(JSON.stringify(request.schema)!==JSON.stringify(expected)||request.maxOutputTokens!==requests[0].maxOutputTokens)throw Error('non_comparable_schema');
   }
   return {itemCode:item.itemCode,origin,estimate,eligible,best,hasAnyEligible:eligible.length>0};
  });
- const summary={items:rows.length,sourcePreserved:true,modelCalls:0,notLiveRemainingBalance:true,notQualityEvidence:true,limitTpmHistorical:threshold,
+ const summary={items:rows.length,sourcePreserved:true,wireSchemasIdentical:false,canonicalOutputContractPreserved:true,modelCalls:0,notLiveRemainingBalance:true,notQualityEvidence:true,limitTpmHistorical:threshold,
   feasibleByMode:Object.fromEntries(modes.map(m=>[m,rows.filter(r=>r.eligible.includes(m)).length])),
   overLimitByMode:Object.fromEntries(modes.map(m=>[m,rows.filter(r=>!r.eligible.includes(m)).length])),
   allModesOverLimit:rows.filter(r=>!r.hasAnyEligible).map(r=>({itemCode:r.itemCode,estimate:r.estimate})),

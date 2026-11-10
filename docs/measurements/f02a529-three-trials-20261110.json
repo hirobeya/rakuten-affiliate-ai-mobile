@@ -1,0 +1,1026 @@
+{
+  "sha": "f02a52900a30cc9f57e84c8184ae77661ac04d78",
+  "calls": 5,
+  "inputTokens": 9800,
+  "outputTokens": 8268,
+  "totalTokens": 18068,
+  "adopted": false,
+  "indexedReviewActuallyCalled": false,
+  "trials": {
+    "editorialBench": {
+      "item_code": "__semantic_preview__:room_contract_fe8f248a06e4a792:e-kurashi:10019512:editorial:owner20261110_0",
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.156842359,
+              "total_time": 4.505180423,
+              "prompt_time": 0.131755295,
+              "total_tokens": 3770,
+              "prompt_tokens": 1678,
+              "completion_time": 4.373425128,
+              "completion_tokens": 2092,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1813
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 6702,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "15.232s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "1m26.4s",
+              "x-ratelimit-remaining-tokens": "5969",
+              "x-ratelimit-remaining-requests": "999"
+            }
+          },
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.339752396,
+              "total_time": 2.936313244,
+              "prompt_time": 0.162020795,
+              "total_tokens": 3394,
+              "prompt_tokens": 2069,
+              "completion_time": 2.774292449,
+              "completion_tokens": 1325,
+              "completion_tokens_details": {
+                "reasoning_tokens": 925
+              }
+            },
+            "attempt": 1,
+            "elapsedMs": 5300,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "17.452s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "2m52.8s",
+              "x-ratelimit-remaining-tokens": "5673",
+              "x-ratelimit-remaining-requests": "998"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "収納ベンチ",
+            "acts_on": "収納と座ること",
+            "acts_on_quote": "座部を上げると、内部に物を収納可能"
+          },
+          "sentences": [
+            {
+              "text": "幅120×奥行37×高さ40cm、重量14kgのコンパクトサイズながら、天然木フレームとウレタンフォームの中材でしっかりした作りの収納ベンチです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "幅120×奥行37×高さ40cm",
+                "重量14kg",
+                "フレーム: 天然木"
+              ]
+            },
+            {
+              "text": "座部を上げると、内部に物を収納可能で、収納部内寸：幅112 奥行29 深さ28cmの大容量スペースが確保でき、リビングの小物やブランケットをすっきり隠せます。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "収納部内寸：幅112 奥行29 深さ28cm"
+              ]
+            },
+            {
+              "text": "座面厚6.5cmでゆったり2人掛けできてソファ感覚で活躍し、友人とのおしゃべりや読書タイムに最適です。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "ゆったり2人掛けできてソファ感覚で活躍"
+              ]
+            },
+            {
+              "text": "張り地はポリエステル、または合成皮革でお手入れが簡単、インテリアに合わせやすいナチュラルな雰囲気を演出します。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "張り地: ポリエステル、または合成皮革"
+              ]
+            }
+          ]
+        },
+        "stage": "done",
+        "nextAt": 0,
+        "review": null,
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "17.452s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "2m52.8s",
+          "x-ratelimit-remaining-tokens": "5673",
+          "x-ratelimit-remaining-requests": "998"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "収納ベンチ",
+                "acts_on": "収納と座ること",
+                "acts_on_quote": "座部を上げると、内部に物を収納可能"
+              },
+              "sentences": [
+                {
+                  "text": "本体サイズは幅120×奥行37×高さ40cmで、重量は14kgとコンパクトながらしっかりした作りです。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "幅120×奥行37×高さ40cm",
+                    "重量14kg"
+                  ]
+                },
+                {
+                  "text": "座部を上げると、内部に物を収納可能で、ゆったり2人掛けできてソファ感覚で活躍します。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "座部を上げると、内部に物を収納可能",
+                    "ゆったり2人掛けできてソファ感覚で活躍"
+                  ]
+                },
+                {
+                  "text": "張り地はポリエステルまたは合成皮革、中材はウレタンフォーム、フレームは天然木を使用しています。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "張り地: ポリエステル、または合成皮革",
+                    "中材: ウレタンフォーム",
+                    "フレーム: 天然木"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "product_identity_missing_from_post",
+                "detail": "product.whatで特定した短い商品種別「収納ベンチ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。",
+                "sentence": null
+              }
+            ]
+          },
+          {
+            "draft": {
+              "product": {
+                "what": "収納ベンチ",
+                "acts_on": "収納と座ること",
+                "acts_on_quote": "座部を上げると、内部に物を収納可能"
+              },
+              "sentences": [
+                {
+                  "text": "幅120×奥行37×高さ40cm、重量14kgのコンパクトサイズながら、天然木フレームとウレタンフォームの中材でしっかりした作りの収納ベンチです。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "幅120×奥行37×高さ40cm",
+                    "重量14kg",
+                    "フレーム: 天然木"
+                  ]
+                },
+                {
+                  "text": "座部を上げると、内部に物を収納可能で、収納部内寸：幅112 奥行29 深さ28cmの大容量スペースが確保でき、リビングの小物やブランケットをすっきり隠せます。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "座部を上げると、内部に物を収納可能",
+                    "収納部内寸：幅112 奥行29 深さ28cm"
+                  ]
+                },
+                {
+                  "text": "座面厚6.5cmでゆったり2人掛けできてソファ感覚で活躍し、友人とのおしゃべりや読書タイムに最適です。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "ゆったり2人掛けできてソファ感覚で活躍"
+                  ]
+                },
+                {
+                  "text": "張り地はポリエステル、または合成皮革でお手入れが簡単、インテリアに合わせやすいナチュラルな雰囲気を演出します。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "張り地: ポリエステル、または合成皮革"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 1,
+            "failures": [
+              {
+                "rule": "catalogue_only_copy",
+                "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+                "sentence": 2
+              },
+              {
+                "rule": "number_without_evidence",
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                "sentence": 2
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                "sentence": 2
+              },
+              {
+                "rule": "final_copy_guard",
+                "detail": "最終コピー時の既存安全チェックで止まる表現: お手入れ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+                "sentence": 3
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": false,
+          "flags": [
+            {
+              "rule": "scene_needs_review"
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 44,
+                "quote": "幅120×奥行37×高さ40cm",
+                "start": 28,
+                "source": "caption"
+              },
+              {
+                "end": 51,
+                "quote": "重量14kg",
+                "start": 45,
+                "source": "caption"
+              },
+              {
+                "end": 95,
+                "quote": "フレーム: 天然木",
+                "start": 86,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 167,
+                "quote": "座部を上げると、内部に物を収納可能",
+                "start": 150,
+                "source": "caption"
+              },
+              {
+                "end": 239,
+                "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                "start": 217,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 187,
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "start": 168,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 74,
+                "quote": "張り地: ポリエステル、または合成皮革",
+                "start": 55,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": [
+            {
+              "rule": "catalogue_only_copy",
+              "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+              "sentence": 2
+            },
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 2
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 2
+            },
+            {
+              "rule": "final_copy_guard",
+              "detail": "最終コピー時の既存安全チェックで止まる表現: お手入れ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+              "sentence": 3
+            }
+          ]
+        },
+        "quality": {
+          "text": "",
+          "ledger": [],
+          "status": "blocked",
+          "reasons": [
+            {
+              "rule": "catalogue_only_copy",
+              "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+              "sentence": 2
+            },
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 2
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 2
+            },
+            {
+              "rule": "final_copy_guard",
+              "detail": "最終コピー時の既存安全チェックで止まる表現: お手入れ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+              "sentence": 3
+            }
+          ]
+        },
+        "failures": [
+          {
+            "rule": "product_identity_missing_from_post",
+            "detail": "product.whatで特定した短い商品種別「収納ベンチ」を、本文の特徴や使用意図に自然につなげて明示する。原文の語を組み合わせた商品種別でも省かない。品名だけの独立した文を足さず、付属品や構造の説明だけで商品全体の代わりにしない。商品種別自体の根拠も審査で確認する。",
+            "sentence": null
+          }
+        ],
+        "startedAt": 1794314586370,
+        "finishedAt": 1794314641947,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "収納ベンチ",
+            "acts_on": "収納と座ること",
+            "acts_on_quote": "座部を上げると、内部に物を収納可能"
+          },
+          "sentences": [
+            {
+              "text": "本体サイズは幅120×奥行37×高さ40cmで、重量は14kgとコンパクトながらしっかりした作りです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "幅120×奥行37×高さ40cm",
+                "重量14kg"
+              ]
+            },
+            {
+              "text": "座部を上げると、内部に物を収納可能で、ゆったり2人掛けできてソファ感覚で活躍します。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "ゆったり2人掛けできてソファ感覚で活躍"
+              ]
+            },
+            {
+              "text": "張り地はポリエステルまたは合成皮革、中材はウレタンフォーム、フレームは天然木を使用しています。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "張り地: ポリエステル、または合成皮革",
+                "中材: ウレタンフォーム",
+                "フレーム: 天然木"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": "収納ボックス"
+      },
+      "updated_at": "2026-11-10 12:44:01.947+00"
+    },
+    "standardBench": {
+      "item_code": "__semantic_preview__:room_contract_fe8f248a06e4a792:e-kurashi:10019512:owner20261110_0",
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.080790687,
+              "total_time": 4.266780381,
+              "prompt_time": 0.119830076,
+              "total_tokens": 4075,
+              "prompt_tokens": 2095,
+              "completion_time": 4.146950305,
+              "completion_tokens": 1980,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1561
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 6423,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "18.067s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "4m19.2s",
+              "x-ratelimit-remaining-tokens": "5591",
+              "x-ratelimit-remaining-requests": "997"
+            }
+          },
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.090330617,
+              "total_time": 3.044923976,
+              "prompt_time": 0.193807018,
+              "total_tokens": 3913,
+              "prompt_tokens": 2550,
+              "completion_time": 2.851116958,
+              "completion_tokens": 1363,
+              "completion_tokens_details": {
+                "reasoning_tokens": 986
+              }
+            },
+            "attempt": 1,
+            "elapsedMs": 5187,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "22.2s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "5m45.6s",
+              "x-ratelimit-remaining-tokens": "5040",
+              "x-ratelimit-remaining-requests": "996"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "2人掛け収納ベンチ",
+            "acts_on": "物の収納",
+            "acts_on_quote": "座部を上げると、内部に物を収納可能"
+          },
+          "sentences": [
+            {
+              "text": "座部を上げると内部に物を収納でき、収納部内寸は幅112 cm、奥行29 cm、深さ28 cmと広く、日常の小物やブランケットなどをすっきり隠せます。",
+              "kinds": [
+                "benefit",
+                "spec"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "収納部内寸：幅112 奥行29 深さ28cm"
+              ]
+            },
+            {
+              "text": "幅120 cmのゆったりした2人掛けサイズで、座面高さ40 cmの低め設計のため、リビングでソファ代わりに使用でき、足元もすっきり見えます。",
+              "kinds": [
+                "scene",
+                "spec"
+              ],
+              "quotes": [
+                "幅120×奥行37×高さ40cm",
+                "ゆったり2人掛けできてソファ感覚で活躍",
+                "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+              ]
+            },
+            {
+              "text": "ポリエステルまたは合成皮革の張り地に天然木フレームを使用した完成品なので、届いたらすぐ組み立て不要で設置できます。",
+              "kinds": [
+                "benefit",
+                "spec"
+              ],
+              "quotes": [
+                "材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木",
+                "完成品です"
+              ]
+            }
+          ]
+        },
+        "stage": "verify",
+        "nextAt": 1794314776401,
+        "review": null,
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "22.2s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "5m45.6s",
+          "x-ratelimit-remaining-tokens": "5040",
+          "x-ratelimit-remaining-requests": "996"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "2人掛け収納ベンチ",
+                "acts_on": "物の収納",
+                "acts_on_quote": "座部を上げると、内部に物を収納可能"
+              },
+              "sentences": [
+                {
+                  "text": "座部を上げると内部に物を収納でき、幅112 奥行29 深さ28cmの広々とした収納スペースが確保されています。",
+                  "kinds": [
+                    "benefit",
+                    "spec"
+                  ],
+                  "quotes": [
+                    "座部を上げると、内部に物を収納可能",
+                    "収納部内寸：幅112 奥行29 深さ28cm"
+                  ]
+                },
+                {
+                  "text": "幅120cmのゆったり2人掛けサイズで、リビングのソファ代わりにも使え、座面高さ40cmの低め設計が足元の見た目もすっきりさせます。",
+                  "kinds": [
+                    "scene",
+                    "spec"
+                  ],
+                  "quotes": [
+                    "ゆったり2人掛けできてソファ感覚で活躍",
+                    "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+                  ]
+                },
+                {
+                  "text": "ポリエステルまたは合成皮革の張り地と天然木フレームで作られた完成品なので、組み立て不要です。",
+                  "kinds": [
+                    "spec",
+                    "benefit"
+                  ],
+                  "quotes": [
+                    "材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木",
+                    "完成品です"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "number_without_evidence",
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                "sentence": 1
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                "sentence": 1
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": true,
+          "flags": [
+            {
+              "rule": "scene_needs_review"
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 167,
+                "quote": "座部を上げると、内部に物を収納可能",
+                "start": 150,
+                "source": "caption"
+              },
+              {
+                "end": 239,
+                "quote": "収納部内寸:幅112 奥行29 深さ28cm",
+                "start": 217,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 44,
+                "quote": "幅120×奥行37×高さ40cm",
+                "start": 28,
+                "source": "caption"
+              },
+              {
+                "end": 187,
+                "quote": "ゆったり2人掛けできてソファ感覚で活躍",
+                "start": 168,
+                "source": "caption"
+              },
+              {
+                "end": 216,
+                "quote": "座面高さ40cmで、ソファシーンにも目線が合う低めの設計",
+                "start": 188,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 95,
+                "quote": "材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木",
+                "start": 52,
+                "source": "caption"
+              },
+              {
+                "end": 112,
+                "quote": "完成品です",
+                "start": 107,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "quality": null,
+        "failures": [
+          {
+            "rule": "number_without_evidence",
+            "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+            "sentence": 1
+          },
+          {
+            "rule": "measurement_without_evidence",
+            "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+            "sentence": 1
+          }
+        ],
+        "startedAt": 1794314679982,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "2人掛け収納ベンチ",
+            "acts_on": "物の収納",
+            "acts_on_quote": "座部を上げると、内部に物を収納可能"
+          },
+          "sentences": [
+            {
+              "text": "座部を上げると内部に物を収納でき、幅112 奥行29 深さ28cmの広々とした収納スペースが確保されています。",
+              "kinds": [
+                "benefit",
+                "spec"
+              ],
+              "quotes": [
+                "座部を上げると、内部に物を収納可能",
+                "収納部内寸：幅112 奥行29 深さ28cm"
+              ]
+            },
+            {
+              "text": "幅120cmのゆったり2人掛けサイズで、リビングのソファ代わりにも使え、座面高さ40cmの低め設計が足元の見た目もすっきりさせます。",
+              "kinds": [
+                "scene",
+                "spec"
+              ],
+              "quotes": [
+                "ゆったり2人掛けできてソファ感覚で活躍",
+                "座面高さ40cmで、ソファシーンにも目線が合う低めの設計"
+              ]
+            },
+            {
+              "text": "ポリエステルまたは合成皮革の張り地と天然木フレームで作られた完成品なので、組み立て不要です。",
+              "kinds": [
+                "spec",
+                "benefit"
+              ],
+              "quotes": [
+                "材質 張り地: ポリエステル、または合成皮革中材: ウレタンフォームフレーム: 天然木",
+                "完成品です"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": "収納ボックス"
+      },
+      "updated_at": "2026-11-10 12:45:54.202+00"
+    },
+    "editorialBos": {
+      "item_code": "__semantic_preview__:room_contract_fe8f248a06e4a792:bos-shop:10000023:editorial:owner20261110_1",
+      "state": {
+        "calls": [
+          {
+            "stage": "generate",
+            "usage": {
+              "queue_time": 0.09004168,
+              "total_time": 3.327502491,
+              "prompt_time": 0.130388261,
+              "total_tokens": 2916,
+              "prompt_tokens": 1408,
+              "completion_time": 3.19711423,
+              "completion_tokens": 1508,
+              "completion_tokens_details": {
+                "reasoning_tokens": 1249
+              }
+            },
+            "attempt": 0,
+            "elapsedMs": 4975,
+            "rateLimits": {
+              "x-ratelimit-limit-tokens": "8000",
+              "x-ratelimit-reset-tokens": "12.945s",
+              "x-ratelimit-limit-requests": "1000",
+              "x-ratelimit-reset-requests": "7m12s",
+              "x-ratelimit-remaining-tokens": "6274",
+              "x-ratelimit-remaining-requests": "995"
+            }
+          }
+        ],
+        "draft": {
+          "product": {
+            "what": "臭わない袋 BOS (ボス) ストライプ",
+            "acts_on": "臭い",
+            "acts_on_quote": "臭わない袋"
+          },
+          "sentences": [
+            {
+              "text": "臭わない袋 BOS (ボス) ストライプは、日本製の防臭袋で、SSサイズ（17×27cm）200枚入りです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "臭わない袋",
+                "日本製",
+                "SSサイズ（17×27cm）"
+              ]
+            },
+            {
+              "text": "生ゴミやペットの排泄物、外出先での匂い対策に最適で、4色から選べるストライプデザインなので見た目もおしゃれです。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "4色からお選びいただけます。"
+              ]
+            },
+            {
+              "text": "サイズやカラーは用途に合わせて選べるので、レジ処理や防災備蓄、旅行の持ち帰りなど幅広いシーンで活用できます。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "防臭力はいずれも同じですので"
+              ]
+            }
+          ]
+        },
+        "stage": "generate",
+        "nextAt": 1794314825084,
+        "review": null,
+        "attempt": 1,
+        "headers": {
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-reset-tokens": "12.945s",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-reset-requests": "7m12s",
+          "x-ratelimit-remaining-tokens": "6274",
+          "x-ratelimit-remaining-requests": "995"
+        },
+        "history": [
+          {
+            "draft": {
+              "product": {
+                "what": "臭わない袋 BOS (ボス) ストライプ",
+                "acts_on": "臭い",
+                "acts_on_quote": "臭わない袋"
+              },
+              "sentences": [
+                {
+                  "text": "臭わない袋 BOS (ボス) ストライプは、日本製の防臭袋で、SSサイズ（17×27cm）200枚入りです。",
+                  "kinds": [
+                    "spec"
+                  ],
+                  "quotes": [
+                    "臭わない袋",
+                    "日本製",
+                    "SSサイズ（17×27cm）"
+                  ]
+                },
+                {
+                  "text": "生ゴミやペットの排泄物、外出先での匂い対策に最適で、4色から選べるストライプデザインなので見た目もおしゃれです。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "4色からお選びいただけます。"
+                  ]
+                },
+                {
+                  "text": "サイズやカラーは用途に合わせて選べるので、レジ処理や防災備蓄、旅行の持ち帰りなど幅広いシーンで活用できます。",
+                  "kinds": [
+                    "benefit",
+                    "scene"
+                  ],
+                  "quotes": [
+                    "防臭力はいずれも同じですので"
+                  ]
+                }
+              ]
+            },
+            "review": null,
+            "attempt": 0,
+            "failures": [
+              {
+                "rule": "number_without_evidence",
+                "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+                "sentence": 0
+              },
+              {
+                "rule": "measurement_without_evidence",
+                "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+                "sentence": 0
+              },
+              {
+                "rule": "unsupported_result",
+                "detail": "防臭",
+                "sentence": 0
+              },
+              {
+                "rule": "catalogue_only_copy",
+                "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+                "sentence": 1
+              },
+              {
+                "rule": "final_copy_guard",
+                "detail": "最終コピー時の既存安全チェックで止まる表現: 用途に合わせ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+                "sentence": 2
+              }
+            ]
+          }
+        ],
+        "machine": {
+          "ok": false,
+          "flags": [
+            {
+              "rule": "scope_or_exclusion",
+              "quotes": [
+                {
+                  "end": 37,
+                  "quote": "4色からお選びいただけます。",
+                  "start": 23,
+                  "source": "caption"
+                }
+              ],
+              "sentence": 1
+            },
+            {
+              "rule": "scene_needs_review"
+            }
+          ],
+          "bindings": [
+            [
+              {
+                "end": 10,
+                "quote": "臭わない袋",
+                "start": 5,
+                "source": "name"
+              },
+              {
+                "end": 44,
+                "quote": "日本製",
+                "start": 41,
+                "source": "name"
+              },
+              {
+                "end": 58,
+                "quote": "SSサイズ(17×27cm)",
+                "start": 44,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 37,
+                "quote": "4色からお選びいただけます。",
+                "start": 23,
+                "source": "caption"
+              }
+            ],
+            [
+              {
+                "end": 73,
+                "quote": "防臭力はいずれも同じですので",
+                "start": 59,
+                "source": "caption"
+              }
+            ]
+          ],
+          "failures": [
+            {
+              "rule": "number_without_evidence",
+              "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+              "sentence": 0
+            },
+            {
+              "rule": "measurement_without_evidence",
+              "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+              "sentence": 0
+            },
+            {
+              "rule": "unsupported_result",
+              "detail": "防臭",
+              "sentence": 0
+            },
+            {
+              "rule": "catalogue_only_copy",
+              "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+              "sentence": 1
+            },
+            {
+              "rule": "final_copy_guard",
+              "detail": "最終コピー時の既存安全チェックで止まる表現: 用途に合わせ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+              "sentence": 2
+            }
+          ]
+        },
+        "quality": null,
+        "failures": [
+          {
+            "rule": "number_without_evidence",
+            "detail": "文中のすべての数値を支える原文引用を付ける。商品名の人数なども使うなら商品名の該当部分を引用する。",
+            "sentence": 0
+          },
+          {
+            "rule": "measurement_without_evidence",
+            "detail": "数値と単位の組を引用で裏付ける。寸法表の単位は省略・共通表記を読み取れるが、原文と違う単位や数値には変えない。",
+            "sentence": 0
+          },
+          {
+            "rule": "unsupported_result",
+            "detail": "防臭",
+            "sentence": 0
+          },
+          {
+            "rule": "catalogue_only_copy",
+            "detail": "仕様を見て選ぶ、表記がある、という説明は購入理由ではない。原文にある具体的な使用場面と、その商品固有の特徴が役立つ関係を自然な本文にする。根拠不足なら効果を作らない。",
+            "sentence": 1
+          },
+          {
+            "rule": "final_copy_guard",
+            "detail": "最終コピー時の既存安全チェックで止まる表現: 用途に合わせ。原文にある表現を保持して全文を書き直す。根拠のない効果を追加しない。",
+            "sentence": 2
+          }
+        ],
+        "startedAt": 1794314805193,
+        "rateRetries": 0,
+        "previousDraft": {
+          "product": {
+            "what": "臭わない袋 BOS (ボス) ストライプ",
+            "acts_on": "臭い",
+            "acts_on_quote": "臭わない袋"
+          },
+          "sentences": [
+            {
+              "text": "臭わない袋 BOS (ボス) ストライプは、日本製の防臭袋で、SSサイズ（17×27cm）200枚入りです。",
+              "kinds": [
+                "spec"
+              ],
+              "quotes": [
+                "臭わない袋",
+                "日本製",
+                "SSサイズ（17×27cm）"
+              ]
+            },
+            {
+              "text": "生ゴミやペットの排泄物、外出先での匂い対策に最適で、4色から選べるストライプデザインなので見た目もおしゃれです。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "4色からお選びいただけます。"
+              ]
+            },
+            {
+              "text": "サイズやカラーは用途に合わせて選べるので、レジ処理や防災備蓄、旅行の持ち帰りなど幅広いシーンで活用できます。",
+              "kinds": [
+                "benefit",
+                "scene"
+              ],
+              "quotes": [
+                "防臭力はいずれも同じですので"
+              ]
+            }
+          ]
+        },
+        "partnerProductType": ""
+      },
+      "updated_at": "2026-11-10 12:46:52.139+00"
+    }
+  }
+}

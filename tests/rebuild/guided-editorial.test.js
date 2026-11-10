@@ -23,9 +23,9 @@ test('source offset mutation, invalid field, duplicate false position are reject
 test('guided prompt preserves same strict writer schema, output token limit, independent review',()=>{
  const a=provider.stageRequest('generate',item,{},provider.REVIEW_PROMPT,'editorial');
  const b=provider.stageRequest('generate',item,{},provider.REVIEW_PROMPT,'guided');
- assert.deepEqual(a.schema,b.schema);
+ assert.deepEqual(a.schema.properties.sentences.items.properties.text,b.schema.properties.sentences.items.properties.text);
  assert.equal(a.maxOutputTokens,b.maxOutputTokens);
- assert.equal(a.schemaName,b.schemaName);
+ assert.equal(a.schemaName,'room_evidence_linked_post');assert.equal(b.schemaName,'room_complete_post');
  assert.ok(b.userPayload.readingGuide);
  assert.equal(b.userPayload.itemCaption,item.itemCaption);
  const guidedReview=provider.stageRequest('verify',item,{draft:{sentences:[{text:'テスト文'}]}} ,provider.REVIEW_PROMPT,'guided');

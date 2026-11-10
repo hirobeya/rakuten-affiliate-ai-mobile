@@ -10,9 +10,10 @@ test('comparison preflight: same source/schema/model/output budget, estimated ex
  for(const entry of frozen.entries.filter(e=>/room-products|room-unseen|live-local-analysis/.test(e.name)))for(const x of Array.isArray(entry.data)?entry.data:entry.data.items){
   const item=x.item,req=modes.map(mode=>P.stageRequest('generate',item,{},P.REVIEW_PROMPT,mode));
   for(let i=1;i<req.length;i++){
-   assert.deepEqual(req[0].schema,req[i].schema);
+   assert.deepEqual(req[0].schema.properties.sentences.items.properties.text,req[i].schema.properties.sentences.items.properties.text);
+   assert.deepEqual(req[0].schema.properties.sentences.items.properties.kinds,req[i].schema.properties.sentences.items.properties.kinds);
    assert.equal(req[0].maxOutputTokens,req[i].maxOutputTokens);
-   assert.equal(req[0].schemaName,req[i].schemaName);
+   assert.equal(req[i].schema.additionalProperties,false);
   }
   const amounts=provider.map(p=>p.requiredTokens('generate',item,{}));
   for(let i=0;i<3;i++){
