@@ -1,0 +1,229 @@
+{
+  "route": "raw-source-fallback-v1",
+  "mode": "offline_only",
+  "groqCalls": 0,
+  "newLiveApprovalRequired": true,
+  "dataset": "frozen historical fixture inputs; preservation does not independently certify source provenance",
+  "rows": [
+    {
+      "itemCode": "pasoro:10001354",
+      "status": "held",
+      "reason": "previously_measured_product_no_resend",
+      "groqCalls": 0,
+      "sourceHash": null,
+      "inputHash": null,
+      "requestHash": null,
+      "reservation": null,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "e-kurashi:10019512",
+      "status": "reuse_existing_local_result",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": null,
+      "inputHash": null,
+      "requestHash": null,
+      "reservation": null,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "supplyshop:10028516",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "041bd11def5e247ba4b72959aa6249989bc6e5a085adf5d458b2b451f340670f",
+      "inputHash": "dbf23c7424c40a1ab3e751b5152f0256d017316b6c858ca072cdcb5354038d3c",
+      "requestHash": "1b96504b87d8864ad729d5f5e87d4db3fd3272f5720398af3ed67275545f5ea6",
+      "reservation": 4519,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "worktk:10014552",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "5e906130f1c5efbc8036f0e1a2588206698b6712fb5c32364dfbe1f5e9b64a5c",
+      "inputHash": "478f6bd11f5783108badd91d0239b8febe5f7cb812de5739370e7b2574796c52",
+      "requestHash": "96fb19d6aa9f40e3008fa52d1e03c46adddcbe17ef15988bb92388802eb54cf0",
+      "reservation": 5284,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "status": "reuse_existing_local_result",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": null,
+      "inputHash": null,
+      "requestHash": null,
+      "reservation": null,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "bos-shop:10000023",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "27e13c9ff6902d13e2a3ed7c0c586565d7055e4989d2d36be079d8e6fc591d2e",
+      "inputHash": "d7e395df6d15d669d7adbc20a2905f5b7bbf5ea8b38dfb37f50308a24a6d0e52",
+      "requestHash": "75f25785f883e4befa31c9f7504f381b1ffb97593853431a19b2e45594e3ded2",
+      "reservation": 4731,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "mtgec-beauty:10001348",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "8e5520a05a75badd4376b2b7fa38079ac5faaa256d18271138596413da71aa49",
+      "inputHash": "36b803fd724b22b37b446ef9f73008b6f0b8e6de3666839e3a39e3b3e9653c45",
+      "requestHash": "cbc96f3837deb5eee64ff42923ff28a8fd48ff0c8545b934e91e6771ab56202c",
+      "reservation": 4523,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "1060737e09eced6923e0faf4520dd01fca1062b8e667bc49669a868f023e30e0",
+      "inputHash": "316ee3686cf50837ea1095680851760f36f252cc3b960fbb093dcc097186f58a",
+      "requestHash": "c530523c6115dd2ec3cb10e17a4bd84584e2f1bea16a3de23925093cce661a01",
+      "reservation": 5016,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "89aa90eacf36376b13f056eba1b3c8236cdefa46a12a3d1b572a464b7603bbc9",
+      "inputHash": "c49a508b68dea703db55e16c08bdbc8ef8184d2a38be4b6cc7aa016d775fc7d6",
+      "requestHash": "ee1d599f276200864b477038d3a64ac26acacb103becae395588353a3e4d99af",
+      "reservation": 5761,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "risu-onlineshop:10002384",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "7730bc1b7dc33c5f488bee3bef0299f4a373658aa3080cd89f1e561521964197",
+      "inputHash": "1eadffc22cd38fefd3331f0a855fc3fd9c5daa17a14f5f4f6f4cc9e2f47821ae",
+      "requestHash": "3c94fc8439151c9d50a048b26be1bbce6c9dffec895629ef4f1b9e2a85e18db1",
+      "reservation": 5532,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "snowfoxskincare:10000116",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "457c106100157a0b9b85cda329a2244534b06ccb6835811bf1dbeac729f35fdd",
+      "inputHash": "d4c3355e39f91dd82213855a01f9e78be2d2fb1ffc181d2a02dd9b3795d42aeb",
+      "requestHash": "c33ddb7cd83188cfb10a633be2b3f192be06cf1ca8d4cf5925df0b271dce826c",
+      "reservation": 5876,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "status": "reuse_existing_local_result",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": null,
+      "inputHash": null,
+      "requestHash": null,
+      "reservation": null,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "astyone0728:10000001",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "da9d43f46f9d68f27837419ba3462fe7c3b4c47eb4f43df01dda6c72003077f8",
+      "inputHash": "4bd734e9aac15f431005cfcce5d66750fe27d6f87e408b153f9c891e3a53f2c4",
+      "requestHash": "03e0d61be2d45ec515cc18a92fb9f76519afaeea39dd75611d07d7b42dcb905b",
+      "reservation": 5867,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "myhomeshop:10000326",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "676cf337695b86426f379d53d7095d625da9ed7f529e754e5a2641a2706a466e",
+      "inputHash": "936b552052330b1cc446f8c8593b25ca908345f7fc1849da64b3a3085a8afa3d",
+      "requestHash": "7a6df5e617025c181e85450326df468f562fb75f93356c00d39e6d95e6d297cd",
+      "reservation": 5975,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "irisplaza-r:10170526",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "bc52d3bf4f886f4c85f1bbb4e6269ccd3b5e67fba85f2d0e5f5889378db61e35",
+      "inputHash": "7d4ad749dd459b6f2bcfd2f1bc4b50a89f3e05d30b95d4ef4ac720879d05950a",
+      "requestHash": "0b2d09bca07ac67ac9c3aa3f911b740efe9a64f0d729ba50f8aa4dddbef53e14",
+      "reservation": 5752,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "c0f446d4a044ea25ead21bb0e9a691f94ec9b5c67f0457c26102b1df544cf180",
+      "inputHash": "afe3802d28b127ca89af6430b13d293e9657c3df80263303d48b46b0f0f68beb",
+      "requestHash": "66b21c1e6f9ec1a6053d32964bf382f69d8f881b18a59ec00ec0207dbb1dc9fe",
+      "reservation": 5216,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "high-broad:10000679",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "63cdd3a4fbc3628f0f2779270295c554b0111cdcbd2a7f9a052d95b612f0b6f5",
+      "inputHash": "7970611acc171962ed479c0d20045da8933979d7797a0043fa1c6edbf99a5d07",
+      "requestHash": "b4d6b427a07d228d971410fd402d041771712d383923af6b8b09d94f0343b3b3",
+      "reservation": 5933,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "daiya:10001447",
+      "status": "reuse_existing_local_result",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": null,
+      "inputHash": null,
+      "requestHash": null,
+      "reservation": null,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "arqs01:10000087",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "25412eb9db8ad88a3f51d49ed8588cea050d8b638bc90ec93504ec013d00684a",
+      "inputHash": "1a0a35dd98fef8d4536262d9b3aae8e6ad78876681a12ce72697b524dd264e52",
+      "requestHash": "3b0137360b848249ffe62368486ed18d6ec2e913ac7dd524915a14af988eeccb",
+      "reservation": 5137,
+      "capacityUnknown": true
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "status": "fallback_prepared_not_authorized",
+      "reason": null,
+      "groqCalls": 0,
+      "sourceHash": "cddb7b7d00a614f2865095a99e053f8886642ddda61bb0ca614eb7529a92851d",
+      "inputHash": "83040c58d3257f0cd19eb3ba1871231fb4aae04dc9be9d9117e465db3a1597a2",
+      "requestHash": "54767f47ccc1af11dad562458db4e60a07aa1158a6dd26f331994f4508eb6fbc",
+      "reservation": 5112,
+      "capacityUnknown": true
+    }
+  ]
+}

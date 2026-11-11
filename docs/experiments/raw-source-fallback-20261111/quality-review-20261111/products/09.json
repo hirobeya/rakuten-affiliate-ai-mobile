@@ -1,0 +1,256 @@
+{
+  "number": 9,
+  "itemCode": "e-kitchen:10079039",
+  "category": "フライパン",
+  "source": {
+    "itemCode": "e-kitchen:10079039",
+    "itemName": "赤字覚悟★ フライパン セット IH ガス対応 アイリスオーヤマ 取っ手が取れる 高耐久4層構造 こびりつきにくい 鍋 炒め鍋 深型 卵焼き器 エッグパン ハンドル 2段階ロック ダイヤモンドコートパン 12点 13点 IPDCI *",
+    "itemCaption": "2026年3月26日ツールセットを削除しました。 2025年12月22日リニューアルしました。 ■カラーが変更になりました。 メタリックバーミリオン/メタリックブルージュ/ グレイッシュシルバーが削除されました。 メタリックグレージュ/メタリックバーガンディ/メタリックブラウンが追加されました。 ■セット数が変更になりました。 12点セットが追加されました。 ■アルミ材の板の厚さが変更になりました。 ■デザインが変更になりました。 ■ハンドルのロックの仕様が変更になりました。 ガスコンロで使用の際、火が底面よりもはみ出した状態で使用を続けると、ハンドルの樹脂が焼損し異臭や変形などにより正常に使用できなくなる恐れがありますので、火の加減には十分にご注意ください。取手が取り外せる着脱式のフライパンです。重ねて収納できます。人工ダイヤモンドを細かい粒子状にして、ふっ素樹脂コーティングに配合した「ダイヤモンドコーティング」仕様。こびりつきを防ぎつつコーティングも長持ちします。※ハンドルは着脱式です。※IH、ガス火両対応です。※電子レンジには使用できません。【12点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約20（パッケージ）●商品質量約4.9kg（パッケージ）【13点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・エッグパン・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約24（パッケージ）●商品質量約5.4kg（パッケージ）【フライパン】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）20cm：直径約21.8×高さ約4.526cm：直径約28.1×高さ約6●商品質量20cm：約300g26cm：約600g●満水容量20cm：1.1L26cm：2.7L●対応熱源IH対応（IH200V、IH100V）、ガス火、ラジエントヒーター、オーブン、その他の電気ヒーター【鍋】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）16cm：直径約17.8×高さ約820cm：直径約21.8×高さ約9.5●商品質量16cm：約350g20cm：約510g●満水容量16cm：1.5L20cm：2.8L●対応",
+    "catchcopy": "",
+    "itemPrice": 9980
+  },
+  "sourceHash": "89aa90eacf36376b13f056eba1b3c8236cdefa46a12a3d1b572a464b7603bbc9",
+  "fieldHashes": {
+    "itemCode": "39f268e8707701f12f2eb4b3ff2b67be1bcf5599e456305432e591b1aa31ee86",
+    "itemName": "265eb3f6eb2d915baa8ed570e56b597f149f11e8dc22cd7585a699da6607cd88",
+    "itemCaption": "71d99ae4ab7af40dbfc7e3502b8f3f4b5d18d5fbb3b961316a41a7d990972096",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "dce4f225f420ad15bf70ec2fc86c5650e18c8db8d1a4ad32b789a12d8eaddc6c"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "フライパン",
+    "item": {
+      "itemCaption": "2026年3月26日ツールセットを削除しました。 2025年12月22日リニューアルしました。 ■カラーが変更になりました。 メタリックバーミリオン/メタリックブルージュ/ グレイッシュシルバーが削除されました。 メタリックグレージュ/メタリックバーガンディ/メタリックブラウンが追加されました。 ■セット数が変更になりました。 12点セットが追加されました。 ■アルミ材の板の厚さが変更になりました。 ■デザインが変更になりました。 ■ハンドルのロックの仕様が変更になりました。 ガスコンロで使用の際、火が底面よりもはみ出した状態で使用を続けると、ハンドルの樹脂が焼損し異臭や変形などにより正常に使用できなくなる恐れがありますので、火の加減には十分にご注意ください。取手が取り外せる着脱式のフライパンです。重ねて収納できます。人工ダイヤモンドを細かい粒子状にして、ふっ素樹脂コーティングに配合した「ダイヤモンドコーティング」仕様。こびりつきを防ぎつつコーティングも長持ちします。※ハンドルは着脱式です。※IH、ガス火両対応です。※電子レンジには使用できません。【12点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約20（パッケージ）●商品質量約4.9kg（パッケージ）【13点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・エッグパン・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約24（パッケージ）●商品質量約5.4kg（パッケージ）【フライパン】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）20cm：直径約21.8×高さ約4.526cm：直径約28.1×高さ約6●商品質量20cm：約300g26cm：約600g●満水容量20cm：1.1L26cm：2.7L●対応熱源IH対応（IH200V、IH100V）、ガス火、ラジエントヒーター、オーブン、その他の電気ヒーター【鍋】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）16cm：直径約17.8×高さ約820cm：直径約21.8×高さ約9.5●商品質量16cm：約350g20cm：約510g●満水容量16cm：1.5L20cm：2.8L●対応",
+      "itemCode": "e-kitchen:10079039",
+      "itemName": "赤字覚悟★ フライパン セット IH ガス対応 アイリスオーヤマ 取っ手が取れる 高耐久4層構造 こびりつきにくい 鍋 炒め鍋 深型 卵焼き器 エッグパン ハンドル 2段階ロック ダイヤモンドコートパン 12点 13点 IPDCI *",
+      "itemPrice": 9980
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "28e8f2e0c65b1e15454f3c16aecbeaab2838ce0931e4719a2ad66484980bdeed",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "F",
+      "stage": "quality",
+      "reason": "catalogue_only_copy",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "27d2cefa4555f97a3284acef71057241209556192b9ea3c6c67ebabaa4e62156",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "e-kitchen:10079039",
+      "itemName": "赤字覚悟★ フライパン セット IH ガス対応 アイリスオーヤマ 取っ手が取れる 高耐久4層構造 こびりつきにくい 鍋 炒め鍋 深型 卵焼き器 エッグパン ハンドル 2段階ロック ダイヤモンドコートパン 12点 13点 IPDCI *",
+      "itemCaption": "2026年3月26日ツールセットを削除しました。 2025年12月22日リニューアルしました。 ■カラーが変更になりました。 メタリックバーミリオン/メタリックブルージュ/ グレイッシュシルバーが削除されました。 メタリックグレージュ/メタリックバーガンディ/メタリックブラウンが追加されました。 ■セット数が変更になりました。 12点セットが追加されました。 ■アルミ材の板の厚さが変更になりました。 ■デザインが変更になりました。 ■ハンドルのロックの仕様が変更になりました。 ガスコンロで使用の際、火が底面よりもはみ出した状態で使用を続けると、ハンドルの樹脂が焼損し異臭や変形などにより正常に使用できなくなる恐れがありますので、火の加減には十分にご注意ください。取手が取り外せる着脱式のフライパンです。重ねて収納できます。人工ダイヤモンドを細かい粒子状にして、ふっ素樹脂コーティングに配合した「ダイヤモンドコーティング」仕様。こびりつきを防ぎつつコーティングも長持ちします。※ハンドルは着脱式です。※IH、ガス火両対応です。※電子レンジには使用できません。【12点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約20（パッケージ）●商品質量約4.9kg（パッケージ）【13点セット】●セット内容・フライパン20cm／26cm・炒め鍋26cm・鍋16cm／20cm・エッグパン・ガラスふた16cm／20cm／26cm・シールふた16cm／20cm・ハンドル×2●商品サイズ（cm）幅約29×奥行約28.5×高さ約24（パッケージ）●商品質量約5.4kg（パッケージ）【フライパン】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）20cm：直径約21.8×高さ約4.526cm：直径約28.1×高さ約6●商品質量20cm：約300g26cm：約600g●満水容量20cm：1.1L26cm：2.7L●対応熱源IH対応（IH200V、IH100V）、ガス火、ラジエントヒーター、オーブン、その他の電気ヒーター【鍋】●表面加工（内側／外側）ふっ素樹脂塗膜加工／（底面を除く）焼付け塗装●材料の種類本体：アルミニウム合金はり底：ステンレス鋼（クロム16％）底の厚さ：2.6mm（はり底含む）●商品サイズ（cm）16cm：直径約17.8×高さ約820cm：直径約21.8×高さ約9.5●商品質量16cm：約350g20cm：約510g●満水容量16cm：1.5L20cm：2.8L●対応",
+      "catchcopy": "",
+      "itemPrice": 9980
+    },
+    "sourceHash": "89aa90eacf36376b13f056eba1b3c8236cdefa46a12a3d1b572a464b7603bbc9",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "27d2cefa4555f97a3284acef71057241209556192b9ea3c6c67ebabaa4e62156",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "de4300b59350eaebfcec9a2fed0766574ccf21817d29dbdd3b2f50b9622bd3df",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "89aa90eacf36376b13f056eba1b3c8236cdefa46a12a3d1b572a464b7603bbc9",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "de4300b59350eaebfcec9a2fed0766574ccf21817d29dbdd3b2f50b9622bd3df",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。12点/13点セットや熱源条件の成否を判定できない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "セット別構成は原文にあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "電子レンジ不可や約の保持を本文で確認できない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※電子レンジには使用できません。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【13点セット】"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

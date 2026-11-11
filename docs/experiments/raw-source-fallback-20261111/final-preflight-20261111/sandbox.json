@@ -1,0 +1,69 @@
+{
+  "sandbox": {
+    "name": "urenavi-s3-20261111-five",
+    "currentSessionId": "sbx_2Oo99ipVUXOAKeFScLJKejpxhq8A",
+    "status": "stopped",
+    "statusUpdatedAt": 1794358020027,
+    "persistent": false,
+    "workloadType": "sandbox",
+    "region": "iad1",
+    "failoverRegions": [],
+    "vcpus": 1,
+    "memory": 2048,
+    "runtime": "node22",
+    "architecture": "amd64",
+    "image": "vercel/sandbox/universal@sha256:bbec19cffb43ad724eee446d3bd4476e2993849dc0ff0c9f33356f8365d72219",
+    "timeout": 1800000,
+    "snapshotExpiration": 604800000,
+    "networkPolicy": {
+      "mode": "deny-all"
+    },
+    "totalEgressBytes": 93309,
+    "totalIngressBytes": 6377653,
+    "totalActiveCpuDurationMs": 18541,
+    "totalDurationMs": 1800221,
+    "cwd": "/vercel",
+    "createdAt": 1794356219616,
+    "updatedAt": 1794356219616
+  },
+  "session": {
+    "id": "sbx_2Oo99ipVUXOAKeFScLJKejpxhq8A",
+    "runtime": "node22",
+    "architecture": "amd64",
+    "requestedAt": 1794356219563,
+    "startedAt": 1794356219584,
+    "stoppedAt": 1794358019805,
+    "status": "stopped",
+    "duration": 1800221,
+    "vcpus": 1,
+    "memory": 2048,
+    "timeout": 1800000,
+    "region": "iad1",
+    "cwd": "/vercel",
+    "workloadType": "sandbox",
+    "createdAt": 1794356219563,
+    "updatedAt": 1794356219592,
+    "interactivePort": 26661,
+    "networkPolicy": {
+      "mode": "deny-all"
+    },
+    "activeCpuDurationMs": 18541,
+    "networkTransfer": {
+      "ingress": 6377653,
+      "egress": 93309
+    },
+    "sourceSandboxName": "urenavi-s3-20261111-five",
+    "projectId": "prj_SAJCw9vvSR79pNT3gJCNcXWItGs8"
+  },
+  "routes": [],
+  "resumed": false,
+  "checkedReadOnly": true,
+  "newSandboxCreated": false,
+  "sessionCommandArchiveShowsOldS3Branch": true,
+  "lastArchivedApprovedS3Sha": "ba22436c7b188ad49ad0cf74581aa9dcbe2123d9",
+  "currentRawSourceCodePresentVerified": false,
+  "activeSecretIntakeVerified": false,
+  "priorSecretDesign": "One-time HTTPS password input; secret retained only in Node memory; request body not logged. Old stopped process is not a reusable live secret path.",
+  "secretValueAccessedOrPrinted": false,
+  "oldCommandsRerun": false
+}

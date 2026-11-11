@@ -1,0 +1,621 @@
+{
+  "number": 5,
+  "itemCode": "wishsun:10000100",
+  "category": "ペット毛取りグローブ",
+  "source": {
+    "itemCode": "wishsun:10000100",
+    "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+    "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取",
+    "catchcopy": "",
+    "itemPrice": 1299
+  },
+  "sourceHash": "2390881d99c28d89c63800a6a7b5f0142f4729c1859fd381b2844935f2a0df0f",
+  "fieldHashes": {
+    "itemCode": "8e4a918009ea999db9904f589024a6bd721d781409ce204b5de72fb7a86e004b",
+    "itemName": "5be33b40d4f6f5c88dd9461522267a5e1e259cc0f468af430a6661006e71112c",
+    "itemCaption": "9d09a68afec3aa7d967a13fe7cd83b9a543f64e0df9d965909e30b21968c5d2b",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "df4011e630c0cda98a2323d4a528f461abdf6e30f69029dbc6508f6897264bb4"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "ペット毛取りグローブ",
+    "item": {
+      "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取",
+      "itemCode": "wishsun:10000100",
+      "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+      "itemPrice": 1299
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "8feceda4a576d16c2c678d8de74294ce6202d924230e82f7f39072ee875f3cda",
+    "before": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+    "after": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+    "sourceQuote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+    "diagnostic": null,
+    "automaticStatus": "existing_gate_ready",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+  "characterCount": 106,
+  "publicationReady": false,
+  "outputAbsence": null,
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "edd0b09ea86a0fefb917f92b4e6ad3624527f5f94eb0556deb86d537a5bdda19",
+    "mode": "normal",
+    "result": {
+      "ok": true,
+      "pending": false,
+      "retryAfterMs": 0,
+      "phase": "local",
+      "version": "super-urenavi-v3-conditional-preview",
+      "model": "local",
+      "productType": {
+        "specific": "グルーミンググローブ",
+        "general": "グルーミンググローブ",
+        "quote": "グルーミンググローブ",
+        "valid": true
+      },
+      "attributes": [
+        {
+          "name": "partner_signal",
+          "value": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "sourceIndex": 0
+        }
+      ],
+      "decisionAxes": [
+        "操作方法"
+      ],
+      "verifiedAppeals": [
+        {
+          "index": 0,
+          "text": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "noHassle": "",
+          "scene": "グルーミンググローブ",
+          "attributeRefs": [],
+          "strength": 3,
+          "verification": {
+            "required": false,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "local_partner_grounded_angle"
+          }
+        }
+      ],
+      "groq": {
+        "pass1Calls": 0,
+        "pass2Calls": 0,
+        "totalCalls": 0
+      },
+      "cacheStatus": "local",
+      "pass2Status": "not_needed",
+      "tier": "A",
+      "quality": {
+        "status": "ready",
+        "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reasons": []
+      },
+      "variants": [
+        {
+          "index": 1,
+          "hookType": "scene",
+          "hook": "グルーミンググローブ",
+          "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています"
+        }
+      ],
+      "local": {
+        "route": "local",
+        "version": "2026-10-05-local-identity-arbitration-v8",
+        "method": "partner_reasoning",
+        "factCount": 1,
+        "valueCount": 0,
+        "partner": {
+          "productType": "グルーミンググローブ",
+          "actsOn": "",
+          "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "kind": "caption_claim"
+        },
+        "arbitration": {
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "winner": {
+            "identity": "グルーミンググローブ",
+            "source": "semantic",
+            "score": 14
+          },
+          "runnerUp": null,
+          "resolvedFamilyConflict": false,
+          "candidates": [
+            {
+              "identity": "グルーミンググローブ",
+              "source": "semantic",
+              "score": 14,
+              "matchIndex": 0,
+              "method": "evidence_backed_semantic_composition"
+            }
+          ]
+        },
+        "learnedIdentity": null
+      }
+    },
+    "baseline": {
+      "ok": true,
+      "pending": false,
+      "retryAfterMs": 0,
+      "phase": "local",
+      "version": "super-urenavi-v3-conditional-preview",
+      "model": "local",
+      "productType": {
+        "specific": "グルーミンググローブ",
+        "general": "グルーミンググローブ",
+        "quote": "グルーミンググローブ",
+        "valid": true
+      },
+      "attributes": [
+        {
+          "name": "partner_signal",
+          "value": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "sourceIndex": 0
+        }
+      ],
+      "decisionAxes": [
+        "操作方法"
+      ],
+      "verifiedAppeals": [
+        {
+          "index": 0,
+          "text": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "noHassle": "",
+          "scene": "グルーミンググローブ",
+          "attributeRefs": [],
+          "strength": 3,
+          "verification": {
+            "required": false,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "local_partner_grounded_angle"
+          }
+        }
+      ],
+      "groq": {
+        "pass1Calls": 0,
+        "pass2Calls": 0,
+        "totalCalls": 0
+      },
+      "cacheStatus": "local",
+      "pass2Status": "not_needed",
+      "tier": "A",
+      "quality": {
+        "status": "ready",
+        "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reasons": []
+      },
+      "variants": [
+        {
+          "index": 1,
+          "hookType": "scene",
+          "hook": "グルーミンググローブ",
+          "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています"
+        }
+      ],
+      "local": {
+        "route": "local",
+        "version": "2026-10-05-local-identity-arbitration-v8",
+        "method": "partner_reasoning",
+        "factCount": 1,
+        "valueCount": 0,
+        "partner": {
+          "productType": "グルーミンググローブ",
+          "actsOn": "",
+          "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+          "kind": "caption_claim"
+        },
+        "arbitration": {
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "winner": {
+            "identity": "グルーミンググローブ",
+            "source": "semantic",
+            "score": 14
+          },
+          "runnerUp": null,
+          "resolvedFamilyConflict": false,
+          "candidates": [
+            {
+              "identity": "グルーミンググローブ",
+              "source": "semantic",
+              "score": 14,
+              "matchIndex": 0,
+              "method": "evidence_backed_semantic_composition"
+            }
+          ]
+        },
+        "learnedIdentity": null
+      }
+    },
+    "editorialProposal": null,
+    "diagnostic": null,
+    "attempts": 1,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "existing_gate_ready"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "wishsun:10000100",
+      "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+      "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取",
+      "catchcopy": "",
+      "itemPrice": 1299
+    },
+    "sourceHash": "2390881d99c28d89c63800a6a7b5f0142f4729c1859fd381b2844935f2a0df0f",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "edd0b09ea86a0fefb917f92b4e6ad3624527f5f94eb0556deb86d537a5bdda19",
+      "mode": "normal",
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "local",
+        "version": "super-urenavi-v3-conditional-preview",
+        "model": "local",
+        "productType": {
+          "specific": "グルーミンググローブ",
+          "general": "グルーミンググローブ",
+          "quote": "グルーミンググローブ",
+          "valid": true
+        },
+        "attributes": [
+          {
+            "name": "partner_signal",
+            "value": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "sourceIndex": 0
+          }
+        ],
+        "decisionAxes": [
+          "操作方法"
+        ],
+        "verifiedAppeals": [
+          {
+            "index": 0,
+            "text": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "noHassle": "",
+            "scene": "グルーミンググローブ",
+            "attributeRefs": [],
+            "strength": 3,
+            "verification": {
+              "required": false,
+              "supported": true,
+              "keepDirectFact": true,
+              "reason": "local_partner_grounded_angle"
+            }
+          }
+        ],
+        "groq": {
+          "pass1Calls": 0,
+          "pass2Calls": 0,
+          "totalCalls": 0
+        },
+        "cacheStatus": "local",
+        "pass2Status": "not_needed",
+        "tier": "A",
+        "quality": {
+          "status": "ready",
+          "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+          "reasons": []
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "hook": "グルーミンググローブ",
+            "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "local": {
+          "route": "local",
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "method": "partner_reasoning",
+          "factCount": 1,
+          "valueCount": 0,
+          "partner": {
+            "productType": "グルーミンググローブ",
+            "actsOn": "",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "kind": "caption_claim"
+          },
+          "arbitration": {
+            "version": "2026-10-05-local-identity-arbitration-v8",
+            "winner": {
+              "identity": "グルーミンググローブ",
+              "source": "semantic",
+              "score": 14
+            },
+            "runnerUp": null,
+            "resolvedFamilyConflict": false,
+            "candidates": [
+              {
+                "identity": "グルーミンググローブ",
+                "source": "semantic",
+                "score": 14,
+                "matchIndex": 0,
+                "method": "evidence_backed_semantic_composition"
+              }
+            ]
+          },
+          "learnedIdentity": null
+        }
+      },
+      "baseline": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "local",
+        "version": "super-urenavi-v3-conditional-preview",
+        "model": "local",
+        "productType": {
+          "specific": "グルーミンググローブ",
+          "general": "グルーミンググローブ",
+          "quote": "グルーミンググローブ",
+          "valid": true
+        },
+        "attributes": [
+          {
+            "name": "partner_signal",
+            "value": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "sourceIndex": 0
+          }
+        ],
+        "decisionAxes": [
+          "操作方法"
+        ],
+        "verifiedAppeals": [
+          {
+            "index": 0,
+            "text": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "noHassle": "",
+            "scene": "グルーミンググローブ",
+            "attributeRefs": [],
+            "strength": 3,
+            "verification": {
+              "required": false,
+              "supported": true,
+              "keepDirectFact": true,
+              "reason": "local_partner_grounded_angle"
+            }
+          }
+        ],
+        "groq": {
+          "pass1Calls": 0,
+          "pass2Calls": 0,
+          "totalCalls": 0
+        },
+        "cacheStatus": "local",
+        "pass2Status": "not_needed",
+        "tier": "A",
+        "quality": {
+          "status": "ready",
+          "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+          "reasons": []
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "hook": "グルーミンググローブ",
+            "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "local": {
+          "route": "local",
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "method": "partner_reasoning",
+          "factCount": 1,
+          "valueCount": 0,
+          "partner": {
+            "productType": "グルーミンググローブ",
+            "actsOn": "",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+            "kind": "caption_claim"
+          },
+          "arbitration": {
+            "version": "2026-10-05-local-identity-arbitration-v8",
+            "winner": {
+              "identity": "グルーミンググローブ",
+              "source": "semantic",
+              "score": 14
+            },
+            "runnerUp": null,
+            "resolvedFamilyConflict": false,
+            "candidates": [
+              {
+                "identity": "グルーミンググローブ",
+                "source": "semantic",
+                "score": 14,
+                "matchIndex": 0,
+                "method": "evidence_backed_semantic_composition"
+              }
+            ]
+          },
+          "learnedIdentity": null
+        }
+      },
+      "editorialProposal": null,
+      "diagnostic": null,
+      "attempts": 1,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "existing_gate_ready"
+    },
+    "localHash": "6612ba193daebbb887a3c249c2690d5d3376e7c072570ad9e9f889b5772609b7",
+    "outputHash": "686be433e680c97458bf2632591c798fd647f85fe3a425c91151c532863461bf",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "2390881d99c28d89c63800a6a7b5f0142f4729c1859fd381b2844935f2a0df0f",
+    "outputHash": "686be433e680c97458bf2632591c798fd647f85fe3a425c91151c532863461bf",
+    "localHash": "6612ba193daebbb887a3c249c2690d5d3376e7c072570ad9e9f889b5772609b7",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "5本指とブラッシングの理由は原文に忠実。一方「非常に扱いやすい」「簡単」を含む長い引用文の魅力は判断が分かれ、自然さ・魅力を保留。明確な不合格としてGroqへ回さない。",
+    "axes": {
+      "understanding": true,
+      "specificity": true,
+      "choice": true,
+      "audience_value": true,
+      "naturalness": null,
+      "grounded": true
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "合格",
+        "reason": "グルーミンググローブをペット用ブラシとして認識。左右セットを別売品と誤認していない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "合格",
+        "reason": "5本指デザインと通常のブラシで難しい死角を具体的に伝える。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "合格",
+        "reason": "通常のブラシでは難しい箇所を扱うという原文に基づく選択理由がある。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "合格",
+        "reason": "ペットのブラッシング場面と価値が文章中で分かる。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "非常に・簡単の販促表現と長い一文が残るが、読みにくさの程度の判断材料が足りず未確認。短さだけを不合格にしない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "合格",
+        "reason": "中心文はitemCaptionの連続した原文と一致。価格も保存値1,299円と一致。使用体験や新しい効能は追加していない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "【パッケージ】：左右セット"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

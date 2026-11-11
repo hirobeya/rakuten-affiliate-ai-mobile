@@ -1,0 +1,26 @@
+{
+  "itemCode": "wishsun:10000100",
+  "sameRawSourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+  "localText": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：999円\n\n※アフィリエイト広告を利用しています",
+  "localCharacters": 104,
+  "rawGroqText": "左右セットのシリコングローブは約22×13cm、重量約55gの軽量設計で、猫・犬・うさぎなどの毛を優しくすくい取ります。\n手のひら側に259本の柔らかいシリコンが配置された凸凹ヘッドが、毛並みを整えながら抜け毛をしっかりキャッチします。\nメッシュ構造で通気性抜群、使用後は丸洗い可能なので、手が蒸れず清潔に保てます。\n使用時は猫や犬が嫌がらない背中や腰から始め、毛玉は手でほぐしてからブラッシングすると安全です。\n#ペットグローブ #抜け毛対策 #左右セット\n\n※アフィリエイト広告を利用しています",
+  "groqCharacters": 249,
+  "groqCalls": 1,
+  "otherGroqComparisons": 0,
+  "localQuality": "failed_editorial",
+  "groqQuality": "failed_evidence_and_editorial",
+  "improvedObservedDimensions": [
+    "具体的特徴の数",
+    "対象動物の明示",
+    "手入れ方法の明示"
+  ],
+  "notProven": [
+    "全体の品質合格",
+    "安定生成率",
+    "未見カテゴリの品質",
+    "本体採用可能性"
+  ],
+  "decision": "do_not_integrate",
+  "outputConditionDifference": "既存独自文は価格欄を付加、Groq契約は価格を生成しない。出力条件が完全同一の比較ではない。",
+  "singleProductOnly": true
+}

@@ -14,3 +14,7 @@ jobs:
         run: bash scripts/rebuild/offline.sh --test tests/rebuild/*.test.js
       - name: Verify existing regression with network guard
         run: bash scripts/rebuild/regression.sh
+      - name: Verify raw-source fallback without credentials or external AI
+        run: bash scripts/rebuild/offline.sh --test tests/room-writer-raw/*.test.js
+      - name: Prepare raw-source fallback offline
+        run: bash scripts/rebuild/offline.sh scripts/room-writer-raw/prepare.cjs

@@ -1,0 +1,180 @@
+{
+  "method": "assistant_independent_full_source_comparison",
+  "reviewerId": "codex-independent-source-comparison-20261111",
+  "humanQualityCertification": false,
+  "notProviderOrValidatorVerdict": true,
+  "rows": [
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "itemName": "ペットベッド 犬 犬用 ペット 3D ベッド 犬用ベッド Lサイズ カバーを外して洗える ドッグベッド 丈夫 パピー 成犬 シニア 老犬 中型犬 大型犬 多頭 カドラー 冬 秋 春夏 オールシーズン 高反発 体圧分散 綿100％ 洗える 丸洗い 洗濯 床ずれ 立ち上がり 介護 高級 ねどっこ",
+      "captionCharacters": 2902,
+      "sourceHash": "4917b387f867e8cbac1e2c1ca8039ca5b9cba9e56d549ff62d6b0d6ef68d1ad0",
+      "localText": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+      "status": "failed",
+      "reason": "3D構造体はプレミアム仕様でありモデル共通ではない。独自文がペットベッド全体へ一般化。合計予約8362>8000で候補除外。",
+      "candidate": false,
+      "axes": {
+        "understanding": false,
+        "specificity": true,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": false,
+        "grounded": false
+      }
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+      "captionCharacters": 1514,
+      "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+      "localText": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：999円\n\n※アフィリエイト広告を利用しています",
+      "status": "failed",
+      "reason": "独立全文照合：原文の一節を商品名の後に接続した説明1文で終わり、対象となるペットや抜け毛ケアの場面が本文に自然に伝わらない。非常に扱いやすい・簡単という抽象評価が中心で、左右セット、撫でる方法、丸洗いできる手入れとの購入判断のつながりを編集できていない。事実誤認ではなく対象・価値の伝達と文章設計の不合格。",
+      "candidate": true,
+      "axes": {
+        "understanding": true,
+        "specificity": true,
+        "choice": true,
+        "audience_value": false,
+        "naturalness": false,
+        "grounded": true
+      }
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "itemName": "鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ アルミ ブラウン 90cm ステップストッカー 椅子 イス 縁台 収納箱 ベンチストッカー 踏み台 アルミ 収納ボックス 工具箱 道具箱 おしゃれ 物置き 屋外 アルミストッカーガーデンベンチ ガーデンチェア 送料無料",
+      "captionCharacters": 641,
+      "sourceHash": "9e15f5c576a5dbbaf92ca3721e38add0822c0b9d8ce051d429af4b0b16cb99ac",
+      "localText": null,
+      "status": "unverified",
+      "reason": "生成本文なし。自動診断のみを文章品質の不合格根拠として採用しない。",
+      "candidate": false,
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      }
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+      "captionCharacters": 692,
+      "sourceHash": "e78ff76c6f8f38096a5ba03a8fd8ffabaee070148e59a0c2a4c9bb14b089a074",
+      "localText": null,
+      "status": "unverified",
+      "reason": "生成本文なし。自動診断のみを文章品質の不合格根拠として採用しない。",
+      "candidate": false,
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      }
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "itemName": "【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量",
+      "captionCharacters": 796,
+      "sourceHash": "b0869e7b7d239b84ded60fac58a4f27a8fa2d0d52d3cd4a9c06f78d5102783ad",
+      "localText": null,
+      "status": "unverified",
+      "reason": "生成本文なし。自動診断のみを文章品質の不合格根拠として採用しない。",
+      "candidate": false,
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      }
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "itemName": "赤字覚悟★ フライパン セット IH ガス対応 アイリスオーヤマ 取っ手が取れる 高耐久4層構造 こびりつきにくい 鍋 炒め鍋 深型 卵焼き器 エッグパン ハンドル 2段階ロック ダイヤモンドコートパン 12点 13点 IPDCI *",
+      "captionCharacters": 2394,
+      "sourceHash": "37dc8e99d8bf75b88f67d11d61597895fc7ad20e11508120882894471985f63b",
+      "localText": null,
+      "status": "unverified",
+      "reason": "生成本文なし。自動診断のみを文章品質の不合格根拠として採用しない。",
+      "candidate": false,
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      }
+    }
+  ],
+  "candidate": {
+    "itemCode": "wishsun:10000100",
+    "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：999円\n\n※アフィリエイト広告を利用しています",
+    "characterCount": 104,
+    "receipt": {
+      "version": "raw-local-quality-v1",
+      "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+      "outputHash": "e868b2e6bbb3706290ec4711b483cd9f5319f2f9c400424706aa62d7f2479073",
+      "localHash": "7505ab79a1634ea1b7d08f06faa6baaedcc02b2811e5dea91a23cd47e77efba0",
+      "status": "failed",
+      "reviewerId": "codex-independent-source-comparison-20261111",
+      "method": "independent_review",
+      "reason": "独立全文照合：原文の一節を商品名の後に接続した説明1文で終わり、対象となるペットや抜け毛ケアの場面が本文に自然に伝わらない。非常に扱いやすい・簡単という抽象評価が中心で、左右セット、撫でる方法、丸洗いできる手入れとの購入判断のつながりを編集できていない。事実誤認ではなく対象・価値の伝達と文章設計の不合格。",
+      "axes": {
+        "understanding": true,
+        "specificity": true,
+        "choice": true,
+        "audience_value": false,
+        "naturalness": false,
+        "grounded": true
+      }
+    },
+    "axisEvidence": [
+      {
+        "axis": "understanding",
+        "status": "passed",
+        "reason": "グルーミング用の手袋として識別し、他の本体・付属品との混同はない。ただし左右セットは文章に説明されていない。"
+      },
+      {
+        "axis": "specificity",
+        "status": "passed",
+        "reason": "5本指デザインと通常のブラシで届きにくい箇所への使い方は原文の具体的特徴。259本の突起や左右セット等は未選択。"
+      },
+      {
+        "axis": "choice",
+        "status": "passed",
+        "reason": "通常のブラシで扱いにくい箇所にも使えるという機能上の選ぶ理由は読み取れる。"
+      },
+      {
+        "axis": "audience_value",
+        "status": "failed",
+        "reason": "本文に犬・猫等の対象、抜け毛をケアする目的、撫でる利用場面が示されず、グルーミングという用語だけに理解を委ねている。原文には対象と使用方法が明記されている。"
+      },
+      {
+        "axis": "naturalness",
+        "status": "failed",
+        "reason": "原文の説明節1つを商品名の後に接続した長い1文で終わる。非常に扱いやすい・簡単という原文の抽象評価を再掲し、誰がどう使うかと具体的特徴を結ぶ投稿文への編集が不足。文字数の短さだけによる拒否ではない。"
+      },
+      {
+        "axis": "grounded",
+        "status": "passed",
+        "reason": "5本指・死角・ブラッシングの節はAPI原文に存在し、価格999円も今回のAPI値と一致。架空の体験・効能の追加は確認されない。色別価格・送料込み価格・最終支払額を保証する評価ではない。"
+      }
+    ],
+    "sourceQuotes": {
+      "identity": "【パッケージ】：左右セット",
+      "subject": "【適用対象】：猫、犬、うさぎ、馬など",
+      "method": "ご使用方法1.手で撫でて",
+      "feature": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+      "care": "シリコンとメッシュ製で丸洗いすることができる"
+    },
+    "priorReviewPreserved": true,
+    "priorReviewRelationship": "以前の1200文字fixture・価格1299円の未確認判定は上書きしない。今回は1514文字の新規API値・価格999円、新sourceHash・新localHashに対する別評価。自然さと対象価値は編集上の独立評価であり機械保証や人間の合格認定ではない。"
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "status": 200,
+  "tokens": 3809,
+  "usage": {
+    "queue_time": 0.10403857,
+    "prompt_tokens": 2736,
+    "prompt_time": 0.121639945,
+    "completion_tokens": 1073,
+    "completion_time": 2.271694472,
+    "total_tokens": 3809,
+    "total_time": 2.393334417,
+    "completion_tokens_details": {
+      "reasoning_tokens": 57
+    }
+  },
+  "latencyMs": 2728,
+  "stop": null,
+  "source": {
+    "itemCode": "wishsun:10000100",
+    "itemName": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+    "itemCaption": "商品仕様【素材】：ゴム、 【商品サイズ】：約22cm×13cm 【重量】:約55g 【適用対象】：猫、犬、うさぎ、馬など 【カラー】：ブラック、ピンク、ブルー、ライトブルー 【パッケージ】：左右セットご使用方法1.手で撫でて 2.グルーミング対象によって撫で順番を変えて 3.数回撫でてこんなにごっそり取れます。【ご注意点】猫のブラッシング猫の気分が乗らない場合は、強引に行わず、グルーミングが嫌にならないように心掛けることが重要です、一度、嫌いになってしまうとブラシを見ただけで逃げ出すようになることもありますので、気をつけてください。 またはブラッシングする際、猫が痛みを感じない程度の力で行ってください。【ご注意点】犬のブラッシングブラッシングはワンちゃんが触れても嫌がらないところ(背中や腰など)からブラシを当てていきます。毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう。 犬の皮膚は人間の3分の1程度の厚さしかないので、皮膚を傷つけないように優しくブラッシングすることが大切です。商品特性【ペットブラシ | ペットの肌に優しい】 抜け毛の悩みを超スッキリ解消してくれる製品「ペットブラシ グローブ」が登場！飼い主の手で撫でるのと同じ感覚でブラッシングできるため、猫ちゃんとワンちゃんの無駄毛がどんなに短くても細くても徹底的に取り除けます。このペットブラシ グローブは手のひらに当たる部分が259本の柔らかいシリコン素材で、お肌を適度に刺激し、毛並みをきれいに整えるだけでなく、皮膚の異常を見つけられるというメリットも！ 【ペットブラシ | ディテールデザイン】 ペットの事も、飼い主さんのことも考えた「凸凹ヘッド」設計で、細かいもしっかりキャッチ！猫の身体のウェーブに添わせたり、顔周りの細かい部分をナデナデする程度で効果があります。非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。また、サイズの調整も可能なため、男性や女性を問わず使えるというのも大きな特徴です。はめてすぐ使い始めできます！ 【ペットブラシ | 優れた通気性】 飼い主様にも優しい仕様として、ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません。通気性と軽量性を揃えており、素早く乾きお手入れも簡単です。5本指の手のひら型なのでとても扱いやすい商品となっております。しっかりと無駄毛が取り除けるので、猫の毛並みがサラツヤに！必要な毛まで取ってしまうことはないため、毛並みがスカスカになることもなく、丁度良い仕上がりになります。 【ペットブラシ | 様々なニーズに応える】 このペットブラシ1ペアで！入浴グルーミングなど大切なペットのケアに！無駄毛を取り除くことで、ペットのアレルギーを防止することができます。また、ペットの肌の新陳代謝や血行も促進できます。ワンちゃん猫ちゃんが気持ちいいと感じる背中や頭から始め徐々に慣れてきたところでシッポや足、ゴロンしたらお腹も優しくブラッシングをしてあげてください。 【ペットブラシ | お手入れが簡単】 ブラシの部分がシリコンタイプになっているので、お手入れが簡単なのも最大の魅力！ペットの肌を傷つけることなく、シリコンとメッシュ製で丸洗いすることができるため、常に清潔な状態を保つことが可能です。非常に利便性が高く、ブラッシングのほかにもシャンプーなどの場でも活躍できます。メーカー希望小売価格はメーカー商品タグに基づいて掲載しています",
+    "catchcopy": "ペットブラシ ペットブラシ 猫ブラシ 猫毛対策 ペット ブラシ グローブ グルーミンググローブ 猫犬 抜け毛",
+    "itemPrice": 999,
+    "genreId": 304250,
+    "itemUrl": "https://item.rakuten.co.jp/wishsun/d3_brush_glove/",
+    "shopName": "WISH SUN",
+    "shopCode": "wishsun",
+    "availability": 1,
+    "postageFlag": 0,
+    "taxFlag": 0,
+    "creditCardFlag": 1,
+    "affiliateRate": 4,
+    "pointRate": 1,
+    "startTime": "",
+    "endTime": ""
+  },
+  "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+  "fieldHashes": {
+    "itemCode": "8e4a918009ea999db9904f589024a6bd721d781409ce204b5de72fb7a86e004b",
+    "itemName": "5be33b40d4f6f5c88dd9461522267a5e1e259cc0f468af430a6661006e71112c",
+    "itemCaption": "7a370943fa41d62be0b1e978ba023254aafff540a903e13a3ea0387bba51f4d2",
+    "catchcopy": "ee81245be07d5fa8834854cfdc080a866cf4d6ac7ae9588142577d0cea99288e",
+    "itemPrice": "83cf8b609de60036a8277bd0e96135751bbc07eb234256d4b65b893360651bf2",
+    "genreId": "a9351c7719d0b1989156d4662741bfef1f55ec109b36f4feddac6f1645fb8e41",
+    "itemUrl": "122cb43fedc44960e99014583cdb1c71dddfcf20ac294cf1de70f6c9492dcc54",
+    "shopName": "8c9c465da268c1386971fbe4d4d207b78767b1828135b6f340b2dcc45a653477",
+    "shopCode": "88bc6055ad5239f3b62f5526eeb174f1bbdf05f19dbf8f57c88aeef006d08308",
+    "availability": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "postageFlag": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "taxFlag": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "creditCardFlag": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "affiliateRate": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+    "pointRate": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "startTime": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "endTime": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+  },
+  "requestHash": "4c2634599d71fb2a3426bf460c207a6810abb4fa253d8f4451396bc7c168a4e1",
+  "inputHash": "8b699c68cd5afc5f9e29d19433d1ae3b718d780d869e307cadb2d30b6e68e772",
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "admissionKind": "initial_unknown",
+  "quality": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+    "outputHash": "e868b2e6bbb3706290ec4711b483cd9f5319f2f9c400424706aa62d7f2479073",
+    "localHash": "7505ab79a1634ea1b7d08f06faa6baaedcc02b2811e5dea91a23cd47e77efba0",
+    "status": "failed",
+    "reviewerId": "codex-independent-source-comparison-20261111",
+    "method": "independent_review",
+    "reason": "独立全文照合：原文の一節を商品名の後に接続した説明1文で終わり、対象となるペットや抜け毛ケアの場面が本文に自然に伝わらない。非常に扱いやすい・簡単という抽象評価が中心で、左右セット、撫でる方法、丸洗いできる手入れとの購入判断のつながりを編集できていない。事実誤認ではなく対象・価値の伝達と文章設計の不合格。",
+    "axes": {
+      "understanding": true,
+      "specificity": true,
+      "choice": true,
+      "audience_value": false,
+      "naturalness": false,
+      "grounded": true
+    }
+  },
+  "officialLimits": {
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "observedAt": 1794395273934
+  },
+  "observedUsage": {
+    "source": "independent_audit",
+    "coverage": "partial",
+    "window": "minute",
+    "periodStart": 1794395274331,
+    "periodEnd": 1794395275331,
+    "observedAt": 1794395275331,
+    "calls": 0,
+    "promptTokens": 0,
+    "completionTokens": 0,
+    "totalTokens": 0
+  },
+  "capacityBefore": {
+    "remainingMinuteTokens": null,
+    "remainingDailyTokens": null,
+    "remainingDailyRequests": null,
+    "observedAt": 1794395275331,
+    "noUnknownConsumption": true,
+    "exclusive": true
+  },
+  "providerCapacity": {
+    "remainingMinuteTokens": 5117,
+    "remainingDailyRequests": 999,
+    "remainingDailyTokens": null
+  },
+  "raw": {
+    "hold": {
+      "active": false,
+      "reason": ""
+    },
+    "post": {
+      "sentences": [
+        {
+          "text": "左右セットのシリコングローブは約22×13cm、重量約55gの軽量設計で、猫・犬・うさぎなどの毛を優しくすくい取ります。",
+          "kind": "fact",
+          "scope": "左右セット",
+          "basis": [
+            {
+              "field": "itemCaption",
+              "quote": "【商品サイズ】：約22cm×13cm 【重量】:約55g"
+            },
+            {
+              "field": "itemCaption",
+              "quote": "【適用対象】：猫、犬、うさぎ、馬など"
+            }
+          ]
+        },
+        {
+          "text": "手のひら側に259本の柔らかいシリコンが配置された凸凹ヘッドが、毛並みを整えながら抜け毛をしっかりキャッチします。",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "itemCaption",
+              "quote": "手のひらに当たる部分が259本の柔らかいシリコン素材"
+            },
+            {
+              "field": "itemCaption",
+              "quote": "「凸凹ヘッド」設計で、細かいもしっかりキャッチ"
+            }
+          ]
+        },
+        {
+          "text": "メッシュ構造で通気性抜群、使用後は丸洗い可能なので、手が蒸れず清潔に保てます。",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "itemCaption",
+              "quote": "ペットブラシグローブの作りがメッシュ構造になっているので手袋の中で蒸れる心配はありません"
+            },
+            {
+              "field": "itemCaption",
+              "quote": "シリコンとメッシュ製で丸洗いすることができる"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "text": "使用時は猫や犬が嫌がらない背中や腰から始め、毛玉は手でほぐしてからブラッシングすると安全です。",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "itemCaption",
+              "quote": "猫のブラッシング…強引に行わず、…犬のブラッシング…背中や腰などからブラシを当てていきます"
+            },
+            {
+              "field": "itemCaption",
+              "quote": "毛玉に無理にブラシを通すと痛いですので、最初に毛玉を手で揉んで、ある程度ほぐしてからブラシを通しましょう"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "text": "#ペットグローブ",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "itemName",
+              "quote": "グルーミンググローブ ペットブラシ"
+            }
+          ]
+        },
+        {
+          "text": "#抜け毛対策",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "catchcopy",
+              "quote": "抜け毛"
+            }
+          ]
+        },
+        {
+          "text": "#左右セット",
+          "kind": "fact",
+          "scope": null,
+          "basis": [
+            {
+              "field": "itemCaption",
+              "quote": "左右セット"
+            }
+          ]
+        }
+      ]
+    },
+    "product": {
+      "name": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+      "unit": null,
+      "basis": [
+        {
+          "field": "itemName",
+          "quote": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物"
+        }
+      ]
+    }
+  },
+  "mechanical": {
+    "ok": false,
+    "status": "rejected",
+    "publication": false,
+    "copyable": false,
+    "semanticApproved": false,
+    "failures": [
+      {
+        "rule": "number_or_unit_not_supported",
+        "id": "post.sentences.0",
+        "detail": "22"
+      },
+      {
+        "rule": "related_qualifier_lost",
+        "id": "post.sentences.1",
+        "detail": "だけ"
+      },
+      {
+        "rule": "invented_quote",
+        "id": "post.notes.0",
+        "detail": "itemCaption"
+      },
+      {
+        "rule": "risk_term_not_supported",
+        "id": "post.notes.0",
+        "detail": "安全"
+      }
+    ],
+    "unresolved": [
+      {
+        "id": "post.sentences.0",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.sentences.1",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.sentences.2",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.notes.0",
+        "reason": "qualifier_relation_requires_semantic_review",
+        "qualifier": "程度"
+      },
+      {
+        "id": "post.notes.0",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.tags.0",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.tags.1",
+        "reason": "independent_semantic_review_required"
+      },
+      {
+        "id": "post.tags.2",
+        "reason": "qualifier_relation_requires_semantic_review",
+        "qualifier": "約"
+      },
+      {
+        "id": "post.tags.2",
+        "reason": "independent_semantic_review_required"
+      }
+    ],
+    "text": "左右セットのシリコングローブは約22×13cm、重量約55gの軽量設計で、猫・犬・うさぎなどの毛を優しくすくい取ります。\n手のひら側に259本の柔らかいシリコンが配置された凸凹ヘッドが、毛並みを整えながら抜け毛をしっかりキャッチします。\nメッシュ構造で通気性抜群、使用後は丸洗い可能なので、手が蒸れず清潔に保てます。\n使用時は猫や犬が嫌がらない背中や腰から始め、毛玉は手でほぐしてからブラッシングすると安全です。\n#ペットグローブ #抜け毛対策 #左右セット\n\n※アフィリエイト広告を利用しています",
+    "characterCount": 249,
+    "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+    "draftHash": "ef71f2f12a2412db36ffda1728465fc96ae49d8d2e70ed1a14733991979c3c0c",
+    "displayHash": "05770b871955b95687e7c5f957d570ab18685289dcf119052ad4cb372c8119c6",
+    "coverage": [
+      "product.name",
+      "product.unit",
+      "post.sentences.0",
+      "post.sentences.1",
+      "post.sentences.2",
+      "post.notes.0",
+      "post.tags.0",
+      "post.tags.1",
+      "post.tags.2"
+    ]
+  }
+}

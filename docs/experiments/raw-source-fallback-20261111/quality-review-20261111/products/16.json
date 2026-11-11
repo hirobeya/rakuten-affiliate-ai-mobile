@@ -1,0 +1,232 @@
+{
+  "number": 16,
+  "itemCode": "arkham:10000161",
+  "category": "掃除用グローブ",
+  "source": {
+    "itemCode": "arkham:10000161",
+    "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+    "itemCaption": "大掃除の日の必須品ウルトラ・マイクロファイバー手袋！ 一年中使えるとても便利な手袋の登場です！特に年末の大掃除に欠かせないアイテムといえばこのウルトラ・マイクロファイバー手袋！ 肌触りがよく超極細繊維を特殊な織り方天文学的な隙間を作りその隙間に汚れを吸収して効率的なお掃除が出来ます！ さらに水洗い(手洗い)が出来るのでいつでも清潔に使うこともできます。カラーは全4色でベージュ、ホワイト、ブルー、ピンクからお選びいただけます。 このウルトラ・マイクロファイバー手袋には世界的な織物証明機関スイスOeko-Texstander100の検査にてレベル2＝肌に直接触れる物(昼着や寝着・シャツ・ブラウス・下着・装飾品やタオル類です。)を取得し、証明書タグが付けられてます。赤ちゃんのお肌に触れてもお肌が敏感な方でも安心して使えます。(^^)/ ウルトラ・マイクロファイバーとは？ こんなところに使える♪ カラーは4色からお選び下さい♪ 仕様 （スペック） 品名お掃除手袋 ウルトラ・マイクロファイバー手袋サイズフリーサイズ 材質ポリエステル100％ カラーのバリエーションページュ 、ホワイト、スカイブルー、ピンク 注意書き 洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。 洗濯を重ねるごとに、汚れの吸収効果は、落ちてくる可能性がございます。 ほつれ部が現れた場合jは、引っ張らずに、かぎ針などで、中に押し込むようにしてください。お掃除手袋 ウルトラ マイクロファイバー手袋 KE702",
+    "catchcopy": "",
+    "itemPrice": 1000
+  },
+  "sourceHash": "c0f446d4a044ea25ead21bb0e9a691f94ec9b5c67f0457c26102b1df544cf180",
+  "fieldHashes": {
+    "itemCode": "cc975abff62f8d4592fef5edc588a375763e4062e37c218efd55a7b9c8146a57",
+    "itemName": "09558001992b0f23f052c66a71dc2e6858d945980083e1b4d3ca956622928a53",
+    "itemCaption": "e9bd93ad892a348d1e900a5799c984d3ab0246e7ffafdc0c3dc6977338ae24a2",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "40510175845988f13f6162ed8526f0b09f73384467fa855e1e79b44a56562a58"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "掃除用グローブ",
+    "item": {
+      "itemCaption": "大掃除の日の必須品ウルトラ・マイクロファイバー手袋！ 一年中使えるとても便利な手袋の登場です！特に年末の大掃除に欠かせないアイテムといえばこのウルトラ・マイクロファイバー手袋！ 肌触りがよく超極細繊維を特殊な織り方天文学的な隙間を作りその隙間に汚れを吸収して効率的なお掃除が出来ます！ さらに水洗い(手洗い)が出来るのでいつでも清潔に使うこともできます。カラーは全4色でベージュ、ホワイト、ブルー、ピンクからお選びいただけます。 このウルトラ・マイクロファイバー手袋には世界的な織物証明機関スイスOeko-Texstander100の検査にてレベル2＝肌に直接触れる物(昼着や寝着・シャツ・ブラウス・下着・装飾品やタオル類です。)を取得し、証明書タグが付けられてます。赤ちゃんのお肌に触れてもお肌が敏感な方でも安心して使えます。(^^)/ ウルトラ・マイクロファイバーとは？ こんなところに使える♪ カラーは4色からお選び下さい♪ 仕様 （スペック） 品名お掃除手袋 ウルトラ・マイクロファイバー手袋サイズフリーサイズ 材質ポリエステル100％ カラーのバリエーションページュ 、ホワイト、スカイブルー、ピンク 注意書き 洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。 洗濯を重ねるごとに、汚れの吸収効果は、落ちてくる可能性がございます。 ほつれ部が現れた場合jは、引っ張らずに、かぎ針などで、中に押し込むようにしてください。お掃除手袋 ウルトラ マイクロファイバー手袋 KE702",
+      "itemCode": "arkham:10000161",
+      "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+      "itemPrice": 1000
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "d9af0a40a4e7441072761a0a07ee5f71569864bcbe532fb8143062e425b5c2e6",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "c2720462c0075624d3bb29606ff7d700e1147825ee45826877e000275f2a1e35",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "arkham:10000161",
+      "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+      "itemCaption": "大掃除の日の必須品ウルトラ・マイクロファイバー手袋！ 一年中使えるとても便利な手袋の登場です！特に年末の大掃除に欠かせないアイテムといえばこのウルトラ・マイクロファイバー手袋！ 肌触りがよく超極細繊維を特殊な織り方天文学的な隙間を作りその隙間に汚れを吸収して効率的なお掃除が出来ます！ さらに水洗い(手洗い)が出来るのでいつでも清潔に使うこともできます。カラーは全4色でベージュ、ホワイト、ブルー、ピンクからお選びいただけます。 このウルトラ・マイクロファイバー手袋には世界的な織物証明機関スイスOeko-Texstander100の検査にてレベル2＝肌に直接触れる物(昼着や寝着・シャツ・ブラウス・下着・装飾品やタオル類です。)を取得し、証明書タグが付けられてます。赤ちゃんのお肌に触れてもお肌が敏感な方でも安心して使えます。(^^)/ ウルトラ・マイクロファイバーとは？ こんなところに使える♪ カラーは4色からお選び下さい♪ 仕様 （スペック） 品名お掃除手袋 ウルトラ・マイクロファイバー手袋サイズフリーサイズ 材質ポリエステル100％ カラーのバリエーションページュ 、ホワイト、スカイブルー、ピンク 注意書き 洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。 洗濯を重ねるごとに、汚れの吸収効果は、落ちてくる可能性がございます。 ほつれ部が現れた場合jは、引っ張らずに、かぎ針などで、中に押し込むようにしてください。お掃除手袋 ウルトラ マイクロファイバー手袋 KE702",
+      "catchcopy": "",
+      "itemPrice": 1000
+    },
+    "sourceHash": "c0f446d4a044ea25ead21bb0e9a691f94ec9b5c67f0457c26102b1df544cf180",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "c2720462c0075624d3bb29606ff7d700e1147825ee45826877e000275f2a1e35",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "A",
+        "stage": "extraction",
+        "reason": "no_grounded_facts",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "18fc6fc97500385055a5fa04bcc58662fadb852b6cb8d72164efcc25725c1e3d",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "c0f446d4a044ea25ead21bb0e9a691f94ec9b5c67f0457c26102b1df544cf180",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "18fc6fc97500385055a5fa04bcc58662fadb852b6cb8d72164efcc25725c1e3d",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。洗濯機非推奨・乾燥機回避の条件保持は未確認。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "掃除手袋の原文はあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "原文の条件や程度を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

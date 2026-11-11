@@ -1,0 +1,256 @@
+{
+  "number": 4,
+  "itemCode": "worktk:10014552",
+  "category": "空調服バッテリー",
+  "source": {
+    "itemCode": "worktk:10014552",
+    "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+    "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+    "catchcopy": "",
+    "itemPrice": 19305
+  },
+  "sourceHash": "5e906130f1c5efbc8036f0e1a2588206698b6712fb5c32364dfbe1f5e9b64a5c",
+  "fieldHashes": {
+    "itemCode": "551a32b3e0b5b52fea396c62b7b122947a8ccfa01b5742476eb415e5f1317ec4",
+    "itemName": "e363930381cae6263a2cc34c5de8883621838a3f7e9356a65293af7cece91c89",
+    "itemCaption": "065f88af8f0a5d3cbf2feac7e0b7aa1763d1732369a0b397c208792af217352b",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "0809cb825253be4a1bf36fa2fa03fbeabef1f776fe6ca886d9132a8529550317"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "空調服バッテリー",
+    "item": {
+      "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+      "itemCode": "worktk:10014552",
+      "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+      "itemPrice": 19305
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "f54975541b85dc2f00fd1b0047a3a4e159564f4da0b3759f85d8f7f6164c3824",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "14bc5946566c47b354d855ca2d38d763094de95dc07defc2a2fcd9c610853cbf",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "worktk:10014552",
+      "itemName": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+      "itemCaption": "商品説明 バートル AC10＋AC10-1 ファンバッテリーセット 商品の特長 夏の必須装備 それがBURTLE AIRCRAFT!! 最大毎秒120Lの圧倒的な風量を放つAC10シリーズ 約4時間の急速充電で、毎日の準備もスムーズ。 プロのための夏の必須装備です。 セット内容 ファンユニット リチウムイオンバッテリー カラー(バッテリー) マーリン マットブラック メタリックレッド カラー(ファン) ブラック アーバンブラック マーリン スパイダーレッド メタリックゴールド ハニーピンク オーシャンブルー ご注意 バッテリー容量／5.600mAh(80.64Wh) ※製造工場の違いによりバッテリー裏面の 容量の表記が異なる場合がございますが、 実際の容量は同じです。 AC10-1(ファン)のご注意 対応バッテリー ACI0、IC01、AC09、AC08、AC360、AC300 ※AC09以前のバッテリーを使用する場合には 機種専用のファンケーブルが必要です。 ※AC260以前のバッテリーは対応しておリません。 ・PSマークの種類：PSE ・届出事業者名：京セラインダストリアルツールズ株式会社 ・モニター等の環境による色の誤差や、素材により色ブレが生じる場合があります。 ・表記サイズには若干の誤差が生じる場合があります。 ・ご注文のタイミングによって、商品が欠品している可能性があります。 ・運送会社の状況・災害時・繁忙期などにより配送が遅延する可能性があります。 ・土・日・祝は休業日となっております。発送までの日数には含まれませんのでご注意ください。[注意] 本製品は「株式会社 空調服」 の 「空調服 製品」とは互換性がございません。ご注意ください。",
+      "catchcopy": "",
+      "itemPrice": 19305
+    },
+    "sourceHash": "5e906130f1c5efbc8036f0e1a2588206698b6712fb5c32364dfbe1f5e9b64a5c",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "14bc5946566c47b354d855ca2d38d763094de95dc07defc2a2fcd9c610853cbf",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "8a6487fefbf50e1656a11bed2eedcf27e61c454c69c3c3879b919866f70baa27",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "5e906130f1c5efbc8036f0e1a2588206698b6712fb5c32364dfbe1f5e9b64a5c",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "8a6487fefbf50e1656a11bed2eedcf27e61c454c69c3c3879b919866f70baa27",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。ファン＋バッテリーのセットと衣服の混同等は今回の本文では評価できない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "原文はAC10＋AC10-1セットだが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "最大毎秒120L、約4時間の条件保持を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "旧機種ケーブル条件・非互換条件の保持を照合できない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "セット内容 ファンユニット リチウムイオンバッテリー"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "AC260以前のバッテリーは対応しておリません"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

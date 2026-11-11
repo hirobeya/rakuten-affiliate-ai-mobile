@@ -1,0 +1,25 @@
+{
+  "version": "rakuten-raw-acquisition-v1",
+  "runId": "raw-acquisition-20261111-oidc-delivery-v4",
+  "executionSha": "6ed2503522f89a270008fff8a257476363ceb876",
+  "branch": "experiment/urenavi-groq-raw-source-fallback-20261111",
+  "environment": "preview",
+  "fileHashes": {
+    "lib/room-writer-raw/acquisition.js": "c8adf6c20357e0dff457b02ad271bebb0e289532e113636326082ebe64b4dbd6",
+    "lib/room-writer-raw/source.js": "5d1003c76e2415955564dd5eb8fe7ef99debbcc4a9040d049173a8c441db22f8",
+    "scripts/room-writer-raw/capture-preview.cjs": "d43bab95369739c20b9278b88dfdb1fdc6c638867b05380597ac02437502eb86",
+    "scripts/room-writer-raw/capture-bridge-preview.cjs": "00a491272cda88a7d71979201cc6be65df0bfa4aa0bd6193adf5d8c6c2de9e9c"
+  },
+  "captureCalls": 1,
+  "generationCalls": 0,
+  "automaticRetries": 0,
+  "credentialValuesExported": false,
+  "captures": [],
+  "stopped": {
+    "itemCode": "emoor-nedogko:10000048",
+    "code": "provider_echoed_credential_in_source_refuse_export",
+    "safeDetails": {
+      "sourceField": "itemUrl"
+    }
+  }
+}

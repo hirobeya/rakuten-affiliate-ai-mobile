@@ -1,0 +1,68 @@
+{
+  "scope": "All matching tracked docs/tests/scripts at baseline HEAD; no Console history fetch. Repository evidence is not a proof of all provider history.",
+  "itemCode": "emoor-nedogko:10000048",
+  "baselineSha": "dae33a28be0de112e34cc93f8f69ed5c03b98b02",
+  "matchingFiles": [
+    {
+      "path": "docs/evaluations/20261027-fixed/inputs.json",
+      "sha256": "15889332dd8ad1320220138dea1f47dcac3cb7b136fcf2b3bb8fb0012424f48b"
+    },
+    {
+      "path": "docs/evaluations/20261027-fixed/post-change-diagnostic.json",
+      "sha256": "b0cb5522d08f32701c01d398a5cf5b100906fd96de5feb6d2f02bf21641f0151"
+    },
+    {
+      "path": "docs/evaluations/20261027-fixed/results.json",
+      "sha256": "275020c4d2a1caf01c352bb8aab49d066d62c02d919fd74753ca530c3bf0aaf9"
+    },
+    {
+      "path": "docs/experiments/raw-source-fallback-20261111/offline-manifest.json",
+      "sha256": "fded8c5b59dbbd6afa6d031a4fdd3ec33659ea6424e40f2536657c60eab28747"
+    },
+    {
+      "path": "docs/experiments/raw-source-fallback-20261111/quality-routing-manifest.json",
+      "sha256": "7f79fb3c13d323247093fee8583e9533d305777a5a91262d0178c18f3dc6c42c"
+    },
+    {
+      "path": "docs/rebuild-20261028/baseline-replay.json",
+      "sha256": "66ce26d3c97df40ca43185a5c46de59168c7c23a85fcd4601a5a0046c8256aa3"
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-final-gate/capacity-analysis.json",
+      "sha256": "39a282d4676e03f6cb31938025eba0b526638563a7690ba8e9a0d63b6669e6a4"
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-local-first-20261108/editorial-review.json",
+      "sha256": "f39e78218f687069a3dc6297db0eae0205b49364558287d699d9ecf740c7c53f"
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+      "sha256": "d681b446828f8b96f6e2abf3fbd84da33045a51df05afc70e535b5f7271392b8"
+    },
+    {
+      "path": "docs/rebuild-20261028/p3-preflight/capacity.json",
+      "sha256": "52b44ad0b84a66a4cd029ec99eb356632adee668c809a971494d69dc9bc0854a"
+    },
+    {
+      "path": "docs/rebuild-20261028/p3a/capacity.json",
+      "sha256": "604781004cfda748d9a36f46422ebcd578b5da9439985b2a947edb6a94f32acf"
+    },
+    {
+      "path": "tests/fixtures/room-products.json",
+      "sha256": "39ea3be7356faf76fdfb831a4f3018817c3fd2cbf0a32f698a50873de6e95bc2"
+    },
+    {
+      "path": "tests/room-writer/eval-set.json",
+      "sha256": "042c9dc1d40278abbf140c7fa6ddbb8eae5265416e220a0d1cea5f80d2a90126"
+    }
+  ],
+  "candidateRecordedLiveRequestFound": false,
+  "previousEvaluationCalls": 0,
+  "requireProviderHistoryReconciliationBeforeLive": true,
+  "knownPreviouslyMeasuredExcluded": [
+    "pasoro:10001354",
+    "e-kurashi:10019512",
+    "bos-shop:10000023",
+    "yukaiya:10001267"
+  ]
+}

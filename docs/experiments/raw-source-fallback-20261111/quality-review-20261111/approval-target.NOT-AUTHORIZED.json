@@ -1,0 +1,24 @@
+{
+  "eligible": true,
+  "notAnAuthorization": true,
+  "template": {
+    "version": "raw-source-fallback-initial-v1",
+    "authorized": false,
+    "environment": "isolated_experiment",
+    "executionSha": "dae33a28be0de112e34cc93f8f69ed5c03b98b02",
+    "experimentId": "96f1c3c6-679c-423b-9b34-3e04f8ac9fb9",
+    "auditId": "8199889b10c06f6d8db1c8f84d487e3c361421b5d86559ddb65f2690e36f94db",
+    "sourceHash": "7593571d9714b995cc21f4b5e24402de9d113011db93dd89a75ea921969d49df",
+    "requestHash": "88a521926005b70a1a2273e93316f84e1a4cd803214a8fc712596b6999100a86",
+    "qualityHash": "fc98b6c5877ae63322b8ddf7a9d80756230a70bfb80739690ef01c984a8afadc",
+    "maxCalls": 1,
+    "maxExperimentCalls": 1,
+    "automaticRetries": 0,
+    "expiresAt": null,
+    "unknownCapacityPolicy": "retain_null_one_call",
+    "acceptUnknownCapacity": false,
+    "maxReservedTokens": 6120
+  },
+  "unknownBalancesRemainNull": true,
+  "requiresNewExplicitApproval": true
+}

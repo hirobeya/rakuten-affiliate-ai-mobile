@@ -1,0 +1,81 @@
+{
+  "mode": "offline_only",
+  "groqCalls": 0,
+  "qualityNotAutomaticallyDecided": true,
+  "rows": [
+    {
+      "number": 1,
+      "itemCode": "emoor-nedogko:10000048",
+      "sourceHash": "4917b387f867e8cbac1e2c1ca8039ca5b9cba9e56d549ff62d6b0d6ef68d1ad0",
+      "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+      "diagnostic": null,
+      "requestHeld": true,
+      "reservation": 8362
+    },
+    {
+      "number": 2,
+      "itemCode": "wishsun:10000100",
+      "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+      "text": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：999円\n\n※アフィリエイト広告を利用しています",
+      "diagnostic": null,
+      "requestHeld": false,
+      "reservation": 6606
+    },
+    {
+      "number": 3,
+      "itemCode": "shopworld:10138423",
+      "sourceHash": "9e15f5c576a5dbbaf92ca3721e38add0822c0b9d8ce051d429af4b0b16cb99ac",
+      "text": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "requestHeld": false,
+      "reservation": 5340
+    },
+    {
+      "number": 4,
+      "itemCode": "arkham:10000161",
+      "sourceHash": "e78ff76c6f8f38096a5ba03a8fd8ffabaee070148e59a0c2a4c9bb14b089a074",
+      "text": null,
+      "diagnostic": {
+        "cause": "A",
+        "stage": "extraction",
+        "reason": "no_grounded_facts",
+        "automaticDiagnosis": true
+      },
+      "requestHeld": false,
+      "reservation": 5429
+    },
+    {
+      "number": 5,
+      "itemCode": "besthouse:10000083",
+      "sourceHash": "b0869e7b7d239b84ded60fac58a4f27a8fa2d0d52d3cd4a9c06f78d5102783ad",
+      "text": null,
+      "diagnostic": {
+        "cause": "F",
+        "stage": "quality",
+        "reason": "catalogue_only_copy",
+        "automaticDiagnosis": true
+      },
+      "requestHeld": false,
+      "reservation": 5242
+    },
+    {
+      "number": 6,
+      "itemCode": "e-kitchen:10079039",
+      "sourceHash": "37dc8e99d8bf75b88f67d11d61597895fc7ad20e11508120882894471985f63b",
+      "text": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "requestHeld": false,
+      "reservation": 7385
+    }
+  ]
+}

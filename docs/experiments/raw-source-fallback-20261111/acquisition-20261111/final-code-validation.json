@@ -1,0 +1,93 @@
+{
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "groqCalls": 0,
+  "results": {
+    "raw": {
+      "tests": 66,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 66",
+        "ℹ suites 0",
+        "ℹ pass 66",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 671.934368"
+      ]
+    },
+    "core": {
+      "tests": 602,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 602",
+        "ℹ suites 0",
+        "ℹ pass 602",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 3847.925119"
+      ]
+    },
+    "regression": {
+      "tests": 456,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 456",
+        "ℹ suites 0",
+        "ℹ pass 456",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 9654.777673"
+      ]
+    },
+    "copy": {
+      "tests": 1,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 1",
+        "ℹ suites 0",
+        "ℹ pass 1",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 909.434178"
+      ]
+    },
+    "ai": {
+      "tests": 9,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 146.444743"
+      ]
+    },
+    "shadow": {
+      "tests": null,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "",
+        "> rakuten-affiliate-ai-mobile@1.0.1 test:shadow",
+        "> node tests/product-shadow-v2.test.js",
+        "",
+        "Shadow V2 regression: PASS"
+      ]
+    }
+  }
+}

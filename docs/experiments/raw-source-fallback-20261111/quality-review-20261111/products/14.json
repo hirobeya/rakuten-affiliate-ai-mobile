@@ -1,0 +1,256 @@
+{
+  "number": 14,
+  "itemCode": "myhomeshop:10000326",
+  "category": "電気ケトル",
+  "source": {
+    "itemCode": "myhomeshop:10000326",
+    "itemName": "電気ケトル＜COUPONで3,980円■レビュー件数2300件越えの爆売れ商品！＞電気ケトル 1.0L 7段階温度調節 ボデーデジタルディスプレイ 4時間保温 二重構造 触れても熱くない 急速沸騰 空焚き防止 メモリー機能 火傷防止 小型 お手入れカンタン お茶 コーヒーミルク 2年保証",
+    "itemCaption": "おススメポイント ★【高機能節電「電気ケトル」】 LEDボディデジタルディスプレイ ケトル、温度が本体に直接表示されるので現在温度と設定温度を一目で確認できる。7段階の温度設定、4時間保温機能、急速沸騰、空焚き防止機能、メモリー機能、触れても熱くない二重構造デザイン、安全でお手入れが簡単なステンレス製で、個人のニーズに完璧にお応えます。母の日、父の日、敬老の日、結婚祝い、新築引っ越し祝いなどのプレゼントとして最適です。 ★【健康で安心！二重構造ケトル】 本電気ケトル内層は食品グレードの304ステンレススチール製で、防錆性と耐食性があり、匂い移りが少なく無臭無味の熱湯が用意できて、水との健康的な接触を保ちます。外層は食品用PP素材、金属と比較すると表面に温度が伝わりにくく、やけどのリスクを低減可能。 ★【7段階温度調節＆4時間保温】 飲み物に合わせた美味しい温度で楽しむことができる7段階（45℃/55℃/65℃/75℃/85℃/95℃/100℃）の温度調節機能付き、赤ちゃん用ミルク/お茶/コーヒー/カープラーメン/お湯などの様々なシーンで大活躍！密閉度の高い構造をしているため、お湯が沸いたあともあたた。 さらに、4時間保温機能付き、簡単に適当の温度を設定します。リモートワークや夜間粉ミルクを作る時にも役立ちます。ご注意：粉ミルクを作り場合は、保温機能と併用してください。 一度に70℃以上のお湯を沸かす必要があります。また、保温機能とは、設定温度より下がるとすぐに温めなおしてくれる。 ★【85秒急速沸騰、安全性も抜群】 忙しい朝に!すぐ飲みたいときにカップ1杯分が約85秒で沸騰する。ガスや火を使わずにお湯を沸かせるうえ、空焚き防止機能も付いているので、安全性も抜群。ワンタッチボタンで蓋が開き、熱気でやけどする心配はありません。沸騰までのスピーディさ・使いやすさ・安全性、すべて妥協できない人におすすめです。PSマークの種類：PSE 届出事業者名：サンレート株式会社 ★【お手入れ簡単&安心保証】 コンパクトで使いやすい1.0Lサイズ。一人暮らしや小家族のニーズに素早く対応するために最適です。2段階の開口角度調整ができる蓋で、手を簡単に入れて掃除することができます。360°向きを選ばないから、コードレスケトル 電気は電源ベースのどの向きに置いても使用できる。 該当商品はメーカー保証がついておりますので、保証期間内に、取扱説明書に従った正常なご使用状態において、 故障もしくは不具合が生じた場合には、センドバック修理や新品交換を無償にてご提供致します。いつでもお気軽に弊店までご連絡ください！ アフタサービスセンターLineID:@087zpsyb メールアドレス：myhomeshop@e-mail.jp ▲対応時間帯：10:00〜19:00(年中無休) サジェストキーワー",
+    "catchcopy": "",
+    "itemPrice": 4980
+  },
+  "sourceHash": "676cf337695b86426f379d53d7095d625da9ed7f529e754e5a2641a2706a466e",
+  "fieldHashes": {
+    "itemCode": "8a3fd34aa7badb2defbdeeb316f45dc9f6be6e476a89a9c78c4e585b96878ca9",
+    "itemName": "5e155faf4c2d7a77b975cf26f99b370a32309cc20876dd51516ac936e4de1b4a",
+    "itemCaption": "137aaf398268600a6bd0e52eb011712d35035f074cee18a0c1f195bb21edee43",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "f393ed8e6e581fb69cfb1a5cf6e3c362cfb309dab026c1b7af2c3be4008c9904"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "電気ケトル",
+    "item": {
+      "itemCaption": "おススメポイント ★【高機能節電「電気ケトル」】 LEDボディデジタルディスプレイ ケトル、温度が本体に直接表示されるので現在温度と設定温度を一目で確認できる。7段階の温度設定、4時間保温機能、急速沸騰、空焚き防止機能、メモリー機能、触れても熱くない二重構造デザイン、安全でお手入れが簡単なステンレス製で、個人のニーズに完璧にお応えます。母の日、父の日、敬老の日、結婚祝い、新築引っ越し祝いなどのプレゼントとして最適です。 ★【健康で安心！二重構造ケトル】 本電気ケトル内層は食品グレードの304ステンレススチール製で、防錆性と耐食性があり、匂い移りが少なく無臭無味の熱湯が用意できて、水との健康的な接触を保ちます。外層は食品用PP素材、金属と比較すると表面に温度が伝わりにくく、やけどのリスクを低減可能。 ★【7段階温度調節＆4時間保温】 飲み物に合わせた美味しい温度で楽しむことができる7段階（45℃/55℃/65℃/75℃/85℃/95℃/100℃）の温度調節機能付き、赤ちゃん用ミルク/お茶/コーヒー/カープラーメン/お湯などの様々なシーンで大活躍！密閉度の高い構造をしているため、お湯が沸いたあともあたた。 さらに、4時間保温機能付き、簡単に適当の温度を設定します。リモートワークや夜間粉ミルクを作る時にも役立ちます。ご注意：粉ミルクを作り場合は、保温機能と併用してください。 一度に70℃以上のお湯を沸かす必要があります。また、保温機能とは、設定温度より下がるとすぐに温めなおしてくれる。 ★【85秒急速沸騰、安全性も抜群】 忙しい朝に!すぐ飲みたいときにカップ1杯分が約85秒で沸騰する。ガスや火を使わずにお湯を沸かせるうえ、空焚き防止機能も付いているので、安全性も抜群。ワンタッチボタンで蓋が開き、熱気でやけどする心配はありません。沸騰までのスピーディさ・使いやすさ・安全性、すべて妥協できない人におすすめです。PSマークの種類：PSE 届出事業者名：サンレート株式会社 ★【お手入れ簡単&安心保証】 コンパクトで使いやすい1.0Lサイズ。一人暮らしや小家族のニーズに素早く対応するために最適です。2段階の開口角度調整ができる蓋で、手を簡単に入れて掃除することができます。360°向きを選ばないから、コードレスケトル 電気は電源ベースのどの向きに置いても使用できる。 該当商品はメーカー保証がついておりますので、保証期間内に、取扱説明書に従った正常なご使用状態において、 故障もしくは不具合が生じた場合には、センドバック修理や新品交換を無償にてご提供致します。いつでもお気軽に弊店までご連絡ください！ アフタサービスセンターLineID:@087zpsyb メールアドレス：myhomeshop@e-mail.jp ▲対応時間帯：10:00〜19:00(年中無休) サジェストキーワー",
+      "itemCode": "myhomeshop:10000326",
+      "itemName": "電気ケトル＜COUPONで3,980円■レビュー件数2300件越えの爆売れ商品！＞電気ケトル 1.0L 7段階温度調節 ボデーデジタルディスプレイ 4時間保温 二重構造 触れても熱くない 急速沸騰 空焚き防止 メモリー機能 火傷防止 小型 お手入れカンタン お茶 コーヒーミルク 2年保証",
+      "itemPrice": 4980
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "aebe546d28efc34e5bc44cf989b321bf575dad76b824e5e2ebc038cc5f9c84ea",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "competing_identity",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "competing_identity",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "3f94dd3b10702529f694d8da4920d6b2c8bb24d97024cda4ceecdbcd246268cd",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "competing_identity",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "myhomeshop:10000326",
+      "itemName": "電気ケトル＜COUPONで3,980円■レビュー件数2300件越えの爆売れ商品！＞電気ケトル 1.0L 7段階温度調節 ボデーデジタルディスプレイ 4時間保温 二重構造 触れても熱くない 急速沸騰 空焚き防止 メモリー機能 火傷防止 小型 お手入れカンタン お茶 コーヒーミルク 2年保証",
+      "itemCaption": "おススメポイント ★【高機能節電「電気ケトル」】 LEDボディデジタルディスプレイ ケトル、温度が本体に直接表示されるので現在温度と設定温度を一目で確認できる。7段階の温度設定、4時間保温機能、急速沸騰、空焚き防止機能、メモリー機能、触れても熱くない二重構造デザイン、安全でお手入れが簡単なステンレス製で、個人のニーズに完璧にお応えます。母の日、父の日、敬老の日、結婚祝い、新築引っ越し祝いなどのプレゼントとして最適です。 ★【健康で安心！二重構造ケトル】 本電気ケトル内層は食品グレードの304ステンレススチール製で、防錆性と耐食性があり、匂い移りが少なく無臭無味の熱湯が用意できて、水との健康的な接触を保ちます。外層は食品用PP素材、金属と比較すると表面に温度が伝わりにくく、やけどのリスクを低減可能。 ★【7段階温度調節＆4時間保温】 飲み物に合わせた美味しい温度で楽しむことができる7段階（45℃/55℃/65℃/75℃/85℃/95℃/100℃）の温度調節機能付き、赤ちゃん用ミルク/お茶/コーヒー/カープラーメン/お湯などの様々なシーンで大活躍！密閉度の高い構造をしているため、お湯が沸いたあともあたた。 さらに、4時間保温機能付き、簡単に適当の温度を設定します。リモートワークや夜間粉ミルクを作る時にも役立ちます。ご注意：粉ミルクを作り場合は、保温機能と併用してください。 一度に70℃以上のお湯を沸かす必要があります。また、保温機能とは、設定温度より下がるとすぐに温めなおしてくれる。 ★【85秒急速沸騰、安全性も抜群】 忙しい朝に!すぐ飲みたいときにカップ1杯分が約85秒で沸騰する。ガスや火を使わずにお湯を沸かせるうえ、空焚き防止機能も付いているので、安全性も抜群。ワンタッチボタンで蓋が開き、熱気でやけどする心配はありません。沸騰までのスピーディさ・使いやすさ・安全性、すべて妥協できない人におすすめです。PSマークの種類：PSE 届出事業者名：サンレート株式会社 ★【お手入れ簡単&安心保証】 コンパクトで使いやすい1.0Lサイズ。一人暮らしや小家族のニーズに素早く対応するために最適です。2段階の開口角度調整ができる蓋で、手を簡単に入れて掃除することができます。360°向きを選ばないから、コードレスケトル 電気は電源ベースのどの向きに置いても使用できる。 該当商品はメーカー保証がついておりますので、保証期間内に、取扱説明書に従った正常なご使用状態において、 故障もしくは不具合が生じた場合には、センドバック修理や新品交換を無償にてご提供致します。いつでもお気軽に弊店までご連絡ください！ アフタサービスセンターLineID:@087zpsyb メールアドレス：myhomeshop@e-mail.jp ▲対応時間帯：10:00〜19:00(年中無休) サジェストキーワー",
+      "catchcopy": "",
+      "itemPrice": 4980
+    },
+    "sourceHash": "676cf337695b86426f379d53d7095d625da9ed7f529e754e5a2641a2706a466e",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "3f94dd3b10702529f694d8da4920d6b2c8bb24d97024cda4ceecdbcd246268cd",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "B",
+        "stage": "identity",
+        "reason": "competing_identity",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "a9f62b97dfc868aedc99df5bcc93a4e7273980fc67b1924fb47b60168b3a029b",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "676cf337695b86426f379d53d7095d625da9ed7f529e754e5a2641a2706a466e",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "a9f62b97dfc868aedc99df5bcc93a4e7273980fc67b1924fb47b60168b3a029b",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。competing_identityで保留。温度・沸騰時間・ミルク条件を照合できない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "電気ケトルの原文はあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "7段階温度等の採用を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "約85秒はカップ1杯分の条件。本文がないため条件保持は未確認。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "カップ1杯分が約85秒で沸騰する。"
+          },
+          {
+            "field": "itemCaption",
+            "quote": "一度に70℃以上のお湯を沸かす必要があります。"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

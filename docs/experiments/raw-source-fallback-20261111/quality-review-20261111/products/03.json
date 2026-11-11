@@ -1,0 +1,232 @@
+{
+  "number": 3,
+  "itemCode": "supplyshop:10028516",
+  "category": "モップハンガー",
+  "source": {
+    "itemCode": "supplyshop:10028516",
+    "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+    "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+    "catchcopy": "",
+    "itemPrice": 26566
+  },
+  "sourceHash": "041bd11def5e247ba4b72959aa6249989bc6e5a085adf5d458b2b451f340670f",
+  "fieldHashes": {
+    "itemCode": "ef153fb08b3dc559764b01af11b203d5907dda8e1618fd5bb0171778bea1af54",
+    "itemName": "c49f57ac8ab7cb55ce3ad4eec4dd82cb33581ec02f0115cae8dd2ce08174bbfd",
+    "itemCaption": "06625be48fd5ea9b5c9393c68d0f7db0d1398ae2a3e22ed6271ae6b09d280d85",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "4a6cb9a0c8816bdc78342b5a911480c376d7a35542416cd758a4b17a6a0c5fe0"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "モップハンガー",
+    "item": {
+      "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+      "itemCode": "supplyshop:10028516",
+      "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+      "itemPrice": 26566
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "c51193d0bd8a67a83e829b8a40ee9d3eca4fbd1ac2c8aba641c43765eafc9a66",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "db80b0194efc8bb4ead1a0a95a8aedf9080c0fdc3736cf1025d4deefa7625a81",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "supplyshop:10028516",
+      "itemName": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+      "itemCaption": "●外寸（幅）[mm]：536●外寸（奥）[mm]：505●外寸（高）[mm]：1375●質量[kg]：9●付属品：キャスター付、スライド式フック付（4個）、スパナ2本付●材質：スチールに粉体塗装●仕様：6本掛け●組立式リニューアルに伴い、パッケージ・内容等予告なく変更する場合がございます。予めご了承ください。広告文責：楽天グループ株式会社050-5212-8316",
+      "catchcopy": "",
+      "itemPrice": 26566
+    },
+    "sourceHash": "041bd11def5e247ba4b72959aa6249989bc6e5a085adf5d458b2b451f340670f",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "db80b0194efc8bb4ead1a0a95a8aedf9080c0fdc3736cf1025d4deefa7625a81",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "A",
+        "stage": "extraction",
+        "reason": "no_grounded_facts",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "9fd2f09f3278b0fa7c5bd3c629cee5b5d248a78be583639bf38e6df1c4a6711d",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "041bd11def5e247ba4b72959aa6249989bc6e5a085adf5d458b2b451f340670f",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "9fd2f09f3278b0fa7c5bd3c629cee5b5d248a78be583639bf38e6df1c4a6711d",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。既存no_grounded_factsで保留。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "原文にモップハンガー6本掛けと付属品があるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "536/505/1375mm等の採用・正誤を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "原文は存在するが本文の主張がないため未確認。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品：キャスター付、スライド式フック付（4個）、スパナ2本付"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "groqCalls": 0,
+  "results": {
+    "raw": {
+      "tests": 66,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "\u2139 tests 66",
+        "\u2139 suites 0",
+        "\u2139 pass 66",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 671.934368"
+      ]
+    },
+    "core": {
+      "tests": 602,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "\u2139 tests 602",
+        "\u2139 suites 0",
+        "\u2139 pass 602",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 3847.925119"
+      ]
+    },
+    "regression": {
+      "tests": 456,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "\u2139 tests 456",
+        "\u2139 suites 0",
+        "\u2139 pass 456",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 9654.777673"
+      ]
+    },
+    "copy": {
+      "tests": 1,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "\u2139 tests 1",
+        "\u2139 suites 0",
+        "\u2139 pass 1",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 909.434178"
+      ]
+    },
+    "ai": {
+      "tests": 9,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "\u2139 tests 9",
+        "\u2139 suites 0",
+        "\u2139 pass 9",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 146.444743"
+      ]
+    },
+    "shadow": {
+      "tests": null,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "",
+        "> rakuten-affiliate-ai-mobile@1.0.1 test:shadow",
+        "> node tests/product-shadow-v2.test.js",
+        "",
+        "Shadow V2 regression: PASS"
+      ]
+    }
+  },
+  "evidenceValidation": {
+    "rawTests": 69,
+    "regression": 456,
+    "exitCode": 0,
+    "groqCalls": 0,
+    "baselineFilesUnchanged": 719
+  }
+}
