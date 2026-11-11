@@ -37,4 +37,12 @@ test('one Rakuten request, no retry, no credential echo or raw upstream error di
  assert.equal(A.verify({...query,fields:{...query.fields,itemUrl:{...query.fields.itemUrl,preserved:true}}}),false);
  await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemUrl:'https://item.rakuten.co.jp/merchant/'+credentials.accessKey}]}))}),/refuse_export/);
  await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemCaption:credentials.accessKey}]}))}),/refuse_export/);
+ const escaped=JSON.stringify({items:[{...item(),itemCaption:credentials.accessKey}]}).replace(credentials.accessKey,'\\u0070'+credentials.accessKey.slice(1));
+ await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(escaped)}),/refuse_export/);
+});
+test('same-project delivery keeps each run immutable and secret out of argv, files and proof',async()=>{
+ const {deliver}=require('../../scripts/room-writer-raw/capture-bridge-preview.cjs');const writes=[],dirs=[];const key='synthetic-secret-never-print';
+ const sandbox={mkDir:async d=>{assert(!dirs.includes(d));dirs.push(d);},writeFiles:async f=>writes.push(...f),runCommand:async c=>{assert(!c.args.join('').includes(key));assert.equal(c.env.GROQ_API_KEY,key);return{exitCode:0,stdout:async()=>JSON.stringify({groqKeyConfigured:true,inferenceCodeLoaded:false,secretWrittenToFile:false})};}};
+ for(const runId of ['first-run','second-run'])await deliver({sandbox,report:Buffer.from(JSON.stringify({runId,executionSha:sha,generationCalls:0})),key});
+ assert.equal(dirs.length,2);assert.equal(writes.length,4);assert(!writes.some(w=>w.content.toString().includes(key)));
 });
