@@ -17,7 +17,7 @@ async function main(){
   fs.writeFileSync(path.join(out,`attempt-${i+1}.json`),JSON.stringify({itemCode,state:'started',observedAt:new Date().toISOString()}),{flag:'wx'});
   report.captureCalls++;
   try{const record=await A.fetchItem({itemCode,credentials,executionSha:manifest.executionSha});report.captures.push(record);}
-  catch(e){report.stopped={itemCode,code:/^[a-z0-9_]+$/.test(e.message)?e.message:'acquisition_failed_safe'};break;}
+  catch(e){report.stopped={itemCode,code:/^[a-z0-9_]+$/.test(e.message)?e.message:'acquisition_failed_safe',...(e.safeDetails?{safeDetails:e.safeDetails}:{})};break;}
  }
  fs.writeFileSync(path.join(out,'capture.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'});
  fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><title>Urenavi isolated source acquisition</title><p>Read-only Rakuten source capture. No AI requests.</p>');

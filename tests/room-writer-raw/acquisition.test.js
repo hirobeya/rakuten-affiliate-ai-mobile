@@ -30,5 +30,7 @@ test('one Rakuten request, no retry, no credential echo or raw upstream error di
  for(const status of [429,500]){let n=0;await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>{n++;return new Response('do not disclose',{status});}}),/rakuten_(429_stop|http_500)/);assert.equal(n,1);}
  const echo=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[item()],echo:credentials.accessKey}))});
  assert.equal(A.verify(echo),true);assert.deepEqual(echo.originalItem,item());assert.equal(echo.wireResponse.retained,false);assert(!JSON.stringify(echo).includes(credentials.accessKey));
+ const tracked=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),affiliateUrl:'https://example.com/?key='+credentials.accessKey}]}))});
+ assert.equal(A.verify(tracked),true);assert.equal(tracked.source.itemCaption,item().itemCaption);assert(!JSON.stringify(tracked).includes(credentials.accessKey));assert.deepEqual(tracked.responseProjection.omittedCredentialEchoFields,['affiliateUrl']);
  await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemCaption:credentials.accessKey}]}))}),/refuse_export/);
 });
