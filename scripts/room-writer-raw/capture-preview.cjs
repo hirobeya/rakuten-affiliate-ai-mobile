@@ -23,4 +23,5 @@ async function main(){
  fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><title>Urenavi isolated source acquisition</title><p>Read-only Rakuten source capture. No AI requests.</p>');
  console.log(JSON.stringify({status:report.stopped?'held':'captured',captureCalls:report.captureCalls,generationCalls:0}));
 }
-main().catch(()=>{console.error('raw_source_capture_build_held_no_secret_details');process.exitCode=1;});
+module.exports={main};
+if(require.main===module)main().catch(()=>{console.error('raw_source_capture_build_held_no_secret_details');process.exitCode=1;});
