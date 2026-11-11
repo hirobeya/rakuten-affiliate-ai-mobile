@@ -1,0 +1,117 @@
+{
+  "startHead": "d55b9bba7ff8bd356cfaf1b49000bac3d3b35f90",
+  "executionCodeSha": "d55b9bba7ff8bd356cfaf1b49000bac3d3b35f90",
+  "existingTrackedFilesUnchanged": 711,
+  "runtimeFilesChanged": false,
+  "oldApprovalAndAuditChanged": false,
+  "generationCalls": 0,
+  "keyIssuedOrChanged": false,
+  "sandboxCreatedOrResumed": false,
+  "liveApprovalIssued": false,
+  "technicalVerdict": "hold_do_not_approve_initial_request",
+  "tests": {
+    "raw": {
+      "tests": 60,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 60",
+        "ℹ suites 0",
+        "ℹ pass 60",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 620.57412"
+      ],
+      "logSha256": "722841b9d6045173d0ae2ccbe03120d8cbd764a0e228a068dc422532a93a5f8d"
+    },
+    "core": {
+      "tests": 602,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 602",
+        "ℹ suites 0",
+        "ℹ pass 602",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 3497.46157"
+      ],
+      "logSha256": "e8d1041327cb67d47fd26cc6c54f0e2c39dc608a630b5abaaed0a956414a72ea"
+    },
+    "regression": {
+      "tests": 456,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 456",
+        "ℹ suites 0",
+        "ℹ pass 456",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 9581.860381"
+      ],
+      "logSha256": "407f23fbcfcf1e99a9677d954d9996885477a815c0384ba297fe643c391cf791"
+    },
+    "copy": {
+      "tests": 1,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 1",
+        "ℹ suites 0",
+        "ℹ pass 1",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 917.492916"
+      ],
+      "logSha256": "fb869311ebc83bfce8af044e16a606332208e9978a873c94a4193cbc9bef0354"
+    },
+    "ai": {
+      "tests": 9,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 105.868287"
+      ],
+      "logSha256": "e729977c604fa3d6548ab5e3d3a8909772b8b6c3c29945a5f6fd79f6bfc38730"
+    },
+    "shadow": {
+      "tests": null,
+      "exitCode": 0,
+      "networkBlocked": true,
+      "summary": [
+        "",
+        "> rakuten-affiliate-ai-mobile@1.0.1 test:shadow",
+        "> node tests/product-shadow-v2.test.js",
+        "",
+        "Shadow V2 regression: PASS"
+      ],
+      "logSha256": "d6435e25166e9372d34fe2751003176fee66f6f062d046c07c6fdb4a54777cb4"
+    }
+  },
+  "startCI": {
+    "Verify Urenavi": {
+      "runId": 42944431856,
+      "result": "success"
+    },
+    "ROOM Copy Regression": {
+      "runId": 42944431779,
+      "result": "success"
+    }
+  }
+}

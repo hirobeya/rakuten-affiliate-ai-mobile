@@ -1,0 +1,79 @@
+{
+  "observedAt": "2026-11-11T09:24:30.602759+00:00",
+  "itemCode": "emoor-nedogko:10000048",
+  "fixturePath": "tests/room-writer/eval-set.json",
+  "originalFixturePath": "tests/fixtures/room-products.json",
+  "originalFixtureCapturedAtMetadata": "2026-10-03T04:21:24.873Z",
+  "currentRakutenAPIResponse": null,
+  "currentRakutenAPIResponseNotCaptured": true,
+  "apiOriginalArchiveAvailable": false,
+  "noApplicationEndpointCalled": true,
+  "noSavedValueChanged": true,
+  "canonicalSellerURL": "https://item.rakuten.co.jp/emoor-nedogko/dk-3dbedl/",
+  "observedSelectedURL": "https://item.rakuten.co.jp/emoor-nedogko/dk-3dbedl/?variantId=5639",
+  "sellerItemNumber": "dk-3dbedl",
+  "renderedBasketElementId": "normal_basket_10000048",
+  "codeURLMatch": "Matched shop slug, title and rendered basket numeric product ID; itemUrl absent from original fixture",
+  "titleMatchesSaved": true,
+  "prices": {
+    "saved": 9990,
+    "pageUnselectedRange": [
+      9990,
+      20900
+    ],
+    "observedAdultTypeMustardYellow": 9990,
+    "observedPremiumTypeAvailableColorsPrice": 20900,
+    "selectedAtObservation": {
+      "type": "成犬タイプ",
+      "color": "マスタードイエロー"
+    },
+    "savedSelectedVariant": null,
+    "savedPriceIsNotAllVariantPrice": true
+  },
+  "modelMaterials": {
+    "regularPuppyHighSenior": "washable open-cell urethane",
+    "regularAdult": "profile urethane plus two solid-cotton pads",
+    "regularSenior": "3D fiber",
+    "premium": "reversible memory foam and 3D structure; different cover materials"
+  },
+  "accessories": {
+    "blanket": "included only for premium",
+    "replacementCover": "separate cover product exists; not inferred included with every variant",
+    "memoryFoamAndCushionsWashable": false
+  },
+  "caption": {
+    "fixtureCharacters": 1200,
+    "savedTail": "滑り止め加工付き。安定するので、特に小型犬やシニア犬にも安心",
+    "sellerTextContinuesAfterFixtureEnd": true,
+    "continuationMarker": "■感動ブランケット",
+    "missingContext": [
+      "rest of anti-slip sentence",
+      "premium blanket description",
+      "seller product notice",
+      "genre/color notice",
+      "detailed material and washing table outside marketing paragraph"
+    ],
+    "complete": false,
+    "originOfTruncationNotProven": "Existing measurement script normalizes and slices at 1200; no original API response tying that exact invocation to this fixture is available",
+    "matchingTruncationImplementation": "scripts/measure-room-top20.js:81"
+  },
+  "catchcopy": {
+    "originalFixtureHasField": false,
+    "evaluationFixtureValue": "",
+    "originalEmptyConfirmed": false,
+    "pageHeadlinePresent": true,
+    "finding": "missing original field became empty in evaluation fixture; not evidence of an empty Rakuten API field",
+    "supportingDefaultImplementation": "scripts/room-writer/run-eval.cjs:72,89"
+  },
+  "completenessVerdict": "failed_truncated_fixture_and_missing_api_provenance",
+  "oldSourceHashMayBeReusedForLive": false,
+  "oldSourceHashHistoricalOnly": "7593571d9714b995cc21f4b5e24402de9d113011db93dd89a75ea921969d49df",
+  "replacementSourceCreated": false,
+  "replacementReason": "Do not splice seller-page text into a supposed API original or overwrite frozen evidence. Capture a complete authoritative response separately, then rebuild quality and request bindings.",
+  "webEvidence": {
+    "retrieval": "search retrieval followed by live browser DOM inspection",
+    "url": "https://item.rakuten.co.jp/emoor-nedogko/dk-3dbedl/",
+    "searchRef": "turn449413647view0",
+    "notFreshAPIData": true
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "observedAt": "2026-11-11T09:24:30.602759+00:00",
+  "organization": "Personal",
+  "project": "Default Project",
+  "consoleURL": "https://console.groq.com/dashboard/logs?cursor=",
+  "visibleLogRows": 13,
+  "rows": [
+    {
+      "displayedTime": "11/11/2026, 9:39:31 AM",
+      "requestIdSuffix": "qr0h",
+      "fullRequestId": null,
+      "inputTokens": 1798,
+      "outputTokens": 478,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:46:48 PM",
+      "requestIdSuffix": "j6rf",
+      "fullRequestId": null,
+      "inputTokens": 1408,
+      "outputTokens": 1508,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:45:51 PM",
+      "requestIdSuffix": "j9x7",
+      "fullRequestId": null,
+      "inputTokens": 2550,
+      "outputTokens": 1363,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:44:43 PM",
+      "requestIdSuffix": "1bff",
+      "fullRequestId": null,
+      "inputTokens": 2095,
+      "outputTokens": 1980,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:43:58 PM",
+      "requestIdSuffix": "20m7",
+      "fullRequestId": null,
+      "inputTokens": 2069,
+      "outputTokens": 1325,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:43:10 PM",
+      "requestIdSuffix": "mvhz",
+      "fullRequestId": null,
+      "inputTokens": 1678,
+      "outputTokens": 2092,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:23:56 PM",
+      "requestIdSuffix": "vaj5",
+      "fullRequestId": null,
+      "inputTokens": 2975,
+      "outputTokens": 2790,
+      "httpStatus": 400,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:23:08 PM",
+      "requestIdSuffix": "4kek",
+      "fullRequestId": null,
+      "inputTokens": 2305,
+      "outputTokens": 2954,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:22:03 PM",
+      "requestIdSuffix": "4y1t",
+      "fullRequestId": null,
+      "inputTokens": 1678,
+      "outputTokens": 2127,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/10/2026, 9:02:45 PM",
+      "requestIdSuffix": "gbhx",
+      "fullRequestId": null,
+      "inputTokens": 1678,
+      "outputTokens": 1693,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/8/2026, 9:40:58 PM",
+      "requestIdSuffix": "7adv",
+      "fullRequestId": null,
+      "inputTokens": 2567,
+      "outputTokens": 1147,
+      "httpStatus": 200,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/8/2026, 8:29:22 AM",
+      "requestIdSuffix": "jjgw",
+      "fullRequestId": null,
+      "inputTokens": 2729,
+      "outputTokens": 3000,
+      "httpStatus": 400,
+      "productIdentity": null
+    },
+    {
+      "displayedTime": "11/6/2026, 11:21:07 AM",
+      "requestIdSuffix": "skmz",
+      "fullRequestId": null,
+      "inputTokens": 2729,
+      "outputTokens": 1000,
+      "httpStatus": 400,
+      "productIdentity": null
+    }
+  ],
+  "knownS3Correlation": {
+    "requestId": "req_01m740qc12emst4nw2dqw9qr0h",
+    "itemCode": "pasoro:10001354",
+    "inputTokens": 1798,
+    "outputTokens": 478,
+    "httpStatus": 200
+  },
+  "candidateInPreservedAvailableRecords": false,
+  "candidatePastCommunication": "unknown",
+  "consoleDoesNotExposeProductSource": true,
+  "retentionAndFullHistoryCoverageVerified": false,
+  "livePrivateBlobOrDatabaseReadbackPerformed": false,
+  "absenceClaimMade": false,
+  "references": [
+    {
+      "path": "docs/measurements/s3-20261111/initial-probe-review.md",
+      "sha256": "9ed5a4a1e22064e40473d0e43c46cfe0c887272a54b8734d80b23a14dea2b565",
+      "origin": "preserved PR166 evidence"
+    },
+    {
+      "path": "docs/measurements/s3-20261111/initial-probe.json",
+      "sha256": "28223ec4f6558b0863918f4499becc8a8f156f3ae7fa8c12ebf0ca70bd167e1d",
+      "origin": "preserved PR166 evidence"
+    },
+    {
+      "path": "/workspace/scratch/6fdaaa7ddfc1/urenavi/docs/measurements/groq-20261110-reconciliation-input.json",
+      "sha256": "f80fafefee6c7ca13a5afdb659cfaa42406a79bf3c53dbe70b3febbecfb6a111",
+      "origin": "existing other checkout uncommitted local evidence, not authoritative remote commit"
+    },
+    {
+      "path": "/workspace/scratch/6fdaaa7ddfc1/urenavi/docs/measurements/f02a529-three-trials-20261110.json",
+      "sha256": "3c58593ce36cb1f002ff8667de67d6956a68edbcb845d0246f1a2be7a369396c",
+      "origin": "existing other checkout uncommitted local evidence, not authoritative remote commit"
+    },
+    {
+      "path": "/workspace/scratch/6fdaaa7ddfc1/urenavi/docs/measurements/editorial-20261110-fixed-bench.json",
+      "sha256": "494ac493de2cfcbb7decc35896f7c9afd211867dac850a64281142b4530941a1",
+      "origin": "existing other checkout uncommitted local evidence, not authoritative remote commit"
+    }
+  ],
+  "oldLedgersChanged": false,
+  "limits": {
+    "source": "Authenticated Groq Console Organization Limits UI",
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "observedAt": "2026-11-11T09:24:30.602759+00:00",
+    "projectOverrideVerified": false,
+    "freshPreDispatchObservationRequired": true
+  },
+  "usageUI": {
+    "period": "November 2026",
+    "timezone": "UTC per page notice",
+    "delayUpToMinutes": 15,
+    "activityAPIKeyCounts": {
+      "urenabipro": 3,
+      "urenavi-s3-five-20261111": 1
+    },
+    "sameCoverageAsLogListVerified": false,
+    "remainingMinuteTokens": null,
+    "remainingDailyTokens": null,
+    "remainingDailyRequests": null,
+    "doNotDeriveBalancesBySubtraction": true
+  },
+  "realGenerationCallsThisTask": 0,
+  "keyIssuedOrChanged": false
+}
