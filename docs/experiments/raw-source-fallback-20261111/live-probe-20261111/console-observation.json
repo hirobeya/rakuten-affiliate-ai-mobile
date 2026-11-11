@@ -1,0 +1,27 @@
+{
+  "url": "https://console.groq.com/dashboard/logs?cursor=",
+  "organization": "Personal",
+  "project": "Default Project",
+  "visibleRows": 14,
+  "newRow": {
+    "displayedTime": "11/11/2026, 8:07:55 PM",
+    "timezoneInterpretation": "Asia/Tokyo; corresponds to worker UTC timestamp",
+    "model": "openai/gpt-oss-120b",
+    "httpStatus": 200,
+    "inputTokens": 2736,
+    "outputTokens": 1073,
+    "consoleLatencySeconds": 2.525694,
+    "requestSuffix": "rw50"
+  },
+  "requestIdFromResponse": "req_01m754p076e9y8nrwc28sqrw50",
+  "matchesResponseAndAudit": true,
+  "projectOverride": "No custom rate limits set observed before dispatch",
+  "organizationLimitsObserved": {
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000
+  },
+  "globalHistoricalProductCoverage": "still_unknown",
+  "noUsageOrBalanceInvented": true
+}

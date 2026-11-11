@@ -1,0 +1,95 @@
+{
+  "method": "assistant_independent_full_source_comparison",
+  "humanCertification": false,
+  "notValidatorOnly": true,
+  "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+  "draftHash": "ef71f2f12a2412db36ffda1728465fc96ae49d8d2e70ed1a14733991979c3c0c",
+  "displayHash": "05770b871955b95687e7c5f957d570ab18685289dcf119052ad4cb372c8119c6",
+  "axes": [
+    {
+      "axis": "商品理解",
+      "status": "未確認",
+      "reason": "ペット用グローブと左右セットは識別している。ただし「シリコングローブ」が商品全体の材質を意味するかは曖昧。原文の素材欄はゴム、手のひら部分はシリコン、他にメッシュの記載がある。product.unitはnullで構造化理解の販売単位確定は未完了。誤りと断定できない部分は未確認。"
+    },
+    {
+      "axis": "特徴の具体性",
+      "status": "合格",
+      "reason": "約22×13cm、約55g、259本、メッシュ、丸洗いが記載され、独自文の5本指だけの説明より具体的な比較材料が増えた。数値は原文に存在する。"
+    },
+    {
+      "axis": "購入を検討する理由",
+      "status": "合格",
+      "reason": "ブラッシング用の形状、抜け毛を取りやすくする構造、丸洗いによる手入れが購入検討材料になる。ただし効果保証を肯定する評価ではない。"
+    },
+    {
+      "axis": "対象者・利用場面・価値",
+      "status": "合格",
+      "reason": "猫・犬・うさぎ、毛のケア、使用後の手入れが本文に明記され、独自文より対象と場面を読み取れる。注記の安全性・対象範囲の正確性は別項目で不合格。"
+    },
+    {
+      "axis": "自然さ・魅力",
+      "status": "不合格",
+      "reason": "3文で説明は増えたが、寸法・重さから始まる仕様中心の構成で、「259本の柔らかいシリコン」という材質と突起の不自然な表現、抜群・蒸れず等の強い言い回しが残る。魅力が安定改善したという合格判断はできない。これは編集上の独立評価であり機械的真偽ではない。"
+    },
+    {
+      "axis": "根拠の正確性",
+      "status": "不合格",
+      "reason": "注記のbasis.quoteに原文にない省略記号入りの合成引用があり、連続した原文引用という契約違反。「ブラッシングすると安全です」は、痛みを感じない程度・優しく・強引にしない等の条件から安全を断定しており、根拠を超える。"
+    }
+  ],
+  "validatorFailureAnalysis": [
+    {
+      "rule": "number_or_unit_not_supported",
+      "location": "post.sentences.0",
+      "classification": "D:検証器の誤拒否",
+      "reason": "原文の約22cm×13cmと約22×13cmは同じ寸法を示す単位省略。数値の改変ではない。現在の正規表現は22と22cmを別トークンとして比較する。",
+      "runtimeChanged": false
+    },
+    {
+      "rule": "related_qualifier_lost",
+      "location": "post.sentences.1",
+      "classification": "D:検証器の誤拒否",
+      "reason": "原文の「毛並みをきれいに整えるだけでなく」の「だけ」を限定条件として検出しているが、これは追加を表す接続であり、限定の欠落ではない。",
+      "runtimeChanged": false
+    },
+    {
+      "rule": "invented_quote",
+      "location": "post.notes.0",
+      "classification": "C:引用契約違反の正しい拒否",
+      "reason": "省略記号を挿入し複数箇所を合成した引用がitemCaptionに連続一致しない。"
+    },
+    {
+      "rule": "risk_term_not_supported",
+      "location": "post.notes.0",
+      "classification": "C:根拠を超えた安全断定の正しい拒否",
+      "reason": "引用にも原文にも安全という断定はない。正しい拒否が残るので、誤拒否2件を除いても不採用。"
+    }
+  ],
+  "additionalSemanticChecks": [
+    {
+      "location": "post.sentences.0",
+      "state": "未確認",
+      "reason": "左右セットの寸法・重量が1枚または1組のどちらの値かAPIに明記されていない。セット全体55gと断定しない。"
+    },
+    {
+      "location": "post.sentences.2",
+      "state": "未確認",
+      "reason": "丸洗い可能と蒸れにくさを並べた因果のつながりが曖昧。丸洗いが蒸れを防ぐという因果は原文から保証できない。"
+    },
+    {
+      "location": "post.notes.0",
+      "state": "不合格",
+      "reason": "犬の注意事項中の背中・腰という例を猫にも一般化している。猫・犬に共通する安全性を断定しない。"
+    },
+    {
+      "location": "post.tags",
+      "state": "照合済み",
+      "reason": "ペットグローブ・抜け毛対策・左右セットは原文の商品用途と一致。審査対象から除外していない。"
+    }
+  ],
+  "overall": "failed_do_not_adopt",
+  "publication": false,
+  "copyable": false,
+  "reason": "意味と引用の実不備があり、誤拒否の改善だけでは合格にならない。",
+  "nextStep": "同一商品へ再送しない。検証器の2種類の一般的誤拒否と、生成側の引用・注意事項の条件保持を別問題として扱う。変更後の実測は別商品の新しい対象・承認で判断する。"
+}

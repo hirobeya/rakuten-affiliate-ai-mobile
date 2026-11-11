@@ -1,0 +1,86 @@
+{
+  "sandbox": {
+    "name": "urenavi-raw-source-20261111-v1",
+    "currentSnapshotId": "snap_pHS239OVFH9UiWoQhaFy668jIOY8",
+    "currentSessionId": "sbx_vU7NzKvma6KVFASrCrOkO8I8vvpk",
+    "status": "stopped",
+    "statusUpdatedAt": 1794395403801,
+    "persistent": true,
+    "workloadType": "sandbox",
+    "region": "iad1",
+    "failoverRegions": [],
+    "vcpus": 1,
+    "memory": 2048,
+    "runtime": "node22",
+    "architecture": "amd64",
+    "image": "vercel/sandbox/node@sha256:b942df1147e36ab5b947e0fb63fd9aa1bd443c145ebebcc501020f8ce4c535cd",
+    "timeout": 1800000,
+    "snapshotExpiration": 604800000,
+    "keepLastSnapshots": {
+      "count": 1,
+      "deleteEvicted": true
+    },
+    "networkPolicy": {
+      "mode": "deny-all"
+    },
+    "totalEgressBytes": 309462,
+    "totalIngressBytes": 11499540,
+    "totalActiveCpuDurationMs": 43032,
+    "totalDurationMs": 2453562,
+    "cwd": "/vercel",
+    "createdAt": 1794391382837,
+    "updatedAt": 1794391382837
+  },
+  "session": {
+    "id": "sbx_vU7NzKvma6KVFASrCrOkO8I8vvpk",
+    "runtime": "node22",
+    "architecture": "amd64",
+    "requestedAt": 1794395016696,
+    "startedAt": 1794395016729,
+    "requestedStopAt": 1794395402622,
+    "stoppedAt": 1794395403549,
+    "status": "stopped",
+    "duration": 386820,
+    "vcpus": 1,
+    "memory": 2048,
+    "timeout": 1800000,
+    "region": "iad1",
+    "cwd": "/vercel",
+    "sourceSnapshotId": "snap_9bQVXyzFrmLvu3SlVF43m6v66MA3",
+    "workloadType": "sandbox",
+    "createdAt": 1794395016696,
+    "updatedAt": 1794395016737,
+    "interactivePort": 26661,
+    "networkPolicy": {
+      "mode": "deny-all"
+    },
+    "activeCpuDurationMs": 6926,
+    "networkTransfer": {
+      "ingress": 51297,
+      "egress": 53599
+    },
+    "sourceSandboxName": "urenavi-raw-source-20261111-v1",
+    "projectId": "prj_SAJCw9vvSR79pNT3gJCNcXWItGs8"
+  },
+  "snapshot": {
+    "id": "snap_pHS239OVFH9UiWoQhaFy668jIOY8",
+    "sourceSessionId": "sbx_vU7NzKvma6KVFASrCrOkO8I8vvpk",
+    "workloadType": "sandbox",
+    "architecture": "amd64",
+    "region": "iad1",
+    "regions": [
+      "iad1"
+    ],
+    "status": "created",
+    "sizeBytes": 156367214,
+    "expiresAt": 1795000203606,
+    "createdAt": 1794395403611,
+    "updatedAt": 1794395403611,
+    "lastUsedAt": 1794395403611,
+    "creationMethod": "automatic",
+    "parentId": "snap_9bQVXyzFrmLvu3SlVF43m6v66MA3"
+  },
+  "requestId": "req_01m754p076e9y8nrwc28sqrw50",
+  "generationCalls": 1,
+  "noFurtherDispatch": true
+}

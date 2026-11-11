@@ -1,0 +1,21 @@
+{
+  "version": "owner-specific-one-call-consent-v1",
+  "authorized": true,
+  "acceptUnknownCapacity": true,
+  "ownerResponse": "良いよ",
+  "scope": "Accept preceding exact one-product one-call proposal, unknown capacity and global-history residual risk; no resend; valid for 60 minutes from receipt observation.",
+  "receivedAt": 1794395017488,
+  "expiresAt": 1794398617488,
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "sourceHash": "031252d0a572e2f084398ab44d3377c7223b385d1b87beaa3e3ce6c8df798def",
+  "inputHash": "8b699c68cd5afc5f9e29d19433d1ae3b718d780d869e307cadb2d30b6e68e772",
+  "requestHash": "4c2634599d71fb2a3426bf460c207a6810abb4fa253d8f4451396bc7c168a4e1",
+  "qualityHash": "73ab727a662344270967fbfd075ff53f7fdb5be5188d172d9f38d9e2be7e9034",
+  "itemCode": "wishsun:10000100",
+  "experimentId": "05594c21-932a-411d-a64f-d8057de1a757",
+  "auditId": "916c4d90c464af3a31fff7f50eb9e03da050fff3eb748e029532d2e05a24e3ab",
+  "maxCalls": 1,
+  "maxExperimentCalls": 1,
+  "automaticRetries": 0,
+  "maxReservedTokens": 6606
+}

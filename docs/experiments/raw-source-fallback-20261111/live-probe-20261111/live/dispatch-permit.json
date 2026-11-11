@@ -1,0 +1,25 @@
+{
+  "version": "manual-fresh-dispatch-permit-v1",
+  "source": "owner_console_observation",
+  "consoleURL": "https://console.groq.com/settings/limits",
+  "organization": "Personal",
+  "project": "Default Project",
+  "projectOverrides": "none_observed",
+  "requestHash": "4c2634599d71fb2a3426bf460c207a6810abb4fa253d8f4451396bc7c168a4e1",
+  "networkPolicy": "api.groq.com_only",
+  "limits": {
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "observedAt": 1794395273934
+  },
+  "capacity": {
+    "remainingMinuteTokens": null,
+    "remainingDailyRequests": null,
+    "remainingDailyTokens": null
+  },
+  "history": "global_per_product_coverage_unknown_accepted",
+  "globalExclusivityBasis": "administrator statement: only ChatGPT and Work use Groq; no concurrent task sends in this run"
+}
