@@ -1,0 +1,43 @@
+{
+  "startedAtSha": "28b1f01835a46240a456829a58696c89ccfdc9fb",
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "evidenceSha": "dcceaf24ad48d6ca31b978dacd293e99a4d87aa3",
+  "pr": 166,
+  "draft": true,
+  "merged": false,
+  "workingTreeCleanAfterEvidenceCommit": true,
+  "ciAtEvidenceSha": [
+    {
+      "name": "Verify Urenavi",
+      "runId": 43005066329,
+      "conclusion": "success"
+    },
+    {
+      "name": "ROOM Copy Regression",
+      "runId": 43005066330,
+      "conclusion": "success"
+    }
+  ],
+  "sandbox": {
+    "name": "urenavi-raw-source-20261111-v1",
+    "sessionId": "sbx_Z65w8Z1fNMOtuC6ONw3HiXBj3wrD",
+    "status": "stopped",
+    "persistent": true,
+    "networkPolicy": "deny-all",
+    "snapshotId": "snap_9bQVXyzFrmLvu3SlVF43m6v66MA3",
+    "snapshotCreatedAt": 1794393449596,
+    "snapshotExpiresAt": 1794998249590,
+    "automaticSnapshotCreated": true,
+    "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+    "mustVerifyLedgerAndShaBeforeResumeDispatch": true
+  },
+  "authorized": false,
+  "acceptUnknownCapacity": false,
+  "expiresAt": null,
+  "groqGenerationCalls": 0,
+  "actualGroqInputTokens": null,
+  "actualGroqOutputTokens": null,
+  "groqLatencyMs": null,
+  "technicalDecision": "Ready for one-candidate approval review; not authorized to send. Unknown capacity and global product-specific history require explicit decision. API records are not full seller-page originals.",
+  "runtimeChangesAfterExecutionSha": false
+}
