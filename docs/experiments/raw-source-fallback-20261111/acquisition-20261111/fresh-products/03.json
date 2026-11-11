@@ -1,0 +1,156 @@
+{
+  "acquisitionReference": "api-capture-final.json#/captures/2",
+  "apiFieldRetention": {
+    "itemCode": {
+      "present": true,
+      "type": "string",
+      "hash": "b584319f262454c792dca8b9c9d386f2bdd07b746421ae4c7093293ec10dfc4e",
+      "utf16Length": 18,
+      "utf8Bytes": 18,
+      "preserved": true
+    },
+    "itemName": {
+      "present": true,
+      "type": "string",
+      "hash": "35da3aab36bbcc0c2e28117410929174e82b006c8934680b5c68a2dff98a5019",
+      "utf16Length": 140,
+      "utf8Bytes": 362,
+      "preserved": true
+    },
+    "itemCaption": {
+      "present": true,
+      "type": "string",
+      "hash": "5bdbbc2ccbb5609d5ce6d61be6be056a88e8f82d679e1cc868a5970176d8bc78",
+      "utf16Length": 641,
+      "utf8Bytes": 1530,
+      "preserved": true
+    },
+    "catchcopy": {
+      "present": true,
+      "type": "string",
+      "hash": "7272a1ea7d2afb761e6bd62d60af4b7c2439ac5cecfced27b6e87e8f5c125584",
+      "utf16Length": 75,
+      "utf8Bytes": 193,
+      "preserved": true
+    },
+    "itemPrice": {
+      "present": true,
+      "type": "number",
+      "hash": "b8d64963468c9614a6814a885fe1fcee13a3bcb5026c9a5774cbec36fdf4b998",
+      "utf16Length": null,
+      "utf8Bytes": null,
+      "preserved": true
+    },
+    "itemUrl": {
+      "present": true,
+      "type": "string",
+      "hash": "bbb00b6860847b3a0ea059da50866671f06d29115bcf985b925f0053092cb6d1",
+      "utf16Length": 50,
+      "utf8Bytes": 50,
+      "preserved": false,
+      "originalValueHash": "bca970a0a0329623b6a3f027c28e11ec4a556d44c92277bd8dbfa59785151d2e"
+    }
+  },
+  "source": {
+    "itemCode": "shopworld:10138423",
+    "itemName": "鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ アルミ ブラウン 90cm ステップストッカー 椅子 イス 縁台 収納箱 ベンチストッカー 踏み台 アルミ 収納ボックス 工具箱 道具箱 おしゃれ 物置き 屋外 アルミストッカーガーデンベンチ ガーデンチェア 送料無料",
+    "itemCaption": "Pickup Item！コンテナボックス アルミ ベンチ ベンチストッ9,980円【 完成品 】 耐荷重150kg 折りたたみ 7,980円～アルミ 踏み台 1段 幅45cm 庭 アルミ踏3,880円工具付き 縁台 ステップ アルミ 縁台 耐荷重5,280円～支柱固定金具付き アルミ 踏み台 2段 アルミ8,280円コンテナボックス 大型 大容量 屋外 収納ボッ7,390円～スツール 収納 収納スツール ボックス ベンチ1,890円～物置き 収納庫 屋外 高さ調整 3段 ベランダ8,280円 ■ その他のサイズはこちら 【 幅60cm 】 【 幅45cm 】 【 幅74cm 】 【 幅102cm 】 【 幅120cm 】 【 2段タイプ　幅74cm 】 軽くて丈夫なベンチストッカー　幅90cm　ブラウン アルミだから軽くて頑丈 大切な工具や道具、電動器具をオールシーズン安心して保管してください。 サビ・汚れにも強く、軒先やお庭に置いて収納BOXとして ガーデニングの道具箱・工具箱にもご使用いただけます。 ベンチや踏み台としても使える 一息つきたいときのベンチや、少し段差のある踏み台としても最適です。【お家の様々な場所で活躍】 プランターに、ベランダ、デッキのステップ、玄関先で玄関台 収納 玄関踏み台 としても大活躍します。 【商品詳細】本体サイズ：約幅90×奥行45×高さ49cm 内寸：（約）幅77×奥行39×高さ38×cm重さ:9.5 Kg 耐荷重:約80kg",
+    "catchcopy": "収納付き 庭 ガーデン 縁台 アルミ縁台 アルミ製 収納庫 ガーデンチェアー 整理 整頓 収納付き 腰掛 腰掛け 蓋付き キャンプ ストッカー ベンチ",
+    "itemPrice": 16780,
+    "genreId": 502627,
+    "itemUrl": "https://item.rakuten.co.jp/shopworld/000000123021/",
+    "shopName": "ショップワールド",
+    "shopCode": "shopworld",
+    "availability": 1,
+    "postageFlag": 0,
+    "taxFlag": 0,
+    "creditCardFlag": 1,
+    "affiliateRate": 4,
+    "pointRate": 1,
+    "startTime": "",
+    "endTime": ""
+  },
+  "sourceHash": "9e15f5c576a5dbbaf92ca3721e38add0822c0b9d8ce051d429af4b0b16cb99ac",
+  "local": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "69662815ad6e4512697aebc38c2fc62baad9b98406d30f56c6eed7b083cbb97a",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "shopworld:10138423",
+      "itemName": "鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ アルミ ブラウン 90cm ステップストッカー 椅子 イス 縁台 収納箱 ベンチストッカー 踏み台 アルミ 収納ボックス 工具箱 道具箱 おしゃれ 物置き 屋外 アルミストッカーガーデンベンチ ガーデンチェア 送料無料",
+      "itemCaption": "Pickup Item！コンテナボックス アルミ ベンチ ベンチストッ9,980円【 完成品 】 耐荷重150kg 折りたたみ 7,980円～アルミ 踏み台 1段 幅45cm 庭 アルミ踏3,880円工具付き 縁台 ステップ アルミ 縁台 耐荷重5,280円～支柱固定金具付き アルミ 踏み台 2段 アルミ8,280円コンテナボックス 大型 大容量 屋外 収納ボッ7,390円～スツール 収納 収納スツール ボックス ベンチ1,890円～物置き 収納庫 屋外 高さ調整 3段 ベランダ8,280円 ■ その他のサイズはこちら 【 幅60cm 】 【 幅45cm 】 【 幅74cm 】 【 幅102cm 】 【 幅120cm 】 【 2段タイプ　幅74cm 】 軽くて丈夫なベンチストッカー　幅90cm　ブラウン アルミだから軽くて頑丈 大切な工具や道具、電動器具をオールシーズン安心して保管してください。 サビ・汚れにも強く、軒先やお庭に置いて収納BOXとして ガーデニングの道具箱・工具箱にもご使用いただけます。 ベンチや踏み台としても使える 一息つきたいときのベンチや、少し段差のある踏み台としても最適です。【お家の様々な場所で活躍】 プランターに、ベランダ、デッキのステップ、玄関先で玄関台 収納 玄関踏み台 としても大活躍します。 【商品詳細】本体サイズ：約幅90×奥行45×高さ49cm 内寸：（約）幅77×奥行39×高さ38×cm重さ:9.5 Kg 耐荷重:約80kg",
+      "catchcopy": "収納付き 庭 ガーデン 縁台 アルミ縁台 アルミ製 収納庫 ガーデンチェアー 整理 整頓 収納付き 腰掛 腰掛け 蓋付き キャンプ ストッカー ベンチ",
+      "itemPrice": 16780,
+      "genreId": 502627,
+      "itemUrl": "https://item.rakuten.co.jp/shopworld/000000123021/",
+      "shopName": "ショップワールド",
+      "shopCode": "shopworld",
+      "availability": 1,
+      "postageFlag": 0,
+      "taxFlag": 0,
+      "creditCardFlag": 1,
+      "affiliateRate": 4,
+      "pointRate": 1,
+      "startTime": "",
+      "endTime": ""
+    },
+    "sourceHash": "9e15f5c576a5dbbaf92ca3721e38add0822c0b9d8ce051d429af4b0b16cb99ac",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "69662815ad6e4512697aebc38c2fc62baad9b98406d30f56c6eed7b083cbb97a",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "ea052dd6c6fcd791a3463b68baa0bb0329cbd3ec8f7ef934caddc10e451a8c0a",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "text": null,
+  "characterCount": null,
+  "qualityState": "unverified",
+  "requestHeld": false,
+  "requestHoldReason": null,
+  "inputEstimate": 3340,
+  "reservation": 5340,
+  "inputHash": "7377f975aefffe9044db099e327ad5bbb32f5bcd51efd1f37252b8ca9dc3dad5",
+  "requestHash": "30f16c65d4a5f25ec27a9536eff0b89ff3b66033b23b6d06c8999ced9f831832",
+  "groqCalls": 0
+}

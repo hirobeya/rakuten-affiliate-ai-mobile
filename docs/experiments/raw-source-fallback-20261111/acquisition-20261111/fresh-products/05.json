@@ -1,0 +1,156 @@
+{
+  "acquisitionReference": "api-capture-final.json#/captures/4",
+  "apiFieldRetention": {
+    "itemCode": {
+      "present": true,
+      "type": "string",
+      "hash": "98f7e6f3cbbfe5e87e8b19d547b6c384722783babcbf3be6bbf6d82cfd4fbe76",
+      "utf16Length": 18,
+      "utf8Bytes": 18,
+      "preserved": true
+    },
+    "itemName": {
+      "present": true,
+      "type": "string",
+      "hash": "9642d351849fb62509bc80c9ff2dda4af48ae0a5d26fbeb41faec2cb716806c6",
+      "utf16Length": 133,
+      "utf8Bytes": 259,
+      "preserved": true
+    },
+    "itemCaption": {
+      "present": true,
+      "type": "string",
+      "hash": "025ce2d79230b20fe86067aeb94e91424c43d069e16ca0910f385070cb9a0b04",
+      "utf16Length": 796,
+      "utf8Bytes": 1538,
+      "preserved": true
+    },
+    "catchcopy": {
+      "present": true,
+      "type": "string",
+      "hash": "55b5331586b3faeaf5ef72c425a109acbe50f7b1ba0c49c065f069c2a1c74ecb",
+      "utf16Length": 117,
+      "utf8Bytes": 225,
+      "preserved": true
+    },
+    "itemPrice": {
+      "present": true,
+      "type": "number",
+      "hash": "051c2e380d07844ffaca43743957f8c0efe2bdf74c6c1e6a9dcccb8d1a3c596b",
+      "utf16Length": null,
+      "utf8Bytes": null,
+      "preserved": true
+    },
+    "itemUrl": {
+      "present": true,
+      "type": "string",
+      "hash": "bec051b10e5973a6ccc0c96afa305dd8932abac0a49fa48017d98e24503afeb0",
+      "utf16Length": 45,
+      "utf8Bytes": 45,
+      "preserved": false,
+      "originalValueHash": "6f3d373eae8f54ae06c3f4e79a40b840d38622e4b3e1acf9d10dcbe486fee68e"
+    }
+  },
+  "source": {
+    "itemCode": "besthouse:10000083",
+    "itemName": "【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量",
+    "itemCaption": "商品情報 商品名モバイルバッテリー 5000mAh 内臓バッテリー容量リチウムイオン蓄電池 5000mAh定格出力：2900mAh 5V/2A 入力Type-Cケーブル・Type-Cポート：5V/3A,9V/2A,12V/1.5A（MAX18W） 出力Type-Cポート・Type-Cコネクタ：5V/3A,9V/2.22A,12V/1.67A Type-Cケーブル：5V/3A,9V/2.22A,10V/2.25A,12V/1.67A（MAX22.5W） Lightningコネクタ：5V/2.4A 保護機能過充電保護/過放電保護/短絡保護 PSEマーク安心・安全のPSE適合商品 定格エネルギー18Wh/3.6V カラーホワイト、ブラック、ピンク、パープル、ブルー 対応機種iPhone各種iPad各種Android各種Apple Watch各種（別途専用充電ケーブル必要）Switchその他 材質PC(本体ケース) 20000mAhhttps://item.rakuten.co.jp/besthouse/ot-ac09/ 注意事項※お客様のモニター環境により、色合いが実際の商品と異なる場合がございます。※商品及びパッケージは改良等の諸事情により予告なく変更することがございます。【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量 1年保証 急速充電 全機種対応 LED残量表示 モバイルバッテリー PSE認証 ケーブル 内蔵Google/Pixel/AQUOS/Galax/Samsung/Note/Xperia 携帯便利 持ち運び プレゼント 贈り物 防災グッズ 5",
+    "catchcopy": "1年保証 急速充電 全機種対応 LED残量表示 モバイルバッテリー PSE認証 ケーブル 内蔵Google/Pixel/AQUOS/Galax/Samsung/Note/Xperia 携帯便利 持ち運び プレゼント 贈り物 防災グッズ",
+    "itemPrice": 1980,
+    "genreId": 564277,
+    "itemUrl": "https://item.rakuten.co.jp/besthouse/ot-ac03/",
+    "shopName": "OKUTA ダイレクト楽天市場店",
+    "shopCode": "besthouse",
+    "availability": 1,
+    "postageFlag": 0,
+    "taxFlag": 0,
+    "creditCardFlag": 1,
+    "affiliateRate": 2,
+    "pointRate": 1,
+    "startTime": "",
+    "endTime": ""
+  },
+  "sourceHash": "b0869e7b7d239b84ded60fac58a4f27a8fa2d0d52d3cd4a9c06f78d5102783ad",
+  "local": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "6e57b6b1a67f6064cac385bc02ee145577c463519e6eb0aeb89ee31a4a677396",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "F",
+      "stage": "quality",
+      "reason": "catalogue_only_copy",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "besthouse:10000083",
+      "itemName": "【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量",
+      "itemCaption": "商品情報 商品名モバイルバッテリー 5000mAh 内臓バッテリー容量リチウムイオン蓄電池 5000mAh定格出力：2900mAh 5V/2A 入力Type-Cケーブル・Type-Cポート：5V/3A,9V/2A,12V/1.5A（MAX18W） 出力Type-Cポート・Type-Cコネクタ：5V/3A,9V/2.22A,12V/1.67A Type-Cケーブル：5V/3A,9V/2.22A,10V/2.25A,12V/1.67A（MAX22.5W） Lightningコネクタ：5V/2.4A 保護機能過充電保護/過放電保護/短絡保護 PSEマーク安心・安全のPSE適合商品 定格エネルギー18Wh/3.6V カラーホワイト、ブラック、ピンク、パープル、ブルー 対応機種iPhone各種iPad各種Android各種Apple Watch各種（別途専用充電ケーブル必要）Switchその他 材質PC(本体ケース) 20000mAhhttps://item.rakuten.co.jp/besthouse/ot-ac09/ 注意事項※お客様のモニター環境により、色合いが実際の商品と異なる場合がございます。※商品及びパッケージは改良等の諸事情により予告なく変更することがございます。【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量 1年保証 急速充電 全機種対応 LED残量表示 モバイルバッテリー PSE認証 ケーブル 内蔵Google/Pixel/AQUOS/Galax/Samsung/Note/Xperia 携帯便利 持ち運び プレゼント 贈り物 防災グッズ 5",
+      "catchcopy": "1年保証 急速充電 全機種対応 LED残量表示 モバイルバッテリー PSE認証 ケーブル 内蔵Google/Pixel/AQUOS/Galax/Samsung/Note/Xperia 携帯便利 持ち運び プレゼント 贈り物 防災グッズ",
+      "itemPrice": 1980,
+      "genreId": 564277,
+      "itemUrl": "https://item.rakuten.co.jp/besthouse/ot-ac03/",
+      "shopName": "OKUTA ダイレクト楽天市場店",
+      "shopCode": "besthouse",
+      "availability": 1,
+      "postageFlag": 0,
+      "taxFlag": 0,
+      "creditCardFlag": 1,
+      "affiliateRate": 2,
+      "pointRate": 1,
+      "startTime": "",
+      "endTime": ""
+    },
+    "sourceHash": "b0869e7b7d239b84ded60fac58a4f27a8fa2d0d52d3cd4a9c06f78d5102783ad",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "6e57b6b1a67f6064cac385bc02ee145577c463519e6eb0aeb89ee31a4a677396",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "F",
+        "stage": "quality",
+        "reason": "catalogue_only_copy",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "c1a06ee8e8676372a21d715924bf99328987737b4507086f55922e63294c55a8",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "text": null,
+  "characterCount": null,
+  "qualityState": "unverified",
+  "requestHeld": false,
+  "requestHoldReason": null,
+  "inputEstimate": 3242,
+  "reservation": 5242,
+  "inputHash": "7ac832e9a2e62d1ce59bddc5d03a47e93a7ed44d2e061e9a1539c1284d75f9db",
+  "requestHash": "ccabb99f56c65365eca054182939c2877b9d4ba45342fd715043db4aece264f9",
+  "groqCalls": 0
+}

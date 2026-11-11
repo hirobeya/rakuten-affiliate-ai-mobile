@@ -1,0 +1,156 @@
+{
+  "acquisitionReference": "api-capture-final.json#/captures/3",
+  "apiFieldRetention": {
+    "itemCode": {
+      "present": true,
+      "type": "string",
+      "hash": "cc975abff62f8d4592fef5edc588a375763e4062e37c218efd55a7b9c8146a57",
+      "utf16Length": 15,
+      "utf8Bytes": 15,
+      "preserved": true
+    },
+    "itemName": {
+      "present": true,
+      "type": "string",
+      "hash": "09558001992b0f23f052c66a71dc2e6858d945980083e1b4d3ca956622928a53",
+      "utf16Length": 50,
+      "utf8Bytes": 132,
+      "preserved": true
+    },
+    "itemCaption": {
+      "present": true,
+      "type": "string",
+      "hash": "e0f56e5fc9ce4661008da94b30d81bc9740596843cc2ee41264054709283022d",
+      "utf16Length": 692,
+      "utf8Bytes": 1954,
+      "preserved": true
+    },
+    "catchcopy": {
+      "present": true,
+      "type": "string",
+      "hash": "a14ee12f3d64168366d78f32a639c64566846c9e706160e1b794e90e000ffc4c",
+      "utf16Length": 40,
+      "utf8Bytes": 104,
+      "preserved": true
+    },
+    "itemPrice": {
+      "present": true,
+      "type": "number",
+      "hash": "40510175845988f13f6162ed8526f0b09f73384467fa855e1e79b44a56562a58",
+      "utf16Length": null,
+      "utf8Bytes": null,
+      "preserved": true
+    },
+    "itemUrl": {
+      "present": true,
+      "type": "string",
+      "hash": "5fb3a144347c439038aaf832cdc08e30051b871be90941527dfb8a2d7c31329d",
+      "utf16Length": 45,
+      "utf8Bytes": 45,
+      "preserved": false,
+      "originalValueHash": "6349c67f05ee4ee3755c35d198c819ee331ce14d99065d07f29783ba687221da"
+    }
+  },
+  "source": {
+    "itemCode": "arkham:10000161",
+    "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+    "itemCaption": "　　大掃除の日の必須品ウルトラ・マイクロファイバー手袋！ 　 　一年中使えるとても便利な手袋の登場です！特に年末の大掃除に欠かせないアイテムといえばこのウルトラ・マイクロファイバー手袋！ 　肌触りがよく超極細繊維を特殊な織り方天文学的な隙間を作りその隙間に汚れを吸収して効率的なお掃除が出来ます！ 　さらに水洗い(手洗い)が出来るのでいつでも清潔に使うこともできます。カラーは全4色でベージュ、ホワイト、ブルー、ピンクからお選びいただけます。 　 　このウルトラ・マイクロファイバー手袋には世界的な織物証明機関スイスOeko-Texstander100の検査にてレベル2＝肌に直接触れる物(昼着や寝着・シャツ・ブラウス・下着・装飾品やタオル類です。)を取得し、証明書タグが付けられてます。赤ちゃんのお肌に触れてもお肌が敏感な方でも安心して使えます。(^^)/ 　　ウルトラ・マイクロファイバーとは？ 　　こんなところに使える♪ 　　カラーは4色からお選び下さい♪ 　　仕様　（スペック） 品名お掃除手袋 ウルトラ・マイクロファイバー手袋サイズフリーサイズ 材質ポリエステル100％ カラーのバリエーションページュ 、ホワイト、スカイブルー、ピンク 　注意書き 洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。 洗濯を重ねるごとに、汚れの吸収効果は、落ちてくる可能性がございます。 ほつれ部が現れた場合jは、引っ張らずに、かぎ針などで、中に押し込むようにしてください。お掃除手袋 ウルトラ マイクロファイバー手袋　KE702",
+    "catchcopy": "お掃除手袋 ウルトラ・マイクロファイバー手袋 KE702 ★定形外郵便送料無料★",
+    "itemPrice": 1000,
+    "genreId": 101839,
+    "itemUrl": "https://item.rakuten.co.jp/arkham/ark0002950/",
+    "shopName": "防犯・防災・護身専門店 アーカム",
+    "shopCode": "arkham",
+    "availability": 1,
+    "postageFlag": 1,
+    "taxFlag": 0,
+    "creditCardFlag": 1,
+    "affiliateRate": 3,
+    "pointRate": 10,
+    "startTime": "",
+    "endTime": ""
+  },
+  "sourceHash": "e78ff76c6f8f38096a5ba03a8fd8ffabaee070148e59a0c2a4c9bb14b089a074",
+  "local": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "7b29f10c70cc6d32bfda97b179acfb78850c7a4d6d8141e191b3caa018334f9f",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "arkham:10000161",
+      "itemName": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+      "itemCaption": "　　大掃除の日の必須品ウルトラ・マイクロファイバー手袋！ 　 　一年中使えるとても便利な手袋の登場です！特に年末の大掃除に欠かせないアイテムといえばこのウルトラ・マイクロファイバー手袋！ 　肌触りがよく超極細繊維を特殊な織り方天文学的な隙間を作りその隙間に汚れを吸収して効率的なお掃除が出来ます！ 　さらに水洗い(手洗い)が出来るのでいつでも清潔に使うこともできます。カラーは全4色でベージュ、ホワイト、ブルー、ピンクからお選びいただけます。 　 　このウルトラ・マイクロファイバー手袋には世界的な織物証明機関スイスOeko-Texstander100の検査にてレベル2＝肌に直接触れる物(昼着や寝着・シャツ・ブラウス・下着・装飾品やタオル類です。)を取得し、証明書タグが付けられてます。赤ちゃんのお肌に触れてもお肌が敏感な方でも安心して使えます。(^^)/ 　　ウルトラ・マイクロファイバーとは？ 　　こんなところに使える♪ 　　カラーは4色からお選び下さい♪ 　　仕様　（スペック） 品名お掃除手袋 ウルトラ・マイクロファイバー手袋サイズフリーサイズ 材質ポリエステル100％ カラーのバリエーションページュ 、ホワイト、スカイブルー、ピンク 　注意書き 洗濯機にかけますと、ほつれる可能性がございますので、手洗いをお薦めします。 乾燥機のご使用は、避けてください。 洗濯を重ねるごとに、汚れの吸収効果は、落ちてくる可能性がございます。 ほつれ部が現れた場合jは、引っ張らずに、かぎ針などで、中に押し込むようにしてください。お掃除手袋 ウルトラ マイクロファイバー手袋　KE702",
+      "catchcopy": "お掃除手袋 ウルトラ・マイクロファイバー手袋 KE702 ★定形外郵便送料無料★",
+      "itemPrice": 1000,
+      "genreId": 101839,
+      "itemUrl": "https://item.rakuten.co.jp/arkham/ark0002950/",
+      "shopName": "防犯・防災・護身専門店 アーカム",
+      "shopCode": "arkham",
+      "availability": 1,
+      "postageFlag": 1,
+      "taxFlag": 0,
+      "creditCardFlag": 1,
+      "affiliateRate": 3,
+      "pointRate": 10,
+      "startTime": "",
+      "endTime": ""
+    },
+    "sourceHash": "e78ff76c6f8f38096a5ba03a8fd8ffabaee070148e59a0c2a4c9bb14b089a074",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "7b29f10c70cc6d32bfda97b179acfb78850c7a4d6d8141e191b3caa018334f9f",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "A",
+        "stage": "extraction",
+        "reason": "no_grounded_facts",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "79835d7108b767c196744ebd6d2bff4a00c0bb04cdaefce318899beefa370afd",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "text": null,
+  "characterCount": null,
+  "qualityState": "unverified",
+  "requestHeld": false,
+  "requestHoldReason": null,
+  "inputEstimate": 3429,
+  "reservation": 5429,
+  "inputHash": "70a4a56b7c1d793abec8b1c323fa00f1df577cdc313332d21045fc36fc51754f",
+  "requestHash": "cbd57c124f6aa3d660696fd20e7dba3f95f2b9d0dd0fcb55a0b5903a7f763717",
+  "groqCalls": 0
+}

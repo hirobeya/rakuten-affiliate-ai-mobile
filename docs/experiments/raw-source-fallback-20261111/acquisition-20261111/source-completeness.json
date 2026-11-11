@@ -1,0 +1,70 @@
+{
+  "captureSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "observedAt": [
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "at": "2026-11-11T10:25:51.008Z"
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "at": "2026-11-11T10:25:52.347Z"
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "at": "2026-11-11T10:25:53.656Z"
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "at": "2026-11-11T10:25:54.968Z"
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "at": "2026-11-11T10:25:56.320Z"
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "at": "2026-11-11T10:25:57.680Z"
+    }
+  ],
+  "apiMeaningFieldsRetained": true,
+  "transportEnvelopeFullyRetained": false,
+  "reason": "API応答URLに認証情報の反映を検出。機密を含むHTTP原本は保存せず、wire hashと長さを保存。商品名・説明・catchcopy・価格・codeは元値を保持。URLは秘密を含むquery/fragmentだけを除き、元値hashと整形履歴を記録。",
+  "apiNotEquivalentToEntireSellerPage": true,
+  "bed": {
+    "captionCharacters": 2902,
+    "oldFixtureCharacters": 1200,
+    "catchcopyState": "API returned nonempty 79-character value; prior fixture missing is not an API empty response",
+    "modelSelection": "unselected_regular_and_premium",
+    "apiPrice": 9990,
+    "priceScope": "API advertised value, not proof of every model price",
+    "reservation": 8362,
+    "held": true
+  },
+  "candidate": {
+    "itemCode": "wishsun:10000100",
+    "captionCharacters": 1514,
+    "oldFixtureCharacters": 1200,
+    "apiPrice": 999,
+    "previousFixturePrice": 1299,
+    "salesBody": "ペット用グルーミンググローブ 左右セット",
+    "selectedColor": null,
+    "colorPriceEquality": null,
+    "materials": "API内にゴム・シリコン・メッシュの記載あり。単一素材と断定しない。",
+    "terminalText": "メーカー希望小売価格はメーカー商品タグに基づいて掲載しています",
+    "sellerPageAuxiliary": {
+      "url": "https://item.rakuten.co.jp/wishsun/d3_brush_glove/",
+      "method": "web open retrieved indexed seller page; crawl last month, not current live price proof",
+      "ref": "turn236352040view0",
+      "matching": [
+        "商品番号d3_brush_glove",
+        "左右セット",
+        "5本指",
+        "サイズ約22cm×13cm",
+        "猫・犬等の対象",
+        "説明末尾のメーカー希望小売価格注記"
+      ],
+      "difference": "販売ページには個人輸入・関税などのショップ注意事項が別途ある。API captionは販売ページ全文ではない。補助資料をGroq入力へ混ぜない。",
+      "sellerPageFullSnapshotRetained": false
+    }
+  }
+}

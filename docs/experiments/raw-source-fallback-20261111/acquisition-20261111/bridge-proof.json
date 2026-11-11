@@ -1,0 +1,14 @@
+{
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "runId": "raw-acquisition-20261111-final-v6",
+  "directory": "/vercel/raw-acquisition-20261111-final-v6",
+  "sameProjectOIDC": true,
+  "captureFileDelivered": true,
+  "secretPath": "server environment -> TLS Sandbox command env -> short-lived Node memory",
+  "proof": {
+    "groqKeyConfigured": true,
+    "inferenceCodeLoaded": false,
+    "secretWrittenToFile": false
+  },
+  "providerRequestsDuringSecretPathCheck": 0
+}

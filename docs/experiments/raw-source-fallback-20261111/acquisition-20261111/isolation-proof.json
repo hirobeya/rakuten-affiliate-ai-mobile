@@ -1,0 +1,28 @@
+{
+  "baselineSha": "28b1f01835a46240a456829a58696c89ccfdc9fb",
+  "baselineFiles": 719,
+  "allBaselineFilesByteIdentical": true,
+  "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e",
+  "sandbox": "urenavi-raw-source-20261111-v1",
+  "sessionId": "sbx_Z65w8Z1fNMOtuC6ONw3HiXBj3wrD",
+  "networkPolicy": "deny-all",
+  "publicRoutes": [],
+  "sandboxCodeCleanAtTargetCreation": true,
+  "sandboxRawTests": {
+    "pass": 66,
+    "fail": 0,
+    "exitCode": 0
+  },
+  "approvalCreated": false,
+  "generationCalls": 0,
+  "oldStoresReadOnly": true,
+  "secretPersistence": "none; key only delivered to short-lived env process, no inference transport loaded",
+  "resumeRequirement": "If Sandbox session or audit directory is lost or restored inconsistently, do not dispatch; verify persistent snapshot and audit manifest, otherwise create a new unsigned target.",
+  "preview": {
+    "id": "dpl_5BcRkBhPzCejEWaXHVRrTa9BvCUu",
+    "url": "https://rakuten-affiliate-ai-mobile-5iwtl8twc-hirobeya-6572.vercel.app",
+    "state": "READY",
+    "target": null,
+    "executionSha": "01a0075aec37c42150f27fb05ec7bdfb2230c80e"
+  }
+}

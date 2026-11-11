@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-11-11",
+  "consoleURL": "https://console.groq.com/dashboard/logs?cursor=",
+  "visibleRows": 13,
+  "newestVisibleRequestSuffix": "qr0h",
+  "newestVisibleInputTokens": 1798,
+  "newestVisibleOutputTokens": 478,
+  "sameVisibleRowsAsPriorCheck": true,
+  "allProviderHistoryCoverage": "unavailable_from_current_console_list",
+  "perProductSourceAvailableInList": false,
+  "candidateHistoryNotProvenZero": true,
+  "knownMeasuredProducts": [
+    "pasoro:10001354",
+    "e-kurashi:10019512",
+    "bos-shop:10000023",
+    "yukaiya:10001267"
+  ],
+  "newExperimentDuplicateGuard": "Fresh namespace plus permanent per-product once marker and SHA/source/request/quality-bound approval; previous known measured products excluded. Missing global history remains a separately disclosed residual risk.",
+  "newProviderGenerationCalls": 0,
+  "remainingMinuteTokens": null,
+  "remainingDailyTokens": null,
+  "remainingDailyRequests": null,
+  "limitsLastObserved": {
+    "source": "Authenticated Groq Console Organization Limits UI",
+    "model": "openai/gpt-oss-120b",
+    "rpm": 30,
+    "rpd": 1000,
+    "tpm": 8000,
+    "tpd": 200000,
+    "observedAt": "2026-11-11T09:24:30.602759+00:00",
+    "projectOverrideVerified": false,
+    "freshPreDispatchObservationRequired": true
+  },
+  "repeatedFullHistorySearchStopped": true
+}

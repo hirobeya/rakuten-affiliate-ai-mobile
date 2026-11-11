@@ -1,0 +1,642 @@
+{
+  "acquisitionReference": "api-capture-final.json#/captures/0",
+  "apiFieldRetention": {
+    "itemCode": {
+      "present": true,
+      "type": "string",
+      "hash": "430ed3c70bf5c6467331084d2dd062d185a7d92cc33b80d3a69c3a742a4b41c2",
+      "utf16Length": 22,
+      "utf8Bytes": 22,
+      "preserved": true
+    },
+    "itemName": {
+      "present": true,
+      "type": "string",
+      "hash": "2d87ced1e284ffe49d95dc55fa0aba16290410621b740f4eee79e230914de6cb",
+      "utf16Length": 146,
+      "utf8Bytes": 360,
+      "preserved": true
+    },
+    "itemCaption": {
+      "present": true,
+      "type": "string",
+      "hash": "a9a5540739140da6fed1519e7c572d63db339389b34809b495e15d3a60e969c7",
+      "utf16Length": 2902,
+      "utf8Bytes": 8027,
+      "preserved": true
+    },
+    "catchcopy": {
+      "present": true,
+      "type": "string",
+      "hash": "bf01603bc2e8198f0872199e674cf810a87017f0c5df8ade47af7bb073d03ccd",
+      "utf16Length": 79,
+      "utf8Bytes": 233,
+      "preserved": true
+    },
+    "itemPrice": {
+      "present": true,
+      "type": "number",
+      "hash": "53c8a0eebfe250ce653a0e20b30f853154337180374a44933acccec3ad24b0f5",
+      "utf16Length": null,
+      "utf8Bytes": null,
+      "preserved": true
+    },
+    "itemUrl": {
+      "present": true,
+      "type": "string",
+      "hash": "25d70047a2e4e77035d6d8f78a4a7d7117daa2033457803a8d16a655844b7657",
+      "utf16Length": 51,
+      "utf8Bytes": 51,
+      "preserved": false,
+      "originalValueHash": "d434d01a3d77a4262ad9f6f46f947f42ff4ab60bc83dfe11b30399185ca476f4"
+    }
+  },
+  "source": {
+    "itemCode": "emoor-nedogko:10000048",
+    "itemName": "ペットベッド 犬 犬用 ペット 3D ベッド 犬用ベッド Lサイズ カバーを外して洗える ドッグベッド 丈夫 パピー 成犬 シニア 老犬 中型犬 大型犬 多頭 カドラー 冬 秋 春夏 オールシーズン 高反発 体圧分散 綿100％ 洗える 丸洗い 洗濯 床ずれ 立ち上がり 介護 高級 ねどっこ",
+    "itemCaption": "私たちよりもたくさん眠る愛犬のために 最高の寝具を。 年代に合わせて選ぶ 3Dベッド 大切なワンちゃんの健康寿命を延ばすことを目的に、寝具専門メーカーと愛犬家が共同開発。今、私たちにできる最高の寝具を作りました。 ＜レギュラー＞ ■ライフステージに合わせたベッドを 人間にもベビー布団があるように、ワンちゃんの成長によって寝具に必要な機能は異なります。パピー・成犬・シニア・ハイシニアと、年代ごとに必要な寝具機能を備えた最高クラスの素材を用意しました。 ■パピー＆ハイシニアタイプ 成長期のパピーと、足腰に不安のあるハイシニアには、絶妙なやわらかさと弾力で、寝返りや立ち上がりをやさしく支える、洗いやすい無膜ウレタン素材を使用。シャワーで手軽に水洗いが可能。もちろん、カバーだけ外して洗うこともできます。 ■成犬タイプ 成犬には、保温性と通気性が高く、体圧分散性に優れたプロファイルウレタンを採用。さらに、薄く加工した固綿を2枚敷くことで、適度なやわらかさで、長い時間を安心して過ごせます。ワンちゃんの数倍の体重の人間が座っても床づきしない底材で、お気に入りの場所が長く使えます。 ■シニアタイプ 長い時間、横になることが多いシニア期は、床ずれしないように、反発力と通気性のある3D構造体を採用。空気をたくさん溜めることで、床冷えも予防。カバーは外して丸洗いでき、底材もシャワーで簡単に洗えるので、安心です。 ■3Dデザイン 犬の習性を研究して生まれた、まくら一体型の3Dデザイン。身体の一部が触れている事で、安心して眠ることができます。 ■綿100％のカバー 吸湿発散性の高い厚手のオックス生地は、皮膚への負担が少なく、掘ったり噛んだりしても破れにくく丈夫。カバーは、取り外して洗濯機で洗うことができます。 ＜プレミアム＞ ■年代に合わせて使い分けできる最高品質モデル 上下面を入れ替えるだけで異なる寝心地を選べる、リバーシブル構造の床材を採用しました。 ＜メモリーフォーム＞ 体重や体の形に沿って優しく沈み込み、しっかりと支える高密度のウレタン素材。体圧を分散し、関節や筋肉への負担を軽減します。 ＜3D構造体＞ 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。活動量が多く、暑がりな愛犬にもおすすめです。 ■約1.5倍のわた量 まくらには、レギュラーの約1.5倍のわた量を使用。「包まれる安心感」と「ふんわりとした心地よさ」で、さらに落ち着ける空間を作ります。 ■立体的なカバー カバーは、陰影が美しく映える立体的なキルティングを採用。季節やトレンドに左右されにくく、長く愛用いただける上品なデザインです。もちろん、取り外して洗濯できます。 ■安全の滑り止め フローリングやタイルの上でもズレにくい滑り止め加工付き。安定するので、特に小型犬やシニア犬にも安心して使っていただけます。 ■感動ブランケット 最高クラスの肌触りを誇る超高密度のエコファーを使用したブランケット付き。裏面は滑らかなスエード生地のリバーシブル仕様。敷きパッドやラグとしても使えます。洗濯機でお洗濯可能です。 ※ご注意ください 「年代に合わせて選ぶ3Dベッド」は、【エムールねどっこ】のオリジナル商品です。 適切な選び方のサポートやアフターフォローを提供するため、販売代理店を設けず、直接、当社【株式会社エムール】が販売しております。 類似品や模倣品には十分ご注意ください。 ■ジャンル 年代に合わせて選ぶ3Dベッド 3Dベッド 3Dbed 3dbed ペット用ベッド 犬用ベッド 猫用ベッド ペットベッド ドッグベッド キャットベッド ベッド ペット寝具 ペット 犬 猫 幼犬 成犬 老犬 パピー シニア ハイシニア 小型犬 中型犬 大型犬 多頭 綿100％ 綿 ポリエステル 吸湿 発散 速乾 通気性 洗える 洗濯可能 衛生的 清潔 介護 おねしょ 年齢 ライフステージ 高反発 ウレタン ファイバー 体圧分散 立ち上がり 睡眠 サポート 耐久性 イエロー ネイビー オレンジ グリーン ブラウン アイボリー 送料無料 エムール ねどっこ ※PC環境により実際のカラーと多少異なることもございます。ご了承ください。商品詳細 品名 年代に合わせて選ぶ 3Dベッド / Lサイズ 寸法 全体：約幅80×奥行68×高さ23cm (内寸：約幅55×奥行54×厚み9cm) ブランケット：約55×85cm 素材 ■パピー＆ハイシニアタイプ 側生地：オックス生地 綿100％ 中材：洗えるウレタンフォーム(無膜ウレタン) 枕部分：中袋入りポリエステルわた(3本) ■成犬タイプ 側生地：オックス生地 綿100％ 中材：高反発プロファイルウレタンフォーム、固綿(2枚) 枕部分：中袋入りポリエステルわた(3本) ■シニアタイプ 側生地：オックス生地 綿100％ 中材：3Dファイバー素材(2つ折り仕様) 枕部分：中袋入りポリエステルわた(3本) ■プレミアムタイプ 表生地：ポリエステル100％(熱キルト生地 ツイルピーチスキン) 底生地：ポリエステル100％(滑り止め加工) クッション：ポリプロピレン100％(3本) 底面(メモリーフォーム)：ウレタンフォーム 45D 底面(3D構造体)：ポリエチレン100％ 70D ブランケット：ポリエステル100％(フェイクファー/スエード) ※ブランケット付きは「プレミアムタイプ」のみです。 ※付属のブランケットは同色です。 カラー マスタードイエロー ネイビー サニーオレンジ オリーブグリーン クリームアイボリー ライトグレー ブライトブラウン ブライトアイボリー 適正犬種 チワワ、ヨークシャーテリア、ポメラニアン、パピヨン、 マルチーズ、トイプードル、ミニチュアダックスフンド、 シーズー、ミニチュアシュナウザー、フレンチブルドッグ、 パグ、ノーフォークテリア、ノーリッチテリア、 ウェストハイランドホワイトテリア、猫等、柴犬、ビーグル、 ウェルシュコーギーペンブローク、ケアーンテリア、 ボストンテリア、ジャックラッセルテリア、 シェットランドシープドッグ、イタリアングレーハウンド、 アメリカンコッカースパニエル、小型犬の多頭飼い等 洗濯 カバー/ブランケット：洗濯機洗い可能(洗濯ネット使用推奨) 3D構造体：シャワーで水洗い可能 ※パピー＆ハイシニアタイプ、シニアタイプは底材もシャワーで手軽に洗えます。 ※メモリーフォームとクッションは洗えません。時々、日陰で通気させてください。 生産国 中国 配送 こちらの商品は送料無料です。 ※沖縄・離島のお客様につきましては、発送不可地域の為、当ショップにてご注文をキャンセルさせていただきます。 商品情報変更日 変更日：2022年11月30日 変更点：パピー＆ハイシニアタイプの無膜ウレタンの品質向上 &emsp;&emsp;&emsp;&emsp;(洗える機能は変わらず、耐久性がアップ)",
+    "catchcopy": "【送料無料】たくさん眠る愛犬のために最高の寝具を。パピー、成犬、シニアの各年代に合わせて選べる3Dベッド。オックス生地で耐久力抜群。カバーは洗濯機で洗えます。",
+    "itemPrice": 9990,
+    "genreId": 409760,
+    "itemUrl": "https://item.rakuten.co.jp/emoor-nedogko/dk-3dbedl/",
+    "shopName": "エムールねどっこ",
+    "shopCode": "emoor-nedogko",
+    "availability": 1,
+    "postageFlag": 0,
+    "taxFlag": 0,
+    "creditCardFlag": 1,
+    "affiliateRate": 4,
+    "pointRate": 1,
+    "startTime": "",
+    "endTime": ""
+  },
+  "sourceHash": "4917b387f867e8cbac1e2c1ca8039ca5b9cba9e56d549ff62d6b0d6ef68d1ad0",
+  "local": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "7aa2acfba5123d51764b0c9beb8ec014283aeb916f219b5b987e0ac7737d646d",
+    "mode": "normal",
+    "result": {
+      "ok": true,
+      "pending": false,
+      "retryAfterMs": 0,
+      "phase": "local",
+      "version": "super-urenavi-v3-conditional-preview",
+      "model": "local",
+      "productType": {
+        "specific": "ペットベッド",
+        "general": "pet",
+        "quote": "ペットベッド",
+        "valid": true
+      },
+      "attributes": [
+        {
+          "name": "partner_signal",
+          "value": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "sourceIndex": 0
+        },
+        {
+          "name": "function",
+          "value": "春夏",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "春夏",
+          "sourceIndex": 1
+        },
+        {
+          "name": "function",
+          "value": "オールシーズン",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "オールシーズン",
+          "sourceIndex": 2
+        },
+        {
+          "name": "function",
+          "value": "洗える",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "洗える",
+          "sourceIndex": 3
+        }
+      ],
+      "decisionAxes": [
+        "操作方法"
+      ],
+      "verifiedAppeals": [
+        {
+          "index": 0,
+          "text": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "noHassle": "",
+          "scene": "ペットベッド",
+          "attributeRefs": [],
+          "strength": 3,
+          "verification": {
+            "required": false,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "local_partner_grounded_angle"
+          }
+        }
+      ],
+      "groq": {
+        "pass1Calls": 0,
+        "pass2Calls": 0,
+        "totalCalls": 0
+      },
+      "cacheStatus": "local",
+      "pass2Status": "not_needed",
+      "tier": "A",
+      "quality": {
+        "status": "ready",
+        "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "reasons": []
+      },
+      "variants": [
+        {
+          "index": 1,
+          "hookType": "scene",
+          "hook": "ペットベッド",
+          "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています"
+        }
+      ],
+      "local": {
+        "route": "local",
+        "version": "2026-10-05-local-identity-arbitration-v8",
+        "method": "partner_reasoning",
+        "factCount": 4,
+        "valueCount": 1,
+        "partner": {
+          "productType": "ペットベッド",
+          "actsOn": "",
+          "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "kind": "caption_claim"
+        },
+        "arbitration": {
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "winner": {
+            "identity": "ペットベッド",
+            "source": "rule",
+            "score": 15
+          },
+          "runnerUp": null,
+          "resolvedFamilyConflict": false,
+          "candidates": [
+            {
+              "identity": "ペットベッド",
+              "source": "rule",
+              "score": 15,
+              "matchIndex": 0,
+              "method": null
+            }
+          ]
+        },
+        "learnedIdentity": null
+      }
+    },
+    "baseline": {
+      "ok": true,
+      "pending": false,
+      "retryAfterMs": 0,
+      "phase": "local",
+      "version": "super-urenavi-v3-conditional-preview",
+      "model": "local",
+      "productType": {
+        "specific": "ペットベッド",
+        "general": "pet",
+        "quote": "ペットベッド",
+        "valid": true
+      },
+      "attributes": [
+        {
+          "name": "partner_signal",
+          "value": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "sourceIndex": 0
+        },
+        {
+          "name": "function",
+          "value": "春夏",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "春夏",
+          "sourceIndex": 1
+        },
+        {
+          "name": "function",
+          "value": "オールシーズン",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "オールシーズン",
+          "sourceIndex": 2
+        },
+        {
+          "name": "function",
+          "value": "洗える",
+          "unit": "",
+          "qualifier": "",
+          "valueType": "text",
+          "quote": "洗える",
+          "sourceIndex": 3
+        }
+      ],
+      "decisionAxes": [
+        "操作方法"
+      ],
+      "verifiedAppeals": [
+        {
+          "index": 0,
+          "text": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "noHassle": "",
+          "scene": "ペットベッド",
+          "attributeRefs": [],
+          "strength": 3,
+          "verification": {
+            "required": false,
+            "supported": true,
+            "keepDirectFact": true,
+            "reason": "local_partner_grounded_angle"
+          }
+        }
+      ],
+      "groq": {
+        "pass1Calls": 0,
+        "pass2Calls": 0,
+        "totalCalls": 0
+      },
+      "cacheStatus": "local",
+      "pass2Status": "not_needed",
+      "tier": "A",
+      "quality": {
+        "status": "ready",
+        "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "reasons": []
+      },
+      "variants": [
+        {
+          "index": 1,
+          "hookType": "scene",
+          "hook": "ペットベッド",
+          "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています"
+        }
+      ],
+      "local": {
+        "route": "local",
+        "version": "2026-10-05-local-identity-arbitration-v8",
+        "method": "partner_reasoning",
+        "factCount": 4,
+        "valueCount": 1,
+        "partner": {
+          "productType": "ペットベッド",
+          "actsOn": "",
+          "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+          "kind": "caption_claim"
+        },
+        "arbitration": {
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "winner": {
+            "identity": "ペットベッド",
+            "source": "rule",
+            "score": 15
+          },
+          "runnerUp": null,
+          "resolvedFamilyConflict": false,
+          "candidates": [
+            {
+              "identity": "ペットベッド",
+              "source": "rule",
+              "score": 15,
+              "matchIndex": 0,
+              "method": null
+            }
+          ]
+        },
+        "learnedIdentity": null
+      }
+    },
+    "editorialProposal": null,
+    "diagnostic": null,
+    "attempts": 1,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "existing_gate_ready"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "emoor-nedogko:10000048",
+      "itemName": "ペットベッド 犬 犬用 ペット 3D ベッド 犬用ベッド Lサイズ カバーを外して洗える ドッグベッド 丈夫 パピー 成犬 シニア 老犬 中型犬 大型犬 多頭 カドラー 冬 秋 春夏 オールシーズン 高反発 体圧分散 綿100％ 洗える 丸洗い 洗濯 床ずれ 立ち上がり 介護 高級 ねどっこ",
+      "itemCaption": "私たちよりもたくさん眠る愛犬のために 最高の寝具を。 年代に合わせて選ぶ 3Dベッド 大切なワンちゃんの健康寿命を延ばすことを目的に、寝具専門メーカーと愛犬家が共同開発。今、私たちにできる最高の寝具を作りました。 ＜レギュラー＞ ■ライフステージに合わせたベッドを 人間にもベビー布団があるように、ワンちゃんの成長によって寝具に必要な機能は異なります。パピー・成犬・シニア・ハイシニアと、年代ごとに必要な寝具機能を備えた最高クラスの素材を用意しました。 ■パピー＆ハイシニアタイプ 成長期のパピーと、足腰に不安のあるハイシニアには、絶妙なやわらかさと弾力で、寝返りや立ち上がりをやさしく支える、洗いやすい無膜ウレタン素材を使用。シャワーで手軽に水洗いが可能。もちろん、カバーだけ外して洗うこともできます。 ■成犬タイプ 成犬には、保温性と通気性が高く、体圧分散性に優れたプロファイルウレタンを採用。さらに、薄く加工した固綿を2枚敷くことで、適度なやわらかさで、長い時間を安心して過ごせます。ワンちゃんの数倍の体重の人間が座っても床づきしない底材で、お気に入りの場所が長く使えます。 ■シニアタイプ 長い時間、横になることが多いシニア期は、床ずれしないように、反発力と通気性のある3D構造体を採用。空気をたくさん溜めることで、床冷えも予防。カバーは外して丸洗いでき、底材もシャワーで簡単に洗えるので、安心です。 ■3Dデザイン 犬の習性を研究して生まれた、まくら一体型の3Dデザイン。身体の一部が触れている事で、安心して眠ることができます。 ■綿100％のカバー 吸湿発散性の高い厚手のオックス生地は、皮膚への負担が少なく、掘ったり噛んだりしても破れにくく丈夫。カバーは、取り外して洗濯機で洗うことができます。 ＜プレミアム＞ ■年代に合わせて使い分けできる最高品質モデル 上下面を入れ替えるだけで異なる寝心地を選べる、リバーシブル構造の床材を採用しました。 ＜メモリーフォーム＞ 体重や体の形に沿って優しく沈み込み、しっかりと支える高密度のウレタン素材。体圧を分散し、関節や筋肉への負担を軽減します。 ＜3D構造体＞ 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。活動量が多く、暑がりな愛犬にもおすすめです。 ■約1.5倍のわた量 まくらには、レギュラーの約1.5倍のわた量を使用。「包まれる安心感」と「ふんわりとした心地よさ」で、さらに落ち着ける空間を作ります。 ■立体的なカバー カバーは、陰影が美しく映える立体的なキルティングを採用。季節やトレンドに左右されにくく、長く愛用いただける上品なデザインです。もちろん、取り外して洗濯できます。 ■安全の滑り止め フローリングやタイルの上でもズレにくい滑り止め加工付き。安定するので、特に小型犬やシニア犬にも安心して使っていただけます。 ■感動ブランケット 最高クラスの肌触りを誇る超高密度のエコファーを使用したブランケット付き。裏面は滑らかなスエード生地のリバーシブル仕様。敷きパッドやラグとしても使えます。洗濯機でお洗濯可能です。 ※ご注意ください 「年代に合わせて選ぶ3Dベッド」は、【エムールねどっこ】のオリジナル商品です。 適切な選び方のサポートやアフターフォローを提供するため、販売代理店を設けず、直接、当社【株式会社エムール】が販売しております。 類似品や模倣品には十分ご注意ください。 ■ジャンル 年代に合わせて選ぶ3Dベッド 3Dベッド 3Dbed 3dbed ペット用ベッド 犬用ベッド 猫用ベッド ペットベッド ドッグベッド キャットベッド ベッド ペット寝具 ペット 犬 猫 幼犬 成犬 老犬 パピー シニア ハイシニア 小型犬 中型犬 大型犬 多頭 綿100％ 綿 ポリエステル 吸湿 発散 速乾 通気性 洗える 洗濯可能 衛生的 清潔 介護 おねしょ 年齢 ライフステージ 高反発 ウレタン ファイバー 体圧分散 立ち上がり 睡眠 サポート 耐久性 イエロー ネイビー オレンジ グリーン ブラウン アイボリー 送料無料 エムール ねどっこ ※PC環境により実際のカラーと多少異なることもございます。ご了承ください。商品詳細 品名 年代に合わせて選ぶ 3Dベッド / Lサイズ 寸法 全体：約幅80×奥行68×高さ23cm (内寸：約幅55×奥行54×厚み9cm) ブランケット：約55×85cm 素材 ■パピー＆ハイシニアタイプ 側生地：オックス生地 綿100％ 中材：洗えるウレタンフォーム(無膜ウレタン) 枕部分：中袋入りポリエステルわた(3本) ■成犬タイプ 側生地：オックス生地 綿100％ 中材：高反発プロファイルウレタンフォーム、固綿(2枚) 枕部分：中袋入りポリエステルわた(3本) ■シニアタイプ 側生地：オックス生地 綿100％ 中材：3Dファイバー素材(2つ折り仕様) 枕部分：中袋入りポリエステルわた(3本) ■プレミアムタイプ 表生地：ポリエステル100％(熱キルト生地 ツイルピーチスキン) 底生地：ポリエステル100％(滑り止め加工) クッション：ポリプロピレン100％(3本) 底面(メモリーフォーム)：ウレタンフォーム 45D 底面(3D構造体)：ポリエチレン100％ 70D ブランケット：ポリエステル100％(フェイクファー/スエード) ※ブランケット付きは「プレミアムタイプ」のみです。 ※付属のブランケットは同色です。 カラー マスタードイエロー ネイビー サニーオレンジ オリーブグリーン クリームアイボリー ライトグレー ブライトブラウン ブライトアイボリー 適正犬種 チワワ、ヨークシャーテリア、ポメラニアン、パピヨン、 マルチーズ、トイプードル、ミニチュアダックスフンド、 シーズー、ミニチュアシュナウザー、フレンチブルドッグ、 パグ、ノーフォークテリア、ノーリッチテリア、 ウェストハイランドホワイトテリア、猫等、柴犬、ビーグル、 ウェルシュコーギーペンブローク、ケアーンテリア、 ボストンテリア、ジャックラッセルテリア、 シェットランドシープドッグ、イタリアングレーハウンド、 アメリカンコッカースパニエル、小型犬の多頭飼い等 洗濯 カバー/ブランケット：洗濯機洗い可能(洗濯ネット使用推奨) 3D構造体：シャワーで水洗い可能 ※パピー＆ハイシニアタイプ、シニアタイプは底材もシャワーで手軽に洗えます。 ※メモリーフォームとクッションは洗えません。時々、日陰で通気させてください。 生産国 中国 配送 こちらの商品は送料無料です。 ※沖縄・離島のお客様につきましては、発送不可地域の為、当ショップにてご注文をキャンセルさせていただきます。 商品情報変更日 変更日：2022年11月30日 変更点：パピー＆ハイシニアタイプの無膜ウレタンの品質向上 &emsp;&emsp;&emsp;&emsp;(洗える機能は変わらず、耐久性がアップ)",
+      "catchcopy": "【送料無料】たくさん眠る愛犬のために最高の寝具を。パピー、成犬、シニアの各年代に合わせて選べる3Dベッド。オックス生地で耐久力抜群。カバーは洗濯機で洗えます。",
+      "itemPrice": 9990,
+      "genreId": 409760,
+      "itemUrl": "https://item.rakuten.co.jp/emoor-nedogko/dk-3dbedl/",
+      "shopName": "エムールねどっこ",
+      "shopCode": "emoor-nedogko",
+      "availability": 1,
+      "postageFlag": 0,
+      "taxFlag": 0,
+      "creditCardFlag": 1,
+      "affiliateRate": 4,
+      "pointRate": 1,
+      "startTime": "",
+      "endTime": ""
+    },
+    "sourceHash": "4917b387f867e8cbac1e2c1ca8039ca5b9cba9e56d549ff62d6b0d6ef68d1ad0",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "7aa2acfba5123d51764b0c9beb8ec014283aeb916f219b5b987e0ac7737d646d",
+      "mode": "normal",
+      "result": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "local",
+        "version": "super-urenavi-v3-conditional-preview",
+        "model": "local",
+        "productType": {
+          "specific": "ペットベッド",
+          "general": "pet",
+          "quote": "ペットベッド",
+          "valid": true
+        },
+        "attributes": [
+          {
+            "name": "partner_signal",
+            "value": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "sourceIndex": 0
+          },
+          {
+            "name": "function",
+            "value": "春夏",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "春夏",
+            "sourceIndex": 1
+          },
+          {
+            "name": "function",
+            "value": "オールシーズン",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "オールシーズン",
+            "sourceIndex": 2
+          },
+          {
+            "name": "function",
+            "value": "洗える",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "洗える",
+            "sourceIndex": 3
+          }
+        ],
+        "decisionAxes": [
+          "操作方法"
+        ],
+        "verifiedAppeals": [
+          {
+            "index": 0,
+            "text": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "noHassle": "",
+            "scene": "ペットベッド",
+            "attributeRefs": [],
+            "strength": 3,
+            "verification": {
+              "required": false,
+              "supported": true,
+              "keepDirectFact": true,
+              "reason": "local_partner_grounded_angle"
+            }
+          }
+        ],
+        "groq": {
+          "pass1Calls": 0,
+          "pass2Calls": 0,
+          "totalCalls": 0
+        },
+        "cacheStatus": "local",
+        "pass2Status": "not_needed",
+        "tier": "A",
+        "quality": {
+          "status": "ready",
+          "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+          "reasons": []
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "hook": "ペットベッド",
+            "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "local": {
+          "route": "local",
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "method": "partner_reasoning",
+          "factCount": 4,
+          "valueCount": 1,
+          "partner": {
+            "productType": "ペットベッド",
+            "actsOn": "",
+            "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "kind": "caption_claim"
+          },
+          "arbitration": {
+            "version": "2026-10-05-local-identity-arbitration-v8",
+            "winner": {
+              "identity": "ペットベッド",
+              "source": "rule",
+              "score": 15
+            },
+            "runnerUp": null,
+            "resolvedFamilyConflict": false,
+            "candidates": [
+              {
+                "identity": "ペットベッド",
+                "source": "rule",
+                "score": 15,
+                "matchIndex": 0,
+                "method": null
+              }
+            ]
+          },
+          "learnedIdentity": null
+        }
+      },
+      "baseline": {
+        "ok": true,
+        "pending": false,
+        "retryAfterMs": 0,
+        "phase": "local",
+        "version": "super-urenavi-v3-conditional-preview",
+        "model": "local",
+        "productType": {
+          "specific": "ペットベッド",
+          "general": "pet",
+          "quote": "ペットベッド",
+          "valid": true
+        },
+        "attributes": [
+          {
+            "name": "partner_signal",
+            "value": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "sourceIndex": 0
+          },
+          {
+            "name": "function",
+            "value": "春夏",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "春夏",
+            "sourceIndex": 1
+          },
+          {
+            "name": "function",
+            "value": "オールシーズン",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "オールシーズン",
+            "sourceIndex": 2
+          },
+          {
+            "name": "function",
+            "value": "洗える",
+            "unit": "",
+            "qualifier": "",
+            "valueType": "text",
+            "quote": "洗える",
+            "sourceIndex": 3
+          }
+        ],
+        "decisionAxes": [
+          "操作方法"
+        ],
+        "verifiedAppeals": [
+          {
+            "index": 0,
+            "text": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "noHassle": "",
+            "scene": "ペットベッド",
+            "attributeRefs": [],
+            "strength": 3,
+            "verification": {
+              "required": false,
+              "supported": true,
+              "keepDirectFact": true,
+              "reason": "local_partner_grounded_angle"
+            }
+          }
+        ],
+        "groq": {
+          "pass1Calls": 0,
+          "pass2Calls": 0,
+          "totalCalls": 0
+        },
+        "cacheStatus": "local",
+        "pass2Status": "not_needed",
+        "tier": "A",
+        "quality": {
+          "status": "ready",
+          "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+          "reasons": []
+        },
+        "variants": [
+          {
+            "index": 1,
+            "hookType": "scene",
+            "hook": "ペットベッド",
+            "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています"
+          }
+        ],
+        "local": {
+          "route": "local",
+          "version": "2026-10-05-local-identity-arbitration-v8",
+          "method": "partner_reasoning",
+          "factCount": 4,
+          "valueCount": 1,
+          "partner": {
+            "productType": "ペットベッド",
+            "actsOn": "",
+            "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+            "kind": "caption_claim"
+          },
+          "arbitration": {
+            "version": "2026-10-05-local-identity-arbitration-v8",
+            "winner": {
+              "identity": "ペットベッド",
+              "source": "rule",
+              "score": 15
+            },
+            "runnerUp": null,
+            "resolvedFamilyConflict": false,
+            "candidates": [
+              {
+                "identity": "ペットベッド",
+                "source": "rule",
+                "score": 15,
+                "matchIndex": 0,
+                "method": null
+              }
+            ]
+          },
+          "learnedIdentity": null
+        }
+      },
+      "editorialProposal": null,
+      "diagnostic": null,
+      "attempts": 1,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "existing_gate_ready"
+    },
+    "localHash": "e800918adb1103f969478fab41fbc714e1ee0ae47b9c189b2ad074ed1a26de39",
+    "outputHash": "3faf7c51f86a2929a44a950a84ec1022b566b3711ad3bbe0c280a13d44446735",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "text": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+  "characterCount": 89,
+  "qualityState": "unverified",
+  "requestHeld": true,
+  "requestHoldReason": "request_reservation_over_tpm_ceiling",
+  "inputEstimate": 6362,
+  "reservation": 8362,
+  "inputHash": null,
+  "requestHash": null,
+  "groqCalls": 0
+}
