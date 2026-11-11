@@ -8,6 +8,7 @@ const {build}=require('../../lib/room-writer/writer');
 const {verify}=require('../../lib/room-writer/verify');
 const {compose}=require('../../lib/room-writer/compose');
 const B=require('../../lib/room-writer/budget');
+const {initialProbeBudget}=require('../../lib/room-writer/initial-probe');
 const SET=path.join(__dirname,'../../tests/room-writer/eval-set.json');
 const OUT=path.resolve(process.env.ROOM_WRITER_RESULT_FILE||'room-writer-e1-results.json');
 const LOCK=OUT+'.exclusive.lock';
@@ -41,11 +42,13 @@ function preflight(){
  const remainingDaily=number(process.env.ROOM_WRITER_DAILY_TOKENS_AVAILABLE);
  const sha=cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
  if(process.env.ROOM_WRITER_S3_APPROVED_SHA!==sha||process.env.ROOM_WRITER_EXCLUSIVE_APPROVED!=='true')die('S3_SHA_OR_EXCLUSIVE_APPROVAL_MISSING');
- if(!observed||now()-observed>60000||observed>now()||remainingMinute===null||remainingDaily===null||remainingMinute>8000||remainingDaily>200000)die('S3_FRESH_CAPACITY_UNVERIFIED');
+ const initialProbe=process.env.ROOM_WRITER_INITIAL_PROBE_APPROVED_SHA===sha;
+ if(!initialProbe&&(!observed||now()-observed>60000||observed>now()||remainingMinute===null||remainingDaily===null||remainingMinute>8000||remainingDaily>200000))die('S3_FRESH_CAPACITY_UNVERIFIED');
+ if(initialProbe&&(remainingMinute!==null||remainingDaily!==null))die('S3_INITIAL_PROBE_MUST_KEEP_CAPACITY_UNKNOWN');
  if(day!==1&&day!==2)die('S3_DAY_MUST_BE_1_OR_2');
  if(!process.env.GROQ_API_KEY)die('S3_PROVIDER_KEY_NOT_PRESENT');
  if(OUT.includes('/docs/rebuild-20261028/')||OUT.includes('/.git/'))die('result_destination_prohibited');
- return {day,sha,remainingMinute,remainingDaily};
+ return {day,sha,initialProbe,remainingMinute,remainingDaily};
 }
 function loadReport(){
  if(!fs.existsSync(OUT))return {posts:[],experiment:'room_writer_e1_v1',model:'openai/gpt-oss-120b',sourceSha:'563e65e0339aa2e33708b998af7e4e47a884ccd3',days:{},stopped:null};
@@ -74,6 +77,7 @@ async function run(){
  const p=preflight();
  claimExclusive();
  const report=loadReport();
+ if(p.initialProbe&&(p.day!==1||report.posts.length))die('S3_INITIAL_PROBE_ALREADY_ATTEMPTED');
  if(p.day===2&&(!report.days['1']||report.days['1']===isoDay()))die('S3_TWO_DISTINCT_DAYS_REQUIRED');
  if(p.day===1&&report.days['1'])die('S3_DAY1_ALREADY_FINISHED');
  const subset=list.slice((p.day-1)*20,p.day*20);
@@ -88,10 +92,14 @@ async function run(){
    report.posts.push({itemCode:row.item.itemCode,day:p.day,state:'completed',post:null,hold:draft.reason,tokens:0,latencyMs:0});save(report);continue;
   }
   const reserved=estimate(draft.request)+2000;
-  const gate=B.budget({dayUsed,minuteUsed,inputEstimate:estimate(draft.request),unresolved:false,capacityObserved:true});
-  if(!gate.allow||reserved>remainingMinute||reserved>remainingDaily){report.stopped='capacity_hold';save(report);die('S3_CAPACITY_INSUFFICIENT');}
+  const gate=p.initialProbe?initialProbeBudget({approved:true,priorAttempts:report.posts.length,inputEstimate:estimate(draft.request),outputReserve:draft.request.max_completion_tokens}):B.budget({dayUsed,minuteUsed,inputEstimate:estimate(draft.request),unresolved:false,capacityObserved:true});
+  if(!gate.allow||(!p.initialProbe&&(reserved>remainingMinute||reserved>remainingDaily))){report.stopped='capacity_hold';save(report);die('S3_CAPACITY_INSUFFICIENT');}
   const event={itemCode:row.item.itemCode,category:row.category,day:p.day,state:'attempt_started',post:null,
    status:'pending',tokens:null,latencyMs:null,sha:crypto.createHash('sha256').update(JSON.stringify(draft.request)).digest('hex')};
+  if(p.initialProbe){
+   const marker=fs.openSync(OUT+'.initial-probe-used','wx',0o600);fs.writeSync(marker,p.sha+'\n');fs.fsyncSync(marker);fs.closeSync(marker);
+   event.admission={mode:'explicitly_approved_initial_probe',reserved,remainingMinute:null,remainingDaily:null};
+  }
   report.posts.push(event);save(report); // durable pre-send record; never retry after ambiguous crash
   const startedAt=now();let http=null,body=null,headers=null;
   try{
@@ -104,19 +112,27 @@ async function run(){
   }catch(e){report.stopped='transport_or_unknown_consumption';event.status='unknown';event.latencyMs=now()-startedAt;save(report);die('S3_AMBIGUOUS_PROVIDER_RESULT_DO_NOT_RETRY');}
   event.latencyMs=now()-startedAt;event.httpStatus=http;
   const usage=body?.usage||null,settled=B.onResponse(http,usage);
+  event.usage=usage;
+  event.providerContent=http===200?body?.choices?.[0]?.message?.content||null:null;
+  event.providerError=body?.error?{code:body.error.code||null,type:body.error.type||null}:null;
   if(!settled.ok){report.stopped=settled.reason;event.status=settled.reason;save(report);die('S3_STOP_NO_RETRY',{reason:settled.reason,http});}
   event.tokens=settled.consumed;dayUsed+=settled.consumed;minuteUsed+=settled.consumed;
   const remainingHeader=number(headers?.get('x-ratelimit-remaining-tokens'));
   const remainingReq=number(headers?.get('x-ratelimit-remaining-requests'));
-  if(remainingHeader===null||remainingReq===null){report.stopped='provider_capacity_unobserved';event.status='usage_reported_but_capacity_unknown';save(report);die('S3_CAPACITY_UNOBSERVED_NO_NEXT_CALL');}
-  remainingMinute=Math.min(remainingHeader,Math.max(0,remainingMinute-settled.consumed));
-  remainingDaily=Math.max(0,remainingDaily-settled.consumed);
+  event.providerCapacity={remainingMinute:remainingHeader,remainingRequestsPerDay:remainingReq,remainingDailyTokens:null};
+  if(!p.initialProbe&&(remainingHeader===null||remainingReq===null)){report.stopped='provider_capacity_unobserved';event.status='usage_reported_but_capacity_unknown';save(report);die('S3_CAPACITY_UNOBSERVED_NO_NEXT_CALL');}
+  if(!p.initialProbe){
+   remainingMinute=Math.min(remainingHeader,Math.max(0,remainingMinute-settled.consumed));
+   remainingDaily=Math.max(0,remainingDaily-settled.consumed);
+  }
   if(usage.prompt_tokens+usage.completion_tokens>reserved){report.stopped='actual_usage_exceeded_reservation';event.status='capacity_misestimation';save(report);die('S3_RESERVATION_UNDERESTIMATED');}
   let generated;try{generated=JSON.parse(body?.choices?.[0]?.message?.content||'');}
   catch{report.stopped='model_json_invalid';event.status='invalid_json';save(report);die('S3_JSON_INVALID_NO_RETRY');}
   const verdict=verify(source,generated);
   event.verdict=verdict;event.draft=generated;event.post=verdict.ok?compose(generated,verdict,{itemPrice:row.item.itemPrice}).text:null;
-  event.status=verdict.status;event.state='completed';save(report);
+  event.status=verdict.status;event.state='completed';
+  if(p.initialProbe)report.stopped='initial_probe_complete_review_required';
+  save(report);
   if(http===429){report.stopped='429';save(report);die('S3_429_NO_RETRY');}
   observed.push(settled.consumed);
   const firstFive=report.posts.filter(x=>x.day===p.day&&Number.isSafeInteger(x.tokens)&&x.tokens>0).slice(0,5);
