@@ -1,0 +1,164 @@
+{
+  "posts": [
+    {
+      "itemCode": "pasoro:10001354",
+      "category": "バイクグローブ",
+      "day": 1,
+      "state": "completed",
+      "post": null,
+      "status": "rejected",
+      "tokens": 2276,
+      "latencyMs": 1445,
+      "sha": "fd13ca4687df11e79e6f34f7227093ab9a15f8c3c01ae29222b31ec72014dbae",
+      "admission": {
+        "mode": "explicitly_approved_initial_probe",
+        "reserved": 5061,
+        "remainingMinute": null,
+        "remainingDaily": null
+      },
+      "httpStatus": 200,
+      "usage": {
+        "queue_time": 0.152004605,
+        "prompt_tokens": 1798,
+        "prompt_time": 0.089434876,
+        "completion_tokens": 478,
+        "completion_time": 1.006104813,
+        "total_tokens": 2276,
+        "total_time": 1.095539689,
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        }
+      },
+      "providerError": null,
+      "providerCapacity": {
+        "remainingMinute": 5802,
+        "remainingRequestsPerDay": 999,
+        "remainingDailyTokens": null
+      },
+      "draft": {
+        "hold": {
+          "active": false,
+          "reason": ""
+        },
+        "post": {
+          "hook": {
+            "text": "本革（山羊革）ならではの柔らかさと高いグリップ力で、長時間のツーリングも快適に。",
+            "kind": "F",
+            "basis": [
+              "f05",
+              "f06"
+            ]
+          },
+          "body": [
+            {
+              "text": "ナックルプロテクターと前面の大きなベルクロでしっかり固定、風の侵入を防ぎます。",
+              "kind": "F",
+              "basis": [
+                "f07",
+                "f04",
+                "f09"
+              ]
+            },
+            {
+              "text": "指先はタッチ対応素材を採用し、手袋をしたままスマホ操作が可能です。",
+              "kind": "F",
+              "basis": [
+                "f11"
+              ]
+            },
+            {
+              "text": "季節に合わせてシンプルモデルと防風モデルの2タイプから選べ、10℃前後の寒さにも対応します。",
+              "kind": "F",
+              "basis": [
+                "f08",
+                "f10"
+              ]
+            }
+          ],
+          "note": "レビュー700件以上、累計5,000セット突破の実績が信頼の証です。"
+        },
+        "product": {
+          "type": "バイクグローブ",
+          "unit": "1個",
+          "confident": true,
+          "basis": [
+            "f01",
+            "f05",
+            "f07",
+            "f08",
+            "f09",
+            "f10",
+            "f11",
+            "f13"
+          ]
+        },
+        "tags": [
+          "本革",
+          "ナックルプロテクター",
+          "スマホ対応",
+          "防風",
+          "季節選択"
+        ]
+      },
+      "verdict": {
+        "ok": false,
+        "status": "rejected",
+        "failures": [
+          {
+            "rule": "V4_qualifier_lost",
+            "index": 1,
+            "text": "ナックルプロテクターと前面の大きなベルクロでしっかり固定、風の侵入を防ぎます。"
+          },
+          {
+            "rule": "V9_product_not_in_hook",
+            "index": 0,
+            "text": "本革（山羊革）ならではの柔らかさと高いグリップ力で、長時間のツーリングも快適に。"
+          }
+        ],
+        "publication": false,
+        "copyable": false,
+        "text": "本革（山羊革）ならではの柔らかさと高いグリップ力で、長時間のツーリングも快適に。\nナックルプロテクターと前面の大きなベルクロでしっかり固定、風の侵入を防ぎます。\n指先はタッチ対応素材を採用し、手袋をしたままスマホ操作が可能です。\n季節に合わせてシンプルモデルと防風モデルの2タイプから選べ、10℃前後の寒さにも対応します。",
+        "semanticApproved": false
+      }
+    }
+  ],
+  "experiment": "room_writer_e1_v1",
+  "model": "openai/gpt-oss-120b",
+  "sourceSha": "563e65e0339aa2e33708b998af7e4e47a884ccd3",
+  "days": {},
+  "stopped": "initial_probe_complete_review_required",
+  "executionSha": "ba22436c7b188ad49ad0cf74581aa9dcbe2123d9",
+  "receipt": {
+    "observedAt": "2026-11-11T00:39:32.946Z",
+    "httpStatus": 200,
+    "usage": {
+      "queue_time": 0.152004605,
+      "prompt_tokens": 1798,
+      "prompt_time": 0.089434876,
+      "completion_tokens": 478,
+      "completion_time": 1.006104813,
+      "total_tokens": 2276,
+      "total_time": 1.095539689,
+      "completion_tokens_details": {
+        "reasoning_tokens": 61
+      }
+    },
+    "latencyMs": 1444,
+    "headers": {
+      "x-ratelimit-limit-requests": "1000",
+      "x-ratelimit-limit-tokens": "8000",
+      "x-ratelimit-remaining-requests": "999",
+      "x-ratelimit-remaining-tokens": "5802",
+      "x-ratelimit-reset-requests": "1m26.4s",
+      "x-ratelimit-reset-tokens": "16.485s",
+      "x-request-id": "req_01m740qc12emst4nw2dqw9qr0h"
+    }
+  },
+  "sourceItem": {
+    "itemCode": "pasoro:10001354",
+    "itemName": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+    "itemCaption": "「価格以上の品質」と「本革の満足感」 季節に合わせて選べる2タイプの本革バイクグローブ(本革手袋)。 ナックルプロテクター入りで安心感もあり、ライダーの声から生まれた設計です。 ■お客様の声から改良しました(2026年10月リニューアル) 「ベルクロが弱い」というお声をもとに、防風モデルのベルクロを手首の前側に移し、大きくしました。 前からしっかり締められるので、手首のすき間から風が入りにくくなっています。 ■快適性と保護性を両立 本革(山羊革)ならではの柔らかさと、高いグリップ力。 使うほど手になじみ、長時間のツーリングでも快適な操作をサポートするバイク用手袋です。 拳と指の関節は、ナックルプロテクターでしっかりガードします。 ■季節で選べる2タイプ ・シンプルモデル:軽くて動きやすい定番モデル。通気孔(パンチング)あり/なしを選べ、春〜秋におすすめ ・防風モデル:手首まで長めに覆い、前面の大きなベルクロでしっかり固定。冷え込みや隙間風に強く、10℃前後にも対応 ■スマホ対応&フィット感の調整が可能 親指と人差し指にタッチ対応素材を採用し、グローブを着けたままスマホを操作できます。 ベルクロ(面ファスナー)で、手首まわりのフィット感も調整できるレザーグローブです。 ■レビュー700件以上&累計5,000セット突破 レビュー700件以上(2026年9月時点)、累計販売5,000セット突破の人気商品。 リピート購入も多く、多くのライダーに選ばれている本革手袋です。 ■メール便でお届け メール便でお届けできるよう、パッケージを必要最小限に設計しました。 見た目の包装ではなく、中身の品質にこだわったバイク手袋です。 本革の良さを気軽に体感できるバイクグローブ。ぜひお試しください。",
+    "catchcopy": "",
+    "itemPrice": 3280
+  }
+}
