@@ -1,0 +1,600 @@
+{
+  "executionSha": "dae33a28be0de112e34cc93f8f69ed5c03b98b02",
+  "sourceSetPath": "tests/room-writer/eval-set.json",
+  "sourceSetHash": "042c9dc1d40278abbf140c7fa6ddbb8eae5265416e220a0d1cea5f80d2a90126",
+  "storedOutputSource": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedOutputReplayMatches": 20,
+  "method": "Read full frozen source and actual stored output independently. Assistant editorial judgments, not machine readiness, old labels, or human certification.",
+  "counts": {
+    "total": 20,
+    "withText": 4,
+    "withoutText": 16,
+    "passed": 1,
+    "failed": 2,
+    "unverified": 17
+  },
+  "axes": {
+    "understanding": "商品理解",
+    "specificity": "特徴の具体性",
+    "choice": "購入を検討する理由",
+    "audience_value": "対象者・利用場面・価値",
+    "naturalness": "自然さ・魅力",
+    "grounded": "根拠の正確性"
+  },
+  "rows": [
+    {
+      "number": 1,
+      "itemCode": "pasoro:10001354",
+      "category": "バイクグローブ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。既存identity_unresolvedは品質6項目の評価に代用しない。実測済み商品のため候補除外。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "c8d76f5dc93cc5a28e0674e49b474a45f29cad6ad72edc3ed99113351c38752a",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "4e7acaaeafdd25d3453d6adacee02a21228eaff8fe5f8fbedd9662019bfd9ff0",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/01.json"
+    },
+    {
+      "number": 2,
+      "itemCode": "e-kurashi:10019512",
+      "category": "収納ベンチ",
+      "status": "failed",
+      "statusJa": "不合格",
+      "axes": {
+        "understanding": true,
+        "specificity": true,
+        "choice": false,
+        "audience_value": false,
+        "naturalness": null,
+        "grounded": true
+      },
+      "reason": "座部を上げる収納機能だけの1文と価格。2人掛け・リビング等の利用文脈を結ばず、購入理由と対象・場面の説明が不足。",
+      "textAvailable": true,
+      "characterCount": 59,
+      "sourceHash": "3dcd120a302e1eaf35f574704675f6da70b5909a7bfe10b1808a9e5ea37c681c",
+      "outputHash": "e584cb0a0d01f958b503a4c943cbdd7f4fc5826869aee2b96758a0fac03b8825",
+      "localHash": "03e42bc9e643466e314817695014d86de6f5de951f510a83e646db7885474dd6",
+      "route": {
+        "status": "fallback_prepared_not_authorized",
+        "qualityState": "failed",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/02.json"
+    },
+    {
+      "number": 3,
+      "itemCode": "supplyshop:10028516",
+      "category": "モップハンガー",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。既存no_grounded_factsで保留。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "041bd11def5e247ba4b72959aa6249989bc6e5a085adf5d458b2b451f340670f",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "9fd2f09f3278b0fa7c5bd3c629cee5b5d248a78be583639bf38e6df1c4a6711d",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/03.json"
+    },
+    {
+      "number": 4,
+      "itemCode": "worktk:10014552",
+      "category": "空調服バッテリー",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。ファン＋バッテリーのセットと衣服の混同等は今回の本文では評価できない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "5e906130f1c5efbc8036f0e1a2588206698b6712fb5c32364dfbe1f5e9b64a5c",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "8a6487fefbf50e1656a11bed2eedcf27e61c454c69c3c3879b919866f70baa27",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/04.json"
+    },
+    {
+      "number": 5,
+      "itemCode": "wishsun:10000100",
+      "category": "ペット毛取りグローブ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": true,
+        "specificity": true,
+        "choice": true,
+        "audience_value": true,
+        "naturalness": null,
+        "grounded": true
+      },
+      "reason": "5本指とブラッシングの理由は原文に忠実。一方「非常に扱いやすい」「簡単」を含む長い引用文の魅力は判断が分かれ、自然さ・魅力を保留。明確な不合格としてGroqへ回さない。",
+      "textAvailable": true,
+      "characterCount": 106,
+      "sourceHash": "2390881d99c28d89c63800a6a7b5f0142f4729c1859fd381b2844935f2a0df0f",
+      "outputHash": "686be433e680c97458bf2632591c798fd647f85fe3a425c91151c532863461bf",
+      "localHash": "6612ba193daebbb887a3c249c2690d5d3376e7c072570ad9e9f889b5772609b7",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/05.json"
+    },
+    {
+      "number": 6,
+      "itemCode": "bos-shop:10000023",
+      "category": "BOS袋",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。identity_unresolvedで保留。別経路で実測済みなので候補除外。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "27e13c9ff6902d13e2a3ed7c0c586565d7055e4989d2d36be079d8e6fc591d2e",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "5c80471bbcbe8b3b44470a99c6ce379fa0b2cfe30072ba387df959027ff2ff05",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/06.json"
+    },
+    {
+      "number": 7,
+      "itemCode": "mtgec-beauty:10001348",
+      "category": "美顔ローラー",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。短い原文には本体・付属品はあるが効能や用途の文章評価はできない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "8e5520a05a75badd4376b2b7fa38079ac5faaa256d18271138596413da71aa49",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "94d45252e2c74028b56992556a2d29694d50bcf566ff76f8ecbd991df21914d1",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/07.json"
+    },
+    {
+      "number": 8,
+      "itemCode": "besthouse:10000083",
+      "category": "モバイルバッテリー",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。catalogue_only_copyは自動診断であり、保存本文がない状態で品質不合格には変換しない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "1060737e09eced6923e0faf4520dd01fca1062b8e667bc49669a868f023e30e0",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "d812f870e58859d54807db4f7ee96a9b95709d743ac5000dc3feebe212cf4713",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/08.json"
+    },
+    {
+      "number": 9,
+      "itemCode": "e-kitchen:10079039",
+      "category": "フライパン",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。12点/13点セットや熱源条件の成否を判定できない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "89aa90eacf36376b13f056eba1b3c8236cdefa46a12a3d1b572a464b7603bbc9",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "de4300b59350eaebfcec9a2fed0766574ccf21817d29dbdd3b2f50b9622bd3df",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/09.json"
+    },
+    {
+      "number": 10,
+      "itemCode": "risu-onlineshop:10002384",
+      "category": "収納ボックス",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。2段セット販売、サイズ別耐荷重、別売パーツの扱いは未確認。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "7730bc1b7dc33c5f488bee3bef0299f4a373658aa3080cd89f1e561521964197",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "9c893b71efa77fec22567597a1dd15b0a318beedd920fbf955d713a651c16a7b",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/10.json"
+    },
+    {
+      "number": 11,
+      "itemCode": "snowfoxskincare:10000116",
+      "category": "ヘアブラシ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。ブラシ単体と併用推奨品・セット商品の区別は未確認。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "457c106100157a0b9b85cda329a2244534b06ccb6835811bf1dbeac729f35fdd",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "a5a11710541e3557369b0cb776149fa8c632251fc16f72b788fb8f4248434baa",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/11.json"
+    },
+    {
+      "number": 12,
+      "itemCode": "emoor-nedogko:10000048",
+      "category": "ペットベッド",
+      "status": "failed",
+      "statusJa": "不合格",
+      "axes": {
+        "understanding": false,
+        "specificity": true,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": false,
+        "grounded": false
+      },
+      "reason": "プレミアムの3D構造体の説明を、モデル条件なしでペットベッド全体へ一般化。原文にある引用でも適用範囲を失っている。<3D構造体>の見出しも本文に残る。",
+      "textAvailable": true,
+      "characterCount": 89,
+      "sourceHash": "7593571d9714b995cc21f4b5e24402de9d113011db93dd89a75ea921969d49df",
+      "outputHash": "3faf7c51f86a2929a44a950a84ec1022b566b3711ad3bbe0c280a13d44446735",
+      "localHash": "8b6e107ee49bf3f17bba76e35010d09c6f0729a0abef9c341d2c081cdad496a8",
+      "route": {
+        "status": "fallback_prepared_not_authorized",
+        "qualityState": "failed",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/12.json"
+    },
+    {
+      "number": 13,
+      "itemCode": "astyone0728:10000001",
+      "category": "靴下",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。5足/10足の販売選択・返品条件等の保持は未確認。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "da9d43f46f9d68f27837419ba3462fe7c3b4c47eb4f43df01dda6c72003077f8",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "17dbb2e0844b6824c4e40d76559d716a7d33b06327c03956c301cc44c734aa61",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/13.json"
+    },
+    {
+      "number": 14,
+      "itemCode": "myhomeshop:10000326",
+      "category": "電気ケトル",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。competing_identityで保留。温度・沸騰時間・ミルク条件を照合できない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "676cf337695b86426f379d53d7095d625da9ed7f529e754e5a2641a2706a466e",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "a9f62b97dfc868aedc99df5bcc93a4e7273980fc67b1924fb47b60168b3a029b",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/14.json"
+    },
+    {
+      "number": 15,
+      "itemCode": "irisplaza-r:10170526",
+      "category": "食品",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。販売履歴と現在の容量・水セットの区別を照合できない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "bc52d3bf4f886f4c85f1bbb4e6269ccd3b5e67fba85f2d0e5f5889378db61e35",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "d966f534b2976e6acb0ebfbdf4fc1efbc361835babbf3943e2cf4e48b3214e77",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/15.json"
+    },
+    {
+      "number": 16,
+      "itemCode": "arkham:10000161",
+      "category": "掃除用グローブ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。洗濯機非推奨・乾燥機回避の条件保持は未確認。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "c0f446d4a044ea25ead21bb0e9a691f94ec9b5c67f0457c26102b1df544cf180",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "18fc6fc97500385055a5fa04bcc58662fadb852b6cb8d72164efcc25725c1e3d",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/16.json"
+    },
+    {
+      "number": 17,
+      "itemCode": "high-broad:10000679",
+      "category": "スポーツ用グローブ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。軟式用・中学生以上・左右別カラー・別売ボールの保持は未確認。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "63cdd3a4fbc3628f0f2779270295c554b0111cdcbd2a7f9a052d95b612f0b6f5",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "b8a4fcde34bb66575f89d6947b87ac759723e21b4c805c6ba498292bcdbefeb2",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/17.json"
+    },
+    {
+      "number": 18,
+      "itemCode": "daiya:10001447",
+      "category": "保存済み洗濯用品",
+      "status": "passed",
+      "statusJa": "合格",
+      "axes": {
+        "understanding": true,
+        "specificity": true,
+        "choice": true,
+        "audience_value": true,
+        "naturalness": true,
+        "grounded": true
+      },
+      "reason": "ハート型→畳まず入れる→カップを包む→擦れ・ねじれをおさえる関係が読み取れ、原文の対象・程度を保つ。今回の保存本文に対する6項目合格。",
+      "textAvailable": true,
+      "characterCount": 102,
+      "sourceHash": "4a107f1f7c0add9e78521c04e46f12d2c74ea60d523bab942ccd45ed285767e0",
+      "outputHash": "f3cf153dc9a1d9afdda617e1e61d952dcf2e1871878d309f8eaffe766042570b",
+      "localHash": "396bca494670315933852fe3f7dd3df1a95236e7b1efb1739f2ea87721adf17e",
+      "route": {
+        "status": "reuse_quality_passed_local",
+        "qualityState": "passed",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/18.json"
+    },
+    {
+      "number": 19,
+      "itemCode": "arqs01:10000087",
+      "category": "バイクグローブ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。editorial_rescue_requires_direct_caption_claimは診断であり品質不合格の証明にしない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "25412eb9db8ad88a3f51d49ed8588cea050d8b638bc90ec93504ec013d00684a",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "6e927e167f0498055199b3615b8a60c6fefd9ac1d16eac30930fd052c6c2f368",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/19.json"
+    },
+    {
+      "number": 20,
+      "itemCode": "shopworld:10138423",
+      "category": "収納ベンチ",
+      "status": "unverified",
+      "statusJa": "未確認",
+      "axes": {
+        "understanding": null,
+        "specificity": null,
+        "choice": null,
+        "audience_value": null,
+        "naturalness": null,
+        "grounded": null
+      },
+      "reason": "本文なし。関連商品の150kgと販売本体の約80kgの混同を照合できない。",
+      "textAvailable": false,
+      "characterCount": null,
+      "sourceHash": "cddb7b7d00a614f2865095a99e053f8886642ddda61bb0ca614eb7529a92851d",
+      "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "localHash": "6f8ea12c5eb6893d304c4d71e6622a38f2041a7fb5728279403a55d29a4be5ed",
+      "route": {
+        "status": "local_quality_unverified",
+        "qualityState": "unverified",
+        "reason": null,
+        "calls": 0
+      },
+      "evidencePath": "products/20.json"
+    }
+  ],
+  "selectedCandidate": "emoor-nedogko:10000048",
+  "realGroqCalls": 0,
+  "actualTokens": null,
+  "liveAuthorizationIssued": false,
+  "commonCauses": [
+    "Extracted sentence loses preceding model scope, despite exact lexical quotation",
+    "A correct feature can still omit the reader situation and concrete purchase reason",
+    "Source headings leak into the post",
+    "No-output veto diagnoses do not establish six-axis writing quality",
+    "Ambiguous naturalness needs further editorial assessment, never automatic fallback"
+  ],
+  "runtimeFilesChanged": false,
+  "oldEvidenceChanged": false,
+  "scope": "Evidence and offline tooling only; passed label applies to this source/text snapshot, not product launch certification"
+}

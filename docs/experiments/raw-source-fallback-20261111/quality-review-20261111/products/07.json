@@ -1,0 +1,232 @@
+{
+  "number": 7,
+  "itemCode": "mtgec-beauty:10001348",
+  "category": "美顔ローラー",
+  "source": {
+    "itemCode": "mtgec-beauty:10001348",
+    "itemName": "リファカッサレイ ReFa CAXA RAY リファ カッサ カッサプレート 美顔器 美顔ローラー リリースリフト refa 正規品 公式 ギフト プレゼント バレンタイン ホワイトデー SR24 R25D03",
+    "itemCaption": "商品名 ReFa CAXA RAY(リファカッサレイ) 広告文責 株式会社MTG 0120-467-222 メーカー（製造） 株式会社MTG 区分 日本製・美容機器 付属品 ポーチ・クリーンクロス・ガイドブック メーカー希望小売価格はメーカーサイトに基づいて掲載しています",
+    "catchcopy": "",
+    "itemPrice": 26180
+  },
+  "sourceHash": "8e5520a05a75badd4376b2b7fa38079ac5faaa256d18271138596413da71aa49",
+  "fieldHashes": {
+    "itemCode": "27e2fa9216d8d300a9d0906ee5a4f2d2fb0ffe8819a6e2ecfaecacca86ff5a17",
+    "itemName": "6b8b4813e8b1e4bd5c380a5c3123f19c7a7035123723d51375d1db2e89064542",
+    "itemCaption": "e4dc5c03f9dc6556219955b4858ce8eeacb1c19e7dbf62d3d83bd795266a19ca",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "36eef5d3eb1fa6ea70f89dad5bfbd453d4b69e0b54098625858db83624ea1a07"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "美顔ローラー",
+    "item": {
+      "itemCaption": "商品名 ReFa CAXA RAY(リファカッサレイ) 広告文責 株式会社MTG 0120-467-222 メーカー（製造） 株式会社MTG 区分 日本製・美容機器 付属品 ポーチ・クリーンクロス・ガイドブック メーカー希望小売価格はメーカーサイトに基づいて掲載しています",
+      "itemCode": "mtgec-beauty:10001348",
+      "itemName": "リファカッサレイ ReFa CAXA RAY リファ カッサ カッサプレート 美顔器 美顔ローラー リリースリフト refa 正規品 公式 ギフト プレゼント バレンタイン ホワイトデー SR24 R25D03",
+      "itemPrice": 26180
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "969adbdcf6dbd098d18e5a3e39954c585c1d423f16b5f369906c5beb03279467",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "a1ab8f06809dabda1590d04e3aaa7e5c4c03934728e816de68afe0f874d40977",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "A",
+      "stage": "extraction",
+      "reason": "no_grounded_facts",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "mtgec-beauty:10001348",
+      "itemName": "リファカッサレイ ReFa CAXA RAY リファ カッサ カッサプレート 美顔器 美顔ローラー リリースリフト refa 正規品 公式 ギフト プレゼント バレンタイン ホワイトデー SR24 R25D03",
+      "itemCaption": "商品名 ReFa CAXA RAY(リファカッサレイ) 広告文責 株式会社MTG 0120-467-222 メーカー（製造） 株式会社MTG 区分 日本製・美容機器 付属品 ポーチ・クリーンクロス・ガイドブック メーカー希望小売価格はメーカーサイトに基づいて掲載しています",
+      "catchcopy": "",
+      "itemPrice": 26180
+    },
+    "sourceHash": "8e5520a05a75badd4376b2b7fa38079ac5faaa256d18271138596413da71aa49",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "a1ab8f06809dabda1590d04e3aaa7e5c4c03934728e816de68afe0f874d40977",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "A",
+        "stage": "extraction",
+        "reason": "no_grounded_facts",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "94d45252e2c74028b56992556a2d29694d50bcf566ff76f8ecbd991df21914d1",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "8e5520a05a75badd4376b2b7fa38079ac5faaa256d18271138596413da71aa49",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "94d45252e2c74028b56992556a2d29694d50bcf566ff76f8ecbd991df21914d1",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。短い原文には本体・付属品はあるが効能や用途の文章評価はできない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "ReFa CAXA RAYと付属品の原文はあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。効能を名前から推測しない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "本文なし。美容効果を補完しない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "付属品 ポーチ・クリーンクロス・ガイドブック"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

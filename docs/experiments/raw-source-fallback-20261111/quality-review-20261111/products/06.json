@@ -1,0 +1,232 @@
+{
+  "number": 6,
+  "itemCode": "bos-shop:10000023",
+  "category": "BOS袋",
+  "source": {
+    "itemCode": "bos-shop:10000023",
+    "itemName": "【お得】 臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚 ｜ 日本製",
+    "itemCaption": "●【限定商品】ストライプパッケージ／袋カラー：4色からお選びいただけます。●【袋サイズ】SSサイズ（17×27cm）●防臭力はいずれも同じですので、お好みの袋サイズ・カラーからお選びください。 「検索用キーワード」 ボス 臭い 匂い ニオイ におい 臭わない 袋 レジ 処理 ゴミ 生 箱 おむつ うんち 生ゴミ ゴミ 対策 エコ 重曹 消臭剤 菌 虫 コバエ カラス 消し 新聞紙 収納 散歩 外出 旅行 おでかけ 車 用品 防災 備蓄 トイレ 持ち帰り 嘔吐 下痢 エチケット マナー おすすめ ランキング 人気 おしゃれ 祝 犬 ペット ドッグ シーツ 犬トイレ 小動物 糞 おしっこ 介護 施設 ケージ ゲージ ポーチ 猫 ねこ キャット 猫砂 猫トイレ 爪とぎ 病気 おから ひのき ペットシーツ 水槽",
+    "catchcopy": "",
+    "itemPrice": 1617
+  },
+  "sourceHash": "27e13c9ff6902d13e2a3ed7c0c586565d7055e4989d2d36be079d8e6fc591d2e",
+  "fieldHashes": {
+    "itemCode": "b98e5cdc616a26a9eefe0bc0c67179183a83a06cb3b2327dd82b2ed59053faa7",
+    "itemName": "82a06d38fdf1c576acc81852813c2a5e826a0bcafd42a58ceb1202271a2c9e7a",
+    "itemCaption": "85a03665cf3983dd14f0da4879b0e30a159a98af3134582abe7b16583551d4c8",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "67aa578ed1fd0fa4198a7f1cc37b1ab20331cb472f7eb766f687f870a53a0670"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "BOS袋",
+    "item": {
+      "itemCaption": "●【限定商品】ストライプパッケージ／袋カラー：4色からお選びいただけます。●【袋サイズ】SSサイズ（17×27cm）●防臭力はいずれも同じですので、お好みの袋サイズ・カラーからお選びください。 「検索用キーワード」 ボス 臭い 匂い ニオイ におい 臭わない 袋 レジ 処理 ゴミ 生 箱 おむつ うんち 生ゴミ ゴミ 対策 エコ 重曹 消臭剤 菌 虫 コバエ カラス 消し 新聞紙 収納 散歩 外出 旅行 おでかけ 車 用品 防災 備蓄 トイレ 持ち帰り 嘔吐 下痢 エチケット マナー おすすめ ランキング 人気 おしゃれ 祝 犬 ペット ドッグ シーツ 犬トイレ 小動物 糞 おしっこ 介護 施設 ケージ ゲージ ポーチ 猫 ねこ キャット 猫砂 猫トイレ 爪とぎ 病気 おから ひのき ペットシーツ 水槽",
+      "itemCode": "bos-shop:10000023",
+      "itemName": "【お得】 臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚 ｜ 日本製",
+      "itemPrice": 1617
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "420ae817f19d5c7a41127ede3a1c108404df3374bc63afad7e192b1799a3bb3d",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "e5d3383d301d4525463e4114a3e88a8608a1aa7c10e44ba61754f752033d23fd",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "bos-shop:10000023",
+      "itemName": "【お得】 臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚 ｜ 日本製",
+      "itemCaption": "●【限定商品】ストライプパッケージ／袋カラー：4色からお選びいただけます。●【袋サイズ】SSサイズ（17×27cm）●防臭力はいずれも同じですので、お好みの袋サイズ・カラーからお選びください。 「検索用キーワード」 ボス 臭い 匂い ニオイ におい 臭わない 袋 レジ 処理 ゴミ 生 箱 おむつ うんち 生ゴミ ゴミ 対策 エコ 重曹 消臭剤 菌 虫 コバエ カラス 消し 新聞紙 収納 散歩 外出 旅行 おでかけ 車 用品 防災 備蓄 トイレ 持ち帰り 嘔吐 下痢 エチケット マナー おすすめ ランキング 人気 おしゃれ 祝 犬 ペット ドッグ シーツ 犬トイレ 小動物 糞 おしっこ 介護 施設 ケージ ゲージ ポーチ 猫 ねこ キャット 猫砂 猫トイレ 爪とぎ 病気 おから ひのき ペットシーツ 水槽",
+      "catchcopy": "",
+      "itemPrice": 1617
+    },
+    "sourceHash": "27e13c9ff6902d13e2a3ed7c0c586565d7055e4989d2d36be079d8e6fc591d2e",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "e5d3383d301d4525463e4114a3e88a8608a1aa7c10e44ba61754f752033d23fd",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "B",
+        "stage": "identity",
+        "reason": "identity_unresolved",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "5c80471bbcbe8b3b44470a99c6ce379fa0b2cfe30072ba387df959027ff2ff05",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "27e13c9ff6902d13e2a3ed7c0c586565d7055e4989d2d36be079d8e6fc591d2e",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "5c80471bbcbe8b3b44470a99c6ce379fa0b2cfe30072ba387df959027ff2ff05",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。identity_unresolvedで保留。別経路で実測済みなので候補除外。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "SSサイズ200枚の袋の原文はあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。検索語を用途根拠へ自動転用しない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "本文なし。袋カラーとストライプ包装の区別を照合できない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【袋サイズ】SSサイズ（17×27cm）"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

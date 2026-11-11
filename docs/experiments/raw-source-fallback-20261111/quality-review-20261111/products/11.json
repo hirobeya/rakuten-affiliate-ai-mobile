@@ -1,0 +1,232 @@
+{
+  "number": 11,
+  "itemCode": "snowfoxskincare:10000116",
+  "category": "ヘアブラシ",
+  "source": {
+    "itemCode": "snowfoxskincare:10000116",
+    "itemName": "【楽天1位】SNOW FOX SKINCARE プレミアム FOX カッサ ビーチウッド ヘアブラシ 木製 くし 頭皮ケア ヘアケア 引っ越し ヘアブラシ 毛穴 洗浄 お風呂 ギフト プレゼント 髪の毛 サラサラ 艶髪 ヘアケア 敬老の日 退職 入学 就職 祝い ご褒美 母の日",
+    "itemCaption": "✦ 待望のリニューアル発売 ✦ 大ヒットカッサヘアブラシがさらなる高級感と使い心地へ進化 品質の核となる素材や独自の構造はそのままに、 デザインと握り心地をアップグレード。 ロゴエンブレムが煌めく、 新しいラグジュアリーな佇まいをお楽しみください。 ―――――――――――――――――――― Renewal Point 新しくなった3つの魅力 ｜ ロゴ入りエンブレムで高級感アップ 持ち手下部に「SNOW FOX HAIRCARE」のロゴをあしらったエンブレムを新たに配し、ラグジュアリーな佇まいに仕上げました。 ｜ すっきりとした新しいハンドル形状 従来はハンドル上部にひねりを加えたデザインでしたが、ひねりをなくし、よりすっきりとしたフォルムへ刷新。太めの持ち手によってグリップ感がさらに増し、毎日のブラッシングを安定して快適に行えます。 ｜ 素材は変わらず高品質のまま 耐久性に優れたビーチウッド（ブナ材）のハンドルと、24Kゴールドメッキを施した150本のピンという品質はそのまま。素材の変更はなく、安心して長くお使いいただけます。 The Story あなたのカッサブラシができるまで — 3ヶ月におよぶ美の軌跡 — 職人の手によって一つひとつ丁寧に作られるカッサブラシ。完成までに3ヶ月を費やす妥協のないものづくりが、頭皮を包み込む極上の使い心地を生み出します。 ―――――――――――――――――――― ―――――――――――――――――――― Gift Wrapping 大切な方への贈り物に 当ストアオリジナルのギフトラッピングを承っております。 母の日、父の日、お誕生日など、特別な日のプレゼントにぜひご利用ください。 ※ショッパー（紙袋）は付随いたしませんのでご了承ください。 How to use 極上のサロン体験をご自宅で 乾いた髪を生え際から後ろに向かって引っ張るようにブラッシングしてください。ピンの先端で頭皮を心地よく刺激します。 ＋ 頭皮ケア 生え際から後頭部にかけてゆっくりとブラシを動かし、巡りをサポートするための適度な圧力を加えます。 ＋ シャンプー前のケア シャンプー前にブラッシングを行うことで、頭皮の汚れをしっかりと除去し、シャンプーの泡立ちを劇的に向上させます。 ※SNOW FOX SKINCAREの「ヴィーガン ノンシリコン ヘア & スカルプ セラム」との併用が特におすすめです。 Premium Set Lineup お得なセットラインナップ ｜ ブラシ＆シャンプーバーセット プレミアム FOX カッサ ウッド ヘアブラシ / ブラッククレイ オールインワン シャンプーバー / 桜＆ホワイトティー スムージング マスク(1枚) / ブライトニング セラム(1.5ml) ｜ ブラシ＆ヘアセラムセット プレミアム FOX カッサ ウッド ヘア",
+    "catchcopy": "",
+    "itemPrice": 22880
+  },
+  "sourceHash": "457c106100157a0b9b85cda329a2244534b06ccb6835811bf1dbeac729f35fdd",
+  "fieldHashes": {
+    "itemCode": "0789daaec938c7cf23d8fcc1e14fd6fa190f44914c4560cf71ae263fb3f03bc9",
+    "itemName": "c1d03f5c91dab59b89684b7286f096e8e6e49accf472d67703ab5ffd10446c1d",
+    "itemCaption": "ad4964a294562a312ec1ec571162102d9f23ff8a8c195d219bf7e95a972f13cd",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "8c6cc1eb8dae63629739503738a7c66b1e07a5f6520ccd0332f55380312fde5d"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "ヘアブラシ",
+    "item": {
+      "itemCaption": "✦ 待望のリニューアル発売 ✦ 大ヒットカッサヘアブラシがさらなる高級感と使い心地へ進化 品質の核となる素材や独自の構造はそのままに、 デザインと握り心地をアップグレード。 ロゴエンブレムが煌めく、 新しいラグジュアリーな佇まいをお楽しみください。 ―――――――――――――――――――― Renewal Point 新しくなった3つの魅力 ｜ ロゴ入りエンブレムで高級感アップ 持ち手下部に「SNOW FOX HAIRCARE」のロゴをあしらったエンブレムを新たに配し、ラグジュアリーな佇まいに仕上げました。 ｜ すっきりとした新しいハンドル形状 従来はハンドル上部にひねりを加えたデザインでしたが、ひねりをなくし、よりすっきりとしたフォルムへ刷新。太めの持ち手によってグリップ感がさらに増し、毎日のブラッシングを安定して快適に行えます。 ｜ 素材は変わらず高品質のまま 耐久性に優れたビーチウッド（ブナ材）のハンドルと、24Kゴールドメッキを施した150本のピンという品質はそのまま。素材の変更はなく、安心して長くお使いいただけます。 The Story あなたのカッサブラシができるまで — 3ヶ月におよぶ美の軌跡 — 職人の手によって一つひとつ丁寧に作られるカッサブラシ。完成までに3ヶ月を費やす妥協のないものづくりが、頭皮を包み込む極上の使い心地を生み出します。 ―――――――――――――――――――― ―――――――――――――――――――― Gift Wrapping 大切な方への贈り物に 当ストアオリジナルのギフトラッピングを承っております。 母の日、父の日、お誕生日など、特別な日のプレゼントにぜひご利用ください。 ※ショッパー（紙袋）は付随いたしませんのでご了承ください。 How to use 極上のサロン体験をご自宅で 乾いた髪を生え際から後ろに向かって引っ張るようにブラッシングしてください。ピンの先端で頭皮を心地よく刺激します。 ＋ 頭皮ケア 生え際から後頭部にかけてゆっくりとブラシを動かし、巡りをサポートするための適度な圧力を加えます。 ＋ シャンプー前のケア シャンプー前にブラッシングを行うことで、頭皮の汚れをしっかりと除去し、シャンプーの泡立ちを劇的に向上させます。 ※SNOW FOX SKINCAREの「ヴィーガン ノンシリコン ヘア & スカルプ セラム」との併用が特におすすめです。 Premium Set Lineup お得なセットラインナップ ｜ ブラシ＆シャンプーバーセット プレミアム FOX カッサ ウッド ヘアブラシ / ブラッククレイ オールインワン シャンプーバー / 桜＆ホワイトティー スムージング マスク(1枚) / ブライトニング セラム(1.5ml) ｜ ブラシ＆ヘアセラムセット プレミアム FOX カッサ ウッド ヘア",
+      "itemCode": "snowfoxskincare:10000116",
+      "itemName": "【楽天1位】SNOW FOX SKINCARE プレミアム FOX カッサ ビーチウッド ヘアブラシ 木製 くし 頭皮ケア ヘアケア 引っ越し ヘアブラシ 毛穴 洗浄 お風呂 ギフト プレゼント 髪の毛 サラサラ 艶髪 ヘアケア 敬老の日 退職 入学 就職 祝い ご褒美 母の日",
+      "itemPrice": 22880
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "fff8267acaa5f08c31d7d7182faca12b919b4ebd6c48188953bf037cbe51b537",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "50f968b600eccf2793d66b29ff22c8f3173c5279043e920c32618e15605d5514",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "B",
+      "stage": "identity",
+      "reason": "identity_unresolved",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "snowfoxskincare:10000116",
+      "itemName": "【楽天1位】SNOW FOX SKINCARE プレミアム FOX カッサ ビーチウッド ヘアブラシ 木製 くし 頭皮ケア ヘアケア 引っ越し ヘアブラシ 毛穴 洗浄 お風呂 ギフト プレゼント 髪の毛 サラサラ 艶髪 ヘアケア 敬老の日 退職 入学 就職 祝い ご褒美 母の日",
+      "itemCaption": "✦ 待望のリニューアル発売 ✦ 大ヒットカッサヘアブラシがさらなる高級感と使い心地へ進化 品質の核となる素材や独自の構造はそのままに、 デザインと握り心地をアップグレード。 ロゴエンブレムが煌めく、 新しいラグジュアリーな佇まいをお楽しみください。 ―――――――――――――――――――― Renewal Point 新しくなった3つの魅力 ｜ ロゴ入りエンブレムで高級感アップ 持ち手下部に「SNOW FOX HAIRCARE」のロゴをあしらったエンブレムを新たに配し、ラグジュアリーな佇まいに仕上げました。 ｜ すっきりとした新しいハンドル形状 従来はハンドル上部にひねりを加えたデザインでしたが、ひねりをなくし、よりすっきりとしたフォルムへ刷新。太めの持ち手によってグリップ感がさらに増し、毎日のブラッシングを安定して快適に行えます。 ｜ 素材は変わらず高品質のまま 耐久性に優れたビーチウッド（ブナ材）のハンドルと、24Kゴールドメッキを施した150本のピンという品質はそのまま。素材の変更はなく、安心して長くお使いいただけます。 The Story あなたのカッサブラシができるまで — 3ヶ月におよぶ美の軌跡 — 職人の手によって一つひとつ丁寧に作られるカッサブラシ。完成までに3ヶ月を費やす妥協のないものづくりが、頭皮を包み込む極上の使い心地を生み出します。 ―――――――――――――――――――― ―――――――――――――――――――― Gift Wrapping 大切な方への贈り物に 当ストアオリジナルのギフトラッピングを承っております。 母の日、父の日、お誕生日など、特別な日のプレゼントにぜひご利用ください。 ※ショッパー（紙袋）は付随いたしませんのでご了承ください。 How to use 極上のサロン体験をご自宅で 乾いた髪を生え際から後ろに向かって引っ張るようにブラッシングしてください。ピンの先端で頭皮を心地よく刺激します。 ＋ 頭皮ケア 生え際から後頭部にかけてゆっくりとブラシを動かし、巡りをサポートするための適度な圧力を加えます。 ＋ シャンプー前のケア シャンプー前にブラッシングを行うことで、頭皮の汚れをしっかりと除去し、シャンプーの泡立ちを劇的に向上させます。 ※SNOW FOX SKINCAREの「ヴィーガン ノンシリコン ヘア & スカルプ セラム」との併用が特におすすめです。 Premium Set Lineup お得なセットラインナップ ｜ ブラシ＆シャンプーバーセット プレミアム FOX カッサ ウッド ヘアブラシ / ブラッククレイ オールインワン シャンプーバー / 桜＆ホワイトティー スムージング マスク(1枚) / ブライトニング セラム(1.5ml) ｜ ブラシ＆ヘアセラムセット プレミアム FOX カッサ ウッド ヘア",
+      "catchcopy": "",
+      "itemPrice": 22880
+    },
+    "sourceHash": "457c106100157a0b9b85cda329a2244534b06ccb6835811bf1dbeac729f35fdd",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "50f968b600eccf2793d66b29ff22c8f3173c5279043e920c32618e15605d5514",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "B",
+        "stage": "identity",
+        "reason": "identity_unresolved",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "a5a11710541e3557369b0cb776149fa8c632251fc16f72b788fb8f4248434baa",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "457c106100157a0b9b85cda329a2244534b06ccb6835811bf1dbeac729f35fdd",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "a5a11710541e3557369b0cb776149fa8c632251fc16f72b788fb8f4248434baa",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。ブラシ単体と併用推奨品・セット商品の区別は未確認。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "商品とセット構成を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "150本のピン等の採用を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "セット・併用・紙袋非付随を照合できない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ショッパー（紙袋）は付随いたしませんのでご了承ください。"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

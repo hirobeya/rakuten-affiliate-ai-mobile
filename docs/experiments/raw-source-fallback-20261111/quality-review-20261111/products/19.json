@@ -1,0 +1,232 @@
+{
+  "number": 19,
+  "itemCode": "arqs01:10000087",
+  "category": "バイクグローブ",
+  "source": {
+    "itemCode": "arqs01:10000087",
+    "itemName": "バイクグローブ 夏用 メッシュ 夏 ライディンググローブ 手袋 プロテクター スマホ対応 バイク 通気性 メッシュグローブ バイク用手袋 メンズ レディース メッシュ手袋 スマホ フィット 安全 男女兼用 スマートフォン操作対応 滑り止め ブラック 黒 レッド",
+    "itemCaption": "全季節対応オールシーズン バイクグローブ ライディンググローブ 転倒時の危険から手をしっかり守る安心の高機能なバイク用グローブです。 メッシュで通気性抜群＆立体成型で握りやすさを確保しながらもしっかりプロテクターを配置！ さらにスマホタッチも可能と革新的！ 春夏の運転も想定した全季節対応モデル。 耐摩耗や滑り止めなどもちろんバイクの運転に欠かせない機能も実装して快適なツーリングをサポート！ サイズはメンズ/レディースです、手の幅を目安にしてお選びください。 シーズン：春 夏 秋 冬 材質：複合生地 (通気性＋グリップ＋スマホタッチ＋耐摩耗性)、 ゴム保護シート、ラバースタンプ、プロテクター サイズは手幅を参考にして下さい 手幅(cm)/サイズ 7.0-8.0:M 8.5-9.0:L 9.5-10:XL 10-:XXL ※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。予めご了承ください。 ※生産時期によりロゴ・デザインに若干の違いがあることがございます。予めご了承ください。 ※メール便（ネコポス・送料無料・最短翌日お届け）での発送となります。 ※パソコン機器及モニター設定や撮影環境、部屋の照明により多少、色の変化が感じられる場合がございます。 ※ MADE IN CHINA▼ おすすめ商品 ▼",
+    "catchcopy": "",
+    "itemPrice": 1060
+  },
+  "sourceHash": "25412eb9db8ad88a3f51d49ed8588cea050d8b638bc90ec93504ec013d00684a",
+  "fieldHashes": {
+    "itemCode": "1df077d20c52886fe40c7b4684f84ff0129f77c059beecba7e37a21b5053bee9",
+    "itemName": "a163b016178ff9ea224a65bc97f3a0002c474078dc6f457cadc4984cae9e3c27",
+    "itemCaption": "65a597c05558760014fdc9d28a0d428ae4e337a73ebc0c0e79a9b5ffae93349f",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "8dfd13f4376053626e97eb7221d469013cae9bc031027e64f0db2ec114f8ffd9"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "バイクグローブ",
+    "item": {
+      "itemCaption": "全季節対応オールシーズン バイクグローブ ライディンググローブ 転倒時の危険から手をしっかり守る安心の高機能なバイク用グローブです。 メッシュで通気性抜群＆立体成型で握りやすさを確保しながらもしっかりプロテクターを配置！ さらにスマホタッチも可能と革新的！ 春夏の運転も想定した全季節対応モデル。 耐摩耗や滑り止めなどもちろんバイクの運転に欠かせない機能も実装して快適なツーリングをサポート！ サイズはメンズ/レディースです、手の幅を目安にしてお選びください。 シーズン：春 夏 秋 冬 材質：複合生地 (通気性＋グリップ＋スマホタッチ＋耐摩耗性)、 ゴム保護シート、ラバースタンプ、プロテクター サイズは手幅を参考にして下さい 手幅(cm)/サイズ 7.0-8.0:M 8.5-9.0:L 9.5-10:XL 10-:XXL ※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。予めご了承ください。 ※生産時期によりロゴ・デザインに若干の違いがあることがございます。予めご了承ください。 ※メール便（ネコポス・送料無料・最短翌日お届け）での発送となります。 ※パソコン機器及モニター設定や撮影環境、部屋の照明により多少、色の変化が感じられる場合がございます。 ※ MADE IN CHINA▼ おすすめ商品 ▼",
+      "itemCode": "arqs01:10000087",
+      "itemName": "バイクグローブ 夏用 メッシュ 夏 ライディンググローブ 手袋 プロテクター スマホ対応 バイク 通気性 メッシュグローブ バイク用手袋 メンズ レディース メッシュ手袋 スマホ フィット 安全 男女兼用 スマートフォン操作対応 滑り止め ブラック 黒 レッド",
+      "itemPrice": 1060
+    },
+    "sourceFile": "tests/fixtures/room-unseen-products.json",
+    "sourceHash": "f0432d77ea154ac8266aeb0b8bf211566dd022bec5de3aee1ee651030c7696ba",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "feature_and_hook_restate_each_other",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "F",
+      "stage": "quality",
+      "reason": "editorial_rescue_requires_direct_caption_claim",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "5cec05e5b17b59bd103537415f7f2049b0f65f765ecd14a3b82ffbd168300603",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "F",
+      "stage": "quality",
+      "reason": "editorial_rescue_requires_direct_caption_claim",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "arqs01:10000087",
+      "itemName": "バイクグローブ 夏用 メッシュ 夏 ライディンググローブ 手袋 プロテクター スマホ対応 バイク 通気性 メッシュグローブ バイク用手袋 メンズ レディース メッシュ手袋 スマホ フィット 安全 男女兼用 スマートフォン操作対応 滑り止め ブラック 黒 レッド",
+      "itemCaption": "全季節対応オールシーズン バイクグローブ ライディンググローブ 転倒時の危険から手をしっかり守る安心の高機能なバイク用グローブです。 メッシュで通気性抜群＆立体成型で握りやすさを確保しながらもしっかりプロテクターを配置！ さらにスマホタッチも可能と革新的！ 春夏の運転も想定した全季節対応モデル。 耐摩耗や滑り止めなどもちろんバイクの運転に欠かせない機能も実装して快適なツーリングをサポート！ サイズはメンズ/レディースです、手の幅を目安にしてお選びください。 シーズン：春 夏 秋 冬 材質：複合生地 (通気性＋グリップ＋スマホタッチ＋耐摩耗性)、 ゴム保護シート、ラバースタンプ、プロテクター サイズは手幅を参考にして下さい 手幅(cm)/サイズ 7.0-8.0:M 8.5-9.0:L 9.5-10:XL 10-:XXL ※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。予めご了承ください。 ※生産時期によりロゴ・デザインに若干の違いがあることがございます。予めご了承ください。 ※メール便（ネコポス・送料無料・最短翌日お届け）での発送となります。 ※パソコン機器及モニター設定や撮影環境、部屋の照明により多少、色の変化が感じられる場合がございます。 ※ MADE IN CHINA▼ おすすめ商品 ▼",
+      "catchcopy": "",
+      "itemPrice": 1060
+    },
+    "sourceHash": "25412eb9db8ad88a3f51d49ed8588cea050d8b638bc90ec93504ec013d00684a",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "5cec05e5b17b59bd103537415f7f2049b0f65f765ecd14a3b82ffbd168300603",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "F",
+        "stage": "quality",
+        "reason": "editorial_rescue_requires_direct_caption_claim",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "6e927e167f0498055199b3615b8a60c6fefd9ac1d16eac30930fd052c6c2f368",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "25412eb9db8ad88a3f51d49ed8588cea050d8b638bc90ec93504ec013d00684a",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "6e927e167f0498055199b3615b8a60c6fefd9ac1d16eac30930fd052c6c2f368",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。editorial_rescue_requires_direct_caption_claimは診断であり品質不合格の証明にしない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "バイクグローブの原文はあるが本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "フィルムによるスマホ感度低下条件を照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "※ご使用のスマホフィルムによりタッチ操作の感度が悪くなる場合がございます。"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}

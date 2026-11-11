@@ -1,0 +1,142 @@
+{
+  "startHead": "dae33a28be0de112e34cc93f8f69ed5c03b98b02",
+  "baselinePullRequest": {
+    "number": 166,
+    "draft": true,
+    "open": true,
+    "merged": false
+  },
+  "baselineCI": [
+    {
+      "workflow": "Verify Urenavi",
+      "runId": 42942016543,
+      "result": "success"
+    },
+    {
+      "workflow": "ROOM Copy Regression",
+      "runId": 42942016369,
+      "result": "success"
+    }
+  ],
+  "existingTrackedFilesUnchanged": 680,
+  "protectedFilesUnchanged": 394,
+  "runtimeChanged": false,
+  "oldEvidenceChanged": false,
+  "liveCalls": 0,
+  "liveApprovalIssued": false,
+  "qualityAssessmentIsAssistantReviewNotHumanApproval": true,
+  "results": {
+    "raw": {
+      "exitCode": 0,
+      "tests": 57,
+      "failures": 0,
+      "summary": [
+        "ℹ tests 57",
+        "ℹ suites 0",
+        "ℹ pass 57",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 621.299792"
+      ],
+      "logSha256": "fba4bc8efac61118687373346060ddf25fa9a2608a80586bb8c3f790180d2e7e",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    },
+    "core": {
+      "exitCode": 0,
+      "tests": 602,
+      "failures": 0,
+      "summary": [
+        "ℹ tests 602",
+        "ℹ suites 0",
+        "ℹ pass 602",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 3509.908178"
+      ],
+      "logSha256": "825d8688f0f5e82d8f2c5e24ca62523251bafe4cc64935cd46eccb90f8bc23a2",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    },
+    "regression": {
+      "exitCode": 0,
+      "tests": 456,
+      "failures": 0,
+      "summary": [
+        "ℹ tests 456",
+        "ℹ suites 0",
+        "ℹ pass 456",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 9260.625567"
+      ],
+      "logSha256": "b7f28164baeb8a7e212c4cb7d6418533fba17643489d4a875cc730afb2690ceb",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    },
+    "copy": {
+      "exitCode": 0,
+      "tests": 1,
+      "failures": 0,
+      "summary": [
+        "ℹ tests 1",
+        "ℹ suites 0",
+        "ℹ pass 1",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 888.38157"
+      ],
+      "logSha256": "83bed259b447e10aef6457c22f7aafb376bdd714d2f68996d693f27277d68362",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    },
+    "ai": {
+      "exitCode": 0,
+      "tests": 9,
+      "failures": 0,
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 113.575928"
+      ],
+      "logSha256": "f27f7fbfb6e4ebca29d527a7b520c3302ef809332e2639debd2412e1759654fc",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    },
+    "shadow": {
+      "exitCode": 0,
+      "tests": null,
+      "failures": 0,
+      "summary": [
+        "",
+        "> rakuten-affiliate-ai-mobile@1.0.1 test:shadow",
+        "> node tests/product-shadow-v2.test.js",
+        "",
+        "Shadow V2 regression: PASS"
+      ],
+      "logSha256": "d6435e25166e9372d34fe2751003176fee66f6f062d046c07c6fdb4a54777cb4",
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true
+    }
+  },
+  "replayMatchesStored": 20,
+  "caseStates": {
+    "passed": 1,
+    "failed": 2,
+    "unverified": 17
+  },
+  "newAuditManifestOnly": true
+}

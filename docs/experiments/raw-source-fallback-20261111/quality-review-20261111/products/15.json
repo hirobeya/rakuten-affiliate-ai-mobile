@@ -1,0 +1,232 @@
+{
+  "number": 15,
+  "itemCode": "irisplaza-r:10170526",
+  "category": "食品",
+  "source": {
+    "itemCode": "irisplaza-r:10170526",
+    "itemName": "＼1袋1,740円～☆彡食いしんぼう祭/クーポン／【令和7年産100％使用】白米 無洗米 和の輝き ブレンド米 10kg (5kg×2袋) 15kg (5kg×3袋) 密封新鮮パック 脱酸素剤入り 米 お米 国産 10キロ 15キロ 低温製法米 送料無料 アイリスオーヤマ",
+    "itemCaption": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】 【2026年1月16日に15kgを追加しました】 【2025年12月9日に 銘柄”こしひかり”を追加しました】 【2025年12月11日に 銘柄”こしひかり”を削除しました】 【2025年12月25日に5kgを追加しました】 ★お水のセット登場★ 美味しいの秘密は、お水にあり。 美味しいお米を、もっと美味しく。 そんな想いから生まれた「お米とお水のセット」もお選びいただけます。 鮮度を保ち、皆様の食卓へ。 低温製法米、和の輝き。 脱酸素剤と空気を通さないフイルムでおいしさ長持ち。 劣化の原因である酸素や湿気を遮断し、ご家庭で開封するまで新鮮さを保ちます。 脱酸素剤&密封新鮮パック。 甘さ、香り、うまみ、ツヤのバランスがよく、和の輝きはどんなおかずにもぴったり。 ●名称：精米 ●内容量：5kg×2袋・15kg (5kg × 3袋) ●ブランド名：和の輝き ●原料玄米：ブレンド米（複合原料米） ●精米年月日：別途商品に記載 【保存について】 ・直射日光を避け、冷暗所など涼しい場所で保管してください。 ・冷蔵庫で保管すると、おいしさが長持ちします。 ・開封後はなるべく早くお召し上がりください。 【富士山の天然水 2L×6本セット】 ●商品サイズ(cm)：直径約6.55×高さ約21 ●質量：約0.54g ●内容量：2L×6本 ●原材料名：水（鉱水） ●栄養成分表示（100ml当たり） エネルギー：0kcal たんぱく質・脂質・炭水化物：0g ナトリウム：0.55mg 食塩相当量：0.001g カルシウム：1.06mg マグネシウム：0.26mg カリウム：0.13mg （検索用：米・お米・コメ・ライス・ごはん・ご飯・白飯・白米・ブランド米・ブレンド米・10kg・低温製法・コールド・アイリスオーヤマ・低温製法米・4562403574800・4562403574800・アイリスオーヤマ） 最強翌日配送対象商品に関するご案内 最強翌日配送対象商品・対象地域に該当する場合は最強翌日配送マークがご注文カゴ近くに表示されます。 最強翌日配送可能なお支払方法は【クレジットカード、代金引換、全額ポイント支払い】のみとなります。 下記の場合は最強翌日配送対象外となります。 ・15点以上ご購入いただいた場合 ・時間指定がある場合 ・ご注文時備考欄にご記入がある場合 ・決済処理にお時間を頂戴する場合 ・郵便番号や住所に誤りがある場合 ・最強翌日配送対象外の商品とご一緒にご注文いただいた場合 ・お届け先住所文字数が40文字以上の場合 原産国：日本【令和8年度産 新米入荷しました！】",
+    "catchcopy": "",
+    "itemPrice": 3980
+  },
+  "sourceHash": "bc52d3bf4f886f4c85f1bbb4e6269ccd3b5e67fba85f2d0e5f5889378db61e35",
+  "fieldHashes": {
+    "itemCode": "f2d8e8ed03d5b42927f0a10812a99148f82d791a8bbcf7740fc876fbde30a08e",
+    "itemName": "d405c0b190704aad6ada97934c27433bf24161b95a97bd9a5a8d5cda31a4b8ba",
+    "itemCaption": "423f4bc5c73da231826a3399aac56f9ef17b2be990d8ef709ba0b5360cb7eb0a",
+    "catchcopy": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+    "itemPrice": "d2ee474d84892ab06ec1878284d2e7034dd3e8072c2cb689527d6706e7137264"
+  },
+  "formattingHistory": [
+    {
+      "operation": "json_serialization",
+      "lossless": true,
+      "semanticTextChanged": false
+    }
+  ],
+  "sourceProvenance": "Frozen acquired-field fixture; not a fresh Rakuten response or certification of complete seller page",
+  "storedEngineResultPath": "docs/rebuild-20261028/p3-local-first-20261108/evaluation.json",
+  "storedEngineResult": {
+    "category": "食品",
+    "item": {
+      "itemCaption": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】 【2026年1月16日に15kgを追加しました】 【2025年12月9日に 銘柄”こしひかり”を追加しました】 【2025年12月11日に 銘柄”こしひかり”を削除しました】 【2025年12月25日に5kgを追加しました】 ★お水のセット登場★ 美味しいの秘密は、お水にあり。 美味しいお米を、もっと美味しく。 そんな想いから生まれた「お米とお水のセット」もお選びいただけます。 鮮度を保ち、皆様の食卓へ。 低温製法米、和の輝き。 脱酸素剤と空気を通さないフイルムでおいしさ長持ち。 劣化の原因である酸素や湿気を遮断し、ご家庭で開封するまで新鮮さを保ちます。 脱酸素剤&密封新鮮パック。 甘さ、香り、うまみ、ツヤのバランスがよく、和の輝きはどんなおかずにもぴったり。 ●名称：精米 ●内容量：5kg×2袋・15kg (5kg × 3袋) ●ブランド名：和の輝き ●原料玄米：ブレンド米（複合原料米） ●精米年月日：別途商品に記載 【保存について】 ・直射日光を避け、冷暗所など涼しい場所で保管してください。 ・冷蔵庫で保管すると、おいしさが長持ちします。 ・開封後はなるべく早くお召し上がりください。 【富士山の天然水 2L×6本セット】 ●商品サイズ(cm)：直径約6.55×高さ約21 ●質量：約0.54g ●内容量：2L×6本 ●原材料名：水（鉱水） ●栄養成分表示（100ml当たり） エネルギー：0kcal たんぱく質・脂質・炭水化物：0g ナトリウム：0.55mg 食塩相当量：0.001g カルシウム：1.06mg マグネシウム：0.26mg カリウム：0.13mg （検索用：米・お米・コメ・ライス・ごはん・ご飯・白飯・白米・ブランド米・ブレンド米・10kg・低温製法・コールド・アイリスオーヤマ・低温製法米・4562403574800・4562403574800・アイリスオーヤマ） 最強翌日配送対象商品に関するご案内 最強翌日配送対象商品・対象地域に該当する場合は最強翌日配送マークがご注文カゴ近くに表示されます。 最強翌日配送可能なお支払方法は【クレジットカード、代金引換、全額ポイント支払い】のみとなります。 下記の場合は最強翌日配送対象外となります。 ・15点以上ご購入いただいた場合 ・時間指定がある場合 ・ご注文時備考欄にご記入がある場合 ・決済処理にお時間を頂戴する場合 ・郵便番号や住所に誤りがある場合 ・最強翌日配送対象外の商品とご一緒にご注文いただいた場合 ・お届け先住所文字数が40文字以上の場合 原産国：日本【令和8年度産 新米入荷しました！】",
+      "itemCode": "irisplaza-r:10170526",
+      "itemName": "＼1袋1,740円～☆彡食いしんぼう祭/クーポン／【令和7年産100％使用】白米 無洗米 和の輝き ブレンド米 10kg (5kg×2袋) 15kg (5kg×3袋) 密封新鮮パック 脱酸素剤入り 米 お米 国産 10キロ 15キロ 低温製法米 送料無料 アイリスオーヤマ",
+      "itemPrice": 3980
+    },
+    "sourceFile": "tests/fixtures/room-products.json",
+    "sourceHash": "1ed300414fd4750af9993fa1cb2b7cb913aaee592a61980987478c36f83c6878",
+    "before": null,
+    "after": null,
+    "sourceQuote": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "automaticStatus": "incomplete",
+    "qualityCertified": false,
+    "groqCalls": 0
+  },
+  "replayMatchesStored": true,
+  "generationText": null,
+  "characterCount": null,
+  "publicationReady": false,
+  "outputAbsence": {
+    "reason": "Existing engine returned null; no assessable post body",
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    }
+  },
+  "localResult": {
+    "version": "local-first-preview-v1",
+    "sourceHash": "b1f1708f3f01a7b6f70caecd97eaa226f144b41d1ec31fe52222d470bda9f275",
+    "mode": "normal",
+    "result": null,
+    "baseline": null,
+    "editorialProposal": null,
+    "diagnostic": {
+      "cause": "D",
+      "stage": "purchase_reason",
+      "reason": "no_grounded_purchase_candidate",
+      "automaticDiagnosis": true
+    },
+    "attempts": 2,
+    "groqCalls": 0,
+    "apiCost": 0,
+    "qualityCertified": false,
+    "localStatus": "incomplete"
+  },
+  "qualityPacket": {
+    "version": "raw-local-quality-v1",
+    "source": {
+      "itemCode": "irisplaza-r:10170526",
+      "itemName": "＼1袋1,740円～☆彡食いしんぼう祭/クーポン／【令和7年産100％使用】白米 無洗米 和の輝き ブレンド米 10kg (5kg×2袋) 15kg (5kg×3袋) 密封新鮮パック 脱酸素剤入り 米 お米 国産 10キロ 15キロ 低温製法米 送料無料 アイリスオーヤマ",
+      "itemCaption": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】 【2026年1月16日に15kgを追加しました】 【2025年12月9日に 銘柄”こしひかり”を追加しました】 【2025年12月11日に 銘柄”こしひかり”を削除しました】 【2025年12月25日に5kgを追加しました】 ★お水のセット登場★ 美味しいの秘密は、お水にあり。 美味しいお米を、もっと美味しく。 そんな想いから生まれた「お米とお水のセット」もお選びいただけます。 鮮度を保ち、皆様の食卓へ。 低温製法米、和の輝き。 脱酸素剤と空気を通さないフイルムでおいしさ長持ち。 劣化の原因である酸素や湿気を遮断し、ご家庭で開封するまで新鮮さを保ちます。 脱酸素剤&密封新鮮パック。 甘さ、香り、うまみ、ツヤのバランスがよく、和の輝きはどんなおかずにもぴったり。 ●名称：精米 ●内容量：5kg×2袋・15kg (5kg × 3袋) ●ブランド名：和の輝き ●原料玄米：ブレンド米（複合原料米） ●精米年月日：別途商品に記載 【保存について】 ・直射日光を避け、冷暗所など涼しい場所で保管してください。 ・冷蔵庫で保管すると、おいしさが長持ちします。 ・開封後はなるべく早くお召し上がりください。 【富士山の天然水 2L×6本セット】 ●商品サイズ(cm)：直径約6.55×高さ約21 ●質量：約0.54g ●内容量：2L×6本 ●原材料名：水（鉱水） ●栄養成分表示（100ml当たり） エネルギー：0kcal たんぱく質・脂質・炭水化物：0g ナトリウム：0.55mg 食塩相当量：0.001g カルシウム：1.06mg マグネシウム：0.26mg カリウム：0.13mg （検索用：米・お米・コメ・ライス・ごはん・ご飯・白飯・白米・ブランド米・ブレンド米・10kg・低温製法・コールド・アイリスオーヤマ・低温製法米・4562403574800・4562403574800・アイリスオーヤマ） 最強翌日配送対象商品に関するご案内 最強翌日配送対象商品・対象地域に該当する場合は最強翌日配送マークがご注文カゴ近くに表示されます。 最強翌日配送可能なお支払方法は【クレジットカード、代金引換、全額ポイント支払い】のみとなります。 下記の場合は最強翌日配送対象外となります。 ・15点以上ご購入いただいた場合 ・時間指定がある場合 ・ご注文時備考欄にご記入がある場合 ・決済処理にお時間を頂戴する場合 ・郵便番号や住所に誤りがある場合 ・最強翌日配送対象外の商品とご一緒にご注文いただいた場合 ・お届け先住所文字数が40文字以上の場合 原産国：日本【令和8年度産 新米入荷しました！】",
+      "catchcopy": "",
+      "itemPrice": 3980
+    },
+    "sourceHash": "bc52d3bf4f886f4c85f1bbb4e6269ccd3b5e67fba85f2d0e5f5889378db61e35",
+    "local": {
+      "version": "local-first-preview-v1",
+      "sourceHash": "b1f1708f3f01a7b6f70caecd97eaa226f144b41d1ec31fe52222d470bda9f275",
+      "mode": "normal",
+      "result": null,
+      "baseline": null,
+      "editorialProposal": null,
+      "diagnostic": {
+        "cause": "D",
+        "stage": "purchase_reason",
+        "reason": "no_grounded_purchase_candidate",
+        "automaticDiagnosis": true
+      },
+      "attempts": 2,
+      "groqCalls": 0,
+      "apiCost": 0,
+      "qualityCertified": false,
+      "localStatus": "incomplete"
+    },
+    "localHash": "d966f534b2976e6acb0ebfbdf4fc1efbc361835babbf3943e2cf4e48b3214e77",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "mode": "normal",
+    "axes": [
+      "understanding",
+      "specificity",
+      "choice",
+      "audience_value",
+      "naturalness",
+      "grounded"
+    ]
+  },
+  "independentAssessment": {
+    "version": "raw-local-quality-v1",
+    "sourceHash": "bc52d3bf4f886f4c85f1bbb4e6269ccd3b5e67fba85f2d0e5f5889378db61e35",
+    "outputHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "localHash": "d966f534b2976e6acb0ebfbdf4fc1efbc361835babbf3943e2cf4e48b3214e77",
+    "reviewerId": "Work-independent-source-text-review-20261111",
+    "method": "independent_review",
+    "reviewerKind": "ai_assistant",
+    "humanApproval": false,
+    "status": "unverified",
+    "reason": "本文なし。販売履歴と現在の容量・水セットの区別を照合できない。",
+    "axes": {
+      "understanding": null,
+      "specificity": null,
+      "choice": null,
+      "audience_value": null,
+      "naturalness": null,
+      "grounded": null
+    },
+    "observations": [
+      {
+        "axis": "understanding",
+        "label": "商品理解",
+        "verdict": "未確認",
+        "reason": "米本体と水セットを照合する本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      },
+      {
+        "axis": "specificity",
+        "label": "特徴の具体性",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      },
+      {
+        "axis": "choice",
+        "label": "購入を検討する理由",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      },
+      {
+        "axis": "audience_value",
+        "label": "対象者・利用場面・価値",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      },
+      {
+        "axis": "naturalness",
+        "label": "自然さ・魅力",
+        "verdict": "未確認",
+        "reason": "本文なし。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      },
+      {
+        "axis": "grounded",
+        "label": "根拠の正確性",
+        "verdict": "未確認",
+        "reason": "タイトル10kgと削除履歴の衝突があり、本文の扱いを確認できない。",
+        "evidence": [
+          {
+            "field": "itemCaption",
+            "quote": "【2026年6月3日に10kgを項目から削除し別ページで販売開始しました】"
+          }
+        ]
+      }
+    ],
+    "failedPassages": []
+  },
+  "qualityStatus": "unverified",
+  "route": {
+    "status": "local_quality_unverified",
+    "qualityState": "unverified",
+    "reason": null,
+    "calls": 0
+  },
+  "limitations": [
+    "Single assistant review, not a separate human or blind customer review",
+    "No actual provider generation or runtime adoption",
+    "No new seller-page fetch; snapshot prices are historical"
+  ]
+}
