@@ -32,5 +32,9 @@ test('one Rakuten request, no retry, no credential echo or raw upstream error di
  assert.equal(A.verify(echo),true);assert.deepEqual(echo.originalItem,item());assert.equal(echo.wireResponse.retained,false);assert(!JSON.stringify(echo).includes(credentials.accessKey));
  const tracked=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),affiliateUrl:'https://example.com/?key='+credentials.accessKey}]}))});
  assert.equal(A.verify(tracked),true);assert.equal(tracked.source.itemCaption,item().itemCaption);assert(!JSON.stringify(tracked).includes(credentials.accessKey));assert.deepEqual(tracked.responseProjection.omittedCredentialEchoFields,['affiliateUrl']);
+ const query=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemUrl:item().itemUrl+'?accessKey='+credentials.accessKey}]}))});
+ assert.equal(A.verify(query),true);assert.equal(query.source.itemCaption,item().itemCaption);assert.equal(query.source.itemUrl,item().itemUrl);assert.equal(query.fields.itemUrl.preserved,false);assert.equal(query.responseProjection.itemUrlProjection.originalPlaintextRetained,false);assert(!JSON.stringify(query).includes(credentials.accessKey));
+ assert.equal(A.verify({...query,fields:{...query.fields,itemUrl:{...query.fields.itemUrl,preserved:true}}}),false);
+ await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemUrl:'https://item.rakuten.co.jp/merchant/'+credentials.accessKey}]}))}),/refuse_export/);
  await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemCaption:credentials.accessKey}]}))}),/refuse_export/);
 });
