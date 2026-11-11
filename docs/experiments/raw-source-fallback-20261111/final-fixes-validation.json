@@ -1,0 +1,124 @@
+{
+  "baseSha": "5c4b41c78e7b872320982d8599f5fb9175320d6a",
+  "dateJst": "2026-11-11",
+  "realGroqCalls": 0,
+  "livePermissionIssued": false,
+  "syntheticTestsNotWritingQualityProof": true,
+  "protectedFilesUnchanged": 394,
+  "qualityRouting": "20 historical inputs unverified with default evaluator absent; no automatic pass/fail",
+  "results": {
+    "raw": {
+      "command": "bash scripts/rebuild/offline.sh --test tests/room-writer-raw/*.test.js",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [
+        53
+      ],
+      "summary": [
+        "ℹ tests 53",
+        "ℹ suites 0",
+        "ℹ pass 53",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 2383.156287"
+      ]
+    },
+    "core": {
+      "command": "bash scripts/rebuild/offline.sh --test tests/rebuild/*.test.js",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [
+        602
+      ],
+      "summary": [
+        "ℹ tests 602",
+        "ℹ suites 0",
+        "ℹ pass 602",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 4185.70627"
+      ]
+    },
+    "regression": {
+      "command": "bash scripts/rebuild/regression.sh",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [
+        456
+      ],
+      "summary": [
+        "ℹ tests 456",
+        "ℹ suites 0",
+        "ℹ pass 456",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 9722.251644"
+      ]
+    },
+    "copy": {
+      "command": "npm run test:copy",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [
+        19,
+        1,
+        6,
+        1
+      ],
+      "summary": [
+        "ℹ tests 1",
+        "ℹ suites 0",
+        "ℹ pass 1",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 745.653875"
+      ]
+    },
+    "ai": {
+      "command": "npm run test:ai",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [
+        5,
+        9
+      ],
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 121.988611"
+      ]
+    },
+    "shadow": {
+      "command": "npm run test:shadow",
+      "exitCode": 0,
+      "networkBlocked": true,
+      "credentialsNotPassedToNode": true,
+      "nodeTestCounts": [],
+      "summary": [
+        "",
+        "> rakuten-affiliate-ai-mobile@1.0.1 test:shadow",
+        "> node tests/product-shadow-v2.test.js",
+        "",
+        "Shadow V2 regression: PASS"
+      ]
+    }
+  }
+}
