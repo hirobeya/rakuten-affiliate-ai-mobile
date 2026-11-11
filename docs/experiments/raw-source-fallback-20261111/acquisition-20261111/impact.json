@@ -1,0 +1,185 @@
+{
+  "baselineSha": "28b1f01835a46240a456829a58696c89ccfdc9fb",
+  "runtimeChanged": false,
+  "historicalRows": [
+    {
+      "itemCode": "pasoro:10001354",
+      "captionCharacters": 749,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "e-kurashi:10019512",
+      "captionCharacters": 688,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "supplyshop:10028516",
+      "captionCharacters": 183,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "worktk:10014552",
+      "captionCharacters": 737,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "bos-shop:10000023",
+      "captionCharacters": 356,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "mtgec-beauty:10001348",
+      "captionCharacters": 136,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "captionCharacters": 796,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "risu-onlineshop:10002384",
+      "captionCharacters": 990,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "snowfoxskincare:10000116",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "astyone0728:10000001",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "myhomeshop:10000326",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "irisplaza-r:10170526",
+      "captionCharacters": 1132,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "captionCharacters": 673,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "high-broad:10000679",
+      "captionCharacters": 1200,
+      "at1200Boundary": true,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "daiya:10001447",
+      "captionCharacters": 3008,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "arqs01:10000087",
+      "captionCharacters": 567,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "captionCharacters": 641,
+      "at1200Boundary": false,
+      "originalAPIComplete": null
+    }
+  ],
+  "at1200Boundary": 7,
+  "paths": [
+    {
+      "path": "scripts/measure-room-top20.js",
+      "scope": "measurement fixture preparation",
+      "finding": "HTML stripped, whitespace folded; caption sliced to 1200, catchcopy to 500; no original response retained here",
+      "sha256": "6d727c933627339931285aae255943a21c5e0e94e96df83a17c1c7b3aa575e59"
+    },
+    {
+      "path": "lib/room-ai.js",
+      "scope": "legacy engine shared preprocessing",
+      "finding": "preprocessCaption strips HTML and sentences; excludes categories of content then slices 1200; affects consumers including local-generic-reasoner",
+      "sha256": "1afc08c3049ee34b0f24d8b96e392cfa81800b747a4e4e5ba3e6f136434574a9"
+    },
+    {
+      "path": "lib/local-generic-reasoner.js",
+      "scope": "existing local engine consumer",
+      "finding": "captionSentences, atomization and source relations call preprocessCaption; later material may be unavailable",
+      "sha256": "c8a642eec13111cdac9f578d0852e7bcac1c1e999fa6f8f65080336eac21ca10"
+    },
+    {
+      "path": "lib/super-urenavi-router.js",
+      "scope": "existing router",
+      "finding": "preprocessCaption followed by 700-character representation (520 prefix + 160 suffix); not an original archive",
+      "sha256": "522694f484fbdfa06b86f5dd31daaf1265bfc6537ad07907f78428e505807d8a"
+    },
+    {
+      "path": "api/search.js",
+      "scope": "normal search output",
+      "finding": "boundedSource caption12000 and catchcopy500 strips HTML/folds whitespace and ends at sentence boundary; does not return retention metadata",
+      "sha256": "edf278e2853edab2c1e2307a49642743a3fd1a145a541467c0753fd3d8b1da1b"
+    },
+    {
+      "path": "lib/pro-search.js",
+      "scope": "pro search output",
+      "finding": "same boundedSource limits; original not retained in output packet",
+      "sha256": "19b49f8a3714ebb9d3c854dde7069207850f82b12b9bc4ea7352029539fbbd78"
+    },
+    {
+      "path": "api/room-ai-v3.js",
+      "scope": "preview writer endpoint",
+      "finding": "title trimmed/capped1000, caption capped12000, catchcopy omitted in item reconstruction",
+      "sha256": "55eb3eac6fd1dd40979675c8d4a362dc8a9437e64794dab4aa72259ac916d64e"
+    },
+    {
+      "path": "public/live-sting-30.html",
+      "scope": "legacy live evaluation page",
+      "finding": "caption sliced1200 before POST",
+      "sha256": "17a67320e6cb97a44e6eb709b4bce1f14adb52894d567065ddc287b3439d58ff"
+    },
+    {
+      "path": "public/live-unknown-10.html",
+      "scope": "legacy live evaluation page",
+      "finding": "caption sliced1200 before POST",
+      "sha256": "41a4fba42f94e412edb7b49b8517544d5403fb115220a7489a09722a6fea664b"
+    }
+  ],
+  "limitsOfDiagnosis": "A 1200 boundary and matching script are evidence of loss risk; cannot prove which invocation created each legacy fixture without its original API response. Legacy content length alone cannot certify completeness.",
+  "newRoute": "Direct Rakuten response stream -> exact UTF8 body and hash -> exact original item -> field presence/type/hash/length -> source envelope; source too large is held, never truncated."
+}
