@@ -28,5 +28,7 @@ test('one Rakuten request, no retry, no credential echo or raw upstream error di
  const good=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async(url,options)=>{calls++;assert.equal(url.origin,'https://openapi.rakuten.co.jp');assert.equal(options.redirect,'error');assert.equal(options.headers.accessKey,credentials.accessKey);return new Response(JSON.stringify({items:[item()]}),{status:200});}});
  assert.equal(calls,1);assert.equal(A.verify(good),true);assert(!JSON.stringify(good).includes(credentials.appId));
  for(const status of [429,500]){let n=0;await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>{n++;return new Response('do not disclose',{status});}}),/rakuten_(429_stop|http_500)/);assert.equal(n,1);}
- await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[item()],echo:credentials.accessKey}))}),/refuse_export/);
+ const echo=await A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[item()],echo:credentials.accessKey}))});
+ assert.equal(A.verify(echo),true);assert.deepEqual(echo.originalItem,item());assert.equal(echo.wireResponse.retained,false);assert(!JSON.stringify(echo).includes(credentials.accessKey));
+ await assert.rejects(A.fetchItem({itemCode:'merchant:123',credentials,executionSha:sha,fetchImpl:async()=>new Response(JSON.stringify({items:[{...item(),itemCaption:credentials.accessKey}]}))}),/refuse_export/);
 });
