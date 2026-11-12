@@ -26,7 +26,7 @@ test('experimental local recovery extracts actual grounded candidates, never cer
   assert.equal(rec.copyable,false);
   assert.equal(rec.semanticApproved,false);
   assert(rec.proposal.length>30);
-  assert(rec.evidence.length>=1&&rec.evidence.length<=2);
+  assert(rec.evidence.length>=1&&rec.evidence.length<=3);
   for(const entry of rec.evidence){
    assert(p.source[entry.source].includes(entry.quote));
    assert(entry.quote.length>=4);
@@ -44,4 +44,35 @@ test('risk-related and marketing-only excerpts never qualify as evidence',()=>{
  const r=preview(item,{identity:'手袋'});
  assert.equal(r.status,'held');
  assert.equal(r.publication,false);
+});
+
+test('output is rooted in facts rather than product-specific scripts',()=>{
+ const item={itemCode:'fixture:bag',itemName:'旅行用バッグ',itemCaption:'取手が取り外せる。重ねて収納できます。',catchcopy:''};
+ const result=preview(item,{identity:'バッグ'});
+ assert.equal(result.status,'proposed_requires_independent_review');
+ assert(result.proposal.includes('バッグ'));
+ assert(!result.proposal.includes('フライパン'));
+ assert.equal(result.evidence.length,2);
+ for(const e of result.evidence)assert(item[e.source].includes(e.quote));
+ assert.equal(result.publication,false);
+});
+test('different selling product with no grounded feature stays held',()=>{
+ const item={itemCode:'fixture:other',itemName:'カップ',itemCaption:'関連商品の収納ケース。別売品は取手が取り外せる。',catchcopy:''};
+ const result=preview(item,{identity:'カップ'});
+ assert.equal(result.status,'held');
+ assert.equal(result.copyable,false);
+});
+test('each four-item output contains multiple exact evidence quotes without unsupported publication',()=>{
+ const relations=['use','care','charging','storage'];
+ products.forEach((p,i)=>{
+  const r=generate(p.source,{experimentalGroundedRecovery:true}).groundedRecovery;
+  assert.equal(r.relation,relations[i]);
+  assert(r.evidence.length>=2);
+  assert(r.proposal.length>=65&&r.proposal.length<=500);
+  for(const e of r.evidence){
+   assert.equal(p.source[e.source].slice(e.at,e.at+e.quote.length),e.quote);
+  }
+  assert.equal(r.publication,false);
+  assert.equal(r.copyable,false);
+ });
 });
