@@ -57,7 +57,7 @@ test('output is rooted in facts rather than product-specific scripts',()=>{
  assert.equal(result.publication,false);
 });
 test('different selling product with no grounded feature stays held',()=>{
- const item={itemCode:'fixture:other',itemName:'カップ',itemCaption:'関連商品の収納ケース。別売品は取手が取り外せる。',catchcopy:''};
+ const item={itemCode:'fixture:other',itemName:'カップ',itemCaption:'関連商品の収納ケース。別売品は取手が取り外せる。重ねて収納できます。',catchcopy:''};
  const result=preview(item,{identity:'カップ'});
  assert.equal(result.status,'held');
  assert.equal(result.copyable,false);
