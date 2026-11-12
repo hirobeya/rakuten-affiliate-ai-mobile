@@ -14,6 +14,8 @@ test('buyer decision plans use source-bound facts and never certify publication'
   const result=plan(fixture.source,{identity});
   assert.equal(result.status,'plan_for_review',fixture.source.itemCode);
   assert.equal(result.selectedDecision.group,expected[i]);
+  assert.equal(result.selectedDecision.readyForDraftComparison,i!==1);
+  assert.equal(result.selectedDecision.planStrength,i===1?'single_sourced_feature':'multiple_sourced_features');
   assert.equal(result.proof.sellerFeatureQuotesVerified,true);
   assert.equal(result.proof.sellingUnitOwnershipVerified,false);
   assert.equal(result.proof.actualConsumerBenefitVerified,false);
