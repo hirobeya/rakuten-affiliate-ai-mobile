@@ -1,0 +1,24 @@
+{
+  "deploymentId": "dpl_F96njLdjShMsFEpdx2EukLixZJQm",
+  "source": "Vercel build log and private proof readback",
+  "proof": {
+    "version": 1,
+    "passed": true,
+    "executionSha": "4a1a656e37797d19492edf910e7be4ad98859288",
+    "context": "build",
+    "at": "2026-11-13T12:39:19.559Z",
+    "noProviderRequest": true,
+    "providerCalls": 0,
+    "privateAnonymousStatus": 403,
+    "competingCreates": 2,
+    "successfulCreates": 1,
+    "independentWorkerReadback": true,
+    "resultRecovered": true,
+    "duplicateRejected": true,
+    "previousSha": null,
+    "crossDeployment": null,
+    "elapsedMs": 4447,
+    "recovered": true
+  },
+  "runtimeVerified": false
+}

@@ -54,3 +54,9 @@ The original Safari pattern error's exact source remains unknown; the screenshot
 2. Current Default Gemini Project/model quota evidence (currentQuotaEvidence is null; public pricing is not project-specific capacity).
 3. Successful owner-authenticated Preview runtime storage probe and receipt recovery. Build-context storage checks alone do not satisfy this.
 4. One authorized real generation only after all above gates, current CI and deployment SHA match; quality assessment then uses the exact generated output.
+
+## Observed build storage result
+
+Deployment `dpl_F96njLdjShMsFEpdx2EukLixZJQm`, revision `4a1a656e37797d19492edf910e7be4ad98859288`: the storage-only build probe passed in 4447 ms. Two create contenders produced exactly one success, independent-process reads recovered the mock result, duplicate creation was rejected, and the private blob returned HTTP 403 without credentials. Gemini provider calls: 0. The proof was recovered on a subsequent build execution. This is build-context evidence only; owner-authenticated Function execution remains unverified.
+
+The first CI run failed because SDK dependency resolution occurred at module load while CI intentionally runs without dependency installation. Resolution was moved inside the real-storage adapter constructor, preserving the dependency-free offline regression workflow. Parallel immutable ledger reads reduce cold-process overhead without weakening the create-only grant.
