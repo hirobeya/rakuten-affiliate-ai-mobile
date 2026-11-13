@@ -20,7 +20,7 @@ test('existing raw contract remains byte-consistent; semantic aid is a separate 
   assert.equal(r.sendEnabled,false);
   assert.equal(r.automaticRetries,0);
   if(r.status==='held'){
-   assert(['comparison_request_over_free_tpm','buyer_decision_insufficient_for_comparison'].includes(r.reason),f.source.itemCode+': '+r.reason);
+   assert(['comparison_request_over_free_tpm','comparison_request_insufficient_estimated_headroom','buyer_decision_insufficient_for_comparison'].includes(r.reason),f.source.itemCode+': '+r.reason);
    continue;
   }
   assert.equal(r.status,'offline_comparison_prepared_not_authorized');
@@ -28,7 +28,7 @@ test('existing raw contract remains byte-consistent; semantic aid is a separate 
   assert.equal(r.request.model,old.request.model);
   assert.equal(r.request.max_completion_tokens,old.request.max_completion_tokens);
   assert.deepEqual(r.request.response_format,old.request.response_format);
-  assert(r.reservation<=8000);
+  assert(r.reservation<=7500);
   assert.equal(r.request.messages[1].role,'user');
   assert.deepEqual(JSON.parse(r.request.messages[1].content).productData,originalEnvelope.source);
   const aid=JSON.parse(r.request.messages[1].content).editorialDecisionAid;
@@ -58,5 +58,5 @@ test('full original caption is preserved even for variant-heavy source; never tr
  const f=fixtures[3],r=prepareSemanticComparison(f.source,{identity:'フライパン'});
  if(r.status==='offline_comparison_prepared_not_authorized')
   assert.equal(JSON.parse(r.request.messages[1].content).productData.itemCaption,f.source.itemCaption);
- else assert.equal(r.reason,'comparison_request_over_free_tpm');
+ else assert(['comparison_request_over_free_tpm','comparison_request_insufficient_estimated_headroom'].includes(r.reason));
 });
