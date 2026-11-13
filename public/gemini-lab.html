@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>ウレナビ Gemini比較・限定検証</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:700px;margin:0 auto;padding:20px;background:#f7f8fb;color:#172235}
+h1{font-size:1.4rem}button,select{font:inherit;padding:12px;border:1px solid #a5adbc;border-radius:10px;background:white;max-width:100%}
+button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}.danger{background:#153d72;color:white}
+section{background:white;border-radius:14px;padding:17px;margin:14px 0;border:1px solid #e2e6ed}
+pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:#f4f6f8;border-radius:10px;padding:14px}
+small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50px}</style>
+</head><body><h1>ウレナビ｜Gemini比較ラボ</h1>
+<p>検証用Previewのみ。保存済み楽天原文4件から1商品を選び、Gemini Flashで1回だけ文章を生成します。生成文は未認証・非公開・自動投稿なし。</p>
+<section><label for="item">比較対象</label><select id="item">
+<option value="3">収納ベンチ</option><option value="4">お掃除手袋</option>
+<option value="5">モバイルバッテリー</option><option value="6">フライパンセット</option></select>
+<p><button id="check">通信なしの準備確認</button></p><div id="preflight" aria-live="polite">未確認</div></section>
+<section><h2>Gemini実生成</h2><p><small>無料枠の消費があります。押すまではモデルへ通信しません。再試行はありません。費用0円の無料プロジェクト以外では使わないでください。</small></p>
+<button class="danger" id="run" disabled>この商品をGeminiで1回生成</button></section>
+<section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let completed=false, resultText='';
+async function check(){
+ $('run').disabled=true; $('preflight').textContent='確認中';
+ try {
+  const r=await fetch('/api/gemini-comparison-lab?id='+encodeURIComponent($('item').value),{credentials:'same-origin',cache:'no-store'});
+  const data=await r.json();
+  if(!r.ok) throw Error(data.error||'準備確認に失敗');
+  $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.held?'保留':'通信なしの準備OK');
+  $('run').disabled=data.held||completed;
+ } catch(e){$('preflight').textContent='準備不可：'+e.message;}
+}
+$('item').addEventListener('change',()=>{$('run').disabled=true;$('preflight').textContent='未確認';});
+$('check').addEventListener('click',check);
+$('run').addEventListener('click',async()=>{
+ if(completed)return;
+ if(!confirm('この商品についてGeminiへ1回だけ送信します。無料枠を消費します。実行しますか？'))return;
+ completed=true; $('run').disabled=true; $('check').disabled=true; $('item').disabled=true;
+ $('result').textContent='送信中（再送しません）';
+ try{
+  const r=await fetch('/api/gemini-comparison-lab',{method:'POST',credentials:'same-origin',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,confirm:'single-free-tier-call'})});
+  const data=await r.json();
+  if(!r.ok)throw Error(data.error||'失敗');
+  resultText=JSON.stringify(data,null,2);
+  $('result').textContent=(data.copy||'本文なし／保留')+'\n\n根拠引用の原文一致: '+(data.citationsPresent?'一致':'未確認・不一致')+
+  '\nトークン: '+JSON.stringify(data.tokens);
+  $('copy').disabled=false;
+ }catch(e){$('result').textContent='生成に失敗：'+e.message+'（自動再試行なし）';}
+});
+$('copy').addEventListener('click',()=>{if(resultText)navigator.clipboard.writeText(resultText).catch(()=>{});});
+</script></body></html>
