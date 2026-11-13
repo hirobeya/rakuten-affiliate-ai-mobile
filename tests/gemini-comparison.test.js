@@ -38,3 +38,11 @@ test('valid response is returned unapproved with real usage only', async () => {
   assert.deepEqual(result.draft,draft);
   assert.equal(result.tokens.total,422);
 });
+test('incomplete/schema-invalid outputs retain actual usage, never retry',async()=>{
+ let calls=0;
+ await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({candidates:[{finishReason:'MAX_TOKENS'}],usageMetadata:{promptTokenCount:100,candidatesTokenCount:20,totalTokenCount:120}})};}}),e=>e.tokens.total===120);
+ assert.equal(calls,1);
+});
+test('source loss is rejected without transport',async()=>{
+ let calls=0;await assert.rejects(compareOnce({...item,itemCaption:''},{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:()=>{calls++;}}));assert.equal(calls,0);
+});

@@ -8,7 +8,7 @@ section{background:white;border-radius:14px;padding:17px;margin:14px 0;border:1p
 pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:#f4f6f8;border-radius:10px;padding:14px}
 small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50px}</style>
 </head><body><h1>ウレナビ｜Gemini比較ラボ</h1>
-<p>検証用Previewのみ。保存済み楽天原文4件から1商品を選び、Gemini Flashで1回だけ文章を生成します。生成文は未認証・非公開・自動投稿なし。</p>
+<p>検証用Previewのみ。保存済み楽天原文4件から1商品を選び、Gemini Flashで1回だけ文章を生成します。生成文は未評価・非公開・自動投稿なし。</p>
 <section><label for="item">比較対象</label><select id="item">
 <option value="3">収納ベンチ</option><option value="4">お掃除手袋</option>
 <option value="5">モバイルバッテリー</option><option value="6">フライパンセット</option></select>
@@ -30,10 +30,10 @@ async function check(){
  try {
   const headers=await authHeaders();
   const r=await fetch('/api/room-ai?action=gemini-comparison-lab&id='+encodeURIComponent($('item').value),{headers,credentials:'same-origin',cache:'no-store'});
-  const data=await r.json();
+  let data; try{data=await r.json();}catch{throw Error('サーバ応答がJSONではありません。HTTP '+r.status+'。再送しません');}
   if(!r.ok) throw Error(data.error||'準備確認に失敗');
-  $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.held?'保留':'通信なしの準備OK');
-  $('run').disabled=data.held||completed;
+  $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.executionHold?'以前の通信結果が未確認のため再送停止':data.held?'保留':'通信なしの準備OK');
+  $('run').disabled=data.held||!!data.executionHold||completed;
  } catch(e){$('preflight').textContent='準備不可：'+e.message;}
 }
 $('item').addEventListener('change',()=>{$('run').disabled=true;$('preflight').textContent='未確認';});
@@ -47,13 +47,13 @@ $('run').addEventListener('click',async()=>{
   const headers=await authHeaders();
   const r=await fetch('/api/room-ai?action=gemini-comparison-lab',{method:'POST',credentials:'same-origin',
    headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,confirm:'single-free-tier-call'})});
-  const data=await r.json();
+  let data; try{data=await r.json();}catch{throw Error('サーバ応答がJSONではありません。HTTP '+r.status+'。再送しません');}
   if(!r.ok)throw Error(data.error||'失敗');
   resultText=JSON.stringify(data,null,2);
   $('result').textContent=(data.copy||'本文なし／保留')+'\n\n根拠引用の原文一致: '+(data.citationsPresent?'一致':'未確認・不一致')+
   '\nトークン: '+JSON.stringify(data.tokens);
   $('copy').disabled=false;
- }catch(e){$('result').textContent='生成に失敗：'+e.message+'（自動再試行なし）';}
+ }catch(e){$('result').textContent='結果未確定・再送停止：'+e.name+'：'+e.message+'（自動再試行なし）';}
 });
 $('copy').addEventListener('click',()=>{if(resultText)navigator.clipboard.writeText(resultText).catch(()=>{});});
 </script></body></html>
