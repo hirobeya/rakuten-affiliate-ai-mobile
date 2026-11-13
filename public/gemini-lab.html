@@ -12,7 +12,7 @@ small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50p
 <section><label for="item">比較対象</label><select id="item">
 <option value="3">収納ベンチ</option><option value="4">お掃除手袋</option>
 <option value="5">モバイルバッテリー</option><option value="6">フライパンセット</option></select>
-<p><button id="check">通信なしの準備確認</button></p><p><small>未ログインの場合は <a href="/app.html">このPreviewのウレナビでログイン</a> した後、この画面へ戻ってください。</small></p><div id="preflight" aria-live="polite">未確認</div></section>
+<p><button id="check">通信なしの準備確認</button></p><p><small>認証できない場合は <a href="/app.html">このPreviewのウレナビ</a> で「本番の認証でPreviewを開く」を選んでください。同じブラウザで本番にログイン済みである必要があります。</small></p><div id="preflight" aria-live="polite">未確認</div></section>
 <section><h2>Gemini実生成</h2><p><small>無料枠の消費があります。押すまではモデルへ通信しません。再試行はありません。費用0円の無料プロジェクト以外では使わないでください。</small></p>
 <button class="danger" id="run" disabled>この商品をGeminiで1回生成</button></section>
 <section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section>
@@ -27,10 +27,16 @@ const sb=window.supabase?.createClient(
  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storage:window.localStorage}}
 );
 async function authHeaders(){
- if(!sb)throw Error('認証の読み込みに失敗しました');
- const {data,error}=await sb.auth.getSession();
- if(error||!data?.session?.access_token)throw Error('このPreviewのウレナビにログインしてください');
- return {'Authorization':'Bearer '+data.session.access_token};
+  // A verified Supabase bearer is preferred. The existing owner handoff
+  // instead sets an HttpOnly device cookie; never read that cookie in JS.
+  // Let the existing server-side authorize(req) validate either credential.
+  if(!sb)return {};
+  try{
+    const {data,error}=await sb.auth.getSession();
+    if(!error && data?.session?.access_token)
+      return {'Authorization':'Bearer '+data.session.access_token};
+  }catch{}
+  return {};
 }
 
 async function check(){
