@@ -27,3 +27,7 @@ for(const phase of ['before-send','after-send','save-failure'])test('hard termin
 test('designed time budget remains within the configured Function limit',()=>{
  const b=require('../lib/room-writer-raw/gemini-preview-route').BUDGET;assert.equal(Object.values(b).reduce((a,v)=>a+v,0),57000);assert.equal(b.provider,25000);assert.equal(require('../vercel.json').functions['api/room-ai.js'].maxDuration,60);
 });
+
+test('expired Free-tier evidence blocks execution but not read-only saved-result access',async()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-readonly-'));try{const g=grant();const write=createIndependent(blob(dir),g,scope);await write.begin(scope);await write.finish(scope,{...scope,mock:true});const expired={...g,freeTierConfirmation:{...g.freeTierConfirmation,validUntilMs:Date.now()-1}};assert.equal(assess(expired,scope).allow,false);const read=createIndependent(blob(dir),expired,scope,{readOnly:true});assert.equal((await read.state(scope)).result.mock,true);await assert.rejects(read.begin(scope));await assert.rejects(read.dispatch(scope,{}));await assert.rejects(read.finish(scope,{}));}finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
