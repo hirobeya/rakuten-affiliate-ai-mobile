@@ -12,48 +12,8 @@ small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50p
 <section><label for="item">比較対象</label><select id="item">
 <option value="3">収納ベンチ</option><option value="4">お掃除手袋</option>
 <option value="5">モバイルバッテリー</option><option value="6">フライパンセット</option></select>
-<p><button id="check">通信なしの準備確認</button></p><p><small>認証できない場合は <a href="/app.html">このPreviewのウレナビ</a> で「本番の認証でPreviewを開く」を選んでください。同じブラウザで本番にログイン済みである必要があります。</small></p><div id="preflight" aria-live="polite">未確認</div></section>
+<p><button id="check">準備確認・保存済み結果を取得</button></p><p><button id="storage">Geminiを呼ばず保存を検証</button></p><p><small>認証できない場合は <a href="/app.html">このPreviewのウレナビ</a> で「本番の認証でPreviewを開く」を選んでください。同じブラウザで本番にログイン済みである必要があります。</small></p><div id="preflight" aria-live="polite">未確認</div></section>
 <section><h2>Gemini実生成</h2><p><small>無料枠の消費があります。押すまではモデルへ通信しません。再試行はありません。費用0円の無料プロジェクト以外では使わないでください。</small></p>
 <button class="danger" id="run" disabled>この商品をGeminiで1回生成</button></section>
-<section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section>
-<script>
-'use strict';
-// This lab uses the existing server-verified HttpOnly owner cookie.
-// No external auth SDK or browser-readable API keys are needed.
-const $=id=>document.getElementById(id);
-let completed=false, resultText='';
-async function authHeaders(){ return {}; }
-$('preflight').textContent='画面操作の準備完了（APIは未確認）';
-
-async function check(){
- $('run').disabled=true; $('preflight').textContent='確認中';
- try {
-  const headers=await authHeaders();
-  const r=await fetch('/api/room-ai?action=gemini-comparison-lab&id='+encodeURIComponent($('item').value),{headers,credentials:'same-origin',cache:'no-store'});
-  let data; try{data=await r.json();}catch{throw Error('サーバ応答がJSONではありません。HTTP '+r.status+'。再送しません');}
-  if(!r.ok) throw Error(data.error||'準備確認に失敗');
-  $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.executionHold?'以前の通信結果が未確認のため再送停止':data.held?'保留':'通信なしの準備OK');
-  $('run').disabled=data.held||!!data.executionHold||completed;
- } catch(e){$('preflight').textContent='準備不可：'+e.message;}
-}
-$('item').addEventListener('change',()=>{$('run').disabled=true;$('preflight').textContent='未確認';});
-$('check').addEventListener('click',check);
-$('run').addEventListener('click',async()=>{
- if(completed)return;
- if(!confirm('この商品についてGeminiへ1回だけ送信します。無料枠を消費します。実行しますか？'))return;
- completed=true; $('run').disabled=true; $('check').disabled=true; $('item').disabled=true;
- $('result').textContent='送信中（再送しません）';
- try{
-  const headers=await authHeaders();
-  const r=await fetch('/api/room-ai?action=gemini-comparison-lab',{method:'POST',credentials:'same-origin',
-   headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,confirm:'single-free-tier-call'})});
-  let data; try{data=await r.json();}catch{throw Error('サーバ応答がJSONではありません。HTTP '+r.status+'。再送しません');}
-  if(!r.ok)throw Error(data.error||'失敗');
-  resultText=JSON.stringify(data,null,2);
-  $('result').textContent=(data.copy||'本文なし／保留')+'\n\n根拠引用の原文一致: '+(data.citationsPresent?'一致':'未確認・不一致')+
-  '\nトークン: '+JSON.stringify(data.tokens);
-  $('copy').disabled=false;
- }catch(e){$('result').textContent='結果未確定・再送停止：'+e.name+'：'+e.message+'（自動再試行なし）';}
-});
-$('copy').addEventListener('click',()=>{if(resultText)navigator.clipboard.writeText(resultText).catch(()=>{});});
-</script></body></html>
+<section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section><section><h2>確認記録</h2><pre id="diagnostics" aria-live="polite">未確認</pre></section>
+<script src="/gemini-lab.js"></script></body></html>

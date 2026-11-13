@@ -1,0 +1,10 @@
+{
+  "project": "Default Gemini Project",
+  "tier": "free",
+  "tierEvidence": "Administrator confirmed Free tier on 2026-11-13; no billing changes authorized.",
+  "model": "gemini-3.8-flash",
+  "modelDocumentation": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash",
+  "pricingDocumentation": "https://ai.google.dev/gemini-api/docs/pricing",
+  "currentQuotaEvidence": null,
+  "quotaRequired": "Current project/model RPM, TPM, RPD and observed usage, observation time, expiry and evidence source. A public limit table is not project-specific quota evidence."
+}
