@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "status": "awaiting_explicit_approval",
+  "approvalId": null,
+  "executionId": null,
+  "approvedBy": null,
+  "approvedAt": null,
+  "itemCode": "shopworld:10138423",
+  "model": "gemini-3.8-flash",
+  "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+  "maxCalls": 1,
+  "freeTierConfirmation": null,
+  "priorHistory": {
+    "approvalId": "storage-bench-20261113-one-call",
+    "classification": "D",
+    "historyHash": "b3c8886a6844b184bbeecb32fae497e72fb5189758fd358ddcd3337575d237b4"
+  },
+  "independentTrialAcknowledged": null,
+  "claimPath": null,
+  "resultPath": null
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-11-13",
+  "baselineSha": "843306a02cd746a86fe470cc4b0ec1e864fdb3ad",
+  "historyHash": "b3c8886a6844b184bbeecb32fae497e72fb5189758fd358ddcd3337575d237b4",
+  "classification": "D",
+  "oldApprovalId": "storage-bench-20261113-one-call",
+  "scope": {
+    "id": "storage-bench-20261113-one-call",
+    "itemCode": "shopworld:10138423",
+    "model": "gemini-3.8-flash",
+    "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+    "maxCalls": 1
+  },
+  "closedSources": [
+    "Vercel runtime retention expired",
+    "Google individual logging disabled; no paid activation",
+    "Screenshot lacks response/dispatch evidence",
+    "No saved browser request/response export identified in retained evidence"
+  ],
+  "doNotRepeatClosedSearches": true,
+  "existingPrivateResult": "pending_read_only_confirmation",
+  "originalSafariError": "cause_unknown",
+  "conclusionIfPrivateResultAbsent": "過去の個別Gemini送信・応答・消費は回収不能。D判定を維持。元の承認枠の再送は禁止。",
+  "status": "external_search_closed_private_read_required"
+}
