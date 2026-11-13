@@ -9,8 +9,9 @@
  function observe(stage,details={}){trace.push({stage,...details});$('diagnostics').textContent=JSON.stringify(trace,null,2);}
  function show(result){resultText=JSON.stringify(result,null,2);$('result').textContent=(result.error?'生成失敗：'+result.error+'（再送禁止）':(result.generatedCopy||result.copy||'本文なし／保留'))+'\n\n品質：'+(result.quality||'未評価')+'\n根拠検証：'+(result.mechanical?.ok?'機械判定通過・意味評価は未実施':'未確認または不合格')+'\nトークン：'+JSON.stringify(result.tokens??null);$('copy').disabled=false;}
  async function request(options={}){
+  const {localEvaluation=false,...requestOptions}=options;
   observe('browser_fetch_started',{method:options.method||'GET'});
-  let r;try{r=await fetch(endpoint+(options.method?'':'&id='+encodeURIComponent($('item').value)+(intent?'&approvalId='+encodeURIComponent(intent.approvalId)+'&executionId='+encodeURIComponent(intent.executionId):'')),{credentials:'same-origin',cache:'no-store',...options});}
+  let r;try{r=await fetch(endpoint+(options.method?'':'&id='+encodeURIComponent($('item').value)+(intent?'&approvalId='+encodeURIComponent(intent.approvalId)+'&executionId='+encodeURIComponent(intent.executionId):'')+(localEvaluation?'&mode=local-evaluation':'')),{credentials:'same-origin',cache:'no-store',...requestOptions});}
   catch(e){observe('browser_fetch_failed',{name:e.name,patternError:/string did not match the expected pattern/i.test(e.message||'')});throw Error('ブラウザの通信処理で停止。送信結果は未確定です');}
   observe('browser_response_received',{httpStatus:r.status,contentType:r.headers.get('content-type')});
   let text;try{text=await r.text();}catch{observe('browser_response_read_failed');throw Error('応答の読取りで停止。再送せず結果取得を使ってください');}
@@ -33,6 +34,22 @@
  }
  $('check').addEventListener('click',check);
  $('item').addEventListener('change',()=>{scope=null;$('run').disabled=true;$('preflight').textContent='未確認';});
+ $('localReview').addEventListener('click',async()=>{
+  $('localReview').disabled=true;
+  $('localResult').textContent='原文に基づく候補を確認中（Gemini通信なし）';
+  try{
+   const data=await request({localEvaluation:true});
+   const lines=['状態：'+(data.proposalStatus||'不明'),'品質：未評価／本番採用不可'];
+   if(data.baselineText)lines.push('既存生成本文：\n'+data.baselineText);
+   if(data.proposedText)lines.push('独自エンジンの改善候補：\n'+data.proposedText);
+   else lines.push('改善候補は保留（根拠不足または未検証）');
+   if(Array.isArray(data.evidence)&&data.evidence.length)lines.push('根拠：\n'+data.evidence.map(e=>(e.source||'不明')+'：'+e.quote).join('\n'));
+   if(data.diagnostic)lines.push('既存生成の停止理由：'+(data.diagnostic.reason||'不明'));
+   lines.push('Gemini追加通信：0回');
+   $('localResult').textContent=lines.join('\n\n');
+  }catch(err){$('localResult').textContent='独自エンジンの通信なし確認に失敗：'+err.message;}
+  finally{$('localReview').disabled=false;}
+ });
  $('storage').addEventListener('click',async()=>{
   $('storage').disabled=true;
   try{const r=await request({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,operation:'storage-probe'})});observe('storage_proof',{proof:r.storageProof});await check();}
