@@ -112,3 +112,26 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
  assert.equal(denied.statusCode,400);
  assert.equal(sends,0);
 }));
+
+
+test('future low-thinking request profile can be inspected by owner without Blob or provider access',()=>preview(async()=>{
+ let calls=0,stores=0;
+ const h=H.createHandler({
+  authorizeImpl:async()=>({ok:true,plan:'owner'}),
+  storeFactory:()=>{stores++;throw Error('must_not_access_blob');},
+  compare:async()=>{calls++;throw Error('must_not_send');}
+ });
+ const res=response();
+ await h({method:'GET',headers:{},query:{id:'3',mode:'request-profile'}},res);
+ assert.equal(res.statusCode,200);
+ assert.equal(res.body.mode,'request-profile');
+ assert.equal(res.body.model,MODEL);
+ assert.equal(res.body.baselineRequestHash,scope.requestHash);
+ assert.notEqual(res.body.lowThinkingRequestHash,scope.requestHash);
+ assert.deepEqual(res.body.lowThinkingConfig,{thinkingLevel:'low'});
+ assert.equal(res.body.lowThinkingMaxOutputTokens,4000);
+ assert.equal(res.body.approvedForLowThinking,false);
+ assert.equal(res.body.providerCalls,0);
+ assert.equal(stores,0);
+ assert.equal(calls,0);
+}));
