@@ -102,6 +102,9 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
  assert.equal(res.body.quality,'unreviewed');
  assert.equal(typeof res.body.sourceHash,'string');
  assert(Array.isArray(res.body.evidence));
+ assert.equal(res.body.proposalStatus,'preview_for_owner_review');
+ assert.match(res.body.proposedText,/収納ベンチ/);
+ assert(res.body.evidence.length>=2,'a useful draft must have at least two distinct source facts');
  assert.equal(sends,0);
  assert.equal(stores,0);
  const denied=response();
