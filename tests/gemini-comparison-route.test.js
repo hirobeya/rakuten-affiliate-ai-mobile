@@ -69,8 +69,8 @@ test('result save failure cannot be followed by another provider call',()=>previ
  const m=memory();m.resultFail();let calls=0;const h=H.createHandler(config(m,{compare:async()=>{calls++;return generated();}}));const a=response();await h(request(),a);assert.equal(a.statusCode,503);assert.equal(a.body.error,'result_save_failed_do_not_resend');assert.equal(a.body.tokens.total,140);const b=response();await h(request(),b);assert.equal(b.statusCode,409);assert.equal(calls,1);
 }));
 test('storage-only runtime action cannot call Gemini and rejects arbitrary fields',()=>preview(async()=>{
- const m=memory(),h=H.createHandler(config(m,{probeImpl:async()=>({passed:true,noProviderRequest:true}),compare:()=>assert.fail('no provider')}));
- const a=response();await h(request('POST',{id:'3',operation:'storage-probe'}),a);assert.equal(a.body.providerCalls,0);const b=response();await h(request('POST',{id:'3',operation:'storage-probe',other:1}),b);assert.equal(b.statusCode,400);
+ const m=memory(),h=H.createHandler(config(m,{probeImpl:async(options,req)=>{assert.equal(req.headers['x-vercel-oidc-token'],'mock-runtime-oidc');return {passed:true,noProviderRequest:true};},compare:()=>assert.fail('no provider')}));
+ const a=response(),req=request('POST',{id:'3',operation:'storage-probe'});req.headers['x-vercel-oidc-token']='mock-runtime-oidc';await h(req,a);assert.equal(a.body.providerCalls,0);assert(!JSON.stringify(a.body).includes('mock-runtime-oidc'));const b=response();await h(request('POST',{id:'3',operation:'storage-probe',other:1}),b);assert.equal(b.statusCode,400);
 }));
 test('storage namespace rejects traversal and Groq prefixes',()=>{
  assert.throws(()=>create(memory().blob,{namespace:'groq'}));assert.throws(()=>create(memory().blob,{namespace:PREFIX+'/../groq'}));

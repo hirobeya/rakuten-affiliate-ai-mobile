@@ -76,5 +76,20 @@
     "needed": "Correlated server/browser/provider evidence identifying pre-dispatch stop, or the original terminal response and usage. A missing log or missing new Blob claim does not prove no historical dispatch.",
     "reviewer": "Named reviewer must verify evidence and update this versioned record; a new administrator approval alone is not a no-dispatch proof.",
     "unrelatedHistory": "Unscoped missing logs do not automatically block all products. Other products remain outside the present grant."
+  },
+  "providerAggregateObservation": {
+    "projectId": "gen-lang-client-0210652653",
+    "model": "gemini-3.8-flash",
+    "observedAt": "2026-11-13T12:47:00Z",
+    "period": "last 28 days",
+    "dailyPeakRequests": 1,
+    "minutePeakRequests": 1,
+    "minutePeakInputTokensDisplayed": "1.36K",
+    "requestHash": null,
+    "providerRequestId": null,
+    "httpStatus": null,
+    "perRequestTokens": null,
+    "interpretation": "Nonzero project/model API usage is visible. It cannot be correlated to the bench request from this aggregate view. The scoped D record is not reclassified as A, B or C.",
+    "individualLogging": "Disabled; UI says billing setup required. No setting changed."
   }
 }

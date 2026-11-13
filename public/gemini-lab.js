@@ -13,7 +13,7 @@
   observe('browser_response_received',{httpStatus:r.status,contentType:r.headers.get('content-type')});
   let text;try{text=await r.text();}catch{observe('browser_response_read_failed');throw Error('応答の読取りで停止。再送せず結果取得を使ってください');}
   let data;try{data=JSON.parse(text);}catch{observe('browser_json_parse_failed');throw Error('応答がJSONではありません。認証画面や配備保護を確認してください');}
-  observe('server_response',{serverStage:data.stage,executionSha:data.executionSha,error:data.error||null,timings:data.timings||[]});
+  observe('server_response',{serverStage:data.stage,executionSha:data.executionSha,error:data.error||null,timings:data.timings||[],storageDiagnostic:data.storageDiagnostic||null});
   if(!r.ok){const error=Error(data.error||'server_error');error.data=data;throw error;}return data;
  }
  async function check(){

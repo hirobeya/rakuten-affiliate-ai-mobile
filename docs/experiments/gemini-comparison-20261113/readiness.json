@@ -1,10 +1,38 @@
 {
   "project": "Default Gemini Project",
   "tier": "free",
-  "tierEvidence": "Administrator confirmed Free tier on 2026-11-13; no billing changes authorized.",
+  "tierEvidence": "Observed directly in signed-in Google AI Studio project dashboard on 2026-11-13; tier Free, no billing settings changed.",
   "model": "gemini-3.8-flash",
   "modelDocumentation": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash",
   "pricingDocumentation": "https://ai.google.dev/gemini-api/docs/pricing",
   "currentQuotaEvidence": null,
-  "quotaRequired": "Current project/model RPM, TPM, RPD and observed usage, observation time, expiry and evidence source. A public limit table is not project-specific quota evidence."
+  "quotaRequired": "Current project/model RPM, TPM, RPD and observed usage, observation time, expiry and evidence source. A public limit table is not project-specific quota evidence.",
+  "projectId": "gen-lang-client-0210652653",
+  "projectQuotaObservation": {
+    "observedAt": "2026-11-13T12:47:00Z",
+    "reviewedBy": "Work, direct browser observation",
+    "projectId": "gen-lang-client-0210652653",
+    "model": "gemini-3.8-flash",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "period": "last 28 days",
+    "observedPeaks": {
+      "rpm": 1,
+      "tpmDisplayed": "1.36K",
+      "rpd": 1
+    },
+    "usageUpdateDelay": "up to 15 minutes",
+    "currentRemaining": null,
+    "source": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653"
+  },
+  "loggingObservation": {
+    "enabled": false,
+    "billingRequiredMessageObserved": true,
+    "source": "https://aistudio.google.com/logs",
+    "individualPastResponseRecoverable": null,
+    "billingChanged": false
+  }
 }
