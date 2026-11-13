@@ -3,13 +3,13 @@
 // No production app route references this endpoint; never uses user-supplied product text.
 const {authorize}=require('../lib/billing');
 const {compareOnce, buildGeminiComparison}=require('../lib/room-writer-raw/gemini-comparison');
+// Static imports so Vercel's serverless file tracing bundles these four samples.
 const ITEMS=Object.freeze({
-  '3':'03', // storage bench
-  '4':'04', // cleaning glove
-  '5':'05', // mobile battery
-  '6':'06'  // pan set
+  '3': require('../docs/experiments/raw-source-fallback-20261111/acquisition-20261111/fresh-products/03.json').source,
+  '4': require('../docs/experiments/raw-source-fallback-20261111/acquisition-20261111/fresh-products/04.json').source,
+  '5': require('../docs/experiments/raw-source-fallback-20261111/acquisition-20261111/fresh-products/05.json').source,
+  '6': require('../docs/experiments/raw-source-fallback-20261111/acquisition-20261111/fresh-products/06.json').source
 });
-const FIXTURES_DIR='../docs/experiments/raw-source-fallback-20261111/acquisition-20261111/fresh-products/';
 const EXPECTED_BRANCH='experiment/urenavi-gemini-comparison-20261113';
 function reply(res,status,data){
   res.status(status).json(data);
@@ -21,9 +21,7 @@ function authorizedOrigin(req){
   try {return new URL(origin).origin==='https://'+host;}catch{return false;}
 }
 function loadItem(id){
-  const file=ITEMS[String(id)];
-  if(!file)return null;
-  return require(FIXTURES_DIR+file+'.json').source;
+  return Object.hasOwn(ITEMS,String(id)) ? ITEMS[String(id)] : null;
 }
 function flatten(draft){
   if(draft?.hold?.active || !draft?.post)return null;
