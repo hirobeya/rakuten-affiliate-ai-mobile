@@ -23,7 +23,7 @@ let completed=false, resultText='';
 async function check(){
  $('run').disabled=true; $('preflight').textContent='確認中';
  try {
-  const r=await fetch('/api/room-ai?action=gemini-comparison-lab?id='+encodeURIComponent($('item').value),{credentials:'same-origin',cache:'no-store'});
+  const r=await fetch('/api/room-ai?action=gemini-comparison-lab&id='+encodeURIComponent($('item').value),{credentials:'same-origin',cache:'no-store'});
   const data=await r.json();
   if(!r.ok) throw Error(data.error||'準備確認に失敗');
   $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.held?'保留':'通信なしの準備OK');
