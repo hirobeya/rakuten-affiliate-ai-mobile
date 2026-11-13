@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {buildGeminiComparison, compareOnce} = require('../lib/room-writer-raw/gemini-comparison');
+const {buildGeminiComparison, compareOnce, toGeminiSchema} = require('../lib/room-writer-raw/gemini-comparison');
 const {SYSTEM, schema} = require('../lib/room-writer-raw/contract-v2');
 const {prepare} = require('../lib/room-writer-raw/source');
 const item = {itemCode:'example:1',itemName:'収納ボックス',itemCaption:'ふた付きの収納ボックス。',catchcopy:'片付けに。',itemPrice:1000};
@@ -10,7 +10,10 @@ test('offline preparation retains exact source and instructions without transpor
   assert.equal(prepared.held, false);
   assert.equal(prepared.request.systemInstruction.parts[0].text,SYSTEM);
   assert.deepEqual(JSON.parse(prepared.request.contents[0].parts[0].text).productData,prepare(item).source);
-  assert.deepEqual(prepared.request.generationConfig.responseJsonSchema,schema);
+  assert.deepEqual(prepared.request.generationConfig.responseJsonSchema,toGeminiSchema(schema));
+  assert.deepEqual(Object.keys(prepared.request.generationConfig.responseJsonSchema.properties),['product','hold','post']);
+  assert.equal(prepared.request.generationConfig.responseJsonSchema.properties.product.properties.name.type,'string');
+  assert.equal(prepared.request.generationConfig.responseJsonSchema.properties.product.properties.name.maxLength,undefined);
   const result = await compareOnce(item,{fetchImpl:()=>{throw Error('network called')}});
   assert.equal(result.status,'offline_ready');
 });
