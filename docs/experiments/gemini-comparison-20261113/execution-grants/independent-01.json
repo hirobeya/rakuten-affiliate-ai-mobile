@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "status": "approved",
+  "approvalId": "urenavi-gemini-bench-independent-20261113-01",
+  "executionId": "urenavi-gemini-bench-execution-20261113-01",
+  "approvedBy": "管理者 Hiroyuki Tokunaga — explicit instruction 2026-11-13",
+  "approvedAt": "2026-11-13T14:53:53Z",
+  "itemCode": "shopworld:10138423",
+  "model": "gemini-3.8-flash",
+  "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+  "maxCalls": 1,
+  "freeTierConfirmation": {
+    "verified": true,
+    "projectId": "gen-lang-client-0210652653",
+    "tier": "free",
+    "model": "gemini-3.8-flash",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "observedAtMs": 1794581633748,
+    "validUntilMs": 1794585233748,
+    "evidenceReference": "Google AI Studio authenticated rate-limit UI; Default Gemini Project; free tier; 2026-11-13 independent execution review",
+    "sourceUrl": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653",
+    "usageInterpretation": "28-day peaks 1 RPM / 1.36K TPM / 1 RPD; not current remaining quota; reporting may lag 15 minutes"
+  },
+  "priorHistory": {
+    "approvalId": "storage-bench-20261113-one-call",
+    "classification": "D",
+    "historyHash": "b3c8886a6844b184bbeecb32fae497e72fb5189758fd358ddcd3337575d237b4"
+  },
+  "independentTrialAcknowledged": true,
+  "claimPath": null,
+  "resultPath": null
+}
