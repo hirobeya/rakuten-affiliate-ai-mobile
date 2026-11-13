@@ -1,11 +1,13 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {buildGeminiComparison, compareOnce, toGeminiSchema} = require('../lib/room-writer-raw/gemini-comparison');
+const {MODEL, ENDPOINT, buildGeminiComparison, compareOnce, toGeminiSchema} = require('../lib/room-writer-raw/gemini-comparison');
 const {SYSTEM, schema} = require('../lib/room-writer-raw/contract-v2');
 const {prepare} = require('../lib/room-writer-raw/source');
 const item = {itemCode:'example:1',itemName:'収納ボックス',itemCaption:'ふた付きの収納ボックス。',catchcopy:'片付けに。',itemPrice:1000};
 test('offline preparation retains exact source and instructions without transport', async () => {
+  assert.equal(MODEL, 'gemini-3.8-flash');
+  assert.equal(ENDPOINT, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent');
   const prepared = buildGeminiComparison(item);
   assert.equal(prepared.held, false);
   assert.equal(prepared.request.systemInstruction.parts[0].text,SYSTEM);
