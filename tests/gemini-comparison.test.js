@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {MODEL, ENDPOINT, buildGeminiComparison, compareOnce, toGeminiSchema} = require('../lib/room-writer-raw/gemini-comparison');
+const {MODEL, ENDPOINT, buildGeminiComparison, buildGeminiLowThinkingCandidate, compareOnce, toGeminiSchema} = require('../lib/room-writer-raw/gemini-comparison');
 const {SYSTEM, schema} = require('../lib/room-writer-raw/contract-v2');
 const {prepare} = require('../lib/room-writer-raw/source');
 const item = {itemCode:'example:1',itemName:'収納ボックス',itemCaption:'ふた付きの収納ボックス。',catchcopy:'片付けに。',itemPrice:1000};
@@ -62,4 +62,23 @@ test('503 keeps only allowlisted provider diagnostics and makes exactly one atte
 
 test('a stalled diagnostic body cannot replace a known 503 or trigger another request',async()=>{
  let calls=0;const start=Date.now();await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'mock-secret',fetchImpl:async()=>{calls++;return {ok:false,status:503,json:()=>new Promise(()=>{})};}}),e=>e.message==='gemini_http_503_no_retry'&&e.httpStatus===503&&e.providerDiagnostic.status===null);assert.equal(calls,1);assert(Date.now()-start<2000);
+});
+
+
+test('low-thinking Gemini profile is an offline-only, distinct future request',()=>{
+ const baseline=buildGeminiComparison(item);
+ const candidate=buildGeminiLowThinkingCandidate(item);
+ assert.equal(candidate.held,false);
+ assert.equal(candidate.profile,'low-thinking-next-trial');
+ assert.equal(candidate.approved,false);
+ assert.equal(candidate.execute,false);
+ assert.notEqual(candidate.requestHash,baseline.requestHash);
+ assert.equal(candidate.sourceHash,baseline.sourceHash);
+ assert.deepEqual(candidate.request.contents,baseline.request.contents);
+ assert.deepEqual(candidate.request.systemInstruction,baseline.request.systemInstruction);
+ assert.deepEqual(candidate.request.generationConfig.responseJsonSchema,baseline.request.generationConfig.responseJsonSchema);
+ assert.deepEqual(candidate.request.generationConfig.thinkingConfig,{thinkingLevel:'low'});
+ assert.equal(candidate.request.generationConfig.maxOutputTokens,4000);
+ assert.equal(baseline.request.generationConfig.thinkingConfig,undefined);
+ assert.equal(baseline.request.generationConfig.maxOutputTokens,2000);
 });
