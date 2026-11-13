@@ -22,3 +22,5 @@ The new store uses an approval-level create-only object shared across execution 
 The previously accepted real Private Blob proof is reused through read-only GET in builds and the lab. No new accepted-baseline probe claims are created for each deployment. A future live independent trial still needs current runtime storage readiness and refreshed Free-tier evidence; the historical accepted proof is displayed separately and does not silently satisfy a new execution's prerequisites.
 
 Safari/iPhone verification is not inferred from desktop Chromium or Mock browser tests. The historical pattern error remains cause unknown. Existing stage diagnostics and browser tests distinguish fetch, response reading and JSON parsing without replaying that historical request.
+
+The independent manifest contains the fresh verified Free-tier/model-limit observation (project, model, limits, observation/expiry and evidence reference). The route uses that same observation for the independent trial, so the administrator does not have to update a second stale Free-tier gate. This is still separate from issuing the approval itself.
