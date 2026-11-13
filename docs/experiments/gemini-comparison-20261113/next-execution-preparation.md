@@ -1,3 +1,9 @@
+# Approved independent trial — maximum one generation
+
+The administrator explicitly approved `urenavi-gemini-bench-independent-20261113-01` / `urenavi-gemini-bench-execution-20261113-01` for the exact bench/model/requestHash in next-execution.json on 2026-11-13. This supersedes the inactive preparation status only. The old D history and original approval remain unchanged and cannot be retried. The manifest records a newly observed Free-tier limit confirmation with a one-hour operational expiry; displayed peaks are not current remaining quota. Before dispatch, owner GET must show both IDs unused, exact Preview SHA, and a fresh runtime storage-only proof. No build calls Gemini. Generation is one server-side attempt; errors and unknown outcomes never replenish authorization.
+
+## Preserved preparation evidence
+
 # Next independent trial preparation — no generation approval
 
 This phase preserves the accepted baseline HEAD `843306a02cd746a86fe470cc4b0ec1e864fdb3ad`. Closed evidence sources are recorded in history-finalization.json and are not queried again. Its historyHash pins the existing D evidence unchanged. Private results are read only via owner GET for the exact item/model/requestHash. A missing result never proves no prior dispatch; a mismatched result is marked unverified instead of presented as this product's output.

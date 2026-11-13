@@ -1,8 +1,8 @@
 {
-  "phase": "preparation_without_generation",
+  "phase": "approved_independent_measurement",
   "acceptedStorageProofSha": "843306a02cd746a86fe470cc4b0ec1e864fdb3ad",
   "reuseAcceptedStorageProof": true,
-  "newGenerationApprovedByThisTask": false,
-  "newLiveClaimsAllowedByThisTask": false,
+  "newGenerationApprovedByThisTask": true,
+  "newLiveClaimsAllowedByThisTask": true,
   "pastEvidenceSearchClosed": true
 }
