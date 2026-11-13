@@ -5,8 +5,32 @@
   "model": "gemini-3.8-flash",
   "modelDocumentation": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash",
   "pricingDocumentation": "https://ai.google.dev/gemini-api/docs/pricing",
-  "currentQuotaEvidence": null,
-  "quotaRequired": "Current project/model RPM, TPM, RPD and observed usage, observation time, expiry and evidence source. A public limit table is not project-specific quota evidence.",
+  "currentQuotaEvidence": {
+    "verified": true,
+    "projectId": "gen-lang-client-0210652653",
+    "model": "gemini-3.8-flash",
+    "tier": "free",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "observedAtMs": 1794575358647,
+    "observationStartedAtMs": 1794575307465,
+    "validUntilMs": 1794576258647,
+    "reviewedBy": "Work, direct Google AI Studio browser observation",
+    "evidenceReference": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653",
+    "usageView": {
+      "period": "last 28 days",
+      "rpmPeakDisplayed": "1 / 5",
+      "tpmPeakDisplayed": "1.36K / 250K",
+      "rpdPeakDisplayed": "- / 20",
+      "currentRemaining": null,
+      "updateDelayMinutes": 15
+    },
+    "meaning": "Verified Free project and model-specific limits only. No assertion of unused requests, zero consumption or current remaining capacity."
+  },
+  "quotaRequired": "Current, scoped Free-tier and model-limit observation. Unknown remaining consumption stays null and cannot clear the separate request-history gate.",
   "projectId": "gen-lang-client-0210652653",
   "projectQuotaObservation": {
     "observedAt": "2026-11-13",

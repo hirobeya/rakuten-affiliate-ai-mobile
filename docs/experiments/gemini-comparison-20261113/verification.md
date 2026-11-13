@@ -51,7 +51,7 @@ The original Safari pattern error's exact source remains unknown; the screenshot
 ## Outstanding release evidence
 
 1. Correlated pre-dispatch evidence or the original provider result for the matching Safari storage-bench execution.
-2. Current Default Gemini Project/model quota evidence (currentQuotaEvidence is null; public pricing is not project-specific capacity).
+2. Keep the scoped Free-tier/model-limit observation fresh. It was verified directly in Google AI Studio and recorded in readiness.json; unknown remaining consumption is not converted to zero.
 3. Successful owner-authenticated Preview runtime storage probe and receipt recovery. Build-context storage checks alone do not satisfy this.
 4. One authorized real generation only after all above gates, current CI and deployment SHA match; quality assessment then uses the exact generated output.
 
@@ -72,3 +72,9 @@ The owner session on the old Preview was still valid. Its existing approval-link
 Revision `bb20f05b41dfb38b186760c406e8065230895f6b` accepted the inherited owner session and returned HTTP 200 for the Function storage probe. The private mock-record probe completed in 6382 ms (HTTP stage, including extra work: 7541 ms; owner authorization: 1106 ms). Private anonymous access was 403, one of two creates succeeded, and the mock result was recovered by independent workers. A subsequent owner GET took 2388 ms for storage state and retained the correct target-history hold. No Gemini call occurred.
 
 The final protocol additionally requires an explicit already-exists conflict, rather than accepting any rejected contender as exclusion proof. It injects claim-readback and result-save failures around real private mock writes, confirms each consumed mock grant independently, and proves a second attempt is rejected. These checks have offline tests and must be observed in the final live Function proof. The recovered proof is exposed through owner GET and displayed after page reload, clearly separate from generated content. Invalid Gemini schema/JSON output retains its original candidate text and provider-reported usage; a non-JSON provider envelope gets its own safe error code.
+
+## Scoped release proof and refreshed Free-tier evidence
+
+The screenshot timestamp is recorded as an observation time, not an invented provider dispatch timestamp. The scoped D record carries an explicit investigation coverage window. A future A proof must have the exact 64-character request hash and cover that entire window; a null hash or unrelated period cannot unlock the grant.
+
+The Free project/model-limit gate uses the directly observed, time-bounded project evidence in readiness.json. It does not require an invented exact remaining counter: the UI peak view is not such a counter, unknown remaining consumption stays null, and provider 429 stops without retry. This Free-tier evidence cannot clear the independent matching-request history hold.

@@ -50,8 +50,8 @@
       "itemCode": "shopworld:10138423",
       "model": "gemini-3.8-flash",
       "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
-      "at": "2026-11-13T15:55:00+09:00",
-      "timePrecision": "minute displayed in screenshot",
+      "at": null,
+      "timePrecision": "Dispatch time unknown. Screenshot observation time is minute precision.",
       "providerRequestId": null,
       "httpStatus": null,
       "providerSent": null,
@@ -68,7 +68,13 @@
         },
         "Runtime records for this time were outside Hobby retention when queried."
       ],
-      "reason": "Browser execution initiated for this product; provider dispatch and consumption cannot be established."
+      "reason": "Browser execution initiated for this product; provider dispatch and consumption cannot be established.",
+      "observedAt": "2026-11-13T15:55:00+09:00",
+      "executionWindow": {
+        "from": "2026-11-12T15:00:00Z",
+        "to": "2026-11-13T06:55:59.999Z",
+        "basis": "Conservative investigation coverage from the start of the reported local creation date through the screenshot observation. Not an asserted dispatch time."
+      }
     }
   ],
   "reconciliationRequirements": {
