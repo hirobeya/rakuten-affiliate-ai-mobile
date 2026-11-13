@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const handler=require('../api/gemini-comparison-lab');
+const handler=require('../lib/room-writer-raw/gemini-preview-route');
 
 function response(){
   return {statusCode:200, headers:{},body:null,
