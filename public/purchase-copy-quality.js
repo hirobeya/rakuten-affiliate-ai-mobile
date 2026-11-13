@@ -31,7 +31,10 @@
   return /[^。！？]{4,}(?:ため(?:に|の)|ことで|ので|により|によって|に合わせて|に応じて)[^。！？]{4,}/.test(s)
    || hasChoiceRelation(s)
    || /[^。！？]{2,}(?:を|が)[^。！？]{0,30}(?:できます|できる|しやす|やすく|入ります|入る|収まり|楽しめ|味わえ|入れられ|包み込|抑え|おさえ|維持|保護)/.test(s)
-   || /[^。！？]{3,}で[^。！？]{3,}(?:しやす|できます|できる)/.test(s);
+   || /[^。！？]{3,}で[^。！？]{3,}(?:しやす|できます|できる)/.test(s)
+   // The seller can state a concrete alternative use without the auxiliary
+   // verb できる. Recognize only a complete source sentence, not a feature label.
+   || /(?:として|にも)[^。！？]{3,60}(?:ご使用いただけます|ご利用いただけます|使用できます|使えます)[。！？]?$/.test(s);
  }
  // Rejection only: having an exact feature quote is not a purchase reason.
  // This does not approve other prose or replace source/semantic review.
