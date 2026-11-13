@@ -19,7 +19,7 @@
  async function check(){
   $('run').disabled=true;$('preflight').textContent='確認中';
   try{
-   const data=await request();scope=data;
+   const data=await request();scope=data;if(data.storageProof)observe('saved_storage_proof_recovered',{proof:data.storageProof});
    let localAttempt=false;try{localAttempt=!!localStorage.getItem(key(data.requestHash));}catch{}
    completed=localAttempt||data.attempt?.claim||data.attempt?.approvalClaim||data.attempt?.legacyClaim||!!data.receipt;
    $('preflight').textContent=data.name+'｜'+(data.holds?.length?data.holds.join(' / '):'準備OK');

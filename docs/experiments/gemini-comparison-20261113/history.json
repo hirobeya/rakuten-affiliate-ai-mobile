@@ -80,7 +80,7 @@
   "providerAggregateObservation": {
     "projectId": "gen-lang-client-0210652653",
     "model": "gemini-3.8-flash",
-    "observedAt": "2026-11-13T12:47:00Z",
+    "observedAt": "2026-11-13",
     "period": "last 28 days",
     "dailyPeakRequests": 1,
     "minutePeakRequests": 1,
@@ -90,6 +90,7 @@
     "httpStatus": null,
     "perRequestTokens": null,
     "interpretation": "Nonzero project/model API usage is visible. It cannot be correlated to the bench request from this aggregate view. The scoped D record is not reclassified as A, B or C.",
-    "individualLogging": "Disabled; UI says billing setup required. No setting changed."
+    "individualLogging": "Disabled; UI says billing setup required. No setting changed.",
+    "timePrecision": "Date; observed directly during this execution session."
   }
 }

@@ -46,3 +46,10 @@ test('incomplete/schema-invalid outputs retain actual usage, never retry',async(
 test('source loss is rejected without transport',async()=>{
  let calls=0;await assert.rejects(compareOnce({...item,itemCaption:''},{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:()=>{calls++;}}));assert.equal(calls,0);
 });
+test('schema failure preserves exact provider content, response ID and actual usage',async()=>{
+ let calls=0;const content='{"unexpected":"original model output"}';
+ await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({responseId:'mock-response',candidates:[{finishReason:'STOP',content:{parts:[{text:content}]}}],usageMetadata:{promptTokenCount:100,candidatesTokenCount:20,totalTokenCount:125}})};}}),e=>e.message==='gemini_schema_invalid'&&e.tokens.total===125&&e.rawCandidateText===content&&e.providerRequestId==='mock-response');assert.equal(calls,1);
+});
+test('invalid provider JSON envelope is distinct from candidate schema failure',async()=>{
+ let calls=0;await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>{throw new SyntaxError('untrusted raw content');}};}}),/gemini_response_json_invalid/);assert.equal(calls,1);
+});

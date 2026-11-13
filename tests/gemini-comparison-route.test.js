@@ -13,7 +13,7 @@ function request(method='POST',body={id:'3',confirm:'single-free-tier-call'}){re
 function memory(){const rows=new Map();let failRead=false,failResult=false;
  const blob={async put(k,v,o){assert.equal(o.access,'private');assert.equal(o.allowOverwrite,false);if(rows.has(k))throw Error('exists');if(failResult&&k.endsWith('/result.json'))throw Error('save_failed');rows.set(k,v);return {url:'https://private.example/mock'};},async get(k,o){assert.equal(o.useCache,false);if(failRead)throw Error('read_failed');return rows.has(k)?{statusCode:200,stream:new Blob([rows.get(k)]).stream()}:null;}};
  return {rows,blob,readFail:v=>{failRead=v;},resultFail:()=>{failResult=true;}};}
-function storeWithProof(m){return {...create(m.blob),readProbe:async()=>({passed:true,context:'runtime',executionSha:SHA})};}
+function storeWithProof(m){return {...create(m.blob),readProbe:async()=>({version:2,passed:true,context:'runtime',executionSha:SHA})};}
 function config(m,extra={}){return {authorizeImpl:async()=>({ok:true,plan:'owner'}),storeFactory:()=>storeWithProof(m),decide:()=>({allow:true,reason:null,history:[]}),account:{project:'Default Gemini Project',tier:'free',model:MODEL,currentQuotaEvidence:{verified:true,validUntilMs:Date.now()+60000}},...extra};}
 const rejectedDraft={product:{name:'架空商品',unit:null,basis:[{field:'itemName',quote:'存在しない原文'}]},hold:{active:false,reason:''},post:{sentences:[{text:'根拠のない架空機能です。',kind:'fact',scope:null,basis:[{field:'itemCaption',quote:'架空の原文'}]}],notes:[],tags:[]}};
 const generated=()=>({status:'generated_unreviewed',model:MODEL,modelVersion:MODEL,providerRequestId:'mock-response-id',requestHash:scope.requestHash,draft:structuredClone(rejectedDraft),tokens:{input:100,output:30,total:140}});

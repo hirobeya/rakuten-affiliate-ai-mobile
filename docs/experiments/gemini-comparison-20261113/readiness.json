@@ -9,7 +9,7 @@
   "quotaRequired": "Current project/model RPM, TPM, RPD and observed usage, observation time, expiry and evidence source. A public limit table is not project-specific quota evidence.",
   "projectId": "gen-lang-client-0210652653",
   "projectQuotaObservation": {
-    "observedAt": "2026-11-13T12:47:00Z",
+    "observedAt": "2026-11-13",
     "reviewedBy": "Work, direct browser observation",
     "projectId": "gen-lang-client-0210652653",
     "model": "gemini-3.8-flash",
@@ -26,7 +26,8 @@
     },
     "usageUpdateDelay": "up to 15 minutes",
     "currentRemaining": null,
-    "source": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653"
+    "source": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653",
+    "timePrecision": "Date; observed directly during this execution session."
   },
   "loggingObservation": {
     "enabled": false,
