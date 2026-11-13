@@ -84,9 +84,9 @@ test('isolated Blob observations separate worker startup, SDK request and body r
 });
 
 
-test('owner can inspect existing local writer evidence without Gemini, Blob writes, or approval mutation',()=>withPreview(async()=>{
+test('owner can inspect existing local writer evidence without Gemini, Blob writes, or approval mutation',()=>preview(async()=>{
  let sends=0,stores=0;
- const h=handler.createHandler({
+ const h=H.createHandler({
   authorizeImpl:async()=>({ok:true,plan:'owner'}),
   storeFactory:()=>{stores++;throw Error('no_blob_access_in_local_evaluation');},
   compare:async()=>{sends++;throw Error('no_gemini_access_in_local_evaluation');}
