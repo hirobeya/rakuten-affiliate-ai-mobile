@@ -112,3 +112,16 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
  assert.equal(denied.statusCode,400);
  assert.equal(sends,0);
 }));
+
+
+test('an exact seller-stated alternative use is eligible, but unrelated and negated uses are not',()=>{
+ const {safeCaptionCandidates}=require('../lib/local-generic-reasoner');
+ const title='収納ベンチ コンテナボックス 工具箱';
+ const exact='ガーデニングの工具箱としてご使用いただけます。';
+ const candidates=safeCaptionCandidates({itemName:title,itemCaption:exact,identity:'収納ベンチ'});
+ assert(candidates.some(x=>x.quote===exact&&x.axis==='原文の使用関係'));
+ for(const bad of ['関連商品の'+exact,'工具箱として使用できません。','安心の工具箱としてご使用いただけます。']){
+  const unsafe=safeCaptionCandidates({itemName:title,itemCaption:bad,identity:'収納ベンチ'});
+  assert(!unsafe.some(x=>x.axis==='原文の使用関係'));
+ }
+});
