@@ -16,28 +16,14 @@ small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50p
 <section><h2>Gemini実生成</h2><p><small>無料枠の消費があります。押すまではモデルへ通信しません。再試行はありません。費用0円の無料プロジェクト以外では使わないでください。</small></p>
 <button class="danger" id="run" disabled>この商品をGeminiで1回生成</button></section>
 <section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
 <script>
 'use strict';
+// This lab uses the existing server-verified HttpOnly owner cookie.
+// No external auth SDK or browser-readable API keys are needed.
 const $=id=>document.getElementById(id);
 let completed=false, resultText='';
-const sb=window.supabase?.createClient(
- 'https://upooxcugrplfmjnqpuxs.supabase.co',
- 'sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5',
- {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storage:window.localStorage}}
-);
-async function authHeaders(){
-  // A verified Supabase bearer is preferred. The existing owner handoff
-  // instead sets an HttpOnly device cookie; never read that cookie in JS.
-  // Let the existing server-side authorize(req) validate either credential.
-  if(!sb)return {};
-  try{
-    const {data,error}=await sb.auth.getSession();
-    if(!error && data?.session?.access_token)
-      return {'Authorization':'Bearer '+data.session.access_token};
-  }catch{}
-  return {};
-}
+async function authHeaders(){ return {}; }
+$('preflight').textContent='画面操作の準備完了（APIは未確認）';
 
 async function check(){
  $('run').disabled=true; $('preflight').textContent='確認中';
