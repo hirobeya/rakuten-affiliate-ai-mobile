@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>ウレナビ Gemini比較・限定検証</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:700px;margin:0 auto;padding:20px;background:#f7f8fb;color:#172235}
+h1{font-size:1.4rem}button,select{font:inherit;padding:12px;border:1px solid #a5adbc;border-radius:10px;background:white;max-width:100%}
+button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}.danger{background:#153d72;color:white}
+section{background:white;border-radius:14px;padding:17px;margin:14px 0;border:1px solid #e2e6ed}
+pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:#f4f6f8;border-radius:10px;padding:14px}
+small{color:#455468}label{display:block;margin-bottom:8px}#result{min-height:50px}</style>
+</head><body><h1>ウレナビ｜Gemini比較ラボ</h1>
+<p>検証用Previewのみ。保存済み楽天原文4件から1商品を選び、Gemini Flashで1回だけ文章を生成します。生成文は未評価・非公開・自動投稿なし。</p>
+<section><label for="item">比較対象</label><select id="item">
+<option value="3">収納ベンチ</option><option value="4">お掃除手袋</option>
+<option value="5">モバイルバッテリー</option><option value="6">フライパンセット</option></select>
+<p><button id="check">準備確認・保存済み結果を取得</button></p><p><button id="storage">Geminiを呼ばず保存を検証</button></p><p><small>認証できない場合は <a href="/app.html">このPreviewのウレナビ</a> で「本番の認証でPreviewを開く」を選んでください。同じブラウザで本番にログイン済みである必要があります。</small></p><div id="preflight" aria-live="polite">未確認</div></section>
+<section><h2>Gemini実生成</h2><p><small>無料枠の消費があります。押すまではモデルへ通信しません。再試行はありません。費用0円の無料プロジェクト以外では使わないでください。</small></p>
+<button class="danger" id="run" disabled>この商品をGeminiで1回生成</button></section>
+<section><h2>結果（未評価）</h2><div id="result" aria-live="polite">未実施</div><button id="copy" disabled>結果をコピー</button></section><section><h2>Geminiが失敗した場合</h2><p>GeminiがHTTP 503などで生成できなかった場合も、この承認枠の再送はできません。既存のウレナビ独自文章生成機能は引き続き利用できます。</p><p><a href="/app.html">ウレナビ本体で商品を選び、独自エンジンで投稿文を作成する</a></p><small>このリンクは画面移動のみ。Geminiへの追加通信・自動切替・課金は行いません。既存の実測結果はそのまま保存されます。</small></section><section><h2>独自エンジンの文章候補（通信なし）</h2><p>楽天原文を使い、既存の独自エンジンが作れる文章候補と根拠を確認します。Geminiには送信せず、保存済みの失敗記録も変更しません。候補は品質未評価で、自動投稿されません。</p><button id="localReview">独自エンジンの候補と根拠を確認</button><pre id="localResult" aria-live="polite">未確認</pre></section><section><h2>次回の独立試験</h2><p id="nextStatus">未承認。今回の新規Gemini通信は禁止されています。</p><a id="nextLink" hidden>別途承認済みの独立枠を開く</a></section><section><h2>確認記録</h2><pre id="diagnostics" aria-live="polite">未確認</pre></section>
+<script src="/gemini-lab.js"></script></body></html>

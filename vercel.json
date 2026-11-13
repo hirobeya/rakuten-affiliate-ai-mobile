@@ -60,7 +60,8 @@
   ],
   "functions": {
     "api/room-ai.js": {
-      "maxDuration": 20
+      "maxDuration": 60,
+      "includeFiles": "lib/room-writer-raw/gemini-blob-worker.js"
     }
   },
   "git": {

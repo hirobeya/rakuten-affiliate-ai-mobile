@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "reviewedBy": "Work / 2026-11-13 execution",
+  "reviewedAt": "2026-11-13",
+  "approval": {
+    "id": "storage-bench-20261113-one-call",
+    "itemCode": "shopworld:10138423",
+    "model": "gemini-3.8-flash",
+    "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+    "maxCalls": 1
+  },
+  "records": [
+    {
+      "id": "reported-2.5-http404",
+      "classification": "B",
+      "itemCode": null,
+      "model": "gemini-2.5-flash",
+      "requestHash": null,
+      "at": null,
+      "providerRequestId": null,
+      "httpStatus": 404,
+      "providerSent": "reported_response_not_independently_verified",
+      "tokens": null,
+      "claim": null,
+      "result": null,
+      "evidence": [
+        "Administrator instruction dated 2026-11-13 reports HTTP 404; raw provider response not retained."
+      ]
+    },
+    {
+      "id": "reported-owner-only",
+      "classification": "A",
+      "itemCode": null,
+      "model": "gemini-3.8-flash",
+      "requestHash": null,
+      "at": null,
+      "providerRequestId": null,
+      "httpStatus": 403,
+      "providerSent": false,
+      "tokens": null,
+      "claim": null,
+      "result": null,
+      "evidence": [
+        "Administrator reports owner_only; authorize guard precedes compareOnce in d36dc8c. Inference conditional on that exact route response."
+      ]
+    },
+    {
+      "id": "safari-storage-bench-pattern-1555",
+      "classification": "D",
+      "itemCode": "shopworld:10138423",
+      "model": "gemini-3.8-flash",
+      "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+      "at": null,
+      "timePrecision": "Dispatch time unknown. Screenshot observation time is minute precision.",
+      "providerRequestId": null,
+      "httpStatus": null,
+      "providerSent": null,
+      "tokens": null,
+      "claim": null,
+      "result": null,
+      "browserAttemptObserved": true,
+      "modelAndRequestBinding": "inferred from d36dc8c deployed at 15:49 JST and unchanged server request body, not a provider receipt",
+      "evidence": [
+        {
+          "file": "IMG_0121.png",
+          "sha256": "88cb68dd3d9e7391574e653f89a67374b2d1d7d30e3e52969eb012d2320b80af",
+          "observed": "Storage bench title, offline ready, disabled generation button and pattern error visible."
+        },
+        "Runtime records for this time were outside Hobby retention when queried."
+      ],
+      "reason": "Browser execution initiated for this product; provider dispatch and consumption cannot be established.",
+      "observedAt": "2026-11-13T15:55:00+09:00",
+      "executionWindow": {
+        "from": "2026-11-12T15:00:00Z",
+        "to": "2026-11-13T06:55:59.999Z",
+        "basis": "Conservative investigation coverage from the start of the reported local creation date through the screenshot observation. Not an asserted dispatch time."
+      }
+    }
+  ],
+  "reconciliationRequirements": {
+    "scope": "Only the matching item/model/request and the one-call approval. No environment-variable unlock.",
+    "needed": "Correlated server/browser/provider evidence identifying pre-dispatch stop, or the original terminal response and usage. A missing log or missing new Blob claim does not prove no historical dispatch.",
+    "reviewer": "Named reviewer must verify evidence and update this versioned record; a new administrator approval alone is not a no-dispatch proof.",
+    "unrelatedHistory": "Unscoped missing logs do not automatically block all products. Other products remain outside the present grant."
+  },
+  "providerAggregateObservation": {
+    "projectId": "gen-lang-client-0210652653",
+    "model": "gemini-3.8-flash",
+    "observedAt": "2026-11-13",
+    "period": "last 28 days",
+    "dailyPeakRequests": 1,
+    "minutePeakRequests": 1,
+    "minutePeakInputTokensDisplayed": "1.36K",
+    "requestHash": null,
+    "providerRequestId": null,
+    "httpStatus": null,
+    "perRequestTokens": null,
+    "interpretation": "Nonzero project/model API usage is visible. It cannot be correlated to the bench request from this aggregate view. The scoped D record is not reclassified as A, B or C.",
+    "individualLogging": "Disabled; UI says billing setup required. No setting changed.",
+    "timePrecision": "Date; observed directly during this execution session."
+  }
+}

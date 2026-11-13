@@ -1,0 +1,7 @@
+# Independent measurement 02 — administrator approved 2026-11-14 JST
+
+The administrator supplied approval `urenavi-gemini-bench-independent-20261114-02` and execution `urenavi-gemini-bench-execution-20261114-02`, maximum one new Gemini generation, zero additional cost, Preview only, exact bench/model/requestHash in next-execution.json. This is distinct from original D and the used independent-01 HTTP503. Both old histories and unknown consumption are retained.
+
+The complete previous manifest is archived byte-for-byte in execution-grants/independent-01.json. Only GET can select that archived manifest to recover the old Private Blob result. POST can select only the current exact ID pair, so archive selection cannot resend the old request. Global create-only approval claims still prevent replenishment via a changed execution ID. Existing claims/results are never overwritten.
+
+The free-tier observation is time-bounded in the current manifest, based on the existing Google AI Studio signed-in project/model/limit UI, not a claim of current remaining quota. It must remain valid at dispatch. The original request body, model and 25s provider timeout are unchanged. Runtime storage-only readiness and unused independent ledger must be checked on the deployed SHA before the one approved POST. Any error/unknown outcome consumes the attempt with no retry. Independent GET performs no generation.
