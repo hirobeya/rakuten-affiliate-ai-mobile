@@ -118,10 +118,11 @@ test('an exact seller-stated alternative use is eligible, but unrelated and nega
  const {safeCaptionCandidates}=require('../lib/local-generic-reasoner');
  const title='収納ベンチ コンテナボックス 工具箱';
  const exact='ガーデニングの工具箱としてご使用いただけます。';
- const candidates=safeCaptionCandidates({itemName:title,itemCaption:exact,identity:'収納ベンチ'});
+ const candidates=safeCaptionCandidates({itemName:title,itemCaption:exact,identity:'収納ベンチ',editorial:true});
+ assert(!safeCaptionCandidates({itemName:title,itemCaption:exact,identity:'収納ベンチ'}).some(x=>x.axis==='原文の使用関係'),'normal generation must preserve its baseline');
  assert(candidates.some(x=>x.quote===exact&&x.axis==='原文の使用関係'));
  for(const bad of ['関連商品の'+exact,'工具箱として使用できません。','安心の工具箱としてご使用いただけます。']){
-  const unsafe=safeCaptionCandidates({itemName:title,itemCaption:bad,identity:'収納ベンチ'});
+  const unsafe=safeCaptionCandidates({itemName:title,itemCaption:bad,identity:'収納ベンチ',editorial:true});
   assert(!unsafe.some(x=>x.axis==='原文の使用関係'));
  }
 });
