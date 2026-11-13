@@ -1,0 +1,21 @@
+# 503 classification and read-only recovery remediation — 2026-11-14 JST
+
+## Preserved measurement
+
+The scoped `independent-01-failure.json` records the already measured attempt without replacing any Private Blob object, original approval, D history or next-execution manifest. Its HTTP 503 is class B (response obtained), with token consumption unknown, not zero. The app mapped that provider failure to HTTP 502 at provider stage. The 2187ms provider step was below 25s, and the total measured stages were 10265ms, below the 60s Function limit. The original response headers and error body were not retained by that transport; no identifier or internal cause can be recovered from them.
+
+Google GenerateContent's official error reference describes 503 UNAVAILABLE as possible temporary overload/unavailability: https://ai.google.dev/gemini-api/docs/generate-content/api-errors . That describes a possible category, not the proven internal cause of this individual request. Authentication, schema rejection, quota exhaustion or model mismatch cannot be inferred from 503. Offline checks show the same fixed model, endpoint, intact full source, exact requestHash and existing schema transport. No obvious local mismatch was found; successful runtime schema acceptance remains unverified. No model, schema, generation instructions or product text was changed. Google's generic retry/model-switch suggestions are not enabled here.
+
+## GET timeout evidence and bounded change
+
+Two previous recovery GETs stopped at exactly 7000ms in storage_state; subsequent GETs recovered the immutable result in 3291ms and after lab reload in 3228ms. This is not lost data or proof of bad credentials. At the measured SHA, the route gave the entire state/proof fan-out 7000ms, while each worker's watchdog was 7300ms, and its SDK abort was 7000ms after module load. The route could therefore time out before an individual read diagnostic. Worker startup, module loading, SDK request and body-read timing were not separately retained then. Their individual historical contributions and temporary network conditions cannot be reconstructed. OIDC was passed into child env by existing code; successful reads confirm it worked on those requests, not why the timed-out reads were slow.
+
+Read-only GET now has 15000ms state budget and 12000ms worker/SDK timeout (parent watchdog 12300ms). Its 8000ms auth plus 15000ms read plus 2000ms overhead is 25000ms, below 60000ms. Generation POST keeps the original 57000ms design, including 25000ms provider limit and 7000ms state/claim/save stages. No auto-retry was added. Longer GET budget alone does not guarantee no future failures.
+
+Safe observations distinguish worker startup, module loading, SDK request and body read, with bounded durations/error codes only. Paths, stored payloads, headers, OIDC and keys are excluded. Failed read still leaves claims/results immutable and cannot dispatch a model. Subsequent explicit GET can recover a result; it never replenishes an approval. Restored failures now display the actual error and explicit no-resend status in the lab.
+
+For a future separately approved provider request only, error transport keeps bounded, allowlisted diagnostic fields (HTTP code, recognized RPC status, request-id headers and retry-after). Free-form error messages and details are not saved; credential-echoing identifiers are dropped. Diagnostic body read is limited to 500ms inside the unchanged provider time budget. This does not retrofit missing data into the old result and never drives automatic retries.
+
+## Next independent measurement
+
+The same bench and same model are needed to obtain the missing successful output and assess the unchanged request under comparable conditions. Temporary provider capacity issues are possible; the prior 503 cannot establish future success. Keep both prior D and used independent-01 unchanged. A new administrator approval, distinct approval/execution IDs, exact scope/hash, maximum one communication and current Free-tier confirmation are required. No new IDs are issued here. Existing claim+dispatch intent+private result/readback+read-only GET remain the path; POST has no retry. The 25s provider timeout's sufficiency for successful generation is still unverified. No additional generation communication is permitted by this remediation task.

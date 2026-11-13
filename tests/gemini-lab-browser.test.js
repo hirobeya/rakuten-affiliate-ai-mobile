@@ -24,3 +24,8 @@ test('HTML/sign-in response is identified at JSON parsing, never as Gemini failu
 test('response read failure is distinct from fetch and parser failures',async()=>{
  const b=browser(async()=>({ok:true,status:200,headers:{get:()=> 'application/json'},text:async()=>{throw Error('read failed');}}));await b.handlers.get('check:click')();assert(b.nodes.get('diagnostics').textContent.includes('browser_response_read_failed'));assert(!b.nodes.get('diagnostics').textContent.includes('browser_json_parse_failed'));
 });
+
+
+test('restored failed receipt displays provider error and cannot enable generation',async()=>{
+ const failed={...payload,receipt:{result:{error:'gemini_http_503_no_retry',tokens:null}},attempt:{claim:true,dispatch:true,approvalClaim:true},executionHold:'existing_independent_attempt_do_not_resend',holds:['existing_independent_attempt_do_not_resend']};const b=browser(async()=>response(failed));await b.handlers.get('check:click')();assert(b.nodes.get('result').textContent.includes('gemini_http_503_no_retry'));assert(b.nodes.get('result').textContent.includes('再送禁止'));assert.equal(b.nodes.get('run').disabled,true);assert.equal(b.calls.length,1);
+});

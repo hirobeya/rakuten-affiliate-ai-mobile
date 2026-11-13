@@ -53,3 +53,13 @@ test('schema failure preserves exact provider content, response ID and actual us
 test('invalid provider JSON envelope is distinct from candidate schema failure',async()=>{
  let calls=0;await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>{throw new SyntaxError('untrusted raw content');}};}}),/gemini_response_json_invalid/);assert.equal(calls,1);
 });
+
+test('503 keeps only allowlisted provider diagnostics and makes exactly one attempt',async()=>{
+ let calls=0;const secret='fake-secret-never-recorded';
+ await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:secret,fetchImpl:async()=>{calls++;return {ok:false,status:503,headers:{get:n=>({'x-request-id':'mock-provider-503','x-goog-request-id':secret,'retry-after':'30','set-cookie':secret}[n]||null)},json:async()=>({error:{code:503,status:'UNAVAILABLE',message:secret,details:[{secret}]},echo:secret})};}}),e=>{
+ assert.equal(e.httpStatus,503);assert.deepEqual(e.providerDiagnostic,{httpStatus:503,status:'UNAVAILABLE',code:503,headers:{'x-request-id':'mock-provider-503','retry-after':'30'}});assert(!JSON.stringify(e.providerDiagnostic).includes(secret));return e.message==='gemini_http_503_no_retry';});assert.equal(calls,1);
+});
+
+test('a stalled diagnostic body cannot replace a known 503 or trigger another request',async()=>{
+ let calls=0;const start=Date.now();await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'mock-secret',fetchImpl:async()=>{calls++;return {ok:false,status:503,json:()=>new Promise(()=>{})};}}),e=>e.message==='gemini_http_503_no_retry'&&e.httpStatus===503&&e.providerDiagnostic.status===null);assert.equal(calls,1);assert(Date.now()-start<2000);
+});

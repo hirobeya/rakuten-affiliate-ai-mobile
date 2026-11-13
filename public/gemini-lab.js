@@ -7,7 +7,7 @@
  const key=(hash,approvalId=null,executionId=null)=>'urenavi-gemini-attempt:'+[approvalId||'legacy',executionId||'legacy',hash].join(':');
  function remember(stage){if(!scope)return;try{localStorage.setItem(key(scope.requestHash,scope.approvalId,scope.executionId),JSON.stringify({stage,at:new Date().toISOString(),requestHash:scope.requestHash,executionSha:scope.executionSha}));}catch{observe('browser_receipt_storage_unavailable');}}
  function observe(stage,details={}){trace.push({stage,...details});$('diagnostics').textContent=JSON.stringify(trace,null,2);}
- function show(result){resultText=JSON.stringify(result,null,2);$('result').textContent=(result.generatedCopy||result.copy||'本文なし／保留')+'\n\n品質：'+(result.quality||'未評価')+'\n根拠検証：'+(result.mechanical?.ok?'機械判定通過・意味評価は未実施':'未確認または不合格')+'\nトークン：'+JSON.stringify(result.tokens??null);$('copy').disabled=false;}
+ function show(result){resultText=JSON.stringify(result,null,2);$('result').textContent=(result.error?'生成失敗：'+result.error+'（再送禁止）':(result.generatedCopy||result.copy||'本文なし／保留'))+'\n\n品質：'+(result.quality||'未評価')+'\n根拠検証：'+(result.mechanical?.ok?'機械判定通過・意味評価は未実施':'未確認または不合格')+'\nトークン：'+JSON.stringify(result.tokens??null);$('copy').disabled=false;}
  async function request(options={}){
   observe('browser_fetch_started',{method:options.method||'GET'});
   let r;try{r=await fetch(endpoint+(options.method?'':'&id='+encodeURIComponent($('item').value)+(intent?'&approvalId='+encodeURIComponent(intent.approvalId)+'&executionId='+encodeURIComponent(intent.executionId):'')),{credentials:'same-origin',cache:'no-store',...options});}
@@ -15,7 +15,7 @@
   observe('browser_response_received',{httpStatus:r.status,contentType:r.headers.get('content-type')});
   let text;try{text=await r.text();}catch{observe('browser_response_read_failed');throw Error('応答の読取りで停止。再送せず結果取得を使ってください');}
   let data;try{data=JSON.parse(text);}catch{observe('browser_json_parse_failed');throw Error('応答がJSONではありません。認証画面や配備保護を確認してください');}
-  observe('server_response',{serverStage:data.stage,executionSha:data.executionSha,error:data.error||null,timings:data.timings||[],storageDiagnostic:data.storageDiagnostic||null});
+  observe('server_response',{serverStage:data.stage,executionSha:data.executionSha,error:data.error||null,timings:data.timings||[],storageDiagnostic:data.storageDiagnostic||null,storageObservations:data.storageObservations||[]});
   if(!r.ok){const error=Error(data.error||'server_error');error.data=data;throw error;}return data;
  }
  async function check(){

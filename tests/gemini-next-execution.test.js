@@ -33,3 +33,5 @@ test('expired Free-tier evidence blocks execution but not read-only saved-result
 });
 
 test('administrator approved manifest pins exact independent IDs and scope without changing D',()=>{assert.equal(template.approvalId,'urenavi-gemini-bench-independent-20261113-01');assert.equal(template.executionId,'urenavi-gemini-bench-execution-20261113-01');assert.equal(assess(template,scope,template.freeTierConfirmation.observedAtMs).allow,true);for(const k of ['itemCode','model','requestHash'])assert.equal(assess(template,{...scope,[k]:'mismatch'},template.freeTierConfirmation.observedAtMs).allow,false);assert.equal(decision(scope,{}).allow,false);});
+
+test('read-only recovery budget stays under 60s without extending the POST budget',()=>{const h=require('../lib/room-writer-raw/gemini-preview-route');assert.equal(h.RECOVERY_BUDGET.storage_state,15000);assert.equal(h.RECOVERY_BUDGET.worker,12000);assert(h.BUDGET.authorization+h.RECOVERY_BUDGET.storage_state+h.BUDGET.overhead<60000);assert.equal(Object.values(h.BUDGET).reduce((a,b)=>a+b,0),57000);});

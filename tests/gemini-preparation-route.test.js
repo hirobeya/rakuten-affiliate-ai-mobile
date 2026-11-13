@@ -28,3 +28,18 @@ test('explicit separately approved mock trial has independent result GET and can
  const old=response();await handler(req(),old);assert.equal(old.body.error,'target_history_unresolved');assert.equal(decision(scope,{}).allow,false);assert.equal(hash(history),priorHash);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 }));
+
+test('503 result survives slow/failed GET recovery, used grant and changed execution ID never send again',async t=>preview(async()=>{
+ t.mock.timers.enable({apis:['setTimeout','Date'],now:Date.parse('2026-11-14T00:00:00Z')});
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-503-recovery-'));try{
+ const prior=hash(history),ids={approvalId:'mock-only-503-approval',executionId:'mock-only-503-execution'};
+ const grant={...scope,...ids,status:'approved',approvedBy:'mock administrator',approvedAt:new Date(Date.now()-1).toISOString(),maxCalls:1,independentTrialAcknowledged:true,priorHistory:{approvalId:history.approval.id,classification:'D',historyHash:prior},freeTierConfirmation:{verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,observedAtMs:Date.now()-1,validUntilMs:Date.now()+600000,evidenceReference:'mock only'}};
+ const b=blob(dir);let calls=0,delay=0,signal;let observed=new Promise(r=>{signal=r;});
+ const handler=H.createHandler({authorizeImpl:async()=>({ok:true,plan:'owner'}),nextGrant:grant,account:account(),storeFactory:(request,g,s,options)=>{const store=g?createIndependent(b,g,s):create(b);return {...store,readProbe:async()=>({version:2,passed:true,context:'runtime',executionSha:SHA}),state:async scope=>{if(request.method==='GET'&&delay){assert.equal(options.timeoutMs,H.RECOVERY_BUDGET.worker);signal();await new Promise(r=>setTimeout(r,delay));}return store.state(scope);}};},compare:async()=>{calls++;const error=Error('gemini_http_503_no_retry');error.httpStatus=503;error.providerDiagnostic={httpStatus:503,status:'UNAVAILABLE',headers:{}};throw error;}});
+ const sent=response();await handler(req('POST',ids),sent);assert.equal(sent.statusCode,502);assert.equal(sent.body.httpStatus,503);assert.equal(sent.body.failureStage,'provider');assert.equal(sent.body.tokens,null);const saved=(await createIndependent(b,grant,scope).state(scope)).result;assert.equal(saved.result.error,'gemini_http_503_no_retry');
+ delay=8000;const slow=response(),running=handler(req('GET',ids),slow);await observed;t.mock.timers.tick(8000);await running;assert.equal(slow.statusCode,200);assert.equal(slow.body.receipt.result.error,'gemini_http_503_no_retry');assert.equal(slow.body.recovery.providerCalls,0);
+ observed=new Promise(r=>{signal=r;});delay=20000;const timed=response(),waiting=handler(req('GET',ids),timed);await observed;t.mock.timers.tick(15001);await waiting;assert.equal(timed.statusCode,503);assert.equal(timed.body.error,'storage_state_unavailable');
+ delay=0;const restored=response();await handler(req('GET',ids),restored);assert.equal(restored.body.recovery.status,'recovered');assert.deepEqual(restored.body.receipt,saved);assert.equal(restored.body.executionHold,'existing_independent_attempt_do_not_resend');
+ const repeated=response();await handler(req('POST',ids),repeated);assert.equal(repeated.statusCode,409);const switched=response();await handler(req('POST',{...ids,executionId:'mock-only-unauthorized-switch'}),switched);assert.equal(switched.body.error,'new_explicit_approval_required');assert.equal(calls,1);assert.equal(hash(history),prior);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+}));

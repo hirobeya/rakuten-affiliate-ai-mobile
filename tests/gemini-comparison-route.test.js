@@ -75,3 +75,10 @@ test('storage-only runtime action cannot call Gemini and rejects arbitrary field
 test('storage namespace rejects traversal and Groq prefixes',()=>{
  assert.throws(()=>create(memory().blob,{namespace:'groq'}));assert.throws(()=>create(memory().blob,{namespace:PREFIX+'/../groq'}));
 });
+
+
+test('isolated Blob observations separate worker startup, SDK request and body read without exposing credentials',async()=>{
+ const {EventEmitter}=require('node:events');const {sdk}=require('../lib/room-writer-raw/gemini-blob');const observations=[];let operations=0;
+ const fakeFork=(file,args,options)=>{assert.equal(options.env.VERCEL_BLOB_RETRIES,'0');assert.equal(options.env.VERCEL_OIDC_TOKEN,'mock-private-oidc');const child=new EventEmitter();child.kill=()=>{};child.send=message=>{operations++;queueMicrotask(()=>{child.emit('message',{phase:'ready'});child.emit('message',{ok:true,value:{statusCode:200,text:'{"stored":true}'},timings:{sdkModuleMs:2,sdkRequestMs:40,bodyReadMs:3}});});};return child;};
+ const b=sdk({oidcToken:'mock-private-oidc',forkImpl:fakeFork,onObservation:o=>observations.push(o)});const result=await b.get(PREFIX+'/mock-only-read.json');assert.equal(JSON.parse(await new Response(result.stream).text()).stored,true);assert.equal(operations,1);assert.equal(observations.length,1);assert.equal(observations[0].sdkRequestMs,40);assert.equal(observations[0].outcome,'completed');assert(observations[0].workerStartupMs>=0);assert(!JSON.stringify(observations).includes('mock-private-oidc'));assert(!JSON.stringify(observations).includes('mock-only-read.json'));
+});
