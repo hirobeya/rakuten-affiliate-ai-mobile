@@ -23,7 +23,7 @@ let completed=false, resultText='';
 async function check(){
  $('run').disabled=true; $('preflight').textContent='確認中';
  try {
-  const r=await fetch('/api/gemini-comparison-lab?id='+encodeURIComponent($('item').value),{credentials:'same-origin',cache:'no-store'});
+  const r=await fetch('/api/room-ai?action=gemini-comparison-lab?id='+encodeURIComponent($('item').value),{credentials:'same-origin',cache:'no-store'});
   const data=await r.json();
   if(!r.ok) throw Error(data.error||'準備確認に失敗');
   $('preflight').textContent=(data.name||data.itemCode)+'｜'+(data.held?'保留':'通信なしの準備OK');
@@ -38,7 +38,7 @@ $('run').addEventListener('click',async()=>{
  completed=true; $('run').disabled=true; $('check').disabled=true; $('item').disabled=true;
  $('result').textContent='送信中（再送しません）';
  try{
-  const r=await fetch('/api/gemini-comparison-lab',{method:'POST',credentials:'same-origin',
+  const r=await fetch('/api/room-ai?action=gemini-comparison-lab',{method:'POST',credentials:'same-origin',
    headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,confirm:'single-free-tier-call'})});
   const data=await r.json();
   if(!r.ok)throw Error(data.error||'失敗');
