@@ -82,3 +82,30 @@ test('isolated Blob observations separate worker startup, SDK request and body r
  const fakeFork=(file,args,options)=>{assert.equal(options.env.VERCEL_BLOB_RETRIES,'0');assert.equal(options.env.VERCEL_OIDC_TOKEN,'mock-private-oidc');const child=new EventEmitter();child.kill=()=>{};child.send=message=>{operations++;queueMicrotask(()=>{child.emit('message',{phase:'ready'});child.emit('message',{ok:true,value:{statusCode:200,text:'{"stored":true}'},timings:{sdkModuleMs:2,sdkRequestMs:40,bodyReadMs:3}});});};return child;};
  const b=sdk({oidcToken:'mock-private-oidc',forkImpl:fakeFork,onObservation:o=>observations.push(o)});const result=await b.get(PREFIX+'/mock-only-read.json');assert.equal(JSON.parse(await new Response(result.stream).text()).stored,true);assert.equal(operations,1);assert.equal(observations.length,1);assert.equal(observations[0].sdkRequestMs,40);assert.equal(observations[0].outcome,'completed');assert(observations[0].workerStartupMs>=0);assert(!JSON.stringify(observations).includes('mock-private-oidc'));assert(!JSON.stringify(observations).includes('mock-only-read.json'));
 });
+
+
+test('owner can inspect existing local writer evidence without Gemini, Blob writes, or approval mutation',()=>withPreview(async()=>{
+ let sends=0,stores=0;
+ const h=handler.createHandler({
+  authorizeImpl:async()=>({ok:true,plan:'owner'}),
+  storeFactory:()=>{stores++;throw Error('no_blob_access_in_local_evaluation');},
+  compare:async()=>{sends++;throw Error('no_gemini_access_in_local_evaluation');}
+ });
+ const res=response();
+ await h({method:'GET',headers:{},query:{id:'3',mode:'local-evaluation'}},res);
+ assert.equal(res.statusCode,200);
+ assert.equal(res.body.mode,'local-evaluation');
+ assert.equal(res.body.itemCode,'shopworld:10138423');
+ assert.equal(res.body.providerCalls,0);
+ assert.equal(res.body.publication,false);
+ assert.equal(res.body.copyable,false);
+ assert.equal(res.body.quality,'unreviewed');
+ assert.equal(typeof res.body.sourceHash,'string');
+ assert(Array.isArray(res.body.evidence));
+ assert.equal(sends,0);
+ assert.equal(stores,0);
+ const denied=response();
+ await h({method:'GET',headers:{},query:{id:'99',mode:'local-evaluation'}},denied);
+ assert.equal(denied.statusCode,400);
+ assert.equal(sends,0);
+}));
