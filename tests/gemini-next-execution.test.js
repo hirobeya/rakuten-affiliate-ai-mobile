@@ -41,9 +41,11 @@ test('third independent grant is approved in scope, but cannot dispatch without 
  assert.equal(template.executionId,'urenavi-gemini-bench-execution-20261115-03');
  assert.equal(low.requestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
  assert.notEqual(low.requestHash,scope.requestHash);
- assert.equal(assess(template,current).allow,false);
- assert(assess(template,current).reasons.includes('fresh_free_tier_confirmation_required'));
- assert.equal(assess(template,current,Date.now(),{readOnly:true}).allow,true);
+ const verifiedAt=template.freeTierConfirmation.observedAtMs+1000;
+ assert.equal(assess(template,current,verifiedAt).allow,true);
+ assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1).allow,false);
+ assert(assess(template,current,template.freeTierConfirmation.validUntilMs+1).reasons.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1,{readOnly:true}).allow,true);
  const proof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'mock fresh account read',observedAtMs:Date.now()-1000,validUntilMs:Date.now()+60000};
  const verified={...template,freeTierConfirmation:proof};
  assert.equal(assess(verified,current).allow,true);
