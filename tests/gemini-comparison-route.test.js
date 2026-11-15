@@ -116,10 +116,12 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
 
 test('future low-thinking request profile can be inspected by owner without Blob or provider access',()=>preview(async()=>{
  let calls=0,stores=0;
+ const validAt=Date.parse('2026-11-15T17:40:00+09:00');
  const h=H.createHandler({
   authorizeImpl:async()=>({ok:true,plan:'owner'}),
   storeFactory:()=>{stores++;throw Error('must_not_access_blob');},
-  compare:async()=>{calls++;throw Error('must_not_send');}
+  compare:async()=>{calls++;throw Error('must_not_send');},
+  clock:()=>validAt
  });
  const res=response();
  await h({method:'GET',headers:{},query:{id:'3',mode:'request-profile'}},res);
@@ -132,8 +134,8 @@ test('future low-thinking request profile can be inspected by owner without Blob
  assert.equal(res.body.lowThinkingMaxOutputTokens,4000);
  assert.equal(res.body.approvedForLowThinking,true);
  assert.equal(res.body.lowThinkingRequestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
- assert.equal(res.body.dispatchReady,false);
- assert(res.body.executionHolds.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(res.body.dispatchReady,true);
+ assert.deepEqual(res.body.executionHolds,[]);
  assert.equal(res.body.providerCalls,0);
  assert.equal(stores,0);
  assert.equal(calls,0);
