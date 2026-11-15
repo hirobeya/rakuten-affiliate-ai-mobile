@@ -140,3 +140,30 @@ test('future low-thinking request profile can be inspected by owner without Blob
  assert.equal(stores,0);
  assert.equal(calls,0);
 }));
+
+
+test('provider budget reserves save time beneath 60s without increasing request count',()=>{
+ assert.equal(H.FUNCTION_LIMIT_MS,60000);
+ assert.equal(H.RESPONSE_RESERVE_MS,10000);
+ assert.equal(H.BUDGET.provider,35000);
+ assert.equal(H.providerBudgetForElapsed(0),35000);
+ assert.equal(H.providerBudgetForElapsed(15000),35000);
+ assert.equal(H.providerBudgetForElapsed(25000),25000);
+ assert.equal(H.providerBudgetForElapsed(45000),5000);
+ assert.equal(H.providerBudgetForElapsed(55000),0);
+});
+test('live comparison receives a cancellable provider deadline and never retries',()=>preview(async()=>{
+ const m=memory();let calls=0,observedBudget=null;
+ const h=H.createHandler(config(m,{compare:async(_item,options)=>{
+  calls++;assert(options.signal instanceof AbortSignal);
+  assert.equal(options.signal.aborted,false);
+  assert.equal(options.profile,'baseline');
+  observedBudget=H.providerBudgetForElapsed(0);
+  return generated();
+ }}));
+ const result=response();await h(request(),result);
+ assert.equal(result.statusCode,200);
+ assert.equal(calls,1);
+ assert.equal(observedBudget,35000);
+ assert.equal((await create(m.blob).state(scope)).result.result.providerCalls,1);
+}));
