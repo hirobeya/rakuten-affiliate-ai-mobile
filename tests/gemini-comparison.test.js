@@ -83,3 +83,24 @@ test('low-thinking Gemini profile is an offline-only, distinct future request',(
  assert.equal(baseline.request.generationConfig.thinkingConfig,undefined);
  assert.equal(baseline.request.generationConfig.maxOutputTokens,2000);
 });
+
+
+test('explicit provider AbortSignal reaches the single REST request',async()=>{
+ const controller=new AbortController();
+ let calls=0,receivedSignal=null;
+ const operation=compareOnce(item,{
+  execute:true,freeTierConfirmed:true,apiKey:'mock-test-key',signal:controller.signal,
+  fetchImpl:async(_url,options)=>{
+   calls++;receivedSignal=options.signal;
+   return new Promise((_resolve,reject)=>{
+    if(options.signal.aborted)return reject(options.signal.reason);
+    options.signal.addEventListener('abort',()=>reject(options.signal.reason),{once:true});
+   });
+  }
+ });
+ await new Promise(resolve=>setImmediate(resolve));
+ controller.abort(Error('gemini_stage_timeout'));
+ await assert.rejects(operation,/gemini_stage_timeout/);
+ assert.equal(receivedSignal,controller.signal);
+ assert.equal(calls,1);
+});
