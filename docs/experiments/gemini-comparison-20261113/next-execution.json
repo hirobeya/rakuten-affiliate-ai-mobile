@@ -10,16 +10,20 @@
   "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
   "maxCalls": 1,
   "freeTierConfirmation": {
-    "verified": false,
+    "verified": true,
     "projectId": "gen-lang-client-0210652653",
     "tier": "free",
     "model": "gemini-3.8-flash",
-    "limits": null,
-    "observedAtMs": null,
-    "validUntilMs": null,
-    "evidenceReference": "Pending fresh authenticated Google AI Studio free-tier verification. No previous evidence carried forward.",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "observedAtMs": 1794729120000,
+    "validUntilMs": 1794732720000,
+    "evidenceReference": "Owner iPhone screenshots 2026-11-15 JST: 16:52 model rate-limit rows Gemini 3.8 Flash RPM 1/5 TPM 1.36K/250K RPD 2/20; 17:39 AI Studio Gemini API rate limit page Free badge; 17:40 project list Default Gemini Project id gen-lang-client-0210652653. Observed metrics are past-28-day peak usage not remaining quota. Screenshot evidence scoped to same owner session, no API keys.",
     "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
-    "usageInterpretation": "Previous displayed limits are historical; current limit and quota not verified."
+    "usageInterpretation": "UI reports prior-28-day maximum usage comparisons, not real-time quota balance; verify auth/project and state immediately before dispatch. Confirmation expires 17:52 JST; never extend without newer authenticated source."
   },
   "priorHistory": {
     "approvalId": "storage-bench-20261113-one-call",
