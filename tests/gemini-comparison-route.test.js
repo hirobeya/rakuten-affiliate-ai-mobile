@@ -116,7 +116,7 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
 
 test('future low-thinking request profile can be inspected by owner without Blob or provider access',()=>preview(async()=>{
  let calls=0,stores=0;
- const validAt=Date.parse('2026-11-15T17:40:00+09:00');
+ const validAt=require('../docs/experiments/gemini-comparison-20261113/next-execution.json').freeTierConfirmation.observedAtMs+1000;
  const h=H.createHandler({
   authorizeImpl:async()=>({ok:true,plan:'owner'}),
   storeFactory:()=>{stores++;throw Error('must_not_access_blob');},

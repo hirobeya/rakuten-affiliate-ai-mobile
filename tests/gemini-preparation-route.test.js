@@ -49,3 +49,20 @@ test('archived round 1 can be read without provider access but can never be disp
  const handler=H.createHandler({authorizeImpl:async()=>({ok:true,plan:'owner'}),storeFactory:(request,g,s)=>{assert.equal(request.method,'GET');assert.equal(g.approvalId,old.approvalId);reads++;return {state:async()=>({approvalClaim:{},claim:{},dispatch:{tokens:null},result:saved}),readProbe:async()=>null};},compare:async()=>{calls++;assert.fail('archive must never dispatch');}});
  const ids={approvalId:old.approvalId,executionId:old.executionId},get=response();await handler(req('GET',ids),get);assert.equal(get.statusCode,200);assert.equal(get.body.recovery.status,'recovered');assert.equal(get.body.receipt.result.httpStatus,503);const post=response();await handler(req('POST',ids),post);assert.equal(post.statusCode,409);assert.equal(reads,1);assert.equal(calls,0);
 }));
+
+
+test('accepted prior runtime proof permits one mock dispatch; incomplete or wrong proof fails closed',()=>preview(async()=>{
+ const acceptedSha=require('../docs/experiments/gemini-comparison-20261113/preparation-policy.json').acceptedRuntimeStorageProofSha;
+ const full={version:2,passed:true,context:'runtime',executionSha:acceptedSha,noProviderRequest:true,providerCalls:0,privateAnonymousStatus:403,claimReadbackFailureBlocksResend:true,resultSaveFailureBlocksResend:true,independentWorkerReadback:true,resultRecovered:true,duplicateRejected:true,crossDeployment:true,successfulCreates:1,competingCreates:2};
+ const ids={approvalId:'mock-reused-proof-approval',executionId:'mock-reused-proof-execution'};
+ const grant={...scope,...ids,status:'approved',approvedBy:'mock admin',approvedAt:new Date(Date.now()-1000).toISOString(),maxCalls:1,independentTrialAcknowledged:true,priorHistory:{approvalId:history.approval.id,classification:'D',historyHash:hash(history)},freeTierConfirmation:{...account().currentQuotaEvidence,evidenceReference:'mock only'}};
+ for(const proof of [null,{...full,executionSha:'a'.repeat(40)},{...full,duplicateRejected:false},{...full,providerCalls:1},full]){
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-reuse-'));try{
+   const b=blob(dir);let calls=0;
+   const h=H.createHandler({authorizeImpl:async()=>({ok:true,plan:'owner'}),account:account(),nextGrant:grant,storeFactory:(r,g,s)=>({...createIndependent(b,g,s,{readOnly:r.method==='GET'}),readProbe:async name=>name===require('../lib/room-writer-raw/gemini-storage-probe').probeId(acceptedSha,'runtime')?proof:null}),compare:async()=>{calls++;const e=Error('gemini_http_503_no_retry');e.httpStatus=503;throw e;}});
+   const r=response();await h(req('POST',ids),r);
+   if(proof===full){assert.equal(calls,1);assert.equal(r.statusCode,502);const get=response();await h(req('GET',ids),get);assert.equal(get.body.recovery.status,'recovered');assert.equal(get.body.receipt.result.httpStatus,503);const again=response();await h(req('POST',ids),again);assert.equal(again.statusCode,409);assert.equal(calls,1);}
+   else {assert.equal(calls,0);assert.equal(r.body.error,'runtime_storage_proof_missing');}
+  }finally{fs.rmSync(dir,{recursive:true,force:true});}
+ }
+}));

@@ -4,5 +4,6 @@
   "reuseAcceptedStorageProof": true,
   "newGenerationApprovedByThisTask": true,
   "newLiveClaimsAllowedByThisTask": true,
-  "pastEvidenceSearchClosed": true
+  "pastEvidenceSearchClosed": true,
+  "acceptedRuntimeStorageProofSha": "69dc2e1bef09c5205607d8fffffe8642224952aa"
 }
