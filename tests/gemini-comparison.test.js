@@ -73,6 +73,7 @@ test('low-thinking Gemini profile is an offline-only, distinct future request',(
  assert.equal(candidate.approved,false);
  assert.equal(candidate.execute,false);
  assert.notEqual(candidate.requestHash,baseline.requestHash);
+ console.log('LOW_THINKING_REQUEST_HASH',candidate.requestHash);
  assert.equal(candidate.sourceHash,baseline.sourceHash);
  assert.deepEqual(candidate.request.contents,baseline.request.contents);
  assert.deepEqual(candidate.request.systemInstruction,baseline.request.systemInstruction);
