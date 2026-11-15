@@ -1,29 +1,25 @@
 {
   "version": 1,
   "status": "approved",
-  "approvalId": "urenavi-gemini-bench-independent-20261114-02",
-  "executionId": "urenavi-gemini-bench-execution-20261114-02",
-  "approvedBy": "管理者 Hiroyuki Tokunaga — explicit instruction 2026-11-14",
-  "approvedAt": "2026-11-13T15:20:03Z",
+  "approvalId": "urenavi-gemini-bench-independent-20261115-03",
+  "executionId": "urenavi-gemini-bench-execution-20261115-03",
+  "approvedBy": "管理者 — explicit approval in ChatGPT conversation on 2026-11-15",
+  "approvedAt": "2026-11-15T07:35:00Z",
   "itemCode": "shopworld:10138423",
   "model": "gemini-3.8-flash",
-  "requestHash": "77f15c60a41b8944b3eeccfd79dd8d54f763ff4a74e3a89c4064d85cabee3674",
+  "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
   "maxCalls": 1,
   "freeTierConfirmation": {
-    "verified": true,
+    "verified": false,
     "projectId": "gen-lang-client-0210652653",
     "tier": "free",
     "model": "gemini-3.8-flash",
-    "limits": {
-      "rpm": 5,
-      "tpm": 250000,
-      "rpd": 20
-    },
-    "observedAtMs": 1794583203371,
-    "validUntilMs": 1794586803371,
-    "evidenceReference": "Google AI Studio authenticated rate-limit UI; Free Default Gemini Project and Gemini 3.8 Flash; independent-02 pre-dispatch review",
-    "sourceUrl": "https://aistudio.google.com/rate-limit?timeRange=last-28-days&project=gen-lang-client-0210652653",
-    "usageInterpretation": "28-day peaks 1 RPM / 1.36K TPM / 1 RPD; not current remaining quota; reporting may lag 15 minutes"
+    "limits": null,
+    "observedAtMs": null,
+    "validUntilMs": null,
+    "evidenceReference": "Pending fresh authenticated Google AI Studio free-tier verification. No previous evidence carried forward.",
+    "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
+    "usageInterpretation": "Previous displayed limits are historical; current limit and quota not verified."
   },
   "priorHistory": {
     "approvalId": "storage-bench-20261113-one-call",
@@ -34,12 +30,16 @@
   "claimPath": null,
   "resultPath": null,
   "previousIndependentAttempt": {
-    "approvalId": "urenavi-gemini-bench-independent-20261113-01",
-    "executionId": "urenavi-gemini-bench-execution-20261113-01",
+    "approvalId": "urenavi-gemini-bench-independent-20261114-02",
+    "executionId": "urenavi-gemini-bench-execution-20261114-02",
     "providerCalls": 1,
     "httpStatus": 503,
     "tokens": null,
     "doNotResend": true,
-    "record": "independent-01-failure.json"
-  }
+    "record": "independent-02-failure receipt in Private Blob",
+    "providerInternalCause": "unknown"
+  },
+  "profile": "low-thinking-next-trial",
+  "maxOutputTokens": 4000,
+  "thinkingLevel": "low"
 }
