@@ -24,8 +24,17 @@ for(const phase of ['before-send','after-send','save-failure'])test('hard termin
  assert.equal(fs.existsSync(path.join(dir,'mock-provider-count')),phase!=='before-send');
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
-test('designed time budget remains within the configured Function limit',()=>{
- const b=require('../lib/room-writer-raw/gemini-preview-route').BUDGET;assert.equal(Object.values(b).reduce((a,v)=>a+v,0),57000);assert.equal(b.provider,25000);assert.equal(require('../vercel.json').functions['api/room-ai.js'].maxDuration,60);
+test('deadline-aware provider time and durable-save reserve fit the configured Function limit',()=>{
+ const h=require('../lib/room-writer-raw/gemini-preview-route');
+ assert.equal(h.BUDGET.provider,35000);
+ assert.equal(h.FUNCTION_LIMIT_MS,60000);
+ assert.equal(h.RESPONSE_RESERVE_MS,10000);
+ assert.equal(require('../vercel.json').functions['api/room-ai.js'].maxDuration,60);
+ for(const elapsed of [0,7000,15000,18000,25000,35000,48000,60000]){
+  const allotted=h.providerBudgetForElapsed(elapsed);
+  assert(allotted>=0&&allotted<=35000);
+  assert(elapsed+allotted+h.RESPONSE_RESERVE_MS<=h.FUNCTION_LIMIT_MS || allotted===0);
+ }
 });
 
 test('expired Free-tier evidence blocks execution but not read-only saved-result access',async()=>{
@@ -53,7 +62,7 @@ test('third independent grant is approved in scope, but cannot dispatch without 
  assert.equal(decision(scope,{}).allow,false);
 });
 
-test('read-only recovery budget stays under 60s without extending the POST budget',()=>{const h=require('../lib/room-writer-raw/gemini-preview-route');assert.equal(h.RECOVERY_BUDGET.storage_state,15000);assert.equal(h.RECOVERY_BUDGET.worker,12000);assert(h.BUDGET.authorization+h.RECOVERY_BUDGET.storage_state+h.BUDGET.overhead<60000);assert.equal(Object.values(h.BUDGET).reduce((a,b)=>a+b,0),57000);});
+test('read-only recovery is separate from the dynamically bounded POST budget',()=>{const h=require('../lib/room-writer-raw/gemini-preview-route');assert.equal(h.RECOVERY_BUDGET.storage_state,15000);assert.equal(h.RECOVERY_BUDGET.worker,12000);assert(h.BUDGET.authorization+h.RECOVERY_BUDGET.storage_state+h.BUDGET.overhead<60000);assert.equal(h.providerBudgetForElapsed(25000),25000);assert.equal(h.RESPONSE_RESERVE_MS,10000);});
 
 test('consumed rounds 1 and 2 remain immutable and read-only after third approval',()=>{
  const {archived,selectForRead}=require('../lib/room-writer-raw/gemini-execution-grant');
