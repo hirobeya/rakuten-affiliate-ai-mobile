@@ -3256,12 +3256,14 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     &&verifiedResult?.quality?.text===String(text||'')&&verifiedResult?.variants?.[0]?.text===String(text||'')
     &&String(verifiedResult?.productType?.quote||'').length>0
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemName,verifiedResult.productType.quote)
-    &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
-    &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
-    &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length>0
-      ? window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||''))
-      : (window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
-        ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote)));
+    &&((partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
+      &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
+      &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length>0
+        ? window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||''))
+        : (window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
+          ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote))))
+      ||(partner?.kind==='signal'
+        &&window.UrenaviPurchaseCopyQuality?.verifiedTitleSignal(item,partner,String(text||''))));
   // Length never substitutes for the exact approved result. In particular,
   // long local text must rebind its source just as short local text does.
   if(validatedByServer){
@@ -3269,7 +3271,7 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     const expected=verifiedText||(v3&&verifiedResult?.ok===true&&verifiedResult?.quality?.status==='ready'
       ?String(verifiedResult?.variants?.[0]?.text||'').trim():'');
     if(!expected||expected!==String(text||''))return true;
-    if(verifiedResult?.model==='local'&&partner?.kind==='caption_claim'&&!localSourceText)return true;
+    if(verifiedResult?.model==='local'&&['caption_claim','signal'].includes(partner?.kind)&&!localSourceText)return true;
   }
   if(lines.length<2&&body.length<85&&(!verifiedText||verifiedText!==String(text||''))&&!localSourceText)return true;
   // Publication safety is enforced at the final copy boundary for every route.
