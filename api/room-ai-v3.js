@@ -520,7 +520,9 @@ function verifiedCaptionEditorialRescue(item,result){
     ||!verifiedLinkedReason(item,partner,text)))return false;
   if(!linked.length&&!hasUseRelation(quote)&&!sourceOperationReason(quote)
     &&!verifiedSourceMultiUse(item,partner,result?.productType?.specific||'',text))return false;
-  return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
+  return !!text&&result.variants?.[0]?.text===text&&text.includes(quote)
+    &&typeof result.productType?.specific==='string'
+    &&text.includes(result.productType.specific);
 }
 
 // A rule-authored use intent and a literal title signal are a separate,
