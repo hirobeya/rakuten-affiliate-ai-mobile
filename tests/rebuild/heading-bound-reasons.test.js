@@ -6,7 +6,7 @@ const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-
 const frozen=require('../../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 test('a seller-stated reason can be bound by a nearby full product heading without fabricating a sentence',()=>{
  const title='収納ボックス RISUスタックシステムケース ワイド2段セット';
- const sentence='中が透けないので、リビングでもインテリアの邪魔になりません。';
+ const sentence='引き出しを開けることで、衣類を取り出しやすくできます。';
  const source='商品名 RISUスタックシステムケース ワイド2段セット。 '+sentence;
  assert.equal(headingBoundToSellingProduct(sentence,'収納ボックス',title,source),true);
  const candidates=sourceCausalCandidates([sentence],'収納ボックス',title,source);
@@ -17,7 +17,7 @@ test('a seller-stated reason can be bound by a nearby full product heading witho
 });
 test('another product or a distant heading never supplies product ownership',()=>{
  const title='収納ボックス RISUスタックシステムケース ワイド2段セット';
- const claim='中が透けないので、リビングでもインテリアの邪魔になりません。';
+ const claim='引き出しを開けることで、衣類を取り出しやすくできます。';
  const header='商品名 RISUスタックシステムケース ワイド2段セット。 ';
  for(const source of [
   header+'関連商品はこちら '+claim,
