@@ -17,6 +17,7 @@ const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
 const {catalogueOnly,restatedReason}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
+const {reviewSourceBenefit}=require('../lib/local-editorial-quality');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -433,6 +434,13 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
   const restatement=restatedReason(text,{identity,quote:partnerCopy?.quote||''});
   if(restatement) return reject('purchase_reason',restatement);
   if(catalogueOnly(text)) return reject('quality','catalogue_only_copy');
+  // An exact quote is necessary, but never by itself a persuasive buyer
+  // reason. This is a rejection-only editorial screen, not a 6-axis pass.
+  // Historic baseline copy remains untouched.
+  if(previewOptions.editorial===true&&partnerCopy?.kind==='caption_claim'){
+    const editorialReview=reviewSourceBenefit({quote:partnerCopy.quote,identity});
+    if(!editorialReview.ok)return reject('quality',editorialReview.reason);
+  }
   if(diagnostics) Object.assign(diagnostics,{status:'ready',stage:'publication',reason:'grounded_local_copy'});
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
