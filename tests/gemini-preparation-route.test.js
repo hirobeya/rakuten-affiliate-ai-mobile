@@ -13,7 +13,11 @@ test('near-budget virtual delays preserve unknown usage and return below 60 seco
  const store={state:async()=>{await delay('state',6999);return {};},readProbe:async()=>({version:2,passed:true,context:'runtime',executionSha:SHA}),begin:async()=>{await delay('claim',6999);claimed=true;},dispatch:async()=>{},finish:async(s,r)=>{await delay('save',6999);record=r;}};
  const handler=H.createHandler({authorizeImpl:async()=>{await delay('auth',7999);return {ok:true,plan:'owner'};},account:account(),decide:()=>({allow:true}),storeFactory:()=>store,compare:()=>{events.provider.signal();return new Promise(()=>{});}});
  const r=response(),start=Date.now(),running=handler(req(),r);
- for(const [name,ms]of [['auth',7999],['state',6999],['claim',6999],['provider',25001],['save',6999]]){await events[name].wait;t.mock.timers.tick(ms);}
+ // The provider deadline is dynamic. A hard-coded 25001ms never expires
+ // when upstream work leaves >25s, and previously hung CI and Vercel builds.
+ const elapsedBeforeProvider=7999+6999+6999;
+ const providerTick=H.providerBudgetForElapsed(elapsedBeforeProvider)+1;
+ for(const [name,ms]of [['auth',7999],['state',6999],['claim',6999],['provider',providerTick],['save',6999]]){await events[name].wait;t.mock.timers.tick(ms);}
  await running;assert.equal(claimed,true);assert.equal(record.result.tokens,null);assert.equal(record.result.error,'gemini_stage_timeout');assert(Date.now()-start<57000);assert.equal(r.statusCode,502);
 }));
 test('explicit separately approved mock trial has independent result GET and cannot clear original D',()=>preview(async()=>{
