@@ -71,7 +71,7 @@ test('paid Production fails closed on missing or altered source and never invoke
    assert.equal(response.body.groq.totalCalls,0);
    assert.deepEqual(api.spent(),{calls:0,claims:0,writes:0});
   }
-  const unsafe={...localZeroCall(get('e-kitchen:10079039'))};
+  const unsafe={...localZeroCall(get('daiya:10001447'))};
   unsafe.local={...unsafe.local,partner:{...unsafe.local.partner,kind:'caption_claim',quote:'必ず全商品に対応できます。'}};
   const api=createHandler({
    authorize:async()=>({ok:true,plan:'base',user:{email:'customer@example.invalid'}}),
