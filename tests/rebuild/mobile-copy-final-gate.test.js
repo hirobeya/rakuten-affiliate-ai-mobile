@@ -9,12 +9,12 @@ const Quality=require('../../public/purchase-copy-quality');
 const Safety=require('../../public/fact-safety');
 const frozen=require('../../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 const html=fs.readFileSync(path.join(__dirname,'../../public/app.html'),'utf8');
-function sourceFunction(name,nextName){
+function sourceFunction(name,nextName,extras={}){
  const from=html.indexOf('function '+name+'('),to=html.indexOf('function '+nextName+'(',from);
  assert.ok(from>0&&to>from,name+' extracted from real mobile script');
  const context={
   window:{UrenaviPurchaseCopyQuality:Quality,UrenaviFactSafety:Safety},
-  RoomCopyResult:{ready:()=>''},localCopyAssessment:()=>null
+  RoomCopyResult:{ready:()=>''},localCopyAssessment:()=>null,...extras
  };
  if(name==='readyV3Post'){
   const a=html.indexOf('function isV3PreviewResult(');
@@ -78,4 +78,41 @@ test('incomplete, nonlocal or unverified result is never copyable',()=>{
  assert.equal(ready({ok:true,pending:true,version:'super-urenavi-v3-test',quality:{status:'ready'},variants:[{text:'未検証'}]}),'');
  assert.equal(review('勝手なコピー',item,false,null),true);
  assert.equal(review('勝手なコピー',item,true,{ok:false,version:'super-urenavi-v3-test',quality:{status:'ready'}}),true);
+});
+
+test('actual mobile postReady function enables only validated paid copy in the current item state',()=>{
+ const item=sample('e-kitchen:10079039');
+ const source=fs.readFileSync(path.join(__dirname,'../../public/app.html'),'utf8');
+ const statusCode=source.slice(source.indexOf('function isFullyReviewedCopyState('),source.indexOf('function postReady('));
+ const context={
+  isV3PreviewResult:x=>String(x?.version||'').startsWith('super-urenavi-v3-'),
+  readyV3Post:ready,
+  RoomCopyResult:{canonical:()=>false,ready:()=>''},
+  aiGatesFullOutput:true,currentAccessPlan:'owner',
+  roomCopyNeedsReview:review,
+  post:()=>responseText,
+  aiPostState:()=>({target:{callAi:true},state:{state:stage,data:serverResponse}})
+ };
+ context.isFullyReviewedCopyState=vm.runInNewContext('('+statusCode.trim()+')',context);
+ const postReady=sourceFunction('postReady','postDisplay',context);
+ let responseText='',serverResponse=null,stage='done';
+ // The same bounded, complete source clauses used by the real owner API.
+ const src=item.itemCaption;
+ const first='取手が取り外せる着脱式のフライパンです。',second='重ねて収納できます。';
+ assert.ok(src.includes(first)&&src.includes(second));
+ responseText=first+' '+second;
+ serverResponse={
+  version:'super-urenavi-v3-conditional-preview',ok:true,pending:false,model:'local',phase:'local',
+  groq:{totalCalls:0},quality:{status:'ready',text:responseText},variants:[{text:responseText}],
+  productType:{specific:'フライパン',quote:'フライパン'},
+  local:{partner:{kind:'caption_claim',quote:first,linkedEvidence:[
+   {source:'itemCaption',quote:first},{source:'itemCaption',quote:second}
+  ]}}
+ };
+ assert.equal(postReady(item),true,'real button gate enables validated owner copy');
+ stage='pending';assert.equal(postReady(item),false,'pending never enables button');
+ stage='done';serverResponse.quality.text+=' 実証されていない効果';
+ assert.equal(postReady(item),false,'response content mismatch blocks button');
+ serverResponse.quality.text=responseText;serverResponse.local.partner.linkedEvidence[1].quote='必ず重ねて収納できます。';
+ assert.equal(postReady(item),false,'forged source clause blocks button');
 });
