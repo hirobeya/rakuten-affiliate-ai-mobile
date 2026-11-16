@@ -40,3 +40,31 @@ test('editorial specific-use gate rejects universal claims and category restatem
  assert.equal(result.ok,true);
  assert.equal(result.sixAxisCertified,false);
 });
+
+test('real mobile API fails closed on legacy escaped-heading copy, without consuming any provider quota',async()=>{
+ const {createHandler}=require('../../lib/room-copy-handler');
+ const item=corpus.rows.find(row=>row.item.itemCode==='emoor-nedogko:10000048')?.item;
+ assert.ok(item);
+ const old=localZeroCall(item);
+ assert.equal(old?.local?.partner?.kind,'caption_claim');
+ assert.equal(item.itemCaption.includes(old.local.partner.quote),false,'pre-existing source mismatch is a reproducible real fixture');
+ const env=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ try{
+  let aiCalls=0,quotaClaims=0;
+  const handler=createHandler({
+   authorize:async()=>({ok:true,plan:'owner',user:{email:'owner-local@invalid.example'}}),
+   logCost:()=>{},store:{loadProduct:async()=>null,saveProduct:async()=>{}},
+   consumeQuota:async()=>{quotaClaims++;throw Error('must not spend quota');},
+   provider:{model:'mock',call:async()=>{aiCalls++;throw Error('provider must not run');}}
+  });
+  const res={code:null,body:null,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
+  await handler({method:'POST',body:item},res);
+  assert.equal(res.code,409);
+  assert.equal(res.body.quality.status,'blocked');
+  assert.equal(res.body.quality.text,'');
+  assert.deepEqual(res.body.variants,[]);
+  assert.equal(res.body.groq.totalCalls,0);
+  assert.equal(aiCalls,0);
+  assert.equal(quotaClaims,0);
+ }finally{if(env===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=env;}
+});
