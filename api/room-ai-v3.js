@@ -318,7 +318,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true,linkedReason:previewOptions.linkedReason===true});
   if(diagnostics) diagnostics.purchaseCandidate=proposedPartnerCopy?{
     text:proposedPartnerCopy.text,quote:proposedPartnerCopy.quote,source:proposedPartnerCopy.source||'itemName',
     kind:proposedPartnerCopy.kind,axes:proposedPartnerCopy.axisHints||[]
@@ -411,7 +411,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind}:null,arbitration:local.arbitration||null,learnedIdentity:local?.identityHypothesis?.method==='learned_verified_type'?identity:null}
+    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind,...(partnerCopy.linkedEvidence?.length?{linkedEvidence:partnerCopy.linkedEvidence}:{})}:null,arbitration:local.arbitration||null,learnedIdentity:local?.identityHypothesis?.method==='learned_verified_type'?identity:null}
   };
 }
 
@@ -449,6 +449,10 @@ function verifiedCaptionEditorialRescue(item,result){
   if(typeof item?.itemCaption!=='string'||!item.itemCaption.includes(quote))return false;
   if(!result.verifiedAppeals?.some(v=>v?.verification?.keepDirectFact===true&&typeof v.text==='string'&&v.text.includes(quote)))return false;
   const text=String(result.quality.text||'');
+  const linked=partner.linkedEvidence||[];
+  if(!Array.isArray(linked)||linked.length>3)return false;
+  if(linked.length&&!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
+    &&item.itemCaption.includes(f.quote)&&text.includes(f.quote)))return false;
   return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
 }
 
@@ -507,7 +511,7 @@ function createHandler(deps={}){
         if(!localResult){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
-          const editorial=localFn(item,learnedIdentity,{}, {editorial:true});
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true});
           if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
