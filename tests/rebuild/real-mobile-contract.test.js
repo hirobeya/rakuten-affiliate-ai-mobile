@@ -56,7 +56,7 @@ test('browser copy boundary verifies both exact linked claims, refuses false or 
 test('UI uses real canonical route and applies source-bound check before copy',()=>{
  const html=fs.readFileSync(path.join(__dirname,'../../public/app.html'),'utf8');
  assert.match(html,/RoomPreviewRequest\.run\(payload/);
- assert.match(html,/verifiedLinkedReason\(item,partner,String\(text\|\|''\)\)/);
- assert.match(html,/sourceOperationReason\(partner\.quote\)/);
+ assert.match(html,/UrenaviPurchaseCopyQuality\?\.verifiedLocalCopy\(item,verifiedResult,String\(text\|\|''\)\)/);
+ assert.equal(typeof copyQuality.verifiedLocalCopy,'function');
  assert.match(html,/result\.quality\.text===text\?text:''/);
 });
