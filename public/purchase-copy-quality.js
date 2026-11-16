@@ -134,6 +134,12 @@
   const id=String(result.productType?.specific||'');
   const typeQuote=String(result.productType?.quote||'');
   if(!id||!typeQuote||!sourceIncludes(item?.itemName,typeQuote))return false;
+  // A copyable ROOM post must tell readers WHAT is being recommended.
+  // A type present only in hidden API metadata cannot rescue an orphaned
+  // feature sentence like "太股付近に装着できます。".
+  const visibleBody=body.replace(/(?:^|\n)価格[:：][^\n]*/g,'')
+    .replace(/※アフィリエイト広告を利用しています/g,'').trim();
+  if(!sourceIncludes(visibleBody,id))return false;
   let owned=false;
   if(partner?.kind==='caption_claim'){
    const quote=String(partner.quote||'');
