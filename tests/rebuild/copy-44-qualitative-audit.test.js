@@ -8,7 +8,7 @@ test('independent source-grounded copy audit of all 44 fixtures',()=>{
  for(const row of corpus.rows){
   const item=row.item;
   const baseline=localZeroCall(item);
-  const editorial=baseline||localZeroCall(item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true});
+  const editorial=baseline||localZeroCall(item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
   const accepted=baseline||verifiedCaptionEditorialRescue(item,editorial)?editorial:null;
   if(accepted){
    const q=accepted.local?.partner?.quote||'';
@@ -72,7 +72,7 @@ test('real mobile API fails closed on legacy escaped-heading copy, without consu
 test('specific usage intent on a literally title-bound signal is not replaced by a catalogue comparison',()=>{
  const row=corpus.rows.find(x=>x.item.itemCode==='besthouse:10000083');
  const debug={};
- const result=localZeroCall(row.item,'',debug,{editorial:true,linkedReason:true,identityExpansion:true});
+ const result=localZeroCall(row.item,'',debug,{editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
  console.log('SPECIFIC_INTENT_RESULT',JSON.stringify({status:debug.stage,reason:debug.reason,text:result?.quality?.text||'',partner:result?.local?.partner||null}));
  const {verifiedTitleSignalEditorialRescue}=require('../../api/room-ai-v3');
  const {SAFE_SIGNALS}=require('../../lib/local-partner-reasoner');
