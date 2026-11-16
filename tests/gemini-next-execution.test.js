@@ -50,10 +50,12 @@ test('fourth grant is approved in exact scope but cannot dispatch without fresh 
  assert.equal(template.executionId,'urenavi-gemini-bench-execution-20261116-04');
  assert.equal(low.requestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
  assert.notEqual(low.requestHash,scope.requestHash);
- assert.equal(template.freeTierConfirmation.verified,false);
- assert.equal(assess(template,current).allow,false);
- assert(assess(template,current).reasons.includes('fresh_free_tier_confirmation_required'));
- assert.equal(assess(template,current,Date.now(),{readOnly:true}).allow,true);
+ assert.equal(template.freeTierConfirmation.verified,true);
+ const withinWindow=Date.parse('2026-11-16T12:22:00+09:00');
+ assert.equal(assess(template,current,withinWindow).allow,true);
+ assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1).allow,false);
+ assert(assess(template,current,template.freeTierConfirmation.validUntilMs+1).reasons.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1,{readOnly:true}).allow,true);
  const proof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'mock fresh account read',observedAtMs:Date.now()-1000,validUntilMs:Date.now()+60000};
  const verified={...template,freeTierConfirmation:proof};
  assert.equal(assess(verified,current).allow,true);
