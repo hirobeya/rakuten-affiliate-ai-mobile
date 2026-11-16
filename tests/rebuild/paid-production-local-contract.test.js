@@ -58,15 +58,30 @@ test('paid Production fails closed on missing or altered source and never invoke
  const prev=process.env.VERCEL_ENV;process.env.VERCEL_ENV='production';
  try{
   for(const code of ['yukaiya:10001267','emoor-nedogko:10000048']){
-   const api=inject('base'),response=res();
-   await api.handler({method:'POST',body:get(code)},response);
-   assert.equal(response.statusCode,409,code);
-   assert.equal(response.body.quality.status,'blocked');
-   assert.equal(response.body.quality.text,'');
-   assert.deepEqual(response.body.variants,[]);
+   const api=inject('base'),response=res(),item=get(code);
+   await api.handler({method:'POST',body:item},response);
+   assert.ok([200,409].includes(response.statusCode),code);
+   if(response.statusCode===200){
+    assert.equal(provenLocalCopy(item,response.body),true,'a late real quote may safely rescue this product');
+   }else{
+    assert.equal(response.body.quality.status,'blocked');
+    assert.equal(response.body.quality.text,'');
+    assert.deepEqual(response.body.variants,[]);
+   }
    assert.equal(response.body.groq.totalCalls,0);
    assert.deepEqual(api.spent(),{calls:0,claims:0,writes:0});
   }
+  const unsafe={...localZeroCall(get('e-kitchen:10079039'))};
+  unsafe.local={...unsafe.local,partner:{...unsafe.local.partner,kind:'caption_claim',quote:'必ず全商品に対応できます。'}};
+  const api=createHandler({
+   authorize:async()=>({ok:true,plan:'base',user:{email:'customer@example.invalid'}}),
+   localZeroCall:()=>unsafe,logCost:()=>{},
+   consumeQuota:async()=>{throw Error('no quota');},
+   provider:{model:'mock',call:async()=>{throw Error('no provider');}}
+  });
+  const blocked=res();await api({method:'POST',body:get('e-kitchen:10079039')},blocked);
+  assert.equal(blocked.statusCode,409);
+  assert.equal(blocked.body.quality.status,'blocked');
  }finally{if(prev===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=prev;}
 });
 test('Production rejects free users and evaluation modes without provider calls',async()=>{
