@@ -7,7 +7,22 @@
  const key=(hash,approvalId=null,executionId=null)=>'urenavi-gemini-attempt:'+[approvalId||'legacy',executionId||'legacy',hash].join(':');
  function remember(stage){if(!scope)return;try{localStorage.setItem(key(scope.requestHash,scope.approvalId,scope.executionId),JSON.stringify({stage,at:new Date().toISOString(),requestHash:scope.requestHash,executionSha:scope.executionSha}));}catch{observe('browser_receipt_storage_unavailable');}}
  function observe(stage,details={}){trace.push({stage,...details});$('diagnostics').textContent=JSON.stringify(trace,null,2);}
- function show(result){resultText=JSON.stringify(result,null,2);$('result').textContent=(result.error?'生成失敗：'+result.error+'（再送禁止）':(result.generatedCopy||result.copy||'本文なし／保留'))+'\n\n品質：'+(result.quality||'未評価')+'\n根拠検証：'+(result.mechanical?.ok?'機械判定通過・意味評価は未実施':'未確認または不合格')+'\nトークン：'+JSON.stringify(result.tokens??null);$('copy').disabled=false;}
+ function show(result){
+  resultText=JSON.stringify(result,null,2);
+  const diagnostic=result.providerDiagnostic||{};
+  const providerStatus=result.httpStatus??diagnostic.httpStatus??'未取得';
+  const lines=[result.error?'生成失敗：'+result.error+'（再送禁止）':(result.generatedCopy||result.copy||'本文なし／保留'),
+   'HTTP：'+providerStatus,
+   'Google側ステータス：'+(diagnostic.status||'未取得'),
+   'GoogleリクエストID：'+(result.providerRequestId||diagnostic.headers?.['x-request-id']||diagnostic.headers?.['x-goog-request-id']||'未取得'),
+   'Retry-After：'+(diagnostic.headers?.['retry-after']||'未取得（再送は禁止）'),
+   '送信結果：'+(result.providerCalls===null?'Google側の処理・消費は不明':result.providerCalls===1?'送信試行あり・再送不可':'未確認'),
+   'トークン：'+JSON.stringify(result.tokens??null),
+   '品質：'+(result.quality||'未評価'),
+   '根拠検証：'+(result.mechanical?.ok?'機械判定通過・意味評価は未実施':'未確認または不合格')];
+  $('result').textContent=lines.join('\n');
+  $('copy').disabled=false;
+ }
  async function request(options={}){
   const {localEvaluation=false,...requestOptions}=options;
   observe('browser_fetch_started',{method:options.method||'GET'});
