@@ -134,8 +134,8 @@ test('future low-thinking request profile can be inspected by owner without Blob
  assert.equal(res.body.lowThinkingMaxOutputTokens,4000);
  assert.equal(res.body.approvedForLowThinking,true);
  assert.equal(res.body.lowThinkingRequestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
- assert.equal(res.body.dispatchReady,false);
- assert(res.body.executionHolds.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(res.body.dispatchReady,true);
+ assert.deepEqual(res.body.executionHolds,[]);
  assert.equal(res.body.providerCalls,0);
  assert.equal(stores,0);
  assert.equal(calls,0);
