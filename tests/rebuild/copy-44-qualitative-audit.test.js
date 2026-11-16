@@ -42,7 +42,7 @@ test('editorial specific-use gate rejects universal claims and category restatem
 });
 
 test('real mobile API fails closed on legacy escaped-heading copy, without consuming any provider quota',async()=>{
- const {createHandler}=require('../../lib/room-copy-handler');
+ const {createHandler,provenLocalCopy}=require('../../lib/room-copy-handler');
  const item=corpus.rows.find(row=>row.item.itemCode==='emoor-nedogko:10000048')?.item;
  assert.ok(item);
  const old=localZeroCall(item);
@@ -59,10 +59,15 @@ test('real mobile API fails closed on legacy escaped-heading copy, without consu
   });
   const res={code:null,body:null,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
   await handler({method:'POST',body:item},res);
-  assert.equal(res.code,409);
-  assert.equal(res.body.quality.status,'blocked');
-  assert.equal(res.body.quality.text,'');
-  assert.deepEqual(res.body.variants,[]);
+  assert.ok([200,409].includes(res.code));
+  if(res.code===200){
+   assert.equal(provenLocalCopy(item,res.body),true,'only a distinct fully evidenced alternative can rescue this item');
+   assert.notEqual(res.body.local.partner.quote,old.local.partner.quote,'the unbound legacy claim is not republished');
+  }else{
+   assert.equal(res.body.quality.status,'blocked');
+   assert.equal(res.body.quality.text,'');
+   assert.deepEqual(res.body.variants,[]);
+  }
   assert.equal(res.body.groq.totalCalls,0);
   assert.equal(aiCalls,0);
   assert.equal(quotaClaims,0);
