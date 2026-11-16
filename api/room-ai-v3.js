@@ -512,7 +512,7 @@ function verifiedTitleSignalEditorialRescue(item,result){
       ||!item.itemName.includes(quote))return false;
   const body=String(result.quality.text||'');
   if(!body||result.variants?.length!==1||result.variants[0]?.text!==body)return false;
-  const lines=body.split('\\n').map(x=>x.trim()).filter(Boolean);
+  const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
   if(lines.length<3||!lines[1]?.includes(quote))return false;
   if(!result.verifiedAppeals?.some(v=>v?.verification?.keepDirectFact===true
     &&typeof v.text==='string'&&v.text.includes(quote)))return false;
