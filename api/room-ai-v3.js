@@ -15,7 +15,7 @@ const {composeLocalPartnerCopy,SAFE_SIGNALS}=require('../lib/local-partner-reaso
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
-const {catalogueOnly,restatedReason,verifiedTitleSignal}=require('../public/purchase-copy-quality');
+const {catalogueOnly,restatedReason,verifiedTitleSignal,verifiedLinkedReason}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 const {reviewSourceBenefit}=require('../lib/local-editorial-quality');
 
@@ -515,8 +515,9 @@ function verifiedCaptionEditorialRescue(item,result){
   const text=String(result.quality.text||'');
   const linked=partner.linkedEvidence||[];
   if(!Array.isArray(linked)||linked.length>3)return false;
-  if(linked.length&&!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
-    &&item.itemCaption.includes(f.quote)&&text.includes(f.quote)))return false;
+  if(linked.length&&(!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
+    &&item.itemCaption.includes(f.quote)&&text.includes(f.quote))
+    ||!verifiedLinkedReason(item,partner,text)))return false;
   return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
 }
 
