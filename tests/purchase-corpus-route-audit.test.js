@@ -30,6 +30,6 @@ test('all 780 source products reach local copy or the shared semantic path witho
    }
   }
   assert.equal(local+semantic+blocked,780);
-  assert.ok(local>0);assert.ok(semantic>0);console.log('PURCHASE_CORPUS_ROUTE_AUDIT '+JSON.stringify({total:items.length,local,semantic,blocked,providerCalls:0}));
+  assert.ok(semantic>0);assert.ok(blocked>0);console.log('PURCHASE_CORPUS_ROUTE_AUDIT '+JSON.stringify({total:items.length,local,semantic,blocked,providerCalls:0}));
  }finally{if(previous===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=previous;}
 });
