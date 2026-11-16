@@ -25,7 +25,8 @@ test('frozen 44 regression: existing local success preserved; editorial-only new
 test('editorial rescue does not accept generic or fabricated approval',()=>{
  const quote='座部を上げると、内部に物を収納可能';
  const item={itemName:'収納ベンチ',itemCaption:quote,itemCode:'test:1'};
- const claim={ok:true,quality:{status:'ready',text:quote},variants:[{text:quote}],local:{partner:{kind:'caption_claim',quote}},verifiedAppeals:[{text:quote,verification:{keepDirectFact:true}}]};
+ const text='収納ベンチは、'+quote+'です。';
+ const claim={ok:true,productType:{specific:'収納ベンチ'},quality:{status:'ready',text},variants:[{text}],local:{partner:{kind:'caption_claim',quote}},verifiedAppeals:[{text:quote,verification:{keepDirectFact:true}}]};
  assert.equal(verifiedCaptionEditorialRescue(item,claim),true);
  assert.equal(verifiedCaptionEditorialRescue(item,{...claim,local:{partner:{kind:'signal',quote:'収納できる'}}}),false);
  assert.equal(verifiedCaptionEditorialRescue(item,{...claim,local:{partner:{kind:'caption_claim',quote:'空中浮遊'}}}),false);
