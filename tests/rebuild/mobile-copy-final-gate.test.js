@@ -159,3 +159,29 @@ test('real iPhone API and copy button accept only source-verified buyer-use sign
   assert.equal(verifiedTitleSignalEditorialRescue(item,noUse),false);
  }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
+
+test('empty, blocked, pending or missing marketing copy can never be marked 問題なし',()=>{
+ const a=html.indexOf('function aiPanelHasReviewablePost(');
+ const b=html.indexOf('function aiPanelMarkup(',a);
+ assert.ok(a>0&&b>a);
+ const predicate=vm.runInNewContext('('+html.slice(a,b).trim()+')',{
+  isV3PreviewResult:result=>String(result?.version||'').startsWith('super-urenavi-v3-'),
+  readyV3Post:ready,
+  RoomCopyResult:{canonical:()=>false,ready:()=>''}
+ });
+ const text='購入理由が原文で明示された文章です。';
+ const valid={version:'super-urenavi-v3-conditional-preview',ok:true,pending:false,quality:{status:'ready',text},variants:[{text}]};
+ assert.equal(predicate({state:'done',data:valid}),true);
+ for(const state of ['error','loading','paused','pending','restored','skipped']){
+  assert.equal(predicate({state,data:valid}),false,state);
+ }
+ for(const data of [
+  {...valid,quality:{status:'blocked',text}},
+  {...valid,quality:{status:'ready',text:''}},
+  {...valid,variants:[{text:'別の商品についての説明です。'}]},
+  {...valid,ok:false},
+  {...valid,pending:true}
+ ])assert.equal(predicate({state:'done',data}),false,'rejected response cannot earn positive review');
+ assert.match(html,/button\.disabled=!reviewable/);
+ assert.match(html,/!aiPanelHasReviewablePost\(aiRoomResults\.get\(index\)\)/);
+});
