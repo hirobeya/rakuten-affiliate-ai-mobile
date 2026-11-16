@@ -318,7 +318,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true,linkedReason:previewOptions.linkedReason===true});
   if(diagnostics) diagnostics.purchaseCandidate=proposedPartnerCopy?{
     text:proposedPartnerCopy.text,quote:proposedPartnerCopy.quote,source:proposedPartnerCopy.source||'itemName',
     kind:proposedPartnerCopy.kind,axes:proposedPartnerCopy.axisHints||[]
@@ -511,7 +511,7 @@ function createHandler(deps={}){
         if(!localResult){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
-          const editorial=localFn(item,learnedIdentity,{}, {editorial:true});
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true});
           if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
