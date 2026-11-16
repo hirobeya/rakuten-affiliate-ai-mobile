@@ -5,7 +5,7 @@ const {captionSentences,editorialCaptionText,safeCaptionCandidates}=require('../
 
 const name='洗濯ネット';
 const claim='洗濯ネットは、衣類を包み込み洗濯時の擦れやねじれをおさえます。';
-const longDescription=name+'。'+'ご案内です。'.repeat(175)+claim;
+const longDescription=name+'。'+'大切なお知らせです。'.repeat(170)+claim;
 
 test('editorial reads sourced claims past 1200 characters and 30 sentences',()=>{
  assert.ok(longDescription.indexOf(claim)>1200);
@@ -16,7 +16,7 @@ test('editorial reads sourced claims past 1200 characters and 30 sentences',()=>
  assert.equal(safeCaptionCandidates({itemName:name,itemCaption:longDescription,identity:name}).some(x=>x.quote===claim),false);
 });
 test('editorial never reads a late related-product catalogue as target evidence',()=>{
- const source=name+'。'+'ご案内です。'.repeat(175)+'関連商品はこちら '+claim;
+ const source=name+'。'+'大切なお知らせです。'.repeat(170)+'関連商品はこちら '+claim;
  assert.equal(editorialCaptionText(source).includes(claim),false);
  assert.equal(safeCaptionCandidates({itemName:name,itemCaption:source,identity:name,editorial:true}).some(x=>x.quote===claim),false);
 });
