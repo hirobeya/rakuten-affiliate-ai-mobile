@@ -3258,9 +3258,10 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemName,verifiedResult.productType.quote)
     &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
-    &&(window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
-      ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote)
-      ||window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||'')));
+    &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length>0
+      ? window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||''))
+      : (window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
+        ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote)));
   // Length never substitutes for the exact approved result. In particular,
   // long local text must rebind its source just as short local text does.
   if(validatedByServer){

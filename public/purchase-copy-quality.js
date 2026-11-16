@@ -73,7 +73,16 @@
   // Only the server may approve the composed relationship. The browser
   // independently verifies every exact source clause, not a ready flag.
   const first=facts[0].quote,second=facts[1].quote;
-  return first!==second&&text.includes(first)&&text.includes(second);
+  if(first===second||partner.quote!==first)return false;
+  const firstAt=caption.indexOf(first);
+  const secondAt=caption.indexOf(second,firstAt+first.length);
+  // Both must describe the same selling unit in consecutive source sentences.
+  // A related-item listing or an intervening different feature invalidates
+  // the link even when both phrases independently exist in the source.
+  if(firstAt<0||secondAt<0||caption.slice(firstAt+first.length,secondAt).trim())return false;
+  const context=caption.slice(Math.max(0,firstAt-180),secondAt+second.length);
+  if(/(?:関連商品|おすすめ商品|別売り|別商品|他の商品)/.test(context))return false;
+  return text.includes(first)&&text.includes(second);
  }
 
  return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,restatedReason};
