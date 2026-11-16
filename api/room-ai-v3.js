@@ -11,7 +11,7 @@ const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity,leadingCompoundIdentity}=require('../lib/repeated-literal-identity');
 const {selectLocalIdentity}=require('../lib/local-identity-arbitrator');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
-const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
+const {composeLocalPartnerCopy,SAFE_SIGNALS}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
@@ -501,6 +501,32 @@ function verifiedCaptionEditorialRescue(item,result){
   return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
 }
 
+// A rule-authored use intent and a literal title signal are a separate,
+// auditable path from caption claims. Never accept generic spec comparison,
+// a missing quote, or a guessed customer outcome.
+function verifiedTitleSignalEditorialRescue(item,result){
+  if(!result?.ok||result?.pending!==false||result?.model!=='local'
+      ||result?.quality?.status!=='ready'||result?.groq?.totalCalls!==0)return false;
+  const partner=result?.local?.partner,quote=String(partner?.quote||'');
+  if(partner?.kind!=='signal'||quote.length<4||typeof item?.itemName!=='string'
+      ||!item.itemName.includes(quote))return false;
+  const body=String(result.quality.text||'');
+  if(!body||result.variants?.length!==1||result.variants[0]?.text!==body)return false;
+  const lines=body.split('\\n').map(x=>x.trim()).filter(Boolean);
+  if(lines.length<3||!lines[1]?.includes(quote))return false;
+  if(!result.verifiedAppeals?.some(v=>v?.verification?.keepDirectFact===true
+    &&typeof v.text==='string'&&v.text.includes(quote)))return false;
+  const firstLine=lines[0].replace(/[。！!]+$/,'');
+  const allowed=SAFE_SIGNALS.some(rule=>
+    rule.intent===firstLine
+    &&/(?:したいとき|使いたいとき|持ち歩きたいとき|選びたいとき)$/.test(rule.intent)
+    &&!/(?:見て選|確認して選|仕様も見)/.test(rule.intent)
+    &&[rule.term,...(rule.aliases||[])].some(t=>normalize(t).toLowerCase()===normalize(quote).toLowerCase())
+  );
+  return allowed&&!catalogueOnly(body)&&!structured.RISK.test(body)
+    &&guardUnsupportedBenefitCopy(item,body)===body;
+}
+
 function createHandler(deps={}){
   const authorizeFn=deps.authorize||authorize;
   const baseStore=deps.store||createCacheStore(db);
@@ -557,7 +583,7 @@ function createHandler(deps={}){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
           const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true,identityExpansion:true});
-          if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
+          if(verifiedCaptionEditorialRescue(item,editorial)||verifiedTitleSignalEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
           if(learnedIdentity&&localResult.local) localResult.local.learnedIdentity=learnedIdentity;
@@ -668,6 +694,7 @@ module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
 module.exports.verifiedCaptionEditorialRescue=verifiedCaptionEditorialRescue;
+module.exports.verifiedTitleSignalEditorialRescue=verifiedTitleSignalEditorialRescue;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
 module.exports.resolveIdentityHint=resolveIdentityHint;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
