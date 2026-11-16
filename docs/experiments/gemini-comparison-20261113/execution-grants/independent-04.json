@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "status": "approved",
+  "approvalId": "urenavi-gemini-bench-independent-20261116-04",
+  "executionId": "urenavi-gemini-bench-execution-20261116-04",
+  "approvedBy": "管理者 — 2026-11-16 ChatGPT directive to execute following explicit question on fourth-round authorization",
+  "approvedAt": "2026-11-16T03:15:12.070Z",
+  "itemCode": "shopworld:10138423",
+  "model": "gemini-3.8-flash",
+  "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
+  "maxCalls": 1,
+  "freeTierConfirmation": {
+    "verified": true,
+    "projectId": "gen-lang-client-0210652653",
+    "tier": "free",
+    "model": "gemini-3.8-flash",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "observedAtMs": 1794799200000,
+    "validUntilMs": 1794802800000,
+    "evidenceReference": "User iPhone AI Studio screenshots captured 2026-11-16 12:20-12:21 JST: selected Default Gemini Project; Gemini 3.8 Flash row selected; payment-information setup prompt shown, no billing enablement; TPM peak 1.36K/250K; RPD peak 2/20. RPM 5 is the previously observed 2026-11-15 same-project/model Free limit, NOT visible in today's horizontal-scroll screenshots. Project numeric ID and explicit Free badge were confirmed on the same account in prior screenshots; do not misstate these as shown today. Screenshot is peak usage over past 28 days, NOT remaining quota. Current live Google-side requests and token consumption still unknown.",
+    "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
+    "usageInterpretation": "Owner confirms this screenshot is current. TPM and RPD are currently observed, historical RPM 5 from the same model/project. 28-day peak values cannot be subtracted from today's RPD/TPM to derive remaining quota. Three earlier independent attempts and unresolved D must remain uncertain. Do not dispatch after 13:20 JST without renewed evidence."
+  },
+  "priorHistory": {
+    "approvalId": "storage-bench-20261113-one-call",
+    "classification": "D",
+    "historyHash": "b3c8886a6844b184bbeecb32fae497e72fb5189758fd358ddcd3337575d237b4"
+  },
+  "independentTrialAcknowledged": true,
+  "claimPath": null,
+  "resultPath": null,
+  "previousIndependentAttempt": {
+    "approvalId": "urenavi-gemini-bench-independent-20261115-03",
+    "executionId": "urenavi-gemini-bench-execution-20261115-03",
+    "dispatchAttempts": 1,
+    "providerCalls": null,
+    "providerHttpStatus": null,
+    "appHttpStatus": 502,
+    "error": "gemini_stage_timeout",
+    "stage": "provider",
+    "elapsedMs": 25001,
+    "tokens": null,
+    "providerRequestId": null,
+    "providerAcceptance": "unknown",
+    "resultSavedAndRecovered": true,
+    "doNotResend": true,
+    "source": "2026-11-15 third-round user-reported execution receipt; original private Blob result remains authoritative; no provider traffic in this change"
+  },
+  "profile": "low-thinking-next-trial",
+  "maxOutputTokens": 4000,
+  "thinkingLevel": "low"
+}
