@@ -723,7 +723,7 @@ input,select{
 .urenaviSteps{margin:10px 0 16px;padding-left:22px;font-size:14px;line-height:1.85;color:#334155}.urenaviAdvanced{margin-top:18px;padding:12px;border:1px solid #d7e2ef;border-radius:12px;background:#f8fafc}.urenaviAdvanced summary{cursor:pointer;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}.urenaviAdvanced textarea{max-width:100%}
 .urenaviExchangeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.urenaviExchangeChoices button{min-height:82px;padding:12px 8px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-weight:800;font-size:15px;cursor:pointer}.urenaviExchangeChoices button[aria-pressed="true"]{border-color:#172a4b;box-shadow:inset 0 0 0 1px #172a4b}.urenaviExchangeChoices button:focus-visible{outline:3px solid #64748b;outline-offset:2px}.urenaviExchangeChoices small{display:block;font-size:11px;font-weight:500;margin-top:6px;color:inherit}@media(max-width:350px){.urenaviExchangeChoices{grid-template-columns:1fr}}
 </style>
-<script src="/purchase-copy-quality.js?v=20261027-reason-veto-3"></script>
+<script src="/purchase-copy-quality.js?v=20261116-linked-proof-1"></script>
 <script src="/room-copy-result.js"></script>
 <script src="/room-preview-request.js"></script>
 </head>
@@ -2696,8 +2696,10 @@ function isV3PreviewResult(result){
 
 function readyV3Post(result){
   if(!isV3PreviewResult(result)) return '';
-  if(result?.ok!==true || result?.quality?.status!=='ready') return '';
-  return String(result?.variants?.[0]?.text||'').trim();
+  if(result?.ok!==true || result?.pending!==false || result?.quality?.status!=='ready') return '';
+  if(result?.variants?.length!==1)return '';
+  const text=String(result.variants[0]?.text||'').trim();
+  return text&&result.quality.text===text?text:'';
 }
 
 function aiSalesInsight(item,result){
@@ -3256,7 +3258,9 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemName,verifiedResult.productType.quote)
     &&partner?.kind==='caption_claim'&&String(partner.quote||'').length>=8
     &&window.UrenaviPurchaseCopyQuality?.sourceIncludes(item?.itemCaption,partner.quote)
-    &&window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote);
+    &&(window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
+      ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote)
+      ||window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||'')));
   // Length never substitutes for the exact approved result. In particular,
   // long local text must rebind its source just as short local text does.
   if(validatedByServer){
