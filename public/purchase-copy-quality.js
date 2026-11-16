@@ -70,7 +70,7 @@
   if(partner?.kind!=='signal'||typeof text!=='string')return false;
   const quote=String(partner.quote||'');
   if(quote.length<4||!sourceIncludes(item?.itemName,quote))return false;
-  const rows=text.split('\\n').map(x=>x.trim()).filter(Boolean);
+  const rows=text.split(/\n+/).map(x=>x.trim()).filter(Boolean);
   if(rows.length<4||!/(?:したいとき|使いたいとき|持ち歩きたいとき|選びたいとき)[。]?$/.test(rows[0])
     ||/(?:見て選|確認して選|仕様も見)/.test(rows[0]))return false;
   if(!rows[1].includes(quote)||catalogueOnly(text))return false;
