@@ -311,8 +311,27 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
     repeated:repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value||''
   };
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
-  if(previewOptions.identityExpansion===true)
+  if(previewOptions.identityExpansion===true){
     local=expandedLiteralWinner(item,literalLocal,local);
+    // When no trusted type dictionary has identified the selling unit,
+    // use the merchant's literal "...商品です。" statement to distinguish
+    // a repeated product noun from a prominent brand or model name.
+    // This is a general source-role rule, not a product-specific exception.
+    const caption=normalize(item?.itemCaption).slice(0,320);
+    const owned=normalize(repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value);
+    const oldIdentity=normalize(local?.canonicalIdentity||local?.raw?.productType?.value);
+    const standalone=title.split(/[\s【】〖〗（）()「」『』・／｜,:：;；!！?？★☆※。&＆]+/).includes(owned);
+    if(!ruleLocal&&!literalLocal&&owned&&owned!==oldIdentity&&standalone
+      &&caption.includes(owned+'です。')
+      &&repeatedLocal?.validation?.productType?.valid===true){
+      local={...repeatedLocal,arbitration:{
+        version:'2026-11-16-source-role-disambiguation-v1',
+        winner:{identity:owned,source:'repeated+merchant_definition'},
+        candidates:[{identity:owned,source:'repeated+merchant_definition'},
+          ...(oldIdentity?[{identity:oldIdentity,source:'title_hypothesis'}]:[])]
+      }};
+    }
+  }
 
   if(!local){
     const rescue=leadingCompoundIdentity(item);
