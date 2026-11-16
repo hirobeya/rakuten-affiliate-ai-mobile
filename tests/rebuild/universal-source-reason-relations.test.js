@@ -45,11 +45,11 @@ test('full API and iPhone bound source evidence agree for the screenshot AVIREX 
  assert.equal(result?.model,'local');
  assert.equal(result?.productType?.specific,'レッグバッグ');
  assert.equal(result?.local?.partner?.kind,'caption_claim');
- // Extraction of an exact use clause is not a complete ROOM post.
- // The screenshot's old one-line result never tells the reader what
- // product is being recommended; hold it for the semantic writer.
- assert.equal(result.quality.text.includes(result.productType.specific),false);
- assert.equal(verifiedCaptionEditorialRescue(item,result),false);
+ // The previously detached use sentence now retains the merchant's
+ // adjoining product introduction, so the post identifies what is sold.
+ assert.equal(result.quality.text.includes(result.productType.specific),true);
+ assert.equal(result.local.partner.linkedEvidence?.length,2);
+ assert.equal(verifiedCaptionEditorialRescue(item,result),true);
  assert.ok(result.local.partner.linkedEvidence?.length
   ?verifiedLinkedReason(item,result.local.partner,result.quality.text)
   :verifiedSourceMultiUse(item,result.local.partner,result.productType.specific,result.quality.text));
