@@ -14,6 +14,7 @@
   const lines=[result.error?'生成失敗：'+result.error+'（再送禁止）':(result.generatedCopy||result.copy||'本文なし／保留'),
    'HTTP：'+providerStatus,
    'Google側ステータス：'+(diagnostic.status||'未取得'),
+   ...(providerStatus===503?['判定：Googleから503応答。一般に一時的なサービス過負荷・利用不可を示します。今回固有の内部原因は未確認。429（クォータ超過）とは区別します。']:[]),
    'GoogleリクエストID：'+(result.providerRequestId||diagnostic.headers?.['x-request-id']||diagnostic.headers?.['x-goog-request-id']||'未取得'),
    'Retry-After：'+(diagnostic.headers?.['retry-after']||'未取得（再送は禁止）'),
    '送信結果：'+(result.providerCalls===null?'Google側の処理・消費は不明':result.providerCalls===1?'送信試行あり・再送不可':'未確認'),
@@ -43,13 +44,13 @@
    $('preflight').textContent=data.name+'｜'+(data.holds?.length?data.holds.join(' / '):'準備OK');
    $('run').disabled=!!data.executionHold||data.held||completed;
    if(data.recovery?.status==='no_saved_result'&&!completed)$('result').textContent='保存済みの実生成結果はありません。過去の未送信を意味しません。';
-   if(data.receipt){show(data.receipt.result||data.receipt);observe('saved_result_recovered');}
+   if(data.receipt){const restored=data.receipt.result||data.receipt;show(restored);observe('saved_result_recovered');if(restored.error==='gemini_http_503_no_retry')await showLocalCandidate();}
    else if(completed)$('result').textContent='実行記録がありますが結果は未取得です。再送せず保存済み結果の取得を使ってください。';
   }catch(e){$('preflight').textContent='準備不可：'+e.message;}
  }
  $('check').addEventListener('click',check);
  $('item').addEventListener('change',()=>{scope=null;$('run').disabled=true;$('preflight').textContent='未確認';});
- $('localReview').addEventListener('click',async()=>{
+ async function showLocalCandidate(){
   $('localReview').disabled=true;
   $('localResult').textContent='原文に基づく候補を確認中（Gemini通信なし）';
   try{
@@ -64,7 +65,8 @@
    $('localResult').textContent=lines.join('\n\n');
   }catch(err){$('localResult').textContent='独自エンジンの通信なし確認に失敗：'+err.message;}
   finally{$('localReview').disabled=false;}
- });
+ }
+ $('localReview').addEventListener('click',showLocalCandidate);
  $('storage').addEventListener('click',async()=>{
   $('storage').disabled=true;
   try{const r=await request({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('item').value,operation:'storage-probe'})});observe('storage_proof',{proof:r.storageProof});await check();}
