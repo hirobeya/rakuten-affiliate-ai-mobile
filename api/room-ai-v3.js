@@ -116,14 +116,20 @@ function separatedKnownIdentity(item){
   return hits.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0]||null;
 }
 
-function resolveLiteralIdentity(item){
+// Narrow, opt-in product-noun coverage for owner Preview editorial generation.
+// Historical local results and recorded fallback approvals must not change.
+const EXTRA_EDITORIAL_PRODUCT_TYPES=Object.freeze([
+  '洗濯ネットセット','ヘアブラシ','靴下','ビジネスソックス',
+  '野球グローブ','バイクグローブ','グローブ','臭わない袋','手袋','お米'
+]);
+function resolveLiteralIdentity(item,expanded=false){
   const title=normalize(item?.itemName);
   if(!title) return null;
   const candidates=[];
   const separated=separatedKnownIdentity(item);
   if(separated) candidates.push(separated);
 
-  const known=(localTypeData.productTypes||[])
+  const known=[...(localTypeData.productTypes||[]),...(expanded?EXTRA_EDITORIAL_PRODUCT_TYPES:[])]
     .map(normalize).filter(Boolean)
     .map(type=>({type,at:title.indexOf(type)}))
     .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
@@ -269,7 +275,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
   };
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
-  const literalLocal=resolveLiteralIdentity(item);
+  const literalLocal=resolveLiteralIdentity(item,previewOptions.identityExpansion===true);
   const repeatedLocal=repeatedLiteralIdentity(item);
   if(diagnostics) diagnostics.identityCandidates={
     rule:ruleLocal?.canonicalIdentity||ruleLocal?.raw?.productType?.value||'',
@@ -511,7 +517,7 @@ function createHandler(deps={}){
         if(!localResult){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
-          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true});
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true,identityExpansion:true});
           if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
