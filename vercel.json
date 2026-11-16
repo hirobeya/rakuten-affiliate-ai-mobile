@@ -67,7 +67,8 @@
   "git": {
     "deploymentEnabled": {
       "main": true,
-      "rebuild/urenavi-core-20261028": false
+      "rebuild/urenavi-core-20261028": false,
+      "feature/urenavi-copy-six-axis-hardening-20261116": false
     }
   }
 }
