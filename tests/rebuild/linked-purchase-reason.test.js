@@ -8,7 +8,7 @@ test('source-linked removable handle and stacking becomes a buyer-use candidate 
  const row=frozen.rows.find(x=>x.item.itemCode==='e-kitchen:10079039');
  assert.ok(row);
  const item=row.item;
- const candidates=safeCaptionCandidates({itemName:item.itemName,itemCaption:item.itemCaption,identity:'フライパン',editorial:true});
+ const candidates=safeCaptionCandidates({itemName:item.itemName,itemCaption:item.itemCaption,identity:'フライパン',editorial:true,linkedReason:true});
  const linked=candidates.find(x=>Array.isArray(x.linkedEvidence));
  assert.ok(linked,'must extract a real two-sentence source relation');
  assert.ok(linked.body.includes('重ねて収納できます'));
@@ -30,7 +30,7 @@ test('frozen 44 local results remain safe and previous successful results remain
  for(const row of frozen.rows){
   const item=row.item,baseline=localZeroCall(item);
   if(baseline)prior.set(item.itemCode,baseline.quality.text);
-  const edited=baseline||localZeroCall(item,'',{}, {editorial:true});
+  const edited=baseline||localZeroCall(item,'',{}, {editorial:true,linkedReason:true});
   if(baseline)assert.equal(edited.quality.text,prior.get(item.itemCode));
   if(!baseline&&edited?.local?.partner?.linkedEvidence?.length){
    assert.ok(edited.local.partner.linkedEvidence.every(f=>item.itemCaption.includes(f.quote)&&edited.quality.text.includes(f.quote)));
