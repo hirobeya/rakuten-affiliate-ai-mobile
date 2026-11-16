@@ -147,3 +147,17 @@ test('NFKC-transformed markup headings cannot become source-proven published cla
  assert.equal(raw?.local?.partner?.quote,quote);
  assert.equal(Quality.verifiedLocalCopy(item,raw,raw.quality.text),false);
 });
+
+test('product name must appear in the copy itself, not just hidden productType metadata',()=>{
+ const Quality=require('../../public/purchase-copy-quality');
+ const source=get('e-kitchen:10079039');
+ const local=localZeroCall(source,'',{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
+ assert.ok(local?.quality?.text.includes('フライパン'));
+ assert.equal(Quality.verifiedLocalCopy(source,local,local.quality.text),true);
+ const text=local.quality.text.replace('フライパン','調理器具');
+ const altered={...local,quality:{...local.quality,text},variants:[{...local.variants[0],text}]};
+ assert.equal(Quality.verifiedLocalCopy(source,altered,text),false,
+   'the reader must know which supported item the source-backed feature belongs to');
+ const wrong={...local,productType:{...local.productType,specific:'炊飯器',quote:'フライパン'}};
+ assert.equal(Quality.verifiedLocalCopy(source,wrong,local.quality.text),false);
+});
