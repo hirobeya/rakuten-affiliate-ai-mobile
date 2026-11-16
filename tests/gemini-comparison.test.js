@@ -51,7 +51,7 @@ test('schema failure preserves exact provider content, response ID and actual us
  await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({responseId:'mock-response',candidates:[{finishReason:'STOP',content:{parts:[{text:content}]}}],usageMetadata:{promptTokenCount:100,candidatesTokenCount:20,totalTokenCount:125}})};}}),e=>e.message==='gemini_schema_invalid'&&e.tokens.total===125&&e.rawCandidateText===content&&e.providerRequestId==='mock-response');assert.equal(calls,1);
 });
 test('invalid provider JSON envelope is distinct from candidate schema failure',async()=>{
- let calls=0;await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,json:async()=>{throw new SyntaxError('untrusted raw content');}};}}),/gemini_response_json_invalid/);assert.equal(calls,1);
+ let calls=0;await assert.rejects(compareOnce(item,{execute:true,freeTierConfirmed:true,apiKey:'test',fetchImpl:async()=>{calls++;return {ok:true,status:200,json:async()=>{throw new SyntaxError('untrusted raw content');}};}}),error=>error.message==='gemini_response_json_invalid'&&error.httpStatus===200&&error.tokens===null);assert.equal(calls,1);
 });
 
 test('503 keeps only allowlisted provider diagnostics and makes exactly one attempt',async()=>{
