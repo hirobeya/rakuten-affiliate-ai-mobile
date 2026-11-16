@@ -63,6 +63,19 @@
   const q=normalize(quote);
   return /^(?:[^。]{1,14}を(?:上げる|開ける|押す|引く)と、)[^。]{3,}(?:収納可能|使用可能|取り出せる|できます|できる|しやすい)[。]?$/.test(q);
  }
+ // Server checks the exact rule and permitted intent. The browser checks
+ // source binding and published structure independently; no fabricated
+ // quote or standalone spec can become a copyable result.
+ function verifiedTitleSignal(item,partner,text){
+  if(partner?.kind!=='signal'||typeof text!=='string')return false;
+  const quote=String(partner.quote||'');
+  if(quote.length<4||!sourceIncludes(item?.itemName,quote))return false;
+  const rows=text.split('\\n').map(x=>x.trim()).filter(Boolean);
+  if(rows.length<4||!/(?:したいとき|使いたいとき|持ち歩きたいとき|選びたいとき)[。]?$/.test(rows[0])
+    ||/(?:見て選|確認して選|仕様も見)/.test(rows[0]))return false;
+  if(!rows[1].includes(quote)||catalogueOnly(text))return false;
+  return true;
+ }
  function verifiedLinkedReason(item,partner,text){
   const facts=partner?.linkedEvidence;
   if(!Array.isArray(facts)||facts.length!==2||typeof text!=='string')return false;
@@ -85,5 +98,5 @@
   return text.includes(first)&&text.includes(second);
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,restatedReason};
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedTitleSignal,restatedReason};
 });
