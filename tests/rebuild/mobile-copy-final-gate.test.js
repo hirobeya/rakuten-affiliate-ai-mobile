@@ -116,3 +116,19 @@ test('actual mobile postReady function enables only validated paid copy in the c
  serverResponse.quality.text=responseText;serverResponse.local.partner.linkedEvidence[1].quote='必ず重ねて収納できます。';
  assert.equal(postReady(item),false,'forged source clause blocks button');
 });
+
+test('all newly eligible 44-product editorial copies must pass the actual iPhone copy guard',()=>{
+ const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
+ let verified=0;const blocked=[];
+ for(const row of frozen.rows){
+  if(localZeroCall(row.item))continue;
+  const result=localZeroCall(row.item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true});
+  if(!verifiedCaptionEditorialRescue(row.item,result))continue;
+  const text=ready(result);
+  if(!text||review(text,row.item,true,result))blocked.push({itemCode:row.item.itemCode,quote:result.local.partner.quote});
+  else verified++;
+ }
+ console.log('EDITORIAL_MOBILE_COPY_44',JSON.stringify({verified,blocked}));
+ assert.equal(blocked.length,0,'server-ready editorial text must never be falsely marked copy-ready when the browser would block it');
+ assert.ok(verified>=3);
+});
