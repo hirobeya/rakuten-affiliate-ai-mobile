@@ -8,7 +8,7 @@ test('44 real products reveal precise local stop stages without provider calls',
  for(const row of frozen.rows){
   const b={},e={};
   const baseline=localZeroCall(row.item,'',b);
-  const editorial=baseline||localZeroCall(row.item,'',e,{editorial:true,linkedReason:true});
+  const editorial=baseline||localZeroCall(row.item,'',e,{editorial:true,linkedReason:true,identityExpansion:true});
   const accepted=baseline||verifiedCaptionEditorialRescue(row.item,editorial)?editorial:null;
   const why=accepted?'ready':(e.stage||b.stage||'unknown');
   stages[why]=(stages[why]||0)+1;
