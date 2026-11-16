@@ -32,11 +32,12 @@ test('frozen 44 local results remain safe and previous successful results remain
   if(baseline)prior.set(item.itemCode,baseline.quality.text);
   const edited=baseline||localZeroCall(item,'',{}, {editorial:true});
   if(baseline)assert.equal(edited.quality.text,prior.get(item.itemCode));
-  if(!baseline&&edited?.local?.partner?.linkedEvidence){
-   assert.ok(edited.local.partner.linkedEvidence.every(f=>item.itemCaption.includes(f.quote)));
+  if(!baseline&&edited?.local?.partner?.linkedEvidence?.length){
+   assert.ok(edited.local.partner.linkedEvidence.every(f=>item.itemCaption.includes(f.quote)&&edited.quality.text.includes(f.quote)));
    newCandidates.push(item.itemCode);
   }
  }
  assert.equal(prior.size,5);
+ assert.ok(newCandidates.includes('e-kitchen:10079039'),'actual linked purchase reason must reach local generation');
  console.log('LINKED_REASON_REPLAY',JSON.stringify({baseline:prior.size,newSourceLinkedCandidates:newCandidates}));
 });
