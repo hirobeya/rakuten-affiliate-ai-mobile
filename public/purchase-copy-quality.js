@@ -98,5 +98,25 @@
   return text.includes(first)&&text.includes(second);
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedTitleSignal,restatedReason};
+ // The selling unit may be named in the preceding complete sentence while
+ // the next sentence explains alternative ways to use it. Verify BOTH the
+ // specific seller-authored use sentence and the exact preceding unit name.
+ // This is a generic grammatical relationship, not a whitelist of products.
+ function verifiedSourceMultiUse(item,partner,identity,text){
+  const quote=String(partner?.quote||''),id=normalize(identity);
+  const caption=String(item?.itemCaption||'');
+  if(partner?.kind!=='caption_claim'||!id||quote.length<22
+     ||!caption.includes(quote)||!String(text||'').includes(quote))return false;
+  if(!/(?:としても|として|できるほか|できる上|兼用でき|使い分け|用途に合わせて|シーンに合わせて)/.test(quote)
+    ||!/(?:使用できます|使用できる|使えます|使える|装着できます|装着できる|兼用できます|兼用できる|選べます|選べる)/.test(quote))return false;
+  if(/(?:関連商品|おすすめ商品|別売|他の商品|別商品|非対応|対応していない|できない|できません|不可|必ず|絶対|100%|最適|保証|大活躍)/.test(quote))return false;
+  const at=caption.indexOf(quote),before=caption.slice(Math.max(0,at-220),at);
+  // When the target name is absent on the claim, it must be the subject
+  // explicitly introduced by the last nearby complete source sentence.
+  if(!quote.includes(id)&&!before.includes(id+'です。'))return false;
+  if(/(?:関連商品|おすすめ商品|別売り|別商品|他の商品)/.test(before))return false;
+  return true;
+ }
+
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,restatedReason};
 });
