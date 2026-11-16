@@ -411,7 +411,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
     cacheStatus:'local',pass2Status:'not_needed',tier:'A',
     quality:{status:'ready',text,reasons:[]},
     variants:[variant],
-    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind,linkedEvidence:partnerCopy.linkedEvidence||[]}:null,arbitration:local.arbitration||null,learnedIdentity:local?.identityHypothesis?.method==='learned_verified_type'?identity:null}
+    local:{route:'local',version:local.arbitration?.version||partnerCopy?.reasoningVersion||local.version||copy?.version||'literal-source',method:partnerCopy?'partner_reasoning':(useStructuredText?structuredMethod:'literal_source'),factCount:facts.length,valueCount:groundedValues.length,partner:partnerCopy?{productType:partnerCopy.productType,actsOn:partnerCopy.actsOn,quote:partnerCopy.quote,kind:partnerCopy.kind,...(partnerCopy.linkedEvidence?.length?{linkedEvidence:partnerCopy.linkedEvidence}:{})}:null,arbitration:local.arbitration||null,learnedIdentity:local?.identityHypothesis?.method==='learned_verified_type'?identity:null}
   };
 }
 
