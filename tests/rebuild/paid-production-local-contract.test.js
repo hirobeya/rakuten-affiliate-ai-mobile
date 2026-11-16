@@ -110,3 +110,40 @@ test('paid iPhone UI sends the same room-copy contract to the production route',
  const route=fs.readFileSync(path.join(__dirname,'../../api/room-ai-v3.js'),'utf8');
  assert.match(route,/req\.query\?\.urenaviContract==='1'/);
 });
+
+test('all 44 independently sourced products have one unambiguous paid ready/blocked contract without external AI',async()=>{
+ const Quality=require('../../public/purchase-copy-quality');
+ const prev=process.env.VERCEL_ENV;process.env.VERCEL_ENV='production';
+ const api=inject('base'),counts={ready:0,blocked:0};
+ try{
+  for(const row of frozen.rows){
+   const output=res();
+   await api.handler({method:'POST',body:row.item},output);
+   assert.ok([200,409].includes(output.statusCode),row.item.itemCode);
+   if(output.statusCode===200){
+    counts.ready++;
+    assert.equal(Quality.verifiedLocalCopy(row.item,output.body,output.body.quality.text),true,row.item.itemCode);
+    assert.equal(provenLocalCopy(row.item,output.body),true,row.item.itemCode);
+    assert.equal(output.body.groq.totalCalls,0,row.item.itemCode);
+   }else{
+    counts.blocked++;
+    assert.equal(output.body.quality.status,'blocked',row.item.itemCode);
+    assert.equal(output.body.quality.text,'',row.item.itemCode);
+    assert.deepEqual(output.body.variants,[],row.item.itemCode);
+   }
+  }
+  assert.equal(counts.ready+counts.blocked,frozen.rows.length);
+  assert.deepEqual(api.spent(),{calls:0,claims:0,writes:0});
+  console.log('PAID_PRODUCTION_44_VERIFIED',JSON.stringify(counts));
+ }finally{if(prev===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=prev;}
+});
+test('NFKC-transformed markup headings cannot become source-proven published claims',()=>{
+ const Quality=require('../../public/purchase-copy-quality');
+ const item=get('emoor-nedogko:10000048');
+ const quote='<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。';
+ assert.equal(Quality.sourceIncludes(item.itemCaption,quote),true);
+ assert.equal(Quality.sourceQuoteIncludes(item.itemCaption,quote),false);
+ const raw=localZeroCall(item);
+ assert.equal(raw?.local?.partner?.quote,quote);
+ assert.equal(Quality.verifiedLocalCopy(item,raw,raw.quality.text),false);
+});
