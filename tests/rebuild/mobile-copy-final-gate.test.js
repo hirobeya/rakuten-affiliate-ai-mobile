@@ -122,7 +122,7 @@ test('all newly eligible 44-product editorial copies must pass the actual iPhone
  let verified=0;const blocked=[];
  for(const row of frozen.rows){
   if(localZeroCall(row.item))continue;
-  const result=localZeroCall(row.item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true});
+  const result=localZeroCall(row.item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
   if(!verifiedCaptionEditorialRescue(row.item,result)&&!verifiedTitleSignalEditorialRescue(row.item,result))continue;
   const text=ready(result);
   if(!text||review(text,row.item,true,result))blocked.push({itemCode:row.item.itemCode,quote:result.local.partner.quote});
