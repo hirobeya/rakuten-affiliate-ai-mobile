@@ -167,3 +167,26 @@ test('live comparison receives a cancellable provider deadline and never retries
  assert.equal(observedBudget,35000);
  assert.equal((await create(m.blob).state(scope)).result.result.providerCalls,1);
 }));
+
+
+test('quality verifier exception preserves received Gemini 200, tokens and response ID without resend',()=>preview(async()=>{
+ const m=memory();let sends=0;
+ const h=H.createHandler(config(m,{
+  compare:async()=>{sends++;return generated();},
+  inspectDraft:()=>{throw Error('local verifier crashed');}
+ }));
+ const response1=response();await h(request(),response1);
+ assert.equal(response1.statusCode,502);
+ assert.equal(response1.body.error,'gemini_validation_failed');
+ assert.equal(response1.body.httpStatus,200);
+ assert.equal(response1.body.providerCalls,1);
+ assert.equal(response1.body.tokens.total,140);
+ assert.equal(response1.body.providerRequestId,'mock-response-id');
+ assert.equal(response1.body.rawGeneratedContent,'根拠のない架空機能です。');
+ const recovered=response();await h(request('GET'),recovered);
+ assert.equal(recovered.body.receipt.result.tokens.total,140);
+ assert.equal(recovered.body.receipt.result.httpStatus,200);
+ const again=response();await h(request(),again);
+ assert.equal(again.statusCode,409);
+ assert.equal(sends,1);
+}));
