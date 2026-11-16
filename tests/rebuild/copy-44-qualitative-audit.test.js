@@ -68,3 +68,14 @@ test('real mobile API fails closed on legacy escaped-heading copy, without consu
   assert.equal(quotaClaims,0);
  }finally{if(env===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=env;}
 });
+
+test('specific usage intent on a literally title-bound signal is not replaced by a catalogue comparison',()=>{
+ const row=corpus.rows.find(x=>x.item.itemCode==='besthouse:10000083');
+ const debug={};
+ const result=localZeroCall(row.item,'',debug,{editorial:true,linkedReason:true,identityExpansion:true});
+ console.log('SPECIFIC_INTENT_RESULT',JSON.stringify({status:debug.stage,reason:debug.reason,text:result?.quality?.text||'',partner:result?.local?.partner||null}));
+ if(result){
+  assert.ok(result.local.partner.quote);
+  assert.ok(row.item.itemName.includes(result.local.partner.quote)||row.item.itemCaption.includes(result.local.partner.quote));
+ }
+});
