@@ -277,12 +277,12 @@ function expandedLiteralWinner(item,literal,previous){
   const at=title.indexOf(type);
   if(at<0)return previous;
   const before=title.slice(Math.max(0,at-7),at),after=title.slice(at+type.length,at+type.length+13);
-  if(/(?:替え|交換用|専用|付属|対応|用)\\s*$/.test(before)
-     ||/^\\s*(?:用|専用)(?:ケース|カバー|ポーチ|ホルダー|ケーブル|替え)/.test(after))return previous;
-  const standalone=title.split(/[\\s【】〖〗（）()「」『』\\[\\]{}・／/\\\\|｜,:：;；!！?？★☆※。&＆]+/).includes(type);
+  if(/(?:替え|交換用|専用|付属|対応|用)\s*$/.test(before)
+     ||/^\s*(?:用|専用)(?:ケース|カバー|ポーチ|ホルダー|ケーブル|替え)/.test(after))return previous;
+  const standalone=title.split(/[\s【】〖〗（）()「」『』\[\]{}・／/\\|｜,:：;；!！?？★☆※。&＆]+/).includes(type);
   if(!standalone&&!type.includes(' '))return previous;
   const existing=normalize(previous?.canonicalIdentity||previous?.raw?.productType?.value);
-  const wrongDescriptor=/^(?:令和|平成)\\d+年産\\d+%使用$/.test(existing);
+  const wrongDescriptor=/^(?:令和|平成)\d+年産\d+%使用$/.test(existing);
   const strongerSet=existing&&type.startsWith(existing)&&type!==existing&&/(?:セット|キット)$/.test(type);
   if(previous&&!wrongDescriptor&&!strongerSet)return previous;
   if(hasCompetingCompoundIdentity(title,type))return previous;
