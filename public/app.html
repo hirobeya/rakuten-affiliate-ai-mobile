@@ -3263,7 +3263,8 @@ function roomCopyNeedsReview(text,item,validatedByServer=false,verifiedResult=nu
       &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length>0
         ? window.UrenaviPurchaseCopyQuality?.verifiedLinkedReason(item,partner,String(text||''))
         : (window.UrenaviPurchaseCopyQuality?.hasUseRelation(partner.quote)
-          ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote))))
+          ||window.UrenaviPurchaseCopyQuality?.sourceOperationReason(partner.quote)
+          ||window.UrenaviPurchaseCopyQuality?.verifiedSourceMultiUse(item,partner,verifiedResult?.productType?.specific,String(text||'')))))
       ||(partner?.kind==='signal'
         &&window.UrenaviPurchaseCopyQuality?.verifiedTitleSignal(item,partner,String(text||''))));
   // Length never substitutes for the exact approved result. In particular,
