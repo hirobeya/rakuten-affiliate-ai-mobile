@@ -12,10 +12,15 @@ const html=fs.readFileSync(path.join(__dirname,'../../public/app.html'),'utf8');
 function sourceFunction(name,nextName){
  const from=html.indexOf('function '+name+'('),to=html.indexOf('function '+nextName+'(',from);
  assert.ok(from>0&&to>from,name+' extracted from real mobile script');
- return vm.runInNewContext('('+html.slice(from,to).trim()+')',{
+ const context={
   window:{UrenaviPurchaseCopyQuality:Quality,UrenaviFactSafety:Safety},
   RoomCopyResult:{ready:()=>''},localCopyAssessment:()=>null
- });
+ };
+ if(name==='readyV3Post'){
+  const a=html.indexOf('function isV3PreviewResult(');
+  context.isV3PreviewResult=vm.runInNewContext('('+html.slice(a,from).trim()+')',context);
+ }
+ return vm.runInNewContext('('+html.slice(from,to).trim()+')',context);
 }
 const review=sourceFunction('roomCopyNeedsReview','isFullyReviewedCopyState');
 const ready=sourceFunction('readyV3Post','aiSalesInsight');
