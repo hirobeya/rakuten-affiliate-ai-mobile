@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {safeCaptionCandidates,linkedStorageCandidates}=require('../../lib/local-generic-reasoner');
-const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
+const {localZeroCall,verifiedCaptionEditorialRescue,createHandler}=require('../../api/room-ai-v3');
 const frozen=require('../../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 test('source-linked removable handle and stacking becomes a buyer-use candidate only in editorial mode',()=>{
  const row=frozen.rows.find(x=>x.item.itemCode==='e-kitchen:10079039');
@@ -60,4 +60,29 @@ test('final local rescue must reject a second unsupported or altered source clau
  unbound.quality.text='取手が取り外せるフライパンです。';
  unbound.variants[0].text=unbound.quality.text;
  assert.equal(verifiedCaptionEditorialRescue(item,unbound),false);
+});
+
+test('the real Preview owner API uses opt-in linked reason without any Groq or quota call',async()=>{
+ const row=frozen.rows.find(x=>x.item.itemCode==='e-kitchen:10079039');
+ const oldEnv=process.env.VERCEL_ENV;
+ process.env.VERCEL_ENV='preview';
+ try{
+  let providerCalls=0,quotaCalls=0;
+  const res={code:0,body:null,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
+  const handler=createHandler({
+   authorize:async()=>({ok:true,plan:'owner'}),
+   store:{loadProduct:async()=>null,saveProduct:async()=>{},findTypeIdentityInTitle:async()=>''},
+   consumeQuota:async()=>{quotaCalls++;throw Error('must not use AI quota');},
+   groq:{callPass1:async()=>{providerCalls++;throw Error('must not call Groq');},callPass2:async()=>{providerCalls++;throw Error('must not call Groq');}}
+  });
+  await handler({method:'POST',body:row.item},res);
+  assert.equal(res.code,200);
+  assert.equal(res.body.model,'local');
+  assert.equal(res.body.quality.status,'ready');
+  assert.equal(res.body.groq.totalCalls,0);
+  assert.equal(providerCalls,0);
+  assert.equal(quotaCalls,0);
+  assert.ok(res.body.local.partner.linkedEvidence.length===2);
+  assert.ok(res.body.quality.text.includes('重ねて収納できます。'));
+ }finally{if(oldEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=oldEnv;}
 });
