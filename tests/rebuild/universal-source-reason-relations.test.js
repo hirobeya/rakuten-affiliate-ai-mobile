@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {adjacentSourceUseCandidates,captionSentences}=require('../../lib/local-generic-reasoner');
+const {adjacentSourceUseCandidates,sourceMultiUseCandidates,captionSentences}=require('../../lib/local-generic-reasoner');
 const {verifiedLinkedReason}=require('../../public/purchase-copy-quality');
 const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
 const screenshot=require('./screenshot-leg-bag-regression.test').screenshotSamples;
@@ -48,4 +48,33 @@ test('full API and iPhone bound source evidence agree for the screenshot AVIREX 
  assert.ok(verifiedCaptionEditorialRescue(item,result));
  assert.ok(verifiedLinkedReason(item,result.local.partner,result.quality.text));
  assert.equal(result.groq.totalCalls,0);
+});
+
+test('explicit multi-use source sentences work across unrelated product categories',()=>{
+ const cases=[
+  {id:'レッグバッグ',caption:'腰に装着できるレッグバッグとしても使えるほか、ショルダーバッグとしても使用できます。'},
+  {id:'収納ラック',caption:'伸縮式の収納ラックはキッチン用としても使用できるほか、洗面所用としても使えます。'},
+  {id:'ペットベッド',caption:'ペットベッドとしても使えるほか、持ち運び用のクッションとしても使用できます。'},
+  {id:'電気ケトル',caption:'電気ケトルとしても使えるほか、温度調節式の給湯器としても使用できます。'},
+  {id:'野球グローブ',caption:'野球グローブとしても使えるほか、ソフトボール用としても使用できます。'}
+ ];
+ for(const c of cases){
+  const out=sourceMultiUseCandidates(captionSentences(c.caption,true),c.id,c.id,c.caption);
+  assert.equal(out.length,1,c.id);
+  assert.equal(out[0].body,c.caption);
+  assert.equal(out[0].quote,c.caption);
+ }
+});
+test('similar-looking unsupported seller or other-product language never passes generic multi-use extraction',()=>{
+ const bad=[
+  'レッグバッグとしても使えるほか、関連商品のショルダーバッグとしても使用できます。',
+  'レッグバッグとしても使えるほか、いつでも必ず安全に使用できます。',
+  'レッグバッグとしても使えるほか、対応していないショルダーバッグとしても使用できます。',
+  '別売りのレッグバッグとしても使えるほか、ショルダーバッグとしても使用できます。',
+  'レッグバッグとしても使えるほか、保証付きで使用できます。'
+ ];
+ for(const caption of bad){
+  const out=sourceMultiUseCandidates(captionSentences(caption,true),'レッグバッグ','レッグバッグ',caption);
+  assert.equal(out.length,0,caption);
+ }
 });
