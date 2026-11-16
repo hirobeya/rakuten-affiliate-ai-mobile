@@ -81,10 +81,17 @@ test('429 stops once, records unknown billed usage, never calls subsequent stage
  try{const x=setup({reject:true}),r=res();await x.handler({method:'POST',body:item},r);assert.equal(r.code,429);assert.equal(x.calls(),1);assert.equal(x.logs[0].estimatedUsd,null);assert.equal(x.logs[0].failed,true);}
  finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
-test('Production and non-owner calls cannot use new Preview endpoint',async()=>{
+test('Production local-only denies unsupported copy with no AI, while Preview remains owner-only',async()=>{
  const old=process.env.VERCEL_ENV;
- try{process.env.VERCEL_ENV='production';const x=setup(),r=res();await x.handler({method:'POST',body:item},r);assert.equal(r.code,404);assert.equal(x.calls(),0);process.env.VERCEL_ENV='preview';const denied=createHandler({authorize:async()=>({ok:true,plan:'pro'})});const d=res();await denied({method:'POST',body:item},d);assert.equal(d.code,403);}
- finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+ try{
+  process.env.VERCEL_ENV='production';
+  const x=setup(),r=res();await x.handler({method:'POST',body:item},r);
+  assert.equal(r.code,409);assert.equal(x.calls(),0);
+  assert.equal(r.body.quality.status,'blocked');
+  process.env.VERCEL_ENV='preview';
+  const denied=createHandler({authorize:async()=>({ok:true,plan:'pro'})});
+  const d=res();await denied({method:'POST',body:item},d);assert.equal(d.code,403);
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
 test('safe local completion is preserved with no Groq call; client sends one request on 202 and 429',async()=>{
  const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
@@ -102,13 +109,15 @@ test('cost measurement leaves unknown models or token counts unknown and include
  const rows=[];const provider=meteredProvider({model:'openai/gpt-oss-20b',call:async()=>({usage:{prompt_tokens:1000,completion_tokens:500}})},{log:x=>rows.push(x)});await provider.call('generate',{},{});assert.equal(rows[0].outputTokens,500);
 });
 
-test('public copy URL reuses the existing function and rejects production dispatch',async()=>{
+test('public copy URL dispatches through the existing function and denies unauthenticated Production calls',async()=>{
  const config=require('../vercel.json');
  assert.deepEqual(config.rewrites[0],{source:'/api/room-copy',destination:'/api/room-ai-v3?urenaviContract=1'});
  const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='production';
- try{let status;const res={setHeader(){},status(n){status=n;return this;},json(body){return body;}};
-  await require('../api/room-ai-v3')({method:'POST',query:{urenaviContract:'1'},body:{}},res);assert.equal(status,404);
- }finally{process.env.VERCEL_ENV=previous;}
+ try{
+  let status;const res={setHeader(){},status(n){status=n;return this;},json(body){return body;}};
+  await require('../api/room-ai-v3')({method:'POST',query:{urenaviContract:'1'},headers:{},body:{}},res);
+  assert.equal(status,403);
+ }finally{if(previous===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=previous;}
 });
 
 test('semantic generator requires evidenced purchase value, not generic one-line usage',()=>{
