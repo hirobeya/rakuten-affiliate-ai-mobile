@@ -74,6 +74,19 @@ test('specific usage intent on a literally title-bound signal is not replaced by
  const debug={};
  const result=localZeroCall(row.item,'',debug,{editorial:true,linkedReason:true,identityExpansion:true});
  console.log('SPECIFIC_INTENT_RESULT',JSON.stringify({status:debug.stage,reason:debug.reason,text:result?.quality?.text||'',partner:result?.local?.partner||null}));
+ const {verifiedTitleSignalEditorialRescue}=require('../../api/room-ai-v3');
+ const {SAFE_SIGNALS}=require('../../lib/local-partner-reasoner');
+ const structured=require('../../public/structured-room-copy');
+ const quote=result?.local?.partner?.quote||'';
+ const lines=String(result?.quality?.text||'').split('\\n').map(x=>x.trim()).filter(Boolean);
+ console.log('TITLE_SIGNAL_PROOF',JSON.stringify({
+  verified:verifiedTitleSignalEditorialRescue(row.item,result),quote,
+  titleBound:row.item.itemName.includes(quote),
+  lines,verifiedAppeals:result?.verifiedAppeals?.map(x=>({text:x.text,keep:x.verification?.keepDirectFact})),
+  rule:SAFE_SIGNALS.filter(x=>[x.term,...(x.aliases||[])].some(t=>t.toLowerCase()===quote.toLowerCase())).map(x=>x.intent),
+  risky:structured.RISK.test(result?.quality?.text||''),
+  catalogue:require('../../public/purchase-copy-quality').catalogueOnly(result?.quality?.text||'')
+ }));
  if(result){
   assert.ok(result.local.partner.quote);
   assert.ok(row.item.itemName.includes(result.local.partner.quote)||row.item.itemCaption.includes(result.local.partner.quote));
