@@ -15,7 +15,7 @@ const {composeLocalPartnerCopy,SAFE_SIGNALS}=require('../lib/local-partner-reaso
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
-const {catalogueOnly,restatedReason}=require('../public/purchase-copy-quality');
+const {catalogueOnly,restatedReason,verifiedTitleSignal}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 const {reviewSourceBenefit}=require('../lib/local-editorial-quality');
 
@@ -523,7 +523,7 @@ function verifiedTitleSignalEditorialRescue(item,result){
     &&!/(?:見て選|確認して選|仕様も見)/.test(rule.intent)
     &&[rule.term,...(rule.aliases||[])].some(t=>normalize(t).toLowerCase()===normalize(quote).toLowerCase())
   );
-  return allowed&&!catalogueOnly(body)&&!structured.RISK.test(body)
+  return allowed&&verifiedTitleSignal(item,partner,body)&&!catalogueOnly(body)&&!structured.RISK.test(body)
     &&guardUnsupportedBenefitCopy(item,body)===body;
 }
 
