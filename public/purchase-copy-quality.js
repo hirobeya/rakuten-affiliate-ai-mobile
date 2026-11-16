@@ -59,6 +59,9 @@
   return '';
  }
  function sourceIncludes(source,quote){const q=normalize(quote);return Boolean(q)&&normalize(source).includes(q);}
+ // Source quotation must retain the original character class (e.g. fullwidth ＜＞);
+ // compatibility normalization can otherwise turn a merchant heading into HTML-like markup.
+ function sourceQuoteIncludes(source,quote){const q=String(quote||'').replace(/\s+/g,' ').trim();return Boolean(q)&&String(source||'').replace(/\s+/g,' ').includes(q);}
  function sourceOperationReason(quote){
   const q=normalize(quote);
   return /^(?:[^。]{1,14}を(?:上げる|開ける|押す|引く)と、)[^。]{3,}(?:収納可能|使用可能|取り出せる|できます|できる|しやすい)[。]?$/.test(q);
@@ -134,7 +137,7 @@
   let owned=false;
   if(partner?.kind==='caption_claim'){
    const quote=String(partner.quote||'');
-   owned=quote.length>=8&&sourceIncludes(item?.itemCaption,quote)&&body.includes(quote)
+   owned=quote.length>=8&&sourceQuoteIncludes(item?.itemCaption,quote)&&body.includes(quote)
      &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length
        ?verifiedLinkedReason(item,partner,body)
        :hasUseRelation(quote)||sourceOperationReason(quote)
@@ -147,5 +150,5 @@
   return true;
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,restatedReason};
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,restatedReason};
 });
