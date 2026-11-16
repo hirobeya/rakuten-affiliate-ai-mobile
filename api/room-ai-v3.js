@@ -15,7 +15,7 @@ const {composeLocalPartnerCopy,SAFE_SIGNALS}=require('../lib/local-partner-reaso
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
-const {catalogueOnly,restatedReason,verifiedTitleSignal,verifiedLinkedReason}=require('../public/purchase-copy-quality');
+const {catalogueOnly,restatedReason,hasUseRelation,sourceOperationReason,verifiedTitleSignal,verifiedLinkedReason,verifiedSourceMultiUse}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
 const {reviewSourceBenefit}=require('../lib/local-editorial-quality');
 
@@ -518,6 +518,8 @@ function verifiedCaptionEditorialRescue(item,result){
   if(linked.length&&(!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
     &&item.itemCaption.includes(f.quote)&&text.includes(f.quote))
     ||!verifiedLinkedReason(item,partner,text)))return false;
+  if(!linked.length&&!hasUseRelation(quote)&&!sourceOperationReason(quote)
+    &&!verifiedSourceMultiUse(item,partner,result?.productType?.specific||'',text))return false;
   return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
 }
 
