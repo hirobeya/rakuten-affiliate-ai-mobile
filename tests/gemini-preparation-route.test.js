@@ -15,10 +15,21 @@ test('near-budget virtual delays preserve unknown usage and return below 60 seco
  const r=response(),start=Date.now(),running=handler(req(),r);
  // The provider deadline is dynamic. A hard-coded 25001ms never expires
  // when upstream work leaves >25s, and previously hung CI and Vercel builds.
- const elapsedBeforeProvider=7999+6999+6999;
- const providerTick=H.providerBudgetForElapsed(elapsedBeforeProvider)+1;
- for(const [name,ms]of [['auth',7999],['state',6999],['claim',6999],['provider',providerTick],['save',6999]]){await events[name].wait;t.mock.timers.tick(ms);}
- await running;assert.equal(claimed,true);assert.equal(record.result.tokens,null);assert.equal(record.result.error,'gemini_stage_timeout');assert(Date.now()-start<57000);assert.equal(r.statusCode,502);
+ const phases=[['auth',7999],['state',6999],['claim',6999]];
+ for(const [name,ms]of phases){await events[name].wait;t.mock.timers.tick(ms);}
+ await events.provider.wait;
+ const providerTick=H.providerBudgetForElapsed(Date.now()-start)+1;
+ t.mock.timers.tick(providerTick);
+ await events.save.wait;
+ t.mock.timers.tick(6999);
+ await running;
+ assert.equal(claimed,true);
+ assert.equal(record.result.tokens,null);
+ assert.equal(record.result.error,'gemini_stage_timeout');
+ // This is a wall-clock fake-timer test; log the measured value when it fails.
+ const elapsed=Date.now()-start;
+ assert(elapsed<H.FUNCTION_LIMIT_MS,`deadline exceeded: ${elapsed}ms, provider tick ${providerTick}ms`);
+ assert.equal(r.statusCode,502);
 }));
 test('explicit separately approved mock trial has independent result GET and cannot clear original D',()=>preview(async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-route-'));try{
