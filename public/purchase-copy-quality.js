@@ -118,5 +118,34 @@
   return true;
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,restatedReason};
+
+ // One source-grounded admission contract shared by server and iPhone.
+ // A server's 'ready' flag is not evidence. Product identity, full output,
+ // quotation, sentence relation and item ownership must independently agree.
+ function verifiedLocalCopy(item,result,text){
+  const body=String(text||''),partner=result?.local?.partner;
+  if(!result?.ok||result.pending!==false||result.model!=='local'||result.phase!=='local'
+    ||result.quality?.status!=='ready'||result.groq?.totalCalls!==0
+    ||!body.trim()||result.quality.text!==body||result.variants?.length!==1
+    ||result.variants[0]?.text!==body)return false;
+  const id=String(result.productType?.specific||'');
+  const typeQuote=String(result.productType?.quote||'');
+  if(!id||!typeQuote||!sourceIncludes(item?.itemName,typeQuote))return false;
+  let owned=false;
+  if(partner?.kind==='caption_claim'){
+   const quote=String(partner.quote||'');
+   owned=quote.length>=8&&sourceIncludes(item?.itemCaption,quote)&&body.includes(quote)
+     &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length
+       ?verifiedLinkedReason(item,partner,body)
+       :hasUseRelation(quote)||sourceOperationReason(quote)
+         ||verifiedSourceMultiUse(item,partner,id,body));
+  }else if(partner?.kind==='signal'){
+   owned=verifiedTitleSignal(item,partner,body);
+  }
+  if(!owned||catalogueOnly(body)
+    ||restatedReason(body,{identity:id,quote:partner?.quote||''}))return false;
+  return true;
+ }
+
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,restatedReason};
 });
