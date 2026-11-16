@@ -2746,6 +2746,14 @@ function aiPhase1Post(item,result){
 
 }
 
+function aiPanelHasReviewablePost(result){
+  if(result?.state!=='done')return false;
+  const data=result.data;
+  if(isV3PreviewResult(data))return Boolean(readyV3Post(data));
+  if(RoomCopyResult.canonical(data))return Boolean(RoomCopyResult.ready(data));
+  return false;
+}
+
 function aiPanelMarkup(item,index){
   if(!debugExportAllowed) return '';
   const image=firstImageUrl(item);
@@ -2790,6 +2798,14 @@ function updateAiPanel(index){
   const facts=box.querySelector('.aiFacts');
   const copy=box.querySelector('.aiCopy');
   const continueButton=box.querySelector('[data-ai-continue]');
+  const reviewable=aiPanelHasReviewablePost(result);
+  box.querySelectorAll('[data-ai-review]').forEach(button=>{
+    if(button.dataset.aiReview==='ok'||button.dataset.aiReview==='minor'){
+      button.disabled=!reviewable;
+      button.title=reviewable?'投稿文の確認結果を記録':'投稿文が生成・検証されるまでは評価できません';
+    }
+    button.classList.toggle('on',aiRoomReviews.get(index)===button.dataset.aiReview);
+  });
   if(continueButton){continueButton.hidden=!['pending','restored'].includes(result?.state);continueButton.textContent=result?.state==='restored'?'保存済み結果を確認':'確認を続ける';}
   if(result?.state==='pending'){status.textContent=pendingAiStatus(result);facts.textContent='';copy.textContent='';return;}
   if(result?.state==='paused'){status.textContent='前の商品で確認が停止しています。確認を続けるとこの商品へ進みます。';facts.textContent='';copy.textContent='';return;}
@@ -3069,7 +3085,9 @@ document.addEventListener('click',async e=>{
     return;
   }
   const b=e.target.closest?.('[data-ai-review]');if(!b)return;
-  const index=Number(b.dataset.i);aiRoomReviews.set(index,b.dataset.aiReview);updateAiPanel(index);
+  const index=Number(b.dataset.i);
+  if(b.disabled||(['ok','minor'].includes(b.dataset.aiReview)&&!aiPanelHasReviewablePost(aiRoomResults.get(index))))return;
+  aiRoomReviews.set(index,b.dataset.aiReview);updateAiPanel(index);
 });
 function legalWarning(i){
   const a=groundedAnalysis(i);
