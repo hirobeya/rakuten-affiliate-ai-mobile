@@ -132,3 +132,30 @@ test('all newly eligible 44-product editorial copies must pass the actual iPhone
  assert.equal(blocked.length,0,'server-ready editorial text must never be falsely marked copy-ready when the browser would block it');
  assert.ok(verified>=3);
 });
+
+test('real iPhone API and copy button accept only source-verified buyer-use signal with no AI calls',async()=>{
+ const {verifiedTitleSignalEditorialRescue}=require('../../api/room-ai-v3');
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ const item=sample('besthouse:10000083');
+ try{
+  const {handler,getCalls}=server();
+  const res=response();await handler({method:'POST',body:item},res);
+  assert.equal(res.code,200);
+  assert.equal(res.body.model,'local');
+  assert.equal(res.body.local.partner.kind,'signal');
+  assert.equal(verifiedTitleSignalEditorialRescue(item,res.body),true);
+  const text=ready(res.body);
+  assert.ok(text);
+  assert.equal(review(text,item,true,res.body),false);
+  assert.deepEqual(getCalls(),{providerCalls:0,quotaCalls:0});
+  const wrong={...item,itemName:'別の商品'};
+  assert.equal(review(text,wrong,true,res.body),true,'mismatched selling item must not be copied');
+  const fraudulent={...res.body,local:{partner:{...res.body.local.partner,quote:'100%確実に充電'}}};
+  assert.equal(review(text,item,true,fraudulent),true);
+  assert.equal(verifiedTitleSignalEditorialRescue(item,fraudulent),false);
+  const noUse={...res.body,quality:{status:'ready',text:text.replace('ケーブルの持ち歩きを減らしたいとき。','仕様を見て選びたいとき。')},
+   variants:[{...res.body.variants[0],text:text.replace('ケーブルの持ち歩きを減らしたいとき。','仕様を見て選びたいとき。')}]};
+  assert.equal(review(noUse.quality.text,item,true,noUse),true);
+  assert.equal(verifiedTitleSignalEditorialRescue(item,noUse),false);
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
