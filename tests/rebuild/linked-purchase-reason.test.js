@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {safeCaptionCandidates,linkedStorageCandidates}=require('../../lib/local-generic-reasoner');
-const {localZeroCall}=require('../../api/room-ai-v3');
+const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
 const frozen=require('../../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 test('source-linked removable handle and stacking becomes a buyer-use candidate only in editorial mode',()=>{
  const row=frozen.rows.find(x=>x.item.itemCode==='e-kitchen:10079039');
@@ -40,4 +40,24 @@ test('frozen 44 local results remain safe and previous successful results remain
  assert.equal(prior.size,5);
  assert.ok(newCandidates.includes('e-kitchen:10079039'),'actual linked purchase reason must reach local generation');
  console.log('LINKED_REASON_REPLAY',JSON.stringify({baseline:prior.size,newSourceLinkedCandidates:newCandidates}));
+});
+
+test('final local rescue must reject a second unsupported or altered source clause',()=>{
+ const item={itemCode:'safe:1',itemName:'フライパン',itemCaption:'取手が取り外せるフライパンです。重ねて収納できます。'};
+ const text='取手が取り外せるフライパンです。重ねて収納できます。';
+ const base={
+  ok:true,quality:{status:'ready',text},variants:[{text}],
+  local:{partner:{kind:'caption_claim',quote:'取手が取り外せるフライパンです。',linkedEvidence:[
+   {source:'itemCaption',quote:'取手が取り外せるフライパンです。'},
+   {source:'itemCaption',quote:'重ねて収納できます。'}
+  ]}},
+  verifiedAppeals:[{text,verification:{keepDirectFact:true}}]
+ };
+ assert.equal(verifiedCaptionEditorialRescue(item,base),true);
+ const forged=structuredClone(base);forged.local.partner.linkedEvidence[1].quote='必ず収納できます。';
+ assert.equal(verifiedCaptionEditorialRescue(item,forged),false);
+ const unbound=structuredClone(base);unbound.local.partner.linkedEvidence[1].quote='重ねて収納できます';
+ unbound.quality.text='取手が取り外せるフライパンです。';
+ unbound.variants[0].text=unbound.quality.text;
+ assert.equal(verifiedCaptionEditorialRescue(item,unbound),false);
 });
