@@ -18,7 +18,7 @@ test('source-confirmed standalone selling nouns remove multiple identity holds o
   const opt=diag(item,{editorial:true,identityExpansion:true,linkedReason:true});
   if(baseline.diagnostic.stage==='identity'&&opt.diagnostic.stage!=='identity')improved++;
   // Selling identity is never sufficient to assert human-reviewed copy.
-  assert.equal(opt.result?.qualityCertified,true===false);
+  assert.notEqual(opt.result?.qualityCertified,true);
  }
  console.log('IDENTITY_RESCUE_COVERAGE',JSON.stringify({attempted:codes.length,improved}));
  assert.ok(improved>=4);
