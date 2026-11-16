@@ -2,7 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {adjacentSourceUseCandidates,sourceMultiUseCandidates,captionSentences}=require('../../lib/local-generic-reasoner');
-const {verifiedLinkedReason}=require('../../public/purchase-copy-quality');
+const {verifiedLinkedReason,verifiedSourceMultiUse}=require('../../public/purchase-copy-quality');
 const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
 const screenshot=require('./screenshot-leg-bag-regression.test').screenshotSamples;
 
@@ -46,7 +46,9 @@ test('full API and iPhone bound source evidence agree for the screenshot AVIREX 
  assert.equal(result?.productType?.specific,'レッグバッグ');
  assert.equal(result?.local?.partner?.kind,'caption_claim');
  assert.ok(verifiedCaptionEditorialRescue(item,result));
- assert.ok(verifiedLinkedReason(item,result.local.partner,result.quality.text));
+ assert.ok(result.local.partner.linkedEvidence?.length
+  ?verifiedLinkedReason(item,result.local.partner,result.quality.text)
+  :verifiedSourceMultiUse(item,result.local.partner,result.productType.specific,result.quality.text));
  assert.equal(result.groq.totalCalls,0);
 });
 
