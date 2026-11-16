@@ -438,6 +438,20 @@ async function rememberValidatedIdentity(store,analysis,model=''){
   }
 }
 
+// Reuse a rejected baseline only when the editorial path supplies a new,
+// verbatim caption claim bound to a verified appeal. This never bypasses any
+// safety, publication or copy guard within localZeroCall.
+function verifiedCaptionEditorialRescue(item,result){
+  if(!result?.ok||result?.quality?.status!=='ready') return false;
+  const partner=result?.local?.partner;
+  const quote=partner?.quote;
+  if(partner?.kind!=='caption_claim'||typeof quote!=='string'||!quote.trim())return false;
+  if(typeof item?.itemCaption!=='string'||!item.itemCaption.includes(quote))return false;
+  if(!result.verifiedAppeals?.some(v=>v?.verification?.keepDirectFact===true&&typeof v.text==='string'&&v.text.includes(quote)))return false;
+  const text=String(result.quality.text||'');
+  return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
+}
+
 function createHandler(deps={}){
   const authorizeFn=deps.authorize||authorize;
   const baseStore=deps.store||createCacheStore(db);
@@ -489,6 +503,12 @@ function createHandler(deps={}){
         if(!localResult&&typeof store.findTypeIdentityInTitle==='function'){
           try{learnedIdentity=await store.findTypeIdentityInTitle(item.itemName);}catch(error){console.warn('super-urenavi-v3 learned identity lookup unavailable',error?.message||'unknown');}
           if(learnedIdentity) localResult=localFn(item,learnedIdentity);
+        }
+        if(!localResult){
+          // One offline-only editorial rescue, using the existing local gate.
+          // Never use it for title-only, generic, or unsupported claims.
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true});
+          if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
           if(learnedIdentity&&localResult.local) localResult.local.learnedIdentity=learnedIdentity;
@@ -598,6 +618,7 @@ module.exports=function(req,res){
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
+module.exports.verifiedCaptionEditorialRescue=verifiedCaptionEditorialRescue;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
 module.exports.resolveIdentityHint=resolveIdentityHint;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
