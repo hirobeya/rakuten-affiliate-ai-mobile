@@ -41,50 +41,37 @@ test('expired Free-tier evidence blocks execution but not read-only saved-result
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-readonly-'));try{const g=grant();const write=createIndependent(blob(dir),g,scope);await write.begin(scope);await write.finish(scope,{...scope,mock:true});const expired={...g,freeTierConfirmation:{...g.freeTierConfirmation,validUntilMs:Date.now()-1}};assert.equal(assess(expired,scope).allow,false);const read=createIndependent(blob(dir),expired,scope,{readOnly:true});assert.equal((await read.state(scope)).result.mock,true);await assert.rejects(read.begin(scope));await assert.rejects(read.dispatch(scope,{}));await assert.rejects(read.finish(scope,{}));}finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 
-test('fourth grant is approved in exact scope but cannot dispatch without fresh Free proof',()=>{
+test('consumed fourth grant has no new dispatch approval',()=>{
  const {buildGeminiLowThinkingCandidate}=require('../lib/room-writer-raw/gemini-comparison');
  const item=require('../lib/room-writer-raw/gemini-preview-route').loadItem('3');
  const low=buildGeminiLowThinkingCandidate(item);
  const current={itemCode:scope.itemCode,model:scope.model,requestHash:low.requestHash};
- assert.equal(template.approvalId,'urenavi-gemini-bench-independent-20261116-04');
- assert.equal(template.executionId,'urenavi-gemini-bench-execution-20261116-04');
- assert.equal(low.requestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
- assert.notEqual(low.requestHash,scope.requestHash);
- assert.equal(template.freeTierConfirmation.verified,true);
- const withinWindow=Date.parse('2026-11-16T12:22:00+09:00');
- assert.equal(assess(template,current,withinWindow).allow,true);
- assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1).allow,false);
- assert(assess(template,current,template.freeTierConfirmation.validUntilMs+1).reasons.includes('fresh_free_tier_confirmation_required'));
- assert.equal(assess(template,current,template.freeTierConfirmation.validUntilMs+1,{readOnly:true}).allow,true);
- const proof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'mock fresh account read',observedAtMs:Date.now()-1000,validUntilMs:Date.now()+60000};
- const verified={...template,freeTierConfirmation:proof};
- assert.equal(assess(verified,current).allow,true);
- assert.equal(assess({...verified,freeTierConfirmation:{...proof,validUntilMs:Date.now()-1}},current).allow,false);
- for(const k of ['itemCode','model','requestHash'])assert.equal(assess(verified,{...current,[k]:'mismatch'}).allow,false);
- assert.equal(decision(scope,{}).allow,false);
+ assert.equal(template.status,'awaiting_explicit_approval');
+ assert.equal(template.approvalId,null);
+ assert.equal(template.executionId,null);
+ assert.equal(template.freeTierConfirmation.verified,false);
+ assert.equal(assess(template,current).allow,false);
+ assert(assess(template,current).reasons.includes('new_explicit_approval_required'));
+ const proof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'mock',observedAtMs:Date.now()-1000,validUntilMs:Date.now()+60000};
+ assert.equal(assess({...template,freeTierConfirmation:proof},current).allow,false);
 });
 
 test('read-only recovery is separate from the dynamically bounded POST budget',()=>{const h=require('../lib/room-writer-raw/gemini-preview-route');assert.equal(h.RECOVERY_BUDGET.storage_state,15000);assert.equal(h.RECOVERY_BUDGET.worker,12000);assert(h.BUDGET.authorization+h.RECOVERY_BUDGET.storage_state+h.BUDGET.overhead<60000);assert.equal(h.providerBudgetForElapsed(25000),25000);assert.equal(h.RESPONSE_RESERVE_MS,10000);});
 
-test('three consumed independent grants are read-only, never dispatchable or reusable',()=>{
+test('all four consumed grants are available only for read-only recovery',()=>{
  const {archived,selectForRead}=require('../lib/room-writer-raw/gemini-execution-grant');
- assert.equal(archived.length,3);
- const [first,second,third]=archived;
- assert.equal(first.approvalId,'urenavi-gemini-bench-independent-20261113-01');
- assert.equal(second.approvalId,'urenavi-gemini-bench-independent-20261114-02');
- assert.equal(third.approvalId,'urenavi-gemini-bench-independent-20261115-03');
- for(const prior of archived) {
+ assert.equal(archived.length,4);
+ assert.deepEqual(archived.map(g=>g.approvalId),['urenavi-gemini-bench-independent-20261113-01','urenavi-gemini-bench-independent-20261114-02','urenavi-gemini-bench-independent-20261115-03','urenavi-gemini-bench-independent-20261116-04']);
+ for(const prior of archived){
+  const point=Math.max(Date.now(),(prior.freeTierConfirmation.validUntilMs||0)+1);
+  const scoped={...scope,requestHash:prior.requestHash};
   assert.equal(selectForRead(prior),prior);
-  assert.equal(assess(prior,{...scope,requestHash:prior.requestHash},Date.now(),{readOnly:true}).allow,true);
-  assert.equal(assess(prior,{...scope,requestHash:prior.requestHash}).allow,false);
+  assert.equal(assess(prior,scoped,point,{readOnly:true}).allow,true);
+  assert.equal(assess(prior,scoped,point).allow,false);
   assert.throws(()=>{prior.maxCalls=2;});
  }
- assert.equal(selectForRead({approvalId:'unauthorized',executionId:'unauthorized'}),template);
- const n=archived.map(g=>g.approvalId);
- assert.equal(new Set(n).size,3);
- assert.equal(require('../docs/experiments/gemini-comparison-20261113/independent-01-failure.json').providerHttpStatus,503);
+ assert.equal(template.previousIndependentAttempt.providerHttpStatus,503);
  assert.equal(template.previousIndependentAttempt.tokens,null);
- assert.equal(template.previousIndependentAttempt.providerCalls,null);
  assert.equal(template.previousIndependentAttempt.dispatchAttempts,1);
  assert.equal(template.previousIndependentAttempt.doNotResend,true);
 });
