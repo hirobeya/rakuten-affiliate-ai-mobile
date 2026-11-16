@@ -116,14 +116,20 @@ function separatedKnownIdentity(item){
   return hits.sort((a,b)=>a.matchIndex-b.matchIndex||String(b.canonicalIdentity||'').length-String(a.canonicalIdentity||'').length)[0]||null;
 }
 
-function resolveLiteralIdentity(item){
+// Narrow, opt-in product-noun coverage for owner Preview editorial generation.
+// Historical local results and recorded fallback approvals must not change.
+const EXTRA_EDITORIAL_PRODUCT_TYPES=Object.freeze([
+  '洗濯ネットセット','ヘアブラシ','靴下','ビジネスソックス',
+  '野球グローブ','バイクグローブ','バイク グローブ','グローブ','臭わない袋','おそうじ 手袋','手袋','お米'
+]);
+function resolveLiteralIdentity(item,expanded=false){
   const title=normalize(item?.itemName);
   if(!title) return null;
   const candidates=[];
   const separated=separatedKnownIdentity(item);
   if(separated) candidates.push(separated);
 
-  const known=(localTypeData.productTypes||[])
+  const known=[...(localTypeData.productTypes||[]),...(expanded?EXTRA_EDITORIAL_PRODUCT_TYPES:[])]
     .map(normalize).filter(Boolean)
     .map(type=>({type,at:title.indexOf(type)}))
     .filter(x=>x.at>=0&&!accessoryScoped(title,x.type))
@@ -260,6 +266,33 @@ function resolveIdentityHint(item,learnedIdentity=''){
   return identity;
 }
 
+// In owner Preview only, prefer an explicit independently named selling noun
+// when a short component-role heuristic or unrelated promotional descriptor
+// would otherwise leave the actual item unresolved. No inferred aliases.
+function expandedLiteralWinner(item,literal,previous){
+  const title=normalize(item?.itemName);
+  const type=normalize(literal?.canonicalIdentity||literal?.raw?.productType?.value);
+  if(!type||literal?.validation?.productType?.valid!==true
+     ||!EXTRA_EDITORIAL_PRODUCT_TYPES.includes(type))return previous;
+  const at=title.indexOf(type);
+  if(at<0)return previous;
+  const before=title.slice(Math.max(0,at-7),at),after=title.slice(at+type.length,at+type.length+13);
+  if(/(?:替え|交換用|専用|付属|対応|用)\s*$/.test(before)
+     ||/^\s*(?:用|専用)(?:ケース|カバー|ポーチ|ホルダー|ケーブル|替え)/.test(after))return previous;
+  const standalone=title.split(/[\s【】〖〗（）()「」『』・／｜,:：;；!！?？★☆※。&＆]+/).includes(type);
+  if(!standalone&&!type.includes(' '))return previous;
+  const existing=normalize(previous?.canonicalIdentity||previous?.raw?.productType?.value);
+  const wrongDescriptor=/^(?:令和|平成)\d+年産\d+%使用$/.test(existing);
+  const strongerSet=existing&&type.startsWith(existing)&&type!==existing&&/(?:セット|キット)$/.test(type);
+  if(previous&&!wrongDescriptor&&!strongerSet)return previous;
+  if(hasCompetingCompoundIdentity(title,type))return previous;
+  return {...literal,identityHypothesis:{method:'explicit_editorial_product_noun',supportCount:1},
+    arbitration:{version:'2026-11-16-preview-explicit-product-v1',winner:{identity:type,source:'literal'},candidates:[{identity:type,source:'literal'}]}};
+}
+function stripMarketingAngle(title=''){
+  return normalize(title).replace(/[<＜][^>＞]{0,100}(?:COUPON|クーポン|レビュー|OFF|セール)[^>＞]{0,100}[>＞]/gi,' ');
+}
+
 function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={}){
   // Internal diagnostics expose the existing decision, never a second policy
   // or a bypass. The normal endpoint still receives exactly the same contract.
@@ -269,7 +302,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
   };
   const title=normalize(item?.itemName);
   const ruleLocal=resolveLocalUnderstanding({itemName:item.itemName,itemCaption:item.itemCaption});
-  const literalLocal=resolveLiteralIdentity(item);
+  const literalLocal=resolveLiteralIdentity(item,previewOptions.identityExpansion===true);
   const repeatedLocal=repeatedLiteralIdentity(item);
   if(diagnostics) diagnostics.identityCandidates={
     rule:ruleLocal?.canonicalIdentity||ruleLocal?.raw?.productType?.value||'',
@@ -277,6 +310,8 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
     repeated:repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value||''
   };
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
+  if(previewOptions.identityExpansion===true)
+    local=expandedLiteralWinner(item,literalLocal,local);
 
   if(!local){
     const rescue=leadingCompoundIdentity(item);
@@ -302,7 +337,9 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
   let identityQuote=String(local?.raw?.productType?.evidence||sourceIdentity).trim();
   if(diagnostics) diagnostics.identity=identity;
   if(!identity || local?.validation?.productType?.valid!==true) return reject('identity','identity_unresolved');
-  if(!local?.arbitration&&hasCompetingCompoundIdentity(title,identity)) return reject('identity','competing_identity');
+  if(!local?.arbitration&&hasCompetingCompoundIdentity(
+    previewOptions.identityExpansion===true?stripMarketingAngle(title):title,identity
+  )) return reject('identity','competing_identity');
 
   const titleOnlyItem={...item,itemCaption:''};
   const copy=structured.compose(titleOnlyItem,{identity});
@@ -511,7 +548,7 @@ function createHandler(deps={}){
         if(!localResult){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
-          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true});
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true,identityExpansion:true});
           if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){

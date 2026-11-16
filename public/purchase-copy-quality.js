@@ -59,5 +59,22 @@
   return '';
  }
  function sourceIncludes(source,quote){const q=normalize(quote);return Boolean(q)&&normalize(source).includes(q);}
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,restatedReason};
+ function sourceOperationReason(quote){
+  const q=normalize(quote);
+  return /^(?:[^。]{1,14}を(?:上げる|開ける|押す|引く)と、)[^。]{3,}(?:収納可能|使用可能|取り出せる|できます|できる|しやすい)[。]?$/.test(q);
+ }
+ function verifiedLinkedReason(item,partner,text){
+  const facts=partner?.linkedEvidence;
+  if(!Array.isArray(facts)||facts.length!==2||typeof text!=='string')return false;
+  const caption=String(item?.itemCaption||'');
+  if(!caption||!caption.includes(String(partner?.quote||'')))return false;
+  if(!facts.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.length>=4
+    &&caption.includes(f.quote)&&text.includes(f.quote)))return false;
+  // Only the server may approve the composed relationship. The browser
+  // independently verifies every exact source clause, not a ready flag.
+  const first=facts[0].quote,second=facts[1].quote;
+  return first!==second&&text.includes(first)&&text.includes(second);
+ }
+
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,restatedReason};
 });
