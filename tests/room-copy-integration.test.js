@@ -98,7 +98,13 @@ test('safe local completion is preserved with no Groq call; client sends one req
  try{
   let calls=0;const logs=[];const local={ok:true,model:'local',quality:{status:'ready'},groq:{totalCalls:0}};
   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),localZeroCall:()=>local,provider:{call:async()=>{calls++;}},logCost:x=>logs.push(x)});
-  const r=res();await handler({method:'POST',body:item},r);assert.equal(calls,0);const {resourceUsage,...copy}=r.body;assert.deepEqual(copy,local);assert.equal(resourceUsage.calls,0);assert.equal(logs[0].estimatedUsd,0);
+  const r=res();await handler({method:'POST',body:item},r);
+  assert.equal(calls,0);
+  assert.equal(r.code,409,'a mock ready flag alone cannot be published as a sourced result');
+  assert.equal(r.body.quality.status,'blocked');assert.equal(r.body.quality.text,'');
+  assert.deepEqual(r.body.variants,[]);
+  assert.equal(r.body.groq.totalCalls,0);
+  assert.equal(logs.length,0,'blocked response makes no provider cost claim');
   for(const status of [202,429]){let dispatched=0;await run(item,{fetchImpl:async url=>{dispatched++;assert.equal(url,'/api/room-copy');return {status,json:async()=>({pending:status===202})};},waitImpl:()=>assert.fail('no timed retry')});assert.equal(dispatched,1);}
  }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
