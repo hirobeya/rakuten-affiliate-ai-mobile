@@ -2372,8 +2372,10 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
-  usePurchasePlan=debugExportAllowed;
   const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
+  // Live paid accounts use the same verified contract, which is restricted
+  // server-side to source-backed local generation with zero provider calls.
+  usePurchasePlan=debugExportAllowed||(runtimeKnown&&!preview&&paidPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
       ?debugExportAllowed
