@@ -10,16 +10,20 @@
   "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
   "maxCalls": 1,
   "freeTierConfirmation": {
-    "verified": false,
+    "verified": true,
     "projectId": "gen-lang-client-0210652653",
     "tier": "free",
     "model": "gemini-3.8-flash",
-    "limits": null,
-    "observedAtMs": null,
-    "validUntilMs": null,
-    "evidenceReference": "Pending current authenticated Free-tier evidence. The 2026-11-15 screenshot is expired; never reuse or promote historical peak usage as remaining quota.",
+    "limits": {
+      "rpm": 5,
+      "tpm": 250000,
+      "rpd": 20
+    },
+    "observedAtMs": 1794799200000,
+    "validUntilMs": 1794802800000,
+    "evidenceReference": "User iPhone AI Studio screenshots captured 2026-11-16 12:20-12:21 JST: selected Default Gemini Project; Gemini 3.8 Flash row selected; payment-information setup prompt shown, no billing enablement; TPM peak 1.36K/250K; RPD peak 2/20. RPM 5 is the previously observed 2026-11-15 same-project/model Free limit, NOT visible in today's horizontal-scroll screenshots. Project numeric ID and explicit Free badge were confirmed on the same account in prior screenshots; do not misstate these as shown today. Screenshot is peak usage over past 28 days, NOT remaining quota. Current live Google-side requests and token consumption still unknown.",
     "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
-    "usageInterpretation": "Historical usage known only as up to three independent send attempts; Google-side usage unknown for each. Fresh project/model Free tier confirmation required before next dispatch."
+    "usageInterpretation": "Owner confirms this screenshot is current. TPM and RPD are currently observed, historical RPM 5 from the same model/project. 28-day peak values cannot be subtracted from today's RPD/TPM to derive remaining quota. Three earlier independent attempts and unresolved D must remain uncertain. Do not dispatch after 13:20 JST without renewed evidence."
   },
   "priorHistory": {
     "approvalId": "storage-bench-20261113-one-call",
