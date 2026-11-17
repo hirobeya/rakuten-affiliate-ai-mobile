@@ -135,3 +135,41 @@ test('semantic generator requires evidenced purchase value, not generic one-line
  const engine=require('../lib/room-semantic-engine');
  assert.match(engine.VERSION,/^room_contract_[a-f0-9]{16}$/);
 });
+
+test('Production semantic rescue is default-off and requires an explicit bounded daily limit',async()=>{
+ const oldEnv=process.env.VERCEL_ENV;
+ const oldFlag=process.env.URENAVI_PAID_SEMANTIC_FALLBACK;
+ const oldLimit=process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT;
+ process.env.VERCEL_ENV='production';
+ try{
+  for(const config of [
+   {flag:undefined,limit:2},
+   {flag:'false',limit:2},
+   {flag:'true',limit:undefined},
+   {flag:'true',limit:0},
+   {flag:'true',limit:21}
+  ]){
+   if(config.flag===undefined)delete process.env.URENAVI_PAID_SEMANTIC_FALLBACK;
+   else process.env.URENAVI_PAID_SEMANTIC_FALLBACK=config.flag;
+   if(config.limit===undefined)delete process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT;
+   else process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT=String(config.limit);
+   const x=setup({realLocal:true}),r=res();await x.handler({method:'POST',body:item},r);
+   assert.equal(r.code,409,JSON.stringify(config));
+   assert.equal(x.calls(),0,'unapproved configuration cannot spend AI tokens');
+   assert.equal(r.body.quality.text,'');
+  }
+  process.env.URENAVI_PAID_SEMANTIC_FALLBACK='true';
+  process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT='2';
+  const x=setup({realLocal:true}),r=res();await x.handler({method:'POST',body:item},r);
+  assert.equal(r.code,200);
+  assert.equal(x.calls(),2,'only the existing structured writer and reviewer execute');
+  assert.equal(r.body.quality.status,'ready');
+  assert.equal(r.body.product.what,'収納ボックス');
+  assert.equal(client.ready(r.body),publication(item,draft,review).text);
+  assert.equal(r.body.resourceUsage.calls,2);
+ }finally{
+  if(oldEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=oldEnv;
+  if(oldFlag===undefined)delete process.env.URENAVI_PAID_SEMANTIC_FALLBACK;else process.env.URENAVI_PAID_SEMANTIC_FALLBACK=oldFlag;
+  if(oldLimit===undefined)delete process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT;else process.env.URENAVI_PAID_SEMANTIC_DAILY_LIMIT=oldLimit;
+ }
+});
