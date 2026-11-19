@@ -76,7 +76,7 @@ SQL
 echo 'PASS: Postgres atomic reservation / concurrency / duplicate / exhaustion / unknown usage / client privilege'
 
 psql -v ON_ERROR_STOP=1 <<'SQL'
-do $
+do $capacity$
 declare a record; b record; r jsonb; p record;
 begin
  -- The two previously created reservations remain valid across exhaustion.
@@ -111,7 +111,7 @@ begin
  or has_function_privilege('anon','public.urenavi_capacity_complete_v1(uuid,uuid,text,bigint)','EXECUTE') then
    raise exception 'public terminal-state RPC privilege exposure';
  end if;
-end $;
+end $capacity$;
 SQL
 echo 'PASS: one-way send intent / unknown retained / successful spend / duplicate refusal / permissions'
 
