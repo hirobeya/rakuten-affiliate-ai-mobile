@@ -1,0 +1,31 @@
+name: Verify Free Capacity DB
+on:
+  pull_request:
+    paths:
+      - 'docs/architecture/multitenant-capacity-db-draft.sql'
+      - 'scripts/test-capacity-postgres.sh'
+      - '.github/workflows/verify-free-capacity-db.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise atomic quota reservation on disposable PostgreSQL
+        run: bash scripts/test-capacity-postgres.sh
