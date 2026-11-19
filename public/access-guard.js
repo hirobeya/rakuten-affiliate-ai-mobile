@@ -181,7 +181,7 @@
     const note=document.createElement('div');
     note.textContent='ログイン済みの端末で承認すると、メールを再送せずにこの検証画面へ入れます。';
 
-    function approvalButton(label,origin,preview){
+    function approvalButton(label,origin,preview,sourceLabel){
       const button=document.createElement('button');
       button.type='button';
       button.textContent=label;
@@ -196,14 +196,14 @@
       color:'#fff',
       fontWeight:'900'
       });
-      button.addEventListener('click',()=>prepareApproval(origin,preview));
+      button.addEventListener('click',()=>prepareApproval(origin,preview,sourceLabel));
       return button;
     }
 
     const msg=document.createElement('div');
     msg.style.marginTop='8px';
 
-    function prepareApproval(origin,preview){
+    function prepareApproval(origin,preview,sourceLabel='本番ウレナビ'){
       const code=randomHandoff();
       localStorage.setItem(HANDOFF_KEY,code);
       startHandoffPolling(true);
@@ -216,12 +216,12 @@
       // null return value with noopener. The existing approval/polling guards remain.
       msg.replaceChildren();
       const explanation=document.createElement('div');
-      explanation.textContent=preview?'下のリンクを、この開発版にログイン済みのブラウザで開いて承認してください。ログインし直す必要はありません。':'下のリンクを、本番ウレナビにログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
+      explanation.textContent=preview?'下のリンクを、この開発版にログイン済みのブラウザで開いて承認してください。ログインし直す必要はありません。':'下のリンクを、'+sourceLabel+'にログイン済みのブラウザで開いてください。認証確認後、このPreviewへ戻ります。';
       const approvalLink=document.createElement('a');
       approvalLink.href=approveUrl;
       approvalLink.target='_blank';
       approvalLink.rel='noopener noreferrer';
-      approvalLink.textContent=preview?'ログイン済みの開発版で承認する':'本番で認証を確認する';
+      approvalLink.textContent=preview?'ログイン済みの開発版で承認する':sourceLabel+'で認証を確認する';
       Object.assign(approvalLink.style,{display:'block',padding:'12px',marginTop:'8px',textAlign:'center',fontWeight:'900'});
       msg.append(explanation,approvalLink);
       if(typeof QRCode==='function'){
@@ -237,8 +237,11 @@
     }
 
     const previewBtn=approvalButton('この開発版のログインで承認',window.location.origin,true);
+    const existingPreviewBtn=approvalButton('Safariのログイン済み旧Previewで承認',
+      'https://rakuten-affiliate-ai-mobile-git-feature-ur-9e0756-hirobeya-6572.vercel.app',
+      false,'ログイン済みの旧Preview');
     const btn=approvalButton('本番の認証でPreviewを開く','https://rakuten-affiliate-ai-mobile.vercel.app',false);
-    box.append(title,note,previewBtn,btn,msg);
+    box.append(title,note,previewBtn,existingPreviewBtn,btn,msg);
     loginBtn.insertAdjacentElement('afterend',box);
   }
 

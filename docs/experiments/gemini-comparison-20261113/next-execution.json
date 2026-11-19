@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "status": "approved",
+  "approvalId": "urenavi-gemini-bench-independent-20261119-05",
+  "executionId": "urenavi-gemini-bench-execution-20261119-05",
+  "approvedBy": "管理者 — ChatGPT conversation 2026-11-19: repeated explicit instruction to proceed with fifth Gemini verification, maximum one real request and no retries",
+  "approvedAt": "2026-11-19T06:46:54.329Z",
+  "itemCode": "shopworld:10138423",
+  "model": "gemini-3.8-flash",
+  "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
+  "maxCalls": 1,
+  "freeTierConfirmation": {
+    "verified": false,
+    "projectId": "gen-lang-client-0210652653",
+    "tier": "free",
+    "model": "gemini-3.8-flash",
+    "limits": null,
+    "observedAtMs": null,
+    "validUntilMs": null,
+    "evidenceReference": "NOT VERIFIED for 2026-11-19. Owner confirms no other consumers; this does not constitute a scoped current free tier rate-limit observation. Must not dispatch until verified at execution.",
+    "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
+    "usageInterpretation": "Approved conditional one-shot grant. Execution is blocked until current scoped Google AI Studio Free-tier evidence is recorded. No real model request allowed on this commit."
+  },
+  "priorHistory": {
+    "approvalId": "storage-bench-20261113-one-call",
+    "classification": "D",
+    "historyHash": "b3c8886a6844b184bbeecb32fae497e72fb5189758fd358ddcd3337575d237b4"
+  },
+  "independentTrialAcknowledged": true,
+  "claimPath": null,
+  "resultPath": null,
+  "previousIndependentAttempt": {
+    "approvalId": "urenavi-gemini-bench-independent-20261116-04",
+    "executionId": "urenavi-gemini-bench-execution-20261116-04",
+    "dispatchAttempts": 1,
+    "providerHttpStatus": 503,
+    "appHttpStatus": null,
+    "error": "gemini_http_503_no_retry",
+    "tokens": null,
+    "resultSavedAndRecovered": true,
+    "doNotResend": true,
+    "source": "Owner-authenticated read-only GET via Gemini lab, 2026-11-19: exact independent-04 IDs, itemCode shopworld:10138423, requestHash 72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a; recovered receipt reports HTTP 503 UNAVAILABLE, no generated text, tokens null, no request-id. This is recovery evidence, not new model usage.",
+    "providerDiagnostic": {
+      "httpStatus": 503,
+      "status": "UNAVAILABLE",
+      "code": 503,
+      "headers": {}
+    },
+    "providerCalls": 1
+  },
+  "profile": "low-thinking-next-trial",
+  "maxOutputTokens": 4000,
+  "thinkingLevel": "low"
+}

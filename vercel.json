@@ -60,13 +60,15 @@
   ],
   "functions": {
     "api/room-ai.js": {
-      "maxDuration": 20
+      "maxDuration": 60,
+      "includeFiles": "lib/room-writer-raw/gemini-blob-worker.js"
     }
   },
   "git": {
     "deploymentEnabled": {
       "main": true,
-      "rebuild/urenavi-core-20261028": false
+      "rebuild/urenavi-core-20261028": false,
+      "experiment/urenavi-gemini-comparison-20261113": false
     }
   }
 }

@@ -30,7 +30,14 @@ textとevidenceを同じ完全な連続引用
 function makeInputHash(){ return require('node:crypto').createHash('sha256').update(PROMPT_VERSION+VALIDATION_RULE_VERSION).digest('hex'); }
 */
 
-const handler=typeWrapper.createHandler();
+const existingHandler=typeWrapper.createHandler();
+const handler=function(req,res){
+  // Branch-guarded, owner-only lab; ordinary requests use the unchanged handler.
+  if(req.query?.action==='gemini-comparison-lab') {
+    return require('../lib/room-writer-raw/gemini-preview-route')(req,res);
+  }
+  return existingHandler(req,res);
+};
 
 module.exports=handler;
 Object.assign(module.exports,legacy);
