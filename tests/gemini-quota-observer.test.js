@@ -37,3 +37,29 @@ test('model errors and missing key remain fail-closed without any retry',async()
  assert.equal(noKey.status,'key_missing');
  assert.equal(noKey.probeCalls,0);
 });
+
+
+test('current independently claimed attempt is counted once from durable state, not from browser or Google guessed remaining',async()=>{
+ const at=Date.parse('2026-11-19T10:20:00Z'),status=knownUsage({
+  timestamp:at,currentAttempt:{claim:{at:'2026-11-19T09:00:00Z'},dispatch:{at:'2026-11-19T09:00:00Z'},approvalClaim:{}}});
+ assert.equal(status.trackedAttemptsTotal,5);
+ assert.equal(status.trackedAttemptsToday,1);
+ assert.equal(status.currentAttemptClaimed,true);
+ assert.equal(status.googleRemaining,null);
+ let calls=0;
+ const o=await observe({clock:()=>at,apiKey:'fake',loadCurrentAttempt:async()=>({claim:{at:'2026-11-19T09:00:00Z'}}),
+  fetchImpl:async()=>{calls++;return {ok:true,status:200,json:async()=>({name:'models/gemini-3.8-flash',supportedGenerationMethods:['generateContent']})};}});
+ assert.equal(o.ledgerRead,'ok');
+ assert.equal(o.usage.trackedAttemptsTotal,5);
+ assert.equal(o.providerGenerationCalls,0);
+ assert.equal(o.canAuthorizeGeneration,false);
+ assert.equal(calls,1);
+});
+test('unreadable ledger never becomes zero verified usage',async()=>{
+ const o=await observe({apiKey:'fake',loadCurrentAttempt:async()=>{throw Error('blob unavailable');},
+ fetchImpl:async()=>({ok:false,status:503})});
+ assert.equal(o.ledgerRead,'unavailable');
+ assert.equal(o.usage.googleRemaining,null);
+ assert.equal(o.modelCheck.available,null);
+ assert.equal(o.canAuthorizeGeneration,false);
+});
