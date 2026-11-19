@@ -131,10 +131,14 @@ begin
    perform 1 from public.urenavi_provider_capacity_v1 where provider=a.provider for update;
    perform 1 from public.urenavi_tenant_capacity_v1
      where user_id=a.user_id and provider=a.provider for update;
+   -- Provider may consume more than the estimate even on HTTP 200.
+   -- Record the REAL amount, and close future admissions until an operator
+   -- obtains fresh authoritative quota evidence; never hide an overrun.
    update public.urenavi_provider_capacity_v1
      set request_reserved=request_reserved-1, request_used=request_used+1,
        token_reserved=token_reserved-a.estimated_tokens,
-       token_used=token_used+p_actual_tokens
+       token_used=token_used+p_actual_tokens,
+       external_usage_known=external_usage_known and p_actual_tokens<=a.estimated_tokens
      where provider=a.provider and request_reserved>0 and token_reserved>=a.estimated_tokens;
    if not found then raise exception 'global_accounting_inconsistent'; end if;
    update public.urenavi_tenant_capacity_v1
