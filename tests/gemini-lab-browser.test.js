@@ -34,7 +34,7 @@ test('restored failed receipt displays provider error and cannot enable generati
 
 
 test('automatic owner preflight shows checked model but never invents Free quota remaining',async()=>{
- const result={...payload,nextExecution:{status:'approved_waiting_prerequisites',allow:false,reasons:['fresh_free_tier_confirmation_required']}};
+ const result={...payload,holds:['current_free_project_limits_evidence_missing'],executionHold:'current_free_project_limits_evidence_missing',nextExecution:{status:'approved_waiting_prerequisites',allow:false,reasons:['fresh_free_tier_confirmation_required']}};
  const b=browser(async url=>response(url.includes('mode=quota-observation')
   ?{mode:'quota-observation',model:'gemini-3.8-flash',modelCheck:{status:'model_available',available:true},usage:{trackedAttemptsTotal:4},exactRemaining:null,canAuthorizeGeneration:false,providerGenerationCalls:0}
   :result));
