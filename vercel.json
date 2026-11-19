@@ -67,7 +67,8 @@
   "git": {
     "deploymentEnabled": {
       "main": true,
-      "rebuild/urenavi-core-20261028": false
+      "rebuild/urenavi-core-20261028": false,
+      "experiment/urenavi-gemini-comparison-20261113": false
     }
   }
 }
