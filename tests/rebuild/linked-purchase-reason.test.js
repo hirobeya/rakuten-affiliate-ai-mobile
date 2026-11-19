@@ -46,7 +46,7 @@ test('final local rescue must reject a second unsupported or altered source clau
  const item={itemCode:'safe:1',itemName:'フライパン',itemCaption:'取手が取り外せるフライパンです。重ねて収納できます。'};
  const text='取手が取り外せるフライパンです。重ねて収納できます。';
  const base={
-  ok:true,quality:{status:'ready',text},variants:[{text}],
+  ok:true,productType:{specific:'フライパン',quote:'フライパン'},quality:{status:'ready',text},variants:[{text}],
   local:{partner:{kind:'caption_claim',quote:'取手が取り外せるフライパンです。',linkedEvidence:[
    {source:'itemCaption',quote:'取手が取り外せるフライパンです。'},
    {source:'itemCaption',quote:'重ねて収納できます。'}

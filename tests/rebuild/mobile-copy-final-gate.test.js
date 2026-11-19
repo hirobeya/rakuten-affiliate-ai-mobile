@@ -118,12 +118,12 @@ test('actual mobile postReady function enables only validated paid copy in the c
 });
 
 test('all newly eligible 44-product editorial copies must pass the actual iPhone copy guard',()=>{
- const {localZeroCall,verifiedCaptionEditorialRescue}=require('../../api/room-ai-v3');
+ const {localZeroCall,verifiedCaptionEditorialRescue,verifiedTitleSignalEditorialRescue}=require('../../api/room-ai-v3');
  let verified=0;const blocked=[];
  for(const row of frozen.rows){
   if(localZeroCall(row.item))continue;
-  const result=localZeroCall(row.item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true});
-  if(!verifiedCaptionEditorialRescue(row.item,result))continue;
+  const result=localZeroCall(row.item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
+  if(!verifiedCaptionEditorialRescue(row.item,result)&&!verifiedTitleSignalEditorialRescue(row.item,result))continue;
   const text=ready(result);
   if(!text||review(text,row.item,true,result))blocked.push({itemCode:row.item.itemCode,quote:result.local.partner.quote});
   else verified++;
@@ -131,4 +131,57 @@ test('all newly eligible 44-product editorial copies must pass the actual iPhone
  console.log('EDITORIAL_MOBILE_COPY_44',JSON.stringify({verified,blocked}));
  assert.equal(blocked.length,0,'server-ready editorial text must never be falsely marked copy-ready when the browser would block it');
  assert.ok(verified>=3);
+});
+
+test('real iPhone API and copy button accept only source-verified buyer-use signal with no AI calls',async()=>{
+ const {verifiedTitleSignalEditorialRescue}=require('../../api/room-ai-v3');
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ const item=sample('besthouse:10000083');
+ try{
+  const {handler,getCalls}=server();
+  const res=response();await handler({method:'POST',body:item},res);
+  assert.equal(res.code,200);
+  assert.equal(res.body.model,'local');
+  assert.equal(res.body.local.partner.kind,'signal');
+  assert.equal(verifiedTitleSignalEditorialRescue(item,res.body),true);
+  const text=ready(res.body);
+  assert.ok(text);
+  assert.equal(review(text,item,true,res.body),false);
+  assert.deepEqual(getCalls(),{providerCalls:0,quotaCalls:0});
+  const wrong={...item,itemName:'別の商品'};
+  assert.equal(review(text,wrong,true,res.body),true,'mismatched selling item must not be copied');
+  const fraudulent={...res.body,local:{partner:{...res.body.local.partner,quote:'100%確実に充電'}}};
+  assert.equal(review(text,item,true,fraudulent),true);
+  assert.equal(verifiedTitleSignalEditorialRescue(item,fraudulent),false);
+  const noUse={...res.body,quality:{status:'ready',text:text.replace('ケーブルの持ち歩きを減らしたいとき。','仕様を見て選びたいとき。')},
+   variants:[{...res.body.variants[0],text:text.replace('ケーブルの持ち歩きを減らしたいとき。','仕様を見て選びたいとき。')}]};
+  assert.equal(review(noUse.quality.text,item,true,noUse),true);
+  assert.equal(verifiedTitleSignalEditorialRescue(item,noUse),false);
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
+
+test('empty, blocked, pending or missing marketing copy can never be marked 問題なし',()=>{
+ const a=html.indexOf('function aiPanelHasReviewablePost(');
+ const b=html.indexOf('function aiPanelMarkup(',a);
+ assert.ok(a>0&&b>a);
+ const predicate=vm.runInNewContext('('+html.slice(a,b).trim()+')',{
+  isV3PreviewResult:result=>String(result?.version||'').startsWith('super-urenavi-v3-'),
+  readyV3Post:ready,
+  RoomCopyResult:{canonical:()=>false,ready:()=>''}
+ });
+ const text='購入理由が原文で明示された文章です。';
+ const valid={version:'super-urenavi-v3-conditional-preview',ok:true,pending:false,quality:{status:'ready',text},variants:[{text}]};
+ assert.equal(predicate({state:'done',data:valid}),true);
+ for(const state of ['error','loading','paused','pending','restored','skipped']){
+  assert.equal(predicate({state,data:valid}),false,state);
+ }
+ for(const data of [
+  {...valid,quality:{status:'blocked',text}},
+  {...valid,quality:{status:'ready',text:''}},
+  {...valid,variants:[{text:'別の商品についての説明です。'}]},
+  {...valid,ok:false},
+  {...valid,pending:true}
+ ])assert.equal(predicate({state:'done',data}),false,'rejected response cannot earn positive review');
+ assert.match(html,/button\.disabled=!reviewable/);
+ assert.match(html,/!aiPanelHasReviewablePost\(aiRoomResults\.get\(index\)\)/);
 });

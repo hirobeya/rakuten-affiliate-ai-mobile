@@ -41,3 +41,15 @@ for(const malformed of [undefined,null,'not an array']){const broken=review(sing
 const missingProof=structuredClone(single);missingProof.sentences[0].quotes=[];assert.equal(c.publication(item,missingProof,review(missingProof)).status,'blocked');
 for(const experience of ['電気ケトルを選びました。','電気ケトルを使っています。','電気ケトルを買ってよかった。']){const fictional=structuredClone(single);fictional.sentences[0].text=experience;assert(c.publication(item,fictional,review(fictional)).reasons.some(r=>r.rule==='fabricated_personal_experience'));}
 const unsupported=structuredClone(single);unsupported.sentences[0].text='一日中ずっと使える電気ケトルです。';const approving=review(unsupported);approving.sentences[0].evidenceQuotes=[];assert.equal(c.publication(item,unsupported,approving).status,'blocked');
+
+for(const fragment of [
+ '忙しい朝にお湯を用意したいとき、約85秒で沸かせる電気ケトル',
+ '忙しい朝にお湯を用意したいとき、約85秒で沸かせる電気ケトルなので。',
+ '忙しい朝にお湯を用意したいとき、約85秒で沸かせる電気ケトルですが、'
+]){
+ const bad=structuredClone(single);
+ bad.sentences[0].text=fragment;
+ const verdict=c.publication(item,bad,review(bad));
+ assert.equal(verdict.status,'blocked',fragment);
+ assert.ok(verdict.reasons.some(x=>['unfinished_sentence','dangling_relation'].includes(x.rule)),fragment);
+}

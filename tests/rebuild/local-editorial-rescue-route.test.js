@@ -23,12 +23,14 @@ test('frozen 44 regression: existing local success preserved; editorial-only new
  assert.ok(additional>=1,'source-grounded editorial path must actually recover a previously held item');
 });
 test('editorial rescue does not accept generic or fabricated approval',()=>{
- const item={itemName:'収納ベンチ',itemCaption:'収納できる',itemCode:'test:1'};
- const claim={ok:true,quality:{status:'ready',text:'収納ベンチは収納できる'},variants:[{text:'収納ベンチは収納できる'}],local:{partner:{kind:'caption_claim',quote:'収納できる'}},verifiedAppeals:[{text:'収納できる',verification:{keepDirectFact:true}}]};
+ const quote='座部を上げると、内部に物を収納可能';
+ const item={itemName:'収納ベンチ',itemCaption:quote,itemCode:'test:1'};
+ const text='収納ベンチは、'+quote+'です。';
+ const claim={ok:true,productType:{specific:'収納ベンチ'},quality:{status:'ready',text},variants:[{text}],local:{partner:{kind:'caption_claim',quote}},verifiedAppeals:[{text:quote,verification:{keepDirectFact:true}}]};
  assert.equal(verifiedCaptionEditorialRescue(item,claim),true);
  assert.equal(verifiedCaptionEditorialRescue(item,{...claim,local:{partner:{kind:'signal',quote:'収納できる'}}}),false);
  assert.equal(verifiedCaptionEditorialRescue(item,{...claim,local:{partner:{kind:'caption_claim',quote:'空中浮遊'}}}),false);
- assert.equal(verifiedCaptionEditorialRescue(item,{...claim,verifiedAppeals:[{text:'収納できる',verification:{keepDirectFact:false}}]}),false);
+ assert.equal(verifiedCaptionEditorialRescue(item,{...claim,verifiedAppeals:[{text:quote,verification:{keepDirectFact:false}}]}),false);
  assert.equal(verifiedCaptionEditorialRescue(item,{...claim,variants:[{text:'別の文章'}]}),false);
 });
 test('owner preview recovers the frozen new caption copy without any provider or quota request',async()=>{

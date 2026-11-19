@@ -59,9 +59,25 @@
   return '';
  }
  function sourceIncludes(source,quote){const q=normalize(quote);return Boolean(q)&&normalize(source).includes(q);}
+ // Source quotation must retain the original character class (e.g. fullwidth ＜＞);
+ // compatibility normalization can otherwise turn a merchant heading into HTML-like markup.
+ function sourceQuoteIncludes(source,quote){const q=String(quote||'').replace(/\s+/g,' ').trim();return Boolean(q)&&String(source||'').replace(/\s+/g,' ').includes(q);}
  function sourceOperationReason(quote){
   const q=normalize(quote);
   return /^(?:[^。]{1,14}を(?:上げる|開ける|押す|引く)と、)[^。]{3,}(?:収納可能|使用可能|取り出せる|できます|できる|しやすい)[。]?$/.test(q);
+ }
+ // Server checks the exact rule and permitted intent. The browser checks
+ // source binding and published structure independently; no fabricated
+ // quote or standalone spec can become a copyable result.
+ function verifiedTitleSignal(item,partner,text){
+  if(partner?.kind!=='signal'||typeof text!=='string')return false;
+  const quote=String(partner.quote||'');
+  if(quote.length<4||!sourceIncludes(item?.itemName,quote))return false;
+  const rows=text.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  if(rows.length<4||!/(?:したいとき|使いたいとき|持ち歩きたいとき|選びたいとき)[。]?$/.test(rows[0])
+    ||/(?:見て選|確認して選|仕様も見)/.test(rows[0]))return false;
+  if(!rows[1].includes(quote)||catalogueOnly(text))return false;
+  return true;
  }
  function verifiedLinkedReason(item,partner,text){
   const facts=partner?.linkedEvidence;
@@ -85,5 +101,60 @@
   return text.includes(first)&&text.includes(second);
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceOperationReason,verifiedLinkedReason,restatedReason};
+ // The selling unit may be named in the preceding complete sentence while
+ // the next sentence explains alternative ways to use it. Verify BOTH the
+ // specific seller-authored use sentence and the exact preceding unit name.
+ // This is a generic grammatical relationship, not a whitelist of products.
+ function verifiedSourceMultiUse(item,partner,identity,text){
+  const quote=String(partner?.quote||''),id=normalize(identity);
+  const caption=String(item?.itemCaption||'');
+  if(partner?.kind!=='caption_claim'||!id||quote.length<22
+     ||!caption.includes(quote)||!String(text||'').includes(quote))return false;
+  if(!/(?:としても|として|できるほか|できる上|兼用でき|使い分け|用途に合わせて|シーンに合わせて)/.test(quote)
+    ||!/(?:使用できます|使用できる|使えます|使える|装着できます|装着できる|兼用できます|兼用できる|選べます|選べる)/.test(quote))return false;
+  if(/(?:関連商品|おすすめ商品|別売|他の商品|別商品|非対応|対応していない|できない|できません|不可|必ず|絶対|100%|最適|保証|大活躍)/.test(quote))return false;
+  const at=caption.indexOf(quote),before=caption.slice(Math.max(0,at-220),at);
+  // When the target name is absent on the claim, it must be the subject
+  // explicitly introduced by the last nearby complete source sentence.
+  if(!quote.includes(id)&&!before.includes(id+'です。'))return false;
+  if(/(?:関連商品|おすすめ商品|別売り|別商品|他の商品)/.test(before))return false;
+  return true;
+ }
+
+
+ // One source-grounded admission contract shared by server and iPhone.
+ // A server's 'ready' flag is not evidence. Product identity, full output,
+ // quotation, sentence relation and item ownership must independently agree.
+ function verifiedLocalCopy(item,result,text){
+  const body=String(text||''),partner=result?.local?.partner;
+  if(!result?.ok||result.pending!==false||result.model!=='local'||result.phase!=='local'
+    ||result.quality?.status!=='ready'||result.groq?.totalCalls!==0
+    ||!body.trim()||result.quality.text!==body||result.variants?.length!==1
+    ||result.variants[0]?.text!==body)return false;
+  const id=String(result.productType?.specific||'');
+  const typeQuote=String(result.productType?.quote||'');
+  if(!id||!typeQuote||!sourceIncludes(item?.itemName,typeQuote))return false;
+  // A copyable ROOM post must tell readers WHAT is being recommended.
+  // A type present only in hidden API metadata cannot rescue an orphaned
+  // feature sentence like "太股付近に装着できます。".
+  const visibleBody=body.replace(/(?:^|\n)価格[:：][^\n]*/g,'')
+    .replace(/※アフィリエイト広告を利用しています/g,'').trim();
+  if(!sourceIncludes(visibleBody,id))return false;
+  let owned=false;
+  if(partner?.kind==='caption_claim'){
+   const quote=String(partner.quote||'');
+   owned=quote.length>=8&&sourceQuoteIncludes(item?.itemCaption,quote)&&body.includes(quote)
+     &&(Array.isArray(partner.linkedEvidence)&&partner.linkedEvidence.length
+       ?verifiedLinkedReason(item,partner,body)
+       :hasUseRelation(quote)||sourceOperationReason(quote)
+         ||verifiedSourceMultiUse(item,partner,id,body));
+  }else if(partner?.kind==='signal'){
+   owned=verifiedTitleSignal(item,partner,body);
+  }
+  if(!owned||catalogueOnly(body)
+    ||restatedReason(body,{identity:id,quote:partner?.quote||''}))return false;
+  return true;
+ }
+
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,restatedReason};
 });

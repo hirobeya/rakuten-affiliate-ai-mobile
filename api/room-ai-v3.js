@@ -11,12 +11,13 @@ const {resolveLocalUnderstanding}=require('../lib/super-urenavi-router');
 const {repeatedLiteralIdentity,leadingCompoundIdentity}=require('../lib/repeated-literal-identity');
 const {selectLocalIdentity}=require('../lib/local-identity-arbitrator');
 const {hasCompetingCompoundIdentity}=require('../lib/local-zero-identity-conflict');
-const {composeLocalPartnerCopy}=require('../lib/local-partner-reasoner');
+const {composeLocalPartnerCopy,SAFE_SIGNALS}=require('../lib/local-partner-reasoner');
 const localTypeData=require('../data/local-product-types.json');
 const structured=require('../public/structured-room-copy');
 const {guardUnsupportedBenefitCopy}=require('../public/fact-safety');
-const {catalogueOnly,restatedReason}=require('../public/purchase-copy-quality');
+const {catalogueOnly,restatedReason,hasUseRelation,sourceOperationReason,verifiedTitleSignal,verifiedLinkedReason,verifiedSourceMultiUse}=require('../public/purchase-copy-quality');
 const {isDescriptorIdentity}=require('../lib/local-identity-role-guard');
+const {reviewSourceBenefit}=require('../lib/local-editorial-quality');
 
 const DEFAULT_DAILY_LIMIT=200;
 const PREVIEW_NAMESPACE='__v3_preview__:';
@@ -310,8 +311,27 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
     repeated:repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value||''
   };
   let local=selectLocalIdentity({title,ruleLocal,literalLocal,repeatedLocal});
-  if(previewOptions.identityExpansion===true)
+  if(previewOptions.identityExpansion===true){
     local=expandedLiteralWinner(item,literalLocal,local);
+    // When no trusted type dictionary has identified the selling unit,
+    // use the merchant's literal "...商品です。" statement to distinguish
+    // a repeated product noun from a prominent brand or model name.
+    // This is a general source-role rule, not a product-specific exception.
+    const caption=normalize(item?.itemCaption).slice(0,320);
+    const owned=normalize(repeatedLocal?.canonicalIdentity||repeatedLocal?.raw?.productType?.value);
+    const oldIdentity=normalize(local?.canonicalIdentity||local?.raw?.productType?.value);
+    const standalone=title.split(/[\s【】〖〗（）()「」『』・／｜,:：;；!！?？★☆※。&＆]+/).includes(owned);
+    if(!ruleLocal&&!literalLocal&&owned&&owned!==oldIdentity&&standalone
+      &&caption.includes(owned+'です。')
+      &&repeatedLocal?.validation?.productType?.valid===true){
+      local={...repeatedLocal,arbitration:{
+        version:'2026-11-16-source-role-disambiguation-v1',
+        winner:{identity:owned,source:'repeated+merchant_definition'},
+        candidates:[{identity:owned,source:'repeated+merchant_definition'},
+          ...(oldIdentity?[{identity:oldIdentity,source:'title_hypothesis'}]:[])]
+      }};
+    }
+  }
 
   if(!local){
     const rescue=leadingCompoundIdentity(item);
@@ -355,7 +375,7 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
 
   const structuredFacts=structuredSafe&&Array.isArray(copy.facts)?copy.facts:[];
   const literalFacts=extractLiteralSpecs(titleOnlyItem);
-  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true,linkedReason:previewOptions.linkedReason===true});
+  const proposedPartnerCopy=composeLocalPartnerCopy({itemName:titleOnlyItem.itemName,itemCaption:item.itemCaption,identity,itemPrice:item.itemPrice,editorial:previewOptions.editorial===true,linkedReason:previewOptions.linkedReason===true,verifiedIntent:previewOptions.verifiedIntent===true});
   if(diagnostics) diagnostics.purchaseCandidate=proposedPartnerCopy?{
     text:proposedPartnerCopy.text,quote:proposedPartnerCopy.quote,source:proposedPartnerCopy.source||'itemName',
     kind:proposedPartnerCopy.kind,axes:proposedPartnerCopy.axisHints||[]
@@ -433,6 +453,13 @@ function localZeroCall(item,learnedIdentity='',diagnostics=null,previewOptions={
   const restatement=restatedReason(text,{identity,quote:partnerCopy?.quote||''});
   if(restatement) return reject('purchase_reason',restatement);
   if(catalogueOnly(text)) return reject('quality','catalogue_only_copy');
+  // An exact quote is necessary, but never by itself a persuasive buyer
+  // reason. This is a rejection-only editorial screen, not a 6-axis pass.
+  // Historic baseline copy remains untouched.
+  if(previewOptions.editorial===true&&partnerCopy?.kind==='caption_claim'){
+    const editorialReview=reviewSourceBenefit({quote:partnerCopy.quote,identity});
+    if(!editorialReview.ok)return reject('quality',editorialReview.reason);
+  }
   if(diagnostics) Object.assign(diagnostics,{status:'ready',stage:'publication',reason:'grounded_local_copy'});
   const hook=partnerCopy?.hook||(useStructuredText&&String(understanding.scene||'').trim()?String(understanding.scene).trim():identity);
   const hookType=partnerCopy?.hookType||(hook===identity?'identity':'scene');
@@ -488,9 +515,40 @@ function verifiedCaptionEditorialRescue(item,result){
   const text=String(result.quality.text||'');
   const linked=partner.linkedEvidence||[];
   if(!Array.isArray(linked)||linked.length>3)return false;
-  if(linked.length&&!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
-    &&item.itemCaption.includes(f.quote)&&text.includes(f.quote)))return false;
-  return !!text&&result.variants?.[0]?.text===text&&text.includes(quote);
+  if(linked.length&&(!linked.every(f=>f?.source==='itemCaption'&&typeof f.quote==='string'&&f.quote.trim()
+    &&item.itemCaption.includes(f.quote)&&text.includes(f.quote))
+    ||!verifiedLinkedReason(item,partner,text)))return false;
+  if(!linked.length&&!hasUseRelation(quote)&&!sourceOperationReason(quote)
+    &&!verifiedSourceMultiUse(item,partner,result?.productType?.specific||'',text))return false;
+  return !!text&&result.variants?.[0]?.text===text&&text.includes(quote)
+    &&typeof result.productType?.specific==='string'
+    &&text.includes(result.productType.specific);
+}
+
+// A rule-authored use intent and a literal title signal are a separate,
+// auditable path from caption claims. Never accept generic spec comparison,
+// a missing quote, or a guessed customer outcome.
+function verifiedTitleSignalEditorialRescue(item,result){
+  if(!result?.ok||result?.pending!==false||result?.model!=='local'
+      ||result?.quality?.status!=='ready'||result?.groq?.totalCalls!==0)return false;
+  const partner=result?.local?.partner,quote=String(partner?.quote||'');
+  if(partner?.kind!=='signal'||quote.length<4||typeof item?.itemName!=='string'
+      ||!item.itemName.includes(quote))return false;
+  const body=String(result.quality.text||'');
+  if(!body||result.variants?.length!==1||result.variants[0]?.text!==body)return false;
+  const lines=body.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  if(lines.length<3||!lines[1]?.includes(quote))return false;
+  if(!result.verifiedAppeals?.some(v=>v?.verification?.keepDirectFact===true
+    &&typeof v.text==='string'&&v.text.includes(quote)))return false;
+  const firstLine=lines[0].replace(/[。！!]+$/,'');
+  const allowed=SAFE_SIGNALS.some(rule=>
+    rule.intent===firstLine
+    &&/(?:したいとき|使いたいとき|持ち歩きたいとき|選びたいとき)$/.test(rule.intent)
+    &&!/(?:見て選|確認して選|仕様も見)/.test(rule.intent)
+    &&[rule.term,...(rule.aliases||[])].some(t=>normalize(t).toLowerCase()===normalize(quote).toLowerCase())
+  );
+  return allowed&&verifiedTitleSignal(item,partner,body)&&!catalogueOnly(body)&&!structured.RISK.test(body)
+    &&guardUnsupportedBenefitCopy(item,body)===body;
 }
 
 function createHandler(deps={}){
@@ -548,8 +606,8 @@ function createHandler(deps={}){
         if(!localResult){
           // One offline-only editorial rescue, using the existing local gate.
           // Never use it for title-only, generic, or unsupported claims.
-          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true,identityExpansion:true});
-          if(verifiedCaptionEditorialRescue(item,editorial)) localResult=editorial;
+          const editorial=localFn(item,learnedIdentity,{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
+          if(verifiedCaptionEditorialRescue(item,editorial)||verifiedTitleSignalEditorialRescue(item,editorial)) localResult=editorial;
         }
         if(localResult){
           if(learnedIdentity&&localResult.local) localResult.local.learnedIdentity=learnedIdentity;
@@ -660,6 +718,7 @@ module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
 module.exports.localZeroCall=localZeroCall;
 module.exports.verifiedCaptionEditorialRescue=verifiedCaptionEditorialRescue;
+module.exports.verifiedTitleSignalEditorialRescue=verifiedTitleSignalEditorialRescue;
 module.exports.resolveLiteralIdentity=resolveLiteralIdentity;
 module.exports.resolveIdentityHint=resolveIdentityHint;
 module.exports.extractLiteralSpecs=extractLiteralSpecs;
