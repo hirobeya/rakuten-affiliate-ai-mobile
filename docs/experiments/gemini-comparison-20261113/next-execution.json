@@ -19,7 +19,7 @@
     "validUntilMs": null,
     "evidenceReference": "The fourth grant was consumed by observed HTTP 503 on 2026-11-16. Never reuse its Free evidence as a fresh subsequent approval.",
     "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
-    "usageInterpretation": "Unapproved future grant placeholder. Four known send attempts, unknown Google token consumption. No dispatch permitted."
+    "usageInterpretation": "Unapproved future grant placeholder. Four known send attempts; fourth receipt recovered read-only 2026-11-19. Unknown Google token consumption. No dispatch permitted."
   },
   "priorHistory": {
     "approvalId": "storage-bench-20261113-one-call",
@@ -37,9 +37,16 @@
     "appHttpStatus": null,
     "error": "gemini_http_503_no_retry",
     "tokens": null,
-    "resultSavedAndRecovered": "not_verified",
+    "resultSavedAndRecovered": true,
     "doNotResend": true,
-    "source": "Owner screenshot 2026-11-16 12:31 JST; private Blob recovery remains pending"
+    "source": "Owner-authenticated read-only GET via Gemini lab, 2026-11-19: exact independent-04 IDs, itemCode shopworld:10138423, requestHash 72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a; recovered receipt reports HTTP 503 UNAVAILABLE, no generated text, tokens null, no request-id. This is recovery evidence, not new model usage.",
+    "providerDiagnostic": {
+      "httpStatus": 503,
+      "status": "UNAVAILABLE",
+      "code": 503,
+      "headers": {}
+    },
+    "providerCalls": 1
   },
   "profile": "low-thinking-next-trial",
   "maxOutputTokens": 4000,
