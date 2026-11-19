@@ -81,3 +81,25 @@ test('accepted prior runtime proof permits one mock dispatch; incomplete or wron
   }finally{fs.rmSync(dir,{recursive:true,force:true});}
  }
 }));
+
+
+test('approved fifth grant with missing current project Free proof cannot claim or send even when owner requests it',()=>preview(async()=>{
+ const fifth=require('../docs/experiments/gemini-comparison-20261113/next-execution.json');
+ const ids={approvalId:fifth.approvalId,executionId:fifth.executionId};
+ const m={writes:0};
+ const h=H.createHandler({authorizeImpl:async()=>({ok:true,plan:'owner'}),
+   nextGrant:fifth,
+   storeFactory:()=>({state:async()=>({}),readProbe:async()=>({version:2,passed:true,context:'runtime',executionSha:SHA}),
+     begin:async()=>{m.writes++;throw Error('must never create claim');},
+     dispatch:async()=>{m.writes++;throw Error('must never dispatch');},
+     finish:async()=>{m.writes++;throw Error('must never write result');}}),
+   compare:async()=>{throw Error('provider must never be contacted without fresh Free proof');},
+   account:account()});
+ const r=response();await h(req('POST',ids),r);
+ assert.equal(r.statusCode,409);
+ assert.equal(r.body.error,'new_explicit_approval_required');
+ assert(r.body.nextExecution.reasons.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(m.writes,0);
+ assert.equal(fifth.maxCalls,1);
+ assert.equal(fifth.freeTierConfirmation.verified,false);
+}));
