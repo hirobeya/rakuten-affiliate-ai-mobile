@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "status": "awaiting_explicit_approval",
-  "approvalId": null,
-  "executionId": null,
-  "approvedBy": null,
-  "approvedAt": null,
+  "status": "approved",
+  "approvalId": "urenavi-gemini-bench-independent-20261119-05",
+  "executionId": "urenavi-gemini-bench-execution-20261119-05",
+  "approvedBy": "管理者 — ChatGPT conversation 2026-11-19: repeated explicit instruction to proceed with fifth Gemini verification, maximum one real request and no retries",
+  "approvedAt": "2026-11-19T06:46:54.329Z",
   "itemCode": "shopworld:10138423",
   "model": "gemini-3.8-flash",
   "requestHash": "72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a",
@@ -17,9 +17,9 @@
     "limits": null,
     "observedAtMs": null,
     "validUntilMs": null,
-    "evidenceReference": "The fourth grant was consumed by observed HTTP 503 on 2026-11-16. Never reuse its Free evidence as a fresh subsequent approval.",
+    "evidenceReference": "NOT VERIFIED for 2026-11-19. Owner confirms no other consumers; this does not constitute a scoped current free tier rate-limit observation. Must not dispatch until verified at execution.",
     "sourceUrl": "https://aistudio.google.com/rate-limit?project=gen-lang-client-0210652653",
-    "usageInterpretation": "Unapproved future grant placeholder. Four known send attempts; fourth receipt recovered read-only 2026-11-19. Unknown Google token consumption. No dispatch permitted."
+    "usageInterpretation": "Approved conditional one-shot grant. Execution is blocked until current scoped Google AI Studio Free-tier evidence is recorded. No real model request allowed on this commit."
   },
   "priorHistory": {
     "approvalId": "storage-bench-20261113-one-call",
