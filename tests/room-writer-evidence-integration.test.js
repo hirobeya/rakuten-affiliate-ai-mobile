@@ -15,7 +15,7 @@ test('real Groq writer gets original-span hints, never a publication grant',()=>
  const request=payload('generate',item,{partnerProductType:'洗濯ネット'});
  assert.deepEqual(request.sourceEvidenceHints,hints);
  assert.equal(request.itemCaption,item.itemCaption);
- assert.match(WRITER_PROMPT,/sourceEvidenceHints.*使用許可や意味的な承認ではない/);
+ assert.ok(request.sourceEvidenceHints.every(h=>h.publicationApproved===false));
 });
 test('hints are absent when owner product identity is unknown or conflicting',()=>{
  const item=items.find(i=>i.itemCode==='linofle:10000458');
