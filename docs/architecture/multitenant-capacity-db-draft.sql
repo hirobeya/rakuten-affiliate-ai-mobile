@@ -83,6 +83,79 @@ end $$;
 revoke all on function public.urenavi_capacity_reserve_v1(uuid,uuid,text,bigint,timestamptz) from public,anon,authenticated;
 grant execute on function public.urenavi_capacity_reserve_v1(uuid,uuid,text,bigint,timestamptz) to service_role;
 
--- BLOCKED pending isolated DB verification and a durable send-intent/state transition.
--- The request must NOT call any AI merely because this reservation RPC succeeded.
--- Reconciliation, window rollover and subscription lifecycle remain separate work.
+-- Reservation is not a dispatch permit. Send-intent and completion follow.
+
+-- State transitions are separate from reservation. Reserving alone NEVER permits dispatch.
+-- A successful send_intent receipt MUST be durably obtained before one provider request.
+-- A lost send_intent receipt is a HOLD (not permission to retry).
+create or replace function public.urenavi_capacity_send_intent_v1(
+ p_attempt_id uuid,p_user_id uuid
+) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare a public.urenavi_capacity_attempts_v1%rowtype;
+begin
+ select * into a from public.urenavi_capacity_attempts_v1
+   where attempt_id=p_attempt_id and user_id=p_user_id for update;
+ if not found then
+   return jsonb_build_object('accepted',false,'reason','attempt_missing');
+ end if;
+ if a.status<>'reserved' then
+   return jsonb_build_object('accepted',false,'reason','already_transitioned');
+ end if;
+ -- One-way transition. No request replay after the first send intent.
+ update public.urenavi_capacity_attempts_v1
+   set status='send_intent' where attempt_id=p_attempt_id;
+ return jsonb_build_object('accepted',true,'attemptId',p_attempt_id::text,'userId',p_user_id::text);
+end $$;
+revoke all on function public.urenavi_capacity_send_intent_v1(uuid,uuid) from public,anon,authenticated;
+grant execute on function public.urenavi_capacity_send_intent_v1(uuid,uuid) to service_role;
+
+-- A confirmed successful response moves the reservation to spent.
+-- Unknown/failed/timeout outcomes keep the full reserved token amount: no automatic refund.
+-- A second completion call does not mutate counters.
+create or replace function public.urenavi_capacity_complete_v1(
+ p_attempt_id uuid,p_user_id uuid,p_outcome text,p_actual_tokens bigint default null
+) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare a public.urenavi_capacity_attempts_v1%rowtype;
+begin
+ select * into a from public.urenavi_capacity_attempts_v1
+   where attempt_id=p_attempt_id and user_id=p_user_id for update;
+ if not found then return jsonb_build_object('accepted',false,'reason','attempt_missing'); end if;
+ if a.status<>'send_intent' then
+   return jsonb_build_object('accepted',false,'reason','invalid_transition');
+ end if;
+ if p_outcome='spent' then
+   if p_actual_tokens is null or p_actual_tokens<0 then
+     return jsonb_build_object('accepted',false,'reason','actual_usage_unknown');
+   end if;
+   -- Serialize counters with the same provider lock order used by reservation.
+   perform 1 from public.urenavi_provider_capacity_v1 where provider=a.provider for update;
+   perform 1 from public.urenavi_tenant_capacity_v1
+     where user_id=a.user_id and provider=a.provider for update;
+   update public.urenavi_provider_capacity_v1
+     set request_reserved=request_reserved-1, request_used=request_used+1,
+       token_reserved=token_reserved-a.estimated_tokens,
+       token_used=token_used+p_actual_tokens
+     where provider=a.provider and request_reserved>0 and token_reserved>=a.estimated_tokens;
+   if not found then raise exception 'global_accounting_inconsistent'; end if;
+   update public.urenavi_tenant_capacity_v1
+     set request_reserved=request_reserved-1,request_used=request_used+1
+     where user_id=a.user_id and provider=a.provider and request_reserved>0;
+   if not found then raise exception 'tenant_accounting_inconsistent'; end if;
+   update public.urenavi_capacity_attempts_v1 set status='spent' where attempt_id=a.attempt_id;
+ elsif p_outcome='outcome_unknown' then
+   if p_actual_tokens is not null then
+     return jsonb_build_object('accepted',false,'reason','unknown_must_not_claim_known_tokens');
+   end if;
+   update public.urenavi_capacity_attempts_v1
+     set status='outcome_unknown' where attempt_id=a.attempt_id;
+ else
+   return jsonb_build_object('accepted',false,'reason','invalid_outcome');
+ end if;
+ return jsonb_build_object('accepted',true,'status',p_outcome,'attemptId',p_attempt_id::text);
+end $$;
+revoke all on function public.urenavi_capacity_complete_v1(uuid,uuid,text,bigint) from public,anon,authenticated;
+grant execute on function public.urenavi_capacity_complete_v1(uuid,uuid,text,bigint) to service_role;
+
+-- Explicitly OUT OF SCOPE: confirmed send_not_started release, window rollover,
+-- true subscription quota derivation, human-reviewed unknown-usage reconciliation.
+-- This SQL is a disposable-Postgres test draft, NOT a production migration.
