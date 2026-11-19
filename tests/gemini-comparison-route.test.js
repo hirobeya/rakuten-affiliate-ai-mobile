@@ -116,7 +116,7 @@ test('owner can inspect existing local writer evidence without Gemini, Blob writ
 
 test('future low-thinking request profile can be inspected by owner without Blob or provider access',()=>preview(async()=>{
  let calls=0,stores=0;
- const validAt=require('../docs/experiments/gemini-comparison-20261113/next-execution.json').freeTierConfirmation.observedAtMs+1000;
+ const validAt=Date.now();
  const h=H.createHandler({
   authorizeImpl:async()=>({ok:true,plan:'owner'}),
   storeFactory:()=>{stores++;throw Error('must_not_access_blob');},
@@ -132,10 +132,10 @@ test('future low-thinking request profile can be inspected by owner without Blob
  assert.notEqual(res.body.lowThinkingRequestHash,scope.requestHash);
  assert.deepEqual(res.body.lowThinkingConfig,{thinkingLevel:'low'});
  assert.equal(res.body.lowThinkingMaxOutputTokens,4000);
- assert.equal(res.body.approvedForLowThinking,false);
+ assert.equal(res.body.approvedForLowThinking,true,'grant approved but actual send blocked by missing current Free proof');
  assert.equal(res.body.lowThinkingRequestHash,'72611580afb7b57a445c5d009169e4fb4946743fdb4bf938c018def03238dc8a');
  assert.equal(res.body.dispatchReady,false);
- assert(res.body.executionHolds.includes('new_explicit_approval_required'));
+ assert(res.body.executionHolds.includes('fresh_free_tier_confirmation_required'));
  assert.equal(res.body.providerCalls,0);
  assert.equal(stores,0);
  assert.equal(calls,0);
