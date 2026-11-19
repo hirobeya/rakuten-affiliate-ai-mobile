@@ -6,6 +6,8 @@ const {localZeroCall,verifiedCaptionEditorialRescue}=require('../api/room-ai-v3'
 const fixture=corpus.rows.find(x=>x.item.itemCode==='linofle:10000458').item;
 test('source-verified selectable assortment is not discarded as an empty purchase reason',()=>{
  const id='洗濯ネット',quote='セット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。';
+ const segments=captionSentences(fixture.itemCaption,true);
+ console.log('SELECTABLE_6_SEGMENTS',JSON.stringify(segments));
  const xs=sourceCausalCandidates(captionSentences(fixture.itemCaption,true),id,fixture.itemName,fixture.itemCaption);
  assert.ok(xs.some(x=>x.quote===quote&&x.body.includes(id)),JSON.stringify(xs));
  assert.ok(fixture.itemCaption.includes(quote),'seller original exact evidence');
