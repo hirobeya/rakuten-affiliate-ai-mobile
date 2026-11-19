@@ -115,3 +115,36 @@ end $capacity$;
 SQL
 echo 'PASS: one-way send intent / unknown retained / successful spend / duplicate refusal / permissions'
 
+
+psql -v ON_ERROR_STOP=1 <<'SQL'
+insert into public.urenavi_provider_capacity_v1
+ (provider,window_end,verified_at,external_usage_known,request_limit,request_used,request_reserved,token_limit,token_used,token_reserved)
+ values ('groq',now()+interval '1 hour',now(),true,5,0,0,10000,0,0);
+insert into public.urenavi_tenant_capacity_v1
+ (user_id,provider,window_end,request_limit,request_used,request_reserved)
+ select '11111111-1111-4111-8111-111111111111'::uuid,'groq',window_end,3,0,0
+ from public.urenavi_provider_capacity_v1 where provider='groq';
+do $overrun$
+declare a uuid:='cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+        u uuid:='11111111-1111-4111-8111-111111111111';
+        w timestamptz; r jsonb; p record;
+begin
+ select window_end into w from public.urenavi_provider_capacity_v1 where provider='groq';
+ select public.urenavi_capacity_reserve_v1(a,u,'groq',1000,w) into r;
+ if r->>'reserved'<>'true' then raise exception 'setup reservation refused: %',r; end if;
+ select public.urenavi_capacity_send_intent_v1(a,u) into r;
+ if r->>'accepted'<>'true' then raise exception 'setup intent refused: %',r; end if;
+ select public.urenavi_capacity_complete_v1(a,u,'spent',2000) into r;
+ if r->>'accepted'<>'true' then raise exception 'actual usage overrun lost: %',r; end if;
+ select * into p from public.urenavi_provider_capacity_v1 where provider='groq';
+ if p.token_used<>2000 or p.token_reserved<>0 or p.request_used<>1
+    or p.request_reserved<>0 or p.external_usage_known then
+   raise exception 'unrecorded overrun or provider not frozen: %',row_to_json(p);
+ end if;
+ select public.urenavi_capacity_reserve_v1('dddddddd-dddd-4ddd-8ddd-dddddddddddd',u,'groq',1000,w) into r;
+ if r->>'reason'<>'fresh_verified_capacity_unavailable' then
+   raise exception 'admission was allowed after overrun: %',r;
+ end if;
+end $overrun$;
+SQL
+echo 'PASS: actual-token overrun accounted and further dispatch frozen'
