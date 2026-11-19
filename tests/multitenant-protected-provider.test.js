@@ -155,3 +155,17 @@ test('unknown provider result persistence is post-dispatch and must stay termina
  let error;try{await x.gate.call('generate',item,{attempt:0});}catch(e){error=e;}
  assert.equal(error.capacityPreDispatch,false);
 });
+
+test('a denied provider attempt is logged as zero external calls, not billed usage',async()=>{
+ const logs=[];
+ const {meteredProvider}=require('../lib/room-copy-cost');
+ const gated=protectProvider({model,requiredTokens:()=>100,call:async()=>assert.fail('provider must not dispatch')},
+  {identity,item,capacityForStage:async()=>({...capacity(),provider:{...capacity().provider,externalUsageKnown:false}}),
+   dbRpc:async()=>assert.fail('must not reserve unknown quota')});
+ await assert.rejects(meteredProvider(gated,{owner:'audit@example.test',log:r=>logs.push(r)})
+  .call('generate',item,{attempt:0}),/external_usage_unknown/);
+ assert.equal(logs.length,1);
+ assert.equal(logs[0].calls,0);
+ assert.equal(logs[0].estimatedUsd,0);
+ assert.equal(logs[0].failureKind,'capacity_pre_dispatch');
+});
