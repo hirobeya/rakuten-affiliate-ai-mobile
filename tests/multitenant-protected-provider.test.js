@@ -105,3 +105,28 @@ test('Groq semantic writer rejects a Gemini quota snapshot before any reservatio
  await assert.rejects(gate.call('generate',item,{attempt:0}),/provider_identity_mismatch/);
  assert.equal(writes,0);assert.equal(calls,0);
 });
+
+test('Preview capacity denial does not decrement legacy daily quota or call provider',async()=>{
+ const oldEnv=process.env.VERCEL_ENV,oldFlag=process.env.URENAVI_CAPACITY_PREVIEW_GATE;
+ process.env.VERCEL_ENV='preview';process.env.URENAVI_CAPACITY_PREVIEW_GATE='true';
+ try{
+  let calls=0,legacyClaims=0,atomicWrites=0;
+  const {createHandler}=require('../lib/room-copy-handler');
+  const backend={getCapacity:async()=>({...capacity(),provider:{...capacity().provider,externalUsageKnown:false}}),
+    dbRpc:async()=>{atomicWrites++;throw Error('must not reserve unknown capacity');}};
+  const handler=createHandler({
+   authorize:async()=>identity,localZeroCall:()=>null,
+   store:{loadProduct:async()=>null,saveProduct:async()=>{}},
+   provider:{model,requiredTokens:()=>100,call:async()=>{calls++;throw Error('must not send');}},
+   consumeQuota:async()=>{legacyClaims++;return true;},
+   capacityBackend:backend,logCost:()=>{}
+  });
+  const res={setHeader(){},status(n){this.statusCode=n;return this;},json(x){this.body=x;return x;}};
+  await handler({method:'POST',body:item},res);
+  assert.equal(res.statusCode,503);
+  assert.equal(calls,0);assert.equal(legacyClaims,0);assert.equal(atomicWrites,0);
+ }finally{
+  if(oldEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=oldEnv;
+  if(oldFlag===undefined)delete process.env.URENAVI_CAPACITY_PREVIEW_GATE;else process.env.URENAVI_CAPACITY_PREVIEW_GATE=oldFlag;
+ }
+});
