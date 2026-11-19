@@ -190,3 +190,25 @@ test('quality verifier exception preserves received Gemini 200, tokens and respo
  assert.equal(again.statusCode,409);
  assert.equal(sends,1);
 }));
+
+
+test('owner quota observation reads only model metadata and own ledger, never claims, saves, or generates',()=>preview(async()=>{
+ let probes=0,stores=0,sends=0;
+ const h=H.createHandler({
+  authorizeImpl:async()=>({ok:true,plan:'owner'}),
+  storeFactory:()=>{stores++;throw Error('quota observation must not access private claim storage');},
+  quotaObserver:async()=>{probes++;return {mode:'quota-observation',model:'gemini-3.8-flash',modelCheck:{status:'model_available',available:true},exactRemaining:null,officialCurrentLimitsVerified:false,providerGenerationCalls:0,canAuthorizeGeneration:false};},
+  compare:async()=>{sends++;throw Error('quota observation cannot generate');}
+ });
+ const r=response();await h({method:'GET',headers:{},query:{id:'3',mode:'quota-observation'}},r);
+ assert.equal(r.statusCode,200);
+ assert.equal(r.body.mode,'quota-observation');
+ assert.equal(r.body.modelCheck.available,true);
+ assert.equal(r.body.exactRemaining,null);
+ assert.equal(r.body.canAuthorizeGeneration,false);
+ assert.equal(r.body.providerGenerationCalls,0);
+ assert.equal(probes,1);assert.equal(stores,0);assert.equal(sends,0);
+ const denied=H.createHandler({authorizeImpl:async()=>({ok:true,plan:'base'}),quotaObserver:async()=>{probes++;}});
+ const x=response();await denied({method:'GET',headers:{},query:{id:'3',mode:'quota-observation'}},x);
+ assert.equal(x.statusCode,403);assert.equal(probes,1);
+}));
