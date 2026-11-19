@@ -71,6 +71,10 @@ test('all four consumed grants are available only for read-only recovery',()=>{
   assert.throws(()=>{prior.maxCalls=2;});
  }
  assert.equal(template.previousIndependentAttempt.providerHttpStatus,503);
+ assert.equal(template.previousIndependentAttempt.providerDiagnostic.status,'UNAVAILABLE');
+ assert.equal(template.previousIndependentAttempt.providerDiagnostic.code,503);
+ assert.equal(template.previousIndependentAttempt.resultSavedAndRecovered,true);
+ assert.equal(template.previousIndependentAttempt.providerCalls,1);
  assert.equal(template.previousIndependentAttempt.tokens,null);
  assert.equal(template.previousIndependentAttempt.dispatchAttempts,1);
  assert.equal(template.previousIndependentAttempt.doNotResend,true);
