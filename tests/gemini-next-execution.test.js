@@ -41,19 +41,22 @@ test('expired Free-tier evidence blocks execution but not read-only saved-result
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gemini-readonly-'));try{const g=grant();const write=createIndependent(blob(dir),g,scope);await write.begin(scope);await write.finish(scope,{...scope,mock:true});const expired={...g,freeTierConfirmation:{...g.freeTierConfirmation,validUntilMs:Date.now()-1}};assert.equal(assess(expired,scope).allow,false);const read=createIndependent(blob(dir),expired,scope,{readOnly:true});assert.equal((await read.state(scope)).result.mock,true);await assert.rejects(read.begin(scope));await assert.rejects(read.dispatch(scope,{}));await assert.rejects(read.finish(scope,{}));}finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 
-test('consumed fourth grant has no new dispatch approval',()=>{
+test('fifth one-shot grant is explicitly scoped but cannot dispatch without real current Free-tier proof',()=>{
  const {buildGeminiLowThinkingCandidate}=require('../lib/room-writer-raw/gemini-comparison');
  const item=require('../lib/room-writer-raw/gemini-preview-route').loadItem('3');
  const low=buildGeminiLowThinkingCandidate(item);
  const current={itemCode:scope.itemCode,model:scope.model,requestHash:low.requestHash};
- assert.equal(template.status,'awaiting_explicit_approval');
- assert.equal(template.approvalId,null);
- assert.equal(template.executionId,null);
+ assert.equal(template.status,'approved');
+ assert.equal(template.approvalId,'urenavi-gemini-bench-independent-20261119-05');
+ assert.equal(template.executionId,'urenavi-gemini-bench-execution-20261119-05');
+ assert.equal(template.maxCalls,1);
  assert.equal(template.freeTierConfirmation.verified,false);
  assert.equal(assess(template,current).allow,false);
- assert(assess(template,current).reasons.includes('new_explicit_approval_required'));
- const proof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'mock',observedAtMs:Date.now()-1000,validUntilMs:Date.now()+60000};
- assert.equal(assess({...template,freeTierConfirmation:proof},current).allow,false);
+ assert(assess(template,current).reasons.includes('fresh_free_tier_confirmation_required'));
+ assert.equal(assess({...template,executionId:'urenavi-gemini-bench-execution-20261116-04'},current).allow,false);
+ assert.equal(assess({...template,requestHash:'x'.repeat(64)},current).allow,false);
+ const fakeExpiredProof={verified:true,limits:{rpm:5,tpm:250000,rpd:20},projectId:'gen-lang-client-0210652653',tier:'free',model:scope.model,evidenceReference:'expired mock',observedAtMs:Date.now()-7200000,validUntilMs:Date.now()-1};
+ assert.equal(assess({...template,freeTierConfirmation:fakeExpiredProof},current).allow,false);
 });
 
 test('read-only recovery is separate from the dynamically bounded POST budget',()=>{const h=require('../lib/room-writer-raw/gemini-preview-route');assert.equal(h.RECOVERY_BUDGET.storage_state,15000);assert.equal(h.RECOVERY_BUDGET.worker,12000);assert(h.BUDGET.authorization+h.RECOVERY_BUDGET.storage_state+h.BUDGET.overhead<60000);assert.equal(h.providerBudgetForElapsed(25000),25000);assert.equal(h.RESPONSE_RESERVE_MS,10000);});
