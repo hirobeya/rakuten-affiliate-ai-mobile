@@ -130,3 +130,28 @@ test('Preview capacity denial does not decrement legacy daily quota or call prov
   if(oldFlag===undefined)delete process.env.URENAVI_CAPACITY_PREVIEW_GATE;else process.env.URENAVI_CAPACITY_PREVIEW_GATE=oldFlag;
  }
 });
+
+test('capacity wrapper preserves shared rate-budget acquire/release contract',async()=>{
+ const lease={waitMs:0,markSent:async()=>{},release:async()=>{}};
+ const original={model,requiredTokens:()=>100,acquire:async()=>lease,
+   call:async()=>{throw Error('should not call');}};
+ const gated=protectProvider(original,{identity,item,
+  capacityForStage:async()=>({...capacity(),provider:{...capacity().provider,externalUsageKnown:false}}),
+  dbRpc:async()=>assert.fail('should not reserve')});
+ assert.equal(gated.capacityGuardEnabled,true);
+ assert.equal(await gated.acquire('generate',item,{attempt:0}),lease);
+ let refusal;
+ try{await gated.call('generate',item,{attempt:0});}catch(e){refusal=e;}
+ assert.equal(refusal.capacityPreDispatch,true);
+});
+test('failed external transport cannot masquerade as a safe pre-dispatch refusal',async()=>{
+ const x=setup({throwProvider:true});
+ let error;
+ try{await x.gate.call('generate',item,{attempt:0});}catch(e){error=e;}
+ assert.equal(error.capacityPreDispatch,false);
+});
+test('unknown provider result persistence is post-dispatch and must stay terminal',async()=>{
+ const x=setup({unknownCompletion:true});
+ let error;try{await x.gate.call('generate',item,{attempt:0});}catch(e){error=e;}
+ assert.equal(error.capacityPreDispatch,false);
+});
