@@ -81,6 +81,36 @@ test('429 stops once, records unknown billed usage, never calls subsequent stage
  try{const x=setup({reject:true}),r=res();await x.handler({method:'POST',body:item},r);assert.equal(r.code,429);assert.equal(x.calls(),1);assert.equal(x.logs[0].estimatedUsd,null);assert.equal(x.logs[0].failed,true);}
  finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
 });
+test('unknown provider outcome is terminal across repeated requests and cache resumes, with no new quota claims',async()=>{
+ const old=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
+ try{
+  for(const status of [429,502]){
+   let calls=0,claims=0,row=null;
+   const provider={model:'openai/gpt-oss-120b',requiredTokens:()=>100,
+    call:async()=>{calls++;const e=new Error('unknown upstream outcome');e.status=status;throw e;}};
+   const store={loadProduct:async()=>row,saveProduct:async x=>{
+    row={schema_version:x.schemaVersion,model:x.model,raw_ai_json:structuredClone(x.rawAiJson)};
+   }};
+   const handler=createHandler({authorize:async()=>({ok:true,plan:'owner',user:{email:'qa@example.test'}}),
+    store,provider,localZeroCall:()=>null,consumeQuota:async()=>{claims++;return true;},logCost:()=>{}});
+   const first=res();await handler({method:'POST',body:item},first);
+   assert.equal(first.code,status);
+   assert.equal(calls,1);
+   assert.equal(claims,1);
+   const second=res();await handler({method:'POST',body:item},second);
+   assert.equal(second.code,200);
+   assert.equal(second.body.ok,false);
+   assert.equal(second.body.pending,false);
+   assert.equal(second.body.quality.status,'blocked');
+   assert.equal(second.body.quality.text,'');
+   assert.deepEqual(second.body.variants,[]);
+   assert.equal(second.body.groq.totalCalls,1);
+   assert.equal(calls,1,'a second visit cannot repeat a potentially charged request');
+   assert.equal(claims,1,'no new quota is claimed');
+  }
+ }finally{if(old===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=old;}
+});
+
 test('Production local-only denies unsupported copy with no AI, while Preview remains owner-only',async()=>{
  const old=process.env.VERCEL_ENV;
  try{
