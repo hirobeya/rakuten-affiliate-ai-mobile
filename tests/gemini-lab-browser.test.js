@@ -11,7 +11,7 @@ const payload={name:'テスト商品',requestHash:'a'.repeat(64),executionSha:'b
 const response=data=>({ok:true,status:200,headers:{get:()=> 'application/json'},text:async()=>JSON.stringify(data)});
 test('GET restores exact saved output and usage without a generation POST',async()=>{
  const receipt={result:{generatedCopy:'保存された原文',tokens:{input:10,output:5,total:17},quality:'unverified'}};
- const b=browser(async()=>response({...payload,receipt}));await b.handlers.get('check:click')();assert(b.nodes.get('result').textContent.includes('保存された原文'));assert.equal(b.calls.length,1);assert.equal(b.calls[0].o.method,undefined);assert.equal(b.nodes.get('run').disabled,true);assert(b.nodes.get('diagnostics').textContent.includes('saved_result_recovered'));
+ const b=browser(async()=>response({...payload,receipt}));await b.handlers.get('check:click')();assert(b.nodes.get('result').textContent.includes('保存された原文'));assert.equal(b.calls.length,2);assert.equal(b.calls[0].o.method,undefined);assert.match(b.calls[1].u,/mode=quota-observation/);assert.equal(b.nodes.get('run').disabled,true);assert(b.nodes.get('diagnostics').textContent.includes('saved_result_recovered'));
 });
 test('unknown fetch outcome survives reload and cannot trigger a second POST',async()=>{
  const saved=new Map();const b=browser(async(u,o)=>{if(o.method==='POST')throw new TypeError('The string did not match the expected pattern.');return response(payload);},saved);
@@ -29,5 +29,19 @@ test('response read failure is distinct from fetch and parser failures',async()=
 test('restored failed receipt displays provider error and cannot enable generation',async()=>{
  const failed={...payload,nextExecution:{allow:false,status:'already_consumed_do_not_resend',approvalId:'mock-approval-0001',executionId:'mock-execution-0001',readOnlyAvailable:true},receipt:{result:{error:'gemini_http_503_no_retry',httpStatus:503,providerDiagnostic:{httpStatus:503,status:'UNAVAILABLE',headers:{}},tokens:null}},attempt:{claim:true,dispatch:true,approvalClaim:true},executionHold:'existing_independent_attempt_do_not_resend',holds:['existing_independent_attempt_do_not_resend']};
  const b=browser(async(url)=>url.includes('mode=local-evaluation')?response({proposalStatus:'preview_for_owner_review',proposedText:'収納に使えるベンチの候補です。',evidence:[{source:'itemCaption',quote:'収納'}],providerCalls:0}):response(failed));
- await b.handlers.get('check:click')();assert(b.nodes.get('result').textContent.includes('gemini_http_503_no_retry'));assert(b.nodes.get('result').textContent.includes('再送禁止'));assert(b.nodes.get('result').textContent.includes('429'));assert(b.nodes.get('localResult').textContent.includes('収納に使えるベンチの候補です。'));assert(b.nodes.get('localResult').textContent.includes('品質：未評価'));assert.equal(b.nodes.get('run').disabled,true);assert.match(b.nodes.get('nextStatus').textContent,/使用済み/);assert.match(b.nodes.get('nextStatus').textContent,/再送禁止/);assert.equal(b.nodes.get('nextLink').hidden,false,'read-only link remains visible');assert.equal(b.calls.length,2);assert(b.calls.every(x=>x.o.method===undefined));
+ await b.handlers.get('check:click')();assert(b.nodes.get('result').textContent.includes('gemini_http_503_no_retry'));assert(b.nodes.get('result').textContent.includes('再送禁止'));assert(b.nodes.get('result').textContent.includes('429'));assert(b.nodes.get('localResult').textContent.includes('収納に使えるベンチの候補です。'));assert(b.nodes.get('localResult').textContent.includes('品質：未評価'));assert.equal(b.nodes.get('run').disabled,true);assert.match(b.nodes.get('nextStatus').textContent,/使用済み/);assert.match(b.nodes.get('nextStatus').textContent,/再送禁止/);assert.equal(b.nodes.get('nextLink').hidden,false,'read-only link remains visible');assert.equal(b.calls.length,3);assert(b.calls.every(x=>x.o.method===undefined));
+});
+
+
+test('automatic owner preflight shows checked model but never invents Free quota remaining',async()=>{
+ const result={...payload,nextExecution:{status:'approved_waiting_prerequisites',allow:false,reasons:['fresh_free_tier_confirmation_required']}};
+ const b=browser(async url=>response(url.includes('mode=quota-observation')
+  ?{mode:'quota-observation',model:'gemini-3.8-flash',modelCheck:{status:'model_available',available:true},usage:{trackedAttemptsTotal:4},exactRemaining:null,canAuthorizeGeneration:false,providerGenerationCalls:0}
+  :result));
+ await b.handlers.get('check:click')();
+ assert.match(b.nodes.get('quotaStatus').textContent,/model_available/);
+ assert.match(b.nodes.get('quotaStatus').textContent,/4回/);
+ assert.match(b.nodes.get('quotaStatus').textContent,/取得不可/);
+ assert.equal(b.nodes.get('run').disabled,true);
+ assert.equal(b.calls.filter(x=>x.o.method==='POST').length,0);
 });
