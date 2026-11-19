@@ -5,7 +5,7 @@ const {localZeroCall}=require('../api/room-ai-v3');
 const corpus=require('../docs/rebuild-20261028/p3-local-first-20261108/evaluation.json');
 test('44 products: factual ledger retains original spans with no publication grant',()=>{
  let withCandidates=0,withRelation=0,total=0,missing=0,unresolved=0;
- const stages={};
+ const stages={},matrix={};
  for(const {item} of corpus.rows){
   const diag={},copy=localZeroCall(item,'',diag,{editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
   const id=diag.identity||diag.identityCandidates?.literal||diag.identityCandidates?.rule||'';
@@ -18,6 +18,8 @@ test('44 products: factual ledger retains original spans with no publication gra
   if(!item.itemCaption)missing++;
   if(!id)unresolved++;
   const stage=diag.stage||'unknown';stages[stage]=(stages[stage]||0)+1;
+  const signal=result.facts.some(f=>f.claimType==='source_purchase_relation')?'direct_relation':result.facts.length?'feature_only':'no_evidence';
+  const group=stage+'|'+signal;matrix[group]=(matrix[group]||0)+1;
   if(result.facts.length)console.log('SOURCE_LEDGER_PRODUCT',JSON.stringify({
     code:item.itemCode,stage,reason:diag.reason,identity:id,
     sourceRelations:result.facts.filter(f=>f.claimType==='source_purchase_relation').length,
@@ -25,7 +27,7 @@ test('44 products: factual ledger retains original spans with no publication gra
   }));
  }
  assert.equal(corpus.rows.length,44);
- console.log('SOURCE_LEDGER_SUMMARY',JSON.stringify({products:44,withCandidates,withRelation,total,missing,unresolved,stages}));
+ console.log('SOURCE_LEDGER_SUMMARY',JSON.stringify({products:44,withCandidates,withRelation,total,missing,unresolved,stages,matrix}));
 });
 test('direct product-linked complete source claims are preserved exactly',()=>{
  const item={itemName:'洗濯ネット 6枚セット',itemCaption:'商品説明 この洗濯ネットは角型で使えます。洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。'};
