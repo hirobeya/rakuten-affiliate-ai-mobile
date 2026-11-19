@@ -96,3 +96,12 @@ test('real mobile Preview handler with opt-in but missing backend halts without 
   if(oldFlag===undefined)delete process.env.URENAVI_CAPACITY_PREVIEW_GATE;else process.env.URENAVI_CAPACITY_PREVIEW_GATE=oldFlag;
  }
 });
+
+test('Groq semantic writer rejects a Gemini quota snapshot before any reservation or send',async()=>{
+ let writes=0,calls=0;
+ const gate=protectProvider({model,requiredTokens:()=>100,call:async()=>{calls++;}},
+  {identity,item,capacityForStage:async()=>({...capacity(),provider:{...capacity().provider,name:'gemini'}}),
+   dbRpc:async()=>{writes++;throw Error('must not be called');}});
+ await assert.rejects(gate.call('generate',item,{attempt:0}),/provider_identity_mismatch/);
+ assert.equal(writes,0);assert.equal(calls,0);
+});
