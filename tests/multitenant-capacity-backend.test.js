@@ -36,6 +36,7 @@ test('unsupported model or identity is rejected without even querying DB',async(
  const {db,log}=mock();const backend=createCapacityBackend(db,{now:()=>now});
  await assert.rejects(backend.getCapacity({userId:'email@x',model:'openai/gpt-oss-120b'}));
  await assert.rejects(backend.getCapacity({userId:user,model:'gemini-3.8-flash'}));
+ await assert.rejects(backend.getCapacity({userId:user,model:'openai/gpt-oss-20b'}));
  assert.equal(log.length,0);
 });
 test('unknown, missing, expired, oversubscribed or stale rows reject',async()=>{
