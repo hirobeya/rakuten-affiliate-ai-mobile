@@ -50,3 +50,12 @@ test('fixed 44-source corpus has only literal original excerpts, never guessed b
  assert.equal(items.length,44);
  assert.ok(found>0);
 });
+
+test('long seller descriptions are preserved and optional hints are dropped by complete token budget',()=>{
+ const item=items.find(i=>i.itemCode==='linofle:10000458');
+ const long={...item,itemCaption:item.itemCaption+('洗濯ネットの仕様は商品ページをご確認ください。'.repeat(260))};
+ assert.ok(sourceEvidenceHints(long,{partnerProductType:'洗濯ネット'}).length>0);
+ const request=payload('generate',long,{partnerProductType:'洗濯ネット'});
+ assert.equal(request.itemCaption,long.itemCaption);
+ assert.equal(Object.hasOwn(request,'sourceEvidenceHints'),false);
+});
