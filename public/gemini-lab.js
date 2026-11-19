@@ -25,15 +25,28 @@
   $('copy').disabled=false;
  }
  async function request(options={}){
-  const {localEvaluation=false,...requestOptions}=options;
+  const {localEvaluation=false,quotaObservation=false,...requestOptions}=options;
   observe('browser_fetch_started',{method:options.method||'GET'});
-  let r;try{r=await fetch(endpoint+(options.method?'':'&id='+encodeURIComponent($('item').value)+(intent?'&approvalId='+encodeURIComponent(intent.approvalId)+'&executionId='+encodeURIComponent(intent.executionId):'')+(localEvaluation?'&mode=local-evaluation':'')),{credentials:'same-origin',cache:'no-store',...requestOptions});}
+  let r;try{r=await fetch(endpoint+(options.method?'':'&id='+encodeURIComponent($('item').value)+(intent?'&approvalId='+encodeURIComponent(intent.approvalId)+'&executionId='+encodeURIComponent(intent.executionId):'')+(localEvaluation?'&mode=local-evaluation':quotaObservation?'&mode=quota-observation':'')),{credentials:'same-origin',cache:'no-store',...requestOptions});}
   catch(e){observe('browser_fetch_failed',{name:e.name,patternError:/string did not match the expected pattern/i.test(e.message||'')});throw Error('ブラウザの通信処理で停止。送信結果は未確定です');}
   observe('browser_response_received',{httpStatus:r.status,contentType:r.headers.get('content-type')});
   let text;try{text=await r.text();}catch{observe('browser_response_read_failed');throw Error('応答の読取りで停止。再送せず結果取得を使ってください');}
   let data;try{data=JSON.parse(text);}catch{observe('browser_json_parse_failed');throw Error('応答がJSONではありません。認証画面や配備保護を確認してください');}
   observe('server_response',{serverStage:data.stage,executionSha:data.executionSha,error:data.error||null,timings:data.timings||[],storageDiagnostic:data.storageDiagnostic||null,storageObservations:data.storageObservations||[]});
   if(!r.ok){const error=Error(data.error||'server_error');error.data=data;throw error;}return data;
+ }
+ // Automatically inspect model metadata and our own immutable attempt
+ // ledger. The result is read-only, not permission to generate.
+ async function checkQuota(){
+  try{
+   const data=await request({quotaObservation:true});
+   const status=data.modelCheck?.status||'unavailable';
+   const total=data.usage?.trackedAttemptsTotal;
+   $('quotaStatus').textContent='Googleモデル確認：'+status+'｜アプリが把握する送信試行：'+(Number.isInteger(total)?total:'不明')+'回｜Google側の正確な残量：取得不可（推定値を実残量として扱いません）';
+   observe('gemini_read_only_quota_observation',{modelStatus:status,knownAttempts:total??null,exactRemaining:null,modelGenerationCalls:0});
+  }catch{
+   $('quotaStatus').textContent='利用状況の自動確認は取得できませんでした。Gemini生成は許可しません。';
+  }
  }
  async function check(){
   $('run').disabled=true;$('preflight').textContent='確認中';
@@ -46,6 +59,7 @@
    if(data.recovery?.status==='no_saved_result'&&!completed)$('result').textContent='保存済みの実生成結果はありません。過去の未送信を意味しません。';
    if(data.receipt){const restored=data.receipt.result||data.receipt;show(restored);observe('saved_result_recovered');if(restored.error==='gemini_http_503_no_retry')await showLocalCandidate();}
    else if(completed)$('result').textContent='実行記録がありますが結果は未取得です。再送せず保存済み結果の取得を使ってください。';
+   await checkQuota();
   }catch(e){$('preflight').textContent='準備不可：'+e.message;}
  }
  $('check').addEventListener('click',check);
