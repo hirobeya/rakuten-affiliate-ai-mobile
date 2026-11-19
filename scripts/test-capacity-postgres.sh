@@ -74,3 +74,44 @@ begin
 end $$;
 SQL
 echo 'PASS: Postgres atomic reservation / concurrency / duplicate / exhaustion / unknown usage / client privilege'
+
+psql -v ON_ERROR_STOP=1 <<'SQL'
+do $
+declare a record; b record; r jsonb; p record;
+begin
+ -- The two previously created reservations remain valid across exhaustion.
+ select attempt_id,user_id into a from public.urenavi_capacity_attempts_v1 order by attempt_id limit 1;
+ select attempt_id,user_id into b from public.urenavi_capacity_attempts_v1 order by attempt_id offset 1 limit 1;
+ -- Completion without prior persisted intent must fail.
+ select public.urenavi_capacity_complete_v1(a.attempt_id,a.user_id,'spent',900) into r;
+ if r->>'reason'<>'invalid_transition' then raise exception 'pre-intent completion accepted'; end if;
+ select public.urenavi_capacity_send_intent_v1(a.attempt_id,a.user_id) into r;
+ if r->>'accepted'<>'true' then raise exception 'send intent not recorded'; end if;
+ select public.urenavi_capacity_send_intent_v1(a.attempt_id,a.user_id) into r;
+ if r->>'accepted'<>'false' then raise exception 'duplicate send intent accepted'; end if;
+ select public.urenavi_capacity_complete_v1(a.attempt_id,a.user_id,'outcome_unknown',null) into r;
+ if r->>'accepted'<>'true' then raise exception 'unknown state not recorded'; end if;
+ select public.urenavi_capacity_complete_v1(a.attempt_id,a.user_id,'spent',900) into r;
+ if r->>'accepted'<>'false' then raise exception 'unknown result wrongly settled'; end if;
+ select public.urenavi_capacity_send_intent_v1(b.attempt_id,b.user_id) into r;
+ if r->>'accepted'<>'true' then raise exception 'second send intent not recorded'; end if;
+ select public.urenavi_capacity_complete_v1(b.attempt_id,b.user_id,'spent',900) into r;
+ if r->>'accepted'<>'true' then raise exception 'confirmed spend did not settle'; end if;
+ select public.urenavi_capacity_complete_v1(b.attempt_id,b.user_id,'spent',900) into r;
+ if r->>'accepted'<>'false' then raise exception 'double settlement accepted'; end if;
+ select * into p from public.urenavi_provider_capacity_v1 where provider='gemini';
+ if p.request_reserved<>1 or p.request_used<>1 or p.token_reserved<>1000 or p.token_used<>900 then
+   raise exception 'final accounting mismatch: %',row_to_json(p);
+ end if;
+ if (select count(*) from public.urenavi_capacity_attempts_v1 where status='outcome_unknown')<>1
+ or (select count(*) from public.urenavi_capacity_attempts_v1 where status='spent')<>1 then
+   raise exception 'terminal attempt states do not match';
+ end if;
+ if has_function_privilege('authenticated','public.urenavi_capacity_send_intent_v1(uuid,uuid)','EXECUTE')
+ or has_function_privilege('anon','public.urenavi_capacity_complete_v1(uuid,uuid,text,bigint)','EXECUTE') then
+   raise exception 'public terminal-state RPC privilege exposure';
+ end if;
+end $;
+SQL
+echo 'PASS: one-way send intent / unknown retained / successful spend / duplicate refusal / permissions'
+
