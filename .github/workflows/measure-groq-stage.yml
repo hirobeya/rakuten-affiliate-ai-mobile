@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: b5d96336d1b17e070610855e7a5702001d799383
+          ref: 4348398ef7fd47d795c2d89cb2f5d3e2b3932acd
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -60,7 +60,7 @@ jobs:
       - name: Prove exact isolated comparator and no-send safeguards
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = 'b5d96336d1b17e070610855e7a5702001d799383'
+          test "$(git rev-parse HEAD)" = '4348398ef7fd47d795c2d89cb2f5d3e2b3932acd'
           node --test tests/rebuild/groq-stage-workflow.test.js \
             tests/rebuild/durable-comparison-journal.test.js
           node --test --test-name-pattern='signed self-ledger|approved self-ledger|self-ledger|signed batch|administrator declaration' tests/rebuild/paired-comparison-runner.test.js
@@ -88,7 +88,7 @@ jobs:
         with:
           # Fixed, reviewed comparison-code SHA. Never take a user-supplied ref
           # when environment secrets are available to the workflow.
-          ref: b5d96336d1b17e070610855e7a5702001d799383
+          ref: 4348398ef7fd47d795c2d89cb2f5d3e2b3932acd
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
