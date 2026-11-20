@@ -28,7 +28,7 @@ module.exports = async function handler(req,res) {
       if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
       return res.status(result.ok ? 200 : result.status).json({
         allowed:result.ok,
-        pro:result.ok && (result.plan==='pro' || result.plan==='owner'),
+        pro:result.ok && ['standard','pro','owner'].includes(result.plan),
         plan:result.ok ? String(result.plan||'base') : '',
         email:result.ok ? String(result.user?.email||'') : ''
       });
