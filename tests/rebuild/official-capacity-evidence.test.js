@@ -79,3 +79,29 @@ test('diagnostics and actual admission share exactly the same fail-closed predic
  assert.ok(officialEvidenceBlockers(notFree,account,timestamp,1000,10000).includes('free_nonbillable_unverified'));
  assert.equal(officialWindows(notFree,account,timestamp,1000,10000),null);
 });
+
+test('offline CLI preflight rejects forged signatures and never needs a provider key',async t=>{
+ const fs=require('node:fs/promises');
+ const os=require('node:os');
+ const path=require('node:path');
+ const {execFileSync}=require('node:child_process');
+ const {generateKeyPairSync}=require('node:crypto');
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'official-evidence-cli-'));
+ t.after(()=>fs.rm(root,{recursive:true,force:true}));
+ const keys=generateKeyPairSync('ed25519');
+ const {publicKey}=keys;
+ const payload={source:'groq_console',artifactSha256:'a'.repeat(64),model:MODEL,account,
+  plan:'free',billable:false,exclusiveWindow:true,unresolvedSends:0,
+  verifiedAt:new Date().toISOString(),counters:{}};
+ const [envelope,artifact,key]=['evidence.json','capture.txt','public.pem'].map(x=>path.join(root,x));
+ await fs.writeFile(envelope,JSON.stringify({payload,signature:Buffer.alloc(64).toString('base64')}));
+ await fs.writeFile(artifact,'test-only capture');
+ await fs.writeFile(key,publicKey.export({type:'spki',format:'pem'}));
+ const output=execFileSync(process.execPath,['scripts/rebuild/run-paired-comparison.cjs',
+  '--action','check-evidence','--organization',account.organization,'--project',account.project,
+  '--credential-sha256',account.credentialSha256,'--estimate','1000',
+  '--evidence',envelope,'--artifact',artifact,'--evidence-key',key],{
+  cwd:path.resolve(__dirname,'../..'),encoding:'utf8',env:{PATH:process.env.PATH}
+ });
+ assert.deepEqual(JSON.parse(output),{status:'stopped',blockers:['evidence_signature_invalid']});
+});
