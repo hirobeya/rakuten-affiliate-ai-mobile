@@ -6,6 +6,8 @@ on:
       - 'scripts/test-capacity-postgres.sh'
       - 'docs/architecture/multitenant-capacity-v2.sql'
       - 'docs/architecture/comparison-capacity-v2.sql'
+      - 'docs/architecture/isolated-self-budget-v2.sql'
+      - 'scripts/test-isolated-self-budget-postgres.sh'
       - 'scripts/test-comparison-postgres.sh'
       - 'scripts/test-comparison-supabase.sh'
       - 'scripts/rebuild/isolated-comparison-supabase.cjs'
@@ -43,6 +45,8 @@ jobs:
         run: bash scripts/test-capacity-v2-postgres.sh
       - name: Verify comparison evidence binding and guarded recovery
         run: bash scripts/test-comparison-postgres.sh
+      - name: Verify isolated self-budget reservation without provider traffic
+        run: bash scripts/test-isolated-self-budget-postgres.sh
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
