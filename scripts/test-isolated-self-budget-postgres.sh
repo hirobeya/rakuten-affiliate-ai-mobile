@@ -63,3 +63,37 @@ begin
   raise exception 'conservative reservations not retained'; end if;
 end $$;
 SQL
+
+# Only disposable PostgreSQL. Two distinct owners contend for the same
+# single organization-wide minute slot: precisely one may reserve.
+psql -Xv ON_ERROR_STOP=1 -c "
+ truncate public.urenavi_self_budget_attempt_v2;
+ update public.urenavi_capacity_provider_v2 set halted=false where provider='groq';"
+tmp=$(mktemp -d)
+trap 'rm -rf -- "$tmp"' EXIT
+pids=()
+for n in 1 2; do
+ if [[ "$n" == 1 ]]; then tenant=11111111-1111-4111-8111-111111111111
+ else tenant=22222222-2222-4222-8222-222222222222; fi
+ psql -XAt -v ON_ERROR_STOP=1 -c "select public.urenavi_self_budget_reserve_v2(
+ '52000000-0000-4000-8000-00000000000$n','$tenant',1000);" > "$tmp/$n" &
+ pids+=("$!")
+done
+for pid in "${pids[@]}"; do wait "$pid"; done
+[[ $(cat "$tmp/1" "$tmp/2" | sort | tr -d '\n') == ft ]]
+[[ $(psql -XAt -v ON_ERROR_STOP=1 -c "select count(*) from public.urenavi_self_budget_attempt_v2") == 1 ]]
+psql -Xv ON_ERROR_STOP=1 <<'SQL'
+do $$
+declare a public.urenavi_self_budget_attempt_v2%rowtype;
+begin
+ select * into strict a from public.urenavi_self_budget_attempt_v2;
+ if not public.urenavi_self_budget_intent_v2(a.id,a.tenant) then
+  raise exception 'concurrent winner cannot persist send intent'; end if;
+ if not public.urenavi_self_budget_complete_v2(a.id,a.tenant,'rate_limited',null) then
+  raise exception '429 must be persisted'; end if;
+ if (select halted from public.urenavi_capacity_provider_v2 where provider='groq') is distinct from true
+   then raise exception '429 must halt whole organization'; end if;
+ if public.urenavi_self_budget_reserve_v2('52000000-0000-4000-8000-000000000003',a.tenant,1)
+   then raise exception 'rate-limited organization admitted a third request'; end if;
+end $$;
+SQL
