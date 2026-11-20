@@ -444,9 +444,9 @@ test('signed self-ledger mode reuses durable stage workflow but never assumes pr
  assert.equal(reply.status,'completed');
  assert.equal(f.calls.length,1);
  assert.deepEqual(f.rpc.map(x=>x[0]),[
-  'rpc/urenavi_capacity_self_budget_reserve_v2',
-  'rpc/urenavi_capacity_self_budget_intent_v2',
-  'rpc/urenavi_capacity_self_budget_complete_v2'
+  'rpc/urenavi_self_budget_reserve_v2',
+  'rpc/urenavi_self_budget_intent_v2',
+  'rpc/urenavi_self_budget_complete_v2'
  ]);
  assert.equal(f.rpc[0][1].p_tenant,auth.user.id);
  assert.equal(f.rpc[2][1].p_actual,1900);
