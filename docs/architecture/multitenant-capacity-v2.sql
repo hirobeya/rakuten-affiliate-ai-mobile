@@ -94,6 +94,23 @@ begin
  select * into locked from public.urenavi_capacity_provider_v2 where provider=p_provider for update;
  if not found or locked.halted then return false; end if;
  t:=clock_timestamp();
+ -- A pre-intent reservation cannot have dispatched. On the next admission,
+ -- release it from every pinned window once any of those windows has ended.
+ -- Sent, unknown and rate-limited holds are never expired here.
+ with expired as (
+  update public.urenavi_capacity_attempt_v2 a set outcome='expired'
+  where a.provider=p_provider and a.outcome='reserved' and exists(
+   select 1 from public.urenavi_capacity_window_v2 w where w.id=any(a.windows) and w.ends_at<=t
+  ) returning a.windows,a.estimate
+ ), holds as (
+  select detached.window_id as id, count(*) as unused_requests, sum(estimate) as unused_tokens
+  from (select unnest(windows) as window_id, estimate from expired) detached
+  group by detached.window_id
+ )
+ update public.urenavi_capacity_window_v2 w
+ set reserved_requests=w.reserved_requests-case when w.dimension<>'tokens' then holds.unused_requests else 0 end,
+     reserved_tokens=w.reserved_tokens-case when w.dimension<>'requests' then holds.unused_tokens else 0 end
+ from holds where w.id=holds.id;
  select array_agg(id order by id),
   count(distinct period) filter (where tenant is not null and dimension='both'),
   count(distinct period) filter (where tenant is null and dimension='both'),

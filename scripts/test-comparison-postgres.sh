@@ -94,3 +94,24 @@ begin
   then raise exception 'expiry did not preserve attempt identity'; end if;
 end $$;
 SQL
+psql -v ON_ERROR_STOP=1 <<'SQL'
+do $$
+declare
+ owner_id uuid:='11111111-1111-4111-8111-111111111111';
+ next_id uuid:='40000000-0000-4000-8000-000000000003';
+ last_id uuid:='40000000-0000-4000-8000-000000000004';
+ boundary timestamptz:=clock_timestamp();
+begin
+ if not public.urenavi_capacity_confirm_window_v2('groq',null,'minute',boundary,boundary+interval '31 seconds',boundary,1,0,0,0,'requests')
+  or not public.urenavi_capacity_reserve_v2(next_id,'groq',owner_id,7300) then raise exception 'post-rollover reserve denied'; end if;
+ -- Simulate a pre-intent process exit and an RPM rollover by itself.
+ boundary:=clock_timestamp();
+ update public.urenavi_capacity_window_v2 set ends_at=boundary where provider='groq' and starts_at<boundary and ends_at>boundary
+  and tenant is null and period='minute' and dimension='requests';
+ if not public.urenavi_capacity_confirm_window_v2('groq',null,'minute',boundary,boundary+interval '31 seconds',boundary,1,0,0,0,'requests')
+  or not public.urenavi_capacity_reserve_v2(last_id,'groq',owner_id,7300) then raise exception 'abandoned hold blocked the fresh RPM window'; end if;
+ if (select outcome from public.urenavi_capacity_attempt_v2 where id=next_id)<>'expired'
+  or (select max(reserved_tokens) from public.urenavi_capacity_window_v2)<>7300
+  then raise exception 'abandoned reservation was not released once'; end if;
+end $$;
+SQL

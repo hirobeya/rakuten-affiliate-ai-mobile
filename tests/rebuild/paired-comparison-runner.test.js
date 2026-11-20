@@ -416,7 +416,9 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   for(const [label,reply,reason,outcome] of [
    ['rate-limit',()=>({status:429}),'provider_rate_limited','rate_limited:?'],
    ['timeout',()=>{throw Error('simulated transport timeout');},'transport_or_persistence_failure','unknown:?'],
-   ['unwritable-result',provider,'transport_or_persistence_failure','unknown:?']
+   ['unwritable-result',provider,'transport_or_persistence_failure','unknown:?'],
+   ['overrun',()=>({...provider(),usage:{prompt_tokens:8600,completion_tokens:400,total_tokens:9000}}),
+    'reservation_or_output_overrun','spent:9000']
   ]){
    await loadWindows();
    const journal=await fs.mkdtemp(path.join(directory,'journals',label+'-'));
