@@ -58,3 +58,39 @@ test('source spans cannot be forged or drift after item edits',()=>{
  ledger.facts[0].publicationApproved=true;
  assert.equal(verifyEvidence(item,ledger),false);
 });
+
+test('adjacent evidence requires a title-bound subject and retains both source positions',()=>{
+ const opening='細口ポットは、注ぐときの湯量と速度を調整できます。';
+ const reason='細い注ぎ口により、湯量や速度を細かく調整できます。';
+ const item={itemName:'電気ポット 細口ポット 0.9L',itemCaption:opening+reason};
+ const extract=item=>extractEvidence({...item,identity:'電気ポット'});
+ const ledger=extract(item);
+ const fact=ledger.facts.find(x=>x.quote===reason);
+ assert.equal(fact?.subjectBinding,'adjacent_explicit_subject');
+ assert.deepEqual(fact.subjectSpan,{start:0,end:opening.length});
+ assert.ok(verifyEvidence(item,ledger));
+ assert.equal(verifyEvidence(item,{facts:[{...fact,subjectSpan:{start:1,end:opening.length}}]}),false);
+ for(const boundary of ['\n','■','【別モデル】','こちらもおすすめ。','別売り品について。']){
+  assert.equal(extract({...item,itemCaption:opening+boundary+reason}).facts.some(x=>x.quote===reason),false,boundary);
+ }
+ for(const switched of ['別売りのノズルにより、湯量や速度を調整できます。','旧モデルは細い注ぎ口により、湯量や速度を調整できます。']){
+  assert.equal(extract({...item,itemCaption:opening+switched}).facts.some(x=>x.quote===switched),false,switched);
+ }
+});
+
+test('a source-bound follow-up supplies the product and passes existing mobile publication checks',()=>{
+ const {verifiedCaptionEditorialRescue}=require('../api/room-ai-v3');
+ const {provenLocalCopy}=require('../lib/room-copy-handler');
+ const item=corpus.rows.find(({item})=>item.itemCode==='mpowjapan:10000907').item;
+ const result=localZeroCall(item,'',{}, {editorial:true,linkedReason:true,identityExpansion:true,verifiedIntent:true});
+ assert.match(result.quality.text,/^電気ケトルは、精密な注ぎ口/);
+ assert.ok(item.itemCaption.includes(result.local.partner.quote));
+ assert.ok(verifiedCaptionEditorialRescue(item,result));
+ assert.ok(provenLocalCopy(item,result));
+});
+
+test('flattened merchant tables cannot pass as a ROOM paragraph',()=>{
+ const {catalogueOnly}=require('../public/purchase-copy-quality');
+ assert.equal(catalogueOnly('収納箱は、素材 ABS樹脂 特徴 横から物を出せます 備考 モニターで色が変わります。'),true);
+ assert.equal(catalogueOnly('収納箱は、横の扉を開けると積み重ねたまま中の物を取り出せます。'),false);
+});
