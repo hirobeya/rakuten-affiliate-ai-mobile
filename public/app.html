@@ -812,13 +812,15 @@ input,select{
 </style>
 <section class="box" id="manualProductInput" hidden aria-labelledby="manualProductHeading">
   <h2 id="manualProductHeading">商品情報からROOM投稿文を作る</h2>
+  <p>ご自身で確認した商品情報を、ご自身の言葉で入力してください。</p>
   <form id="manualProductForm">
     <label for="manualName">商品名</label>
     <input id="manualName" name="name" required maxlength="250">
     <label for="manualFeatures">特徴</label>
     <textarea id="manualFeatures" name="features" rows="3" maxlength="2000"></textarea>
     <label for="manualDescription">使い方や説明（任意）</label>
-    <textarea id="manualDescription" name="description" rows="3" maxlength="4000"></textarea>
+    <textarea id="manualDescription" name="description" rows="3" maxlength="4000" aria-describedby="manualDescriptionHint"></textarea>
+    <p id="manualDescriptionHint">使う場面、特徴、そこから得られる利点を一文で書くと、選ぶ理由をまとめやすくなります。</p>
     <label for="manualPrice">価格（円、任意）</label>
     <input id="manualPrice" name="price" type="number" inputmode="numeric" min="1" max="100000000" step="1">
     <button type="submit">投稿文を作る</button>
@@ -827,6 +829,7 @@ input,select{
   <label id="manualResultLabel" for="manualProductResult" hidden>生成した投稿文</label>
   <textarea id="manualProductResult" rows="7" readonly hidden></textarea>
   <button id="manualProductCopy" type="button" hidden>コピー</button>
+  <a id="manualRoomHome" href="https://room.rakuten.co.jp/" target="_blank" rel="noopener noreferrer" hidden>楽天ROOMを開く</a>
 </section>
 
 
@@ -1306,10 +1309,11 @@ async function showApp(session) {
     if(!response.ok) throw new Error('Access check unavailable');
     currentAppSession=session;
     currentAccessPlan=String(access.plan||'base');
-    await updateDebugExportAccess();
+    const manualOnly=await updateDebugExportAccess();
     authGate.style.display='none';
     appRoot.style.display='block';
     userMail.textContent=session.user.email||'';
+    if(manualOnly)return;
     window.initRoomOperations(session.user.email||'');
     window.initRoomOutcomes(session.user.email||'');
     proRenderMigration();
@@ -1467,12 +1471,14 @@ function cleanAuthUrl(){
   // its validated handoff until access-guard confirms approval; remove all
   // credential/error parameters and the auth fragment immediately.
   const handoffs=new URLSearchParams(window.location.search).getAll('handoff');
-  const pendingHandoff=handoffs.length===1&&/^[a-f0-9]{64}$/i.test(handoffs[0])
-    ?'?handoff='+handoffs[0]:'';
+  const safeQuery=new URLSearchParams();
+  if(handoffs.length===1&&/^[a-f0-9]{64}$/i.test(handoffs[0]))safeQuery.set('handoff',handoffs[0]);
+  if(new URLSearchParams(window.location.search).get('mode')==='manual')safeQuery.set('mode','manual');
+  const safeSuffix=safeQuery.size?'?'+safeQuery.toString():'';
   history.replaceState(
     {},
     document.title,
-    window.location.pathname+pendingHandoff
+    window.location.pathname+safeSuffix
   );
 
 }
@@ -2389,13 +2395,15 @@ function groundedAnalysis(i){
 async function updateDebugExportAccess(){
   let preview=false;
   let runtimeKnown=false;
+  const manualRequested=new URLSearchParams(window.location.search).get('mode')==='manual';
+  let manualOnly=manualRequested;
   try{
     const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
     const d=await r.json().catch(()=>({}));
     runtimeKnown=r.ok && typeof d.preview==='boolean';
     preview=runtimeKnown && d.preview===true;
-    const manualOnly=runtimeKnown && d.manualOnly===true;
-    document.getElementById('manualProductInput').hidden=!(manualOnly||(preview&&currentAccessPlan==='owner'));
+    manualOnly=manualRequested||(runtimeKnown&&d.manualOnly===true);
+    document.getElementById('manualProductInput').hidden=!(runtimeKnown&&(d.manualOnly===true||(preview&&currentAccessPlan==='owner')));
     document.querySelector('#appRoot main').classList.toggle('manual-product-only',manualOnly);
     if(manualOnly)document.getElementById('upgradeProBtn').hidden=true;
   }catch{
@@ -2412,12 +2420,14 @@ async function updateDebugExportAccess(){
       ?debugExportAllowed
       :paidPlan
   );
+  if(manualOnly)debugExportAllowed=usePurchasePlan=aiGatesFullOutput=false;
   const box=document.getElementById('debugExport');
   if(box) box.classList.toggle('on',debugExportAllowed);
   if(!debugExportAllowed){
     const ta=document.getElementById('debugJson');
     if(ta) ta.value='';
   }
+  return manualOnly;
 }
 
 function debugFallbackReason(a){
@@ -4835,13 +4845,14 @@ const manualForm=document.getElementById('manualProductForm');
 const manualResult=document.getElementById('manualProductResult');
 const manualStatus=document.getElementById('manualProductStatus');
 const manualCopy=document.getElementById('manualProductCopy');
+const manualRoomHome=document.getElementById('manualRoomHome');
 const manualLabel=document.getElementById('manualResultLabel');
 manualForm.addEventListener('submit',async event=>{
   event.preventDefault();
   const submit=event.submitter||manualForm.querySelector('[type=submit]');
   submit.disabled=true;
   manualResult.value='';
-  manualResult.hidden=manualCopy.hidden=manualLabel.hidden=true;
+  manualResult.hidden=manualCopy.hidden=manualLabel.hidden=manualRoomHome.hidden=true;
   manualStatus.textContent='投稿文を作成中…';
   const body=Object.fromEntries(new FormData(manualForm));
   body.price=body.price===''?null:Number(body.price);
@@ -4855,7 +4866,7 @@ manualForm.addEventListener('submit',async event=>{
       return;
     }
     manualResult.value=data.text;
-    manualResult.hidden=manualCopy.hidden=manualLabel.hidden=false;
+    manualResult.hidden=manualCopy.hidden=manualLabel.hidden=manualRoomHome.hidden=false;
     manualStatus.textContent='投稿前に商品情報を確認してください。';
   }catch{
     manualStatus.textContent='接続できませんでした。もう一度お試しください。';
