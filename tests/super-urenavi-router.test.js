@@ -3,10 +3,20 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {
-  createHandler,
+  createHandler:actualCreateHandler,
   resolveLocalUnderstanding,
   promoteImageHint
 }=require('../lib/super-urenavi-router');
+// Offline route tests use an explicit fake capacity boundary with mock
+// transport only. Production never receives this bypass.
+function createHandler(deps={}){
+ const offlineMockCapacity=async({callAI,apiKey,model,item})=>{
+  if(!deps.callGroq)throw Error('mock transport required for offline test');
+  return callAI({apiKey,model,itemName:item.itemName,itemCaption:item.itemCaption,
+   itemPrice:item.itemPrice,imageDataUrl:null,maxRetries:0});
+ };
+ return actualCreateHandler({...deps,capacityGate:deps.capacityGate||offlineMockCapacity});
+}
 
 function makeRes(){
   return {
