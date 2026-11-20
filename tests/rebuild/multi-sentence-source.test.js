@@ -63,3 +63,18 @@ test('offline writer receives linked proof only under the existing token ceiling
  assert.equal(planSourceComparison(source,state,{rates:{inputPerMillion:0,outputPerMillion:0},
   limits:{remainingRequests:1,remainingTokens:8000}}).eligible,true);
 });
+
+test('literal causal source claims are reusable without a product-category rewrite',()=>{
+ const source=item('保存ケースは、仕切りを使うことで、衣類を分けて収納できます。');
+ const result=composeSourceCopy(source,'保存ケース',{inputOwner:true});
+ assert.ok(result,'explicit claim with verified product ownership should yield copy');
+ assert.equal(result.proof.kind,'explicit_cause');
+ assert.equal(result.text.split('\\n')[1],'仕切りを使うことで、衣類を分けて収納できます。');
+ assert.equal(source.itemCaption.slice(result.proof.literal.start,result.proof.literal.end),result.proof.literal.quote);
+ assert.equal(generate(source).path,'linked_source_relation');
+ for(const caption of [
+  '関連商品\\n保存ケースは、仕切りを使うことで、衣類を分けて収納できます。',
+  '保存ケースは、仕切りを使うことで、衣類を分けて収納できます。\\n仕切りは付属しません。',
+  '別モデルの保存ケースは、仕切りを使うことで、衣類を分けて収納できます。'
+ ]) assert.equal(composeSourceCopy(item(caption),'保存ケース',{inputOwner:true}),null,caption);
+});
