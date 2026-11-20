@@ -7,11 +7,11 @@ const {execFileSync}=require('node:child_process');
 const {parseArgs}=require('node:util');
 const {importOfficialEvidence,matchesOfficialArtifact,officialEvidenceBlockers,selfLedgerEvidenceBlockers}=require('../../lib/urenavi-core/official-capacity-evidence');
 const {createIsolatedComparisonSupabase}=require('./isolated-comparison-supabase.cjs');
-const {createComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
+const {createComparisonJournal,createDurableComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
 const {createGroqComparisonTransport,createPairedComparisonRunner,expectedApproval}
  =require('../../lib/urenavi-core/paired-comparison-runner');
 const {values}=parseArgs({options:{
- action:{type:'string'},tenant:{type:'string'},organization:{type:'string'},project:{type:'string'},'budget-source':{type:'string'},
+ action:{type:'string'},tenant:{type:'string'},organization:{type:'string'},project:{type:'string'},'budget-source':{type:'string'},'journal-backend':{type:'string'},
  'credential-sha256':{type:'string'},inputs:{type:'string'},journal:{type:'string'},approval:{type:'string'},evidence:{type:'string'},
  artifact:{type:'string'},observation:{type:'string'},estimate:{type:'string'},'approval-key':{type:'string'},'evidence-key':{type:'string'},item:{type:'string'},arm:{type:'string'},stage:{type:'string'}
 }});
@@ -21,10 +21,12 @@ const keyFingerprint=groqKey?createHash('sha256').update(groqKey).digest('hex'):
 const account={organization:values.organization,project:values.project,
  credentialSha256:values['credential-sha256']||keyFingerprint};
 const budgetSource=values['budget-source']||'official';
+const journalBackend=values['journal-backend']||'local';
 const root=require('node:path').resolve(__dirname,'../..');
 const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
 async function run(){
  if(!['official','self_ledger'].includes(budgetSource))throw Error('unsupported_budget_source');
+ if(!['local','supabase'].includes(journalBackend))throw Error('unsupported_journal_backend');
  if(values.action==='import-evidence'){
   const observation=await json(values.observation);
   return importOfficialEvidence(observation,await fs.readFile(values.artifact));
@@ -57,10 +59,17 @@ async function run(){
   throw Error('isolated_operator_execution_disabled');
  if(values.action==='run'&&keyFingerprint!==account.credentialSha256)throw Error('comparison_credential_mismatch');
  if(git('status','--porcelain'))throw Error('clean_checkout_required');
+ const remote=process.env.URENAVI_COMPARISON_REMOTE_SUPABASE;
+ if(remote&&
+   (journalBackend!=='supabase'||process.env.URENAVI_COMPARISON_REMOTE_ENABLED!=='isolated-operator-confirmed'))
+  throw Error('remote_comparison_requires_persistent_journal_and_operator_gate');
  const {db,authorize}=createIsolatedComparisonSupabase({
-  url:process.env.URENAVI_COMPARISON_LOCAL_SUPABASE,
-  serviceKey:process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY,
-  ownerJwt:process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT
+  url:remote||process.env.URENAVI_COMPARISON_LOCAL_SUPABASE,
+  serviceKey:remote?process.env.URENAVI_COMPARISON_REMOTE_SERVICE_KEY:
+   process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY,
+  ownerJwt:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_JWT:
+   process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT,
+  allowRemote:Boolean(remote)
  });
  const [inputs,approvalKey,evidenceKey]=await Promise.all([
   json(values.inputs),fs.readFile(values['approval-key']),fs.readFile(values['evidence-key'])
@@ -72,7 +81,8 @@ async function run(){
  const transport=values.action==='run'?createGroqComparisonTransport({apiKey:groqKey}):
   async()=>{throw Error('no_transport_in_recovery');};
  const runner=createPairedComparisonRunner({inputs,environment:'isolated',executionSha,account,db,authorize,budgetSource,
-  journal:createComparisonJournal(values.journal),approvalKey,evidenceKey,
+  journal:journalBackend==='supabase'?createDurableComparisonJournal(db):
+   createComparisonJournal(values.journal),approvalKey,evidenceKey,
   readEvidence:readVerifiedEvidence,transport});
  if(values.action==='recover')return runner.recover({recoveryEnvelope:await readVerifiedEvidence()});
  return runner.run({approvalEnvelope:await json(values.approval),itemCode:values.item,arm:values.arm,stage:values.stage});
