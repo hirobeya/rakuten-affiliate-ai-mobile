@@ -2,7 +2,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {MODEL}=require('../../lib/urenavi-core/generation-comparison');
-const {importOfficialEvidence,matchesOfficialArtifact,officialWindows}=require('../../lib/urenavi-core/official-capacity-evidence');
+const {importOfficialEvidence,matchesOfficialArtifact,officialWindows,officialEvidenceBlockers}=require('../../lib/urenavi-core/official-capacity-evidence');
 const verifiedAt='2026-11-20T08:00:00.000Z';
 const minute='2026-11-20T08:00:40.200Z';
 const day='2026-11-21T07:59:59.500Z';
@@ -52,4 +52,30 @@ test('header artifacts reject credentials, duplicate fields and non-integer coun
   {authorization:'test-secret'}, {'x-ratelimit-limit-requests':'1','X-ratelimit-limit-requests':'2'},
   {'x-ratelimit-remaining-tokens':'0.5'}
  ])assert.throws(()=>importOfficialEvidence(observation,parse(fields)),/invalid_rate_header/);
+});
+
+test('diagnostics and actual admission share exactly the same fail-closed predicate',()=>{
+ const raw=Buffer.from('test-only Console capture');
+ const minuteEnd='2026-11-20T08:00:40.200Z';
+ const dayEnd='2026-11-21T07:59:59.500Z';
+ const complete=importOfficialEvidence({...base,source:'groq_console',counters:{
+  rpm:{limit:30,remaining:10,resetAt:minuteEnd},
+  rpd:{limit:1000,remaining:100,resetAt:dayEnd},
+  tpm:{limit:8000,remaining:7000,resetAt:minuteEnd},
+  tpd:{limit:200000,remaining:20000,resetAt:dayEnd}
+ }},raw);
+ const timestamp=Date.parse(verifiedAt);
+ assert.deepEqual(officialEvidenceBlockers(complete,account,timestamp,1000,10000),[]);
+ assert.ok(officialWindows(complete,account,timestamp,1000,10000));
+ for(const axis of ['rpm','rpd','tpm','tpd']){
+  const partial={...complete,counters:{...complete.counters,[axis]:{...complete.counters[axis],remaining:null}}};
+  assert.ok(officialEvidenceBlockers(partial,account,timestamp,1000,10000).includes(axis+'_official_counter_unverified'));
+  assert.equal(officialWindows(partial,account,timestamp,1000,10000),null);
+ }
+ const header={...complete,source:'groq_headers'};
+ assert.ok(officialEvidenceBlockers(header,account,timestamp,1000,10000).includes('console_evidence_required'));
+ assert.equal(officialWindows(header,account,timestamp,1000,10000),null);
+ const notFree={...complete,billable:null};
+ assert.ok(officialEvidenceBlockers(notFree,account,timestamp,1000,10000).includes('free_nonbillable_unverified'));
+ assert.equal(officialWindows(notFree,account,timestamp,1000,10000),null);
 });
