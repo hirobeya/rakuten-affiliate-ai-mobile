@@ -69,12 +69,12 @@ test('literal causal source claims are reusable without a product-category rewri
  const result=composeSourceCopy(source,'保存ケース',{inputOwner:true});
  assert.ok(result,'explicit claim with verified product ownership should yield copy');
  assert.equal(result.proof.kind,'explicit_cause');
- assert.equal(result.text.split('\\n')[1],'仕切りを使うことで、衣類を分けて収納できます。');
+ assert.equal(result.text.split('\n')[1],'仕切りを使うことで、衣類を分けて収納できます。');
  assert.equal(source.itemCaption.slice(result.proof.literal.start,result.proof.literal.end),result.proof.literal.quote);
  assert.equal(generate(source).path,'linked_source_relation');
  for(const caption of [
-  '関連商品\\n保存ケースは、仕切りを使うことで、衣類を分けて収納できます。',
-  '保存ケースは、仕切りを使うことで、衣類を分けて収納できます。\\n仕切りは付属しません。',
+  '関連商品\n保存ケースは、仕切りを使うことで、衣類を分けて収納できます。',
+  '保存ケースは、仕切りを使うことで、衣類を分けて収納できます。\n仕切りは付属しません。',
   '別モデルの保存ケースは、仕切りを使うことで、衣類を分けて収納できます。'
  ]) assert.equal(composeSourceCopy(item(caption),'保存ケース',{inputOwner:true}),null,caption);
 });
