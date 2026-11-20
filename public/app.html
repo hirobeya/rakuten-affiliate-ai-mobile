@@ -2203,7 +2203,7 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
-  const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
+  const paidPlan=['standard','base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
       ?debugExportAllowed
