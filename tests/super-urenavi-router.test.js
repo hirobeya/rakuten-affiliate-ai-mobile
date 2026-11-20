@@ -96,7 +96,7 @@ test('valid text Groq result stops before image',async()=>withPreviewKey(async()
   assert.equal(imageLoads,0);
 }));
 
-test('image cache hit prevents a second Groq call',async()=>withPreviewKey(async()=>{
+test('legacy image-cache data does not add another execution route',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -107,13 +107,14 @@ test('image cache hit prevents a second Groq call',async()=>withPreviewKey(async
   const res=makeRes();
   await handler({method:'POST',body:{itemCode:'x3',itemName:'本革 バイクグローブ グローブ',itemCaption:'',imageUrl:'https://example.com/x.jpg'}},res);
   assert.equal(res.statusCode,200);
-  assert.equal(res.body.cache.status,'image_hit');
-  assert.equal(res.body.stages.imageCacheHit,true);
+  assert.equal(res.body.cache.status,'miss');
+  assert.equal(res.body.route.route,'text');
+  assert.equal(res.body.stages.imageAttempted,false);
   assert.equal(groq,1);
   assert.equal(imageLoads,0);
 }));
 
-test('uncertain text with no image cache escalates to image exactly once',async()=>withPreviewKey(async()=>{
+test('uncertain text ends after one provider call with no image lookup or image persistence',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0,imageSaves=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -128,8 +129,10 @@ test('uncertain text with no image cache escalates to image exactly once',async(
   const res=makeRes();
   await handler({method:'POST',body:{itemCode:'x4',itemName:'本革 バイクグローブ グローブ',itemCaption:'',imageUrl:'https://example.com/x.jpg'}},res);
   assert.equal(res.statusCode,200);
-  assert.equal(res.body.route.route,'image');
-  assert.equal(groq,2);
-  assert.equal(imageLoads,1);
-  assert.equal(imageSaves,1);
+  assert.equal(res.body.route.route,'text');
+  assert.equal(res.body.stages.imageAttempted,false);
+  assert.equal(res.body.stages.secondProviderAttempt,false);
+  assert.equal(groq,1);
+  assert.equal(imageLoads,0);
+  assert.equal(imageSaves,0);
 }));
