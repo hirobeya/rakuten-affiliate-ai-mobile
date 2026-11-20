@@ -44,11 +44,22 @@ function counters(time){
  const minute=new Date(time+45000).toISOString();
  const day=new Date(time+300000).toISOString();
  return {
-  rpm:{limit:30,remaining:10,resetAt:minute},rpd:{limit:1000,remaining:50,resetAt:day},
+  rpm:{limit:30,remaining:10,resetAt:new Date(time+40000).toISOString()},rpd:{limit:1000,remaining:50,resetAt:new Date(time+290000).toISOString()},
   tpm:{limit:8000,remaining:8000,resetAt:minute},tpd:{limit:200000,remaining:40000,resetAt:day}
  };
 }
-async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=false,authorize=async()=>auth,inputsOverride=inputs}={}){
+function confirmedWindows(time,tenants){
+ const seen=new Date(time).toISOString();
+ const result=[];
+ const values=counters(time);
+ for(const [period,r,t] of [['minute',values.rpm,values.tpm],['day',values.rpd,values.tpd]]){
+  result.push([null,period,seen,r.resetAt,seen,r.limit,0,r.limit-r.remaining,0,'requests']);
+  result.push([null,period,seen,t.resetAt,seen,0,t.limit,0,t.limit-t.remaining,'tokens']);
+  for(const tenant of tenants)result.push([tenant,period,seen,t.resetAt,seen,r.limit,t.limit,0,0,'both']);
+ }
+ return result;
+}
+async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>now,failSave=false,authorize=async()=>auth,inputsOverride=inputs}={}){
  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'paired-comparison-'));
  t.after(()=>fs.rm(directory,{recursive:true,force:true}));
  const plain=createComparisonJournal(directory);
@@ -64,7 +75,7 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=fal
  });
  const rpc=[],calls=[];
  const make=()=>createComparisonRunner({
-  environment:'isolated',inputs:inputsOverride,executionSha:sha,account,authorize,now:()=>now,
+  environment:'isolated',inputs:inputsOverride,executionSha:sha,account,authorize,now:clock,
   approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,journal,
   readEvidence:async()=>signed(evidence(evidencePatch),evidenceKeys.privateKey),
   db:async(route,{body})=>{const args=JSON.parse(body);rpc.push([route,args]);return dbResult(route,args);},
@@ -175,6 +186,29 @@ test('unresolved intent, missing recovery evidence and failed settlement block a
  assert.equal(g.calls.length,0);
 });
 
+test('expiry during reservation or durable intent never reaches the transport',async t=>{
+ for(const [rpc,delay,reason] of [
+  ['reserve_v2',60001,'evidence_or_approval_expired_before_intent'],
+  ['comparison_intent_v2',30000,'evidence_or_approval_expired_before_transport']
+ ]){
+  let elapsed=0;
+  const f=await fixture(t,{clock:()=>now+elapsed,dbResult:route=>{
+   if(route.endsWith('capacity_'+rpc))elapsed=delay;
+   return true;
+  }});
+  assert.equal((await f.runner.run(stage())).reason,reason);
+  assert.equal(f.calls.length,0);
+ }
+});
+test('a signed scope change or partial provider proof never grants transport',async t=>{
+ const f=await fixture(t,{evidencePatch:{source:'groq_headers'}});
+ const request=stage();
+ const wrong=approve(request.approvalEnvelope.payload.target,{scope:{...scope,maxCalls:9}});
+ assert.equal((await f.runner.run({...request,approvalEnvelope:wrong})).reason,'approval_invalid_or_expired');
+ assert.equal((await f.runner.run(request)).reason,'official_capacity_unverified_or_insufficient');
+ assert.equal(f.calls.length,0);
+});
+
 if(process.env.URENAVI_DISPOSABLE_PG==='1'){
  test('isolated PostgreSQL: owner, durable intent, settlement, restart, halt and recovery',async t=>{
   const {execFileSync}=require('node:child_process');
@@ -182,11 +216,13 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
    input:sql,encoding:'utf8',env:{PATH:process.env.PATH,PGHOST:'127.0.0.1',PGPORT:'5432',
     PGUSER:'postgres',PGPASSWORD:'postgres',PGDATABASE:'urenavi_paired_test',PGCONNECT_TIMEOUT:'3'}
   }).trim().split('\n').at(-1);
+  const sqlArgument=value=>value===null?'null':"'"+String(value).replaceAll("'","''")+"'";
   const db=async(route,options)=>{
    assert.match(route,/^rpc\/urenavi_capacity_(reserve|comparison_intent|complete|comparison_resume)_v2$/);
    const args=Object.entries(JSON.parse(options.body)).map(([name,value])=>{
     assert.match(name,/^p_[a-z_]+$/);
     if(value===null)return name+'=>null';
+    if(name==='p_counters')return name+'=>'+sqlArgument(JSON.stringify(value));
     assert.match(String(value),/^[a-zA-Z0-9_.:\-]+$/);
     return name+"=>'"+value+"'";
    });
@@ -203,13 +239,9 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
   });
   function confirmWindows(){
    captureTime=Date.now();
-   const seen=new Date(captureTime).toISOString();
-   const counts=counters(captureTime);
-   for(const [period,requests,tokens] of [['minute',counts.rpm,counts.tpm],['day',counts.rpd,counts.tpd]]){
-    for(const tenant of ['null',"'"+auth.user.id+"'","'22222222-2222-4222-8222-222222222222'"]){
-     assert.equal(psql(`set role service_role; select public.urenavi_capacity_confirm_window_v2(
-      'groq',${tenant},'${period}','${seen}','${requests.resetAt}','${seen}',${requests.limit},${tokens.limit},0,0);`),'t');
-    }
+   for(const row of confirmedWindows(captureTime,[auth.user.id,'22222222-2222-4222-8222-222222222222'])){
+    assert.equal(psql("set role service_role; select public.urenavi_capacity_confirm_window_v2('groq',"+
+     row.map(sqlArgument).join(',')+');'),'t');
    }
   }
   const writerId=scope.slots[0].attemptIds.writer;
@@ -337,13 +369,10 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   async function loadWindows(){
    sql("truncate public.urenavi_capacity_comparison_evidence_v2, public.urenavi_capacity_attempt_v2, public.urenavi_capacity_window_v2, public.urenavi_capacity_provider_v2; insert into public.urenavi_capacity_provider_v2(provider) values ('groq');");
    captureTime=Date.now();
-   const start=new Date(captureTime).toISOString();
-   const values=counters(captureTime);
-   for(const [period,r,t] of [['minute',values.rpm,values.tpm],['day',values.rpd,values.tpd]]){
-    for(const tenant of [null,owner.id,other.id])assert.equal(await rpc('confirm_window',{
-     p_provider:'groq',p_tenant:tenant,p_period:period,p_start:start,p_end:r.resetAt,p_verified:start,
-     p_request_limit:r.limit,p_token_limit:t.limit,p_external_requests:0,p_external_tokens:0
-    }),true);
+   const names=['tenant','period','start','end','verified','request_limit','token_limit','external_requests','external_tokens','dimension'];
+   for(const row of confirmedWindows(captureTime,[owner.id,other.id])){
+    const args=Object.fromEntries(names.map((name,index)=>['p_'+name,row[index]]));
+    assert.equal(await rpc('confirm_window',{p_provider:'groq',...args}),true);
    }
   }
   function runner(user,journal,reply=provider){

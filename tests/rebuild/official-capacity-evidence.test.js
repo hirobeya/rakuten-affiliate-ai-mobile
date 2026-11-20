@@ -34,8 +34,16 @@ test('Console limits without remaining/reset do not constitute confirmation',()=
  const counters={rpm:{limit:30,remaining:5,resetAt:minute},rpd:{limit:1000,remaining:100,resetAt:day},
   tpm:{limit:8000,remaining:7000,resetAt:minute},tpd:{limit:200000,remaining:20000,resetAt:day}};
  const full=importOfficialEvidence({...observation,counters},capture);
- assert.deepEqual(ready(full),{minuteEnd:minute,dayEnd:day});
- assert.equal(ready({...full,counters:{...counters,rpd:{...counters.rpd,resetAt:minute}}}),null);
+ assert.deepEqual(ready(full),{counters});
+ const different={...counters,tpm:{...counters.tpm,resetAt:'2026-11-20T08:00:32.000Z'},
+  tpd:{...counters.tpd,resetAt:'2026-11-21T07:59:25.000Z'}};
+ assert.deepEqual(ready({...full,counters:different}),{counters:different});
+ for(const axis of Object.keys(counters)){
+  const replace=patch=>ready({...full,counters:{...counters,[axis]:{...counters[axis],...patch}}});
+  assert.equal(replace({remaining:null}),null);
+  assert.equal(replace({resetAt:'2026-11-20T08:00:10.000Z'}),null);
+ }
+ assert.equal(officialWindows(full,account,Date.parse(verifiedAt)+60001,1000,10000),null);
  assert.throws(()=>importOfficialEvidence({...observation,counters:{rpm:{limit:9,remaining:10}}},capture),/invalid_official_counter/);
 });
 test('header artifacts reject credentials, duplicate fields and non-integer counts',()=>{
