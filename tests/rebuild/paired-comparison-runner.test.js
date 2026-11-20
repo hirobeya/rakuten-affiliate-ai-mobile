@@ -59,7 +59,7 @@ function confirmedWindows(time,tenants){
  }
  return result;
 }
-async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>now,failSave=false,authorize=async()=>auth,inputsOverride=inputs}={}){
+async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>now,failSave=false,authorize=async()=>auth,inputsOverride=inputs,budgetSource='official'}={}){
  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'paired-comparison-'));
  t.after(()=>fs.rm(directory,{recursive:true,force:true}));
  const plain=createComparisonJournal(directory);
@@ -75,7 +75,7 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>no
  });
  const rpc=[],calls=[];
  const make=()=>createComparisonRunner({
-  environment:'isolated',inputs:inputsOverride,executionSha:sha,account,authorize,now:clock,
+  environment:'isolated',inputs:inputsOverride,executionSha:sha,account,authorize,now:clock,budgetSource,
   approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,journal,
   readEvidence:async()=>signed(evidence(evidencePatch),evidenceKeys.privateKey),
   db:async(route,{body})=>{const args=JSON.parse(body);rpc.push([route,args]);return dbResult(route,args);},
@@ -431,3 +431,36 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   }
  });
 }
+
+test('signed self-ledger mode reuses durable stage workflow but never assumes provider balances',async t=>{
+ const f=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{counters:{}}});
+ const target={itemCode:item.itemCode,arm:'B',stage:'generate'};
+ const approvalEnvelope=signed({approvalId:hash(['self',target]),
+  expiresAt:new Date(now+300000).toISOString(),
+  scope:expectedApproval(sha,auth.user.id,account,plan,'self_ledger'),target},approvalKeys.privateKey);
+ assert.equal((await f.runner.run(stage())).reason,'approval_invalid_or_expired');
+ assert.equal(f.calls.length,0,'ordinary official approval never opts into self policy');
+ const reply=await f.runner.run({...target,approvalEnvelope});
+ assert.equal(reply.status,'completed');
+ assert.equal(f.calls.length,1);
+ assert.deepEqual(f.rpc.map(x=>x[0]),[
+  'rpc/urenavi_capacity_self_budget_reserve_v2',
+  'rpc/urenavi_capacity_self_budget_intent_v2',
+  'rpc/urenavi_capacity_self_budget_complete_v2'
+ ]);
+ assert.equal(f.rpc[0][1].p_tenant,auth.user.id);
+ assert.equal(f.rpc[2][1].p_actual,1900);
+ assert.equal((await f.runner.recover({recoveryEnvelope:null})).reason,'manual_reconciliation_required');
+});
+test('self-ledger requires signed verified Free evidence and never sends on unknown billing',async t=>{
+ for(const patch of [{billable:null},{plan:null},{exclusiveWindow:false},{unresolvedSends:1}]){
+  const f=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{counters:{},...patch}});
+  const target={itemCode:item.itemCode,arm:'B',stage:'generate'};
+  const approvalEnvelope=signed({approvalId:hash(['self',target]),
+   expiresAt:new Date(now+300000).toISOString(),
+   scope:expectedApproval(sha,auth.user.id,account,plan,'self_ledger'),target},approvalKeys.privateKey);
+  assert.equal((await f.runner.run({...target,approvalEnvelope})).reason,'official_capacity_unverified_or_insufficient');
+  assert.equal(f.calls.length,0);
+  assert.equal(f.rpc.length,0);
+ }
+});
