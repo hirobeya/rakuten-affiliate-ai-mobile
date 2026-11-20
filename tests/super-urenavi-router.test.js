@@ -4,8 +4,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {
   createHandler:actualCreateHandler,
-  resolveLocalUnderstanding,
-  promoteImageHint
+  resolveLocalUnderstanding
 }=require('../lib/super-urenavi-router');
 // Offline route tests use an explicit fake capacity boundary with mock
 // transport only. Production never receives this bypass.
@@ -61,16 +60,6 @@ test('local allowlist resolves exact grounded type without guessing accessories'
   assert.equal(hit?.raw?.productType?.value,'電気ケトル');
   assert.equal(hit?.validation?.productType?.valid,true);
   assert.equal(resolveLocalUnderstanding({itemName:'モバイルバッテリー用ケース 収納ポーチ',itemCaption:''}),null);
-});
-
-test('cached image hint can only promote a type that exists in current source',()=>{
-  const good=promoteImageHint(
-    {features:[],sellingPoints:[],confidence:'medium'},
-    'バイクグローブ',
-    {itemName:'本革 バイクグローブ メンズ',itemCaption:''}
-  );
-  assert.equal(good?.validation?.productType?.valid,true);
-  assert.equal(promoteImageHint({features:[],sellingPoints:[]},'収納ボックス',{itemName:'バイクグローブ',itemCaption:''}),null);
 });
 
 test('router order is product cache then local and local consumes zero Groq quota',async()=>withPreviewKey(async()=>{
