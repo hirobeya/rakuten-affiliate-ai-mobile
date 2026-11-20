@@ -17,8 +17,11 @@ const required=name=>{
  return value;
 };
 function run(){
- if(required('URENAVI_MEASURE_ACK')!=='I_CHECKED_GROQ_FREE_NO_BILLING'||
-    required('URENAVI_MEASURE_PROVIDER_APPROVAL')!=='I_AUTHORIZE_GROQ_LIMITED_MEASUREMENT')
+ const mode=required('URENAVI_MEASURE_MODE');
+ if(!['preflight','send'].includes(mode)||
+    required('URENAVI_MEASURE_ACK')!=='I_CHECKED_GROQ_FREE_NO_BILLING'||
+    (mode==='send'&&
+     required('URENAVI_MEASURE_PROVIDER_APPROVAL')!=='I_AUTHORIZE_GROQ_LIMITED_MEASUREMENT'))
   throw Error('manual_groq_authorization_missing');
  const stage=required('URENAVI_MEASURE_STAGE');
  const arm=required('URENAVI_MEASURE_ARM');
