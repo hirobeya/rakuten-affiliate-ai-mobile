@@ -23,7 +23,8 @@ const signed=(payload,key)=>({payload,signature:sign(null,Buffer.from(JSON.strin
 const approvalKeys=generateKeyPairSync('ed25519');
 const evidenceKeys=generateKeyPairSync('ed25519');
 const scope=expectedApproval(sha,auth.user.id,account,plan);
-const approvalEnvelope=signed({approvalId:'b'.repeat(64),expiresAt:new Date(now+300000).toISOString(),scope},approvalKeys.privateKey);
+const approve=(target,opts={})=>signed({approvalId:hash(target),expiresAt:new Date(now+300000).toISOString(),scope,target,...opts},approvalKeys.privateKey);
+const approvalEnvelope=approve({itemCode:item.itemCode,arm:'B',stage:'generate'});
 const usage={prompt_tokens:1500,completion_tokens:400,total_tokens:1900};
 const draft={product:{what:'収納ボックス',acts_on:'食材を分けて収納',acts_on_quote:'食材を分けて収納できます'},
  sentences:[{text:'仕切りの付いた収納ボックスで、食材を分けて収納できます。',
@@ -32,10 +33,22 @@ const review={product:{what:'supported',acts_on:'supported'},sentences:[{
  text:draft.sentences[0].text,evidenceQuotes:draft.sentences[0].quotes,reason:'literal source',
  target:'supported',part:'supported',conditions:'supported',negation:'supported',degree:'supported'
 }],quality:{identity:'supported',reason:'supported',scene:'supported',natural:'supported',non_redundant:'supported',room_style:'supported'}};
-const stage=(overrides={})=>({approvalEnvelope,itemCode:item.itemCode,arm:'B',stage:'generate',...overrides});
+const stage=(overrides={})=>{
+ const target={itemCode:item.itemCode,arm:'B',stage:'generate'};
+ for(const field of Object.keys(target))if(field in overrides)target[field]=overrides[field];
+ return {approvalEnvelope:approve(target),...target,...overrides};
+};
 const provider=(raw=draft)=>({status:200,model:MODEL,providerRequestId:'simulated',raw,usage});
 
-async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=false}={}){
+function counters(time){
+ const minute=new Date(time+45000).toISOString();
+ const day=new Date(time+300000).toISOString();
+ return {
+  rpm:{limit:30,remaining:10,resetAt:minute},rpd:{limit:1000,remaining:50,resetAt:day},
+  tpm:{limit:8000,remaining:8000,resetAt:minute},tpd:{limit:200000,remaining:40000,resetAt:day}
+ };
+}
+async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=false,authorize=async()=>auth,inputsOverride=inputs}={}){
  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'paired-comparison-'));
  t.after(()=>fs.rm(directory,{recursive:true,force:true}));
  const plain=createComparisonJournal(directory);
@@ -47,12 +60,11 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=fal
  const evidence=patch=>({
   source:'groq_console',artifactSha256:hash(++observed),model:MODEL,account,plan:'free',billable:false,
   exclusiveWindow:true,unresolvedSends:0,verifiedAt:new Date(now).toISOString(),
-  minute:{remainingRequests:10,remainingTokens:8000,end:new Date(now+30000).toISOString()},
-  day:{remainingRequests:50,remainingTokens:40000,end:new Date(now+300000).toISOString()},...patch
+  counters:counters(now),...patch
  });
  const rpc=[],calls=[];
  const make=()=>createComparisonRunner({
-  environment:'isolated',inputs,executionSha:sha,account,authorize:async()=>auth,now:()=>now,
+  environment:'isolated',inputs:inputsOverride,executionSha:sha,account,authorize,now:()=>now,
   approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,journal,
   readEvidence:async()=>signed(evidence(evidencePatch),evidenceKeys.privateKey),
   db:async(route,{body})=>{const args=JSON.parse(body);rpc.push([route,args]);return dbResult(route,args);},
@@ -61,7 +73,7 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},failSave=fal
  return {runner:make(),make,journal,rpc,calls,evidence};
 }
 test('missing or altered approval and unknown capacity never reserve or send',async t=>{
- const f=await fixture(t,{evidencePatch:{day:null}});
+ const f=await fixture(t,{evidencePatch:{counters:{}}});
  assert.equal((await f.runner.run(stage({approvalEnvelope:null}))).reason,'approval_invalid_or_expired');
  const altered={...approvalEnvelope,payload:{...approvalEnvelope.payload,expiresAt:new Date(now+500000).toISOString()}};
  assert.equal((await f.runner.run(stage({approvalEnvelope:altered}))).reason,'approval_invalid_or_expired');
@@ -125,3 +137,124 @@ test('the one-shot transport times out without issuing a second request',async t
  assert.equal(calls,1);
  assert.equal(seenSignal.aborted,true);
 });
+
+for(const [name,options,reason] of [
+ ['stale evidence',{evidencePatch:{verifiedAt:new Date(now-60001).toISOString()}},'official_capacity_unverified_or_insufficient'],
+ ['wrong account',{evidencePatch:{account:{...account,project:'other'}}},'official_capacity_unverified_or_insufficient'],
+ ['wrong model',{evidencePatch:{model:'other'}},'official_capacity_unverified_or_insufficient'],
+ ['unresolved provider send',{evidencePatch:{unresolvedSends:1}},'official_capacity_unverified_or_insufficient'],
+ ['unverified billing',{evidencePatch:{billable:null}},'official_capacity_unverified_or_insufficient'],
+ ['unconfirmed free plan',{evidencePatch:{plan:null}},'official_capacity_unverified_or_insufficient'],
+ ['normal user',{authorize:async()=>({...auth,plan:'pro'})},'owner_required'],
+ ['other owner',{authorize:async()=>({...auth,user:{...auth.user,id:'22222222-2222-4222-8222-222222222222'}})},'approval_invalid_or_expired'],
+ ['missing DB',{dbResult:()=>{throw Error('DB unavailable');}},'reservation_not_confirmed'],
+ ['reservation denied',{dbResult:()=>false},'reservation_not_confirmed']
+]){
+ test(name+' never invokes the transport',async t=>{
+  const f=await fixture(t,options);
+  assert.equal((await f.runner.run(stage())).reason,reason);
+  assert.equal(f.calls.length,0);
+ });
+}
+test('signed approval only permits its one stage and tampered source cannot build a runner',async t=>{
+ const f=await fixture(t);
+ assert.equal((await f.runner.run(stage({arm:'C',approvalEnvelope}))).reason,'stage_not_approved');
+ assert.equal(f.calls.length,0);
+ await assert.rejects(fixture(t,{inputsOverride:[{...inputs[0],item:{...item,itemPrice:999}}]}),/input|hash|source/);
+});
+test('unresolved intent, missing recovery evidence and failed settlement block additional sends',async t=>{
+ const f=await fixture(t,{dbResult:r=>!r.includes('complete')});
+ const id=scope.slots[0].attemptIds.writer;
+ assert.equal((await f.runner.run(stage())).reason,'settlement_unconfirmed');
+ assert.equal((await f.make().recover({recoveryEnvelope:null})).reason,'recovery_evidence_invalid');
+ assert.equal((await f.make().run(stage({arm:'C'}))).reason,'study_halted');
+ assert.equal(f.calls.length,1);
+ const g=await fixture(t);
+ await g.journal.create(id+'-claim',{});
+ assert.equal((await g.make().run(stage({arm:'C'}))).reason,'unresolved_prior_claim');
+ assert.equal(g.calls.length,0);
+});
+
+if(process.env.URENAVI_DISPOSABLE_PG==='1'){
+ test('isolated PostgreSQL: owner, durable intent, settlement, restart, halt and recovery',async t=>{
+  const {execFileSync}=require('node:child_process');
+  const psql=sql=>execFileSync('psql',['-XAt','-v','ON_ERROR_STOP=1'],{
+   input:sql,encoding:'utf8',env:{PATH:process.env.PATH,PGHOST:'127.0.0.1',PGPORT:'5432',
+    PGUSER:'postgres',PGPASSWORD:'postgres',PGDATABASE:'urenavi_paired_test'}
+  }).trim().split('\n').at(-1);
+  const db=async(route,options)=>{
+   assert.match(route,/^rpc\/urenavi_capacity_(reserve|comparison_intent|complete|comparison_resume)_v2$/);
+   const args=Object.entries(JSON.parse(options.body)).map(([name,value])=>{
+    assert.match(name,/^p_[a-z_]+$/);
+    if(value===null)return name+'=>null';
+    assert.match(String(value),/^[a-zA-Z0-9_.:\-]+$/);
+    return name+"=>'"+value+"'";
+   });
+   return psql('set role service_role; select public.'+route.slice(4)+'('+args.join(',')+');')==='t';
+  };
+  const dir=await fs.mkdtemp(path.join(os.tmpdir(),'paired-postgres-'));
+  t.after(()=>fs.rm(dir,{recursive:true,force:true}));
+  const journal=createComparisonJournal(dir);
+  let captureTime,seq=0,sendCount=0;
+  const evidence=(extra={})=>({
+   source:'groq_console',artifactSha256:hash(['integration',++seq]),account,model:MODEL,plan:'free',
+   billable:false,exclusiveWindow:true,unresolvedSends:0,verifiedAt:new Date(captureTime).toISOString(),
+   counters:counters(captureTime),...extra
+  });
+  function confirmWindows(){
+   captureTime=Date.now();
+   const seen=new Date(captureTime).toISOString();
+   const counts=counters(captureTime);
+   for(const [period,requests,tokens] of [['minute',counts.rpm,counts.tpm],['day',counts.rpd,counts.tpd]]){
+    for(const tenant of ['null',"'"+auth.user.id+"'","'22222222-2222-4222-8222-222222222222'"]){
+     assert.equal(psql(`set role service_role; select public.urenavi_capacity_confirm_window_v2(
+      'groq',${tenant},'${period}','${seen}','${requests.resetAt}','${seen}',${requests.limit},${tokens.limit},0,0);`),'t');
+    }
+   }
+  }
+  const writerId=scope.slots[0].attemptIds.writer;
+  const otherId=scope.slots[1].attemptIds.writer;
+  const attempt=id=>psql(`select outcome from public.urenavi_capacity_attempt_v2 where id='${id}';`);
+  const make=(authorize=async()=>auth)=>createComparisonRunner({
+   environment:'isolated',inputs,executionSha:sha,account,authorize,db,journal:createComparisonJournal(dir),
+   approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,
+   readEvidence:async()=>signed(evidence(),evidenceKeys.privateKey),
+   transport:async()=>{
+    const id=sendCount++===0?writerId:otherId;
+    assert.equal(attempt(id),'sent');
+    assert.equal(psql(`select count(*) from public.urenavi_capacity_comparison_evidence_v2 where attempt_id='${id}';`),'1');
+    return id===writerId?provider():{status:429};
+   }
+  },index,plan);
+  const request=(arm='B')=>stage({arm,approvalEnvelope:approve({itemCode:item.itemCode,arm,stage:'generate'},
+   {expiresAt:new Date(Date.now()+60000).toISOString()})});
+  psql("insert into public.urenavi_capacity_provider_v2(provider) values('groq');");
+  confirmWindows();
+  assert.equal((await make(async()=>({...auth,plan:'pro'})).run(request())).reason,'owner_required');
+  assert.equal((await make(async()=>({...auth,user:{...auth.user,id:'22222222-2222-4222-8222-222222222222'}})).run(request())).reason,'approval_invalid_or_expired');
+  assert.equal(sendCount,0);
+  assert.equal((await make().run(request())).status,'completed');
+  assert.equal(attempt(writerId),'spent');
+  const stored=execFileSync(process.execPath,['-e',`
+   const j=require('./lib/urenavi-core/comparison-journal').createComparisonJournal(process.argv[1]);
+   j.read(process.argv[2]+'-result').then(record=>process.stdout.write(String(record.usage.total)));
+  `,dir,writerId],{encoding:'utf8'});
+  assert.equal(stored,'1900');
+  assert.equal((await make().run(request())).reason,'duplicate_attempt');
+  assert.equal((await make().run(request('C'))).reason,'provider_rate_limited');
+  assert.equal(attempt(otherId),'rate_limited');
+  assert.equal((await make().run(request())).reason,'study_halted');
+  assert.equal(sendCount,2);
+  const recover=()=>make().recover({recoveryEnvelope:signed(evidence({
+   executionSha:sha,tenant:auth.user.id,studyId:plan.studyId,reconciled:true,attemptIds:[otherId]
+  }),evidenceKeys.privateKey)});
+  assert.equal((await recover()).reason,'recovery_not_confirmed');
+  // Advance only the disposable fixture's windows to simulate elapsed provider windows.
+  psql("update public.urenavi_capacity_window_v2 set ends_at=clock_timestamp()-interval '1 millisecond';");
+  confirmWindows();
+  assert.equal((await recover()).status,'recovered');
+  assert.equal((await journal.read(otherId+'-recovered')).evidenceHash.length,64);
+  assert.equal((await make().run(request('C'))).reason,'duplicate_attempt');
+  assert.equal(sendCount,2);
+ });
+}

@@ -4,7 +4,7 @@
 
 ## 実装と停止条件
 
-- 固定20商品の原文ハッシュを再確認し、先行2商品・B/Cの署名対象を固定。書き手の本文SHA、段階別の試行ID、予約量、モデル設定は前回の固定計画と一致。審査は同じ承認で精算・保存済みの書き手結果から再構築し、既存の機械審査を通る場合のみ候補になる。
+- 固定20商品の原文ハッシュを再確認し、先行2商品・B/Cの署名対象を固定。書き手の本文SHA、段階別の試行ID、予約量、モデル設定は前回の固定計画と一致。審査は精算・保存済みの書き手結果から再構築し、既存の機械審査を通る場合のみ候補になる。
 - オーナー、コミットSHA、組織・プロジェクト・Groqキーの指紋を署名済み許可に結び付ける。承認署名と公式証拠の確認署名は別の信頼鍵。承認ID、実行・送信本文ハッシュ、先行2商品、方式、回数、予算、期限を記録する。
 - 残量は担当者が公式Consoleまたは公式ヘッダーの証拠を取得・署名して入力する。送信器は自動で公式残量を取得しない。署名付き証拠には原本SHA-256、照合済みプロジェクト・モデル・キー指紋、課金のないFree条件、他利用との排他、未解決送信0、RPM/RPD/TPM/TPDの残数と終了時刻が必要。証拠は60秒以内、タイムアウトは10秒。期限不足や不明な値では停止。過去の使用量は入力しない。
 - 容量管理v2はプロバイダーと契約者別の分・日窓のリクエスト・トークンを原子的に予約。新しいSQLはグローバル窓の確認時刻、窓終了時刻、証拠ハッシュを永続送信意図と同じトランザクションで確認する。同一証拠の使い回しも拒否する。
@@ -14,9 +14,9 @@
 ## オペレーターの実行条件
 
 1. 最終SHAをクリーンにチェックアウトし、専用の永続ディレクトリとループバックの隔離Supabaseを用意する。容量v2本体SQLと `docs/architecture/comparison-capacity-v2.sql` を隔離DBに適用。サービスキーとオーナーJWTは隔離環境のみ。CLIはVercelと非ループバックDBを拒否。
-2. 仮の認証情報を署名せず、`node scripts/rebuild/run-paired-comparison.cjs --action scope` に `--tenant`、`--organization`、`--project`、`--credential-sha256` を指定して署名対象を出す。管理者は実行条件に合意したうえで、`{approvalId, expiresAt, scope}` に別途署名する。承認エンベロープは `{payload, signature}`。署名は Ed25519 で、payload の JSON.stringify 結果のUTF-8を対象とし、署名値はbase64。
-3. 公式残量を取得して `{source, artifactSha256, model, account, plan, billable, exclusiveWindow, unresolvedSends, verifiedAt, minute, day}` を署名する。minute/day は `{remainingRequests, remainingTokens, end}`。会社側の日・分窓と契約者の窓を容量v2へ登録する。DBのグローバル窓の確認日時・終了日時と一致させる。
-4. 別途承認済みの場合だけ、隔離オペレーターが `URENAVI_ISOLATED_COMPARISON=operator-enabled` の状態で `--action run` を一段階ずつ実行する。引数は上記accountに加え `--inputs`、`--journal`、`--approval`、`--evidence`、`--approval-key`、`--evidence-key`、`--item`、`--arm`、`--stage generate|verify`。認証情報・秘密鍵はGitに保存しない。環境変数はCLI内で検証する。
+2. 仮の認証情報を署名せず、`node scripts/rebuild/run-paired-comparison.cjs --action scope` に `--tenant`、`--organization`、`--project`、`--credential-sha256` を指定して署名対象を出す。管理者は実行条件に合意したうえで、`{approvalId, expiresAt, scope, target:{itemCode,arm,stage}}` に別途署名する。target は1段階に限定し、次の段階には別の承認IDと署名を使う。承認エンベロープは `{payload, signature}`。署名は Ed25519 で、payload の JSON.stringify 結果のUTF-8を対象とし、署名値はbase64。
+3. [公式証拠の取り込み手順](./official-capacity-import-stage2.md)で取得、原本照合、正規化と署名を行う。DBのグローバル窓の確認日時・終了日時と一致させる。
+4. 別途承認済みの場合だけ、隔離オペレーターが `URENAVI_ISOLATED_COMPARISON=operator-enabled` の状態で `--action run` を一段階ずつ実行する。引数は上記accountに加え `--inputs`、`--journal`、`--approval`、`--evidence`、`--artifact`、`--approval-key`、`--evidence-key`、`--item`、`--arm`、`--stage generate|verify`。認証情報・秘密鍵はGitに保存しない。環境変数はCLI内で検証する。
 5. 停止解除時は別の証拠に executionSha、tenant、studyId、reconciled:true、attemptIds を添え、調整済みの最新公式残量を署名して `--action recover` を実行する。DB確認や永続保存の成否が不明な場合は管理者による照合が必要。自動解除しない。
 
 CLIを実送信モードでは起動していない。隔離Supabase・実運用永続ボリュームへの導入、公式証拠の取得、署名、実通信は次回承認後に確認する。CIは使い捨てPostgresと通信なしの模擬を使う。
