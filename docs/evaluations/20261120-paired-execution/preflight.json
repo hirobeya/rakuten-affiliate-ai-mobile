@@ -1,0 +1,83 @@
+{
+  "studyId": "urenavi-fixed-20-abc-20261120",
+  "liveAuthorized": false,
+  "latestOfficialCapacity": null,
+  "providerCalls": 0,
+  "maximumCalls": 8,
+  "writerReservation": 26460,
+  "reviewReservationCeiling": 32000,
+  "maximumReservation": 58460,
+  "priorPublicRateEstimateUsd": 0.015969,
+  "verifiedSlots": [
+    {
+      "itemCode": "e-kurashi:10037463",
+      "arm": "B",
+      "sourceHash": "579df068fff7622a00bd5e5ded3543b8d9f4d567d65c23fddf06ad3a7ad173ee",
+      "writerRequestHash": "aa715f071707cb24a46185c55439df48024de1f268a15c663d018278ce537320",
+      "attemptIds": {
+        "writer": "67abf9c9-6709-4802-8585-19720f0f4d25",
+        "review": "377551ee-0aa1-40f4-861d-26646267f188"
+      },
+      "writerReservation": 6263,
+      "reviewCeiling": 8000
+    },
+    {
+      "itemCode": "e-kurashi:10037463",
+      "arm": "C",
+      "sourceHash": "579df068fff7622a00bd5e5ded3543b8d9f4d567d65c23fddf06ad3a7ad173ee",
+      "writerRequestHash": "3c49d3cd12a54eb84d0590cf6873df3321704c2b205e2860aa911a8131127d66",
+      "attemptIds": {
+        "writer": "cfa8f579-b2ad-448b-83ee-05949250bc20",
+        "review": "532366a2-1f6a-48a3-8808-af1e589a410e"
+      },
+      "writerReservation": 6955,
+      "reviewCeiling": 8000
+    },
+    {
+      "itemCode": "e-kurashi:10018414",
+      "arm": "B",
+      "sourceHash": "f35a1824d8807d5d40870a3823081296e77b299b473293c76b8e6b7f28ceafe4",
+      "writerRequestHash": "68e79b99f98d58b86e41db1507d1ce3dd259c06184c82d603ad02bad89add243",
+      "attemptIds": {
+        "writer": "a4754e16-e711-492d-816a-a0cd71410465",
+        "review": "16c49bf1-18eb-4a74-894a-5f7f0b3db4d0"
+      },
+      "writerReservation": 6444,
+      "reviewCeiling": 8000
+    },
+    {
+      "itemCode": "e-kurashi:10018414",
+      "arm": "C",
+      "sourceHash": "f35a1824d8807d5d40870a3823081296e77b299b473293c76b8e6b7f28ceafe4",
+      "writerRequestHash": "d395eea576d14b1089e5ff39e1a93487cb70da0b3f62873f7a7e82f4ee761122",
+      "attemptIds": {
+        "writer": "65080bc5-080c-4f59-8ac3-d8b4dcb4e4c5",
+        "review": "fc33d7a7-52ea-4f00-8283-28b1cbac4cd5"
+      },
+      "writerReservation": 6798,
+      "reviewCeiling": 8000
+    }
+  ],
+  "unitEconomicsExample": {
+    "assumedAllRequestsUseAI": true,
+    "largestPairedGenerationAndReviewEstimateUsd": 0.00404325,
+    "monthly": [
+      {
+        "requests": 30,
+        "aiCostCeilingUsd": 0.1212975
+      },
+      {
+        "requests": 100,
+        "aiCostCeilingUsd": 0.404325
+      },
+      {
+        "requests": 300,
+        "aiCostCeilingUsd": 1.212975
+      }
+    ],
+    "dbCost": null,
+    "hostCost": null,
+    "operationsCost": null,
+    "actualPaymentFees": null
+  }
+}
