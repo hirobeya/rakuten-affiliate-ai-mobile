@@ -69,6 +69,9 @@ async function run(){
    process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY,
   ownerJwt:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_JWT:
    process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT,
+  ownerEmail:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_EMAIL:undefined,
+  ownerPassword:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_PASSWORD:undefined,
+  publishableKey:remote?process.env.URENAVI_COMPARISON_REMOTE_PUBLISHABLE_KEY:undefined,
   allowRemote:Boolean(remote)
  });
  const [inputs,approvalKey,evidenceKey]=await Promise.all([
