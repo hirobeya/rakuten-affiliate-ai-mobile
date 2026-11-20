@@ -61,6 +61,9 @@ begin
     or exists(select 1 from public.urenavi_capacity_window_v2 where provider='gemini' and starts_at=now_value and tokens<>0)
    then raise exception 'settlement changed wrong windows'; end if;
  if public.urenavi_capacity_complete_v2(a,'$tenant','spent',500) then raise exception 'duplicate settlement'; end if;
+ if public.urenavi_capacity_reserve_v2(b,'gemini','$tenant',1000) then raise exception 'unattributed cross-window spend must halt'; end if;
+ -- Simulate independent verified reconciliation in this disposable fixture.
+ update public.urenavi_capacity_provider_v2 set halted=false where provider='gemini';
  if not public.urenavi_capacity_reserve_v2(b,'gemini','$tenant',1000) then raise exception 'new window reservation'; end if;
  if not public.urenavi_capacity_intent_v2(b,'$tenant') then raise exception 'send'; end if;
  if not public.urenavi_capacity_complete_v2(b,'$tenant','unknown',null) then raise exception 'unknown settlement'; end if;

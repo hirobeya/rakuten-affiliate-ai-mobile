@@ -147,7 +147,11 @@ begin
     requests=requests+1,tokens=tokens+p_actual
    where id=any(a.windows);
  end if;
- if p_outcome<>'spent' or p_actual>a.estimate then
+ -- The pinned reservation can be reconciled after expiry, but a response
+ -- alone cannot prove which provider window was actually charged.
+ if p_outcome<>'spent' or p_actual>a.estimate or exists(
+   select 1 from public.urenavi_capacity_window_v2 where id=any(a.windows) and ends_at<=clock_timestamp()
+ ) then
    update public.urenavi_capacity_provider_v2 set halted=true where provider=a.provider;
  end if;
  update public.urenavi_capacity_attempt_v2 set outcome=p_outcome,actual_tokens=p_actual where id=p_id;
