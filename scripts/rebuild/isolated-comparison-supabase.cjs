@@ -1,12 +1,19 @@
 'use strict';
 
 // Shared by the isolated operator CLI and the real local Supabase test.
-function createIsolatedComparisonSupabase({url='http://127.0.0.1:54321',serviceKey,ownerJwt}={}){
+// The only authorized hosted destination is the separately created,
+// zero-cost comparison project. Never accept a caller-provided production URL.
+const ISOLATED_PROJECT_ID='vyzpklomggsazwigxkfh';
+function createIsolatedComparisonSupabase({url='http://127.0.0.1:54321',serviceKey,ownerJwt,
+ allowRemote=false,fetchImpl=fetch}={}){
  const local=new URL(url);
- if(local.protocol!=='http:'||local.hostname!=='127.0.0.1'||local.username||local.password||
-    local.pathname!=='/'||local.search||local.hash)throw Error('loopback_supabase_required');
+ const loopback=local.protocol==='http:'&&local.hostname==='127.0.0.1';
+ const hosted=allowRemote===true&&local.protocol==='https:'&&
+  local.hostname===ISOLATED_PROJECT_ID+'.supabase.co'&&local.port==='';
+ if((!loopback&&!hosted)||local.username||local.password||
+    local.pathname!=='/'||local.search||local.hash)throw Error('isolated_supabase_destination_required');
  if(!serviceKey||!ownerJwt)throw Error('isolated_supabase_credentials_required');
- const request=(pathname,options)=>fetch(local.origin+pathname,{
+ const request=(pathname,options)=>fetchImpl(local.origin+pathname,{
   ...options,redirect:'error',signal:AbortSignal.timeout(4000)
  });
  const db=async(path,options)=>{
