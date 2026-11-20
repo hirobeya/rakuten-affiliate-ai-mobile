@@ -67,3 +67,57 @@ test('hosted comparison access is pinned to newly isolated Supabase only',()=>{
  }).db);
  assert.ok(createIsolatedComparisonSupabase({...creds,url:'http://127.0.0.1:54321'}).db);
 });
+
+test('isolated owner obtains a fresh JWT and never trusts editable user metadata',async()=>{
+ const requests=[];
+ const fetchImpl=async(url,options)=>{
+  requests.push({url,options});
+  if(url.endsWith('/auth/v1/token?grant_type=password'))return {
+   ok:true,json:async()=>({access_token:'ephemeral-access-token'})
+  };
+  if(url.endsWith('/auth/v1/user'))return {
+   ok:true,json:async()=>({id:'11111111-1111-4111-8111-111111111111',
+    email:'owner@example.invalid',app_metadata:{urenavi_role:'owner'},
+    user_metadata:{urenavi_role:'user'}})
+  };
+  throw Error('unexpected_network_path');
+ };
+ const client=createIsolatedComparisonSupabase({
+  url:'https://vyzpklomggsazwigxkfh.supabase.co/',
+  allowRemote:true,serviceKey:'isolated-service-key',
+  ownerEmail:'owner@example.invalid',ownerPassword:'secret-credential',
+  publishableKey:'isolated-publishable-key',fetchImpl
+ });
+ assert.equal((await client.authorize()).ok,true);
+ assert.equal((await client.authorize()).ok,true);
+ assert.equal(requests.filter(x=>x.url.includes('/token?')).length,2,
+  'short-lived owner JWT must be renewed for each authorization');
+ assert.equal(requests[1].options.headers.Authorization,'Bearer ephemeral-access-token');
+ assert.ok(!JSON.stringify(requests).includes('upooxcugrplfmjnqpuxs'));
+});
+test('isolated remote owner login fails closed on missing or unverified credentials',async()=>{
+ assert.throws(()=>createIsolatedComparisonSupabase({
+  url:'https://vyzpklomggsazwigxkfh.supabase.co/',
+  allowRemote:true,serviceKey:'service',ownerEmail:'owner@example.invalid',
+  publishableKey:'publishable'
+ }),/incomplete_isolated_owner_credentials/);
+ let sent=0;
+ const client=createIsolatedComparisonSupabase({
+  url:'https://vyzpklomggsazwigxkfh.supabase.co/',allowRemote:true,
+  serviceKey:'service',ownerEmail:'owner@example.invalid',
+  ownerPassword:'password',publishableKey:'publishable',
+  fetchImpl:async()=>{sent++;return {ok:false};}
+ });
+ assert.equal((await client.authorize()).ok,false);
+ assert.equal(sent,1);
+ const another=createIsolatedComparisonSupabase({
+  url:'https://vyzpklomggsazwigxkfh.supabase.co/',allowRemote:true,
+  serviceKey:'service',ownerEmail:'owner@example.invalid',
+  ownerPassword:'password',publishableKey:'publishable',
+  fetchImpl:async url=>url.includes('/token?')?
+   {ok:true,json:async()=>({access_token:'fresh'})}:
+   {ok:true,json:async()=>({id:'11111111-1111-4111-8111-111111111111',
+    email:'owner@example.invalid',user_metadata:{urenavi_role:'owner'},app_metadata:{}})}
+ });
+ assert.equal((await another.authorize()).ok,false,'user_metadata cannot grant owner');
+});
