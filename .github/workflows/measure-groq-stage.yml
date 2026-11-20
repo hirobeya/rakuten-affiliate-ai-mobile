@@ -1,5 +1,8 @@
 name: Isolated Groq Stage (pinned, manual only)
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/measure-groq-stage.yml'
   workflow_dispatch:
     inputs:
       mode:
@@ -43,7 +46,7 @@ jobs:
   offline-readiness:
     # Public repository standard hosted runner; no secrets, no Groq, no
     # Supabase connection, no approval. Safe to run before environment setup.
-    if: ${{ inputs.mode == 'preflight' }}
+    if: ${{ github.event_name == 'pull_request' || inputs.mode == 'preflight' }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
