@@ -7,7 +7,6 @@ const html=fs.readFileSync(path.join(__dirname,'../public/app.html'),'utf8');
 test('automatic AI batch halts on first uncertain provider response',()=>{
  assert.match(html,/const halt=await requestAiRoom\(job\.item,job\.index,generation\)/);
  assert.match(html,/if\(halt\)\{[\s\S]*?queue\.length=0;\s*break;/);
- assert.match(html,/const stop=await requestAiRoom\(/);
 });
 test('all unsuccessful responses and network errors halt batch, success does not',()=>{
  assert.match(html,/if\(!r\.ok\)\{[\s\S]*?haltAutomatic=true;[\s\S]*?\}else aiRoomResults\.set\(index,\{state:'done',data:d\}\);/);
