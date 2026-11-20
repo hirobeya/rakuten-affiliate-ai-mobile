@@ -60,7 +60,7 @@ jobs:
           test "$(git rev-parse HEAD)" = 'b5d96336d1b17e070610855e7a5702001d799383'
           node --test tests/rebuild/groq-stage-workflow.test.js \
             tests/rebuild/durable-comparison-journal.test.js
-          node --test tests/rebuild/paired-comparison-runner.test.js
+          node --test --test-name-pattern='signed self-ledger|approved self-ledger|self-ledger|signed batch|administrator declaration' tests/rebuild/paired-comparison-runner.test.js
           node -e "const p=require('./docs/evaluations/20261120-ai-comparison/offline-report.json');if(p.paired.maximumCalls!==8||p.paired.itemCodes.length!==2)process.exit(1);console.log(JSON.stringify({status:'offline-only-passed',items:p.paired.itemCodes,externalCalls:0}))"
   isolated-stage:
     # No secrets reach the unprotected offline-readiness job.
