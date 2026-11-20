@@ -67,8 +67,9 @@ async function run(){
   url:remote||process.env.URENAVI_COMPARISON_LOCAL_SUPABASE,
   serviceKey:remote?process.env.URENAVI_COMPARISON_REMOTE_SERVICE_KEY:
    process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY,
-  ownerJwt:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_JWT:
-   process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT,
+  // Hosted comparisons require fresh sign-in. A fixed token remains valid
+  // only for disposable local PostgREST integration tests.
+  ownerJwt:remote?undefined:process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT,
   ownerEmail:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_EMAIL:undefined,
   ownerPassword:remote?process.env.URENAVI_COMPARISON_REMOTE_OWNER_PASSWORD:undefined,
   publishableKey:remote?process.env.URENAVI_COMPARISON_REMOTE_PUBLISHABLE_KEY:undefined,
