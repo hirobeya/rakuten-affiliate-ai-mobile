@@ -24,7 +24,7 @@ for i in {1..8}; do
   pids+=("$!")
 done
 for pid in "${pids[@]}"; do wait "$pid"; done
-[[ $(grep -l '^t$' "$out" | wc -l) -eq 2 ]]
+[[ $(grep -l '^t$' "$out"/[1-8] | wc -l) -eq 2 ]]
 psql -v ON_ERROR_STOP=1 <<SQL
 do \$test\$
 declare first_id uuid; second_id uuid;
