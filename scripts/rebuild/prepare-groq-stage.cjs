@@ -16,6 +16,9 @@ const required=name=>{
  if(!value)throw Error('isolated_stage_preflight_missing_'+name);
  return value;
 };
+function signedStageScope(executionSha,tenant,account){
+ return expectedApproval(executionSha,tenant,account,undefined,'self_ledger');
+}
 function run(){
  const mode=required('URENAVI_MEASURE_MODE');
  if(!['preflight','send'].includes(mode)||
@@ -42,7 +45,7 @@ function run(){
  const tenant=required('URENAVI_ISOLATED_OWNER_ID');
  if(!/^[0-9a-f-]{36}$/i.test(tenant))throw Error('invalid_isolated_owner_identity');
  const executionSha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
- const scope=expectedApproval(executionSha,tenant,account,undefined,'self_ledger');
+ const scope=signedStageScope(executionSha,tenant,account);
  const targets=scope.slots.filter(s=>s.arm===arm).slice(0,maxCalls).map(s=>({
   itemCode:s.itemCode,arm,stage
  }));
@@ -86,8 +89,11 @@ function run(){
   targetItemCodes:targets.map(t=>t.itemCode),folder
  })+'\n');
 }
-try{run();}catch{
- // Deliberately do not reveal missing secret values, private key or raw inputs.
- process.stderr.write('isolated signed-stage preflight failed (no provider send)\n');
- process.exitCode=1;
+if(require.main===module){
+ try{run();}catch{
+  // Deliberately do not reveal missing secret values, private key or raw inputs.
+  process.stderr.write('isolated signed-stage preflight failed (no provider send)\n');
+  process.exitCode=1;
+ }
 }
+module.exports={signedStageScope};
