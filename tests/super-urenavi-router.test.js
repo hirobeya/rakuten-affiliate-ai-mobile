@@ -185,8 +185,10 @@ test('long Rakuten source remains whole for validation and cache while Groq sees
  const longCaption='A'.repeat(2500)+'検証対象の末尾仕様='+'B'.repeat(2000);
  const saved=[];
  let groqCalls=0;
- const handler=createHandler({
+ const handler=actualCreateHandler({
   authorize:async()=>({ok:true,plan:'owner'}),
+  capacityGate:async({item,callAI})=>callAI({itemCaption:item.modelCaption,
+   imageDataUrl:null,maxRetries:0}),
   callGroq:async({itemCaption})=>{
    groqCalls++;
    assert.ok(itemCaption.length<=3000);
