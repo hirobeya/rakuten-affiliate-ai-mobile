@@ -41,7 +41,8 @@ test('no verified identity or DB approval can send a provider request',async()=>
 test('db refusal, absent intent and backend exception always block before transport',async()=>{
  for(const config of [{reservation:false},{intent:false}]){
   const d=fakeDb(config);let sends=0;
-  await assert.rejects(run({db:d.db,callAI:async()=>{sends++;return response}}));
+  await assert.rejects(run({db:d.db,callAI:async()=>{sends++;return response}}),err=>
+    config.intent===false ? err.capacityPreDispatch===false : err.capacityPreDispatch===true);
   assert.equal(sends,0);
  }
  let sends=0;
@@ -85,7 +86,9 @@ test('missing provider usage or unconfirmed settlement halts without re-dispatch
  for(const opts of [{result:{...response,usage:null},settlement:true},
   {result:response,settlement:false}]){
   const d=fakeDb({settlement:opts.settlement});let sends=0;
-  await assert.rejects(run({db:d.db,callAI:async()=>{sends++;return opts.result}}),/room_ai_(provider_usage_unknown|settlement_unconfirmed)_no_retry/);
+  await assert.rejects(run({db:d.db,callAI:async()=>{sends++;return opts.result}}),err=>
+   /room_ai_(provider_usage_unknown|settlement_unconfirmed)_no_retry/.test(err.message)&&
+   err.capacityPreDispatch===false);
   assert.equal(sends,1);
  }
 });
