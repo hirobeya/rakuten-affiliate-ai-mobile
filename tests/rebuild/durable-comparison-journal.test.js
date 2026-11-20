@@ -50,7 +50,7 @@ test('durable lock and persistence fail closed on ambiguous database response',a
  await assert.rejects(journal.read('a'),/durable_journal_read_unconfirmed/);
 });
 test('hosted comparison access is pinned to newly isolated Supabase only',()=>{
- const creds={serviceKey:'fake',ownerJwt:'fake',fetchImpl:async()=>{throw Error('not_called');}};
+ const creds={serviceKey:'fake',ownerJwt:'fake',ownerEmail:'test@example.invalid',ownerPassword:'test-pass',publishableKey:'test-key',fetchImpl:async()=>{throw Error('not_called');}};
  for(const url of ['https://upooxcugrplfmjnqpuxs.supabase.co/',
   'https://other.supabase.co/','http://vyzpklomggsazwigxkfh.supabase.co/',
   'https://vyzpklomggsazwigxkfh.supabase.co.evil.org/',
@@ -94,6 +94,12 @@ test('isolated owner obtains a fresh JWT and never trusts editable user metadata
   'short-lived owner JWT must be renewed for each authorization');
  assert.equal(requests[1].options.headers.Authorization,'Bearer ephemeral-access-token');
  assert.ok(!JSON.stringify(requests).includes('upooxcugrplfmjnqpuxs'));
+});
+test('remote Supabase never accepts a static owner JWT as a substitute for fresh login',()=>{
+ assert.throws(()=>createIsolatedComparisonSupabase({
+  url:'https://vyzpklomggsazwigxkfh.supabase.co/',allowRemote:true,
+  serviceKey:'isolation-only',ownerJwt:'static-token'
+ }),/isolated_remote_fresh_owner_auth_required/);
 });
 test('isolated remote owner login fails closed on missing or unverified credentials',async()=>{
  assert.throws(()=>createIsolatedComparisonSupabase({
