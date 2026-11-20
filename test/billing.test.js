@@ -126,11 +126,11 @@ test('The approved new-sale contract is exactly one 1480 JPY monthly subscriptio
  const pricing=require('../lib/urenavi-pricing');
  assert.equal(pricing.MONTHLY_PRICE_JPY,1480);
  assert.equal(pricing.PLAN_ID,'standard');
- const p={id:'price_1480',active:true,unit_amount:1480,currency:'jpy',
+ const p={id:'price_test',active:true,unit_amount:1480,currency:'jpy',livemode:false,tax_behavior:'inclusive',
   recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
  assert.equal(pricing.validatesMonthlyPrice(p),true);
- for(const patch of [{unit_amount:980},{unit_amount:1980},{currency:'usd'},
-  {active:false},{recurring:{interval:'year',interval_count:1}},
+ for(const patch of [{unit_amount:980},{unit_amount:1980},{currency:'usd'},{tax_behavior:'exclusive'},
+  {active:false},{livemode:true},{recurring:{interval:'year',interval_count:1}},
   {recurring:{interval:'month',interval_count:1,usage_type:'metered'}}]){
   assert.equal(pricing.validatesMonthlyPrice({...p,...patch}),false);
  }
@@ -189,7 +189,7 @@ test('replayed paid checkout webhook never duplicates billing-side activation',a
 });
 test('explicit single-plan checkout verifies Stripe price and link before redirect',async()=>{
  process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
- const price={id:'price_test',active:true,unit_amount:1480,currency:'jpy',
+ const price={id:'price_test',active:true,unit_amount:1480,currency:'jpy',livemode:false,tax_behavior:'inclusive',
   recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
  let calls=0;
  global.fetch=async url=>{
@@ -229,7 +229,7 @@ test('single-plan checkout refuses stale link, multiple prices and amount drift'
   global.fetch=async url=>{
    calls++;url=String(url);
    if(url.includes('/prices/price_test'))
-    return response({id:'price_test',active:true,unit_amount:c.priceAmount,currency:'jpy',
+    return response({id:'price_test',active:true,unit_amount:c.priceAmount,currency:'jpy',livemode:false,tax_behavior:'inclusive',
      recurring:{interval:'month',interval_count:1,usage_type:'licensed'}});
    if(url.includes('/payment_links/plink_test/line_items'))
     return response({data:Array.from({length:c.lineCount},()=>({
