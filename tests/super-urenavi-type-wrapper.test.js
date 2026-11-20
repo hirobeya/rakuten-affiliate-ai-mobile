@@ -34,7 +34,7 @@ function knowledgeCall(counter){
   };
 }
 
-test('validated local route learns type knowledge once, then reuses it',async()=>{
+test('validated local route never starts extra knowledge generation when cache misses',async()=>{
   const counter={count:0},s=store();
   process.env.GROQ_API_KEY='mock';
   const h=createHandler({
@@ -42,15 +42,15 @@ test('validated local route learns type knowledge once, then reuses it',async()=
     store:s,callKnowledge:knowledgeCall(counter)
   });
   const a=response();await h({},a);
-  assert.equal(a.body.typeKnowledge.status,'generated');
-  assert.equal(a.body.typeKnowledge.groqCalls,1);
+  assert.equal(a.body.typeKnowledge.status,'miss');
+  assert.equal(a.body.typeKnowledge.groqCalls,0);
   const b=response();await h({},b);
-  assert.equal(b.body.typeKnowledge.status,'hit');
+  assert.equal(b.body.typeKnowledge.status,'miss');
   assert.equal(b.body.typeKnowledge.groqCalls,0);
-  assert.equal(counter.count,1);
+  assert.equal(counter.count,0);
 });
 
-test('text route learns a new type once and attaches ranking-only knowledge',async()=>{
+test('text route never incurs a second knowledge generation call',async()=>{
   const counter={count:0},s=store();
   const h=createHandler({
     baseHandler:base({ok:true,route:{route:'text'},validation:VALIDATION}),store:s,
@@ -58,11 +58,11 @@ test('text route learns a new type once and attaches ranking-only knowledge',asy
   });
   process.env.GROQ_API_KEY='mock';
   const a=response();await h({},a);
-  assert.equal(a.body.typeKnowledge.status,'generated');
-  assert.equal(a.body.typeKnowledge.knowledge.usage,'ranking_only');
+  assert.equal(a.body.typeKnowledge.status,'miss');
+  assert.equal(a.body.typeKnowledge.groqCalls,0);
   const b=response();await h({},b);
-  assert.equal(b.body.typeKnowledge.status,'hit');
-  assert.equal(counter.count,1);
+  assert.equal(b.body.typeKnowledge.status,'miss');
+  assert.equal(counter.count,0);
 });
 
 test('cached knowledge on cache route is reused with zero Groq',async()=>{
@@ -78,7 +78,7 @@ test('cached knowledge on cache route is reused with zero Groq',async()=>{
   assert.equal(calls,0);
 });
 
-test('cache route generates once when product understanding exists but type knowledge does not',async()=>{
+test('cache route with no knowledge remains provider-free',async()=>{
   const counter={count:0},s=store();
   process.env.GROQ_API_KEY='mock';
   const h=createHandler({
@@ -86,8 +86,9 @@ test('cache route generates once when product understanding exists but type know
     callKnowledge:knowledgeCall(counter)
   });
   const res=response();await h({},res);
-  assert.equal(res.body.typeKnowledge.status,'generated');
-  assert.equal(counter.count,1);
+  assert.equal(res.body.typeKnowledge.status,'miss');
+  assert.equal(res.body.typeKnowledge.groqCalls,0);
+  assert.equal(counter.count,0);
 });
 
 test('invalid or failed product understanding never triggers type knowledge',async()=>{
