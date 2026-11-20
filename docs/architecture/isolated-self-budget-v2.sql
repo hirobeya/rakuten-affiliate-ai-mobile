@@ -97,6 +97,9 @@ begin
   or exists(select 1 from public.urenavi_capacity_attempt_v2
   where provider='groq' and outcome='sent') then return false; end if;
  update public.urenavi_self_budget_attempt_v2 set outcome='sent' where id=p_id;
+ -- Reserve the shared provider halt until this send settles. The original
+ -- v2 dispatch gate reads this same flag, so the two modes cannot overlap.
+ update public.urenavi_capacity_provider_v2 set halted=true where provider='groq';
  return true;
 end $$;
 
@@ -115,7 +118,10 @@ begin
  if not found or a.outcome<>'sent' then return false; end if;
  update public.urenavi_self_budget_attempt_v2
   set outcome=p_outcome, actual_tokens=p_actual where id=p_id;
- if p_outcome<>'spent' or p_actual>a.estimated_tokens then
+ if p_outcome='spent' and p_actual<=a.estimated_tokens then
+  update public.urenavi_capacity_provider_v2 set halted=false where provider='groq';
+ else
+  -- Unknown use, a 429, or overrun retains the shared provider halt.
   update public.urenavi_capacity_provider_v2 set halted=true where provider='groq';
  end if;
  return true;
