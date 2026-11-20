@@ -180,7 +180,7 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
   const {execFileSync}=require('node:child_process');
   const psql=sql=>execFileSync('psql',['-XAt','-v','ON_ERROR_STOP=1'],{
    input:sql,encoding:'utf8',env:{PATH:process.env.PATH,PGHOST:'127.0.0.1',PGPORT:'5432',
-    PGUSER:'postgres',PGPASSWORD:'postgres',PGDATABASE:'urenavi_paired_test'}
+    PGUSER:'postgres',PGPASSWORD:'postgres',PGDATABASE:'urenavi_paired_test',PGCONNECT_TIMEOUT:'3'}
   }).trim().split('\n').at(-1);
   const db=async(route,options)=>{
    assert.match(route,/^rpc\/urenavi_capacity_(reserve|comparison_intent|complete|comparison_resume)_v2$/);
@@ -230,6 +230,8 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
    {expiresAt:new Date(Date.now()+60000).toISOString()})});
   psql("insert into public.urenavi_capacity_provider_v2(provider) values('groq');");
   confirmWindows();
+  assert.equal(psql("select has_table_privilege('authenticated','public.urenavi_capacity_attempt_v2','SELECT');"),'f');
+  assert.equal(psql("select has_function_privilege('authenticated','public.urenavi_capacity_reserve_v2(uuid,text,uuid,bigint)','EXECUTE');"),'f');
   assert.equal((await make(async()=>({...auth,plan:'pro'})).run(request())).reason,'owner_required');
   assert.equal((await make(async()=>({...auth,user:{...auth.user,id:'22222222-2222-4222-8222-222222222222'}})).run(request())).reason,'approval_invalid_or_expired');
   assert.equal(sendCount,0);

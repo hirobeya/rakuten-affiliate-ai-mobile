@@ -50,6 +50,8 @@ jobs:
           PGPASSWORD: postgres
           URENAVI_DISPOSABLE_PG: '1'
         run: |
+          # Match the Supabase backend role only inside this disposable container.
+          psql -Xv ON_ERROR_STOP=1 -c 'alter role service_role bypassrls'
           createdb urenavi_paired_test
           psql -Xv ON_ERROR_STOP=1 -d urenavi_paired_test \
             -f docs/architecture/multitenant-capacity-v2.sql \
