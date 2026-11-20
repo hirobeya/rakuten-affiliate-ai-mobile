@@ -130,13 +130,15 @@ test('The approved new-sale contract is exactly one 1480 JPY monthly subscriptio
   recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
  assert.equal(pricing.validatesMonthlyPrice(p),true);
  for(const patch of [{unit_amount:980},{unit_amount:1980},{currency:'usd'},{tax_behavior:'exclusive'},
-  {active:false},{livemode:true},{recurring:{interval:'year',interval_count:1}},
+  {active:false},{recurring:{interval:'year',interval_count:1}},
   {recurring:{interval:'month',interval_count:1,usage_type:'metered'}}]){
   assert.equal(pricing.validatesMonthlyPrice({...p,...patch}),false);
  }
  process.env.URENAVI_PRICE_ID='price_test';
  global.fetch=async url=>response(String(url).includes('/prices/')?p:{});
  assert.equal(await billing.verifyConfiguredSalePrice(),true);
+ global.fetch=async url=>response(String(url).includes('/prices/')?{...p,livemode:true}:{});
+ await assert.rejects(()=>billing.verifyConfiguredSalePrice(),/1480 JPY/);
  global.fetch=async url=>response(String(url).includes('/prices/')?{...p,unit_amount:980}:{});
  await assert.rejects(()=>billing.verifyConfiguredSalePrice(),/1480 JPY/);
 });
