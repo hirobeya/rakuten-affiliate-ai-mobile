@@ -136,3 +136,48 @@ test('uncertain text ends after one provider call with no image lookup or image 
   assert.equal(imageLoads,0);
   assert.equal(imageSaves,0);
 }));
+
+test('single-attempt transport never retries after 429 or JSON validation failure',async()=>{
+ const {defaultCallGroq}=require('../lib/room-ai-handler');
+ for(const [status,body] of [
+  [429,{error:{code:'rate_limit_exceeded',message:'test quota'}}],
+  [400,{error:{code:'json_validate_failed',message:'test invalid structured output'}}]
+ ]){
+  let sends=0;
+  const fetchImpl=async()=>{
+   sends++;
+   return {ok:false,status,
+    headers:{get:()=>null},
+    json:async()=>body};
+  };
+  await assert.rejects(
+   defaultCallGroq({apiKey:'mock',model:'openai/gpt-oss-120b',
+    itemName:'未確定の収納用品',itemCaption:'説明',itemPrice:1200,
+    imageDataUrl:null,maxRetries:0,fetchImpl}),
+   error=>error.status===status
+  );
+  assert.equal(sends,1,'no hidden request retry is allowed');
+ }
+});
+test('unified route always selects fixed 120B and sends no image even if supplied',async()=>withPreviewKey(async()=>{
+ let sends=0;
+ const handler=createHandler({
+  authorize:async()=>({ok:true,plan:'owner'}),
+  consumeQuota:async()=>true,
+  store:makeStore(),
+  callGroq:async({model,imageDataUrl})=>{
+   sends++;
+   assert.equal(model,'openai/gpt-oss-120b');
+   assert.equal(imageDataUrl,null);
+   return {raw:{productType:{value:'不明商品',source:'itemName',evidence:'不明商品'},
+    features:[],sellingPoints:[],confidence:'medium'},model};
+  },
+  loadImageDataUrl:async()=>{throw Error('image route must never run');}
+ });
+ const r=makeRes();
+ await handler({method:'POST',body:{itemCode:'test:one',itemName:'不明商品 製品',
+  itemCaption:'仕様は未記載',itemPrice:1200,imageUrl:'https://example.com/image.jpg'}},r);
+ assert.equal(r.statusCode,200);
+ assert.equal(sends,1);
+ assert.equal(r.body.stages.imageAttempted,false);
+}));
