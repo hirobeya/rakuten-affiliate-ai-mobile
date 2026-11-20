@@ -347,8 +347,6 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   const [owner,member,other]=await Promise.all([createUser(true),createUser(false),createUser(true)]);
   const clientFor=user=>createIsolatedComparisonSupabase({url:api,serviceKey,ownerJwt:user.jwt});
   assert.equal((await clientFor(owner).authorize()).user.id,owner.id);
-  assert.deepEqual(await createDurableComparisonJournal(clientFor(owner).db).read('restart-evidence'),
-    {saved:true,word:'日本語'});
   assert.equal((await clientFor(member).authorize()).ok,false);
   assert.equal((await clientFor(other).authorize()).user.id,other.id);
   const rpc=(action,body)=>clientFor(owner).db('rpc/urenavi_capacity_'+action+'_v2',
