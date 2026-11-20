@@ -134,6 +134,53 @@ test('The approved new-sale contract is exactly one 1480 JPY monthly subscriptio
  global.fetch=async url=>response(String(url).includes('/prices/')?{...p,unit_amount:980}:{});
  await assert.rejects(()=>billing.verifyConfiguredSalePrice(),/1480 JPY/);
 });
+test('¥1480 paid checkout activates the one standard plan with full entitlement',async()=>{
+ const writes=[];let created=0;
+ global.fetch=async(url,opts={})=>{
+  url=String(url);
+  if(url.includes('/checkout/sessions/'))return response({
+   livemode:false,mode:'subscription',status:'complete',
+   payment_status:'paid',payment_link:'plink_test',subscription:'sub_test'});
+  if(url.includes('/subscriptions/'))return response(sub());
+  if(url.includes('urenavi_entitlements_v2?'))return response([]);
+  if(url.includes('/customers/'))return response({email:'newbuyer@example.invalid'});
+  if(url.includes('rpc/urenavi_sync_entitlement')){
+   writes.push(JSON.parse(opts.body).p_row);return response(null);
+  }
+  if(url.includes('/auth/v1/admin/users')){created++;return response({id:'user_mock'});}
+  throw Error('unexpected connection');
+ };
+ const result=await billing.activate('cs_test_fixture');
+ assert.equal(result.plan,'standard');
+ assert.equal(result.active,true);
+ assert.equal(created,1);
+ assert.equal(writes.length,1);
+ assert.equal(writes[0].plan,'standard');
+ assert.equal(writes[0].email,'newbuyer@example.invalid');
+});
+test('replayed paid checkout webhook never duplicates billing-side activation',async()=>{
+ let activations=0,provisions=0;
+ global.fetch=async(url,opts={})=>{
+  url=String(url);
+  if(url.includes('/checkout/sessions/'))return response({
+   livemode:false,mode:'subscription',status:'complete',
+   payment_status:'paid',payment_link:'plink_test',subscription:'sub_test'});
+  if(url.includes('/subscriptions/'))return response(sub());
+  if(url.includes('urenavi_entitlements_v2?'))return response([]);
+  if(url.includes('/customers/'))return response({email:'newbuyer@example.invalid'});
+  if(url.includes('rpc/urenavi_sync_entitlement')){activations++;return response(null);}
+  if(url.includes('/auth/v1/admin/users')){provisions++;return response({id:'user_mock'});}
+  throw Error('unexpected connection');
+ };
+ const event={livemode:false,type:'checkout.session.completed',
+  data:{object:{id:'cs_test_fixture',payment_link:'plink_test',payment_status:'paid'}}};
+ for(let i=0;i<2;i++){
+  const result=res();await webhook(signed(event),result);
+  assert.equal(result.code,200);
+ }
+ assert.equal(activations,2,'idempotent entitlement sync is allowed');
+ assert.equal(provisions,2,'repeated auth provisioning must be idempotent at provider');
+});
 test('New purchases remain disabled until approved 1480 JPY sale and settlement are deployed',async()=>{
  global.fetch=()=>{throw Error('disabled buy must not contact Stripe');};
  for(const action of ['buy','buy-pro']){
