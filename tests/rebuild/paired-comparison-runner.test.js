@@ -545,3 +545,19 @@ test('self-ledger declaration can be older than 60s but not outlive approval',as
   'declaration_exceeds_approval_lifetime');
  assert.equal(blocked.calls.length,0);
 });
+
+test('administrator declaration imports with a real source hash and cannot impersonate official quota evidence',()=>{
+ const {importOfficialEvidence,matchesOfficialArtifact,officialWindows,selfLedgerWindows}
+  =require('../../lib/urenavi-core/official-capacity-evidence');
+ const artifact=Buffer.from('isolated administrator declared nonbillable Free');
+ const observation={source:'administrator_declaration',
+  account,model:MODEL,plan:'free',billable:false,exclusiveWindow:false,unresolvedSends:null,
+  verifiedAt:new Date(now-3600000).toISOString(),
+  expiresAt:new Date(now+300000).toISOString(),counters:{}};
+ const imported=importOfficialEvidence(observation,artifact);
+ assert.equal(matchesOfficialArtifact(imported,artifact),true);
+ assert.ok(selfLedgerWindows(imported,account,now));
+ assert.equal(officialWindows(imported,account,now,1000,10000),null);
+ assert.equal(selfLedgerWindows({...imported,expiresAt:new Date(now+86400001).toISOString()},account,now),null);
+ assert.equal(matchesOfficialArtifact({...imported,expiresAt:new Date(now+86400001).toISOString()},artifact),false);
+});
