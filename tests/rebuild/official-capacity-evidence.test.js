@@ -84,7 +84,7 @@ test('offline CLI preflight rejects forged signatures and never needs a provider
  const fs=require('node:fs/promises');
  const os=require('node:os');
  const path=require('node:path');
- const {execFileSync}=require('node:child_process');
+ const {spawnSync}=require('node:child_process');
  const {generateKeyPairSync}=require('node:crypto');
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'official-evidence-cli-'));
  t.after(()=>fs.rm(root,{recursive:true,force:true}));
@@ -97,11 +97,12 @@ test('offline CLI preflight rejects forged signatures and never needs a provider
  await fs.writeFile(envelope,JSON.stringify({payload,signature:Buffer.alloc(64).toString('base64')}));
  await fs.writeFile(artifact,'test-only capture');
  await fs.writeFile(key,publicKey.export({type:'spki',format:'pem'}));
- const output=execFileSync(process.execPath,['scripts/rebuild/run-paired-comparison.cjs',
+ const result=spawnSync(process.execPath,['scripts/rebuild/run-paired-comparison.cjs',
   '--action','check-evidence','--organization',account.organization,'--project',account.project,
   '--credential-sha256',account.credentialSha256,'--estimate','1000',
   '--evidence',envelope,'--artifact',artifact,'--evidence-key',key],{
   cwd:path.resolve(__dirname,'../..'),encoding:'utf8',env:{PATH:process.env.PATH}
  });
- assert.deepEqual(JSON.parse(output),{status:'stopped',blockers:['evidence_signature_invalid']});
+ assert.equal(result.status,1);
+ assert.deepEqual(JSON.parse(result.stdout),{status:'stopped',blockers:['evidence_signature_invalid']});
 });
