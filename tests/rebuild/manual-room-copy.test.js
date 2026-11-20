@@ -2,7 +2,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const manual=require('../../lib/manual-room-copy');
-const {verifyNaturalization}=require('../../lib/room-copy-naturalization');
+const {verifyNaturalization,hasMalformedTopicChain}=require('../../lib/room-copy-naturalization');
 
 function run(handler,body,query){
  const res={setHeader(){},status(code){this.code=code;return this;},json(data){this.data=data;return this;}};
@@ -36,4 +36,13 @@ test('naturalization preserves quantity, conditions, degree, negation and number
   clean.replace('初心者でも',''),clean.replace('できます','できません'),
   clean.replace('調整できます','細かく調整できます'),clean.replace('1,200','2,100')
  ])assert.equal(verifyNaturalization(original,candidate),false,candidate);
+});
+
+test('generic Japanese topic-chain veto rejects malformed source-bound sales prose without inventing replacements',()=>{
+ const malformed='電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円';
+ assert.equal(hasMalformedTopicChain(malformed),true);
+ assert.equal(hasMalformedTopicChain('収納ケースは、必要な書類をまとめて収納できます。\n\n価格：1,200円'),false);
+ assert.equal(hasMalformedTopicChain('保存するときは、ふたを閉めます。'),false);
+ assert.equal(hasMalformedTopicChain('収納ボックスは、なお収納ボックスは、便利です。'),true);
+ assert.equal(hasMalformedTopicChain(null),true);
 });
