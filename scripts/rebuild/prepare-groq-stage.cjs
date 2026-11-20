@@ -42,7 +42,7 @@ function run(){
  const tenant=required('URENAVI_ISOLATED_OWNER_ID');
  if(!/^[0-9a-f-]{36}$/i.test(tenant))throw Error('invalid_isolated_owner_identity');
  const executionSha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
- const scope=expectedApproval(executionSha,tenant,account);
+ const scope=expectedApproval(executionSha,tenant,account,undefined,'self_ledger');
  const targets=scope.slots.filter(s=>s.arm===arm).slice(0,maxCalls).map(s=>({
   itemCode:s.itemCode,arm,stage
  }));
