@@ -11,7 +11,7 @@
 | 層 | 事実 | 対応 | 公開判定 |
 |---|---|---|---|
 | 価格契約 | 旧mainに980円の購入テスト・旧Base/Proの認証実装が残る | Draft PR #186で1480円判定、旧テストとアプリ表示を修正 | 料金部分のみCI合格 |
-| Stripeテスト | 接続済みサンドボックスの一覧には月額980円Priceが1件、1480円Priceは0件 | テストPrice/Payment Linkを別途作成し、amountとredirectを確認 | 未完了 |
+| Stripeテスト | 2026-11-20、月額1,480円Price `price_1UdsgOIjWIM1d80UC33Mwf3h` を接続済みSandboxに新規作成し再取得検証済み。`tax_behavior=exclusive`（税別） | テストPayment Linkと購入/解約E2E、最終税表示を別途確認。旧980円Priceは不変更 | 価格作成のみ完了 |
 | 購入API | /api/access?action=buy と buy-pro は404販売停止 | 受付停止を維持。新料金検証・決済・Webhook・認証・返金/解約回帰を新規実装後に判断 | 未完了 |
 | UI | 旧980→1480 Pro導線が残っていた | Draft PR #186で導線を削除しテスト追加 | CI合格 |
 | AI生成 | Draft PR #184で比較送信・品質審査・容量管理を整備、実測未完了 | 既存設計・送信防止機構を再利用し、承認後に隔離実測 | 未完了 |
@@ -32,3 +32,9 @@
 - PR #184 / #185 / #186 はそれぞれDraft・未マージで独立。PR #186単体のCI合格は#184・#185の統合合格を意味しない。
 - 新価格のStripe本番設定、実Groq送信、本番DB変更、Production配備はこの作業では **実施しない**。
 - 実測・販売を許可する前にPR統合のCI、モバイル実機テスト、正式な承認境界を確認する。
+
+## 同日追加の実証
+- 1,480円プランの権限は `standard` として判定し、旧Base/Proを読み取り専用で互換維持。旧980円Priceが既存envに残っても `standard` に昇格しない。
+- 模擬購入済Checkout→同期→標準プラン権限付与、重複Webhook、旧契約読み取り、容量管理の否認ケースを自動テスト。
+- Stripe接続済みSandboxで新規Priceを作成し再取得。¥1,480・JPY・month・active・licensed・test mode。税別（exclusive）は既存Sandboxと同じ設定。**お客様の税込最終支払額¥1,480を保証する設定ではない**ため、税の扱いを未決定のままPayment Linkや本番購入を有効化しない。
+- 隔離容量管理DBは現時点で auth.users=0、利用枠window=0。Groq本送信は拒否される。データ補完のために実在しないユーザーや公式残量証拠を合成しない。
