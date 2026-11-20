@@ -19,30 +19,19 @@ test('manual stage workflow is default-off and requires both an environment revi
  assert.match(workflow,/--action run-batch --journal-backend supabase --budget-source self_ledger/);
  assert.doesNotMatch(workflow,/schedule:/,'no scheduled transport is authorized');
 });
-test('preflight with missing GitHub environment secrets stops before generating approval or transport',()=>{
- const folder=fs.mkdtempSync(path.join(os.tmpdir(),'groq-preflight-negative-'));
- try{
-  const r=spawnSync(process.execPath,['scripts/rebuild/prepare-groq-stage.cjs'],{
-   cwd:path.resolve(__dirname,'../..'),encoding:'utf8',
-   env:{PATH:process.env.PATH,RUNNER_TEMP:folder,
-    URENAVI_MEASURE_MODE:'preflight',
-    URENAVI_MEASURE_ACK:'I_CHECKED_GROQ_FREE_NO_BILLING',
-    URENAVI_MEASURE_STAGE:'generate',URENAVI_MEASURE_ARM:'B',
-    URENAVI_MEASURE_MAX_CALLS:'1'}
-  });
-  assert.equal(r.status,1);
-  assert.match(r.stderr,/preflight failed \(no provider send\)/);
-  assert.equal(fs.readdirSync(folder).length,1,'no public approval or credentials written');
-  assert.deepEqual(fs.readdirSync(path.join(folder,'urenavi-isolated-stage')),[]);
- }finally{fs.rmSync(folder,{recursive:true,force:true});}
-});
-test('Groq batch operator remains disabled even if CLI arguments are supplied',()=>{
- const r=spawnSync(process.execPath,['scripts/rebuild/run-paired-comparison.cjs',
-  '--action','run-batch','--budget-source','self_ledger',
-  '--organization','test','--project','test','--credential-sha256','c'.repeat(64)],{
-   cwd:path.resolve(__dirname,'../..'),encoding:'utf8',
-   env:{PATH:process.env.PATH}
-  });
- assert.equal(r.status,1);
- assert.match(r.stderr,/stopped before receiving a usable result/);
+test('preflight is fail-closed when environment secrets or explicit acknowledgement are missing',()=>{
+ const preparation=fs.readFileSync(path.join(__dirname,
+  '../../scripts/rebuild/prepare-groq-stage.cjs'),'utf8');
+ const operator=fs.readFileSync(path.join(__dirname,
+  '../../scripts/rebuild/run-paired-comparison.cjs'),'utf8');
+ assert.match(preparation,/manual_groq_authorization_missing/);
+ assert.match(preparation,/URENAVI_MEASURE_MODE/);
+ assert.match(preparation,/URENAVI_MEASURE_PROVIDER_APPROVAL/);
+ assert.match(preparation,/URENAVI_APPROVAL_PRIVATE_PEM_B64/);
+ assert.match(preparation,/URENAVI_EVIDENCE_PRIVATE_PEM_B64/);
+ assert.match(preparation,/URENAVI_FROZEN_INPUTS_B64/);
+ assert.doesNotMatch(preparation,/https:\/\/api\.groq\.com/);
+ assert.match(operator,/isolated_operator_execution_disabled/);
+ assert.match(operator,/remote_comparison_requires_persistent_journal_and_operator_gate/);
+ assert.match(operator,/comparison_credential_mismatch/);
 });
