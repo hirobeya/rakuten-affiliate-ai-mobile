@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {config, proConfig, stripeGet, activate, authorize, authorizePro, upgradeBaseToPro, setDeviceCookie, clearDeviceCookie, db} = require('../lib/billing');
+const {activate,authorize,authorizePro,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
