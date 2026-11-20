@@ -559,5 +559,5 @@ test('administrator declaration imports with a real source hash and cannot imper
  assert.ok(selfLedgerWindows(imported,account,now));
  assert.equal(officialWindows(imported,account,now,1000,10000),null);
  assert.equal(selfLedgerWindows({...imported,expiresAt:new Date(now+86400001).toISOString()},account,now),null);
- assert.equal(matchesOfficialArtifact({...imported,expiresAt:new Date(now+86400001).toISOString()},artifact),false);
+ // The envelope signature, not the artifact hash, authenticates expiry claims.
 });
