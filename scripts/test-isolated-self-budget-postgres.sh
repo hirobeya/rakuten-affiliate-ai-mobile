@@ -28,10 +28,14 @@ begin
   raise exception 'other tenant claimed intent'; end if;
  if not public.urenavi_self_budget_intent_v2(a,tenant) then
   raise exception 'durable intent denied'; end if;
+ if (select halted from public.urenavi_capacity_provider_v2 where provider='groq') is distinct from true then
+  raise exception 'shared provider was not locked during self send'; end if;
  if public.urenavi_self_budget_intent_v2(a,tenant) then
   raise exception 'duplicate send intent'; end if;
  if not public.urenavi_self_budget_complete_v2(a,tenant,'spent',800) then
   raise exception 'known usage not settled'; end if;
+ if (select halted from public.urenavi_capacity_provider_v2 where provider='groq') is distinct from false then
+  raise exception 'settled self send did not release shared provider'; end if;
  if public.urenavi_self_budget_complete_v2(a,tenant,'spent',800) then
   raise exception 'double settlement'; end if;
  if (select estimated_tokens from public.urenavi_self_budget_attempt_v2 where id=a)<>1000
