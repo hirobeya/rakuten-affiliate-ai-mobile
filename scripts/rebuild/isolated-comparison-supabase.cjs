@@ -15,6 +15,7 @@ function createIsolatedComparisonSupabase({url='http://127.0.0.1:54321',serviceK
  const freshAuth=Boolean(ownerEmail&&ownerPassword&&publishableKey);
  if((ownerEmail||ownerPassword||publishableKey)&&!freshAuth)
   throw Error('incomplete_isolated_owner_credentials');
+ if(hosted&&!freshAuth)throw Error('isolated_remote_fresh_owner_auth_required');
  if(!serviceKey||(!ownerJwt&&!freshAuth))throw Error('isolated_supabase_credentials_required');
  const request=(pathname,options)=>fetchImpl(local.origin+pathname,{
   ...options,redirect:'error',signal:AbortSignal.timeout(4000)
