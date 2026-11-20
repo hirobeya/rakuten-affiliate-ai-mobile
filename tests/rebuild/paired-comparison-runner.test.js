@@ -71,7 +71,11 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>no
  const evidence=patch=>({
   source:'groq_console',artifactSha256:hash(++observed),model:MODEL,account,plan:'free',billable:false,
   exclusiveWindow:true,unresolvedSends:0,verifiedAt:new Date(now).toISOString(),
-  counters:counters(now),...patch
+  counters:counters(now),
+  ...(budgetSource==='self_ledger'?{
+   expiresAt:new Date(now+300000).toISOString(),
+   exclusiveWindow:false,unresolvedSends:null
+  }:{}),...patch
  });
  const rpc=[],calls=[];
  const make=()=>createComparisonRunner({
@@ -470,7 +474,10 @@ test('signed self-ledger mode reuses durable stage workflow but never assumes pr
  assert.equal((await f.runner.recover({recoveryEnvelope:null})).reason,'manual_reconciliation_required');
 });
 test('self-ledger requires signed verified Free evidence and never sends on unknown billing',async t=>{
- for(const patch of [{billable:null},{plan:null},{exclusiveWindow:false},{unresolvedSends:1}]){
+ for(const patch of [{billable:null},{plan:null},
+  {expiresAt:new Date(now-1).toISOString()},
+  {expiresAt:new Date(now+86400001).toISOString()},
+  {verifiedAt:new Date(now+1000).toISOString()}]){
   const f=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{counters:{},...patch}});
   const target={itemCode:item.itemCode,arm:'B',stage:'generate'};
   const approvalEnvelope=signed({approvalId:hash(['self',target]),
@@ -480,4 +487,60 @@ test('self-ledger requires signed verified Free evidence and never sends on unkn
   assert.equal(f.calls.length,0);
   assert.equal(f.rpc.length,0);
  }
+});
+
+test('approved self-ledger batch permits exactly its signed stage targets with one reusable declaration',async t=>{
+ const f=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{counters:{}}});
+ const targets=[{itemCode:item.itemCode,arm:'B',stage:'generate'},
+  {itemCode:item.itemCode,arm:'C',stage:'generate'}];
+ const approvalEnvelope=signed({
+  approvalId:hash(['batch',targets]),expiresAt:new Date(now+300000).toISOString(),
+  scope:expectedApproval(sha,auth.user.id,account,plan,'self_ledger'),targets,maxCalls:2
+ },approvalKeys.privateKey);
+ const first=await f.runner.run({...targets[0],approvalEnvelope});
+ assert.equal(first.status,'completed');
+ const second=await f.runner.run({...targets[1],approvalEnvelope});
+ assert.equal(second.status,'completed');
+ assert.equal(f.calls.length,2);
+ assert.equal(f.rpc.filter(([name])=>name.endsWith('_intent_v2')).length,2);
+ assert.equal((await f.runner.run({...targets[0],approvalEnvelope})).reason,'batch_call_limit_reached');
+ assert.equal(f.calls.length,2);
+});
+test('self-ledger signed batch never broadens stage, authorization scope or maximum calls',async t=>{
+ const f=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{counters:{}}});
+ const allowed={itemCode:item.itemCode,arm:'B',stage:'generate'};
+ const other={itemCode:item.itemCode,arm:'C',stage:'generate'};
+ const scope=expectedApproval(sha,auth.user.id,account,plan,'self_ledger');
+ const envelope=(targets,maxCalls,expiresAt=new Date(now+300000).toISOString())=>
+  signed({approvalId:hash([targets,maxCalls,expiresAt]),scope,targets,maxCalls,expiresAt},
+   approvalKeys.privateKey);
+ for(const [targets,maxCalls,request,reason] of [
+  [[allowed,allowed],2,allowed,'batch_targets_invalid'],
+  [[allowed,other],5,allowed,'batch_call_limit_invalid'],
+  [[allowed],1,other,'stage_not_approved'],
+  [[{...allowed,stage:'verify'}],1,allowed,'batch_targets_invalid'],
+  [[{...allowed,unexpected:true}],1,allowed,'batch_targets_invalid'],
+ ]){
+  const approvalEnvelope=envelope(targets,maxCalls);
+  assert.equal((await f.runner.run({...request,approvalEnvelope})).reason,reason);
+ }
+ assert.equal(f.calls.length,0);assert.equal(f.rpc.length,0);
+});
+test('self-ledger declaration can be older than 60s but not outlive approval',async t=>{
+ const eligible=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{
+  verifiedAt:new Date(now-3600000).toISOString(),
+  expiresAt:new Date(now+300000).toISOString(),exclusiveWindow:false,unresolvedSends:null
+ }});
+ const target={itemCode:item.itemCode,arm:'B',stage:'generate'};
+ const approvalEnvelope=signed({approvalId:hash(['long-lived',target]),
+  expiresAt:new Date(now+300000).toISOString(),
+  scope:expectedApproval(sha,auth.user.id,account,plan,'self_ledger'),target
+ },approvalKeys.privateKey);
+ assert.equal((await eligible.runner.run({...target,approvalEnvelope})).status,'completed');
+ const blocked=await fixture(t,{budgetSource:'self_ledger',evidencePatch:{
+  expiresAt:new Date(now+600000).toISOString()
+ }});
+ assert.equal((await blocked.runner.run({...target,approvalEnvelope})).reason,
+  'declaration_exceeds_approval_lifetime');
+ assert.equal(blocked.calls.length,0);
 });
