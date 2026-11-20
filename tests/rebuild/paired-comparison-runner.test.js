@@ -262,7 +262,7 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
 }
 
 if(process.env.URENAVI_TEST_SUPABASE_DIR){
- test('local Supabase Auth and PostgREST survive restart and fail closed',async()=>{
+ test('local Supabase Auth and PostgREST survive restart and fail closed',async t=>{
   const {execFileSync}=require('node:child_process');
   const {randomUUID}=require('node:crypto');
   const {createIsolatedComparisonSupabase}=require('../../scripts/rebuild/isolated-comparison-supabase.cjs');
@@ -270,6 +270,11 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   const directory=process.env.URENAVI_TEST_SUPABASE_DIR;
   const status=JSON.parse(await fs.readFile(path.join(directory,'status.json'),'utf8'));
   const api=assertLocal(status.API_URL,'http:',54321).origin;
+  const loopbackFetch=globalThis.fetch;
+  t.mock.method(globalThis,'fetch',(url,options)=>{
+   assert.equal(new URL(url).origin,api,'this test permits only local Supabase HTTP');
+   return loopbackFetch(url,options);
+  });
   const postgres=assertLocal(status.DB_URL,'postgresql:',54322);
   assert.equal(postgres.pathname,'/postgres');
   const serviceKey=status.SERVICE_ROLE_KEY;

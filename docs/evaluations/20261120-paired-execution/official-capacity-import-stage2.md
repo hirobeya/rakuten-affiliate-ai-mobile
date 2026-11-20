@@ -35,3 +35,11 @@ node scripts/rebuild/run-paired-comparison.cjs --action import-evidence \
 4項目に十分な残量があり、証拠が60秒以内で、リセットまで10秒を超える場合だけ予約に進む。容量v2は各分窓・日窓でリクエストとトークンが終了時刻を共有するため、それぞれの公式時刻が一致しない場合は送信前に停止する。DBに確認窓を設定するときは、全体の公式残量とローカルの消費・予約を重複計上しない。停止解除には同じ原本照合に加え、未解決試行の根拠付き照合が必要。
 
 GitHub Actionsの検証では使い捨てPostgreSQLに両SQLを適用し、既存送信器のDB呼出しをservice_roleで実行する。テスト用のオーナー識別と模擬トランスポートを使用する。隔離Supabase Authへの接続確認とは別の検証である。
+
+## 実測用の隔離環境と確認順序
+
+1. Docker、Supabase CLI 2.75.0、Node 24、psql がある専用ホストでPRの最終SHAをクリーンにチェックアウトする。テスト手順 `bash scripts/test-comparison-supabase.sh` を先に実行する。テストはSupabase Auth、PostgREST、PostgreSQLをローカルコンテナで起動し、模擬送信で確認後にその環境を破棄する。
+2. 実測用はテストと別のローカル作業ディレクトリをホストの永続ディスクに作る。ディレクトリを所有者だけが操作できるようにし、Supabase CLIの `init` と `start` に同じ `--workdir` を指定する。ホストの外側からAPI・DBポートに到達できない状態で運用する。クラウドプロジェクトへのリンクは不要。新規専用DBのループバック接続先を `supabase status` で照合し、`psql -v ON_ERROR_STOP=1` で容量v2と比較専用の既存SQLを順に適用する。
+3. 永続ディスクに比較専用の空のジャーナル領域を作り、実行ユーザーだけに読み書きを許可する。専用ローカルAuthで作成した管理者の `app_metadata.urenavi_role` を `owner` に設定し、ログイン済みのJWTをCLI設定へ渡す。JWT・service_roleキーは専用環境の値を使い、ファイルや環境変数で保持する。SQL適用先とジャーナルは使い捨て検証環境と分ける。
+4. Groq管理者は既にログインしたConsoleで対象組織とプロジェクトを選び、組織Limits、プロジェクトLimits、Billingを一度照合する。モデル、対象範囲、画面の採取時刻を記録し、表示される場合に限り4項目の現在残量とリセットを保存する。正式な応答ヘッダー原本があればRPD・TPMの証拠として保持する。Free契約の確認と、他の使用主体を排除できる状態の確認は別々に行う。
+5. [GroqのRate Limits](https://console.groq.com/docs/rate-limits)が公開するヘッダーにはRPM・TPDの残量とリセットは含まれない。[Projects](https://console.groq.com/docs/projects)で説明されるプロジェクト別の設定にも組織上限が適用される。管理画面に対象モデルの現在残量が表示されなければ、画面取得の反復は不要。上限、使用履歴、プロジェクト分離、ローカル予約、429停止だけでは送信前の4項目の現在残量は確定できない。回避のための試し送信は行わない。
