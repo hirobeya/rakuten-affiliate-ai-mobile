@@ -35,3 +35,19 @@ test('preflight is fail-closed when environment secrets or explicit acknowledgem
  assert.match(operator,/remote_comparison_requires_persistent_journal_and_operator_gate/);
  assert.match(operator,/comparison_credential_mismatch/);
 });
+
+test('signed preflight scope exactly matches self-ledger runner and excludes legacy mode',()=>{
+ const {signedStageScope}=require('../../scripts/rebuild/prepare-groq-stage.cjs');
+ const {expectedApproval}=require('../../lib/urenavi-core/paired-comparison-runner');
+ const {hash}=require('../../lib/urenavi-core/generation-comparison');
+ const account={organization:'Personal',project:'Default Project',credentialSha256:'c'.repeat(64)};
+ const sha='a'.repeat(40),tenant='11111111-1111-4111-8111-111111111111';
+ const prepared=signedStageScope(sha,tenant,account);
+ const expected=expectedApproval(sha,tenant,account,undefined,'self_ledger');
+ assert.equal(prepared.budgetSource,'self_ledger');
+ assert.equal(hash(prepared),hash(expected));
+ assert.notEqual(hash(prepared),hash(expectedApproval(sha,tenant,account)));
+ assert.equal(prepared.executionSha,sha);
+ assert.equal(prepared.tenant,tenant);
+ assert.ok(prepared.slots.length>0);
+});
