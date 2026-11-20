@@ -187,6 +187,54 @@ test('replayed paid checkout webhook never duplicates billing-side activation',a
  assert.equal(activations,2,'idempotent entitlement sync is allowed');
  assert.equal(provisions,2,'repeated auth provisioning must be idempotent at provider');
 });
+test('explicit single-plan checkout verifies Stripe price and link before redirect',async()=>{
+ process.env.URENAVI_SALES_ENABLED='explicit_1480_go_live';
+ const price={id:'price_test',active:true,unit_amount:1480,currency:'jpy',
+  recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
+ let calls=0;
+ global.fetch=async url=>{
+  calls++;url=String(url);
+  if(url.includes('/prices/price_test'))return response(price);
+  if(url.includes('/payment_links/plink_test/line_items'))
+   return response({data:[{price:{id:'price_test'},quantity:1}],has_more:false});
+  if(url.includes('/payment_links/plink_test'))
+   return response({id:'plink_test',livemode:false,active:true,url:'https://buy.stripe.com/test_fixture'});
+  throw Error('unrecognized external endpoint');
+ };
+ const out=res();await access({method:'GET',query:{action:'buy'},headers:{}},out);
+ assert.equal(out.code,303);
+ assert.equal(out.url,'https://buy.stripe.com/test_fixture');
+ assert.equal(calls,3);
+});
+test('single-plan checkout refuses stale link, multiple prices and amount drift',async()=>{
+ process.env.URENAVI_SALES_ENABLED='explicit_1480_go_live';
+ const cases=[
+  {priceAmount:980,linkActive:true,lineCount:1},
+  {priceAmount:1480,linkActive:false,lineCount:1},
+  {priceAmount:1480,linkActive:true,lineCount:2},
+  {priceAmount:1480,linkActive:true,lineCount:1,wrongPrice:true}
+ ];
+ for(const c of cases){
+  let calls=0;
+  global.fetch=async url=>{
+   calls++;url=String(url);
+   if(url.includes('/prices/price_test'))
+    return response({id:'price_test',active:true,unit_amount:c.priceAmount,currency:'jpy',
+     recurring:{interval:'month',interval_count:1,usage_type:'licensed'}});
+   if(url.includes('/payment_links/plink_test/line_items'))
+    return response({data:Array.from({length:c.lineCount},()=>({
+     price:{id:c.wrongPrice?'price_other':'price_test'},quantity:1})),has_more:false});
+   if(url.includes('/payment_links/plink_test'))
+    return response({id:'plink_test',livemode:false,active:c.linkActive,
+     url:'https://buy.stripe.com/test_fixture'});
+   throw Error('unexpected connection');
+  };
+  const out=res();await access({method:'GET',query:{action:'buy'},headers:{}},out);
+  assert.equal(out.code,503);
+  assert.equal(out.url,undefined);
+  assert.ok(calls>=1);
+ }
+});
 test('New purchases remain disabled until approved 1480 JPY sale and settlement are deployed',async()=>{
  global.fetch=()=>{throw Error('disabled buy must not contact Stripe');};
  for(const action of ['buy','buy-pro']){
