@@ -13,9 +13,9 @@ function createIsolatedComparisonSupabase({url='http://127.0.0.1:54321',serviceK
  if((!loopback&&!hosted)||local.username||local.password||
     local.pathname!=='/'||local.search||local.hash)throw Error('isolated_supabase_destination_required');
  const freshAuth=Boolean(ownerEmail&&ownerPassword&&publishableKey);
- if(!serviceKey||(!ownerJwt&&!freshAuth))throw Error('isolated_supabase_credentials_required');
  if((ownerEmail||ownerPassword||publishableKey)&&!freshAuth)
   throw Error('incomplete_isolated_owner_credentials');
+ if(!serviceKey||(!ownerJwt&&!freshAuth))throw Error('isolated_supabase_credentials_required');
  const request=(pathname,options)=>fetchImpl(local.origin+pathname,{
   ...options,redirect:'error',signal:AbortSignal.timeout(4000)
  });
