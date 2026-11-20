@@ -55,9 +55,9 @@ async function run(){
   if(!values.tenant)throw Error('owner_tenant_required');
   return expectedApproval(executionSha,values.tenant,account,undefined,budgetSource);
  }
- if(!['run','recover'].includes(values.action)||process.env.URENAVI_ISOLATED_COMPARISON!=='operator-enabled'||process.env.VERCEL)
+ if(!['run','run-batch','recover'].includes(values.action)||process.env.URENAVI_ISOLATED_COMPARISON!=='operator-enabled'||process.env.VERCEL)
   throw Error('isolated_operator_execution_disabled');
- if(values.action==='run'&&keyFingerprint!==account.credentialSha256)throw Error('comparison_credential_mismatch');
+ if(['run','run-batch'].includes(values.action)&&keyFingerprint!==account.credentialSha256)throw Error('comparison_credential_mismatch');
  if(git('status','--porcelain'))throw Error('clean_checkout_required');
  const remote=process.env.URENAVI_COMPARISON_REMOTE_SUPABASE;
  if(remote&&
@@ -81,14 +81,33 @@ async function run(){
   const [envelope,artifact]=await Promise.all([json(values.evidence),fs.readFile(values.artifact)]);
   return matchesOfficialArtifact(envelope?.payload,artifact)?envelope:null;
  };
- const transport=values.action==='run'?createGroqComparisonTransport({apiKey:groqKey}):
+ const transport=['run','run-batch'].includes(values.action)?createGroqComparisonTransport({apiKey:groqKey}):
   async()=>{throw Error('no_transport_in_recovery');};
  const runner=createPairedComparisonRunner({inputs,environment:'isolated',executionSha,account,db,authorize,budgetSource,
   journal:journalBackend==='supabase'?createDurableComparisonJournal(db):
    createComparisonJournal(values.journal),approvalKey,evidenceKey,
   readEvidence:readVerifiedEvidence,transport});
  if(values.action==='recover')return runner.recover({recoveryEnvelope:await readVerifiedEvidence()});
- return runner.run({approvalEnvelope:await json(values.approval),itemCode:values.item,arm:values.arm,stage:values.stage});
+ const approvalEnvelope=await json(values.approval);
+ if(values.action==='run-batch'){
+  const payload=approvalEnvelope?.payload;
+  if(!['generate','verify'].includes(values.stage)||
+    !Array.isArray(payload?.targets)||!Number.isSafeInteger(payload.maxCalls)||
+    payload.maxCalls<1||payload.maxCalls>payload.targets.length||
+    payload.targets.length>8||
+    payload.targets.some(t=>t.stage!==values.stage))
+   throw Error('signed_stage_batch_invalid');
+  const results=[];
+  for(const target of payload.targets){
+   if(results.length>=payload.maxCalls)break;
+   const result=await runner.run({approvalEnvelope,itemCode:target.itemCode,arm:target.arm,stage:target.stage});
+   results.push({target,result});
+   if(result.status!=='completed')break;
+  }
+  return {status:results.length&&results.every(r=>r.result.status==='completed')?
+   'completed':'stopped',results};
+ }
+ return runner.run({approvalEnvelope,itemCode:values.item,arm:values.arm,stage:values.stage});
 }
 run().then(result=>{
  process.stdout.write(JSON.stringify(result,null,2)+'\n');
