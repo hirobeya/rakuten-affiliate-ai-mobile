@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {activate,authorize,authorizePro,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
+const {activate,authorize,authorizePro,verifyConfiguredCheckout,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
@@ -72,8 +72,16 @@ module.exports = async function handler(req,res) {
       return res.status(200).json({approved:true,email:row.email});
     }
 
-    if (req.query.action === 'buy-pro' || req.query.action === 'buy') {
+    if (req.query.action === 'buy-pro') {
       return res.status(404).json({message:'販売・新規受付は現在停止しています'});
+    }
+    if (req.query.action === 'buy') {
+      // Newly approved single-plan sales require an explicit environment
+      // activation AND a live read-only Stripe price/link verification.
+      if(process.env.URENAVI_SALES_ENABLED!=='explicit_1480_go_live')
+       return res.status(404).json({message:'販売・新規受付は現在停止しています'});
+      const verifiedUrl=await verifyConfiguredCheckout();
+      return res.redirect(303,verifiedUrl);
     }
 
     if (!['activate','activate-pro'].includes(String(req.query.action||''))) return res.status(400).json({message:'Invalid action'});
