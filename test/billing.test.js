@@ -69,6 +69,42 @@ test('No stale 980 JPY plan or Pro upgrade purchase appears in the customer app'
  assert.equal(typeof billing.upgradeBaseToPro,'undefined');
  assert.equal(typeof billing.stripePost,'undefined');
 });
+test('¥1480 standard receives all features while old Base and Pro remain readable',()=>{
+ const now=Math.floor(Date.now()/1000)+7200;
+ const withPrice=price=>sub({items:{data:[{price:{id:price},current_period_end:now}]}});
+ const standard=billing.subscriptionState(withPrice('price_test'));
+ assert.equal(standard.active,true);
+ assert.equal(standard.plan,'standard');
+ const oldBase=billing.subscriptionState(withPrice(billing.legacyBasePriceId()));
+ assert.equal(oldBase.active,true);
+ assert.equal(oldBase.plan,'base');
+ const oldPro=billing.subscriptionState(withPrice('price_1UHYOdEYXoynxoEYlgFOFjqB'));
+ assert.equal(oldPro.active,true);
+ assert.equal(oldPro.plan,'pro');
+ assert.equal(billing.subscriptionState(withPrice('price_unknown')).active,false);
+});
+test('¥1480 standard and legacy Pro both authorize enhanced features, legacy Base does not',async()=>{
+ const now=Math.floor(Date.now()/1000)+7200;
+ const old=process.env.URENAVI_PRICE_ID;
+ const accessToken=authToken();
+ let subscriptionPrice='price_test';
+ global.fetch=async url=>{
+  url=String(url);
+  if(url.includes('/auth/v1/user'))return response({id:'user_fixture',email:'a@example.com'});
+  if(url.includes('rpc/urenavi_session_valid'))return response(true);
+  if(url.includes('urenavi_entitlements?'))return response([]);
+  if(url.includes('urenavi_entitlements_v2?'))return response([{stripe_subscription_id:'sub_test'}]);
+  if(url.includes('/subscriptions/'))return response(sub({items:{data:[{price:{id:subscriptionPrice},current_period_end:now}]}}));
+  throw Error('unexpected route '+url);
+ };
+ const request={headers:{authorization:'Bearer '+accessToken}};
+ assert.equal((await billing.authorizePro(request)).plan,'standard');
+ subscriptionPrice='price_1UHYOdEYXoynxoEYlgFOFjqB';
+ assert.equal((await billing.authorizePro(request)).plan,'pro');
+ subscriptionPrice=billing.legacyBasePriceId();
+ assert.equal((await billing.authorizePro(request)).status,403);
+ process.env.URENAVI_PRICE_ID=old;
+});
 test('The approved new-sale contract is exactly one 1480 JPY monthly subscription',async()=>{
  const pricing=require('../lib/urenavi-pricing');
  assert.equal(pricing.MONTHLY_PRICE_JPY,1480);
