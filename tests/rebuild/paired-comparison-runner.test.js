@@ -347,6 +347,8 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   const [owner,member,other]=await Promise.all([createUser(true),createUser(false),createUser(true)]);
   const clientFor=user=>createIsolatedComparisonSupabase({url:api,serviceKey,ownerJwt:user.jwt});
   assert.equal((await clientFor(owner).authorize()).user.id,owner.id);
+  assert.deepEqual(await createDurableComparisonJournal(clientFor(owner).db).read('restart-evidence'),
+    {saved:true,word:'日本語'});
   assert.equal((await clientFor(member).authorize()).ok,false);
   assert.equal((await clientFor(other).authorize()).user.id,other.id);
   const rpc=(action,body)=>clientFor(owner).db('rpc/urenavi_capacity_'+action+'_v2',
@@ -401,6 +403,9 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   assert.equal(simulated,0);
   assert.equal((await runner(owner,durable).run(request('B'))).status,'completed');
   assert.equal(row(),'spent:1900');
+  const {createDurableComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
+  const journalBeforeRestart=createDurableComparisonJournal(clientFor(owner).db);
+  await journalBeforeRestart.create('restart-evidence',{saved:true,word:'日本語'});
   const supabase=(action,args=[])=>execFileSync('supabase',[action,'--workdir',directory,...args],{stdio:'ignore'});
   supabase('stop');
   const unavailable=await fs.mkdtemp(path.join(directory,'journals','stopped-'));
@@ -434,14 +439,11 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   // The real PostgREST path uses one DB journal across worker restarts.
   // No Groq transport: the pre-existing provider fixture is an in-process mock.
   await loadWindows();
-  const {createDurableComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
   const remoteJournal=createDurableComparisonJournal(clientFor(owner).db);
   const before=simulated;
   assert.equal((await runner(owner,remoteJournal).run(request('B'))).status,'completed');
   assert.equal(simulated,before+1);
   assert.equal((await remoteJournal.read(writerId+'-result')).usage.total,1900);
-  supabase('stop');
-  supabase('start',['-x',process.env.URENAVI_TEST_SUPABASE_EXCLUDE]);
   const recoveredJournal=createDurableComparisonJournal(clientFor(owner).db);
   assert.equal((await recoveredJournal.read(writerId+'-result')).usage.total,1900);
   assert.equal((await runner(owner,recoveredJournal).run(request('B'))).reason,'duplicate_attempt');
