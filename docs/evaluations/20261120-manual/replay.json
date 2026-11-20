@@ -1,0 +1,1083 @@
+{
+  "regression": {
+    "items": 44,
+    "candidates": 15,
+    "published": 11,
+    "renderingChanges": 1,
+    "sixAxisOverall": {
+      "pass": 3,
+      "fail": 12,
+      "unconfirmed": 29
+    },
+    "rows": [
+      {
+        "code": "pasoro:10001354",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "e-kurashi:10019512",
+        "candidate": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "certified": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Seat operation and storage use are clear."
+        }
+      },
+      {
+        "code": "supplyshop:10028516",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "worktk:10014552",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "wishsun:10000100",
+        "candidate": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "certified": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Awkward wording and implied comparison to ordinary brushes."
+        }
+      },
+      {
+        "code": "bos-shop:10000023",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "mtgec-beauty:10001348",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "besthouse:10000083",
+        "candidate": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Built-in Type-C cable supports the stated carry scenario."
+        }
+      },
+      {
+        "code": "e-kitchen:10079039",
+        "candidate": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Concrete storage benefit, but duplicate detach wording and abrupt sentence break."
+        }
+      },
+      {
+        "code": "risu-onlineshop:10002384",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "snowfoxskincare:10000116",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "emoor-nedogko:10000048",
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail"
+          ],
+          "note": "Literal caption binding fails and section markup is visible."
+        }
+      },
+      {
+        "code": "astyone0728:10000001",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "myhomeshop:10000326",
+        "candidate": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Opening restates the spec without explaining what temperature selection helps with."
+        }
+      },
+      {
+        "code": "irisplaza-r:10170526",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "arkham:10000161",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "high-broad:10000679",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "arqs01:10000087",
+        "candidate": "バイクに乗るときの手元に。\n停車中にスマホを操作したい場面にも対応。\n\nバイクグローブです。\n\n商品の特徴\n・メッシュ\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "No visible selling product and copy relies on scenario inference."
+        }
+      },
+      {
+        "code": "shopworld:10138423",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "satiwel:10002945",
+        "candidate": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。\n\n価格：25,698円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Tray and cleaning benefit are tangible. Heavy-object capacity requires qualification."
+        }
+      },
+      {
+        "code": "pc2b:10001078",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "gogo1102:10000190",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "bos-shop:10000024",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "masayosiryouhin:10000072",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "furumiyashop:10000146",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "doshisha-marche:10000227",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "exception5251:10000379",
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Foldability is repeated without a concrete use or benefit."
+        }
+      },
+      {
+        "code": "40s-skincare:10000159",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "auc-r-style:10000367",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "goodgoods-center:10000193",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "mpowjapan:10000907",
+        "candidate": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Source explains the spout, flow and beginner use. Redundant control-adjust wording makes it stilted."
+        },
+        "naturalnessReview": "Removed redundant nominalization. Other merchant phrasing remains formal; retain the prior naturalness outcome."
+      },
+      {
+        "code": "fujisports-r:10054189",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "repeat7:10002729",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "bbtown:10225214",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "daiya:10001447",
+        "candidate": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "certified": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit bra shape and washing benefit, but overloaded sentence."
+        }
+      },
+      {
+        "code": "daiya:10001030",
+        "candidate": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "certified": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit laundry examples and expandable volume. Promotional wording."
+        }
+      },
+      {
+        "code": "ipow:10000579",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "linofle:10000458",
+        "candidate": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "certified": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "The set is identified, but no example of which laundry or situation to choose for."
+        }
+      },
+      {
+        "code": "yukaiya:10001267",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "living-mahoroba:10015748",
+        "candidate": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "certified": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "A concrete example shows what fits in size M."
+        }
+      },
+      {
+        "code": "daiya:10001455",
+        "candidate": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "certified": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Use case and mechanism are clear, but sentence is overloaded."
+        }
+      },
+      {
+        "code": "ritoashop:10000039",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "brian:10001257",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "lebenwood:10004953",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    ]
+  },
+  "holdout": {
+    "items": 18,
+    "candidates": 8,
+    "published": 2,
+    "renderingChanges": 0,
+    "sixAxisOverall": {
+      "pass": 0,
+      "fail": 8,
+      "unconfirmed": 10
+    },
+    "rows": [
+      {
+        "code": "irisplaza-r:10159378",
+        "candidate": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Orphan closing parenthesis and no visible product."
+        }
+      },
+      {
+        "code": "surutto:10000019",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "tiger-online:10003537",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "auc-kaei-trading:10000740",
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Foldability is repeated without explaining when it matters."
+        }
+      },
+      {
+        "code": "k-lalala:10000555",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "eunicedress:10001862",
+        "candidate": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。\n\n価格：2,384円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Specific access benefit, but opening is a list and product is absent."
+        }
+      },
+      {
+        "code": "next-online:10000247",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "auc-cleaner-parts:10000709",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "lifeinqc:10000013",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "kaedear:10000076",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "kaedear:10000687",
+        "candidate": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "certified": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Mesh and airflow benefit are clear. Awkward and misspelled phrasing."
+        }
+      },
+      {
+        "code": "sunnypolkashop:10000003",
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n本革を使ったバイクグローブです。\n\n商品の特徴\n・メッシュ\n・防水\n\n価格：2,880円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic situation and no product or support for conditions."
+        }
+      },
+      {
+        "code": "dasimon:10000020",
+        "candidate": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic compactness claim with no visible product or specific feature."
+        }
+      },
+      {
+        "code": "ennshopstore:10000094",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "hitidear:10000115",
+        "candidate": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Useful connection details, but no identity and supported simultaneous configuration needs checking."
+        }
+      },
+      {
+        "code": "tuzukiya:10128242",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "asahiprocureace:11812439",
+        "candidate": null,
+        "certified": null,
+        "rendered": null,
+        "review": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      {
+        "code": "daiwa-yohin:10011593",
+        "candidate": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "certified": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "rendered": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "review": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Lead treats a variant label as the product. Condition and meaning of the label need checking."
+        }
+      }
+    ]
+  }
+}

@@ -4,6 +4,8 @@ on:
     paths:
       - 'docs/architecture/multitenant-capacity-db-draft.sql'
       - 'scripts/test-capacity-postgres.sh'
+      - 'docs/architecture/multitenant-capacity-v2.sql'
+      - 'scripts/test-capacity-v2-postgres.sh'
       - '.github/workflows/verify-free-capacity-db.yml'
   workflow_dispatch:
 permissions:
@@ -29,3 +31,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Exercise atomic quota reservation on disposable PostgreSQL
         run: bash scripts/test-capacity-postgres.sh
+      - name: Exercise four concurrent quota windows
+        run: bash scripts/test-capacity-v2-postgres.sh

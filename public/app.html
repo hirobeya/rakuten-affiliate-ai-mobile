@@ -802,6 +802,33 @@ input,select{
 
 
 <h1>ウレナビ</h1>
+<style>
+#manualProductInput { margin: 14px 0; }
+#manualProductInput label { display:block; margin-top:12px; }
+#manualProductInput :is(input,textarea) { display:block; width:100%; box-sizing:border-box; font-size:16px; }
+#manualProductInput button { margin-top:12px; }
+#manualProductInput [hidden] { display:none; }
+.manual-product-only #manualProductInput ~ * { display:none !important; }
+</style>
+<section class="box" id="manualProductInput" hidden aria-labelledby="manualProductHeading">
+  <h2 id="manualProductHeading">商品情報からROOM投稿文を作る</h2>
+  <form id="manualProductForm">
+    <label for="manualName">商品名</label>
+    <input id="manualName" name="name" required maxlength="250">
+    <label for="manualFeatures">特徴</label>
+    <textarea id="manualFeatures" name="features" rows="3" maxlength="2000"></textarea>
+    <label for="manualDescription">使い方や説明（任意）</label>
+    <textarea id="manualDescription" name="description" rows="3" maxlength="4000"></textarea>
+    <label for="manualPrice">価格（円、任意）</label>
+    <input id="manualPrice" name="price" type="number" inputmode="numeric" min="1" max="100000000" step="1">
+    <button type="submit">投稿文を作る</button>
+  </form>
+  <p id="manualProductStatus" role="status"></p>
+  <label id="manualResultLabel" for="manualProductResult" hidden>生成した投稿文</label>
+  <textarea id="manualProductResult" rows="7" readonly hidden></textarea>
+  <button id="manualProductCopy" type="button" hidden>コピー</button>
+</section>
+
 
 <div class="sub">
 商品を探し、用途・価格・確認できた報酬条件を比較。商品選びから投稿準備・実績確認まで支援します。<br>
@@ -2367,6 +2394,10 @@ async function updateDebugExportAccess(){
     const d=await r.json().catch(()=>({}));
     runtimeKnown=r.ok && typeof d.preview==='boolean';
     preview=runtimeKnown && d.preview===true;
+    const manualOnly=runtimeKnown && d.manualOnly===true;
+    document.getElementById('manualProductInput').hidden=!(manualOnly||(preview&&currentAccessPlan==='owner'));
+    document.querySelector('#appRoot main').classList.toggle('manual-product-only',manualOnly);
+    if(manualOnly)document.getElementById('upgradeProBtn').hidden=true;
   }catch{
     preview=false;
     runtimeKnown=false;
@@ -4800,6 +4831,47 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 <script src="/vendor/qrcode-1.0.0.min.js"></script>
 <script src="/access-guard.js?v=20261020-handoff-app-2"></script>
 <script>
+const manualForm=document.getElementById('manualProductForm');
+const manualResult=document.getElementById('manualProductResult');
+const manualStatus=document.getElementById('manualProductStatus');
+const manualCopy=document.getElementById('manualProductCopy');
+const manualLabel=document.getElementById('manualResultLabel');
+manualForm.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const submit=event.submitter||manualForm.querySelector('[type=submit]');
+  submit.disabled=true;
+  manualResult.value='';
+  manualResult.hidden=manualCopy.hidden=manualLabel.hidden=true;
+  manualStatus.textContent='投稿文を作成中…';
+  const body=Object.fromEntries(new FormData(manualForm));
+  body.price=body.price===''?null:Number(body.price);
+  const headers={'Content-Type':'application/json'};
+  if(currentAppSession?.access_token)headers.Authorization='Bearer '+currentAppSession.access_token;
+  try{
+    const response=await fetch('/api/manual-room-copy',{method:'POST',headers,credentials:'same-origin',body:JSON.stringify(body)});
+    const data=await response.json();
+    if(!response.ok){
+      manualStatus.textContent=response.status===422?'商品の使い方や、特徴が役立つ場面を具体的に入力してください。':'入力内容とログイン状態を確認してください。';
+      return;
+    }
+    manualResult.value=data.text;
+    manualResult.hidden=manualCopy.hidden=manualLabel.hidden=false;
+    manualStatus.textContent='投稿前に商品情報を確認してください。';
+  }catch{
+    manualStatus.textContent='接続できませんでした。もう一度お試しください。';
+  }finally{
+    submit.disabled=false;
+  }
+});
+manualCopy.addEventListener('click',async()=>{
+  try{
+    await navigator.clipboard.writeText(manualResult.value);
+    manualStatus.textContent='コピーしました。';
+  }catch{
+    manualResult.select();
+    manualStatus.textContent='選択した本文をコピーしてください。';
+  }
+});
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);
 window.addEventListener('pageshow',()=>{if(!document.hidden){void bootAuth();setTimeout(resumeActiveAiQueue,500);}});

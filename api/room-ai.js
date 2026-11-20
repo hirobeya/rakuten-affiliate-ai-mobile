@@ -39,7 +39,9 @@ const handler=function(req,res){
   return existingHandler(req,res);
 };
 
-module.exports=handler;
+module.exports=(req,res)=>process.env.URENAVI_PRODUCT_INPUT_MODE==='manual'
+ ?res.status(403).json({message:'manual_product_input_required'})
+ :handler(req,res);
 Object.assign(module.exports,legacy);
 module.exports.handler=handler;
 module.exports.createRouterHandler=router.createHandler;

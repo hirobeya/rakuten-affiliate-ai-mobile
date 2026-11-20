@@ -84,6 +84,7 @@ async function listQueue(email){
   }));
 }
 module.exports=async function handler(req,res){
+  if(process.env.URENAVI_PRODUCT_INPUT_MODE==='manual')return res.status(403).json({message:'manual_product_input_required'});
   res.setHeader('Cache-Control','no-store');
   if(!['GET','POST'].includes(req.method||'GET')) return res.status(405).json({message:'Method not allowed'});
   try{
