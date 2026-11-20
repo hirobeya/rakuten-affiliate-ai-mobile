@@ -78,7 +78,11 @@ module.exports = async function handler(req,res) {
     if (req.query.action === 'buy') {
       // Newly approved single-plan sales require an explicit environment
       // activation AND a live read-only Stripe price/link verification.
-      if(process.env.URENAVI_SALES_ENABLED!=='explicit_1480_go_live')
+      const sandboxApproved=process.env.VERCEL_ENV==='preview' &&
+        process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED==='isolated_preview_only';
+      const liveApproved=process.env.VERCEL_ENV==='production' &&
+        process.env.URENAVI_SALES_ENABLED==='explicit_1480_go_live';
+      if(!sandboxApproved&&!liveApproved)
        return res.status(404).json({message:'販売・新規受付は現在停止しています'});
       const verifiedUrl=await verifyConfiguredCheckout();
       return res.redirect(303,verifiedUrl);
