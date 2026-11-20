@@ -279,7 +279,7 @@ function run(name,fn){
   await run('Production client enables AI only for paid plans while debug stays Preview owner only',()=>{
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/runtimeKnown/);
-    assert.match(html,/\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
+    assert.match(html,/\['standard','base','pro','owner'\]\.includes\(currentAccessPlan\)/);
     assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
     assert.match(html,/if\(!aiGatesFullOutput\|\|generation!==aiRunGeneration\) return/);
     assert.match(html,/async function runAiPreview\(items\)\{\n  if\(!aiGatesFullOutput\) return/);
@@ -684,7 +684,7 @@ function run(name,fn){
     const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
     assert.match(html,/let aiGatesFullOutput=false/);
     assert.match(html,/debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner'/);
-    assert.match(html,/const paidPlan=\['base','pro','owner'\]\.includes\(currentAccessPlan\)/);
+    assert.match(html,/const paidPlan=\['standard','base','pro','owner'\]\.includes\(currentAccessPlan\)/);
     assert.match(html,/aiGatesFullOutput=runtimeKnown/);
     assert.match(html,/preview\s*\?debugExportAllowed/);
     assert.match(html,/function resolvedPost\(/);
