@@ -73,6 +73,7 @@ test('adjacent evidence requires a title-bound subject and retains both source p
  for(const boundary of ['\n','■','【別モデル】','こちらもおすすめ。','別売り品について。']){
   assert.equal(extract({...item,itemCaption:opening+boundary+reason}).facts.some(x=>x.quote===reason),false,boundary);
  }
+ assert.equal(extract({...item,itemCaption:'【別モデル】'+opening+reason}).facts.some(x=>x.quote===reason),false);
  for(const switched of ['別売りのノズルにより、湯量や速度を調整できます。','旧モデルは細い注ぎ口により、湯量や速度を調整できます。']){
   assert.equal(extract({...item,itemCaption:opening+switched}).facts.some(x=>x.quote===switched),false,switched);
  }
