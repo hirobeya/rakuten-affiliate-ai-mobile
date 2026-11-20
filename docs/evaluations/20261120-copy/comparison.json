@@ -1,0 +1,3076 @@
+{
+  "baseline": "ec1f695bba1819e8e8d23bd208494c8dd5a9fa47",
+  "axes": [
+    "productUnderstanding",
+    "featureSpecificity",
+    "purchaseReason",
+    "audienceSituationValue",
+    "naturalnessAppeal",
+    "sourceAccuracy"
+  ],
+  "summary": {
+    "regression": {
+      "before": {
+        "candidate": 15,
+        "mobileGate": 10,
+        "evidenceItems": 4,
+        "causalEvidenceItems": 2,
+        "sixAxisOverall": {
+          "pass": 3,
+          "fail": 12,
+          "unconfirmed": 29
+        },
+        "axes": {
+          "productUnderstanding": {
+            "pass": 12,
+            "fail": 3,
+            "unconfirmed": 29
+          },
+          "featureSpecificity": {
+            "pass": 15,
+            "fail": 0,
+            "unconfirmed": 29
+          },
+          "purchaseReason": {
+            "pass": 12,
+            "fail": 3,
+            "unconfirmed": 29
+          },
+          "audienceSituationValue": {
+            "pass": 11,
+            "fail": 4,
+            "unconfirmed": 29
+          },
+          "naturalnessAppeal": {
+            "pass": 3,
+            "fail": 12,
+            "unconfirmed": 29
+          },
+          "sourceAccuracy": {
+            "pass": 11,
+            "fail": 1,
+            "unconfirmed": 32
+          }
+        }
+      },
+      "after": {
+        "candidate": 15,
+        "mobileGate": 11,
+        "evidenceItems": 8,
+        "causalEvidenceItems": 6,
+        "sixAxisOverall": {
+          "pass": 3,
+          "fail": 12,
+          "unconfirmed": 29
+        },
+        "axes": {
+          "productUnderstanding": {
+            "pass": 13,
+            "fail": 2,
+            "unconfirmed": 29
+          },
+          "featureSpecificity": {
+            "pass": 15,
+            "fail": 0,
+            "unconfirmed": 29
+          },
+          "purchaseReason": {
+            "pass": 12,
+            "fail": 3,
+            "unconfirmed": 29
+          },
+          "audienceSituationValue": {
+            "pass": 11,
+            "fail": 4,
+            "unconfirmed": 29
+          },
+          "naturalnessAppeal": {
+            "pass": 3,
+            "fail": 12,
+            "unconfirmed": 29
+          },
+          "sourceAccuracy": {
+            "pass": 11,
+            "fail": 1,
+            "unconfirmed": 32
+          }
+        }
+      }
+    },
+    "holdout": {
+      "before": {
+        "candidate": 8,
+        "mobileGate": 3,
+        "evidenceItems": 1,
+        "causalEvidenceItems": 1,
+        "sixAxisOverall": {
+          "pass": 0,
+          "fail": 8,
+          "unconfirmed": 10
+        },
+        "axes": {
+          "productUnderstanding": {
+            "pass": 2,
+            "fail": 6,
+            "unconfirmed": 10
+          },
+          "featureSpecificity": {
+            "pass": 7,
+            "fail": 1,
+            "unconfirmed": 10
+          },
+          "purchaseReason": {
+            "pass": 5,
+            "fail": 3,
+            "unconfirmed": 10
+          },
+          "audienceSituationValue": {
+            "pass": 5,
+            "fail": 3,
+            "unconfirmed": 10
+          },
+          "naturalnessAppeal": {
+            "pass": 0,
+            "fail": 8,
+            "unconfirmed": 10
+          },
+          "sourceAccuracy": {
+            "pass": 2,
+            "fail": 1,
+            "unconfirmed": 15
+          }
+        }
+      },
+      "after": {
+        "candidate": 8,
+        "mobileGate": 2,
+        "evidenceItems": 3,
+        "causalEvidenceItems": 2,
+        "sixAxisOverall": {
+          "pass": 0,
+          "fail": 8,
+          "unconfirmed": 10
+        },
+        "axes": {
+          "productUnderstanding": {
+            "pass": 2,
+            "fail": 6,
+            "unconfirmed": 10
+          },
+          "featureSpecificity": {
+            "pass": 7,
+            "fail": 1,
+            "unconfirmed": 10
+          },
+          "purchaseReason": {
+            "pass": 5,
+            "fail": 3,
+            "unconfirmed": 10
+          },
+          "audienceSituationValue": {
+            "pass": 5,
+            "fail": 3,
+            "unconfirmed": 10
+          },
+          "naturalnessAppeal": {
+            "pass": 0,
+            "fail": 8,
+            "unconfirmed": 10
+          },
+          "sourceAccuracy": {
+            "pass": 3,
+            "fail": 0,
+            "unconfirmed": 15
+          }
+        }
+      }
+    }
+  },
+  "regression": [
+    {
+      "code": "pasoro:10001354",
+      "title": "【リピーター続出】 バイク グローブ 秋 革 バイク用 グローブ バイク 手袋 スマホ レザー メンズ 大きいサイズ レディース 男女兼用 アメリカン オールシーズン 通気孔 防風 ブラック 黒 スマホ対応 山羊革 シンプル 操作性 S XXL 2XL 3XL XXXL Tranform（トランフォーム）",
+      "captionLength": 749,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "バイク グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "バイク グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "e-kurashi:10019512",
+      "title": "収納ベンチ 2人掛け 幅120 奥行37 高さ40cm ベンチ ソファ 二人掛け 収納スツール 収納ボックス ベンチボックス オットマン 足置き 椅子 スツール 背もたれなし クッション付き 山善 YAMAZEN 【送料無料】",
+      "captionLength": 688,
+      "before": {
+        "candidate": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "published": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "収納ベンチ",
+        "quote": "座部を上げると、内部に物を収納可能",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Seat operation and storage use are clear."
+        }
+      },
+      "after": {
+        "candidate": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "published": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "収納ベンチ",
+        "quote": "座部を上げると、内部に物を収納可能",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Seat operation and storage use are clear."
+        }
+      }
+    },
+    {
+      "code": "supplyshop:10028516",
+      "title": "モップハンガー RC型 コンパクト 6本掛【tmcp2212】",
+      "captionLength": 183,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "モップハンガー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "モップハンガー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "worktk:10014552",
+      "title": "[2026年★30V★即納] バートル 空調 服 バッテリー ファンセット BURTLE 空調作業服 ファンバッテリーセット カラーファン 春夏 エアークラフト エアクラ AIRCRAFT 空調 ファンユニット バッテリ 黒ファン ブラック カラー 強力30V おすすめ 人気 [AC10＋AC10-1] bt-fanbt2",
+      "captionLength": 737,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ファンセット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ファンセット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "wishsun:10000100",
+      "title": "グルーミンググローブ ペットブラシ 猫 手袋 グルーミング 犬 うさぎ ブラシ クリーナー 毛取り 舞い毛予防 シャワー お風呂 左右セット 贈り物",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "published": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reason": "no_grounded_facts",
+        "identity": "グルーミンググローブ",
+        "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Awkward wording and implied comparison to ordinary brushes."
+        }
+      },
+      "after": {
+        "candidate": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "published": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reason": "no_grounded_facts",
+        "identity": "グルーミンググローブ",
+        "quote": "非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Awkward wording and implied comparison to ordinary brushes."
+        }
+      }
+    },
+    {
+      "code": "bos-shop:10000023",
+      "title": "【お得】 臭わない袋 BOS (ボス) ストライプ ｜ SSサイズ 200枚 ｜ 日本製",
+      "captionLength": 356,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "臭わない袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "臭わない袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "mtgec-beauty:10001348",
+      "title": "リファカッサレイ ReFa CAXA RAY リファ カッサ カッサプレート 美顔器 美顔ローラー リリースリフト refa 正規品 公式 ギフト プレゼント バレンタイン ホワイトデー SR24 R25D03",
+      "captionLength": 136,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "リファカッサレイ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "リファカッサレイ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "besthouse:10000083",
+      "title": "【楽天1位】モバイルバッテリー type-c ケーブル パワーバンク 入力 出力 急速充電 iphone 充電器 5000mAh 小型 22.5w iPhone Type-Cケーブル内蔵 超コンパクトiPad/Android 全機種対応 PSE認証済 充電器 大容量",
+      "captionLength": 796,
+      "before": {
+        "candidate": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "Type-Cケーブル内蔵",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Built-in Type-C cable supports the stated carry scenario."
+        }
+      },
+      "after": {
+        "candidate": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "Type-Cケーブル内蔵",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "Built-in Type-C cable supports the stated carry scenario."
+        }
+      }
+    },
+    {
+      "code": "e-kitchen:10079039",
+      "title": "赤字覚悟★ フライパン セット IH ガス対応 アイリスオーヤマ 取っ手が取れる 高耐久4層構造 こびりつきにくい 鍋 炒め鍋 深型 卵焼き器 エッグパン ハンドル 2段階ロック ダイヤモンドコートパン 12点 13点 IPDCI *",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "フライパン",
+        "quote": "取手が取り外せる着脱式のフライパンです。",
+        "sourceEvidence": [
+          {
+            "quote": "取手が取り外せる着脱式のフライパンです。",
+            "start": 334,
+            "end": 354,
+            "claimType": "source_feature",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Concrete storage benefit, but duplicate detach wording and abrupt sentence break."
+        }
+      },
+      "after": {
+        "candidate": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "フライパン",
+        "quote": "取手が取り外せる着脱式のフライパンです。",
+        "sourceEvidence": [
+          {
+            "quote": "取手が取り外せる着脱式のフライパンです。",
+            "start": 334,
+            "end": 354,
+            "claimType": "source_feature",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Concrete storage benefit, but duplicate detach wording and abrupt sentence break."
+        }
+      }
+    },
+    {
+      "code": "risu-onlineshop:10002384",
+      "title": "収納ボックス 収納ケース RISUスタックシステムケース ワイド【2段セット】 カラーボックス チェスト おしゃれ 送料無料 北欧 引き出し クローゼット プラスチック 押し入れ収納 衣類 奥行50 50cm 日本製 天板 リス",
+      "captionLength": 990,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "収納ボックス",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "収納ボックス",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "snowfoxskincare:10000116",
+      "title": "【楽天1位】SNOW FOX SKINCARE プレミアム FOX カッサ ビーチウッド ヘアブラシ 木製 くし 頭皮ケア ヘアケア 引っ越し ヘアブラシ 毛穴 洗浄 お風呂 ギフト プレゼント 髪の毛 サラサラ 艶髪 ヘアケア 敬老の日 退職 入学 就職 祝い ご褒美 母の日",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ヘアブラシ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ヘアブラシ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "emoor-nedogko:10000048",
+      "title": "ペットベッド 犬 犬用 ペット 3D ベッド 犬用ベッド Lサイズ カバーを外して洗える ドッグベッド 丈夫 パピー 成犬 シニア 老犬 中型犬 大型犬 多頭 カドラー 冬 秋 春夏 オールシーズン 高反発 体圧分散 綿100％ 洗える 丸洗い 洗濯 床ずれ 立ち上がり 介護 高級 ねどっこ",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "ペットベッド",
+        "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail"
+          ],
+          "note": "Literal caption binding fails and section markup is visible."
+        }
+      },
+      "after": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "ペットベッド",
+        "quote": "<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail"
+          ],
+          "note": "Literal caption binding fails and section markup is visible."
+        }
+      }
+    },
+    {
+      "code": "astyone0728:10000001",
+      "title": "靴下 メンズ ビジネスソックス [累計200万足突破] [楽天1位] 黒 紺 10足 5足 セット 24-28cm IGRESS イグレス ラッピング",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "靴下",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "靴下",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "myhomeshop:10000326",
+      "title": "電気ケトル＜COUPONで3,980円■レビュー件数2300件越えの爆売れ商品！＞電気ケトル 1.0L 7段階温度調節 ボデーデジタルディスプレイ 4時間保温 二重構造 触れても熱くない 急速沸騰 空焚き防止 メモリー機能 火傷防止 小型 お手入れカンタン お茶 コーヒーミルク 2年保証",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "電気ケトル",
+        "quote": "温度調節",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Opening restates the spec without explaining what temperature selection helps with."
+        }
+      },
+      "after": {
+        "candidate": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "電気ケトル",
+        "quote": "温度調節",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Opening restates the spec without explaining what temperature selection helps with."
+        }
+      }
+    },
+    {
+      "code": "irisplaza-r:10170526",
+      "title": "＼1袋1,740円～☆彡食いしんぼう祭/クーポン／【令和7年産100％使用】白米 無洗米 和の輝き ブレンド米 10kg (5kg×2袋) 15kg (5kg×3袋) 密封新鮮パック 脱酸素剤入り 米 お米 国産 10キロ 15キロ 低温製法米 送料無料 アイリスオーヤマ",
+      "captionLength": 1132,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "お米",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "お米",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "arkham:10000161",
+      "title": "お掃除手袋 「ウルトラ マイクロファイバー手袋」KE702 ★定形外郵便にて送料無料！（2双まで）★",
+      "captionLength": 673,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "手袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "手袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "high-broad:10000679",
+      "title": "野球グローブ 軟式 大人用 高校生 中学生 12インチ 右投げ用 左投げ用 ブラック オレンジ 送料無料",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "野球グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "野球グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "arqs01:10000087",
+      "title": "バイクグローブ 夏用 メッシュ 夏 ライディンググローブ 手袋 プロテクター スマホ対応 バイク 通気性 メッシュグローブ バイク用手袋 メンズ レディース メッシュ手袋 スマホ フィット 安全 男女兼用 スマートフォン操作対応 滑り止め ブラック 黒 レッド",
+      "captionLength": 567,
+      "before": {
+        "candidate": "バイクに乗るときの手元に。\n停車中にスマホを操作したい場面にも対応。\n\nバイクグローブです。\n\n商品の特徴\n・メッシュ\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "バイクグローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "No visible selling product and copy relies on scenario inference."
+        }
+      },
+      "after": {
+        "candidate": "バイクに乗るときの手元に。\n停車中にスマホを操作したい場面にも対応。\n\nバイクグローブです。\n\n商品の特徴\n・メッシュ\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "バイクグローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "No visible selling product and copy relies on scenario inference."
+        }
+      }
+    },
+    {
+      "code": "shopworld:10138423",
+      "title": "鍵穴付き コンテナボックス アルミベンチ 屋外 収納 ベンチ アルミ ブラウン 90cm ステップストッカー 椅子 イス 縁台 収納箱 ベンチストッカー 踏み台 アルミ 収納ボックス 工具箱 道具箱 おしゃれ 物置き 屋外 アルミストッカーガーデンベンチ ガーデンチェア 送料無料",
+      "captionLength": 641,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "収納ベンチ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "収納ベンチ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "satiwel:10002945",
+      "title": "【送料無料】【法人専用】テラモト　モップハンガー RC型(12本掛)　CE-491-330-0",
+      "captionLength": 786,
+      "before": {
+        "candidate": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。\n\n価格：25,698円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モップハンガー",
+        "quote": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。",
+        "sourceEvidence": [
+          {
+            "quote": "・受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。",
+            "start": 291,
+            "end": 335,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Tray and cleaning benefit are tangible. Heavy-object capacity requires qualification."
+        }
+      },
+      "after": {
+        "candidate": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。\n\n価格：25,698円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モップハンガー",
+        "quote": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。",
+        "sourceEvidence": [
+          {
+            "quote": "・受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。",
+            "start": 291,
+            "end": 335,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "ストッパー付きなので固定もできます。",
+            "start": 389,
+            "end": 407,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Tray and cleaning benefit are tangible. Heavy-object capacity requires qualification."
+        }
+      }
+    },
+    {
+      "code": "pc2b:10001078",
+      "title": "【公式ショップ】空調服(R)　スターターキット ブラック SK23011K90 18V バッテリー ファン セット ケーブル レギュラータイプ",
+      "captionLength": 641,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "スターターキット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "スターターキット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "gogo1102:10000190",
+      "title": "【改良版】犬 猫 毛取り手袋　ペット用静電気除去手袋　猫の毛除去手袋 　らくらくブラシ　5本指 グルーミンググローブ 　抜け毛取り 洗える 静電気式 再利用可能 掃除グローブ 毛",
+      "captionLength": 524,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペット用静電気除去手袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペット用静電気除去手袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "bos-shop:10000024",
+      "title": "【お得】 臭わない袋 BOS (ボス) ストライプ ｜ Sサイズ 200枚 ｜ 日本製",
+      "captionLength": 354,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "臭わない袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "臭わない袋",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "masayosiryouhin:10000072",
+      "title": "リファカラットレイ Refa CARAT RAY RF-PC2019B【MTG 美顔ローラー 美顔器 美容ローラー リファ カラットレイ 美容ローラー RFPC2019B クリスマス プレゼント ギフト 誕生日 敬老の日 父の日 母の日】【楽天ランキング1位受賞】",
+      "captionLength": 757,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "リファカラットレイ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "リファカラットレイ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "furumiyashop:10000146",
+      "title": "【クーポン利用で最安2380円】楽天1位26冠！モバイルバッテリー 大容量 23600mAh PD22.5W 急速充電 Type-C出入力 4本ケーブル内蔵 軽量 iphone スマホ充電器 携帯充電器 タイプc対応 残量表示 LEDライト 防災グッズ PSE認証済 Lightning iPhone/Android全機種対応",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "モバイルバッテリー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "モバイルバッテリー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "doshisha-marche:10000227",
+      "title": "【公式通販 限定カラー】evercook エバークック フライパン IH ネイビー 500日保証 ｜ 軽量化！ オール熱源対応スタンダードシリーズ IH対応 ガス火対応 ドウシシャ pfoaフリー ふっ素 ｜ 玉子焼用 20cm 26cm 28cm 28cm深型",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "repeated_use_and_identity_only",
+        "identity": "フライパン",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "repeated_use_and_identity_only",
+        "identity": "フライパン",
+        "quote": null,
+        "sourceEvidence": [
+          {
+            "quote": "最大約15％軽量化 フライパンの重量の大半を占めるアルミニウム合金も含め、従来の3mmから2.5mmに薄くすることで最大約15％の軽量化を実現しました。",
+            "start": 269,
+            "end": 345,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "exception5251:10000379",
+      "title": "【楽天ランキング1位】総合1位 収納ボックス キャスター付き 5面開閉 折りたたみ 収納ケース フタ付き おしゃれ 中身が見える 衣装ケース 押入れ クローゼット 衣類 布団 積み重ね コンパクト 27L/40L/53L/82L f-00003",
+      "captionLength": 257,
+      "before": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "折りたたみ",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Foldability is repeated without a concrete use or benefit."
+        }
+      },
+      "after": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "折りたたみ",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Foldability is repeated without a concrete use or benefit."
+        }
+      }
+    },
+    {
+      "code": "40s-skincare:10000159",
+      "title": "【ランキング80冠・女優サロンブラシ】 ヘアブラシ 猪毛 豚毛 イルチ公式 Sサイズ 木製 パドルブラシ 艶髪 ツヤ髪 サラサラ まとまる 静電気防止 くせ毛 うねり 広がり 頭皮マッサージ ブラッシング 美髪 ダメージケア 天然毛 高級 くし ヘアケア レディース",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ヘアブラシ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ヘアブラシ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "auc-r-style:10000367",
+      "title": "【エントリーで最大100%還元】 ドーム型 ペットベッド 犬 猫 ベッド 冬 おしゃれ ハウス 暖かい ペット ふわふわ ボア 犬用ベッド ネコベッド ドームベッド 選べる3サイズ マット クッション",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "goodgoods-center:10000193",
+      "title": "靴下 レディース 楽天1位＼好きな色を1足ずつ選べる／ 靴下 6足組 蒸れにくい 80%綿 抗菌防臭 ソックス シンプル カラフルソックス 四季 おしゃれ 綿 クルーソックス 無地 男女兼用 くつした 長め アウトドア靴下 22-25cm",
+      "captionLength": 983,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "靴下",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "靴下",
+        "quote": null,
+        "sourceEvidence": [
+          {
+            "quote": "6足セットになっているので、着替えニーズにもピッタリ、一週間以上に持ちます。",
+            "start": 195,
+            "end": 233,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "mpowjapan:10000907",
+      "title": "【15%OFFクーポンで7,633円】電気ケトル EPEIOS エペイオス【高評価4.68】コーヒーケトル 0.9L｜1℃単位温度調節＆保温機能付き 細口 ステンレス製 ドリップケトル 空焚き防止 おしゃれデザイン 湯沸かし やかん 電気ポット（Lite）",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "電気ケトル",
+        "quote": "精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "The draft omitted the selling-product name."
+        }
+      },
+      "after": {
+        "candidate": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "published": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "電気ケトル",
+        "quote": "精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。",
+        "sourceEvidence": [
+          {
+            "quote": "精密な注ぎ口のデザインにより、水流の量や速度のコントロールを初心者でも簡単に調整できます。",
+            "start": 502,
+            "end": 547,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "adjacent_explicit_subject",
+            "subjectSpan": {
+              "start": 438,
+              "end": 502
+            }
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Source explains the spout, flow and beginner use. Redundant control-adjust wording makes it stilted."
+        }
+      }
+    },
+    {
+      "code": "fujisports-r:10054189",
+      "title": "お米 コメ つや姫 新米 10kg 精米 無洗米 送料無料 山形県産 令和8年産 5kg×2袋",
+      "captionLength": 758,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "お米",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "お米",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "repeat7:10002729",
+      "title": "【送料無料】あっちこっち おそうじ 手袋（グリーン）テイジン 日本製 マイクロファイバー 台拭き 窓拭き ガラス拭き 大掃除【ゆうパケット 追跡可能メール便（配送日時指定不可）】【ポイント10倍】【楽天ランキング第1位】※素材・仕様ともに同一、パッケージの変更あり",
+      "captionLength": 301,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "bbtown:10225214",
+      "title": "【交換送料無料】 軟式野球 ソフトボール兼用 グローブ ZETT ゼット ライテックス 軟式ソフト兼用 オールラウンド用 右投用 左投用 ブラック BSGB3900L BSGB3910L BSGB3920L 型付け可能(G) キャッチボール お手頃 【365日あす楽対応】",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "グローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "daiya:10001447",
+      "title": "★送料無料★【ブラ 洗濯ネット 型崩れ 防止】サボるん ブラジャー 洗濯 ネット 型 崩れ しない ドラム式 洗濯機 たたき洗い 手洗い おしゃれ着 ランジェリー メッシュ ホームクリーニング かわいい ハート ブラジャー用 洗濯機で洗える",
+      "captionLength": 3008,
+      "before": {
+        "candidate": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "published": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit bra shape and washing benefit, but overloaded sentence."
+        }
+      },
+      "after": {
+        "candidate": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "published": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit bra shape and washing benefit, but overloaded sentence."
+        }
+      }
+    },
+    {
+      "code": "daiya:10001030",
+      "title": "★送料無料★【布団も洗える! 当店限定商品 70cm】大きくふくらむ洗濯ネット | 衣替え 洗濯ネット 洗濯ネット特大 布団用 乾燥機対応 大型 大容量 布団 毛布 寝具用 掛け布団 タオル ドラム式 まとめ洗い 洗濯用品 寝具 人気",
+      "captionLength": 3312,
+      "before": {
+        "candidate": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "published": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "大きくふくらむ洗濯ネット",
+        "quote": "洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit laundry examples and expandable volume. Promotional wording."
+        }
+      },
+      "after": {
+        "candidate": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "published": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "大きくふくらむ洗濯ネット",
+        "quote": "洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Explicit laundry examples and expandable volume. Promotional wording."
+        }
+      }
+    },
+    {
+      "code": "ipow:10000579",
+      "title": "【8枚セット】【送料無料】ipow 洗濯ネット ランドリーネット 洗濯バッグ ブラジャーネット 洗濯用品 衣類 下着 靴下 シャツ など適用 トラベルポーチ 型崩れ防止 細かい網目 丈夫 家庭用",
+      "captionLength": 443,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [
+          {
+            "quote": "洗剤や柔軟剤は透してくれるので柔軟剤の効果が繊維の中まで届ける。",
+            "start": 255,
+            "end": 287,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "linofle:10000458",
+      "title": "【楽天1位】洗濯ネット サイズ組み合わせ自由 選べる6枚セット ランドリーネット 洗濯 ネット 角型 洗濯用品 型崩れ防止 丈夫 細かい 網目 トラベル 使いやすい ランドリー 小 送料無料",
+      "captionLength": 551,
+      "before": {
+        "candidate": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "published": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "セット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。",
+        "sourceEvidence": [
+          {
+            "quote": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+            "start": 56,
+            "end": 88,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "セット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。",
+            "start": 215,
+            "end": 257,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "The set is identified, but no example of which laundry or situation to choose for."
+        }
+      },
+      "after": {
+        "candidate": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "published": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "セット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。",
+        "sourceEvidence": [
+          {
+            "quote": "サイズ組み合わせ自由で、選べる6枚セットのランドリーネットです。",
+            "start": 56,
+            "end": 88,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "洗濯時の型崩れ防止や、衣類のダメージを軽減するために必須のアイテム。",
+            "start": 88,
+            "end": 122,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "セット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。",
+            "start": 215,
+            "end": 257,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "日々の洗濯をより快適にするための必須アイテム、ぜひお試しください！",
+            "start": 291,
+            "end": 324,
+            "claimType": "source_feature",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "The set is identified, but no example of which laundry or situation to choose for."
+        }
+      }
+    },
+    {
+      "code": "yukaiya:10001267",
+      "title": "【 楽天1位受賞★レビュー特典付き 】＼クーポンで最大20％OFF！／洗濯ネット ランドリーネット 大型 ニット 6枚セット 下着 形崩れ防止 洗濯用品 家庭用品 トラベルポーチ 収納ネット RP1",
+      "captionLength": 0,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "living-mahoroba:10015748",
+      "title": "洗濯ネット 角型 マチアリ コットンラッセル レース編み Mサイズ Lサイズ 天然素材 綿100 % 岩本繊維 【 日本製 】やさしい洗濯ネット コットン 天然 綿 綿100 コットン100 コットン100％",
+      "captionLength": 1861,
+      "before": {
+        "candidate": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "published": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。",
+        "sourceEvidence": [
+          {
+            "quote": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。",
+            "start": 1366,
+            "end": 1409,
+            "claimType": "source_feature",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "A concrete example shows what fits in size M."
+        }
+      },
+      "after": {
+        "candidate": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "published": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "洗濯ネット",
+        "quote": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。",
+        "sourceEvidence": [
+          {
+            "quote": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。",
+            "start": 1366,
+            "end": 1409,
+            "claimType": "source_feature",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "note": "A concrete example shows what fits in size M."
+        }
+      }
+    },
+    {
+      "code": "daiya:10001455",
+      "title": "★送料無料★【お買得3枚セット】 シャツ用洗濯ネット 洗濯シワ防止 3枚組 | シャツ用 ワイシャツ Yシャツ yシャツブラウス 便利グッズ ドラム式 単身赴任 ネット 洗濯 ランドリーネット 洗濯ネット おしゃれ着 洗濯用品",
+      "captionLength": 487,
+      "before": {
+        "candidate": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "published": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "シャツ用洗濯ネット",
+        "quote": "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Use case and mechanism are clear, but sentence is overloaded."
+        }
+      },
+      "after": {
+        "candidate": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "published": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "シャツ用洗濯ネット",
+        "quote": "シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Use case and mechanism are clear, but sentence is overloaded."
+        }
+      }
+    },
+    {
+      "code": "ritoashop:10000039",
+      "title": "洗濯ネット ランドリーネット 衣類 を守る 型崩れ防止 ハニカム素材 メッシュ 耐久性 丈夫 長持ち 繰り返し使える 角型 家庭用 家庭 洗濯用ネット Tシャツ 下着 靴下 1000円ポッキリ 1000円ぽっきり ドラム式 旅行 持ち運び 白 ホワイト 中サイズ 大 30×40cm 50×60cm",
+      "captionLength": 3178,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "brian:10001257",
+      "title": "【お買い物マラソン 5％クーポン】 【全3色】 ランドリーネット 洗濯ネット 洗濯袋 細かい網目 形崩れ防止 収納ネット 四角 極小型 小型 中型 大型 特大 超特大型 極大 ブラジャー 布団用 毛布 下着 洗濯用品 家庭用品 トラベルポーチ グレー ピンク ライトグリー",
+      "captionLength": 479,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "code": "lebenwood:10004953",
+      "title": "【楽天15冠1位 x 専門家監修】3枚入り 洗濯ネットセット ランドリーネット 収納 ブラジャー 帽子 メッシュネット 乾燥機対応 ドラム式 大 中 小 ブラ用洗濯ネット 洗濯袋 中目 セーター用 洗濯物袋 ハニカムメッシュネット 送料無料",
+      "captionLength": 2246,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネットセット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "catalogue_only_copy",
+        "identity": "洗濯ネットセット",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    }
+  ],
+  "holdout": [
+    {
+      "category": "kitchen",
+      "sourceCapture": "urenavi-source-pan.json",
+      "code": "irisplaza-r:10159378",
+      "title": "★TVで紹介されました★ フライパン 20cm 22cm 24cm 26cm 28cm IH ガス火対応 鍋 炒め鍋 深型 卵焼き器 エッグパン 四角い ih 軽い 軽量 PFOA PFOS フリー おしゃれ かわいい くっつきにくい フッ素コーティング アイリスオーヤマ ナチュかる NTL *",
+      "captionLength": 1200,
+      "before": {
+        "candidate": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "フライパン",
+        "quote": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Orphan closing parenthesis and no visible product."
+        }
+      },
+      "after": {
+        "candidate": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "フライパン",
+        "quote": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Orphan closing parenthesis and no visible product."
+        }
+      }
+    },
+    {
+      "category": "kitchen",
+      "sourceCapture": "urenavi-source-pan.json",
+      "code": "surutto:10000019",
+      "title": "【SURUTTO 公式/1年保証】 フライパン 20cm 26cm 28cm 30cm 深型 卵焼き 長持ち 軽い 軽量 IH対応 ガス火対応 食洗機対応 こびりつきにくい 均一に火が通る 外面セラミック 内面フッ素コーティング PFOA不使用 スルッと スルット",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "feature_and_hook_restate_each_other",
+        "identity": "フライパン",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "feature_and_hook_restate_each_other",
+        "identity": "フライパン",
+        "quote": null,
+        "sourceEvidence": [
+          {
+            "quote": "Q.フッ素加工は人体に有害と聞いたのですが… A.フッ素加工フライパンに適した使用方法を守ってお使いいただければ、人体に影響はございません。",
+            "start": 752,
+            "end": 822,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "kitchen",
+      "sourceCapture": "urenavi-source-kettle.json",
+      "code": "tiger-online:10003537",
+      "title": "【P5倍★ 10/9 8:59迄】タイガー魔法瓶 電気ケトル 蒸気レス わく子 0.8L 1.0L 800mL 1000mL PCJ-A082 PCJ-A102 節電 安心 安全設計 軽量 本体防汚加工 おしゃれ ケトル ポット タイガー グレー ホワイト",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "電気ケトル",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "電気ケトル",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "storage",
+      "sourceCapture": "urenavi-source-box.json",
+      "code": "auc-kaei-trading:10000740",
+      "title": "【50%オフクーポン】即納 収納ボックス 収納ケース チェスト 折りたたみ 収納 ふた付き キャスター付き 5面開き 前開き 27L 40L 53L 82L 屋外 おしゃれ プラスチック 衣装ケース コンテナ ボックス 衣類 布団",
+      "captionLength": 584,
+      "before": {
+        "candidate": "収納ボックスは、素材 ABSプラスチック PPプラスチック 特徴 5面開きで取り出しやすいコンパクトに折りたためるかんたん組み立てキャスター付きおしゃれなカラーバリエーション中身が見える半透明タイプ優れた耐久性防虫カップ付き 備考 開封後は新品の為においのする場合がございます。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "published": "収納ボックスは、素材 ABSプラスチック PPプラスチック 特徴 5面開きで取り出しやすいコンパクトに折りたためるかんたん組み立てキャスター付きおしゃれなカラーバリエーション中身が見える半透明タイプ優れた耐久性防虫カップ付き 備考 開封後は新品の為においのする場合がございます。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "素材 ABSプラスチック PPプラスチック 特徴 5面開きで取り出しやすいコンパクトに折りたためるかんたん組み立てキャスター付きおしゃれなカラーバリエーション中身が見える半透明タイプ優れた耐久性防虫カップ付き 備考 開封後は新品の為においのする場合がございます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "fail"
+          ],
+          "note": "Flattened materials, features and remarks were copied into the post. The added product prefix also makes the remark ambiguous."
+        }
+      },
+      "after": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "折りたたみ",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "pass"
+          ],
+          "note": "Foldability is repeated without explaining when it matters."
+        }
+      }
+    },
+    {
+      "category": "storage",
+      "sourceCapture": "urenavi-source-box.json",
+      "code": "k-lalala:10000555",
+      "title": "収納ボックス 収納 収納ケース おしゃれ JEJ 限定カラー カクス 70深 55深 フタ付き 大容量 衣装ケース 押入れ収納 小物収納 洋服 クローゼットケース シンプル 限定カラー 収納家具 収納ボックス 中が透けない",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "収納ボックス",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "収納ボックス",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "storage",
+      "sourceCapture": "urenavi-source-box.json",
+      "code": "eunicedress:10001862",
+      "title": "【55％OFFクーポン】楽天1位 収納ボックス 折り畳み ふた付き プラスチック キャスター付き 大容量 折り畳み可能 5面開き 組み立て簡単 押入れ収納 衣装収納 お洒落 寝室 新生活 収納ケース 収納 小物 （T）",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。\n\n価格：2,384円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。",
+        "sourceEvidence": [
+          {
+            "quote": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。",
+            "start": 103,
+            "end": 141,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Specific access benefit, but opening is a list and product is absent."
+        }
+      },
+      "after": {
+        "candidate": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。\n\n価格：2,384円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "収納ボックス",
+        "quote": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。",
+        "sourceEvidence": [
+          {
+            "quote": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。",
+            "start": 103,
+            "end": 141,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "キャスターの収納溝が付いているので積み重ねて使用可能です。",
+            "start": 163,
+            "end": 192,
+            "claimType": "source_purchase_relation",
+            "subjectBinding": "merchant_intro"
+          },
+          {
+            "quote": "折りたたむことができ使用しないときもコンパクトにスペースを活用できます。",
+            "start": 193,
+            "end": 229,
+            "claimType": "source_feature",
+            "subjectBinding": "merchant_intro"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Specific access benefit, but opening is a list and product is absent."
+        }
+      }
+    },
+    {
+      "category": "pet",
+      "sourceCapture": "urenavi-source-bed.json",
+      "code": "next-online:10000247",
+      "title": "＼zzz／ 頑丈 ！ 型崩れしない！ 洗える！体圧分散 夏用 ペットベッド ベッド 犬のベッド ペット クッション 猫 高級 シニア ペットソファー ペット オールシーズン 高反発 マット 丈夫 寝床 小型犬 中型犬 大型犬 シニア犬 寝心地 対応 洗える カバー 春 夏 送料無料 丸洗い",
+      "captionLength": 169,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "pet",
+      "sourceCapture": "urenavi-source-bed.json",
+      "code": "auc-cleaner-parts:10000709",
+      "title": "【期間限定10％オフ】犬 イヌ ベッド ドッグベッド Suuu公式 北欧デザイン 洗える 撥水 丈夫 おしゃれ ペットベッド オールシーズン 小型犬 中型犬 大型犬 S M L",
+      "captionLength": 723,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "pet",
+      "sourceCapture": "urenavi-source-bed.json",
+      "code": "lifeinqc:10000013",
+      "title": "楽天1位常連 犬 ベッド 小型犬 中型犬 大型犬 ペットベッド 夏用 ふわふわ 犬のベッド 高反発 犬 介護ベッド 丈夫 防水 ペット用 クッション ソファー 洗える 猫 高級 MLXL シニア オールシーズン 暖かい 春 夏 送料無料",
+      "captionLength": 989,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "ペットベッド",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "motorcycle",
+      "sourceCapture": "urenavi-source-bike.json",
+      "code": "kaedear:10000076",
+      "title": "[ランキング1位 MOTOグローブ ] バイク グローブ GOODデザイン スマホ 対応 通気性 工夫 ストレッチ プロテクター バイク用グローブ メッシュ 本革 バイク+グローブ 革 快適なアクセルワークが可能",
+      "captionLength": 1200,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "MOTOグローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_facts",
+        "identity": "MOTOグローブ",
+        "quote": null,
+        "sourceEvidence": [
+          {
+            "quote": "そんな工夫が施されたエレクトロMOTOグローブは操作の邪魔にならない箇所は出来るだけ生地を薄く、保護するべきところはカーボンプロテクターや生地を二枚張りにし、操作性と保護性のどちらも捨てないグローブといえます。",
+            "start": 502,
+            "end": 607,
+            "claimType": "source_feature",
+            "subjectBinding": "explicit_identity"
+          }
+        ],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "motorcycle",
+      "sourceCapture": "urenavi-source-bike.json",
+      "code": "kaedear:10000687",
+      "title": "バイク グローブ シンプルでカッコよく 男女兼用 メッシュ グローブ スマホ 対応 ストレッチ 抜群 バイク用グローブ 夏 秋 春 に最適 通気性 抜群 プロテクター バイク用グローブ 夏 メッシュ 夏用グローブ バイク グローブ",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "published": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "バイク グローブ",
+        "quote": "メッシュ構造により通気性が良く蒸れずらい。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Mesh and airflow benefit are clear. Awkward and misspelled phrasing."
+        }
+      },
+      "after": {
+        "candidate": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "published": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "バイク グローブ",
+        "quote": "メッシュ構造により通気性が良く蒸れずらい。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "note": "Mesh and airflow benefit are clear. Awkward and misspelled phrasing."
+        }
+      }
+    },
+    {
+      "category": "motorcycle",
+      "sourceCapture": "urenavi-source-bike.json",
+      "code": "sunnypolkashop:10000003",
+      "title": "【楽天1位】バイクグローブ バイク レザーグローブ メッシュ 春夏用 メンズ レディース おすすめ 防寒 冬用 最強 本革 レザー ツーリング プレゼント 薄手 コスパ 防水 メッシュ オールシーズン 雨 大きいサイズ 手袋 指 スマホ操作",
+      "captionLength": 411,
+      "before": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n本革を使ったバイクグローブです。\n\n商品の特徴\n・メッシュ\n・防水\n\n価格：2,880円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "バイクグローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic situation and no product or support for conditions."
+        }
+      },
+      "after": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n本革を使ったバイクグローブです。\n\n商品の特徴\n・メッシュ\n・防水\n\n価格：2,880円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "バイクグローブ",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic situation and no product or support for conditions."
+        }
+      }
+    },
+    {
+      "category": "electronics",
+      "sourceCapture": "urenavi-source-mobile.json",
+      "code": "dasimon:10000020",
+      "title": "＼84%OFF！20%OFFクーポン+P2で1,706円！／モバイルバッテリー 22000mAh 大容量 軽量 小型 ケーブル内蔵 防災ライト iPhone18 4台同時充電 急速充電 LED残量表示 スマホ充電器 iPhone/Android 全機種対応 Type-C PSE認証 旅行/出張 ケーブルの持ち運び不要",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic compactness claim with no visible product or specific feature."
+        }
+      },
+      "after": {
+        "candidate": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Generic compactness claim with no visible product or specific feature."
+        }
+      }
+    },
+    {
+      "category": "electronics",
+      "sourceCapture": "urenavi-source-mobile.json",
+      "code": "ennshopstore:10000094",
+      "title": "楽天総合1位【1,990円・新発売SALE】 モバイルバッテリー 軽量 小型 24800mAh 22.5W 急速充電 軽量 薄い バッテリー 大容量 3台同時充電 充電器 22cmケーブル内蔵 携帯充電器 SCP 22.5W/PD 20W/QC 3.0最速 機内持込 防災グッズ ハンディファン 2026年NEW",
+      "captionLength": 87,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "モバイルバッテリー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "no_grounded_purchase_candidate",
+        "identity": "モバイルバッテリー",
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "electronics",
+      "sourceCapture": "urenavi-source-mobile.json",
+      "code": "hitidear:10000115",
+      "title": "【クーポンで最安2180円】「年間ランキング受賞」「楽天1位」モバイルバッテリー 半固体電池 大容量 20800mAh 4本ケーブル内蔵 燃えにくい 準固体電池 超軽量 小型 ワイヤレス充電 6台同時充電 3way蓄電 MFi認証 持ち運び便利 残量表示 iPhone/iPad/Android対応",
+      "captionLength": 1200,
+      "before": {
+        "candidate": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Useful connection details, but no identity and supported simultaneous configuration needs checking."
+        }
+      },
+      "after": {
+        "candidate": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "published": null,
+        "reason": "grounded_local_copy",
+        "identity": "モバイルバッテリー",
+        "quote": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Useful connection details, but no identity and supported simultaneous configuration needs checking."
+        }
+      }
+    },
+    {
+      "category": "household",
+      "sourceCapture": "urenavi-source-mop.json",
+      "code": "tuzukiya:10128242",
+      "title": "※法人専用品※テラモト モップハンガーRC型 12本掛 CE-491-330-0 1台",
+      "captionLength": 151,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "household",
+      "sourceCapture": "urenavi-source-mop.json",
+      "code": "asahiprocureace:11812439",
+      "title": "テラモト モップハンガーRC型コンパクト(6本掛) CE-491-340-0 1台 ◇▼356-8067",
+      "captionLength": 378,
+      "before": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      },
+      "after": {
+        "candidate": null,
+        "published": null,
+        "reason": "identity_unresolved",
+        "identity": null,
+        "quote": null,
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "note": "No rendered draft"
+        }
+      }
+    },
+    {
+      "category": "household",
+      "sourceCapture": "urenavi-source-mop.json",
+      "code": "daiwa-yohin:10011593",
+      "title": "大型収納タイプ モップハンガーRC型（12本掛） CE-491-330-0 （6本掛） CE-491-340-0 テラモト 収納 清掃用具 体育館 工場 整頓",
+      "captionLength": 778,
+      "before": {
+        "candidate": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "published": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "大型収納タイプ",
+        "quote": "モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Lead treats a variant label as the product. Condition and meaning of the label need checking."
+        }
+      },
+      "after": {
+        "candidate": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "published": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "reason": "grounded_local_copy",
+        "identity": "大型収納タイプ",
+        "quote": "モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。",
+        "sourceEvidence": [],
+        "assistantReview": {
+          "axes": [
+            "fail",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "unconfirmed"
+          ],
+          "note": "Lead treats a variant label as the product. Condition and meaning of the label need checking."
+        }
+      }
+    }
+  ]
+}
