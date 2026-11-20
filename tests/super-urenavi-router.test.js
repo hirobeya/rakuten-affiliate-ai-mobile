@@ -180,3 +180,30 @@ test('unified route always selects fixed 120B and sends no image even if supplie
  assert.equal(sends,1);
  assert.equal(r.body.stages.imageAttempted,false);
 }));
+
+test('long Rakuten source remains whole for validation and cache while Groq sees bounded text',async()=>withPreviewKey(async()=>{
+ const longCaption='A'.repeat(2500)+'検証対象の末尾仕様='+'B'.repeat(2000);
+ const saved=[];
+ let groqCalls=0;
+ const handler=createHandler({
+  authorize:async()=>({ok:true,plan:'owner'}),
+  callGroq:async({itemCaption})=>{
+   groqCalls++;
+   assert.ok(itemCaption.length<=3000);
+   assert.ok(itemCaption.includes('検証対象')===false);
+   assert.ok(itemCaption.endsWith('B'.repeat(750)));
+   return {raw:{productType:{value:'不明商品',source:'itemName',evidence:'不明商品'},
+    features:[],sellingPoints:[],confidence:'medium'},model:'mock'};
+  },
+  store:makeStore({saveProduct:async row=>saved.push(row)})
+ });
+ const r=makeRes();
+ await handler({method:'POST',body:{
+  itemCode:'shop:long-caption',itemName:'不明商品テスト',itemCaption:longCaption,
+  itemPrice:1234
+ }},r);
+ assert.equal(r.statusCode,200);
+ assert.equal(groqCalls,1);
+ assert.equal(saved.length,1);
+ assert.equal(saved[0].itemCaption,longCaption);
+}));
