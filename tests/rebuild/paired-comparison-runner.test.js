@@ -69,7 +69,8 @@ async function fixture(t,{answer,dbResult=()=>true,evidencePatch={},clock=()=>no
  }};
  let observed=0;
  const evidence=patch=>({
-  source:'groq_console',artifactSha256:hash(++observed),model:MODEL,account,plan:'free',billable:false,
+  source:budgetSource==='self_ledger'?'administrator_declaration':'groq_console',
+  artifactSha256:hash(++observed),model:MODEL,account,plan:'free',billable:false,
   exclusiveWindow:true,unresolvedSends:0,verifiedAt:new Date(now).toISOString(),
   counters:counters(now),
   ...(budgetSource==='self_ledger'?{
