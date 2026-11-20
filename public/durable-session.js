@@ -6,6 +6,7 @@
   const PROCESSING='processing';
   const POSTED='posted';
   const API='/api/resume';
+  const manualOnly=()=>Boolean(root.document?.querySelector?.('.manual-product-only'));
   const DB_TIMEOUT_MS=2600;
 
   let currentSession=null;
@@ -60,6 +61,7 @@
   }
 
   async function api(body=null){
+    if(manualOnly())return null;
     const headers={Accept:'application/json',...(await authHeader())};
     const options={method:body?'POST':'GET',headers,credentials:'include',cache:'no-store'};
     if(body){
@@ -199,6 +201,7 @@
       wrapRender();
       const app=root.document.getElementById('appRoot');
       if(app?.style.display==='block'){
+        if(manualOnly())return;
         await restoreActive();
         return;
       }

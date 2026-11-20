@@ -22,7 +22,7 @@ test('manual-only route accepts a paid session and uses only submitted product d
  assert.equal((await run(handler,{name:'収納ベンチ',features:'',description:'',price:null})).code,400);
  const free=manual.createHandler({authorizeUser:async()=>({ok:true,plan:'free'})});
  assert.equal((await run(free,{})).code,403);
- for(const file of ['search','search-v2','pro','pro-genres','pro-cron','room-ai','room-ai-v3']){
+ for(const file of ['search','search-v2','pro','pro-genres','pro-cron','resume','room-ai','room-ai-v3']){
    assert.equal((await run(require('../../api/'+file),{},{urenaviContract:'1'})).code,403,file);
  }
 });
