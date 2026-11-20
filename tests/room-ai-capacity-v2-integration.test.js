@@ -104,10 +104,38 @@ test('no real Groq request from main router when capacity RPC rejects',async()=>
    setHeader(k,v){this.headers[k]=v;},
    status(c){this.code=c;return this;},json(v){this.body=v;return this;}};
   await handler({method:'POST',body:{...item,itemName:'架空の用品',itemCaption:'構造を確認できる用品です。'}},res);
-  assert.equal(res.code,502);
+  assert.equal(res.code,503);
+  assert.match(res.body.message,/利用枠を確認できない/);
+  assert.equal(res.body.retryAllowed,false);
   assert.equal(sends,0);
  }finally{
   if(previous.env===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=previous.env;
   if(previous.key===undefined)delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=previous.key;
+ }
+});
+
+test('provider 429 is reported as stop with no replay or leaked identifiers',async()=>{
+ const oldEnv=process.env.VERCEL_ENV,oldKey=process.env.GROQ_API_KEY;
+ process.env.VERCEL_ENV='preview';process.env.GROQ_API_KEY='mock';
+ try{
+  let sends=0;
+  const handler=createHandler({
+   authorize:async()=>authorization,
+   capacityGate:async()=>{sends++;const e=new Error('provider-secret-internal');e.status=429;throw e;},
+   store:{loadProduct:async()=>null,saveProduct:async()=>{}}
+  });
+  const res={code:200,body:null,headers:{},
+   setHeader(k,v){this.headers[k]=v;},
+   status(v){this.code=v;return this;},
+   json(v){this.body=v;return this;}
+  };
+  await handler({method:'POST',body:item},res);
+  assert.equal(sends,1);
+  assert.equal(res.code,429);
+  assert.equal(res.body.retryAllowed,false);
+  assert.doesNotMatch(JSON.stringify(res.body),/provider-secret-internal/);
+ }finally{
+  if(oldEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=oldEnv;
+  if(oldKey===undefined)delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=oldKey;
  }
 });
