@@ -6,6 +6,7 @@ const {createHash}=require('node:crypto');
 const {execFileSync}=require('node:child_process');
 const {parseArgs}=require('node:util');
 const {importOfficialEvidence,matchesOfficialArtifact}=require('../../lib/urenavi-core/official-capacity-evidence');
+const {createIsolatedComparisonSupabase}=require('./isolated-comparison-supabase.cjs');
 const {createComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
 const {createGroqComparisonTransport,createPairedComparisonRunner,expectedApproval}
  =require('../../lib/urenavi-core/paired-comparison-runner');
@@ -36,28 +37,11 @@ async function run(){
   throw Error('isolated_operator_execution_disabled');
  if(values.action==='run'&&keyFingerprint!==account.credentialSha256)throw Error('comparison_credential_mismatch');
  if(git('status','--porcelain'))throw Error('clean_checkout_required');
- const local=new URL(process.env.URENAVI_COMPARISON_LOCAL_SUPABASE||'http://127.0.0.1:54321');
- if(local.protocol!=='http:'||local.hostname!=='127.0.0.1'||local.username||local.password||
-    local.pathname!=='/'||local.search||local.hash)throw Error('loopback_supabase_required');
- const serviceKey=process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY;
- const ownerJwt=process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT;
- if(!serviceKey||!ownerJwt)throw Error('isolated_supabase_credentials_required');
- const isolatedFetch=(pathname,options)=>fetch(local.origin+pathname,{
-  ...options,redirect:'error',signal:AbortSignal.timeout(4000)
+ const {db,authorize}=createIsolatedComparisonSupabase({
+  url:process.env.URENAVI_COMPARISON_LOCAL_SUPABASE,
+  serviceKey:process.env.URENAVI_COMPARISON_LOCAL_SERVICE_KEY,
+  ownerJwt:process.env.URENAVI_COMPARISON_LOCAL_OWNER_JWT
  });
- const db=async(path,options)=>{
-  const response=await isolatedFetch('/rest/v1/'+path,{...options,headers:{
-   apikey:serviceKey,Authorization:'Bearer '+serviceKey,'Content-Type':'application/json'
-  }});
-  if(!response.ok)throw Error('isolated_capacity_db_unavailable');
-  return response.json();
- };
- const authorize=async()=>{
-  const response=await isolatedFetch('/auth/v1/user',{headers:{apikey:serviceKey,Authorization:'Bearer '+ownerJwt}});
-  if(!response.ok)return {ok:false};
-  const user=await response.json();
-  return {ok:user.app_metadata?.urenavi_role==='owner',plan:'owner',user:{id:user.id,email:user.email}};
- };
  const [inputs,approvalKey,evidenceKey]=await Promise.all([
   json(values.inputs),fs.readFile(values['approval-key']),fs.readFile(values['evidence-key'])
  ]);

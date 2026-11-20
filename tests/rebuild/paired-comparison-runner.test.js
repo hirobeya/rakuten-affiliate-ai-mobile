@@ -260,3 +260,138 @@ if(process.env.URENAVI_DISPOSABLE_PG==='1'){
   assert.equal(sendCount,2);
  });
 }
+
+if(process.env.URENAVI_TEST_SUPABASE_DIR){
+ test('local Supabase Auth and PostgREST survive restart and fail closed',async()=>{
+  const {execFileSync}=require('node:child_process');
+  const {randomUUID}=require('node:crypto');
+  const {createIsolatedComparisonSupabase}=require('../../scripts/rebuild/isolated-comparison-supabase.cjs');
+  const {importOfficialEvidence,matchesOfficialArtifact}=require('../../lib/urenavi-core/official-capacity-evidence');
+  const directory=process.env.URENAVI_TEST_SUPABASE_DIR;
+  const status=JSON.parse(await fs.readFile(path.join(directory,'status.json'),'utf8'));
+  const api=assertLocal(status.API_URL,'http:',54321).origin;
+  const postgres=assertLocal(status.DB_URL,'postgresql:',54322);
+  assert.equal(postgres.pathname,'/postgres');
+  const serviceKey=status.SERVICE_ROLE_KEY;
+  const anonKey=status.ANON_KEY;
+  assert.ok(serviceKey&&anonKey);
+  function assertLocal(value,protocol,port){
+   const url=new URL(value);
+   assert.equal(url.protocol,protocol);
+   assert.equal(url.hostname,'127.0.0.1');
+   assert.equal(Number(url.port),port);
+   return url;
+  }
+  function sql(statement,args=[]){
+   return execFileSync('psql',['-XAtq','-v','ON_ERROR_STOP=1',...args],{
+    input:statement,encoding:'utf8',env:{PATH:process.env.PATH,PGHOST:postgres.hostname,PGPORT:postgres.port,
+     PGUSER:decodeURIComponent(postgres.username),PGPASSWORD:decodeURIComponent(postgres.password),
+     PGDATABASE:'postgres',PGCONNECT_TIMEOUT:'3'}
+   }).trim();
+  }
+  async function authRequest(route,key,body){
+   const response=await fetch(api+'/auth/v1/'+route,{method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),
+    headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+   assert.ok(response.ok,'local Auth '+route+' returned '+response.status);
+   return response.json();
+  }
+  async function createUser(owner){
+   const credentials={email:randomUUID()+'@example.com',password:randomUUID()};
+   const created=await authRequest('admin/users',serviceKey,{...credentials,email_confirm:true,
+    app_metadata:owner?{urenavi_role:'owner'}:{},user_metadata:{urenavi_role:'owner'}});
+   const session=await authRequest('token?grant_type=password',anonKey,credentials);
+   assert.equal(session.user.id,created.id);
+   assert.match(created.id,/^[0-9a-f-]{36}$/);
+   return {id:created.id,jwt:session.access_token};
+  }
+  sql('', ['-f','docs/architecture/multitenant-capacity-v2.sql','-f','docs/architecture/comparison-capacity-v2.sql']);
+  sql("notify pgrst, 'reload schema';");
+  const [owner,member,other]=await Promise.all([createUser(true),createUser(false),createUser(true)]);
+  const clientFor=user=>createIsolatedComparisonSupabase({url:api,serviceKey,ownerJwt:user.jwt});
+  assert.equal((await clientFor(owner).authorize()).user.id,owner.id);
+  assert.equal((await clientFor(member).authorize()).ok,false);
+  assert.equal((await clientFor(other).authorize()).user.id,other.id);
+  const rpc=(action,body)=>clientFor(owner).db('rpc/urenavi_capacity_'+action+'_v2',
+   {method:'POST',body:JSON.stringify(body)});
+  const blocked=await fetch(api+'/rest/v1/rpc/urenavi_capacity_reserve_v2',{
+   method:'POST',redirect:'error',signal:AbortSignal.timeout(4000),
+   headers:{apikey:anonKey,Authorization:'Bearer '+member.jwt,'Content-Type':'application/json'},
+   body:JSON.stringify({p_id:randomUUID(),p_provider:'groq',p_tenant:owner.id,p_estimate:1})
+  });
+  assert.ok([401,403,404].includes(blocked.status),'authenticated reservation access must be denied');
+  const executionSha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+  const signedScope=expectedApproval(executionSha,owner.id,account,plan);
+  const request=arm=>{
+   const target={itemCode:item.itemCode,arm,stage:'generate'};
+   return {...target,approvalEnvelope:approve(target,{scope:signedScope,expiresAt:new Date(Date.now()+60000).toISOString()})};
+  };
+  let captureTime,simulated=0;
+  const writerId=signedScope.slots.find(s=>s.arm==='B').attemptIds.writer;
+  const row=()=>sql(`select outcome || ':' || coalesce(actual_tokens::text,'?')
+   from public.urenavi_capacity_attempt_v2 where id='${writerId}' and tenant='${owner.id}';`);
+  async function loadWindows(){
+   sql("truncate public.urenavi_capacity_comparison_evidence_v2, public.urenavi_capacity_attempt_v2, public.urenavi_capacity_window_v2, public.urenavi_capacity_provider_v2; insert into public.urenavi_capacity_provider_v2(provider) values ('groq');");
+   captureTime=Date.now();
+   const start=new Date(captureTime).toISOString();
+   const values=counters(captureTime);
+   for(const [period,r,t] of [['minute',values.rpm,values.tpm],['day',values.rpd,values.tpd]]){
+    for(const tenant of [null,owner.id,other.id])assert.equal(await rpc('confirm_window',{
+     p_provider:'groq',p_tenant:tenant,p_period:period,p_start:start,p_end:r.resetAt,p_verified:start,
+     p_request_limit:r.limit,p_token_limit:t.limit,p_external_requests:0,p_external_tokens:0
+    }),true);
+   }
+  }
+  function runner(user,journal,reply=provider){
+   const artifact=Buffer.from('synthetic Supabase test '+journal);
+   return createComparisonRunner({environment:'isolated',inputs,executionSha,account,...clientFor(user),
+    journal:createComparisonJournal(journal),approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,
+    readEvidence:async()=>{
+     const evidence=importOfficialEvidence({source:'groq_console',account,model:MODEL,verifiedAt:new Date(captureTime).toISOString(),
+      plan:'free',billable:false,exclusiveWindow:true,unresolvedSends:0,counters:counters(captureTime)},artifact);
+     assert.ok(matchesOfficialArtifact(evidence,artifact));
+     return signed(evidence,evidenceKeys.privateKey);
+    },transport:async()=>{
+     simulated++;
+     assert.equal(row(),'sent:?');
+     assert.equal(sql(`select count(*) from public.urenavi_capacity_comparison_evidence_v2 where attempt_id='${writerId}';`),'1');
+     return reply();
+    }
+   },index,plan);
+  }
+  const durable=await fs.mkdtemp(path.join(directory,'journals','successful-'));
+  await loadWindows();
+  assert.equal((await runner(member,durable).run(request('B'))).reason,'owner_required');
+  assert.equal((await runner(other,durable).run(request('B'))).reason,'approval_invalid_or_expired');
+  assert.equal(simulated,0);
+  assert.equal((await runner(owner,durable).run(request('B'))).status,'completed');
+  assert.equal(row(),'spent:1900');
+  const supabase=(action,args=[])=>execFileSync('supabase',[action,'--workdir',directory,...args],{stdio:'ignore'});
+  supabase('stop');
+  const unavailable=await fs.mkdtemp(path.join(directory,'journals','stopped-'));
+  assert.equal((await runner(owner,unavailable).run(request('B'))).status,'stopped');
+  assert.equal(simulated,1);
+  supabase('start',['-x',process.env.URENAVI_TEST_SUPABASE_EXCLUDE]);
+  assert.equal((await clientFor(owner).authorize()).user.id,owner.id);
+  assert.equal(row(),'spent:1900');
+  assert.equal(execFileSync(process.execPath,['-e',`
+   const j=require('./lib/urenavi-core/comparison-journal').createComparisonJournal(process.argv[1]);
+   j.read(process.argv[2]+'-result').then(record=>process.stdout.write(String(record.usage.total)));
+  `,durable,writerId],{encoding:'utf8'}),'1900');
+  assert.equal((await runner(owner,durable).run(request('B'))).reason,'duplicate_attempt');
+  assert.equal(simulated,1);
+  for(const [label,reply,reason,outcome] of [
+   ['rate-limit',()=>({status:429}),'provider_rate_limited','rate_limited:?'],
+   ['timeout',()=>{throw Error('simulated transport timeout');},'transport_or_persistence_failure','unknown:?'],
+   ['unwritable-result',provider,'transport_or_persistence_failure','unknown:?']
+  ]){
+   await loadWindows();
+   const journal=await fs.mkdtemp(path.join(directory,'journals',label+'-'));
+   if(label==='unwritable-result')await fs.mkdir(path.join(journal,writerId+'-result.json'));
+   const before=simulated;
+   assert.equal((await runner(owner,journal,reply).run(request('B'))).reason,reason);
+   assert.equal(row(),outcome);
+   assert.equal((await runner(owner,journal,reply).run(request('C'))).reason,'study_halted');
+   assert.equal(simulated,before+1);
+  }
+ });
+}
