@@ -1,0 +1,137 @@
+name: Isolated Groq Stage (pinned, manual only)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/measure-groq-stage.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "offline code checks only (default), or send after separate explicit approval"
+        type: choice
+        required: true
+        options: [preflight, send]
+        default: preflight
+      stage:
+        description: "Fixed paired study stage"
+        type: choice
+        required: true
+        options: [generate, verify]
+        default: generate
+      arm:
+        description: "Fixed comparison arm"
+        type: choice
+        required: true
+        options: [B, C]
+        default: B
+      max_calls:
+        description: "Upper bound for this manual batch (1 or 2)"
+        type: choice
+        required: true
+        options: ['1', '2']
+        default: '1'
+      free_confirmation:
+        description: "Enter I_CHECKED_GROQ_FREE_NO_BILLING after checking Groq console"
+        type: string
+        required: false
+      provider_authorization:
+        description: "For send only: enter I_AUTHORIZE_GROQ_LIMITED_MEASUREMENT"
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: isolated-groq-measurement
+  cancel-in-progress: false
+jobs:
+  offline-readiness:
+    # Public repository standard hosted runner; no secrets, no Groq, no
+    # Supabase connection, no approval. Safe to run before environment setup.
+    if: ${{ github.event_name == 'pull_request' || inputs.mode == 'preflight' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4348398ef7fd47d795c2d89cb2f5d3e2b3932acd
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Prove exact isolated comparator and no-send safeguards
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '4348398ef7fd47d795c2d89cb2f5d3e2b3932acd'
+          node --test tests/rebuild/groq-stage-workflow.test.js \
+            tests/rebuild/durable-comparison-journal.test.js
+          node --test --test-name-pattern='signed self-ledger|approved self-ledger|self-ledger|signed batch|administrator declaration' tests/rebuild/paired-comparison-runner.test.js
+          node -e "const p=require('./docs/evaluations/20261120-ai-comparison/offline-report.json');if(p.paired.maximumCalls!==8||p.paired.itemCodes.length!==2)process.exit(1);console.log(JSON.stringify({status:'offline-only-passed',items:p.paired.itemCodes,externalCalls:0}))"
+  isolated-stage:
+    # No secrets reach the unprotected offline-readiness job.
+    if: ${{ inputs.mode == 'send' }}
+    environment: groq-measure
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check that GitHub Environment manual reviewer gate is configured
+        env:
+          REVIEWER_GATE: ${{ vars.GROQ_MEASURE_ENV_REVIEWERS_CONFIRMED }}
+          MODE: ${{ inputs.mode }}
+          FREE_ACK: ${{ inputs.free_confirmation }}
+          SEND_ACK: ${{ inputs.provider_authorization }}
+        run: |
+          test "$REVIEWER_GATE" = 'configured-and-reviewed'
+          test "$FREE_ACK" = 'I_CHECKED_GROQ_FREE_NO_BILLING'
+          if [ "$MODE" = 'send' ]; then
+            test "$SEND_ACK" = 'I_AUTHORIZE_GROQ_LIMITED_MEASUREMENT'
+          fi
+      - uses: actions/checkout@v4
+        with:
+          # Fixed, reviewed comparison-code SHA. Never take a user-supplied ref
+          # when environment secrets are available to the workflow.
+          ref: 4348398ef7fd47d795c2d89cb2f5d3e2b3932acd
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Prepare bounded stage inputs and signed declarations
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+          URENAVI_MEASURE_MODE: ${{ inputs.mode }}
+          URENAVI_MEASURE_ACK: ${{ inputs.free_confirmation }}
+          URENAVI_MEASURE_PROVIDER_APPROVAL: ${{ inputs.provider_authorization }}
+          URENAVI_MEASURE_STAGE: ${{ inputs.stage }}
+          URENAVI_MEASURE_ARM: ${{ inputs.arm }}
+          URENAVI_MEASURE_MAX_CALLS: ${{ inputs.max_calls }}
+          URENAVI_GROQ_ORGANIZATION: ${{ secrets.URENAVI_GROQ_ORGANIZATION }}
+          URENAVI_GROQ_PROJECT: ${{ secrets.URENAVI_GROQ_PROJECT }}
+          URENAVI_COMPARISON_GROQ_KEY: ${{ secrets.URENAVI_COMPARISON_GROQ_KEY }}
+          URENAVI_ISOLATED_OWNER_ID: ${{ secrets.URENAVI_ISOLATED_OWNER_ID }}
+          URENAVI_FROZEN_INPUTS_B64: ${{ secrets.URENAVI_FROZEN_INPUTS_B64 }}
+          URENAVI_APPROVAL_PRIVATE_PEM_B64: ${{ secrets.URENAVI_APPROVAL_PRIVATE_PEM_B64 }}
+          URENAVI_EVIDENCE_PRIVATE_PEM_B64: ${{ secrets.URENAVI_EVIDENCE_PRIVATE_PEM_B64 }}
+        run: node scripts/rebuild/prepare-groq-stage.cjs
+      - name: Execute only the explicitly approved isolated batch
+        if: ${{ inputs.mode == 'send' }}
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+          URENAVI_ISOLATED_COMPARISON: operator-enabled
+          URENAVI_COMPARISON_REMOTE_ENABLED: isolated-operator-confirmed
+          URENAVI_COMPARISON_REMOTE_SUPABASE: https://vyzpklomggsazwigxkfh.supabase.co/
+          URENAVI_COMPARISON_REMOTE_SERVICE_KEY: ${{ secrets.URENAVI_COMPARISON_REMOTE_SERVICE_KEY }}
+          URENAVI_COMPARISON_REMOTE_PUBLISHABLE_KEY: ${{ secrets.URENAVI_COMPARISON_REMOTE_PUBLISHABLE_KEY }}
+          URENAVI_COMPARISON_REMOTE_OWNER_EMAIL: ${{ secrets.URENAVI_COMPARISON_REMOTE_OWNER_EMAIL }}
+          URENAVI_COMPARISON_REMOTE_OWNER_PASSWORD: ${{ secrets.URENAVI_COMPARISON_REMOTE_OWNER_PASSWORD }}
+          URENAVI_COMPARISON_GROQ_KEY: ${{ secrets.URENAVI_COMPARISON_GROQ_KEY }}
+          URENAVI_GROQ_ORGANIZATION: ${{ secrets.URENAVI_GROQ_ORGANIZATION }}
+          URENAVI_GROQ_PROJECT: ${{ secrets.URENAVI_GROQ_PROJECT }}
+          STAGE: ${{ inputs.stage }}
+        run: |
+          set -euo pipefail
+          path="$RUNNER_TEMP/urenavi-isolated-stage"
+          node scripts/rebuild/run-paired-comparison.cjs \
+            --action run-batch --journal-backend supabase --budget-source self_ledger \
+            --organization "$URENAVI_GROQ_ORGANIZATION" --project "$URENAVI_GROQ_PROJECT" \
+            --inputs "$path/inputs.json" --approval "$path/approval.json" \
+            --evidence "$path/evidence.json" --artifact "$path/artifact.json" \
+            --approval-key "$path/approval-public.pem" --evidence-key "$path/evidence-public.pem" \
+            --stage "$STAGE"
