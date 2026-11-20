@@ -20,7 +20,7 @@ test('upstream authentication failure does not sign the customer out',async()=>{
   const r=res();await search({headers:{authorization:'Bearer '+authToken()},query:{keyword:'商品'}},r);
   assert.equal(r.code,502);assert.doesNotMatch(JSON.stringify(r.body),/application key/);
 });
-beforeEach(()=>{Object.assign(process.env,{VERCEL_ENV:'preview',STRIPE_SECRET_KEY:'sk_test_fixture',URENAVI_PRICE_ID:'price_test',URENAVI_PAYMENT_LINK_ID:'plink_test',URENAVI_PAYMENT_LINK_URL:'https://buy.stripe.com/test_fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',STRIPE_WEBHOOK_SECRET:'fixture'});});
+beforeEach(()=>{Object.assign(process.env,{VERCEL_ENV:'preview',STRIPE_SECRET_KEY:'sk_test_fixture',URENAVI_PRICE_ID:'price_test',URENAVI_PAYMENT_LINK_ID:'plink_test',URENAVI_PAYMENT_LINK_URL:'https://buy.stripe.com/test_fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',SUPABASE_URL:'https://vyzpklomggsazwigxkfh.supabase.co',STRIPE_WEBHOOK_SECRET:'fixture'});});
 afterEach(()=>{global.fetch=originalFetch; for(const key of Object.keys(process.env)) if(!(key in originalEnv)) delete process.env[key];Object.assign(process.env,originalEnv);});
 const response=data=>({ok:true,status:200,json:async()=>data,text:async()=>JSON.stringify(data)});
 const sub=(extra={})=>({id:'sub_test',customer:'cus_test',livemode:false,status:'active',items:{data:[{price:{id:'price_test'},current_period_end:Math.floor(Date.now()/1000)+3600}]},...extra});
@@ -31,6 +31,16 @@ test('Production refuses TEST key',()=>{process.env.VERCEL_ENV='production';asse
 test('Only active, matching mode/price, future paid period allows access',()=>{assert.equal(billing.subscriptionState(sub()).active,true);for(const status of ['canceled','past_due','unpaid','incomplete','incomplete_expired','paused','trialing'])assert.equal(billing.subscriptionState(sub({status})).active,false);assert.equal(billing.subscriptionState(sub({livemode:true})).active,false);assert.equal(billing.subscriptionState(sub({items:{data:[]}})).active,false);assert.equal(billing.subscriptionState(sub({items:{data:[{price:{id:'price_test'},current_period_end:1}]}})).active,false);});
 test('Period-end cancellation allows already paid period; canceled blocks immediately',()=>{assert.equal(billing.subscriptionState(sub({cancel_at_period_end:true})).active,true);assert.equal(billing.subscriptionState(sub({status:'canceled',cancel_at_period_end:true})).active,false);});
 test('Webhook rejects tamper, missing secret, replay and malformed signatures',()=>{const raw=Buffer.from('{}'),t=1000;const hash=crypto.createHmac('sha256','fixture').update(t+'.').update(raw).digest('hex');assert.deepEqual(billing.verifySignature(raw,`t=${t},v1=${hash}`,'fixture',t),{});for(const args of [[Buffer.from('{ }'),`t=${t},v1=${hash}`,'fixture',t],[raw,`t=${t},v1=${hash}`,'',t],[raw,`t=${t},v1=${hash}`,'fixture',t+301],[raw,`t=${t},v1=abc`,'fixture',t]])assert.throws(()=>billing.verifySignature(...args));});
+test('Preview TEST billing never writes Production customer/auth data',async()=>{
+ process.env.SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+ let calls=0;global.fetch=async()=>{calls++;throw Error('Production request forbidden');};
+ await assert.rejects(()=>billing.syncSubscription('sub_test'),/isolated Supabase/);
+ await assert.rejects(()=>billing.ensureAuthUser('fixture@example.invalid'),/isolated Supabase/);
+ const out=res();
+ await access({method:'GET',query:{action:'activate',session_id:'cs_test_fixture'},headers:{}},out);
+ assert.equal(out.code,503);
+ assert.equal(calls,0);
+});
 test('Wrong-mode webhook cannot call services',async()=>{global.fetch=()=>{throw new Error('must not fetch');};const r=res();await webhook(signed({livemode:true,type:'customer.subscription.deleted',data:{object:{id:'sub_test'}}}),r);assert.equal(r.code,400);});
 test('Signed cancellation fetches current state and synchronizes isolated row; repeats are safe',async()=>{const writes=[];global.fetch=async(url,options)=>{url=String(url);if(url.includes('/subscriptions/'))return response(sub({status:'canceled'}));if(url.includes('/customers/'))return response({email:'Buyer@example.com'});if(url.includes('rpc/urenavi_sync_entitlement')){writes.push(JSON.parse(options.body).p_row);return response(null);}return response([]);};const event={livemode:false,type:'customer.subscription.deleted',data:{object:{id:'sub_test'}}};for(let i=0;i<2;i++){const r=res();await webhook(signed(event),r);assert.equal(r.code,200);}assert.equal(writes.length,2);assert.equal(writes[0].active,false);assert.equal(writes[0].livemode,false);assert.equal(writes[0].email,'buyer@example.com');});
 test('Webhook database failure remains retryable without leaking secret',async()=>{global.fetch=async()=>{throw new Error('sk_test_DO_NOT_EXPOSE');};const r=res();await webhook(signed({livemode:false,type:'customer.subscription.updated',data:{object:{id:'sub_test'}}}),r);assert.equal(r.code,503);assert.ok(!JSON.stringify(r).includes('DO_NOT_EXPOSE'));});
