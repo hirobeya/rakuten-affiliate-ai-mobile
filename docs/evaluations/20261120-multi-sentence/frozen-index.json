@@ -1,0 +1,102 @@
+[
+  {
+    "category": "kettle",
+    "itemCode": "mpowjapan:10000798",
+    "inputSha256": "893eaeb3606e6158d0e195a9f120ece8712538696e61b78e591fb98e189432ac"
+  },
+  {
+    "category": "kettle",
+    "itemCode": "e-kurashi:10037463",
+    "inputSha256": "579df068fff7622a00bd5e5ded3543b8d9f4d567d65c23fddf06ad3a7ad173ee"
+  },
+  {
+    "category": "box",
+    "itemCode": "air-rhizome:10011631",
+    "inputSha256": "4844a78efcd03d8da94ae410c680a29b07c317a2fa0ed6a300caca051e974cb6"
+  },
+  {
+    "category": "box",
+    "itemCode": "livewell:10002767",
+    "inputSha256": "a733bbd662b85287d59af07815013183ebc1bb5a93caf30610125dde92fc341d"
+  },
+  {
+    "category": "mobile",
+    "itemCode": "seinan2:10000006",
+    "inputSha256": "f706d9a1618601599f9d48b7b2395b5aad5a683ca9bd621eaf5cf1769a4afbea"
+  },
+  {
+    "category": "mobile",
+    "itemCode": "artpiece:10000904",
+    "inputSha256": "b06b239faac2c4ab3c043a82fafa380435eca5c101d2719fe8fd036c4f37b48d"
+  },
+  {
+    "category": "bed",
+    "itemCode": "emoor-nedogko:10000047",
+    "inputSha256": "efd92d1eaabf582676cbeb8a8ccc2032c84a3a17d08e95fdf6567cea509775ea"
+  },
+  {
+    "category": "bed",
+    "itemCode": "4-l-f:10000057",
+    "inputSha256": "dc1193a8b3328e10ac219973dc014f9f32a130d5420ef9bbf820381954f7bf81"
+  },
+  {
+    "category": "pan",
+    "itemCode": "miyazakimanufacturing:10000008",
+    "inputSha256": "c580b721685c1a811bec73241e644e425ebd610678b533882f49f043d74f94e2"
+  },
+  {
+    "category": "pan",
+    "itemCode": "kai:10008595",
+    "inputSha256": "7abac1badb313669b7c29992e646d9b68451672c17ab96fa8e0a62a993b4eaad"
+  },
+  {
+    "category": "mop",
+    "itemCode": "arotho:10001214",
+    "inputSha256": "a587586a6c5867cc5b0ce32947318ea9fd02e45ab2c66c0524ee1c68801d59e6"
+  },
+  {
+    "category": "mop",
+    "itemCode": "arotho:10001210",
+    "inputSha256": "e9cc0076bdce0b8424b442be8f2a3908afb79519e714b50383a3883f0c96e23d"
+  },
+  {
+    "category": "fan",
+    "itemCode": "mirai100:10000461",
+    "inputSha256": "1f86df570416fc8997705e193cc8da61fc47bc7f2fe5e3d9006fd0aa643c10ee"
+  },
+  {
+    "category": "fan",
+    "itemCode": "kirinkokusai:10000162",
+    "inputSha256": "8e8abffb66548d1b6e89c4a7d292a450d1a9bebfefe0eaa797f895bfcd8a1c90"
+  },
+  {
+    "category": "bench",
+    "itemCode": "noone:10002900",
+    "inputSha256": "800ec030d347ea93fad0ce593b115a446185786acf2c00aaee222beaaa899c60"
+  },
+  {
+    "category": "bench",
+    "itemCode": "e-kurashi:10018414",
+    "inputSha256": "f35a1824d8807d5d40870a3823081296e77b299b473293c76b8e6b7f28ceafe4"
+  },
+  {
+    "category": "hair",
+    "itemCode": "40s-skincare:10000255",
+    "inputSha256": "9fbd24f6da61c06568a359a9486ee5afa9d7d9d5e5971bf0d73703e08c23b1cb"
+  },
+  {
+    "category": "hair",
+    "itemCode": "lorelife:10000106",
+    "inputSha256": "b4e1c12506c5f2ea9f74c7bbae92d89739145fa288b39a8b0d3adbae3757f58b"
+  },
+  {
+    "category": "bike",
+    "itemCode": "quest-online:10000223",
+    "inputSha256": "2ee690317b8043780980cf10b1d103ceaa57d8a63372d59ac7d948b37778a969"
+  },
+  {
+    "category": "bike",
+    "itemCode": "rockbros:10026750",
+    "inputSha256": "45154b63b98bf6f82d526d469b6eba8b41bd4608ba79bb2cc9923a6fa3f75188"
+  }
+]
