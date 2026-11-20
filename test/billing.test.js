@@ -80,6 +80,12 @@ test('a stale ¥980 Stripe price environment cannot upgrade legacy Base users',(
   assert.equal(result.active,true);
  }finally{process.env.URENAVI_PRICE_ID=old;}
 });
+test('customer UI enables full output for the approved standard subscription',()=>{
+ const fs=require('node:fs');
+ const html=fs.readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+ assert.match(html,/const paidPlan=\['standard','base','pro','owner'\]\.includes\(currentAccessPlan\)/);
+ assert.match(html,/aiGatesFullOutput=runtimeKnown/);
+});
 test('¥1480 standard receives all features while old Base and Pro remain readable',()=>{
  const now=Math.floor(Date.now()/1000)+7200;
  const withPrice=price=>sub({items:{data:[{price:{id:price},current_period_end:now}]}});
