@@ -341,7 +341,8 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
    assert.match(created.id,/^[0-9a-f-]{36}$/);
    return {id:created.id,jwt:session.access_token};
   }
-  sql('', ['-f','docs/architecture/multitenant-capacity-v2.sql','-f','docs/architecture/comparison-capacity-v2.sql']);
+  sql('', ['-f','docs/architecture/multitenant-capacity-v2.sql','-f','docs/architecture/comparison-capacity-v2.sql',
+   '-f','docs/architecture/isolated-comparison-journal-v2.sql']);
   sql("notify pgrst, 'reload schema';");
   const [owner,member,other]=await Promise.all([createUser(true),createUser(false),createUser(true)]);
   const clientFor=user=>createIsolatedComparisonSupabase({url:api,serviceKey,ownerJwt:user.jwt});
@@ -378,7 +379,8 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
   function runner(user,journal,reply=provider){
    const artifact=Buffer.from('synthetic Supabase test '+journal);
    return createComparisonRunner({environment:'isolated',inputs,executionSha,account,...clientFor(user),
-    journal:createComparisonJournal(journal),approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,
+    journal:typeof journal==='string'?createComparisonJournal(journal):journal,
+    approvalKey:approvalKeys.publicKey,evidenceKey:evidenceKeys.publicKey,
     readEvidence:async()=>{
      const evidence=importOfficialEvidence({source:'groq_console',account,model:MODEL,verifiedAt:new Date(captureTime).toISOString(),
       plan:'free',billable:false,exclusiveWindow:true,unresolvedSends:0,counters:counters(captureTime)},artifact);
@@ -429,6 +431,21 @@ if(process.env.URENAVI_TEST_SUPABASE_DIR){
    assert.equal((await runner(owner,journal,reply).run(request('C'))).reason,'study_halted');
    assert.equal(simulated,before+1);
   }
+  // The real PostgREST path uses one DB journal across worker restarts.
+  // No Groq transport: the pre-existing provider fixture is an in-process mock.
+  await loadWindows();
+  const {createDurableComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
+  const remoteJournal=createDurableComparisonJournal(clientFor(owner).db);
+  const before=simulated;
+  assert.equal((await runner(owner,remoteJournal).run(request('B'))).status,'completed');
+  assert.equal(simulated,before+1);
+  assert.equal((await remoteJournal.read(writerId+'-result')).usage.total,1900);
+  supabase('stop');
+  supabase('start',['-x',process.env.URENAVI_TEST_SUPABASE_EXCLUDE]);
+  const recoveredJournal=createDurableComparisonJournal(clientFor(owner).db);
+  assert.equal((await recoveredJournal.read(writerId+'-result')).usage.total,1900);
+  assert.equal((await runner(owner,recoveredJournal).run(request('B'))).reason,'duplicate_attempt');
+  assert.equal(simulated,before+1);
  });
 }
 
