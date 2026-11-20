@@ -69,6 +69,17 @@ test('No stale 980 JPY plan or Pro upgrade purchase appears in the customer app'
  assert.equal(typeof billing.upgradeBaseToPro,'undefined');
  assert.equal(typeof billing.stripePost,'undefined');
 });
+test('a stale ¥980 Stripe price environment cannot upgrade legacy Base users',()=>{
+ const old=process.env.URENAVI_PRICE_ID;
+ process.env.URENAVI_PRICE_ID=billing.legacyBasePriceId();
+ try{
+  const legacy=sub({items:{data:[{price:{id:billing.legacyBasePriceId()},
+   current_period_end:Math.floor(Date.now()/1000)+7200}]}});
+  const result=billing.subscriptionState(legacy);
+  assert.equal(result.plan,'base');
+  assert.equal(result.active,true);
+ }finally{process.env.URENAVI_PRICE_ID=old;}
+});
 test('¥1480 standard receives all features while old Base and Pro remain readable',()=>{
  const now=Math.floor(Date.now()/1000)+7200;
  const withPrice=price=>sub({items:{data:[{price:{id:price},current_period_end:now}]}});
