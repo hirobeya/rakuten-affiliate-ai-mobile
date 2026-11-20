@@ -2586,9 +2586,12 @@ function updateAiPanel(index){
 }
 
 async function requestAiRoom(item,index,generation){
-  if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
+  if(!aiGatesFullOutput||generation!==aiRunGeneration) return false;
+  let haltAutomatic=false;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  // The server serializes reservation, send intent, provider and settlement.
+  // Give it room to finish, but remain under the 20-second Vercel limit.
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
@@ -2599,11 +2602,13 @@ async function requestAiRoom(item,index,generation){
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
+      haltAutomatic=true;
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+    haltAutomatic=true;
   }finally{
     clearTimeout(timer);
     if(generation===aiRunGeneration){
@@ -2683,7 +2688,21 @@ async function runAiPreview(items){
   });
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
-    await requestAiRoom(job.item,job.index,generation);
+    const halt=await requestAiRoom(job.item,job.index,generation);
+    // One uncertain provider response must not trigger a batch of new
+    // reservations/attempts for every remaining search result.
+    if(halt){
+      for(const pending of queue){
+        aiRoomResults.set(pending.index,{
+          state:'error',
+          message:'AIの自動判定を停止しました。安全確認後に再度検索してください。',
+          status:503
+        });
+        updateAiPanel(pending.index);
+      }
+      queue.length=0;
+      break;
+    }
     if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
 }
