@@ -643,7 +643,7 @@ input,select{
 }
 
 .headActions{display:flex;align-items:center;gap:6px;flex:none}
-.proBtn{display:inline-block;background:#172a4b;color:#fff;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:900;text-decoration:none}
+
 .logoutBtn{
   border:0;
   background:#eef1f4;
@@ -744,7 +744,7 @@ input,select{
   <div id="userMail" class="userMail"></div>
 
   <div class="headActions">
-    <button id="upgradeProBtn" class="proBtn" type="button" style="display:none;border:0" hidden aria-hidden="true">旧プラン変更は受付停止</button>
+    
 <button id="logoutBtn" class="logoutBtn">
       ログアウト
     </button>
@@ -4066,11 +4066,9 @@ function setAppScreen(mode='normal'){
 proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
 proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
 
-// Legacy Pro entitlements may still be honored; the obsolete 980 JPY -> Pro
-// purchase journey must not be offered under the new single-plan contract.
+// Retain existing users' Pro feature entitlement but never offer the
+// retired tier-upgrade purchase journey.
 function updateUpgradeUi(access={}){
-  const btn=proEl('upgradeProBtn');
-  btn.style.display='none';
   proAvailable=!!access.pro;
   proEl('appModeNav').classList.toggle('on',proAvailable);
   if(!proAvailable) setAppScreen('normal');
