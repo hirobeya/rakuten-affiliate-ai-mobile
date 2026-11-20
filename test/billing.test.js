@@ -188,7 +188,7 @@ test('replayed paid checkout webhook never duplicates billing-side activation',a
  assert.equal(provisions,2,'repeated auth provisioning must be idempotent at provider');
 });
 test('explicit single-plan checkout verifies Stripe price and link before redirect',async()=>{
- process.env.URENAVI_SALES_ENABLED='explicit_1480_go_live';
+ process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
  const price={id:'price_test',active:true,unit_amount:1480,currency:'jpy',
   recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
  let calls=0;
@@ -206,8 +206,18 @@ test('explicit single-plan checkout verifies Stripe price and link before redire
  assert.equal(out.url,'https://buy.stripe.com/test_fixture');
  assert.equal(calls,3);
 });
-test('single-plan checkout refuses stale link, multiple prices and amount drift',async()=>{
+test('Production cannot use Preview TEST checkout approval or test key',async()=>{
+ process.env.VERCEL_ENV='production';
+ process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
  process.env.URENAVI_SALES_ENABLED='explicit_1480_go_live';
+ let calls=0;global.fetch=async()=>{calls++;throw Error('must not send');};
+ const result=res();await access({method:'GET',query:{action:'buy'},headers:{}},result);
+ assert.equal(result.code,503);
+ assert.equal(result.url,undefined);
+ assert.equal(calls,0);
+});
+test('single-plan checkout refuses stale link, multiple prices and amount drift',async()=>{
+ process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
  const cases=[
   {priceAmount:980,linkActive:true,lineCount:1},
   {priceAmount:1480,linkActive:false,lineCount:1},
