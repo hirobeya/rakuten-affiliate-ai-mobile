@@ -65,7 +65,9 @@ test('No stale 980 JPY plan or Pro upgrade purchase appears in the customer app'
  assert.doesNotMatch(html,/月額980円|月額980 円|980円の通常契約/);
  assert.doesNotMatch(html,/action=upgrade-pro/);
  assert.doesNotMatch(html,/function upgradeToPro\(/);
- assert.match(html,/btn\.style\.display='none'/);
+ assert.doesNotMatch(html,/id="upgradeProBtn"|upgradeProBtn|function upgradeToPro\(/);
+ assert.equal(typeof billing.upgradeBaseToPro,'undefined');
+ assert.equal(typeof billing.stripePost,'undefined');
 });
 test('The approved new-sale contract is exactly one 1480 JPY monthly subscription',async()=>{
  const pricing=require('../lib/urenavi-pricing');
