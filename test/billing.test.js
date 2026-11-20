@@ -59,6 +59,14 @@ test('Preview rejects legacy paid subscriptions while allowing the explicit acti
   assert.equal((await billing.authorize(request)).ok,true);
 });
 test('Paid user direct access checks actual Stripe state',async()=>{global.fetch=async url=>{url=String(url);if(url.includes('/auth/v1/user'))return response({id:'user_fixture',email:'a@example.com'});if(url.includes('urenavi_session_valid'))return response(true);if(url.includes('/subscriptions/'))return response(sub());return response([{stripe_subscription_id:'sub_test'}]);};assert.equal((await billing.authorize({headers:{authorization:'Bearer '+authToken()}})).ok,true);});
+test('No stale 980 JPY plan or Pro upgrade purchase appears in the customer app',()=>{
+ const fs=require('node:fs');
+ const html=fs.readFileSync(require('node:path').join(__dirname,'../public/app.html'),'utf8');
+ assert.doesNotMatch(html,/月額980円|月額980 円|980円の通常契約/);
+ assert.doesNotMatch(html,/action=upgrade-pro/);
+ assert.doesNotMatch(html,/function upgradeToPro\(/);
+ assert.match(html,/btn\.style\.display='none'/);
+});
 test('The approved new-sale contract is exactly one 1480 JPY monthly subscription',async()=>{
  const pricing=require('../lib/urenavi-pricing');
  assert.equal(pricing.MONTHLY_PRICE_JPY,1480);
