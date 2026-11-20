@@ -1,0 +1,85 @@
+name: Verify Free Capacity DB
+on:
+  pull_request:
+    paths:
+      - 'docs/architecture/multitenant-capacity-db-draft.sql'
+      - 'scripts/test-capacity-postgres.sh'
+      - 'docs/architecture/multitenant-capacity-v2.sql'
+      - 'docs/architecture/comparison-capacity-v2.sql'
+      - 'docs/architecture/isolated-self-budget-v2.sql'
+      - 'docs/architecture/isolated-comparison-journal-v2.sql'
+      - 'scripts/test-comparison-journal-postgres.sh'
+      - 'lib/urenavi-core/comparison-journal.js'
+      - 'tests/rebuild/durable-comparison-journal.test.js'
+      - 'scripts/test-isolated-self-budget-postgres.sh'
+      - 'scripts/test-comparison-postgres.sh'
+      - 'scripts/test-comparison-supabase.sh'
+      - 'scripts/rebuild/isolated-comparison-supabase.cjs'
+      - 'scripts/rebuild/run-paired-comparison.cjs'
+      - 'scripts/test-capacity-v2-postgres.sh'
+      - '.github/workflows/verify-free-capacity-db.yml'
+      - 'lib/urenavi-core/official-capacity-evidence.js'
+      - 'lib/urenavi-core/paired-comparison-runner.js'
+      - 'tests/rebuild/paired-comparison-runner.test.js'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise atomic quota reservation on disposable PostgreSQL
+        run: bash scripts/test-capacity-postgres.sh
+      - name: Exercise four concurrent quota windows
+        run: bash scripts/test-capacity-v2-postgres.sh
+      - name: Verify comparison evidence binding and guarded recovery
+        run: bash scripts/test-comparison-postgres.sh
+      - name: Verify durable comparison journal against disposable PostgreSQL
+        run: bash scripts/test-comparison-journal-postgres.sh
+      - name: Verify isolated self-budget reservation without provider traffic
+        run: bash scripts/test-isolated-self-budget-postgres.sh
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Exercise the actual comparison runner against isolated PostgreSQL and a mock provider
+        env:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          URENAVI_DISPOSABLE_PG: '1'
+        run: |
+          # Match the Supabase backend role only inside this disposable container.
+          psql -Xv ON_ERROR_STOP=1 -c 'alter role service_role bypassrls'
+          createdb urenavi_paired_test
+          psql -Xv ON_ERROR_STOP=1 -d urenavi_paired_test \
+            -f docs/architecture/multitenant-capacity-v2.sql \
+            -f docs/architecture/comparison-capacity-v2.sql
+          node --test --test-name-pattern='isolated PostgreSQL' tests/rebuild/paired-comparison-runner.test.js
+  supabase:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.75.0
+      - name: Verify local Supabase Auth, PostgREST, and restart with mock transport
+        run: bash scripts/test-comparison-supabase.sh

@@ -1,0 +1,42 @@
+[
+  {
+    "category": "kettle",
+    "itemCode": "enetroom:10143383",
+    "sourceSHA256": "ca0bb05b13a2fb556531605846425882ce6f82be7a0dd60076efa15474d3bef2"
+  },
+  {
+    "category": "kettle",
+    "itemCode": "tiger-online:10004174",
+    "sourceSHA256": "5ea7c00b51dd6bcd250ec5ade7033cc5422813c666b2b42228db1ee96292346d"
+  },
+  {
+    "category": "box",
+    "itemCode": "e-kurashi:10028731",
+    "sourceSHA256": "2f4988d76fa6643f5f9758c9ffefadd5d9b85ed1a1276a81ee571a8caab91fbc"
+  },
+  {
+    "category": "box",
+    "itemCode": "rack-kan:10001985",
+    "sourceSHA256": "0d29180eb123464448d35a3be3f0a58ca8122a628ce6158c4f28c4f47c56a0b0"
+  },
+  {
+    "category": "bed",
+    "itemCode": "mtgrace:10041306",
+    "sourceSHA256": "e2cb52540d480a62528878212fa9484e03e085279f35420570217cf08ff8621d"
+  },
+  {
+    "category": "bed",
+    "itemCode": "emoor-nedogko:10000310",
+    "sourceSHA256": "01d963694c6d6292ee9f9caaf8dd6c47c09f38c7de6c2c310a26f1014f9d0aed"
+  },
+  {
+    "category": "mobile",
+    "itemCode": "felice1009:10000004",
+    "sourceSHA256": "e16d3ae868a88d8c82ae72224c9352e562c76dae068b59732e76fac1c3254c1c"
+  },
+  {
+    "category": "mobile",
+    "itemCode": "anker:10001908",
+    "sourceSHA256": "8067dc4333a33c3bc00c7bc2c0bb12c89bb16f7e81f75c1f0401e70cd7636775"
+  }
+]

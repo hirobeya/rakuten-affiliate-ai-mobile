@@ -481,6 +481,7 @@ function createHandler(deps={}){
   });
   return async function handler(req,res){
 
+  if(process.env.URENAVI_PRODUCT_INPUT_MODE==='manual')return res.status(403).json({message:'manual_product_input_required'});
   if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
 

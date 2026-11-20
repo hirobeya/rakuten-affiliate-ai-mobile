@@ -18,3 +18,7 @@ jobs:
         run: bash scripts/rebuild/offline.sh --test tests/room-writer-raw/*.test.js
       - name: Prepare raw-source fallback offline
         run: bash scripts/rebuild/offline.sh scripts/room-writer-raw/prepare.cjs
+      - name: Verify manual mode in isolated Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/urenavi-browser" --no-save --no-audit --no-fund playwright@1.58.2
+          NODE_PATH="$RUNNER_TEMP/urenavi-browser/node_modules" node scripts/test-manual-browser.cjs

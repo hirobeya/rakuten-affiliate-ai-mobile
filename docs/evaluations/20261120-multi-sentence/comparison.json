@@ -1,0 +1,3102 @@
+{
+  "regression": [
+    {
+      "itemCode": "pasoro:10001354",
+      "category": "バイクグローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10019512",
+      "category": "収納ベンチ",
+      "before": {
+        "candidate": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "output": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "output": "収納ベンチは、座部を上げると、内部に物を収納可能です。\n\n価格：15,999円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "note": "Seat operation and storage use are clear."
+      }
+    },
+    {
+      "itemCode": "supplyshop:10028516",
+      "category": "モップハンガー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "worktk:10014552",
+      "category": "空調服バッテリー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "wishsun:10000100",
+      "category": "ペット毛取りグローブ",
+      "before": {
+        "candidate": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "output": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "output": "グルーミンググローブは、非常に扱いやすい5本指デザインで、普段のブラシでは難しいような死角も、このペットブラシで簡単にブラッシングすることができます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Awkward wording and implied comparison to ordinary brushes."
+      }
+    },
+    {
+      "itemCode": "bos-shop:10000023",
+      "category": "BOS袋",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "mtgec-beauty:10001348",
+      "category": "美顔ローラー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "besthouse:10000083",
+      "category": "モバイルバッテリー",
+      "before": {
+        "candidate": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "ケーブルの持ち歩きを減らしたいとき。\nType-Cケーブル内蔵のモバイルバッテリーです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "note": "Built-in Type-C cable supports the stated carry scenario."
+      }
+    },
+    {
+      "itemCode": "e-kitchen:10079039",
+      "category": "フライパン",
+      "before": {
+        "candidate": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "取手が取り外せる着脱式のフライパンです。 重ねて収納できます。\n\n価格：9,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Concrete storage benefit, but duplicate detach wording and abrupt sentence break."
+      }
+    },
+    {
+      "itemCode": "risu-onlineshop:10002384",
+      "category": "収納ボックス",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "snowfoxskincare:10000116",
+      "category": "ヘアブラシ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "emoor-nedogko:10000048",
+      "category": "ペットベッド",
+      "before": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：9,990円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "note": "Literal caption binding fails and section markup is visible."
+      }
+    },
+    {
+      "itemCode": "astyone0728:10000001",
+      "category": "靴下",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "myhomeshop:10000326",
+      "category": "電気ケトル",
+      "before": {
+        "candidate": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "温度を選んで使いたいとき。\n温度調節に対応した電気ケトルです。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "fail",
+          "fail",
+          "fail",
+          "pass"
+        ],
+        "note": "Opening restates the spec without explaining what temperature selection helps with."
+      }
+    },
+    {
+      "itemCode": "irisplaza-r:10170526",
+      "category": "食品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "arkham:10000161",
+      "category": "掃除用グローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "high-broad:10000679",
+      "category": "スポーツ用グローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "arqs01:10000087",
+      "category": "バイクグローブ",
+      "before": {
+        "candidate": "バイクに乗るときの手元に。\n停車中にスマホを操作したい場面にも対応。\n\nバイクグローブです。\n\n商品の特徴\n・メッシュ\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "バイクに乗るときの手元に。\n停車中にスマホを操作したい場面にも対応。\n\nバイクグローブです。\n\n商品の特徴\n・メッシュ\n\n価格：1,060円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "No visible selling product and copy relies on scenario inference."
+      }
+    },
+    {
+      "itemCode": "shopworld:10138423",
+      "category": "収納ベンチ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "satiwel:10002945",
+      "category": "モップハンガー",
+      "before": {
+        "candidate": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。\n\n価格：25,698円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "受皿は取り外せるのでお手入れしやすく、 また金属製の為重い物を載せることが できます。\n\n価格：25,698円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Tray and cleaning benefit are tangible. Heavy-object capacity requires qualification."
+      }
+    },
+    {
+      "itemCode": "pc2b:10001078",
+      "category": "空調服バッテリー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "gogo1102:10000190",
+      "category": "ペット毛取りグローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "bos-shop:10000024",
+      "category": "BOS袋",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "masayosiryouhin:10000072",
+      "category": "美顔ローラー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "furumiyashop:10000146",
+      "category": "モバイルバッテリー",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "doshisha-marche:10000227",
+      "category": "フライパン",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "repeated_use_and_identity_only",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "repeated_use_and_identity_only",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "exception5251:10000379",
+      "category": "収納ボックス",
+      "before": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：4,280円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "fail",
+          "fail",
+          "fail",
+          "pass"
+        ],
+        "note": "Foldability is repeated without a concrete use or benefit."
+      }
+    },
+    {
+      "itemCode": "40s-skincare:10000159",
+      "category": "ヘアブラシ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "auc-r-style:10000367",
+      "category": "ペットベッド",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "goodgoods-center:10000193",
+      "category": "靴下",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "mpowjapan:10000907",
+      "category": "電気ケトル",
+      "before": {
+        "candidate": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "電気ケトルは、精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Source explains the spout, flow and beginner use. Redundant control-adjust wording makes it stilted."
+      }
+    },
+    {
+      "itemCode": "fujisports-r:10054189",
+      "category": "食品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "repeat7:10002729",
+      "category": "掃除用グローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "bbtown:10225214",
+      "category": "スポーツ用グローブ",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "daiya:10001447",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "output": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "output": "洗濯ネットは、ブラジャーのカップを裏返したり、畳んだりせずに入れられるハート型により、左右のカップを包み込み洗濯時の擦れやねじれをおさえます。\n\n価格：1,299円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Explicit bra shape and washing benefit, but overloaded sentence."
+      }
+    },
+    {
+      "itemCode": "daiya:10001030",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "output": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "output": "大きくふくらむ洗濯ネットは、洗濯物の容量に合わせてふくらむので、シングルサイズの掛け布団のような大物洗いから衣類や小物などのまとめ洗いまで幅ひろく使える汎用性に優れた新タイプの洗濯ネットです。\n\n価格：1,399円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Explicit laundry examples and expandable volume. Promotional wording."
+      }
+    },
+    {
+      "itemCode": "ipow:10000579",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "linofle:10000458",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "output": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "output": "洗濯ネットのセット内容は自由に組み合わせることができるので、用途に合わせてカスタマイズ可能です。\n\n価格：1,480円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "fail",
+          "fail",
+          "fail",
+          "pass"
+        ],
+        "note": "The set is identified, but no example of which laundry or situation to choose for."
+      }
+    },
+    {
+      "itemCode": "yukaiya:10001267",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "living-mahoroba:10015748",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "output": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "output": "Mサイズでもダブルガーゼの上下セットパジャマが楽々入るくらいの大きさの洗濯ネットです。\n\n価格：2,640円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "note": "A concrete example shows what fits in size M."
+      }
+    },
+    {
+      "itemCode": "daiya:10001455",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "output": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "output": "シャツ用洗濯ネットは、シャツをクルクル巻いて洗うことで、洗濯ネットの中でシャツがかたよらず、洗濯によってできるシワや型くずれをおさえるので、アイロンがけの負担が減ります。\n\n価格：2,380円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Use case and mechanism are clear, but sentence is overloaded."
+      }
+    },
+    {
+      "itemCode": "ritoashop:10000039",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "brian:10001257",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "lebenwood:10004953",
+      "category": "保存済み洗濯用品",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "catalogue_only_copy",
+        "stage": "quality"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    }
+  ],
+  "history": [
+    {
+      "itemCode": "irisplaza-r:10159378",
+      "category": "kitchen",
+      "before": {
+        "candidate": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": ")軽く握りやすい形状のハンドルなので調理しやすく、洗うときも負担を感じにくいです。\n\n価格：1,980円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Orphan closing parenthesis and no visible product."
+      }
+    },
+    {
+      "itemCode": "surutto:10000019",
+      "category": "kitchen",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "feature_and_hook_restate_each_other",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "feature_and_hook_restate_each_other",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "tiger-online:10003537",
+      "category": "kitchen",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "auc-kaei-trading:10000740",
+      "category": "storage",
+      "before": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：2,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "fail",
+          "fail",
+          "fail",
+          "pass"
+        ],
+        "note": "Foldability is repeated without explaining when it matters."
+      }
+    },
+    {
+      "itemCode": "k-lalala:10000555",
+      "category": "storage",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "eunicedress:10001862",
+      "category": "storage",
+      "before": {
+        "candidate": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。\n\n価格：2,384円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "衣類も布団もストックも♪ 5面から取り出せるので大きな荷物を取り出しやすい。\n\n価格：2,384円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Specific access benefit, but opening is a list and product is absent."
+      }
+    },
+    {
+      "itemCode": "next-online:10000247",
+      "category": "pet",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "auc-cleaner-parts:10000709",
+      "category": "pet",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "lifeinqc:10000013",
+      "category": "pet",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "kaedear:10000076",
+      "category": "motorcycle",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "kaedear:10000687",
+      "category": "motorcycle",
+      "before": {
+        "candidate": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "output": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "output": "バイク グローブは、メッシュ構造により通気性が良く蒸れずらい。\n\n価格：3,410円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "note": "Mesh and airflow benefit are clear. Awkward and misspelled phrasing."
+      }
+    },
+    {
+      "itemCode": "sunnypolkashop:10000003",
+      "category": "motorcycle",
+      "before": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n本革を使ったバイクグローブです。\n\n商品の特徴\n・メッシュ\n・防水\n\n価格：2,880円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n本革を使ったバイクグローブです。\n\n商品の特徴\n・メッシュ\n・防水\n\n価格：2,880円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "fail",
+          "fail",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Generic situation and no product or support for conditions."
+      }
+    },
+    {
+      "itemCode": "dasimon:10000020",
+      "category": "electronics",
+      "before": {
+        "candidate": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "コンパクトな作りなので、日常的な持ち歩きから、旅や出張のおともまで、この一台で対応できます。\n\n価格：2,180円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "fail",
+          "fail",
+          "fail",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Generic compactness claim with no visible product or specific feature."
+      }
+    },
+    {
+      "itemCode": "ennshopstore:10000094",
+      "category": "electronics",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "hitidear:10000115",
+      "category": "electronics",
+      "before": {
+        "candidate": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "更に2個USB出力口付きで、QIワイヤレス充電機能も搭載で、最大6台の設備を同時に充電することもでき、友達家族と一緒にいるときは、必要に応じてみんなで充電することができます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Useful connection details, but no identity and supported simultaneous configuration needs checking."
+      }
+    },
+    {
+      "itemCode": "tuzukiya:10128242",
+      "category": "household",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "asahiprocureace:11812439",
+      "category": "household",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ],
+        "note": "No rendered draft"
+      }
+    },
+    {
+      "itemCode": "daiwa-yohin:10011593",
+      "category": "household",
+      "before": {
+        "candidate": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "output": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "output": "大型収納タイプは、モップハンガーRC型 モップなどを簡単に脱着できるアーム型フックのタフなハンガー。\n\n価格：27,170円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": {
+        "axes": [
+          "fail",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "unconfirmed"
+        ],
+        "note": "Lead treats a variant label as the product. Condition and meaning of the label need checking."
+      }
+    }
+  ],
+  "saved": [
+    {
+      "itemCode": "enetroom:10143383",
+      "category": "kettle",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    },
+    {
+      "itemCode": "tiger-online:10004174",
+      "category": "kettle",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10028731",
+      "category": "box",
+      "before": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：3,999円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "折りたためる形で選びたいなら。\n折りたたみできる収納ボックスです。\n\n価格：3,999円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "public_gate_rejected"
+      }
+    },
+    {
+      "itemCode": "rack-kan:10001985",
+      "category": "box",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "competing_identity"
+      }
+    },
+    {
+      "itemCode": "mtgrace:10041306",
+      "category": "bed",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    },
+    {
+      "itemCode": "emoor-nedogko:10000310",
+      "category": "bed",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    },
+    {
+      "itemCode": "felice1009:10000004",
+      "category": "mobile",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    },
+    {
+      "itemCode": "anker:10001908",
+      "category": "mobile",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "no_grounded_purchase_candidate"
+      }
+    }
+  ],
+  "manual": [
+    {
+      "itemCode": "H01",
+      "category": null,
+      "before": {
+        "candidate": "片手で開く保存容器\n料理中に片手がふさがっているときは、ふたに押しボタンがあるので片手でふたを開けられます。\n\n価格：1,200円\n\n※アフィリエイト広告を利用しています",
+        "output": "片手で開く保存容器\n料理中に片手がふさがっているときは、ふたに押しボタンがあるので片手でふたを開けられます。\n\n価格：1,200円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": "片手で開く保存容器\n料理中に片手がふさがっているときは、ふたに押しボタンがあるので片手でふたを開けられます。\n\n価格：1,200円\n\n※アフィリエイト広告を利用しています",
+        "output": "片手で開く保存容器\n料理中に片手がふさがっているときは、ふたに押しボタンがあるので片手でふたを開けられます。\n\n価格：1,200円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "pass",
+        "note": "片手がふさがる場面、押しボタン、片手で開ける利点がつながる",
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      }
+    },
+    {
+      "itemCode": "H02",
+      "category": null,
+      "before": {
+        "candidate": "仕切り付き工具ケース\n小さな部品を持ち運ぶときは、内部に3枚の仕切りがあるのでネジとナットを分けて収納できます。\n\n価格：1,600円\n\n※アフィリエイト広告を利用しています",
+        "output": "仕切り付き工具ケース\n小さな部品を持ち運ぶときは、内部に3枚の仕切りがあるのでネジとナットを分けて収納できます。\n\n価格：1,600円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": "仕切り付き工具ケース\n小さな部品を持ち運ぶときは、内部に3枚の仕切りがあるのでネジとナットを分けて収納できます。\n\n価格：1,600円\n\n※アフィリエイト広告を利用しています",
+        "output": "仕切り付き工具ケース\n小さな部品を持ち運ぶときは、内部に3枚の仕切りがあるのでネジとナットを分けて収納できます。\n\n価格：1,600円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "pass",
+        "note": "3枚の仕切りと搬送時に部品を分ける理由が明確",
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      }
+    },
+    {
+      "itemCode": "H03",
+      "category": null,
+      "before": {
+        "candidate": "手動式コーヒーミル\n電源がない場所で豆を挽くときは、手で回すハンドルが付いているので電源を入れなくても豆を挽くことができます。\n\n価格：3,900円\n\n※アフィリエイト広告を利用しています",
+        "output": "手動式コーヒーミル\n電源がない場所で豆を挽くときは、手で回すハンドルが付いているので電源を入れなくても豆を挽くことができます。\n\n価格：3,900円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": "手動式コーヒーミル\n電源がない場所で豆を挽くときは、手で回すハンドルが付いているので電源を入れなくても豆を挽くことができます。\n\n価格：3,900円\n\n※アフィリエイト広告を利用しています",
+        "output": "手動式コーヒーミル\n電源がない場所で豆を挽くときは、手で回すハンドルが付いているので電源を入れなくても豆を挽くことができます。\n\n価格：3,900円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "fail",
+        "note": "自然さ：電源と豆を挽く表現が重複",
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "fail",
+          "pass"
+        ]
+      }
+    },
+    {
+      "itemCode": "H04",
+      "category": null,
+      "before": {
+        "candidate": "2段の収納ラック\n洗面所の小物を片付けるときは、2段に分けて載せられるのでタオルと洗剤を別々に収納できます。\n\n価格：2,800円\n\n※アフィリエイト広告を利用しています",
+        "output": "2段の収納ラック\n洗面所の小物を片付けるときは、2段に分けて載せられるのでタオルと洗剤を別々に収納できます。\n\n価格：2,800円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": "2段の収納ラック\n洗面所の小物を片付けるときは、2段に分けて載せられるのでタオルと洗剤を別々に収納できます。\n\n価格：2,800円\n\n※アフィリエイト広告を利用しています",
+        "output": "2段の収納ラック\n洗面所の小物を片付けるときは、2段に分けて載せられるのでタオルと洗剤を別々に収納できます。\n\n価格：2,800円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "pass",
+        "note": "洗面所の状況と、2段を使って種類別に収納する利点が明確",
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      }
+    },
+    {
+      "itemCode": "H05",
+      "category": null,
+      "before": {
+        "candidate": "デスク用ケーブルクリップ\n机の上で充電する機器を替えるときは、直径6mm以下のケーブルを挟めるのでケーブルの先端を机の端に留めておけます。\n\n価格：900円\n\n※アフィリエイト広告を利用しています",
+        "output": "デスク用ケーブルクリップ\n机の上で充電する機器を替えるときは、直径6mm以下のケーブルを挟めるのでケーブルの先端を机の端に留めておけます。\n\n価格：900円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": "デスク用ケーブルクリップ\n机の上で充電する機器を替えるときは、直径6mm以下のケーブルを挟めるのでケーブルの先端を机の端に留めておけます。\n\n価格：900円\n\n※アフィリエイト広告を利用しています",
+        "output": "デスク用ケーブルクリップ\n机の上で充電する機器を替えるときは、直径6mm以下のケーブルを挟めるのでケーブルの先端を机の端に留めておけます。\n\n価格：900円\n\n※アフィリエイト広告を利用しています",
+        "path": "source_relation",
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "pass",
+        "note": "6mm以下の制約を維持し、機器の交換時の具体的な利点を説明",
+        "axes": [
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      }
+    },
+    {
+      "itemCode": "H06",
+      "category": null,
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "販売対象に含まれない別売り品の記述を拒否",
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ]
+      }
+    },
+    {
+      "itemCode": "H07",
+      "category": null,
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "絶対表現を拒否",
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ]
+      }
+    },
+    {
+      "itemCode": "H08",
+      "category": null,
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": {
+        "before": "unconfirmed",
+        "after": "unconfirmed",
+        "note": "色・形のみで確認できる購入理由がない",
+        "axes": [
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed",
+          "unconfirmed"
+        ]
+      }
+    }
+  ],
+  "frozen": [
+    {
+      "itemCode": "mpowjapan:10000798",
+      "category": "kettle",
+      "before": {
+        "candidate": "電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円\n\n※アフィリエイト広告を利用しています",
+        "output": "電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円\n\n※アフィリエイト広告を利用しています",
+        "output": "電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "reason": "話題が重複し「は、なお」の接続が不自然"
+        },
+        "after": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass"
+          ],
+          "reason": "話題が重複し「は、なお」の接続が不自然"
+        }
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10037463",
+      "category": "kettle",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": "電気ケトル\n50度に設定できるので、白湯や野菜洗いにも使えます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "電気ケトル\n50度に設定できるので、白湯や野菜洗いにも使えます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "linked_source_relation",
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        },
+        "after": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass",
+            "pass"
+          ],
+          "reason": "50度設定と対象の具体的な用途が原文の同じ因果箇条書きにあり、自然な短文に変換できた"
+        }
+      }
+    },
+    {
+      "itemCode": "air-rhizome:10011631",
+      "category": "box",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        }
+      }
+    },
+    {
+      "itemCode": "livewell:10002767",
+      "category": "box",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        }
+      }
+    },
+    {
+      "itemCode": "seinan2:10000006",
+      "category": "mobile",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        }
+      }
+    },
+    {
+      "itemCode": "artpiece:10000904",
+      "category": "mobile",
+      "before": {
+        "candidate": "LCD電池残量表示&コンパクト 高品質LCD液晶ディスプレイを搭載しており、残量を1%刻みで表示できるので、電池残量が一目で確認できます。\n\n価格：3,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "LCD電池残量表示&コンパクト 高品質LCD液晶ディスプレイを搭載しており、残量を1%刻みで表示できるので、電池残量が一目で確認できます。\n\n価格：3,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "grounded_local_copy"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "grounded_local_copy"
+        }
+      }
+    },
+    {
+      "itemCode": "emoor-nedogko:10000047",
+      "category": "bed",
+      "before": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：7,990円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "ペットベッドは、<3D構造体> 通気性に優れた立体構造で、寝返りしやすく、ムレを防ぎながらもしっかりと体を支えます。\n\n価格：7,990円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "公開できる根拠付き本文なし"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "公開できる根拠付き本文なし"
+        }
+      }
+    },
+    {
+      "itemCode": "4-l-f:10000057",
+      "category": "bed",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        }
+      }
+    },
+    {
+      "itemCode": "miyazakimanufacturing:10000008",
+      "category": "pan",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        }
+      }
+    },
+    {
+      "itemCode": "kai:10008595",
+      "category": "pan",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        }
+      }
+    },
+    {
+      "itemCode": "arotho:10001214",
+      "category": "mop",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        }
+      }
+    },
+    {
+      "itemCode": "arotho:10001210",
+      "category": "mop",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "competing_identity",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "competing_identity"
+        }
+      }
+    },
+    {
+      "itemCode": "mirai100:10000461",
+      "category": "fan",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "identity_unresolved"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "identity_unresolved"
+        }
+      }
+    },
+    {
+      "itemCode": "kirinkokusai:10000162",
+      "category": "fan",
+      "before": {
+        "candidate": "モバイルバッテリーは、また、高密度且つ大容量のリチウムポリマー電池を採用し、より長持ちできます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "output": "モバイルバッテリーは、また、高密度且つ大容量のリチウムポリマー電池を採用し、より長持ちできます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "path": "verified_local",
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "モバイルバッテリーは、また、高密度且つ大容量のリチウムポリマー電池を採用し、より長持ちできます。\n\n価格：2,980円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "pass",
+            "pass",
+            "fail",
+            "fail",
+            "fail",
+            "fail"
+          ],
+          "reason": "何に対して長持ちするのかが原文で確定できず、旧候補は今版で拒否"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "何に対して長持ちするのかが原文で確定できず、旧候補は今版で拒否"
+        }
+      }
+    },
+    {
+      "itemCode": "noone:10002900",
+      "category": "bench",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "identity_unresolved",
+        "stage": "identity"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "identity_unresolved"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "identity_unresolved"
+        }
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10018414",
+      "category": "bench",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "after": {
+        "candidate": "収納スツール\n座部下におもちゃや防災用品などもたっぷり収納できます。\n\n価格：3,799円\n\n※アフィリエイト広告を利用しています",
+        "output": "収納スツール\n座部下におもちゃや防災用品などもたっぷり収納できます。\n\n価格：3,799円\n\n※アフィリエイト広告を利用しています",
+        "path": "linked_source_relation",
+        "failure": "no_grounded_purchase_candidate",
+        "stage": "purchase_reason"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_purchase_candidate"
+        },
+        "after": {
+          "axes": [
+            "pass",
+            "pass",
+            "pass",
+            "fail",
+            "pass",
+            "pass"
+          ],
+          "reason": "収納対象と場所は具体的だが、使う場面から選ぶ理由までの訴求は不足"
+        }
+      }
+    },
+    {
+      "itemCode": "40s-skincare:10000255",
+      "category": "hair",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        }
+      }
+    },
+    {
+      "itemCode": "lorelife:10000106",
+      "category": "hair",
+      "before": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "after": {
+        "candidate": null,
+        "output": null,
+        "path": null,
+        "failure": "no_grounded_facts",
+        "stage": "extraction"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "no_grounded_facts"
+        }
+      }
+    },
+    {
+      "itemCode": "quest-online:10000223",
+      "category": "bike",
+      "before": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n牛革を使ったバイクグローブです。\n\n価格：3,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "after": {
+        "candidate": "バイクに乗るときの手元に。\nオールシーズン仕様です。\n\n牛革を使ったバイクグローブです。\n\n価格：3,580円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": null,
+        "stage": null
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "公開できる根拠付き本文なし"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "公開できる根拠付き本文なし"
+        }
+      }
+    },
+    {
+      "itemCode": "rockbros:10026750",
+      "category": "bike",
+      "before": {
+        "candidate": "バイク グローブは、素手よりも衝撃吸収性が高くなるので、夏の消耗が激しいライディングでも効率的に走行できるんです!\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "after": {
+        "candidate": "バイク グローブは、素手よりも衝撃吸収性が高くなるので、夏の消耗が激しいライディングでも効率的に走行できるんです!\n\n価格：3,280円\n\n※アフィリエイト広告を利用しています",
+        "output": null,
+        "path": null,
+        "failure": "grounded_local_copy",
+        "stage": "publication"
+      },
+      "priorReview": null,
+      "review": {
+        "before": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "grounded_local_copy"
+        },
+        "after": {
+          "axes": [
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed",
+            "unconfirmed"
+          ],
+          "reason": "grounded_local_copy"
+        }
+      }
+    }
+  ]
+}

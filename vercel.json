@@ -12,6 +12,10 @@
       "destination": "/api/room-ai-v3?urenaviContract=1"
     },
     {
+      "source": "/api/manual-room-copy",
+      "destination": "/api/room-ai-v3?urenaviManual=1"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/public/$1"
     }

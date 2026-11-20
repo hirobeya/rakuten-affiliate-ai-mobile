@@ -8,6 +8,9 @@
   return /(?:見て|確認して|見比べて)選(?:ぶ|び)/.test(s)
    || /(?:点|ところ)(?:が|は)(?:選びやす|適しています)/.test(s)
    || /「[^」]{1,45}」表記の/.test(s)
+   // Flattened merchant tables keep their field headers even after HTML
+   // removal. Multiple whitespace-delimited headers signal a table row.
+   || (s.match(/(?:^|\s)(?:素材|材質|特徴|備考|原産国|商品仕様|商品名)(?=\s|:)/g)||[]).length>=2
    || /表記(?:がある|の)[^。！？]{0,30}(?:です|。)/.test(s)
    // Copying a seller's promotional assertion verbatim does not make it a
    // concrete purchase reason. The writer already forbids these assertions.

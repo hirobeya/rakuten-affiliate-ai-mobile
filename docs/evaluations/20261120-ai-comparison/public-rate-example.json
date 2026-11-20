@@ -1,0 +1,9 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "currency": "USD",
+  "inputPerMillion": 0.15,
+  "outputPerMillion": 0.60,
+  "source": "https://console.groq.com/docs/models",
+  "referenceDate": "2026-11-20",
+  "accountPlanOrRemainingCapacityVerified": false
+}

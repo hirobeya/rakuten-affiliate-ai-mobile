@@ -710,6 +710,8 @@ function createHandler(deps={}){
 
 const legacyHandler=createHandler();
 module.exports=function(req,res){
+  if(req.query?.urenaviManual==='1')return require('../lib/manual-room-copy')(req,res);
+  if(process.env.URENAVI_PRODUCT_INPUT_MODE==='manual')return res.status(403).json({message:'manual_product_input_required'});
   if(req.query?.urenaviReviewComparison==='1')return require('../lib/room-review-comparison')(req,res);
   if(req.query?.urenaviContract==='1')return require('../lib/room-copy-handler')(req,res);
   return legacyHandler(req,res);
