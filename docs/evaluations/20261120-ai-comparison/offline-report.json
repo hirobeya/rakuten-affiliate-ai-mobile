@@ -1,0 +1,1763 @@
+{
+  "studyId": "urenavi-fixed-20-abc-20261120",
+  "setup": {
+    "model": "openai/gpt-oss-120b",
+    "transport": "chat",
+    "reasoningEffort": "medium",
+    "temperature": 0.2,
+    "maxWriterOutput": 2000,
+    "maxReviewOutput": 2000,
+    "maximumAttemptsPerStage": 1
+  },
+  "referenceCeiling": 8000,
+  "currentAvailableCapacity": null,
+  "liveAuthorized": false,
+  "summary": {
+    "A": {
+      "total": 20,
+      "texts": 3,
+      "publicationReady": 3,
+      "publicationBlocked": 17,
+      "publicationUnmeasured": 0,
+      "qualityPass": 1,
+      "qualityFail": 2,
+      "qualityUnmeasured": 17
+    },
+    "B": {
+      "total": 20,
+      "texts": 0,
+      "publicationReady": 0,
+      "publicationBlocked": 0,
+      "publicationUnmeasured": 20,
+      "qualityPass": 0,
+      "qualityFail": 0,
+      "qualityUnmeasured": 20,
+      "plannedWriterCalls": 20,
+      "writerReservations": 125298,
+      "reviewReservationCeilings": 160000,
+      "pricedCeilingUsd": 0.0787947
+    },
+    "C": {
+      "total": 20,
+      "texts": 0,
+      "publicationReady": 0,
+      "publicationBlocked": 0,
+      "publicationUnmeasured": 20,
+      "qualityPass": 0,
+      "qualityFail": 0,
+      "qualityUnmeasured": 20,
+      "plannedWriterCalls": 2,
+      "writerReservations": 13753,
+      "reviewReservationCeilings": 16000,
+      "pricedCeilingUsd": 0.00806295
+    }
+  },
+  "paired": {
+    "itemCodes": [
+      "e-kurashi:10037463",
+      "e-kurashi:10018414"
+    ],
+    "maximumCalls": 8,
+    "reservation": 58460,
+    "pricedCeilingUsd": 0.015969
+  },
+  "totals": {
+    "maximumCalls": 44,
+    "plannedWriterCalls": 22,
+    "maximumReviewCalls": 22,
+    "writerReservations": 139051,
+    "reviewReservationCeilings": 176000,
+    "pricedCeilingUsd": 0.08685764999999998
+  },
+  "rows": [
+    {
+      "itemCode": "mpowjapan:10000798",
+      "category": "kettle",
+      "sourceHash": "893eaeb3606e6158d0e195a9f120ece8712538696e61b78e591fb98e189432ac",
+      "A": {
+        "status": "offline_run",
+        "text": "電気ケトルは、なおポットとして大切な保温機能は、ワンタッチで60分間作動して追加での抽出にもすぐに対応できます。\n\n価格：14,960円\n\n※アフィリエイト広告を利用しています",
+        "implementation": "verified_local",
+        "publication": "ready",
+        "quality": {
+          "identity": "pass",
+          "specificity": "pass",
+          "purchase_reason": "pass",
+          "scene_and_value": "pass",
+          "natural_japanese": "fail",
+          "source_accuracy": "pass"
+        },
+        "qualityReview": {
+          "author": "assistant",
+          "reason": "話題が重複し「は、なお」の接続が不自然"
+        },
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "0cdd12cf2d297e227dff053af876ec59c28c7d41c991c511a28f8fdbcba338a2",
+          "attemptIds": {
+            "writer": "0aef5312-ab22-430b-8ed5-7ca0f1c1e104",
+            "review": "35100a72-d86d-4561-87ac-b0c548f99fb9"
+          },
+          "writerReservation": 6689,
+          "minimumReviewReservation": 5931,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00400335
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "0cdd12cf2d297e227dff053af876ec59c28c7d41c991c511a28f8fdbcba338a2",
+          "attemptIds": {
+            "writer": "ca4c82f7-0b10-4852-8b01-2a72d9e32002",
+            "review": "e6879b60-ee1a-4093-8178-12bf545ca51b"
+          },
+          "writerReservation": 6689,
+          "minimumReviewReservation": 5931,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10037463",
+      "category": "kettle",
+      "sourceHash": "579df068fff7622a00bd5e5ded3543b8d9f4d567d65c23fddf06ad3a7ad173ee",
+      "A": {
+        "status": "offline_run",
+        "text": "電気ケトル\n50度に設定できるので、白湯や野菜洗いにも使えます。\n\n価格：8,980円\n\n※アフィリエイト広告を利用しています",
+        "implementation": "linked_source_relation",
+        "publication": "ready",
+        "quality": {
+          "identity": "pass",
+          "specificity": "pass",
+          "purchase_reason": "pass",
+          "scene_and_value": "pass",
+          "natural_japanese": "pass",
+          "source_accuracy": "pass"
+        },
+        "qualityReview": {
+          "author": "assistant",
+          "reason": "50度設定と対象の具体的な用途が原文の同じ因果箇条書きにあり、自然な短文に変換できた"
+        },
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "aa715f071707cb24a46185c55439df48024de1f268a15c663d018278ce537320",
+          "attemptIds": {
+            "writer": "67abf9c9-6709-4802-8585-19720f0f4d25",
+            "review": "377551ee-0aa1-40f4-861d-26646267f188"
+          },
+          "writerReservation": 6263,
+          "minimumReviewReservation": 5505,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00393945
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "3c49d3cd12a54eb84d0590cf6873df3321704c2b205e2860aa911a8131127d66",
+          "attemptIds": {
+            "writer": "cfa8f579-b2ad-448b-83ee-05949250bc20",
+            "review": "532366a2-1f6a-48a3-8808-af1e589a410e"
+          },
+          "writerReservation": 6955,
+          "minimumReviewReservation": 5505,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00404325
+        }
+      }
+    },
+    {
+      "itemCode": "air-rhizome:10011631",
+      "category": "box",
+      "sourceHash": "4844a78efcd03d8da94ae410c680a29b07c317a2fa0ed6a300caca051e974cb6",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "0a1e259592f1d0d2a9c8610fc755b9201cc859318f23aedc5ec5cacd61c3aeb2",
+          "attemptIds": {
+            "writer": "ffbb2df9-8cca-4aaa-8082-3d438f82a482",
+            "review": "44be0da3-3a1f-469f-8725-d8a63dda4713"
+          },
+          "writerReservation": 6268,
+          "minimumReviewReservation": 5510,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039402
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "0a1e259592f1d0d2a9c8610fc755b9201cc859318f23aedc5ec5cacd61c3aeb2",
+          "attemptIds": {
+            "writer": "a238f88d-6a96-4fdb-8e13-cb4f8702d791",
+            "review": "072918e0-6309-4697-85fd-c936b1db42f2"
+          },
+          "writerReservation": 6268,
+          "minimumReviewReservation": 5510,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "livewell:10002767",
+      "category": "box",
+      "sourceHash": "a733bbd662b85287d59af07815013183ebc1bb5a93caf30610125dde92fc341d",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "d7040b87da01d1356b1f012aa6c82fdb8d754905010a096643055349ecd38e7a",
+          "attemptIds": {
+            "writer": "118c1c48-bcd0-4202-84aa-d3fbaf8da214",
+            "review": "273934e5-952b-4d1c-8a17-7e0630ffa8f4"
+          },
+          "writerReservation": 6355,
+          "minimumReviewReservation": 5597,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00395325
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "d7040b87da01d1356b1f012aa6c82fdb8d754905010a096643055349ecd38e7a",
+          "attemptIds": {
+            "writer": "40a0a69e-f065-465d-8565-120ccdb5428e",
+            "review": "b365366d-0e96-4466-818b-edabb13330ef"
+          },
+          "writerReservation": 6355,
+          "minimumReviewReservation": 5597,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "seinan2:10000006",
+      "category": "mobile",
+      "sourceHash": "f706d9a1618601599f9d48b7b2395b5aad5a683ca9bd621eaf5cf1769a4afbea",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "f1d6a9a650813f45578113ffeae835f80d6b65d8133fbb855fb44220a71c38a1",
+          "attemptIds": {
+            "writer": "9b74c6e3-2555-4575-8d40-3281959ce938",
+            "review": "4ee639e6-3f10-43ff-8cb0-e594887888da"
+          },
+          "writerReservation": 6366,
+          "minimumReviewReservation": 5607,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039549
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "f1d6a9a650813f45578113ffeae835f80d6b65d8133fbb855fb44220a71c38a1",
+          "attemptIds": {
+            "writer": "dd2598c6-7137-42ed-8c10-ed35e2e87f77",
+            "review": "14073937-f9fc-42fa-8ac9-8df74b18b68e"
+          },
+          "writerReservation": 6366,
+          "minimumReviewReservation": 5607,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "artpiece:10000904",
+      "category": "mobile",
+      "sourceHash": "b06b239faac2c4ab3c043a82fafa380435eca5c101d2719fe8fd036c4f37b48d",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "047d90c02913eff3c1d03cdb94d3d9e2c0b5f81d16e3ebd9d2bd0125ed68b3af",
+          "attemptIds": {
+            "writer": "e96b45dc-1093-4099-83d2-5adcf8bf1e1b",
+            "review": "1402aa04-99ff-4ae2-871c-cc0e799f8e60"
+          },
+          "writerReservation": 6671,
+          "minimumReviewReservation": 5912,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00400065
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "047d90c02913eff3c1d03cdb94d3d9e2c0b5f81d16e3ebd9d2bd0125ed68b3af",
+          "attemptIds": {
+            "writer": "6ff3a577-71cb-41c4-8f03-2e9cba0630df",
+            "review": "25775d5f-e860-4f47-86c2-2c52041466a0"
+          },
+          "writerReservation": 6671,
+          "minimumReviewReservation": 5912,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "emoor-nedogko:10000047",
+      "category": "bed",
+      "sourceHash": "efd92d1eaabf582676cbeb8a8ccc2032c84a3a17d08e95fdf6567cea509775ea",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "3df37f2595bfa9ddaf4ffaea0bf80f08cae63633254ca9f26a76fe1f552b29e5",
+          "attemptIds": {
+            "writer": "a63a0887-0988-42bc-83ad-ed423fc95c8f",
+            "review": "733aa486-77c1-4cd5-8aca-de30434ba919"
+          },
+          "writerReservation": 6879,
+          "minimumReviewReservation": 6121,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00403185
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "3df37f2595bfa9ddaf4ffaea0bf80f08cae63633254ca9f26a76fe1f552b29e5",
+          "attemptIds": {
+            "writer": "cd468b62-d4e5-4437-8594-c943fedbd69a",
+            "review": "97529e0b-58cf-4c0d-83b1-de12fce88040"
+          },
+          "writerReservation": 6879,
+          "minimumReviewReservation": 6121,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "4-l-f:10000057",
+      "category": "bed",
+      "sourceHash": "dc1193a8b3328e10ac219973dc014f9f32a130d5420ef9bbf820381954f7bf81",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "f4d9a9b93b0cf75f1165b284ad7a0fbf228ce9d65d5e67f7bb51fb3d09d2ba31",
+          "attemptIds": {
+            "writer": "40d1cd4e-3a85-466b-800c-0816735caccb",
+            "review": "272b2d01-8dcf-4aa4-8b6c-fa22f3ca54e1"
+          },
+          "writerReservation": 5692,
+          "minimumReviewReservation": 4934,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0038538
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "f4d9a9b93b0cf75f1165b284ad7a0fbf228ce9d65d5e67f7bb51fb3d09d2ba31",
+          "attemptIds": {
+            "writer": "46a84b00-a208-4b2a-8edd-077eb8821e1c",
+            "review": "e2d44546-93b8-4f7d-8f68-e7a5dc8ad8fc"
+          },
+          "writerReservation": 5692,
+          "minimumReviewReservation": 4934,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "miyazakimanufacturing:10000008",
+      "category": "pan",
+      "sourceHash": "c580b721685c1a811bec73241e644e425ebd610678b533882f49f043d74f94e2",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "49791d6647e3d391af0575c29e4e8ed4946fef450945690e9d49c869d9ab66f6",
+          "attemptIds": {
+            "writer": "74d2fb4e-45a4-40b3-8262-31569c41f68e",
+            "review": "2a0899fa-65ec-4a67-8bd2-57fca6ac6858"
+          },
+          "writerReservation": 5857,
+          "minimumReviewReservation": 5099,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00387855
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "49791d6647e3d391af0575c29e4e8ed4946fef450945690e9d49c869d9ab66f6",
+          "attemptIds": {
+            "writer": "a0349038-b8e0-4314-8825-9b102b4f1250",
+            "review": "869e8dc8-f34a-4f4d-8cdd-866bdb8f334e"
+          },
+          "writerReservation": 5857,
+          "minimumReviewReservation": 5099,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "kai:10008595",
+      "category": "pan",
+      "sourceHash": "7abac1badb313669b7c29992e646d9b68451672c17ab96fa8e0a62a993b4eaad",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "fc9c24ba9d0d4bb24a61ebcd395e9f72f3d2b1d3436ded4c2a0493e3e8b6dda6",
+          "attemptIds": {
+            "writer": "45cb1628-d2cf-410f-8f40-6437198224aa",
+            "review": "91191729-dde9-41ea-8101-9c82bc0fca8d"
+          },
+          "writerReservation": 6019,
+          "minimumReviewReservation": 5261,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00390285
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "fc9c24ba9d0d4bb24a61ebcd395e9f72f3d2b1d3436ded4c2a0493e3e8b6dda6",
+          "attemptIds": {
+            "writer": "1c90358f-dcb9-4200-867a-6d1cc403b392",
+            "review": "5666e4c3-372e-4ce9-886f-b72ac92543bc"
+          },
+          "writerReservation": 6019,
+          "minimumReviewReservation": 5261,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "arotho:10001214",
+      "category": "mop",
+      "sourceHash": "a587586a6c5867cc5b0ce32947318ea9fd02e45ab2c66c0524ee1c68801d59e6",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "b8a0583925821f3e5930aae258cc2c7848371faaf64c1d3773609499e9a646bf",
+          "attemptIds": {
+            "writer": "62dcd9e6-3de1-409e-8826-b69eefbfc25c",
+            "review": "41d214ec-1a28-45ad-8d6f-96292d8bd0a0"
+          },
+          "writerReservation": 5436,
+          "minimumReviewReservation": 4678,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0038153999999999996
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "b8a0583925821f3e5930aae258cc2c7848371faaf64c1d3773609499e9a646bf",
+          "attemptIds": {
+            "writer": "3405ccfe-0bac-4ef3-8372-2b76c38a1512",
+            "review": "489aa94e-6934-4543-831f-ea934d0f465f"
+          },
+          "writerReservation": 5436,
+          "minimumReviewReservation": 4678,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "arotho:10001210",
+      "category": "mop",
+      "sourceHash": "e9cc0076bdce0b8424b442be8f2a3908afb79519e714b50383a3883f0c96e23d",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "c38bf486145f7a8f0be3f26cff86497b662831a58b737750041f9280253c3111",
+          "attemptIds": {
+            "writer": "7b622a3f-7aac-48fd-8943-0d61e53d2764",
+            "review": "85d0c5a2-fedb-4fae-8331-4ee31bd23e19"
+          },
+          "writerReservation": 5393,
+          "minimumReviewReservation": 4635,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0038089499999999997
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "c38bf486145f7a8f0be3f26cff86497b662831a58b737750041f9280253c3111",
+          "attemptIds": {
+            "writer": "4f37cb6c-9253-4278-8457-d3a233165f1d",
+            "review": "5bf2aec4-01a1-40f8-8d7b-93c51dc1d44e"
+          },
+          "writerReservation": 5393,
+          "minimumReviewReservation": 4635,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "mirai100:10000461",
+      "category": "fan",
+      "sourceHash": "1f86df570416fc8997705e193cc8da61fc47bc7f2fe5e3d9006fd0aa643c10ee",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "7cb0c5eaefdbdaef76b6034c5ddc3b1c0144a5a60f95e574d2a3afc88cb2d641",
+          "attemptIds": {
+            "writer": "48280c0c-28f7-43b1-8662-73819b5e81a8",
+            "review": "531f0948-ac03-44b9-8ab2-42b590aa69fb"
+          },
+          "writerReservation": 5400,
+          "minimumReviewReservation": 4642,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00381
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "7cb0c5eaefdbdaef76b6034c5ddc3b1c0144a5a60f95e574d2a3afc88cb2d641",
+          "attemptIds": {
+            "writer": "b4b76ef3-b902-4457-8515-9285426dfa13",
+            "review": "c1cd5991-9a93-4874-8399-e625a96982fc"
+          },
+          "writerReservation": 5400,
+          "minimumReviewReservation": 4642,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "kirinkokusai:10000162",
+      "category": "fan",
+      "sourceHash": "8e8abffb66548d1b6e89c4a7d292a450d1a9bebfefe0eaa797f895bfcd8a1c90",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "ca15ad28a3cdbcd4398b6efb70172c26bb9f6ebc00b23481a9abb1a7bcc078a7",
+          "attemptIds": {
+            "writer": "9796d67a-807a-4e50-853b-9261ffea9194",
+            "review": "5919c731-5d19-4c26-8ea2-0e2be5624a13"
+          },
+          "writerReservation": 6412,
+          "minimumReviewReservation": 5654,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039618000000000006
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "ca15ad28a3cdbcd4398b6efb70172c26bb9f6ebc00b23481a9abb1a7bcc078a7",
+          "attemptIds": {
+            "writer": "536bb588-5953-4038-894a-5fb2c9ff4ebb",
+            "review": "e664e7a5-1d8f-42f2-8026-546fcd1ee171"
+          },
+          "writerReservation": 6412,
+          "minimumReviewReservation": 5654,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "noone:10002900",
+      "category": "bench",
+      "sourceHash": "800ec030d347ea93fad0ce593b115a446185786acf2c00aaee222beaaa899c60",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "9d89aeccb4f5959aec69b84536c7ad1dc94b3c7bfa5b6058d9abe952f5499bb9",
+          "attemptIds": {
+            "writer": "f70ca888-bb3f-436e-82c7-8906a01a3673",
+            "review": "b8f2cad6-37ef-4a18-8a61-2be94cee0cae"
+          },
+          "writerReservation": 6550,
+          "minimumReviewReservation": 5792,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039825
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "9d89aeccb4f5959aec69b84536c7ad1dc94b3c7bfa5b6058d9abe952f5499bb9",
+          "attemptIds": {
+            "writer": "20a8d573-dc01-4ffb-849a-81d9328732f0",
+            "review": "2d4cd5d9-edf1-4896-851a-99a29f5c9f0a"
+          },
+          "writerReservation": 6550,
+          "minimumReviewReservation": 5792,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "e-kurashi:10018414",
+      "category": "bench",
+      "sourceHash": "f35a1824d8807d5d40870a3823081296e77b299b473293c76b8e6b7f28ceafe4",
+      "A": {
+        "status": "offline_run",
+        "text": "収納スツール\n座部下におもちゃや防災用品などもたっぷり収納できます。\n\n価格：3,799円\n\n※アフィリエイト広告を利用しています",
+        "implementation": "linked_source_relation",
+        "publication": "ready",
+        "quality": {
+          "identity": "pass",
+          "specificity": "pass",
+          "purchase_reason": "pass",
+          "scene_and_value": "fail",
+          "natural_japanese": "pass",
+          "source_accuracy": "pass"
+        },
+        "qualityReview": {
+          "author": "assistant",
+          "reason": "収納対象と場所は具体的だが、使う場面から選ぶ理由までの訴求は不足"
+        },
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "68e79b99f98d58b86e41db1507d1ce3dd259c06184c82d603ad02bad89add243",
+          "attemptIds": {
+            "writer": "a4754e16-e711-492d-816a-a0cd71410465",
+            "review": "16c49bf1-18eb-4a74-894a-5f7f0b3db4d0"
+          },
+          "writerReservation": 6444,
+          "minimumReviewReservation": 5686,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039666
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "d395eea576d14b1089e5ff39e1a93487cb70da0b3f62873f7a7e82f4ee761122",
+          "attemptIds": {
+            "writer": "65080bc5-080c-4f59-8ac3-d8b4dcb4e4c5",
+            "review": "fc33d7a7-52ea-4f00-8283-28b1cbac4cd5"
+          },
+          "writerReservation": 6798,
+          "minimumReviewReservation": 5686,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0040197
+        }
+      }
+    },
+    {
+      "itemCode": "40s-skincare:10000255",
+      "category": "hair",
+      "sourceHash": "9fbd24f6da61c06568a359a9486ee5afa9d7d9d5e5971bf0d73703e08c23b1cb",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "8548b2778e53621eeb033273bd207adfd1434561c830b99b1cb0d06de81dc268",
+          "attemptIds": {
+            "writer": "319577c9-1332-45ff-89bd-9ccc94dfa31e",
+            "review": "2cdda1c1-2a89-45fd-8e73-a9108c08e358"
+          },
+          "writerReservation": 6809,
+          "minimumReviewReservation": 6051,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.00402135
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "8548b2778e53621eeb033273bd207adfd1434561c830b99b1cb0d06de81dc268",
+          "attemptIds": {
+            "writer": "064d96bf-04a0-4c57-8ec0-fc5b740d0b5e",
+            "review": "018177a1-f816-44b1-849d-3236c05eefc9"
+          },
+          "writerReservation": 6809,
+          "minimumReviewReservation": 6051,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "lorelife:10000106",
+      "category": "hair",
+      "sourceHash": "b4e1c12506c5f2ea9f74c7bbae92d89739145fa288b39a8b0d3adbae3757f58b",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "7e39ea8aa7306085da8307ed3e266440dd2013b00f6dcd3f87159cbd7184dde5",
+          "attemptIds": {
+            "writer": "d3fddf1e-fe9e-4d31-8d8d-de8bd1d08c48",
+            "review": "be51c25b-2ace-4778-8971-37d058d11f93"
+          },
+          "writerReservation": 6707,
+          "minimumReviewReservation": 5949,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.004006050000000001
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "7e39ea8aa7306085da8307ed3e266440dd2013b00f6dcd3f87159cbd7184dde5",
+          "attemptIds": {
+            "writer": "f94a5269-efa1-415b-82cc-8e94f5bbb161",
+            "review": "785b7a54-4d63-4b84-8aa0-41c3f064330d"
+          },
+          "writerReservation": 6707,
+          "minimumReviewReservation": 5949,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "quest-online:10000223",
+      "category": "bike",
+      "sourceHash": "2ee690317b8043780980cf10b1d103ceaa57d8a63372d59ac7d948b37778a969",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "fea8fabd265f4478ee9a0a5b90a84edefcc42581ade103a62899ab4a2b3a9955",
+          "attemptIds": {
+            "writer": "30f2f64c-1d77-4e13-827e-6f9c58e3ca8e",
+            "review": "c09801d0-7c07-4abb-86a2-69677982a6fb"
+          },
+          "writerReservation": 6604,
+          "minimumReviewReservation": 5846,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039905999999999995
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "fea8fabd265f4478ee9a0a5b90a84edefcc42581ade103a62899ab4a2b3a9955",
+          "attemptIds": {
+            "writer": "33d507c6-8e4e-4082-8aff-0e3ca054762c",
+            "review": "d1eb9d56-37f7-4e06-8027-e955e8693a75"
+          },
+          "writerReservation": 6604,
+          "minimumReviewReservation": 5846,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    },
+    {
+      "itemCode": "rockbros:10026750",
+      "category": "bike",
+      "sourceHash": "45154b63b98bf6f82d526d469b6eba8b41bd4608ba79bb2cc9923a6fa3f75188",
+      "A": {
+        "status": "offline_run",
+        "text": null,
+        "implementation": null,
+        "publication": "blocked",
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "qualityReview": null,
+        "usage": {
+          "totalTokens": 0
+        },
+        "latencyMs": null
+      },
+      "B": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_comparable_saved_response",
+        "qualityReview": null,
+        "plan": {
+          "stop": null,
+          "writerRequestHash": "50eb7b29fb1720d22e9842678f5ea453595cc3ea52823e21810719c7863e6ceb",
+          "attemptIds": {
+            "writer": "fb454071-911a-4132-8521-7d1bf424f6c2",
+            "review": "477bb05b-8ef0-44ea-8723-afb19d3fe41b"
+          },
+          "writerReservation": 6484,
+          "minimumReviewReservation": 5726,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 2,
+          "pricedCeilingUsd": 0.0039726
+        }
+      },
+      "C": {
+        "quality": {
+          "identity": "unmeasured",
+          "specificity": "unmeasured",
+          "purchase_reason": "unmeasured",
+          "scene_and_value": "unmeasured",
+          "natural_japanese": "unmeasured",
+          "source_accuracy": "unmeasured"
+        },
+        "text": null,
+        "publication": "unmeasured",
+        "usage": null,
+        "latencyMs": null,
+        "status": "unmeasured",
+        "reason": "no_distinct_grounded_hints",
+        "qualityReview": null,
+        "plan": {
+          "stop": "no_distinct_grounded_hints",
+          "writerRequestHash": "50eb7b29fb1720d22e9842678f5ea453595cc3ea52823e21810719c7863e6ceb",
+          "attemptIds": {
+            "writer": "af1b3d89-9441-43b9-8f8b-049c5b812c35",
+            "review": "568fb633-91c5-414f-8027-4abd04b6fcb8"
+          },
+          "writerReservation": 6484,
+          "minimumReviewReservation": 5726,
+          "reviewReservationCeiling": 8000,
+          "maxCalls": 0,
+          "pricedCeilingUsd": null
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "itemCode": "mpowjapan:10000798",
+    "arm": "A",
+    "author": "assistant",
+    "textHash": "f743790dbc00a6fedc3ea4bcb8dc4a78cebc3d54bae628364d1e2df9a046b492",
+    "axes": {
+      "identity": "pass",
+      "specificity": "pass",
+      "purchase_reason": "pass",
+      "scene_and_value": "pass",
+      "natural_japanese": "fail",
+      "source_accuracy": "pass"
+    },
+    "reason": "話題が重複し「は、なお」の接続が不自然"
+  },
+  {
+    "itemCode": "e-kurashi:10037463",
+    "arm": "A",
+    "author": "assistant",
+    "textHash": "cc99682a0d1f1aa597b646a7d797d47012dff1109a1de8be5dc807ce31b901c5",
+    "axes": {
+      "identity": "pass",
+      "specificity": "pass",
+      "purchase_reason": "pass",
+      "scene_and_value": "pass",
+      "natural_japanese": "pass",
+      "source_accuracy": "pass"
+    },
+    "reason": "50度設定と対象の具体的な用途が原文の同じ因果箇条書きにあり、自然な短文に変換できた"
+  },
+  {
+    "itemCode": "e-kurashi:10018414",
+    "arm": "A",
+    "author": "assistant",
+    "textHash": "f4a8d7e07f91ac2b7e3651a49540e082853782d1764a3b71c222fab04e3d92a5",
+    "axes": {
+      "identity": "pass",
+      "specificity": "pass",
+      "purchase_reason": "pass",
+      "scene_and_value": "fail",
+      "natural_japanese": "pass",
+      "source_accuracy": "pass"
+    },
+    "reason": "収納対象と場所は具体的だが、使う場面から選ぶ理由までの訴求は不足"
+  }
+]
