@@ -744,7 +744,7 @@ input,select{
   <div id="userMail" class="userMail"></div>
 
   <div class="headActions">
-    <button id="upgradeProBtn" class="proBtn" type="button" style="display:none;border:0">Proへアップグレード</button>
+    <button id="upgradeProBtn" class="proBtn" type="button" style="display:none;border:0" hidden aria-hidden="true">旧プラン変更は受付停止</button>
 <button id="logoutBtn" class="logoutBtn">
       ログアウト
     </button>
@@ -4066,50 +4066,15 @@ function setAppScreen(mode='normal'){
 proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
 proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
 
+// Legacy Pro entitlements may still be honored; the obsolete 980 JPY -> Pro
+// purchase journey must not be offered under the new single-plan contract.
 function updateUpgradeUi(access={}){
   const btn=proEl('upgradeProBtn');
-  const isBase=String(access.plan||'')==='base' && !access.pro;
+  btn.style.display='none';
   proAvailable=!!access.pro;
-  btn.style.display=isBase?'inline-block':'none';
   proEl('appModeNav').classList.toggle('on',proAvailable);
   if(!proAvailable) setAppScreen('normal');
 }
-async function upgradeToPro(){
-  const ok=window.confirm(
-    'ウレナビ Proへアップグレードします。\n\n'
-    +'月額980円の通常契約を、月額1,480円のPro契約へ変更します。\n'
-    +'別契約は追加されません。二重課金にはなりません。\n'
-    +'今すぐの追加請求はなく、次回更新から月額1,480円になります。\n'
-    +'Pro機能は変更完了後すぐ使えます。\n\n'
-    +'アップグレードしますか？'
-  );
-  if(!ok)return;
-  const btn=proEl('upgradeProBtn');
-  btn.disabled=true;btn.textContent='変更中…';
-  try{
-    if(!currentAppSession?.access_token) throw new Error('再ログインしてからアップグレードしてください。');
-    const r=await fetch('/api/access?action=upgrade-pro',{
-      method:'POST',
-      headers:{Authorization:'Bearer '+currentAppSession.access_token,'Content-Type':'application/json'},
-      credentials:'include',
-      body:'{}'
-    });
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(d.message||'アップグレードできませんでした。');
-    currentAccessPlan='pro';
-    proAvailable=true;
-    btn.style.display='none';
-    proEl('appModeNav').classList.add('on');
-    await configureIntegratedPro(true);
-    const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
-    proEl('proMsg').textContent=(d.alreadyPro?'すでにPro契約です。':'Proへアップグレードしました。')+' '+renewal+'から月額1,480円です。';
-    setAppScreen('pro');
-  }catch(e){
-    alert(e.message||'アップグレードできませんでした。');
-    btn.disabled=false;btn.textContent='Proへアップグレード';
-  }
-}
-proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
   proAvailable=!!enabled;
