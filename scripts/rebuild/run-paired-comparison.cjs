@@ -2,10 +2,10 @@
 // Only an isolated operator process may run this command. No app/API route
 // imports it. Kept separate from the network-disabled comparison reader.
 const fs=require('node:fs/promises');
-const {createHash}=require('node:crypto');
+const {createHash,verify}=require('node:crypto');
 const {execFileSync}=require('node:child_process');
 const {parseArgs}=require('node:util');
-const {importOfficialEvidence,matchesOfficialArtifact}=require('../../lib/urenavi-core/official-capacity-evidence');
+const {importOfficialEvidence,matchesOfficialArtifact,officialEvidenceBlockers}=require('../../lib/urenavi-core/official-capacity-evidence');
 const {createIsolatedComparisonSupabase}=require('./isolated-comparison-supabase.cjs');
 const {createComparisonJournal}=require('../../lib/urenavi-core/comparison-journal');
 const {createGroqComparisonTransport,createPairedComparisonRunner,expectedApproval}
@@ -13,7 +13,7 @@ const {createGroqComparisonTransport,createPairedComparisonRunner,expectedApprov
 const {values}=parseArgs({options:{
  action:{type:'string'},tenant:{type:'string'},organization:{type:'string'},project:{type:'string'},
  'credential-sha256':{type:'string'},inputs:{type:'string'},journal:{type:'string'},approval:{type:'string'},evidence:{type:'string'},
- artifact:{type:'string'},observation:{type:'string'},'approval-key':{type:'string'},'evidence-key':{type:'string'},item:{type:'string'},arm:{type:'string'},stage:{type:'string'}
+ artifact:{type:'string'},observation:{type:'string'},estimate:{type:'string'},'approval-key':{type:'string'},'evidence-key':{type:'string'},item:{type:'string'},arm:{type:'string'},stage:{type:'string'}
 }});
 const json=async file=>JSON.parse(await fs.readFile(file,'utf8'));
 const groqKey=process.env.URENAVI_COMPARISON_GROQ_KEY;
@@ -28,6 +28,23 @@ async function run(){
   return importOfficialEvidence(observation,await fs.readFile(values.artifact));
  }
  if(!account.organization||!account.project||!/^([a-f0-9]{64})$/.test(account.credentialSha256||''))throw Error('comparison_account_required');
+ if(values.action==='check-evidence'){
+  const estimate=Number(values.estimate);
+  if(!Number.isSafeInteger(estimate)||estimate<1||estimate>1000000000)
+   throw Error('evidence_check_estimate_required');
+  const [envelope,artifact,key]=await Promise.all([
+   json(values.evidence),fs.readFile(values.artifact),fs.readFile(values['evidence-key'])
+  ]);
+  let verified=false;
+  try{
+   verified=!!envelope?.payload&&typeof envelope.signature==='string'&&
+    verify(null,Buffer.from(JSON.stringify(envelope.payload)),key,Buffer.from(envelope.signature,'base64'));
+  }catch{}
+  const blockers=!verified?['evidence_signature_invalid']:
+   !matchesOfficialArtifact(envelope.payload,artifact)?['evidence_artifact_mismatch']:
+   officialEvidenceBlockers(envelope.payload,account,Date.now(),estimate,10000);
+  return {status:blockers.length?'stopped':'verified',blockers};
+ }
  const executionSha=git('rev-parse','HEAD');
  if(values.action==='scope'){
   if(!values.tenant)throw Error('owner_tenant_required');
