@@ -3,10 +3,19 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const {
-  createHandler,
-  resolveLocalUnderstanding,
-  promoteImageHint
+  createHandler:actualCreateHandler,
+  resolveLocalUnderstanding
 }=require('../lib/super-urenavi-router');
+// Offline route tests use an explicit fake capacity boundary with mock
+// transport only. Production never receives this bypass.
+function createHandler(deps={}){
+ const offlineMockCapacity=async({callAI,apiKey,model,item})=>{
+  if(!deps.callGroq)throw Error('mock transport required for offline test');
+  return callAI({apiKey,model,itemName:item.itemName,itemCaption:item.itemCaption,
+   itemPrice:item.itemPrice,imageDataUrl:null,maxRetries:0});
+ };
+ return actualCreateHandler({...deps,capacityGate:deps.capacityGate||offlineMockCapacity});
+}
 
 function makeRes(){
   return {
@@ -53,16 +62,6 @@ test('local allowlist resolves exact grounded type without guessing accessories'
   assert.equal(resolveLocalUnderstanding({itemName:'モバイルバッテリー用ケース 収納ポーチ',itemCaption:''}),null);
 });
 
-test('cached image hint can only promote a type that exists in current source',()=>{
-  const good=promoteImageHint(
-    {features:[],sellingPoints:[],confidence:'medium'},
-    'バイクグローブ',
-    {itemName:'本革 バイクグローブ メンズ',itemCaption:''}
-  );
-  assert.equal(good?.validation?.productType?.valid,true);
-  assert.equal(promoteImageHint({features:[],sellingPoints:[]},'収納ボックス',{itemName:'バイクグローブ',itemCaption:''}),null);
-});
-
 test('router order is product cache then local and local consumes zero Groq quota',async()=>withPreviewKey(async()=>{
   let quota=0,groq=0,saved=0;
   const handler=createHandler({
@@ -96,7 +95,7 @@ test('valid text Groq result stops before image',async()=>withPreviewKey(async()
   assert.equal(imageLoads,0);
 }));
 
-test('image cache hit prevents a second Groq call',async()=>withPreviewKey(async()=>{
+test('legacy image-cache data does not add another execution route',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -107,13 +106,14 @@ test('image cache hit prevents a second Groq call',async()=>withPreviewKey(async
   const res=makeRes();
   await handler({method:'POST',body:{itemCode:'x3',itemName:'本革 バイクグローブ グローブ',itemCaption:'',imageUrl:'https://example.com/x.jpg'}},res);
   assert.equal(res.statusCode,200);
-  assert.equal(res.body.cache.status,'image_hit');
-  assert.equal(res.body.stages.imageCacheHit,true);
+  assert.equal(res.body.cache.status,'miss');
+  assert.equal(res.body.route.route,'text');
+  assert.equal(res.body.stages.imageAttempted,false);
   assert.equal(groq,1);
   assert.equal(imageLoads,0);
 }));
 
-test('uncertain text with no image cache escalates to image exactly once',async()=>withPreviewKey(async()=>{
+test('uncertain text ends after one provider call with no image lookup or image persistence',async()=>withPreviewKey(async()=>{
   let groq=0,imageLoads=0,imageSaves=0;
   const handler=createHandler({
     authorize:async()=>({ok:true,plan:'owner'}),consumeQuota:async()=>true,
@@ -128,8 +128,84 @@ test('uncertain text with no image cache escalates to image exactly once',async(
   const res=makeRes();
   await handler({method:'POST',body:{itemCode:'x4',itemName:'本革 バイクグローブ グローブ',itemCaption:'',imageUrl:'https://example.com/x.jpg'}},res);
   assert.equal(res.statusCode,200);
-  assert.equal(res.body.route.route,'image');
-  assert.equal(groq,2);
-  assert.equal(imageLoads,1);
-  assert.equal(imageSaves,1);
+  assert.equal(res.body.route.route,'text');
+  assert.equal(res.body.stages.imageAttempted,false);
+  assert.equal(res.body.stages.secondProviderAttempt,false);
+  assert.equal(groq,1);
+  assert.equal(imageLoads,0);
+  assert.equal(imageSaves,0);
+}));
+
+test('single-attempt transport never retries after 429 or JSON validation failure',async()=>{
+ const {defaultCallGroq}=require('../lib/room-ai-handler');
+ for(const [status,body] of [
+  [429,{error:{code:'rate_limit_exceeded',message:'test quota'}}],
+  [400,{error:{code:'json_validate_failed',message:'test invalid structured output'}}]
+ ]){
+  let sends=0;
+  const fetchImpl=async()=>{
+   sends++;
+   return {ok:false,status,
+    headers:{get:()=>null},
+    json:async()=>body};
+  };
+  await assert.rejects(
+   defaultCallGroq({apiKey:'mock',model:'openai/gpt-oss-120b',
+    itemName:'未確定の収納用品',itemCaption:'説明',itemPrice:1200,
+    imageDataUrl:null,maxRetries:0,fetchImpl}),
+   error=>error.status===status
+  );
+  assert.equal(sends,1,'no hidden request retry is allowed');
+ }
+});
+test('unified route always selects fixed 120B and sends no image even if supplied',async()=>withPreviewKey(async()=>{
+ let sends=0;
+ const handler=createHandler({
+  authorize:async()=>({ok:true,plan:'owner'}),
+  consumeQuota:async()=>true,
+  store:makeStore(),
+  callGroq:async({model,imageDataUrl})=>{
+   sends++;
+   assert.equal(model,'openai/gpt-oss-120b');
+   assert.equal(imageDataUrl,null);
+   return {raw:{productType:{value:'不明商品',source:'itemName',evidence:'不明商品'},
+    features:[],sellingPoints:[],confidence:'medium'},model};
+  },
+  loadImageDataUrl:async()=>{throw Error('image route must never run');}
+ });
+ const r=makeRes();
+ await handler({method:'POST',body:{itemCode:'test:one',itemName:'不明商品 製品',
+  itemCaption:'仕様は未記載',itemPrice:1200,imageUrl:'https://example.com/image.jpg'}},r);
+ assert.equal(r.statusCode,200);
+ assert.equal(sends,1);
+ assert.equal(r.body.stages.imageAttempted,false);
+}));
+
+test('long Rakuten source remains whole for validation and cache while Groq sees bounded text',async()=>withPreviewKey(async()=>{
+ const longCaption='A'.repeat(2500)+'検証対象の末尾仕様='+'B'.repeat(2000);
+ const saved=[];
+ let groqCalls=0;
+ const handler=actualCreateHandler({
+  authorize:async()=>({ok:true,plan:'owner'}),
+  capacityGate:async({item,callAI})=>callAI({itemCaption:item.modelCaption,
+   imageDataUrl:null,maxRetries:0}),
+  callGroq:async({itemCaption})=>{
+   groqCalls++;
+   assert.ok(itemCaption.length<=3000);
+   assert.ok(itemCaption.includes('検証対象')===false);
+   assert.ok(itemCaption.endsWith('B'.repeat(750)));
+   return {raw:{productType:{value:'不明商品',source:'itemName',evidence:'不明商品'},
+    features:[],sellingPoints:[],confidence:'medium'},model:'mock'};
+  },
+  store:makeStore({saveProduct:async row=>saved.push(row)})
+ });
+ const r=makeRes();
+ await handler({method:'POST',body:{
+  itemCode:'shop:long-caption',itemName:'不明商品テスト',itemCaption:longCaption,
+  itemPrice:1234
+ }},r);
+ assert.equal(r.statusCode,200);
+ assert.equal(groqCalls,1);
+ assert.equal(saved.length,1);
+ assert.equal(saved[0].itemCaption,longCaption);
 }));

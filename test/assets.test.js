@@ -56,3 +56,15 @@ test('access guard cannot override the product-specific first line',()=>{
   assert.doesNotMatch(guard,/let hook=|この価格なら試しやすい|これ、見つけたらチェックしたい|選ばれている理由が気になる/);
   assert.doesNotMatch(guard,/return \`\$\{hook\}/);
 });
+
+test('purchase pages use the approved monthly price and empty copy stays empty',()=>{
+  const guard=fs.readFileSync('public/access-guard.js','utf8');
+  const terms=fs.readFileSync('public/tokusho.html','utf8');
+  for(const source of [guard,terms]){
+    assert.match(source,/月額1,480円（税込）/);
+    assert.doesNotMatch(source,/月額980円|先着30名/);
+  }
+  const install=guard.match(/function installRoomPostCopyFix\(\)\{[\s\S]+?(?=\n  function installSafePostPreviewLinks)/)[0];
+  const post=Function(install+'\nconst window={};const post=()=>"";installRoomPostCopyFix();return window.post;')();
+  assert.equal(post({}), '');
+});

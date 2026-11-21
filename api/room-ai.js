@@ -38,7 +38,6 @@ module.exports.handler=handler;
 module.exports.createRouterHandler=router.createHandler;
 module.exports.createTypeKnowledgeHandler=typeWrapper.createHandler;
 module.exports.resolveLocalUnderstanding=router.resolveLocalUnderstanding;
-module.exports.promoteImageHint=router.promoteImageHint;
 module.exports.productCacheKeyV2=productCacheKey;
 module.exports.normalizeImageUrlV2=normalizeImageUrl;
 module.exports.imageCacheKeyV2=imageCacheKey;
