@@ -66,7 +66,8 @@ test('source relations bind merchant headings and keep exact spans across number
     itemCaption:'商品説明 収納ボックスの特徴 1）外寸50cm 2）5面から取り出せるので大きな荷物を取り出しやすい。'
   };
   const copy=composeSourceCopy(item,'収納ボックス');
-  assert.match(copy?.text||'',/5面から取り出せるので大きな荷物を取り出しやすい。/);
+  assert.match(copy?.text||'',/5面から取り出せるので、大きな荷物を取り出しやすい。/);
+  assert.equal(copy.proof.literal.quote,'5面から取り出せるので大きな荷物を取り出しやすい。');
   for(const span of copy.proof.evidence){
     assert.equal(item.itemCaption.slice(span.start,span.end),span.quote);
   }

@@ -70,7 +70,8 @@ test('A is local, B completes via v2 despite analysis cache, C and D stop before
   const ready=await b.request(items.B);
   assert.equal(ready.body.copyStatus,'ready');
   assert.equal(ready.body.route.route,'text');
-  assert.ok(ready.body.sourceCopy.text.includes(quote));
+  assert.ok(ready.body.sourceCopy.text.includes('水流の量や速度を初心者でも簡単に調整できます。'));
+  assert.equal(ready.body.sourceCopy.proof.literal.quote,quote);
   for(const span of ready.body.sourceCopy.proof.evidence){
     assert.equal(items.B.itemCaption.slice(span.start,span.end),span.quote);
   }
