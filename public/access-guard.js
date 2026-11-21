@@ -12,7 +12,7 @@
     const a=document.createElement('a');
     a.id='urenaviPurchaseLink';
     a.href=PURCHASE_URL;
-    a.textContent='まだ購入していない方｜月額980円で始める';
+    a.textContent='まだ購入していない方｜月額1,480円（税込）';
     Object.assign(a.style,{display:'block',marginTop:'12px',padding:'13px',border:'1px solid #e8b6ad',borderRadius:'13px',textAlign:'center',textDecoration:'none',color:'#a12e21',fontSize:'12px',fontWeight:'900',background:'#fff8f6'});
     loginBtn.insertAdjacentElement('afterend',a);
   }
@@ -255,7 +255,7 @@
       }
 
       body=body.replace(/\s*※アフィリエイト広告を利用しています\s*$/,'').trim();
-      return body+'\n\n※アフィリエイト広告を利用しています';
+      return body?body+'\n\n※アフィリエイト広告を利用しています':'';
     };
   }
 
