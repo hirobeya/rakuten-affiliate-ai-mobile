@@ -58,3 +58,26 @@ test('retired experiment returns 410 without exercising its provider factory',as
   await retiredHandler({method:'POST',body:{}},res);
   assert.equal(res.code,410);
 });
+
+test('source relations bind merchant headings and keep exact spans across numbered bullets',()=>{
+  const {inspect,composeSourceCopy}=require('../lib/urenavi-core/source-purchase-relations');
+  const item={
+    itemName:'収納ボックス 40L',
+    itemCaption:'商品説明 収納ボックスの特徴 1）外寸50cm 2）5面から取り出せるので大きな荷物を取り出しやすい。'
+  };
+  const copy=composeSourceCopy(item,'収納ボックス');
+  assert.match(copy?.text||'',/5面から取り出せるので大きな荷物を取り出しやすい。/);
+  for(const span of copy.proof.evidence){
+    assert.equal(item.itemCaption.slice(span.start,span.end),span.quote);
+  }
+  for(const boundary of ['関連商品','別売のカバー','タイプB']){
+    const disjoint={...item,itemCaption:item.itemCaption.replace('2）','2）'+boundary+' ●')};
+    assert.equal(inspect(disjoint,'収納ボックス').length,0,boundary);
+  }
+});
+
+test('continuation does not borrow a feature from a previous numbered item',()=>{
+  const {inspect}=require('../lib/urenavi-core/source-purchase-relations');
+  const item={itemName:'収納ボックス',itemCaption:'商品説明 収納ボックスの特徴 1）取り外せる仕切りが付いています。 2）そのため、大きな荷物も取り出せます。'};
+  assert.equal(inspect(item,'収納ボックス').length,0);
+});
