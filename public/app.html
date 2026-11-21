@@ -2525,6 +2525,7 @@ function safeSearchIdentity(item){
 }
 
 function aiPhase1Post(item,result){
+  if(result?.copyStatus&&(result.copyStatus!=='ready'||!result.sourceCopy?.text)) return '';
   const v=result?.validation||{},insight=aiSalesInsight(item,result);
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
@@ -2599,6 +2600,7 @@ function updateAiPanel(index){
 async function requestAiRoom(item,index,generation,{localOnly=false}={}){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return false;
   let haltAutomatic=false;
+  const sourceConflict=aiTargetDecision(item).reasons.includes('rule_conflict');
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
   // The server serializes reservation, send intent, provider and settlement.
   // Give it room to finish, but remain under the 20-second Vercel limit.
@@ -2607,14 +2609,14 @@ async function requestAiRoom(item,index,generation,{localOnly=false}={}){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),localOnly})});
+    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),localOnly:localOnly||sourceConflict,purpose:'room-copy'})});
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
       haltAutomatic=true;
-    }else if(localOnly&&!d.sourceCopy){
+    }else if(localOnly&&!sourceConflict&&!d.sourceCopy){
       aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',localChecked:true});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
@@ -2862,8 +2864,10 @@ function resolveAiGate(item,index,keyword=''){
   if(ai.state==='error'){
     return {enabled:true,status:'fallback',full:false,reasons:['ai_error'],target:ai.target||null,ruleSecondOpinion:{checked:false,conflict:false}};
   }
+  if(ai.data?.copyStatus==='stopped') return {enabled:true,status:'fallback',full:false,reasons:[ai.data.copyReason]};
   const v=ai.data?.validation||{};
   const second=ruleSecondOpinion(item,v,keyword);
+  if(ai.data?.copyStatus==='ready'&&second.conflict) return {enabled:true,status:'fallback',full:false,reasons:['rule_second_opinion_conflict']};
   const reasons=[...(Array.isArray(v.reasons)?v.reasons:[])];
   if(!v.productType?.valid && !reasons.includes('product_type_validation_failed')) reasons.push('product_type_validation_failed');
   if(second.conflict) reasons.push('rule_second_opinion_conflict');
