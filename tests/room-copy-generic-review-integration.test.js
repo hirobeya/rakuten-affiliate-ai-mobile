@@ -15,6 +15,6 @@ test('quality gate is the previously verified generic PR184 module, not a new pr
 test('catalogue-only pitch is blocked; concrete cited use statements are not rejected just for their category',()=>{
  assert.equal(quality.catalogueOnly('仕様を確認して選ぶ商品です。'),true);
  assert.equal(quality.catalogueOnly('幅20cmの収納ケースで、棚の空きスペースに収まります。'),false);
- assert.ok(quality.restatedReason('組み合わせ自由です。とても便利です。',{identity:'収納ケース'}));
+ assert.ok(quality.restatedReason('組み合わせは自由です。これが便利です。',{identity:'収納ケース'}));
  assert.equal(quality.restatedReason('組み合わせを用途に合わせて選べます。',{identity:'収納ケース'}),'');
 });
