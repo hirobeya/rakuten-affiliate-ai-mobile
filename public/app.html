@@ -643,7 +643,7 @@ input,select{
 }
 
 .headActions{display:flex;align-items:center;gap:6px;flex:none}
-.proBtn{display:inline-block;background:#172a4b;color:#fff;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:900;text-decoration:none}
+
 .logoutBtn{
   border:0;
   background:#eef1f4;
@@ -744,7 +744,7 @@ input,select{
   <div id="userMail" class="userMail"></div>
 
   <div class="headActions">
-    <button id="upgradeProBtn" class="proBtn" type="button" style="display:none;border:0">Proへアップグレード</button>
+    
 <button id="logoutBtn" class="logoutBtn">
       ログアウト
     </button>
@@ -936,6 +936,7 @@ input,select{
 <script src="/pain-copy-refine.js?v=20260920-1"></script>
 <script src="/pain-copy-context-fix.js?v=20260918-8"></script>
 <script src="/fact-safety.js?v=20260925-1"></script>
+<script src="/purchase-copy-quality.js?v=20261121-1"></script>
 <script src="/room-copy-quality.js?v=20260925-1"></script>
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
@@ -2203,7 +2204,7 @@ async function updateDebugExportAccess(){
     runtimeKnown=false;
   }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
-  const paidPlan=['base','pro','owner'].includes(currentAccessPlan);
+  const paidPlan=['standard','base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
       ?debugExportAllowed
@@ -2528,12 +2529,22 @@ function aiPhase1Post(item,result){
   const identity=v.productType?.valid===true?String(insight.productType||'').trim():safeSearchIdentity(item);
   if(!identity) return '';
   const combinedFacts=[...(Array.isArray(insight.features)?insight.features:[]),...(Array.isArray(insight.sellingPoints)?insight.sellingPoints:[])];
+  const quality=window.UrenaviPurchaseCopyQuality;
+  // Reuse the generic, category-independent editorial rejection rules
+  // from the previously tested quality branch. They never certify evidence.
+  // A rejected draft is not shown as ready or copyable.
+  const acceptable=(text)=>{
+    if(!quality || !String(text||'').trim())return '';
+    return quality.catalogueOnly(text)||quality.restatedReason(text,{identity})
+      ?'':String(text).trim();
+  };
+  if(result?.sourceCopy?.text) return acceptable(result.sourceCopy.text);
   const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,identity,combinedFacts)||'';
-  if(universalPost) return universalPost;
+  if(universalPost) return acceptable(universalPost);
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
   const titleTokens=window.UrenaviPainCopy?.titleFactTokens?.(item)||[];
   const facts=window.UrenaviFactSafety?.filterAllowedTitleFacts?.(titleTokens,combinedFacts)||[];
-  return window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'';
+  return acceptable(window.UrenaviPainCopy?.buildGroundedBenefitPost?.(item,facts)||window.UrenaviPainCopy?.buildNeutralFactPost?.(item,facts)||'');
 }
 
 function aiPanelMarkup(item,index){
@@ -2585,25 +2596,32 @@ function updateAiPanel(index){
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
 }
 
-async function requestAiRoom(item,index,generation){
-  if(!aiGatesFullOutput||generation!==aiRunGeneration) return;
+async function requestAiRoom(item,index,generation,{localOnly=false}={}){
+  if(!aiGatesFullOutput||generation!==aiRunGeneration) return false;
+  let haltAutomatic=false;
   aiRoomResults.set(index,{state:'loading'});updateAiPanel(index);
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+  // The server serializes reservation, send intent, provider and settlement.
+  // Give it room to finish, but remain under the 20-second Vercel limit.
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18000);
   try{
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||'').slice(0,1200),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||'')})});
+    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),localOnly})});
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
+      haltAutomatic=true;
+    }else if(localOnly&&!d.sourceCopy){
+      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',localChecked:true});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){
     if(generation!==aiRunGeneration) return;
     aiRoomResults.set(index,{state:'error',message:e?.name==='AbortError'?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':'AI分析に失敗しました。安全のため短文表示です。',status:null});
+    haltAutomatic=true;
   }finally{
     clearTimeout(timer);
     if(generation===aiRunGeneration){
@@ -2639,6 +2657,7 @@ async function requestAiRoom(item,index,generation){
       }
     }
   }
+  return haltAutomatic;
 }
 
 function aiTargetDecision(item){
@@ -2683,7 +2702,21 @@ async function runAiPreview(items){
   });
   while(queue.length&&generation===aiRunGeneration){
     const job=queue.shift();
-    await requestAiRoom(job.item,job.index,generation);
+    const halt=await requestAiRoom(job.item,job.index,generation);
+    // One uncertain provider response must not trigger a batch of new
+    // reservations/attempts for every remaining search result.
+    if(halt){
+      for(const pending of queue){
+        aiRoomResults.set(pending.index,{
+          state:'error',
+          message:'AIの自動判定を停止しました。安全確認後に再度検索してください。',
+          status:503
+        });
+        updateAiPanel(pending.index);
+      }
+      queue.length=0;
+      break;
+    }
     if(queue.length) await new Promise(r=>setTimeout(r,750));
   }
 }
@@ -2691,19 +2724,15 @@ async function runAiPreview(items){
 async function ensureAiForItem(index){
   if(!aiGatesFullOutput) return;
   const current=aiRoomResults.get(index);
-  if(current?.state==='done'||current?.state==='loading'||current?.reason==='rule_confident') return;
+  if(current?.state==='done'||current?.state==='loading'||current?.state==='error'||current?.localChecked) return;
   const item=lastSearchItems[index];
   if(!item) return;
   const target=current?.target||aiTargetDecision(item);
   if(!target.callAi){
-    aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',target,auto:false});
-    updateAiPanel(index);
+    if(item.itemCaption) await requestAiRoom(item,index,aiRunGeneration,{localOnly:true});
     return;
   }
-  const generation=aiRunGeneration;
-  aiRoomResults.set(index,{state:'loading',target,auto:false});
-  updateAiPanel(index);
-  await requestAiRoom(item,index,generation);
+  await requestAiRoom(item,index,aiRunGeneration);
 }
 
 document.addEventListener('click',e=>{
@@ -4066,50 +4095,13 @@ function setAppScreen(mode='normal'){
 proEl('normalModeBtn').addEventListener('click',()=>setAppScreen('normal'));
 proEl('proModeBtn').addEventListener('click',()=>setAppScreen('pro'));
 
+// Retain existing users' Pro feature entitlement but never offer the
+// retired tier-upgrade purchase journey.
 function updateUpgradeUi(access={}){
-  const btn=proEl('upgradeProBtn');
-  const isBase=String(access.plan||'')==='base' && !access.pro;
   proAvailable=!!access.pro;
-  btn.style.display=isBase?'inline-block':'none';
   proEl('appModeNav').classList.toggle('on',proAvailable);
   if(!proAvailable) setAppScreen('normal');
 }
-async function upgradeToPro(){
-  const ok=window.confirm(
-    'ウレナビ Proへアップグレードします。\n\n'
-    +'月額980円の通常契約を、月額1,480円のPro契約へ変更します。\n'
-    +'別契約は追加されません。二重課金にはなりません。\n'
-    +'今すぐの追加請求はなく、次回更新から月額1,480円になります。\n'
-    +'Pro機能は変更完了後すぐ使えます。\n\n'
-    +'アップグレードしますか？'
-  );
-  if(!ok)return;
-  const btn=proEl('upgradeProBtn');
-  btn.disabled=true;btn.textContent='変更中…';
-  try{
-    if(!currentAppSession?.access_token) throw new Error('再ログインしてからアップグレードしてください。');
-    const r=await fetch('/api/access?action=upgrade-pro',{
-      method:'POST',
-      headers:{Authorization:'Bearer '+currentAppSession.access_token,'Content-Type':'application/json'},
-      credentials:'include',
-      body:'{}'
-    });
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(d.message||'アップグレードできませんでした。');
-    currentAccessPlan='pro';
-    proAvailable=true;
-    btn.style.display='none';
-    proEl('appModeNav').classList.add('on');
-    await configureIntegratedPro(true);
-    const renewal=d.current_period_end?new Date(d.current_period_end).toLocaleDateString('ja-JP'):'次回更新日';
-    proEl('proMsg').textContent=(d.alreadyPro?'すでにPro契約です。':'Proへアップグレードしました。')+' '+renewal+'から月額1,480円です。';
-    setAppScreen('pro');
-  }catch(e){
-    alert(e.message||'アップグレードできませんでした。');
-    btn.disabled=false;btn.textContent='Proへアップグレード';
-  }
-}
-proEl('upgradeProBtn').addEventListener('click',upgradeToPro);
 
 async function configureIntegratedPro(enabled){
   proAvailable=!!enabled;
@@ -4147,7 +4139,7 @@ proEl('proGenerateBtn').addEventListener('click',proGenerate);
 document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('change',proSaveTasks));
 
 </script>
-<script src="/access-guard.js?v=20260919-2"></script>
+<script src="/access-guard.js?v=20261121-1"></script>
 <script>
 void bootAuth();
 window.addEventListener('pagehide',saveSearchState);

@@ -836,7 +836,7 @@ function createHandler(deps={}){
         String(x.catchcopy||'').slice(0,500),
 
         itemCaption:
-        String(x.itemCaption||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,1200),
+        String(x.itemCaption||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim(),
 
         genreId:
         String(x.genreId||''),

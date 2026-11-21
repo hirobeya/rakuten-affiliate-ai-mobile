@@ -3,7 +3,7 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const html=fs.readFileSync(path.join(__dirname,'../public/v3-live-30.html'),'utf8');
+const html=fs.readFileSync(path.join(__dirname,'fixtures/v3-live-30.html'),'utf8');
 
 const listMatch=html.match(/const KEYWORDS=\[(.*?)\];/s);
 assert.ok(listMatch,'keyword list missing');
