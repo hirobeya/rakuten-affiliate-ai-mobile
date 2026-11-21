@@ -81,3 +81,39 @@ test('continuation does not borrow a feature from a previous numbered item',()=>
   const item={itemName:'収納ボックス',itemCaption:'商品説明 収納ボックスの特徴 1）取り外せる仕切りが付いています。 2）そのため、大きな荷物も取り出せます。'};
   assert.equal(inspect(item,'収納ボックス').length,0);
 });
+
+test('search text preserves a declared product and its source-backed use without a dictionary entry',async t=>{
+  const previous=process.env.VERCEL_ENV;
+  process.env.VERCEL_ENV='preview';
+  t.after(()=>{
+    if(previous===undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV=previous;
+  });
+  const {searchCaptionText}=require('../lib/urenavi-core/source-passages');
+  const claim='棚の幅を調整できるので、置く場所に合わせて使えます。';
+  const caption=searchCaptionText('<table><tr><th>商品名</th><td>窓辺ラック</td></tr></table><p>商品説明</p><p>'+claim+'</p>');
+  const capacityGate=t.mock.fn();
+  const handler=createRouterHandler({
+    authorize:async()=>({ok:true,plan:'owner'}),
+    capacityGate,
+    store:{loadProduct:async()=>null,saveProduct:async()=>{}}
+  });
+  const item={itemName:'窓辺ラック 木製',itemCaption:caption,localOnly:true};
+  const res=response();
+  await handler({method:'POST',body:item},res);
+  assert.equal(res.body.validation.productType.value,'窓辺ラック');
+  assert.equal(res.body.cache.stored,false);
+  assert.ok(res.body.sourceCopy.text.includes(claim));
+  assert.equal(res.body.sourceCopy.proof.evidence[0].quote,'商品名 窓辺ラック');
+  for(const itemCaption of [
+    caption.replace(claim,'類似商品です。'),
+    caption.replace(claim,'別売の棚板です。'+claim),
+    caption.replace(claim,'別タイプの説明です。'+claim),
+    caption.replace('商品説明','商品名 壁面ラック\n商品説明')
+  ]){
+    const refused=response();
+    await handler({method:'POST',body:{...item,itemCaption}},refused);
+    assert.equal(refused.body.sourceCopy,null);
+  }
+  assert.equal(capacityGate.mock.calls.length,0);
+});

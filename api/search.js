@@ -1,3 +1,4 @@
+const {searchCaptionText}=require('../lib/urenavi-core/source-passages');
 const {authorize} = require('../lib/billing');
 const clamp=(n,min=0,max=100)=>
 Math.max(
@@ -836,7 +837,7 @@ function createHandler(deps={}){
         String(x.catchcopy||'').slice(0,500),
 
         itemCaption:
-        String(x.itemCaption||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim(),
+        searchCaptionText(x.itemCaption),
 
         genreId:
         String(x.genreId||''),
