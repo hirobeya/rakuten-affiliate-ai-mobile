@@ -714,7 +714,7 @@ function run(name,fn){
     assert.match(html,/function safeSearchIdentity\(item\)/);
     assert.match(html,/v\.productType\?\.valid===true\?String\(insight\.productType\|\|''\)\.trim\(\):safeSearchIdentity\(item\)/);
     assert.match(html,/const universalPost=window\.UrenaviPainCopy\?\.buildValidatedProductPost/);
-    assert.match(html,/if\(universalPost\) return universalPost/);
+    assert.match(html,/if\(universalPost\) return acceptable\(universalPost\)/);
     assert.match(html,/if\(!\(v\?\.mode==='simple'\|\|v\?\.mode==='simple_partial'\)\) return ''/);
     assert.doesNotMatch(html,/if\(v\.productType\?\.valid!==true\) return ''/);
     assert.match(html,/バッグ\|ケース\|カバー\|ブラシ\|ローラー/);
