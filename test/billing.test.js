@@ -201,6 +201,7 @@ test('replayed paid checkout webhook never duplicates billing-side activation',a
 });
 test('explicit single-plan checkout verifies Stripe price and link before redirect',async()=>{
  process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
+ process.env.URENAVI_CHECKOUT_RETURN_ORIGIN='https://preview-example.vercel.app';
  const price={id:'price_test',active:true,unit_amount:1480,currency:'jpy',livemode:false,tax_behavior:'inclusive',
   recurring:{interval:'month',interval_count:1,usage_type:'licensed'}};
  let calls=0;
@@ -210,13 +211,35 @@ test('explicit single-plan checkout verifies Stripe price and link before redire
   if(url.includes('/payment_links/plink_test/line_items'))
    return response({data:[{price:{id:'price_test'},quantity:1}],has_more:false});
   if(url.includes('/payment_links/plink_test'))
-   return response({id:'plink_test',livemode:false,active:true,url:'https://buy.stripe.com/test_fixture'});
+   return response({id:'plink_test',livemode:false,active:true,url:'https://buy.stripe.com/test_fixture',after_completion:{type:'redirect',redirect:{url:'https://preview-example.vercel.app/api/access?action=activate&session_id={CHECKOUT_SESSION_ID}'}}});
   throw Error('unrecognized external endpoint');
  };
  const out=res();await access({method:'GET',query:{action:'buy'},headers:{}},out);
  assert.equal(out.code,303);
  assert.equal(out.url,'https://buy.stripe.com/test_fixture');
  assert.equal(calls,3);
+});
+test('completed Checkout must return to the exact verified app origin',async()=>{
+ process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
+ process.env.URENAVI_CHECKOUT_RETURN_ORIGIN='https://preview-example.vercel.app';
+ const badReturns=[
+  {type:'hosted_confirmation',hosted_confirmation:{}},
+  {type:'redirect',redirect:{url:'https://evil.example/api/access?action=activate&session_id={CHECKOUT_SESSION_ID}'}},
+  {type:'redirect',redirect:{url:'https://preview-example.vercel.app/api/access?action=activate&session_id=untrusted'}},
+  {type:'redirect',redirect:{url:'https://preview-example.vercel.app/api/access?action=activate&session_id={CHECKOUT_SESSION_ID}&redirect=https://evil.example'}}
+ ];
+ for(const after_completion of badReturns){
+  global.fetch=async url=>{
+   url=String(url);
+   if(url.includes('/prices/price_test'))return response({id:'price_test',active:true,unit_amount:1480,currency:'jpy',livemode:false,tax_behavior:'inclusive',recurring:{interval:'month',interval_count:1,usage_type:'licensed'}});
+   if(url.includes('/payment_links/plink_test/line_items'))return response({data:[{price:{id:'price_test'},quantity:1}],has_more:false});
+   if(url.includes('/payment_links/plink_test'))return response({id:'plink_test',livemode:false,active:true,url:'https://buy.stripe.com/test_fixture',after_completion});
+   throw Error('unexpected request');
+  };
+  const out=res();await access({method:'GET',query:{action:'buy'},headers:{}},out);
+  assert.equal(out.code,503);
+  assert.equal(out.url,undefined);
+ }
 });
 test('Production cannot use Preview TEST checkout approval or test key',async()=>{
  process.env.VERCEL_ENV='production';
@@ -230,6 +253,7 @@ test('Production cannot use Preview TEST checkout approval or test key',async()=
 });
 test('single-plan checkout refuses stale link, multiple prices and amount drift',async()=>{
  process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
+ process.env.URENAVI_CHECKOUT_RETURN_ORIGIN='https://preview-example.vercel.app';
  const cases=[
   {priceAmount:980,linkActive:true,lineCount:1},
   {priceAmount:1480,linkActive:false,lineCount:1},
@@ -248,7 +272,7 @@ test('single-plan checkout refuses stale link, multiple prices and amount drift'
      price:{id:c.wrongPrice?'price_other':'price_test'},quantity:1})),has_more:false});
    if(url.includes('/payment_links/plink_test'))
     return response({id:'plink_test',livemode:false,active:c.linkActive,
-     url:'https://buy.stripe.com/test_fixture'});
+     url:'https://buy.stripe.com/test_fixture',after_completion:{type:'redirect',redirect:{url:'https://preview-example.vercel.app/api/access?action=activate&session_id={CHECKOUT_SESSION_ID}'}}});
    throw Error('unexpected connection');
   };
   const out=res();await access({method:'GET',query:{action:'buy'},headers:{}},out);
