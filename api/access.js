@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {activate,authorize,authorizePro,verifyConfiguredCheckout,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
+const {activate,authorize,authorizePro,verifyConfiguredCheckout,requireSafeCustomerWriteDestination,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
@@ -84,6 +84,7 @@ module.exports = async function handler(req,res) {
         process.env.URENAVI_SALES_ENABLED==='explicit_1480_go_live';
       if(!sandboxApproved&&!liveApproved)
        return res.status(404).json({message:'販売・新規受付は現在停止しています'});
+      requireSafeCustomerWriteDestination();
       const verifiedUrl=await verifyConfiguredCheckout();
       return res.redirect(303,verifiedUrl);
     }

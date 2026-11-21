@@ -219,6 +219,17 @@ test('explicit single-plan checkout verifies Stripe price and link before redire
  assert.equal(out.url,'https://buy.stripe.com/test_fixture');
  assert.equal(calls,3);
 });
+test('Preview checkout stops before Stripe when account provisioning is not isolated',async()=>{
+ process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
+ delete process.env.SUPABASE_URL;
+ let calls=0;
+ global.fetch=async()=>{calls++;throw Error('Unexpected HTTP request');};
+ const out=res();
+ await access({method:'GET',query:{action:'buy'},headers:{}},out);
+ assert.equal(out.code,503);
+ assert.equal(out.url,undefined);
+ assert.equal(calls,0);
+});
 test('completed Checkout must return to the exact verified app origin',async()=>{
  process.env.URENAVI_SANDBOX_CHECKOUT_ENABLED='isolated_preview_only';
  process.env.URENAVI_CHECKOUT_RETURN_ORIGIN='https://preview-example.vercel.app';

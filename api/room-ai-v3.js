@@ -117,6 +117,9 @@ function createHandler(deps={}){
   };
 }
 
-module.exports=createHandler();
+// Retired Preview experiment. Keep its factory available for offline replay.
+module.exports=function retiredRoomAiV3(req,res){
+  return json(res,410,{message:'room_ai_v3_retired'});
+};
 module.exports.createHandler=createHandler;
 module.exports.namespacedStore=namespacedStore;
