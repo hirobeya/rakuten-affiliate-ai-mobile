@@ -941,13 +941,15 @@ input,select{
 <script src="/product-shadow-v2.js?v=20260921-1"></script>
 <script src="/return-state.js?v=20260918-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0"></script>
+<script src="/api/access?action=auth-client"></script>
 <script>
 
-const SUPABASE_URL=
-'https://upooxcugrplfmjnqpuxs.supabase.co';
-
-const SUPABASE_KEY=
-'sb_publishable_OBQUoiuGzy_YagoMeAnHYg_BTNfn8j5';
+const authConfig=window.urenaviAuthConfig;
+if(!authConfig){
+  for(const button of document.querySelectorAll('#authGate button')) button.disabled=true;
+  document.getElementById('authGate').append('認証設定を読み込めませんでした。時間をおいて再読み込みしてください。');
+  throw new Error('Auth configuration unavailable');
+}
 
 const REAUTH_MS=
 30*24*60*60*1000;
@@ -961,8 +963,8 @@ const SEND_NEXT_KEY=
 
 const sb=
 supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
+  authConfig.url,
+  authConfig.publishableKey,
   {
     auth:{
       persistSession:true,
@@ -4149,15 +4151,15 @@ document.querySelectorAll('[data-pro-task]').forEach(x=>x.addEventListener('chan
 </script>
 <script src="/access-guard.js?v=20261121-1"></script>
 <script>
-void bootAuth();
+if(window.urenaviAuthConfig) void bootAuth();
 window.addEventListener('pagehide',saveSearchState);
-window.addEventListener('pageshow',()=>{if(!document.hidden) void bootAuth();});
+window.addEventListener('pageshow',()=>{if(window.urenaviAuthConfig&&!document.hidden) void bootAuth();});
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden) saveSearchState();
-  else void bootAuth();
+  else if(window.urenaviAuthConfig) void bootAuth();
 });
 document.addEventListener('click',e=>{if(e.target.closest?.('a.roomLink')) saveSearchState();},true);
-setInterval(()=>{if(!document.hidden) void bootAuth();},60000);
+setInterval(()=>{if(window.urenaviAuthConfig&&!document.hidden) void bootAuth();},60000);
 </script>
 </body>
 </html>

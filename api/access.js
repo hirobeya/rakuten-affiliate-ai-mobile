@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const {activate,authorize,authorizePro,verifyConfiguredCheckout,requireSafeCustomerWriteDestination,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
+const {authClientConfig,activate,authorize,authorizePro,verifyConfiguredCheckout,requireSafeCustomerWriteDestination,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
 const handoffHash = code => crypto.createHash('sha256').update(String(code)).digest('hex');
@@ -13,6 +13,12 @@ module.exports = async function handler(req,res) {
       return res.status(404).json({message:'販売・新規受付は現在停止しています'});
     }
     if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
+    if (req.query.action === 'auth-client') {
+      const client=authClientConfig({browser:true});
+      res.setHeader('Content-Type','application/javascript; charset=utf-8');
+      return res.status(200).send('window.urenaviAuthConfig='+JSON.stringify(client)+';');
+    }
+
     if (req.query.action === 'logout') {
       clearDeviceCookie(res);
       return res.status(204).end();
