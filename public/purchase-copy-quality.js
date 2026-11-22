@@ -159,5 +159,21 @@
   return true;
  }
 
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,restatedReason};
+ function verifiedMeasuredSourceCopy(item,copy){
+  const proof=copy?.proof, measurement=proof?.measurement;
+  if(!measurement?.notes?.length)return false;
+  const exact=span=>Boolean(span?.quote&&Number.isInteger(span.start)&&span.start>=0
+    &&span.end===span.start+span.quote.length&&String(item?.[span.source]||'').slice(span.start,span.end)===span.quote);
+  if(![proof.subject,proof.literal,measurement.specification,...measurement.notes].every(exact))return false;
+  const labels=[...new Set(measurement.specification.quote.match(/※[0-9]+/g)||[])];
+  if(labels.length!==measurement.notes.length||labels.some((label,i)=>{
+   const note=measurement.notes[i], marker=label+'：';
+   return note.start<=measurement.specification.end||
+     item.itemCaption.slice(note.start-marker.length,note.start)!==marker;
+  }))return false;
+  const body=[proof.subject.quote,proof.literal.quote,measurement.notes.map(note=>note.quote).join('')].join('\n');
+  const price=Number(item.itemPrice);
+  return copy.text===body+(price>0?'\n\n価格：'+price.toLocaleString('ja-JP')+'円':'')+'\n\n※アフィリエイト広告を利用しています';
+ }
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,verifiedMeasuredSourceCopy,restatedReason};
 });

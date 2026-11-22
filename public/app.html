@@ -2597,7 +2597,7 @@ function updateAiPanel(index){
   box.querySelectorAll('[data-ai-review]').forEach(b=>b.classList.toggle('on',aiRoomReviews.get(index)===b.dataset.aiReview));
 }
 
-async function requestAiRoom(item,index,generation,{localOnly=false}={}){
+async function requestAiRoom(item,index,generation,{localOnly=true}={}){
   if(!aiGatesFullOutput||generation!==aiRunGeneration) return false;
   let haltAutomatic=false;
   const sourceConflict=aiTargetDecision(item).reasons.includes('rule_conflict');
@@ -2616,8 +2616,6 @@ async function requestAiRoom(item,index,generation,{localOnly=false}={}){
       const message=r.status===503&&String(d.message||'').includes('GROQ_API_KEY')?'AI機能を利用できません。安全のため短文表示です。':r.status===429?'AIの1日上限に達しました。安全のため短文表示です。':r.status===504?'AI分析が時間内に完了しませんでした。安全のため短文表示です。':(d.message||'AI分析に失敗しました。安全のため短文表示です。');
       aiRoomResults.set(index,{state:'error',message,status:r.status});
       haltAutomatic=true;
-    }else if(localOnly&&!sourceConflict&&!d.sourceCopy){
-      aiRoomResults.set(index,{state:'skipped',reason:'rule_confident',localChecked:true});
     }else aiRoomResults.set(index,{state:'done',data:d});
     for(const p of ['room','threads','instagram']) postCache.delete(p+':'+index);
   }catch(e){

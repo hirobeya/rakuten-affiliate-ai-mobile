@@ -1,0 +1,171 @@
+{
+  "baselinePullRequest": 189,
+  "baselineRemoteHead": "1a8655a48e309b0751557087e1f28f39ce4132c3",
+  "holdout": [
+    {
+      "genre": "bos",
+      "code": "bos-shop:10000026",
+      "hash": "c24b337e14189fb88105a99e9bd0eb3d2f91b8dbe125128ba307e82c554687d9",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    },
+    {
+      "genre": "pet",
+      "code": "xili01shop:10000110",
+      "hash": "d4461b44fa0eeda92dcf6c80d9ee65129a34155ae656d2c6ba88f25346ea794d",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    },
+    {
+      "genre": "roller",
+      "code": "nissoplus:10000225",
+      "hash": "ccab0e42618f03d2ba8c251b2417c7929be55fd26c1caf9aeef4c1d575aee522",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    },
+    {
+      "genre": "socks",
+      "code": "nszstore:10000072",
+      "hash": "6fde3ef09807b7c15101ee02447ae53e81f9a9bf2547e6b5459fadd60e88e75f",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    },
+    {
+      "genre": "sports",
+      "code": "lsports:10060694",
+      "hash": "d3fd04ea7c6945e65cad58d6ac500ef46f8c5495c6e3e2a90d824383d67a8f54",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    },
+    {
+      "genre": "cleaning",
+      "code": "repeat7:10004567",
+      "hash": "5245bf19f63f961744ccaf157e9ac2845561c66940fb43d5fb0e1e9bdb1e07cd",
+      "status": "not_generated",
+      "reason": "product_identity_unresolved"
+    }
+  ],
+  "measured": {
+    "itemCode": "tiger-online:10003897",
+    "text": "電気ケトル\nスピード沸騰 カップ1杯約60秒でお湯が沸くので、使いたいときに使う分だけすぐにお湯が沸かせます。\n水温・室温23度。通電自動オフするまでの時間。約140mL。\n\n価格：4,980円\n\n※アフィリエイト広告を利用しています",
+    "proof": {
+      "kind": "explicit_cause",
+      "feature": {
+        "source": "itemCaption",
+        "quote": "スピード沸騰 カップ1杯約60秒でお湯が沸く",
+        "start": 136,
+        "end": 158,
+        "audience": [],
+        "condition": [],
+        "degree": [
+          "約"
+        ],
+        "negation": [],
+        "number": [
+          "1",
+          "60秒"
+        ]
+      },
+      "benefit": {
+        "source": "itemCaption",
+        "quote": "使いたいときに使う分だけすぐにお湯が沸かせます",
+        "start": 161,
+        "end": 184,
+        "audience": [],
+        "condition": [
+          "とき",
+          "だけ"
+        ],
+        "degree": [],
+        "negation": [],
+        "number": []
+      },
+      "literal": {
+        "source": "itemCaption",
+        "quote": "スピード沸騰 カップ1杯約60秒でお湯が沸くので、使いたいときに使う分だけすぐにお湯が沸かせます。",
+        "start": 136,
+        "end": 185,
+        "audience": [],
+        "condition": [
+          "とき",
+          "だけ"
+        ],
+        "degree": [
+          "約"
+        ],
+        "negation": [],
+        "number": [
+          "1",
+          "60秒"
+        ]
+      },
+      "subject": {
+        "source": "itemName",
+        "quote": "電気ケトル",
+        "start": 31,
+        "end": 36,
+        "audience": [],
+        "condition": [],
+        "degree": [],
+        "negation": [],
+        "number": []
+      },
+      "evidence": [
+        {
+          "source": "itemCaption",
+          "quote": "タイガーの電気ケトルが人気の理由",
+          "start": 44,
+          "end": 60,
+          "audience": [],
+          "condition": [],
+          "degree": [],
+          "negation": [],
+          "number": []
+        },
+        {
+          "source": "itemCaption",
+          "quote": "スピード沸騰 カップ1杯約60秒でお湯が沸くので、使いたいときに使う分だけすぐにお湯が沸かせます。",
+          "start": 136,
+          "end": 185,
+          "audience": [],
+          "condition": [
+            "とき",
+            "だけ"
+          ],
+          "degree": [
+            "約"
+          ],
+          "negation": [],
+          "number": [
+            "1",
+            "60秒"
+          ]
+        }
+      ],
+      "measurement": {
+        "specification": {
+          "source": "itemCaption",
+          "quote": "沸とう時間（※1）：カップ1杯（約）（※2） 60秒",
+          "start": 450,
+          "end": 476
+        },
+        "notes": [
+          {
+            "source": "itemCaption",
+            "quote": "水温・室温23度。通電自動オフするまでの時間。",
+            "start": 530,
+            "end": 553
+          },
+          {
+            "source": "itemCaption",
+            "quote": "約140mL。",
+            "start": 557,
+            "end": 564
+          }
+        ]
+      }
+    }
+  },
+  "externalAiRequests": 0,
+  "releasePassed": false
+}
