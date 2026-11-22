@@ -1,3 +1,4 @@
+const {isModeAPreview}=require('../lib/mode-a-preview');
 const {db,authorizeProEmail}=require('../lib/billing');
 const {searchProducts}=require('../lib/pro-search');
 
@@ -27,6 +28,7 @@ async function recentCodes(email){
   return codes;
 }
 module.exports=async function handler(req,res){
+  if(isModeAPreview())return res.status(404).json({message:'方式Aではこの経路を使用しません。'});
   if(req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   const secret=String(process.env.CRON_SECRET||'');
   const schedule=String(req.headers['x-vercel-cron-schedule']||'');

@@ -1,4 +1,5 @@
 const crypto = require('node:crypto');
+const {isModeAPreview}=require('../lib/mode-a-preview');
 const {authClientConfig,activate,authorize,authorizePro,verifyConfiguredCheckout,requireSafeCustomerWriteDestination,setDeviceCookie,clearDeviceCookie,db} = require('../lib/billing');
 
 const HANDOFF_TTL_MS = 10 * 60 * 1000;
@@ -13,6 +14,8 @@ module.exports = async function handler(req,res) {
       return res.status(404).json({message:'販売・新規受付は現在停止しています'});
     }
     if (req.method !== 'GET') return res.status(405).json({message:'Method not allowed'});
+    if(isModeAPreview()&&['buy','buy-pro','activate','activate-pro'].includes(req.query.action))
+      return res.status(404).json({message:'方式Aでは購入を受け付けていません。'});
     if (req.query.action === 'auth-client') {
       const client=authClientConfig({browser:true});
       res.setHeader('Content-Type','application/javascript; charset=utf-8');
@@ -34,7 +37,7 @@ module.exports = async function handler(req,res) {
       if(result.ok && result.user?.email) setDeviceCookie(res,result.user.email);
       return res.status(result.ok ? 200 : result.status).json({
         allowed:result.ok,
-        pro:result.ok && ['standard','pro','owner'].includes(result.plan),
+        pro:!isModeAPreview() && result.ok && ['standard','pro','owner'].includes(result.plan),
         plan:result.ok ? String(result.plan||'base') : '',
         email:result.ok ? String(result.user?.email||'') : ''
       });

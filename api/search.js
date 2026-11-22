@@ -1,5 +1,6 @@
 const {searchCaptionText}=require('../lib/urenavi-core/source-passages');
-const {authorize} = require('../lib/billing');
+const {authorize,db} = require('../lib/billing');
+const {isModeAPreview,approvedSlot,isApprovedDeployment,hasThreeCandidates}=require('../lib/mode-a-preview');
 const clamp=(n,min=0,max=100)=>
 Math.max(
   min,
@@ -472,9 +473,12 @@ function profitabilityScore(x){
 
 function createHandler(deps={}){
   const authorizeFn=deps.authorize||authorize;
+  const attemptDb=deps.attemptDb||db;
+  const send=deps.fetch||((...args)=>fetch(...args));
   return async function handler(req,res){
 
-  if(req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
+  const modeA=isModeAPreview();
+  if(modeA?req.method!=='POST':req.method && req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{
 
     res.setHeader(
@@ -504,32 +508,37 @@ function createHandler(deps={}){
     }
 
 
+    const trial=modeA?approvedSlot(req.body):null;
+    if(modeA&&auth.plan!=='owner')return res.status(403).json({message:'隔離管理者のみ検索できます。'});
+    if(modeA&&!trial)return res.status(400).json({message:'承認済みの検証枠を選んでください。'});
+    const query=trial||req.query;
+
     const keyword=
     normalizeSearchKeyword(
-      req.query.keyword||
+      query.keyword||
       ''
     );
 
 
     const minPrice=
-    req.query.minPrice
+    query.minPrice
     ?
-    +req.query.minPrice
+    +query.minPrice
     :
     null;
 
 
     const maxPrice=
-    req.query.maxPrice
+    query.maxPrice
     ?
-    +req.query.maxPrice
+    +query.maxPrice
     :
     null;
 
 
     const userSort=
     String(
-      req.query.sort||
+      query.sort||
       'standard'
     );
 
@@ -633,11 +642,19 @@ function createHandler(deps={}){
     p.toString();
 
 
+    if(trial){
+      if(!isApprovedDeployment(affiliateId))return res.status(403).json({message:'配備SHAと本人の提携IDが未確認です。送信はありません。'});
+      const claimed=await attemptDb('rpc/urenavi_claim_mode_a_preview',{
+        method:'POST',body:JSON.stringify({p_slot:trial.slot})
+      });
+      if(claimed!==true)return res.status(409).json({message:'検証枠が使用済み、条件未成立、または安全停止中です。送信はありません。'});
+    }
     const r=
-    await fetch(
+    await send(
       url,
       {
         signal:AbortSignal.timeout(12000),
+        ...(trial?{redirect:'error'}:{}),
         headers:{
           Origin:
           'https://rakuten-affiliate-ai-mobile.vercel.app',
@@ -650,9 +667,7 @@ function createHandler(deps={}){
 
     const data=
     await r.json()
-    .catch(
-      ()=>({})
-    );
+    .catch(error=>{if(trial)throw error;return {};});
 
 
     if(!r.ok){
@@ -667,6 +682,9 @@ function createHandler(deps={}){
 
     }
 
+
+    if(trial&&!Array.isArray(data.items)&&!Array.isArray(data.Items))
+      return res.status(502).json({message:'楽天の応答形式を確認できません。検証を停止しました。'});
 
     let items=
     (
@@ -690,6 +708,11 @@ function createHandler(deps={}){
       v
     );
 
+
+    if(trial&&items.some(item=>!(typeof item.itemCode==='string'&&item.itemCode&&
+      typeof item.itemName==='string'&&item.itemName&&Number.isFinite(Number(item.itemPrice))&&
+      /^https:\/\/(?:item|hb\.afl)\.rakuten\.co\.jp\//.test(item.itemUrl||''))))
+      return res.status(502).json({message:'必要な商品情報を確認できません。検証を停止しました。'});
 
     const wantsFurusato=
     /ふるさと納税|寄付/
@@ -815,7 +838,7 @@ function createHandler(deps={}){
     .slice(0,10);
 
     const uniqueGenreIds=[...new Set(selected.map(x=>String(x.genreId||'')).filter(Boolean))];
-    const genrePairs=await Promise.all(
+    const genrePairs=trial?[]:await Promise.all(
       uniqueGenreIds.map(async id=>[id,await fetchGenreMeta(id,appId,accessKey)])
     );
     const genreById=new Map(genrePairs);
@@ -908,6 +931,12 @@ function createHandler(deps={}){
     );
 
 
+    if(trial){
+      const finished=await attemptDb('rpc/urenavi_finish_mode_a_preview',{
+        method:'POST',body:JSON.stringify({p_slot:trial.slot,p_has_three:hasThreeCandidates(out)})
+      });
+      if(finished!==true)return res.status(503).json({message:'検索の記録が確定しません。検証を停止しました。'});
+    }
     return res
     .status(200)
     .json({
@@ -915,7 +944,8 @@ function createHandler(deps={}){
       out,
       count:
       +data.count||
-      0
+      0,
+      ...(trial?{modeAKeyword:trial.keyword}:{})
     });
 
 

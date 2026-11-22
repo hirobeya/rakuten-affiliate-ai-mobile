@@ -859,6 +859,17 @@ input,select{
 
 </select>
 
+<div id="modeASlots" hidden>
+  <label for="modeASlot">方式Aの検証枠</label>
+  <select id="modeASlot">
+    <option value="">選択してください</option>
+    <option value="1">Chrome：収納ケース（1,500〜5,000円）</option>
+    <option value="2">ホーム画面版：収納ケース（1,500〜5,000円）</option>
+    <option value="3">Chromeの予備：電気ケトル（3,000〜8,000円）</option>
+    <option value="4">ホーム画面版の予備：電気ケトル（3,000〜8,000円）</option>
+  </select>
+  <p class="muted">検索語・価格帯は検証枠の設定を使用します。レビュー100件以上・評価4.3以上を目安に、原文で型番・仕様と重複を確認してください。</p>
+</div>
 <button id="go" class="go">
 商品を探して評価する
 </button>
@@ -1008,6 +1019,7 @@ let currentAccessPlan='base';
 let proAvailable=false;
 let debugExportAllowed=false;
 let aiGatesFullOutput=false;
+let modeAPreview=false;
 let aiRoomResults=new Map();
 let aiRoomReviews=new Map();
 let aiRunGeneration=0;
@@ -2200,12 +2212,18 @@ async function updateDebugExportAccess(){
     const r=await fetch('/api/runtime-env',{credentials:'same-origin',cache:'no-store'});
     const d=await r.json().catch(()=>({}));
     runtimeKnown=r.ok && typeof d.preview==='boolean';
+    modeAPreview=runtimeKnown&&d.preview===true&&d.modeA===true;
     preview=runtimeKnown && d.preview===true;
   }catch{
     preview=false;
     runtimeKnown=false;
   }
+  if($('#modeASlots'))$('#modeASlots').hidden=!modeAPreview;
+  if(modeAPreview){
+    for(const id of ['k','min','max','sort']){const field=document.getElementById(id);if(field) field.disabled=true;}
+  }
   debugExportAllowed=runtimeKnown && preview && currentAccessPlan==='owner';
+  if(modeAPreview)debugExportAllowed=false;
   const paidPlan=['standard','base','pro','owner'].includes(currentAccessPlan);
   aiGatesFullOutput=runtimeKnown && (
     preview
@@ -3108,7 +3126,7 @@ function decision(
 
 
 function compare(
-  a
+  a,label='AI'
 ){
 
   const t=
@@ -3152,7 +3170,7 @@ function compare(
             </div>
 
             <div class="cs">
-              AI ${i.score}/100
+              ${label} ${i.score}/100
             </div>
 
           </div>
@@ -3219,11 +3237,87 @@ function compare(
 }
 
 
+function modeACopyText(item){
+  return [
+    '商品名：'+item.itemName,
+    '価格：'+fmt(item.itemPrice)+'円',
+    '評価：'+item.reviewAverage,
+    'レビュー件数：'+fmt(item.reviewCount)+'件',
+    '商品URL：'+item.itemUrl
+  ].join('\n');
+}
+
+function renderModeA(items){
+  const results=$('#res');
+  const shortlisted=new Set(),titles=new Set();
+  for(const item of items.slice(0,10)){
+    const title=String(item.itemName||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+    if(shortlisted.size===3) break;
+    if(!title||!item.itemCode||shortlisted.has(item.itemCode)||titles.has(title)||
+       item.reviewCount<100||item.reviewAverage<4.3||item.itemPrice<=0||!item.itemCaption)continue;
+    shortlisted.add(item.itemCode);
+    titles.add(title);
+  }
+  const rendered=new Set();
+  results.innerHTML='<p>注目候補 '+shortlisted.size+'件。並びはウレナビの独自スコアです。</p>'+
+    (shortlisted.size<3?'<p>基準を満たす候補が3件未満です。</p>':'')+
+    compare(items,'ウレナビ')+items.map((item,index)=>{
+      const candidate=shortlisted.has(item.itemCode)&&!rendered.has(item.itemCode);
+      rendered.add(item.itemCode);
+      return '<article class="item"><h3>'+esc(item.itemName)+'</h3><p>'+
+        (candidate?'注目候補　':'')+'ウレナビ '+esc(item.score)+'点</p><p>'+
+        fmt(item.itemPrice)+'円／★'+esc(item.reviewAverage)+'／レビュー'+fmt(item.reviewCount)+'件</p>'+
+        '<details><summary>商品説明の原文</summary><p>'+esc(item.itemCaption||'説明なし')+'</p></details>'+
+        '<button type="button" data-mode-a-copy="'+index+'">商品情報5項目をコピー</button>'+
+        '<textarea hidden aria-label="コピー用の商品情報" readonly></textarea></article>';
+    }).join('');
+  results.querySelectorAll('[data-mode-a-copy]').forEach(button=>{
+    button.onclick=async()=>{
+      const text=modeACopyText(items[Number(button.dataset.modeACopy)]);
+      try{await navigator.clipboard.writeText(text);button.textContent='商品情報をコピーしました';}
+      catch{
+        const field=button.parentElement.querySelector('textarea');
+        field.value=text;field.hidden=false;field.focus();field.select();
+        button.textContent='表示された商品情報を選択してコピー';
+      }
+    };
+  });
+}
+
+async function runModeASearch(){
+  const button=$('#go'),status=$('#st'),select=$('#modeASlot');
+  const slot=Number(select.value);
+  if(!slot){status.textContent='検証枠を選んでください。';return;}
+  if(searching)return;
+  if(currentAccessPlan!=='owner'||!currentAppSession?.access_token){
+    status.textContent='隔離管理者としてログインしてください。';return;
+  }
+  searching=true;button.disabled=true;status.textContent='検索中…';
+  try{
+    const result=await fetch('/api/search',{
+      method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+currentAppSession.access_token},
+      body:JSON.stringify({slot})
+    });
+    const data=await result.json();
+    if(!result.ok)throw new Error(data.message||'安全確認が完了していません。');
+    lastSearchKeyword=String(data.modeAKeyword||'');
+    k.value=lastSearchKeyword;
+    render(Array.isArray(data.items)?data.items:[]);
+    saveSearchState();
+    select.options[select.selectedIndex].disabled=true;
+    select.value='';
+    status.textContent=lastSearchItems.length+'件を表示しました。';
+  }catch(error){
+    status.textContent='検証停止：'+(error.message||'応答を確認できません。')+' 再送せず、ご確認ください。';
+  }finally{searching=false;button.disabled=false;}
+}
+
 function render(
   a
 ){
 
   lastSearchItems=Array.isArray(a)?a:[];
+  if(modeAPreview){renderModeA(lastSearchItems);return;}
   aiRoomResults=new Map();
   aiRoomReviews=new Map();
   aiRunGeneration++;
@@ -3644,6 +3738,7 @@ function render(
 
 $('#go').onclick=
 async()=>{
+  if(modeAPreview)return runModeASearch();
 
   if(
     searching
