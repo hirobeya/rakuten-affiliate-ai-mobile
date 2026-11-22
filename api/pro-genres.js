@@ -1,3 +1,4 @@
+const {isModeAPreview}=require('../lib/mode-a-preview');
 const {authorizePro,db}=require('../lib/billing');
 
 function cleanGenre(x){
@@ -9,6 +10,7 @@ function cleanGenre(x){
   return {genreId:id,nameJa:name,level:Number.isFinite(level)?level:0};
 }
 module.exports=async function handler(req,res){
+  if(isModeAPreview())return res.status(404).json({message:'方式Aではこの経路を使用しません。'});
   res.setHeader('Cache-Control','private, max-age=300');
   if(req.method!=='GET') return res.status(405).json({message:'Method not allowed'});
   try{

@@ -30,7 +30,9 @@ textとevidenceを同じ完全な連続引用
 function makeInputHash(){ return require('node:crypto').createHash('sha256').update(PROMPT_VERSION+VALIDATION_RULE_VERSION).digest('hex'); }
 */
 
-const handler=typeWrapper.createHandler();
+const {isModeAPreview}=require('../lib/mode-a-preview');
+const defaultHandler=typeWrapper.createHandler();
+const handler=(req,res)=>isModeAPreview()?res.status(404).json({message:'方式AではAIを使用しません。'}):defaultHandler(req,res);
 
 module.exports=handler;
 Object.assign(module.exports,legacy);

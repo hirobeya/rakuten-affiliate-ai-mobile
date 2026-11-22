@@ -142,3 +142,51 @@ test('provider 429 is reported as stop with no replay or leaked identifiers',asy
   if(oldKey===undefined)delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=oldKey;
  }
 });
+
+test('paid requests reserve both spending ceilings in v2 before the single send',async()=>{
+ const paths=[],payloads=[];
+ let sends=0;
+ const paidPolicy={organizationDailyTokens:1000000,tenantDailyTokens:50000,
+  inputNanoUsdPerToken:150,outputNanoUsdPerToken:600};
+ const result=await guardedRoomAiCall({req:request,authorization,apiKey:'offline',item,paidPolicy,
+  db:async(path,{body})=>{paths.push(path);payloads.push(JSON.parse(body));return true;},
+  callAI:async options=>{sends++;assert.equal(options.maxRetries,0);return response;}});
+ assert.equal(sends,1);
+ assert.deepEqual(paths,['rpc/urenavi_capacity_reserve_paid_v2','rpc/urenavi_capacity_intent_v2','rpc/urenavi_capacity_complete_v2']);
+ assert.equal(payloads[0].p_org_token_ceiling,1000000);
+ assert.equal(payloads[0].p_tenant_token_ceiling,50000);
+ assert.equal(payloads[0].p_tenant,user.id);
+ assert.equal(result.estimatedCostNanoUsd,97500);
+ await assert.rejects(guardedRoomAiCall({req:request,authorization,apiKey:'offline',item,paidPolicy,
+  db:async()=>false,callAI:async()=>assert.fail('no send after budget refusal')}),/reservation_unconfirmed/);
+});
+
+test('paid configuration requires current evidence for this exact key and production approval',()=>{
+ const {createHash}=require('node:crypto');
+ const {paidCapacityPolicy,groqPlan}=require('../lib/urenavi-core/groq-plan');
+ const now=Date.now(),key='offline';
+ const evidence={approved:true,plan:'paid',evidenceHash:'a'.repeat(64),
+  keyHash:createHash('sha256').update(key).digest('hex'),
+  verifiedAt:new Date(now-1000).toISOString(),expiresAt:new Date(now+1000).toISOString(),
+  inputNanoUsdPerToken:150,outputNanoUsdPerToken:600,
+  organizationDailyBudgetNanoUsd:600000000,tenantDailyBudgetNanoUsd:60000000};
+ const env={URENAVI_GROQ_PLAN:'paid',VERCEL_ENV:'production',URENAVI_GROQ_PAID_ENABLED:'approved_paid',
+  URENAVI_GROQ_PAID_EVIDENCE:JSON.stringify(evidence)};
+ assert.equal(groqPlan({}),'free');
+ assert.equal(groqPlan({URENAVI_GROQ_PLAN:'invalid'}),null);
+ assert.equal(paidCapacityPolicy({key,env,now}).tenantDailyTokens,100000);
+ assert.equal(paidCapacityPolicy({key,env:{...env,VERCEL_ENV:'preview'},now}),null);
+ assert.equal(paidCapacityPolicy({key,env:{...env,URENAVI_GROQ_PAID_ENABLED:''},now}),null);
+ assert.equal(paidCapacityPolicy({key:'other',env,now}),null);
+ assert.equal(paidCapacityPolicy({key,env,now:now+1000}),null);
+});
+
+test('unexpected provider overrun is settled and withheld with no retry',async()=>{
+ const d=fakeDb();
+ let calls=0;
+ await assert.rejects(guardedRoomAiCall({req:request,authorization,apiKey:'offline',item,
+  estimate:300,db:d.db,callAI:async()=>{calls++;return response;}}),
+  error=>error.message==='room_ai_provider_usage_exceeded_no_retry'&&error.capacityPreDispatch===false);
+ assert.equal(calls,1);
+ assert.equal(d.args.at(-1).p_actual,350);
+});

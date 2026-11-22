@@ -1,3 +1,4 @@
+const {isModeAPreview}=require('../lib/mode-a-preview');
 const search=require('./search');
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 const norm=s=>String(s||'').normalize('NFKC').toLowerCase();
@@ -48,6 +49,7 @@ function intentScore(item,keyword){
 }
 
 module.exports=async function(req,res){
+  if(isModeAPreview())return res.status(404).json({message:'方式Aではこの経路を使用しません。'});
   let statusCode=200,payload=null;
   const proxy={
     setHeader:(...a)=>res.setHeader(...a),

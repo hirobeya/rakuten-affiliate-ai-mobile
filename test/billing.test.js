@@ -311,3 +311,34 @@ test('No implicit legacy live checkout price is used without explicit configurat
 test('Search ranks relevant products and returns finite sellability/profitability and affiliate URLs',async()=>{process.env.RAKUTEN_APP_ID='fixture';process.env.RAKUTEN_ACCESS_KEY='fixture';process.env.RAKUTEN_AFFILIATE_ID='fixture';global.fetch=async url=>{url=String(url);if(url.includes('/auth/v1/user'))return response({id:'user_fixture',email:'a@example.com'});if(url.includes('urenavi_session_valid'))return response(true);if(url.includes('/subscriptions/'))return response(sub());if(url.includes('urenavi_entitlements_v2'))return response([{stripe_subscription_id:'sub_test'}]);if(url.includes('urenavi_entitlements?'))return response([]);assert.ok(url.startsWith('https://openapi.rakuten.co.jp/'));return response({items:[{itemName:'充電器 USB-C',catchcopy:'急速充電対応',itemCaption:'外出先でも手軽に充電できるコンパクト充電器',genreId:'123456',itemCode:'shop:item',itemPrice:3000,reviewCount:100,reviewAverage:4.5,affiliateRate:4,affiliateUrl:'https://hb.afl.rakuten.co.jp/fixture',mediumImageUrls:['https://example.com/image.png']},{itemName:'ふるさと納税 充電器',itemPrice:30000,reviewCount:1000,reviewAverage:5,affiliateRate:4}],count:2});};const r=res();await search({headers:{authorization:'Bearer '+authToken()},query:{keyword:'充電器'}},r);assert.equal(r.code,200);assert.equal(r.body.items.length,1);const item=r.body.items[0];for(const key of ['sellability','profitability','score'])assert.ok(Number.isFinite(item[key])&&item[key]>=0&&item[key]<=100);assert.equal(item.estimatedCommission,120);assert.equal(item.catchcopy,'急速充電対応');assert.match(item.itemCaption,/コンパクト充電器/);assert.equal(item.genreId,'123456');assert.equal(item.itemCode,'shop:item');assert.ok(item.affiliateUrl.startsWith('https://hb.afl.rakuten.co.jp/'));});
 
 test('Delayed checkout event after cancellation acknowledges current inactive state',async()=>{let written;global.fetch=async(url,options)=>{url=String(url);if(url.includes('/checkout/sessions/'))return response({livemode:false,mode:'subscription',status:'complete',payment_status:'paid',payment_link:'plink_test',subscription:'sub_test'});if(url.includes('/subscriptions/'))return response(sub({status:'canceled'}));if(url.includes('/customers/'))return response({email:'a@example.com'});if(url.includes('rpc/urenavi_sync_entitlement')){written=JSON.parse(options.body).p_row;return response(null);}return response([]);};const r=res();await webhook(signed({livemode:false,type:'checkout.session.completed',data:{object:{id:'cs_test_fixture',payment_link:'plink_test',payment_status:'paid'}}}),r);assert.equal(r.code,200);assert.equal(written.active,false);});
+
+test('Groq experiment Preview uses the isolated Auth and never falls back to the shared service key',async()=>{
+ process.env.VERCEL_GIT_COMMIT_REF='experiment/urenavi-groq-room-copy-20261122';
+ process.env.SUPABASE_URL='https://upooxcugrplfmjnqpuxs.supabase.co';
+ process.env.SUPABASE_SERVICE_ROLE_KEY='shared-service-key';
+ delete process.env.URENAVI_ISOLATED_SUPABASE_PUBLISHABLE_KEY;
+ delete process.env.URENAVI_COMPARISON_REMOTE_SERVICE_KEY;
+ let calls=0;
+ global.fetch=async()=>{calls++;throw Error('No request allowed');};
+ const unavailable=res();
+ await access({method:'GET',query:{action:'auth-client'}},unavailable);
+ assert.equal(unavailable.code,503);
+ await assert.rejects(()=>billing.db('urenavi_entitlements'),/Database configuration missing/);
+ assert.equal(calls,0);
+
+ process.env.URENAVI_ISOLATED_SUPABASE_PUBLISHABLE_KEY='sb_publishable_fixture';
+ process.env.URENAVI_COMPARISON_REMOTE_SERVICE_KEY='isolated-service-key';
+ const configured=res();
+ configured.send=body=>{configured.body=body;return configured;};
+ await access({method:'GET',query:{action:'auth-client'}},configured);
+ assert.equal(configured.code,200);
+ assert.match(configured.body,/vyzpklomggsazwigxkfh/);
+ assert.match(configured.body,/sb_publishable_fixture/);
+ assert.doesNotMatch(configured.body,/service-key|upooxcugrplfmjnqpuxs/);
+ global.fetch=async(url,options)=>{
+  assert.equal(new URL(url).origin,'https://vyzpklomggsazwigxkfh.supabase.co');
+  assert.equal(options.headers.apikey,'isolated-service-key');
+  return response([]);
+ };
+ assert.deepEqual(await billing.db('urenavi_entitlements'),[]);
+});

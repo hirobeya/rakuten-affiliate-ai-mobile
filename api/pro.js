@@ -1,3 +1,4 @@
+const {isModeAPreview}=require('../lib/mode-a-preview');
 const {authorizePro,db,setDeviceCookie}=require('../lib/billing');
 const {searchProducts}=require('../lib/pro-search');
 
@@ -84,6 +85,7 @@ async function listQueue(email){
   }));
 }
 module.exports=async function handler(req,res){
+  if(isModeAPreview())return res.status(404).json({message:'方式Aではこの経路を使用しません。'});
   res.setHeader('Cache-Control','no-store');
   if(!['GET','POST'].includes(req.method||'GET')) return res.status(405).json({message:'Method not allowed'});
   try{
