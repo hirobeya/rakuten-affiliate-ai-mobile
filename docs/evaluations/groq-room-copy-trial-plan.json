@@ -1,0 +1,85 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "modelPlan": "free",
+  "reservationTokensPerRequest": 8000,
+  "maxOutputTokens": 2000,
+  "maxRequestsPerRun": 6,
+  "automaticRetries": 0,
+  "samples": [
+    {
+      "group": "収納",
+      "code": "risu-onlineshop:10002384",
+      "eligibleForApproval": true,
+      "inputBytes": 3417,
+      "sourceHash": "6ba5cb84b34ba8e85a36033d12e8e5e9452ebfe47bf342754209ddcf54729df5"
+    },
+    {
+      "group": "キッチン家電",
+      "code": "mpowjapan:10000907",
+      "eligibleForApproval": true,
+      "inputBytes": 4150,
+      "sourceHash": "eadfc7ee6be53633d52a5dbf11e25580e00380474b7b46719ecfe1bfd70add26"
+    },
+    {
+      "group": "掃除用品",
+      "code": "pit-life:10003902",
+      "eligibleForApproval": true,
+      "inputBytes": 4231,
+      "sourceHash": "d65990ea61c5825ec098630836d818b33d36d663b94c22b90a8a9f8bbdb2e344"
+    },
+    {
+      "group": "電子機器",
+      "code": "seinan2:10000006",
+      "eligibleForApproval": true,
+      "inputBytes": 3598,
+      "sourceHash": "15ed396d3caeae15be2e89392e641cd8083bb637f04a63422b797adcd1a4e7ce"
+    },
+    {
+      "group": "セット",
+      "code": "lsports:10060694",
+      "eligibleForApproval": true,
+      "inputBytes": 3494,
+      "sourceHash": "b74d3a22f63ec7f793457efe32552144bd38264e78ca7f1f2e8f649fa31a1e0d"
+    },
+    {
+      "group": "型番・選択肢",
+      "code": "tiger-online:10003537",
+      "eligibleForApproval": true,
+      "inputBytes": 3662,
+      "sourceHash": "a645c44f898c95046a8755c6c89b3c78f4a16e9fbc77309cd655765b1975de67"
+    },
+    {
+      "group": "原文不足",
+      "code": "next-online:10000247",
+      "eligibleForApproval": false,
+      "inputBytes": 1461,
+      "sourceHash": "f0b59bd17d7b0cecf230ab5dc25daa37abff0128e97b537402a6b97f18031500"
+    },
+    {
+      "group": "構成矛盾",
+      "code": "tuzukiya:10128242",
+      "eligibleForApproval": false,
+      "inputBytes": 1104,
+      "sourceHash": "f6e80a4f67b5b0c352e1e7aa0538c62b0807f3a9b164bc1027ae4c93a9527486"
+    }
+  ],
+  "scorePolicy": {
+    "method": "実応答を固定原文と照合する人手評価。項目ごとに可否を記録し、停止は品質合格に加えない。",
+    "quality": [
+      "商品理解",
+      "特徴の具体性",
+      "選ぶ理由",
+      "対象・場面・価値",
+      "自然さ・魅力",
+      "根拠外主張なし"
+    ],
+    "appeal": [
+      "冒頭の興味",
+      "商品固有の良さ",
+      "使用場面",
+      "比較判断の材料",
+      "詳細を見たい理由"
+    ],
+    "pass": "商品ごとに品質6/6かつ訴求力4/5以上で合格。初回の採用候補は送信対象6件中5件以上合格かつ根拠外主張0件。停止対象2件は両方が送信前に停止。"
+  }
+}

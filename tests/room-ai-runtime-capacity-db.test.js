@@ -56,3 +56,15 @@ test('no preview or production capacity dispatch from unrecognized runtime',asyn
  await assert.rejects(db(path,payload),/capacity_v2_runtime_not_authorized/);
  assert.equal(calls,0);
 });
+
+test('paid runtime rejects the unbudgeted reserve and preview rejects any paid reserve',async()=>{
+ const paid='rpc/urenavi_capacity_reserve_paid_v2';
+ const env={VERCEL_ENV:'production',URENAVI_PRODUCTION_CAPACITY_ENABLED:'approved_v2',
+  URENAVI_GROQ_PLAN:'paid',URENAVI_GROQ_PAID_ENABLED:'approved_paid',SUPABASE_URL:PRODUCTION_DB_URL};
+ const productionDb=async p=>p===paid;
+ const db=makeRuntimeCapacityDb({env,productionDb});
+ await assert.rejects(db(path,payload),/paid_capacity_requires_budget_reservation/);
+ assert.equal(await db(paid,payload),true);
+ await assert.rejects(makeRuntimeCapacityDb({env:{...env,VERCEL_ENV:'preview'}})(paid,payload),
+  /paid_capacity_preview_not_authorized/);
+});

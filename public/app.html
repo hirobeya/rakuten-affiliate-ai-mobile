@@ -2539,7 +2539,12 @@ function aiPhase1Post(item,result){
     return quality.catalogueOnly(text)||quality.restatedReason(text,{identity})
       ?'':String(text).trim();
   };
-  if(result?.sourceCopy?.text) return acceptable(result.sourceCopy.text);
+  if(result?.sourceCopy?.text){
+    const copy=result.sourceCopy;
+    if(copy.proof?.kind==='declared_use'&&!quality?.verifiedDeclaredReasonCopy(item,copy))return '';
+    if(copy.proof?.measurement&&!quality?.verifiedMeasuredSourceCopy(item,copy))return '';
+    return acceptable(copy.text);
+  }
   const universalPost=window.UrenaviPainCopy?.buildValidatedProductPost?.(item,identity,combinedFacts)||'';
   if(universalPost) return acceptable(universalPost);
   if(!(v?.mode==='simple'||v?.mode==='simple_partial')) return '';
@@ -2609,7 +2614,8 @@ async function requestAiRoom(item,index,generation,{localOnly=true}={}){
     const headers={'Content-Type':'application/json'};
     if(currentAppSession?.access_token) headers.Authorization='Bearer '+currentAppSession.access_token;
     const imageUrl=firstImageUrl(item);
-    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),localOnly:localOnly||sourceConflict,purpose:'room-copy'})});
+    const reviewOnly=new URLSearchParams(window.location.search).get('groqReview')==='1'&&!sourceConflict;
+    const r=await fetch('/api/room-ai',{method:'POST',headers,credentials:'include',signal:controller.signal,body:JSON.stringify({itemCode:String(item?.itemCode||''),itemName:String(item?.itemName||''),itemCaption:String(item?.itemCaption||''),itemPrice:Number(item?.itemPrice)||0,imageUrl:imageUrl==='#'?'':imageUrl,itemUrl:String(item?.itemUrl||''),localOnly:!reviewOnly&&(localOnly||sourceConflict),purpose:'room-copy',...(reviewOnly?{groqRoomCopyTrial:true,reviewOnly:true}:{})})});
     const d=await r.json().catch(()=>({}));
     if(generation!==aiRunGeneration) return;
     if(!r.ok){

@@ -43,3 +43,16 @@ test('a declared name can bind a reordered title and only the corroborated featu
  assert.ok(!resolveSourceUnderstanding({...item,itemCaption:changed}).sourceCopy);
  assert.ok(!resolveSourceUnderstanding({...item,itemName:'交換用 '+item.itemName}).sourceCopy);
 });
+
+test('declared benefit is rewritten without losing source or admitting stronger claims',()=>{
+ const {resolveSourceUnderstanding}=require('../lib/super-urenavi-router');
+ const {verifiedDeclaredReasonCopy}=require('../public/purchase-copy-quality');
+ const item=require('../tests/fixtures/source-declared-copy-product.json');
+ const {sourceCopy}=resolveSourceUnderstanding(item);
+ assert.ok(verifiedDeclaredReasonCopy(item,sourceCopy));
+ assert.ok(sourceCopy.text.startsWith('隙間や細かい部分までしっかり拭ける、マイクロファイバーグローブ。\n素手感覚で使える5本指タイプです。'));
+ assert.ok(!sourceCopy.text.includes(sourceCopy.proof.literal.quote));
+ assert.equal(verifiedDeclaredReasonCopy(item,{...sourceCopy,text:sourceCopy.text.replace('拭ける','除菌できる')}),false);
+ assert.equal(verifiedDeclaredReasonCopy({...item,itemCaption:item.itemCaption.replace('しっかり拭ける','簡単に拭ける')},sourceCopy),false);
+ assert.equal(verifiedDeclaredReasonCopy(item,{...sourceCopy,proof:{...sourceCopy.proof,literal:{}}}),false);
+});

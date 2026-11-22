@@ -15,7 +15,7 @@ const ok={raw:confirmed,usage:{prompt_tokens:220,completion_tokens:85}};
 const legacyLocal={model:'local',result_status:'ok',raw_ai_json:{...confirmed,features:[]}};
 
 function environment(t){
-  const keys=['VERCEL_ENV','GROQ_API_KEY','URENAVI_ROOM_COPY_FREE_EVIDENCE'];
+  const keys=['VERCEL_ENV','GROQ_API_KEY','URENAVI_ROOM_COPY_FREE_EVIDENCE','VERCEL_GIT_COMMIT_SHA'];
   const previous=keys.map(key=>[key,process.env[key]]);
   t.after(()=>{for(const [key,value] of previous){
     if(value===undefined)delete process.env[key];else process.env[key]=value;
@@ -45,7 +45,7 @@ function fixture({reply=ok,prior=legacyLocal,policy={},authorize=async()=>auth}=
   },callGroq:async opts=>{
     sends++;
     assert.equal(opts.maxRetries,0);
-    assert.equal(opts.copyReview,true);
+    assert.ok(opts.copyReview===true||opts.roomCopyTrial===true);
     if(reply instanceof Error)throw reply;
     return reply;
   }});
@@ -159,7 +159,7 @@ test('the app displays and copies only the server-approved post for room-copy re
     assert.equal(context.resolvedPost(items.B,0),'');
     assert.equal(context.postReady(items.B),false);
   }
-  result.set(0,{state:'done',data:{copyStatus:'ready',validation,sourceCopy:{text:quote}}});
+  result.set(0,{state:'done',data:{copyStatus:'ready',validation,sourceCopy:{text:quote,proof:{kind:'reviewed_groq_copy'}}}});
   assert.equal(context.resolvedPost(items.B,0),quote);
   assert.equal(context.postReady(items.B),true);
   context.ruleSecondOpinion=()=>({conflict:true});
@@ -177,4 +177,118 @@ test('a dictionary miss can use a declared source subject without inventing an i
   const f=fixture({prior:null,reply:{...ok,raw}});
   assert.equal((await f.request(item)).body.route.route,'text');
   assert.equal(f.sends,1);
+});
+
+function approveTrial(item){
+ const digest=createHash('sha256').update(JSON.stringify([item.itemCode,item.itemName,item.itemCaption,item.itemPrice])).digest('hex');
+ const evidence=JSON.parse(process.env.URENAVI_ROOM_COPY_FREE_EVIDENCE);
+ process.env.VERCEL_GIT_COMMIT_SHA='b'.repeat(40);
+ process.env.URENAVI_ROOM_COPY_FREE_EVIDENCE=JSON.stringify({...evidence,trial:{sha:process.env.VERCEL_GIT_COMMIT_SHA,sourceHashes:[digest]}});
+}
+
+test('trial requires an exact approved source and SHA; unreviewable prose stays private',async t=>{
+ environment(t);
+ const f=fixture({prior:null,reply:{...ok,raw:{...confirmed,roomCopy:'根拠があるように見える任意の文章'}}});
+ const trial={groqRoomCopyTrial:true};
+ assert.equal((await f.request(items.B,trial)).body.copyReason,'groq_trial_approval_unconfirmed');
+ approveTrial(items.B);
+ assert.equal((await f.request({...items.B,itemPrice:1},trial)).body.copyReason,'groq_trial_approval_unconfirmed');
+ assert.equal(f.sends,0);
+ const first=await f.request(items.B,trial);
+ assert.equal(first.body.copyReason,'provider_candidate_requires_review');
+ assert.equal(first.body.sourceCopy,null);
+ assert.ok(!JSON.stringify(first.body).includes('任意の文章'));
+ assert.equal((await f.request(items.B,trial)).body.copyReason,'provider_candidate_requires_review');
+ assert.equal(f.sends,1);
+});
+
+test('trial can return the exact independently verified post and does not resend on retrieval',async t=>{
+ environment(t);
+ approveTrial(items.B);
+ const copy='電気ケトル\n精密な注ぎ口のデザインにより、水流の量や速度を初心者でも簡単に調整できます。';
+ const f=fixture({prior:null,reply:{...ok,raw:{...confirmed,roomCopy:copy}}});
+ for(const route of ['text','cache']){
+  const result=await f.request(items.B,{groqRoomCopyTrial:true});
+  assert.equal(result.body.copyStatus,'ready');
+  assert.equal(result.body.route.route,route);
+ }
+ assert.equal(f.sends,1);
+});
+
+test('trial does not retry after candidate save fails',async t=>{
+ environment(t);
+ approveTrial(items.B);
+ const f=fixture({prior:null,policy:{save:false},reply:{...ok,raw:{...confirmed,roomCopy:'候補'}}});
+ assert.equal((await f.request(items.B,{groqRoomCopyTrial:true})).body.copyReason,'provider_result_save_unconfirmed');
+ await f.request(items.B,{groqRoomCopyTrial:true});
+ assert.equal(f.sends,1);
+});
+
+test('trial transport sends facts and editorial copy in the same structured request with zero retries',async()=>{
+ const {defaultCallGroq}=require('../lib/room-ai-handler');
+ let calls=0;
+ await assert.rejects(defaultCallGroq({...items.B,apiKey:mockKey,model:'openai/gpt-oss-120b',roomCopyTrial:true,maxRetries:2,
+  fetchImpl:async(_,options)=>{
+   calls++;
+   const body=JSON.parse(options.body);
+   assert.equal(body.max_output_tokens,2000);
+   assert.ok(body.text.format.schema.required.includes('roomCopy'));
+   assert.ok(body.text.format.schema.required.includes('productType'));
+   return new Response('{}',{status:429});
+  }
+ }),error=>error.status===429);
+ assert.equal(calls,1);
+});
+
+test('normal generation in a paid-configured environment cannot bypass confirmed budget evidence',async t=>{
+ environment(t);
+ const snapshot=['URENAVI_GROQ_PLAN','URENAVI_GROQ_PAID_ENABLED','URENAVI_GROQ_PAID_EVIDENCE','URENAVI_GROQ_PAID_ROOM_COPY_ENABLED']
+  .map(key=>[key,process.env[key]]);
+ t.after(()=>{for(const [key,value] of snapshot){
+  if(value===undefined)delete process.env[key];else process.env[key]=value;
+ }});
+ process.env.VERCEL_ENV='production';
+ process.env.URENAVI_GROQ_PLAN='paid';
+ delete process.env.URENAVI_GROQ_PAID_ENABLED;
+ delete process.env.URENAVI_GROQ_PAID_EVIDENCE;
+ delete process.env.URENAVI_GROQ_PAID_ROOM_COPY_ENABLED;
+ const f=fixture({prior:null});
+ assert.equal((await f.request(items.B)).body.copyReason,'paid_budget_unconfirmed');
+ assert.equal((await f.request(items.B,{groqRoomCopyTrial:true})).body.copyReason,'groq_trial_unavailable');
+ assert.equal(f.sends,0);
+ assert.equal(f.paths.length,0);
+});
+
+test('an exact human-reviewed paraphrase can be retrieved without a new send',async t=>{
+ environment(t);
+ approveTrial(items.B);
+ const {reviewDigest}=require('../lib/urenavi-core/room-copy-review');
+ const previous=process.env.URENAVI_ROOM_COPY_REVIEWED_HASHES;
+ t.after(()=>{if(previous===undefined)delete process.env.URENAVI_ROOM_COPY_REVIEWED_HASHES;
+  else process.env.URENAVI_ROOM_COPY_REVIEWED_HASHES=previous;});
+ delete process.env.URENAVI_ROOM_COPY_REVIEWED_HASHES;
+ const raw={...confirmed,roomCopy:'お湯を注ぐ量や速さを調整したいときに。精密な注ぎ口の電気ケトルです。'};
+ const f=fixture({prior:null,reply:{...ok,raw}});
+ const action={groqRoomCopyTrial:true};
+ assert.equal((await f.request(items.B,action)).body.copyReason,'provider_candidate_requires_review');
+ delete process.env.URENAVI_ROOM_COPY_FREE_EVIDENCE;
+ process.env.URENAVI_ROOM_COPY_REVIEWED_HASHES=JSON.stringify([reviewDigest(items.B,raw)]);
+ const ready=(await f.request(items.B,{...action,reviewOnly:true})).body;
+ assert.equal(ready.copyStatus,'ready');
+ assert.equal(ready.sourceCopy.proof.kind,'reviewed_groq_copy');
+ assert.ok(ready.sourceCopy.text.startsWith(raw.roomCopy));
+ assert.equal(ready.route.groqCalls,0);
+ assert.equal((await f.request({...items.B,itemPrice:1},action)).body.copyReason,'provider_candidate_requires_review');
+ assert.equal(f.sends,1);
+});
+
+
+test('review-only cache miss cannot send even when the fixed source is approved',async t=>{
+ environment(t);
+ approveTrial(items.B);
+ const f=fixture({prior:null});
+ const response=await f.request(items.B,{groqRoomCopyTrial:true,reviewOnly:true});
+ assert.equal(response.body.copyReason,'reviewed_candidate_not_found');
+ assert.equal(f.paths.length,0);
+ assert.equal(f.sends,0);
 });

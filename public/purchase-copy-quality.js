@@ -159,12 +159,42 @@
   return true;
  }
 
+ // Compare raw source offsets, including full-width text and punctuation.
+ function exactSpan(item,span){
+  return Boolean(span?.quote&&['itemName','itemCaption'].includes(span.source)
+   &&Number.isInteger(span.start)&&span.start>=0&&span.end===span.start+span.quote.length
+   &&String(item?.[span.source]||'').slice(span.start,span.end)===span.quote);
+ }
+ function readyRoomText(item,body){
+  const price=Number(item?.itemPrice);
+  return body+(price>0?'\n\n価格：'+price.toLocaleString('ja-JP')+'円':'')+'\n\n※アフィリエイト広告を利用しています';
+ }
+ // Surface the practical reason first, then explain the supporting
+ // feature. All substantive words still come from the same source claim.
+ function renderDeclaredReason(proof){
+  if(proof?.kind!=='declared_use')return null;
+  const {subject,feature,benefit,literal}=proof;
+  if(!subject?.quote||!feature?.quote||!benefit?.quote||!literal?.quote||
+    !/[るうくぐすつぬぶむ]$/u.test(benefit.quote))return null;
+  const link=literal.quote.slice(feature.quote.length,-1);
+  if(link!=='だから、'+benefit.quote&&link!=='だから，'+benefit.quote)return null;
+  if(literal.source!=='itemCaption'||!literal.quote.startsWith(feature.quote)||
+    feature.start!==literal.start||benefit.end!==literal.end-1||
+    benefit.start!==literal.end-1-benefit.quote.length)return null;
+  return benefit.quote+'、'+subject.quote+'。\n'+feature.quote+'です。';
+ }
+ function verifiedDeclaredReasonCopy(item,copy){
+  const proof=copy?.proof;
+  const body=renderDeclaredReason(proof);
+  if(!body||proof.subject.source!=='itemCaption'||proof.feature.source!=='itemCaption'
+   ||proof.benefit.source!=='itemCaption'||!Array.isArray(proof.evidence)||proof.evidence.length<2)return false;
+  return [proof.subject,proof.feature,proof.benefit,proof.literal,...proof.evidence]
+   .every(span=>exactSpan(item,span))&&copy.text===readyRoomText(item,body);
+ }
  function verifiedMeasuredSourceCopy(item,copy){
   const proof=copy?.proof, measurement=proof?.measurement;
   if(!measurement?.notes?.length)return false;
-  const exact=span=>Boolean(span?.quote&&Number.isInteger(span.start)&&span.start>=0
-    &&span.end===span.start+span.quote.length&&String(item?.[span.source]||'').slice(span.start,span.end)===span.quote);
-  if(![proof.subject,proof.literal,measurement.specification,...measurement.notes].every(exact))return false;
+  if(![proof.subject,proof.literal,measurement.specification,...measurement.notes].every(span=>exactSpan(item,span)))return false;
   const labels=[...new Set(measurement.specification.quote.match(/※[0-9]+/g)||[])];
   if(labels.length!==measurement.notes.length||labels.some((label,i)=>{
    const note=measurement.notes[i], marker=label+'：';
@@ -172,8 +202,7 @@
      item.itemCaption.slice(note.start-marker.length,note.start)!==marker;
   }))return false;
   const body=[proof.subject.quote,proof.literal.quote,measurement.notes.map(note=>note.quote).join('')].join('\n');
-  const price=Number(item.itemPrice);
-  return copy.text===body+(price>0?'\n\n価格：'+price.toLocaleString('ja-JP')+'円':'')+'\n\n※アフィリエイト広告を利用しています';
+  return copy.text===readyRoomText(item,body);
  }
- return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,verifiedMeasuredSourceCopy,restatedReason};
+ return {catalogueOnly,hasUseRelation,hasChoiceRelation,sellerNarrative,sourceIncludes,sourceQuoteIncludes,sourceOperationReason,verifiedLinkedReason,verifiedSourceMultiUse,verifiedTitleSignal,verifiedLocalCopy,verifiedMeasuredSourceCopy,verifiedDeclaredReasonCopy,renderDeclaredReason,readyRoomText,restatedReason};
 });
