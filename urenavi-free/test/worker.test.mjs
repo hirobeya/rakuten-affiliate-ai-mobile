@@ -9,12 +9,16 @@ test('Cloudflare serves assets and does not expose unapproved catalog data', asy
     WORKER_VERSION: { id: 'abcdef12-3456-7890-1234-567890123456' },
     URENAVI_FREE_RAKUTEN_ORIGIN: origin
   };
-  assert.equal(await (await worker.fetch(new Request(origin), env)).text(), 'static');
-  const result = await worker.fetch(new Request(origin + '/api/catalog?keyword=傘'), env);
+  assert.equal((await worker.fetch(new Request(origin), env)).status, 503);
+  env.URENAVI_FREE_PREVIEW_PASSWORD = 'test-fixture-password'.repeat(2);
+  const options = { headers: { Authorization: 'Basic ' + Buffer.from('urenavi:' + env.URENAVI_FREE_PREVIEW_PASSWORD).toString('base64') } };
+  assert.equal((await worker.fetch(new Request(origin), env)).status, 401);
+  assert.equal(await (await worker.fetch(new Request(origin, options), env)).text(), 'static');
+  const result = await worker.fetch(new Request(origin + '/api/catalog?keyword=傘', options), env);
   assert.equal(result.status, 503);
   assert.equal(result.headers.get('X-Robots-Tag'), 'noindex, nofollow');
-  assert.equal((await worker.fetch(new Request(origin + '/api/other'), env)).status, 404);
-  assert.equal((await worker.fetch(new Request(origin + '/api/catalog?keyword=傘&keyword=靴'), env)).status, 400);
+  assert.equal((await worker.fetch(new Request(origin + '/api/other', options), env)).status, 404);
+  assert.equal((await worker.fetch(new Request(origin + '/api/catalog?keyword=傘&keyword=靴', options), env)).status, 400);
 });
 
 test('Cloudflare rejects oversized analytics bodies and an unapproved live hostname', async () => {
@@ -51,4 +55,13 @@ test('Cloudflare verification URL requires authentication before static files or
     Buffer.from('urenavi:' + env.URENAVI_FREE_PREVIEW_PASSWORD).toString('base64') } };
   assert.equal((await worker.fetch(new Request(origin, authorized), env)).status, 200);
   assert.equal((await worker.fetch(new Request(origin + '/api/catalog?mode=ranking', authorized), env)).status, 503);
+});
+
+ test('QA alias is protected even without origin or version bindings', async () => {
+  const origin = 'https://verify-urenavi-free-qa-191.fixture.workers.dev';
+  const env = { ASSETS: { fetch: () => { throw new Error('must not serve assets'); } } };
+  assert.equal((await worker.fetch(new Request(origin), env)).status, 503);
+  env.URENAVI_FREE_PREVIEW_PASSWORD = 'test-fixture-password'.repeat(2);
+  assert.equal((await worker.fetch(new Request(origin), env)).status, 401);
+  assert.equal((await worker.fetch(new Request(origin + '/api/catalog'), env)).status, 401);
 });
