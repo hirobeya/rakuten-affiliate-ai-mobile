@@ -61,6 +61,9 @@ async function main() {
     console.error('QA_RUNTIME_STAGE: ' + stage);
     throw new Error('QA_RUNTIME_HTTP_' + probe.status);
   }
+  console.log('QA_RUNTIME_OBSERVED_SHA ' + (/^[a-f0-9]{40}$/.test(proof?.sha || '') ? proof.sha : 'MISSING_OR_INVALID'));
+  console.log('QA_RUNTIME_REDIS_RESULT ' + (proof?.redis === true ? 'OK' : 'INVALID'));
+  console.log('QA_RUNTIME_EXPECTED_SHA ' + sha);
   requireCondition(proof.sha === sha && proof.redis === true, 'QA_RUNTIME_PROOF_MISMATCH');
   console.log('QA_RUNTIME_REDIS_OK ' + sha);
 }
