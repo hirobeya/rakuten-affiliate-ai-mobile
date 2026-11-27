@@ -1,6 +1,6 @@
 # 無料ウレナビ
 
-このディレクトリが無料版の配備ルート。既存のVercelプロジェクト、環境変数、楽天アプリID、データベースを流用しない。設定を空にした検証版ではトップページを表示し、商品APIは503を返す。検索エンジンの登録はHTMLとHTTPの両方で停止する。
+このディレクトリが無料版の配備ルート。既存のVercelプロジェクト、環境変数、データベースとは分離する。楽天アプリIDは登録URLの適合と他経路の通信状況を確認したうえで再利用を判断する。設定を空にした検証版ではトップページを表示し、商品APIは503を返す。検索エンジンの登録はHTMLとHTTPの両方で停止する。
 
 ## Cloudflare Workers Freeの隔離検証
 
@@ -22,10 +22,10 @@
 
 実接続には、このブランチ・対象SHA・有効期限・日次上限・承認全体の送信上限・登録済みサイトURLを含む新しい承認が必要。実行SHAは配備側のバージョン情報に基づき照合する。明示の承認まで以下は設定しない。
 
-- `URENAVI_FREE_APPROVED_SHA`、`URENAVI_FREE_APPROVED_UNTIL`（ISO 8601）、`URENAVI_FREE_DAILY_LIMIT`、`URENAVI_FREE_APPROVAL_LIMIT`
+- `URENAVI_FREE_APPROVED_SHA`、`URENAVI_FREE_APPROVED_FROM`、`URENAVI_FREE_APPROVED_UNTIL`（ISO 8601）、`URENAVI_FREE_DAILY_LIMIT`、`URENAVI_FREE_APPROVAL_LIMIT`
 - `URENAVI_FREE_RAKUTEN_ORIGIN`、`URENAVI_FREE_RAKUTEN_APP_ID`、`URENAVI_FREE_RAKUTEN_ACCESS_KEY`、`URENAVI_FREE_RAKUTEN_AFFILIATE_ID`、`URENAVI_FREE_APPROVED_AFFILIATE_HASH`
 - 隔離したRedisの `URENAVI_FREE_REDIS_URL`、`URENAVI_FREE_REDIS_TOKEN` と独立した `URENAVI_FREE_EVENT_SECRET`。閲覧・クリックの重複防止は30分、日別集計は90日。
-- 楽天データ保存条件と配備先を確認後、`URENAVI_FREE_CACHE_APPROVED=true` で60秒の共有キャッシュと順位比較を有効にする。
+- 楽天データ保存条件と配備先を確認後、`URENAVI_FREE_CACHE_APPROVED=true` で60秒の共有キャッシュを有効にする。公開時の順位履歴は、別の `URENAVI_FREE_RANK_HISTORY_APPROVED=true` を設定してから有効にする。検証枠では共有キャッシュと順位履歴は常に無効。
 
 通信予約はRedisで原子的に記録する。429、タイムアウト、処理中断、結果保存失敗で予約が残った場合は楽天への送信が止まる。運営者は停止を維持して記録を照合し、送信が終わったことと残りの承認枠を確認した後に当該予約だけを解除する。期限切れや再配備で自動解除しない。商用配備と検索登録は、運用先を確定し実機・実データと帰属を検証してから実装する。
 
@@ -40,3 +40,12 @@
 3. 商品詳細の再取得1回。上の結果でお気に入りに追加した同一商品コードを指定。
 4. 最大3回、日次上限3回、承認時に確定する日本時間の開始から30分間。楽天公式上限は同一アプリIDで毎秒1回以下。アプリの予約間隔は最低2秒。429、結果不明、Redis障害、承認範囲の不一致があれば停止し、再試行しない。
 5. 初回は共有キャッシュ・順位履歴の保存を無効にする。集計はテスト環境に限定する。楽天応答のリンクは改変せず、商品一致を確認する。自己購入・クリックの反復は行わない。
+
+## 一般公開枠の設定
+
+管理者の3通信枠と公開枠は配備先・公開フラグ・承認変数を分ける。今回の検証用Workerでは公開枠を起動しない。公開時は専用の `urenavi-free-public` Worker、配備元の同じタグ形式、楽天に登録した実URLと一致する `URENAVI_FREE_PUBLIC_ORIGIN` / `URENAVI_FREE_RAKUTEN_ORIGIN`、リリースSHAに一致する `URENAVI_FREE_PUBLIC_SHA`、`URENAVI_FREE_PUBLIC_ENABLED=true` が必要。公開枠は検索ごとの30分承認を参照しない。管理者検証と公開の同時利用が不要になった時点で管理者検証を無効にする。楽天アプリIDが他サービスと共用の場合はこのアプリだけで通信間隔を保証できないため、共有の上限管理を用意するか専用化する。
+
+- Upstashの月500,000コマンドについて、予約・完了と詳細・クリックおよびキャッシュ更新用に検索単位あたり36コマンドを予算化。拒否・監視用に25%を残し、31日で割った公開上限は336件/日、31日では10,416件。負荷検証前は `URENAVI_FREE_DAILY_LIMIT` をこの範囲内の低い値に設定する。レスポンスサイズ・保存量・帯域の上限、拒否やイベントの実測に応じて見直す。
+- 予約時は `URENAVI_FREE_SEARCHES_PER_IP_MINUTE` で1～8回/分の端末側IP制限を設定できる。上流全体は2秒に1予約まで、追加の端末・Workerインスタンスにも同じRedisの上限が適用される。Freeの上限が近づいた場合は公開フラグを無効にして翌サイクルの回復を確認する。大量リクエストの拒否にもRedisコマンドがかかるため、公開時の入口の流量対策とUsageの確認が必要。
+- ローカル隔離Redisの観測値は、公開モードのキャッシュなし検索17コマンド、初回詳細・初回クリックを各1回含めると28コマンド。UpstashはEVAL本体と内部Redisコマンドをそれぞれ数えるため、クラウド側Usageでも照合する。
+- 検証枠では検索・ランキング・商品再取得を各1回まで予約し、再取得は当該枠の検索またはランキングが返したコードに限る。予約の重複はサーバーで拒否する。楽天への通信開始前に検証者と承認時刻を合わせる。

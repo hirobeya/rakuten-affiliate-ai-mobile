@@ -36,3 +36,19 @@ test('Cloudflare rejects oversized analytics bodies and an unapproved live hostn
   });
   assert.equal((await worker.fetch(oversized, env)).status, 400);
 });
+
+test('Cloudflare verification URL requires authentication before static files or APIs', async () => {
+  const origin = 'https://verify-urenavi-free-qa-191.fixture.workers.dev';
+  const env = {
+    ASSETS: { fetch: () => new Response('static') },
+    WORKER_VERSION: { id: 'fixture', tag: 'feature/urenavi-free-20261127:' + 'a'.repeat(40) },
+    URENAVI_FREE_RAKUTEN_ORIGIN: origin,
+    URENAVI_FREE_PREVIEW_PASSWORD: 'test-fixture-password'.repeat(2)
+  };
+  assert.equal((await worker.fetch(new Request(origin), env)).status, 401);
+  assert.equal((await worker.fetch(new Request(origin + '/api/catalog?mode=ranking'), env)).status, 401);
+  const authorized = { headers: { Authorization: 'Basic ' +
+    Buffer.from('urenavi:' + env.URENAVI_FREE_PREVIEW_PASSWORD).toString('base64') } };
+  assert.equal((await worker.fetch(new Request(origin, authorized), env)).status, 200);
+  assert.equal((await worker.fetch(new Request(origin + '/api/catalog?mode=ranking', authorized), env)).status, 503);
+});

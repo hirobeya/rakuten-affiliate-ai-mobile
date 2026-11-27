@@ -234,3 +234,11 @@ for (const keyword of themes) {
     load({ keyword }, '季節のおすすめ検索');
   }));
 }
+
+// Display rank changes only after the active deployment enables rank history.
+fetch('/api/catalog?mode=capabilities')
+  .then(response => response.ok ? response.json() : null)
+  .then(config => {
+    if (config?.rising === true) document.querySelector('[data-mode="rising"]').hidden = false;
+  })
+  .catch(() => {});

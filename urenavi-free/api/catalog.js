@@ -11,6 +11,15 @@ function liveAllowed(env, preview) {
   const isPreview = preview ? preview.isIsolatedPreview :
     env.VERCEL_ENV === 'preview' && env.VERCEL_GIT_COMMIT_REF === 'feature/urenavi-free-20261127';
   const deadline = Date.parse(env.URENAVI_FREE_APPROVED_UNTIL);
+  if (preview?.isPublic) {
+    return env.URENAVI_FREE_PUBLIC_ENABLED === 'true' && /^[a-f0-9]{40}$/.test(sha || '') &&
+      sha === env.URENAVI_FREE_PUBLIC_SHA;
+  }
+  if (preview?.isIsolatedPreview) {
+    const start = Date.parse(env.URENAVI_FREE_APPROVED_FROM);
+    if (!Number.isFinite(start) || start > Date.now() || deadline - start !== 30 * 60 * 1000 ||
+        env.URENAVI_FREE_APPROVAL_LIMIT !== '3') return false;
+  }
   return isPreview &&
     /^[a-f0-9]{40}$/.test(sha || '') && sha === env.URENAVI_FREE_APPROVED_SHA &&
     Number.isFinite(deadline) && Date.now() < deadline;
@@ -30,12 +39,25 @@ function makeHandler(env = process.env, deps = {}) {
     }
 
     if (req.method !== 'GET' && req.method !== 'POST') return send(405, { message: 'この操作は利用できません。' });
+    if (req.method === 'GET' && req.query?.mode === 'capabilities') {
+      return send(200, { rising: deps.preview?.isPublic === true && liveAllowed(env, deps.preview) &&
+        env.URENAVI_FREE_CACHE_APPROVED === 'true' && env.URENAVI_FREE_RANK_HISTORY_APPROVED === 'true' });
+    }
     const query = req.method === 'GET' ? parseQuery(req.query ?? {}) : null;
     if (req.method === 'GET' && !query) return send(400, { message: '検索語や価格の入力を確認してください。' });
     const closed = { message: '現在、楽天市場の商品データ取得を停止しています。' };
     if (!liveAllowed(env, deps.preview)) return send(503, closed);
+    const publicMode = deps.preview?.isPublic === true;
+    const trial = deps.preview?.isIsolatedPreview === true;
+    if (publicMode && (query?.mode === 'rising' &&
+        (env.URENAVI_FREE_CACHE_APPROVED !== 'true' || env.URENAVI_FREE_RANK_HISTORY_APPROVED !== 'true'))) return send(404, closed);
+    if (trial && query && !(
+      (query.mode === 'search' && query.keyword === '折りたたみ傘' && !query.genre && !query.maxPrice) ||
+      (query.mode === 'ranking' && !query.genre) || query.mode === 'detail'
+    )) return send(403, { message: '今回の検証枠の対象外です。' });
+
     const provider = (deps.createRakuten ?? createRakuten)(env);
-    const state = (deps.createState ?? createState)(env);
+    const state = (deps.createState ?? createState)(env, undefined, { publicMode, trial });
     const ip = deps.preview ? req.clientIp : req.headers['x-vercel-forwarded-for'];
     if (!provider || !state || typeof ip !== 'string' || !isIP(ip)) return send(503, closed);
     const secret = env.URENAVI_FREE_EVENT_SECRET;
@@ -61,6 +83,7 @@ function makeHandler(env = process.env, deps = {}) {
         result = JSON.parse(cached);
       } else if (action === 'send') {
         // A crash, unknown response or failure leaves the durable pending flag in place.
+        if (!liveAllowed(env, deps.preview)) return send(503, closed);
         result = await provider.get(sourceQuery);
         if (await state.finish(sourceQuery, nonce, result) !== 1) return send(503, closed);
       } else {

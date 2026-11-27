@@ -155,3 +155,25 @@ test('shared cache is opt-in and missing state credentials close live requests',
   }
   assert.equal(createState({ ...env, URENAVI_FREE_REDIS_TOKEN: '' }), null);
 });
+
+test('Cloudflare public gate is separate from the trial grant and requires matching public SHA', async () => {
+  const input = {
+    ...env,
+    URENAVI_FREE_PUBLIC_SHA: sha,
+    URENAVI_FREE_PUBLIC_ENABLED: 'true',
+    URENAVI_FREE_APPROVED_UNTIL: ''
+  };
+  const deps = {
+    preview: { isPublic: true, sha },
+    createRakuten: () => ({}),
+    createState: (_env, _send, options) => {
+      assert.deepEqual(options, { publicMode: true, trial: false });
+      return { claim: () => ['limited'] };
+    }
+  };
+  const headers = { 'x-vercel-forwarded-for': '192.0.2.1' };
+  const result = await request(makeHandler(input, deps), { headers, clientIp: '192.0.2.1' });
+  assert.equal(result.code, 429);
+  assert.equal((await request(makeHandler({ ...input, URENAVI_FREE_PUBLIC_ENABLED: 'false' }, deps))).code, 503);
+  assert.equal((await request(makeHandler(input, deps), { query: { mode: 'capabilities' } })).data.rising, false);
+});

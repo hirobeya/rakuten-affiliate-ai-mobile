@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from 'node:crypto';
 import catalog from './api/catalog.js';
 
 const branch = 'feature/urenavi-free-20261127';
@@ -46,17 +47,37 @@ function deployment(url, env) {
   const version = env.WORKER_VERSION;
   const host = new RegExp('^verify-' + workerName + '\\.[a-z0-9-]+\\.workers\\.dev$');
   const [ref, sha] = (version?.tag ?? '').split(':');
+  const matches = ref === branch && Boolean(version?.id) && url.origin === env.URENAVI_FREE_RAKUTEN_ORIGIN;
   return {
     sha,
-    isIsolatedPreview: ref === branch && host.test(url.hostname) &&
-      Boolean(version?.id) &&
-      url.origin === env.URENAVI_FREE_RAKUTEN_ORIGIN
+    isIsolatedPreview: matches && host.test(url.hostname),
+    isPublic: matches && url.origin === env.URENAVI_FREE_PUBLIC_ORIGIN &&
+      /^urenavi-free-public\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)
   };
+}
+
+function protectPreview(request, env) {
+  const password = env.URENAVI_FREE_PREVIEW_PASSWORD;
+  if (typeof password !== 'string' || password.length < 32) {
+    return new Response(null, { status: 503, headers: jsonHeaders });
+  }
+  const expected = 'Basic ' + Buffer.from('urenavi:' + password, 'utf8').toString('base64');
+  const digest = value => createHash('sha256').update(value).digest();
+  if (timingSafeEqual(digest(request.headers.get('Authorization') || ''), digest(expected))) return null;
+  return new Response(null, {
+    status: 401,
+    headers: { ...jsonHeaders, 'WWW-Authenticate': 'Basic realm="Urenavi QA", charset="UTF-8"' }
+  });
 }
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const preview = deployment(url, env);
+    if (preview.isIsolatedPreview) {
+      const denied = protectPreview(request, env);
+      if (denied) return denied;
+    }
     if (url.pathname !== '/api/catalog') {
       if (url.pathname.startsWith('/api/')) return new Response(null, { status: 404, headers: jsonHeaders });
       return env.ASSETS.fetch(request);
@@ -70,7 +91,7 @@ export default {
       }
     }
     const headers = new Headers(jsonHeaders);
-    const handler = catalog.makeHandler(env, { preview: deployment(url, env) });
+    const handler = catalog.makeHandler(env, { preview });
     return handler({
       method: request.method,
       query: asQuery(url),
