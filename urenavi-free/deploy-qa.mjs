@@ -30,6 +30,7 @@ async function main() {
   try { body = await response.json(); } catch { throw new Error('REDIS_RESPONSE_INVALID'); }
   requireCondition(body.result === 'PONG', 'REDIS_PING_FAILED');
   console.log('QA_REDIS_PING_OK (one command; no Rakuten request)');
+  let uploadedVersionId;
   const dir = mkdtempSync(join(tmpdir(), 'urenavi-qa-'));
   try {
     const file = join(dir, 'secrets.json');
@@ -42,8 +43,14 @@ async function main() {
     const result = spawnSync('npx', ['--yes', 'wrangler@4.168.0', 'versions', 'upload',
       '--preview-alias', 'verify', '--tag', 'feature/urenavi-free-20261127:' + sha,
       '--var', 'URENAVI_FREE_RAKUTEN_ORIGIN:' + origin,
-      '--var', 'URENAVI_FREE_REDIS_URL:' + redis, '--secrets-file', file], { stdio: 'inherit' });
+      '--var', 'URENAVI_FREE_REDIS_URL:' + redis,
+      '--var', 'URENAVI_FREE_BUILD_REF:feature/urenavi-free-20261127:' + sha,
+      '--secrets-file', file], { encoding: 'utf8', stdio: ['ignore','pipe','pipe'] });
     requireCondition(result.status === 0, 'QA_UPLOAD_FAILED');
+    const ids = [...(result.stdout || '').matchAll(/Worker Version ID:\s*([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/ig)];
+    requireCondition(ids.length === 1, 'QA_UPLOAD_VERSION_ID_MISSING');
+    uploadedVersionId = ids[0][1].toLowerCase();
+    console.log('QA_UPLOADED_VERSION_ID ' + uploadedVersionId);
   } finally { rmSync(dir, { recursive: true, force: true }); }
   console.log('QA_UPLOAD_OK ' + sha);
   // Check the actual deployed alias exactly once, without any Rakuten request.
@@ -64,12 +71,13 @@ async function main() {
   console.log('QA_RUNTIME_OBSERVED_SHA ' + (/^[a-f0-9]{40}$/.test(proof?.sha || '') ? proof.sha : 'MISSING_OR_INVALID'));
   console.log('QA_RUNTIME_REDIS_RESULT ' + (proof?.redis === true ? 'OK' : 'INVALID'));
   console.log('QA_RUNTIME_EXPECTED_SHA ' + sha);
-  requireCondition(proof.sha === sha && proof.redis === true, 'QA_RUNTIME_PROOF_MISMATCH');
+  console.log('QA_RUNTIME_VERSION_ID ' + (/^[a-f0-9-]{36}$/i.test(proof?.versionId || '') ? proof.versionId : 'MISSING_OR_INVALID'));
+  requireCondition(proof.sha === sha && proof.redis === true && proof.versionId === uploadedVersionId && proof.yahooConfigured === Boolean(env.URENAVI_FREE_YAHOO_APP_ID), 'QA_RUNTIME_PROOF_MISMATCH');
   console.log('QA_RUNTIME_REDIS_OK ' + sha);
 }
 main().catch(error => {
   const code = error instanceof Error ? error.message : '';
-  const allowed = /^(QA_PASSWORD_MISSING|REDIS_TOKEN_MISSING|REDIS_ENDPOINT_INVALID|REDIS_ENDPOINT_MISMATCH|GIT_SHA_INVALID|REDIS_NETWORK_FAILED|REDIS_HTTP_[1-5][0-9]{2}|REDIS_RESPONSE_INVALID|REDIS_PING_FAILED|QA_UPLOAD_FAILED|QA_RUNTIME_NETWORK_FAILED|QA_RUNTIME_HTTP_[1-5][0-9]{2}|QA_RUNTIME_RESPONSE_INVALID|QA_RUNTIME_PROOF_MISMATCH)$/;
+  const allowed = /^(QA_PASSWORD_MISSING|REDIS_TOKEN_MISSING|REDIS_ENDPOINT_INVALID|REDIS_ENDPOINT_MISMATCH|GIT_SHA_INVALID|REDIS_NETWORK_FAILED|REDIS_HTTP_[1-5][0-9]{2}|REDIS_RESPONSE_INVALID|REDIS_PING_FAILED|QA_UPLOAD_FAILED|QA_UPLOAD_VERSION_ID_MISSING|QA_RUNTIME_NETWORK_FAILED|QA_RUNTIME_HTTP_[1-5][0-9]{2}|QA_RUNTIME_RESPONSE_INVALID|QA_RUNTIME_PROOF_MISMATCH)$/;
   console.error('QA_DEPLOY_STOPPED: ' + (allowed.test(code) ? code : 'UNEXPECTED_FAILURE'));
   process.exitCode = 1;
 });
