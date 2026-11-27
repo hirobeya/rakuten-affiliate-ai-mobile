@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
 import catalog from './api/catalog.js';
+import yahoo from './api/yahoo.js';
 
 const branch = 'feature/urenavi-free-20261127';
 const workerName = 'urenavi-free-qa-191';
@@ -103,6 +104,11 @@ export default {
         return new Response(null, { status: 404, headers: jsonHeaders });
       if (request.method !== 'POST') return new Response(null, { status: 405, headers: jsonHeaders });
       return redisDiagnostic(env);
+    }
+    if (url.pathname === '/api/yahoo') {
+      if (request.method !== 'GET') return new Response(null, { status: 405, headers: jsonHeaders });
+      const result = await yahoo.handleYahoo(env, preview, asQuery(url));
+      return Response.json(result.data, { status: result.status, headers: jsonHeaders });
     }
     if (url.pathname !== '/api/catalog') {
       if (url.pathname.startsWith('/api/')) return new Response(null, { status: 404, headers: jsonHeaders });
