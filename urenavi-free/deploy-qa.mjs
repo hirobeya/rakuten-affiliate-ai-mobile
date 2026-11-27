@@ -41,10 +41,23 @@ async function main() {
     requireCondition(result.status === 0, 'QA_UPLOAD_FAILED');
   } finally { rmSync(dir, { recursive: true, force: true }); }
   console.log('QA_UPLOAD_OK ' + sha);
+  // Check the actual deployed alias exactly once, without any Rakuten request.
+  let probe;
+  try {
+    probe = await fetch(origin + '/api/qa-redis', {
+      method: 'POST', headers: { Authorization: 'Basic ' + Buffer.from('urenavi:' + password).toString('base64') },
+      redirect: 'error', signal: AbortSignal.timeout(8000)
+    });
+  } catch { throw new Error('QA_RUNTIME_NETWORK_FAILED'); }
+  if (!probe.ok) throw new Error('QA_RUNTIME_HTTP_' + probe.status);
+  let proof;
+  try { proof = await probe.json(); } catch { throw new Error('QA_RUNTIME_RESPONSE_INVALID'); }
+  requireCondition(proof.sha === sha && proof.redis === true, 'QA_RUNTIME_PROOF_MISMATCH');
+  console.log('QA_RUNTIME_REDIS_OK ' + sha);
 }
 main().catch(error => {
   const code = error instanceof Error ? error.message : '';
-  const allowed = /^(QA_PASSWORD_MISSING|REDIS_TOKEN_MISSING|REDIS_ENDPOINT_INVALID|REDIS_ENDPOINT_MISMATCH|GIT_SHA_INVALID|REDIS_NETWORK_FAILED|REDIS_HTTP_[1-5][0-9]{2}|REDIS_RESPONSE_INVALID|REDIS_PING_FAILED|QA_UPLOAD_FAILED)$/;
+  const allowed = /^(QA_PASSWORD_MISSING|REDIS_TOKEN_MISSING|REDIS_ENDPOINT_INVALID|REDIS_ENDPOINT_MISMATCH|GIT_SHA_INVALID|REDIS_NETWORK_FAILED|REDIS_HTTP_[1-5][0-9]{2}|REDIS_RESPONSE_INVALID|REDIS_PING_FAILED|QA_UPLOAD_FAILED|QA_RUNTIME_NETWORK_FAILED|QA_RUNTIME_HTTP_[1-5][0-9]{2}|QA_RUNTIME_RESPONSE_INVALID|QA_RUNTIME_PROOF_MISMATCH)$/;
   console.error('QA_DEPLOY_STOPPED: ' + (allowed.test(code) ? code : 'UNEXPECTED_FAILURE'));
   process.exitCode = 1;
 });
