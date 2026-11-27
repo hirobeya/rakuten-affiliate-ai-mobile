@@ -26,7 +26,7 @@ async function handleYahoo(env, preview, query, deps = {}) {
   const day = Math.floor(now()/86400000);
   const keys = [pending,prefix+'spacing',prefix+'used:'+day];
   async function evalCommand(script, keys, args) {
-    const response = await send(env.URENAVI_FREE_REDIS_URL, {method:'POST', headers:{Authorization:'Bearer '+env.URENAVI_FREE_REDIS_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(['EVAL',script,keys.length,...keys,...args]),redirect:'error',signal:AbortSignal.timeout(2500)});
+    const response = await send(env.URENAVI_FREE_REDIS_URL, {method:'POST', headers:{Authorization:'Bearer '+env.URENAVI_FREE_REDIS_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(['EVAL',script,keys.length,...keys,...args]),redirect:'manual',signal:AbortSignal.timeout(2500)});
     if (!response.ok) throw new Error('redis');
     const body = await response.json();
     if (body.error) throw new Error('redis');
