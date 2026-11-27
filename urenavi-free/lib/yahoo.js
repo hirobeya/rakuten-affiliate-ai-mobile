@@ -31,7 +31,7 @@ function createYahoo(env, send = fetch) {
       url.searchParams.set('results', '20');
       if (query.maxPrice) url.searchParams.set('price_to', query.maxPrice);
       if (query.mode === 'budget') url.searchParams.set('sort', '+price');
-      const response = await send(url, { redirect: 'error', signal: AbortSignal.timeout(5000) });
+      const response = await send(url, { redirect: 'manual', signal: AbortSignal.timeout(5000) });
       if (!response.ok) throw new Error('yahoo-unavailable');
       const data = await response.json();
       if (!Array.isArray(data.hits)) throw new Error('yahoo-invalid-response');
