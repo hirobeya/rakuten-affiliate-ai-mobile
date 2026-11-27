@@ -54,9 +54,13 @@ async function main() {
       redirect: 'error', signal: AbortSignal.timeout(8000)
     });
   } catch { throw new Error('QA_RUNTIME_NETWORK_FAILED'); }
-  if (!probe.ok) throw new Error('QA_RUNTIME_HTTP_' + probe.status);
   let proof;
-  try { proof = await probe.json(); } catch { throw new Error('QA_RUNTIME_RESPONSE_INVALID'); }
+  try { proof = await probe.json(); } catch { throw new Error('QA_RUNTIME_HTTP_' + probe.status); }
+  if (!probe.ok) {
+    const stage = typeof proof?.stage === 'string' && /^(URL_BINDING|TOKEN_BINDING|REDIS_HTTP_[1-5][0-9]{2}|REDIS_WRITE_DENIED|REDIS_COMMAND_ERROR|REDIS_RESULT_MISMATCH|REDIS_TRANSPORT_OR_PARSE)$/.test(proof.stage) ? proof.stage : 'UNKNOWN';
+    console.error('QA_RUNTIME_STAGE: ' + stage);
+    throw new Error('QA_RUNTIME_HTTP_' + probe.status);
+  }
   requireCondition(proof.sha === sha && proof.redis === true, 'QA_RUNTIME_PROOF_MISMATCH');
   console.log('QA_RUNTIME_REDIS_OK ' + sha);
 }
