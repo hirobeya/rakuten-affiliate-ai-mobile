@@ -103,7 +103,7 @@ function createState(env, send = fetch, { publicMode = false, trial = false } = 
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(['EVAL', script, keys.length, ...keys.map(value => namespace + value), ...args]),
-      redirect: 'error',
+      redirect: 'manual',
       signal: AbortSignal.timeout(2500)
     });
     if (!response.ok) throw new Error('state-unavailable');
