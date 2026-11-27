@@ -83,7 +83,7 @@ async function redisDiagnostic(env) {
     const response = await fetch(env.URENAVI_FREE_REDIS_URL, {
       method: 'POST', headers: { Authorization: 'Bearer ' + env.URENAVI_FREE_REDIS_TOKEN, 'Content-Type': 'application/json' },
       body: JSON.stringify(['EVAL', script, 1, 'urenavi:qa:probe:' + nonce, nonce]),
-      redirect: 'error', signal: AbortSignal.timeout(2500)
+      redirect: 'manual', signal: AbortSignal.timeout(2500)
     });
     if (!response.ok) return reply(503, false, 'REDIS_HTTP_' + response.status);
     const body = await response.json();
