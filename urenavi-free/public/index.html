@@ -18,11 +18,12 @@
       <h1 id="heading">探して、比べて、<br>選べる。</h1>
       <p>価格やレビューを見比べて、気になった商品はお気に入りに。</p>
       <form id="search">
-        <label for="keyword">商品名・キーワード（楽天市場内検索）</label>
+        <label for="keyword">商品名・キーワード</label>
         <div class="search-row">
           <input type="search" id="keyword" placeholder="例：折りたたみ傘" required maxlength="128" enterkeyhint="search">
           <button type="submit">検索</button>
         </div>
+        <label for="provider">検索先<select id="provider"><option value="rakuten">楽天市場</option><option value="yahoo">Yahoo!ショッピング</option></select></label>
         <div class="options">
           <label for="mode">探し方
             <select id="mode"><option value="search">標準</option><option value="budget">お買い得候補（価格の安い順）</option><option value="commission">高報酬候補（推定額順）</option></select>
@@ -41,7 +42,7 @@
     </nav>
     <section class="themes" aria-labelledby="external-title">
       <h2 id="external-title">他の通販サイトで商品を探す</h2>
-      <p class="meta">楽天APIの接続状況に関係なく利用できます。外部サイトの公式情報を表示します。ウレナビ内への商品情報の取り込み・横断比較は未対応です。</p>
+      <p class="meta">楽天APIの接続状況に関係なく利用できます。外部サイトの公式情報を表示します。公式サイトで直接検索・ランキングを確認するためのリンクです。</p>
       <div class="actions">
         <a class="buy" href="https://shopping.yahoo.co.jp/categoryranking/" target="_blank" rel="noopener noreferrer">Yahoo! 人気ランキング</a>
         <a class="buy" href="https://shopping.yahoo.co.jp/categoryranking/?rterm=realtime" target="_blank" rel="noopener noreferrer">Yahoo! リアルタイム</a>
