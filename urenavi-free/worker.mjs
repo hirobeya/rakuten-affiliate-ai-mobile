@@ -74,9 +74,9 @@ function protectPreview(request, env) {
 // Authenticated QA only. Never calls Rakuten or touches the live reservation keys.
 async function redisDiagnostic(env) {
   const headers = jsonHeaders;
-  const reply = (status, ok) => Response.json({ redis: ok, sha: env.WORKER_VERSION?.tag?.split(':')[1] ?? null }, { status, headers });
-  if (env.URENAVI_FREE_REDIS_URL !== 'https://chief-panda-222800.upstash.io' ||
-      !env.URENAVI_FREE_REDIS_TOKEN) return reply(503, false);
+  const reply = (status, ok, stage) => Response.json({ redis: ok, stage, sha: env.WORKER_VERSION?.tag?.split(':')[1] ?? null }, { status, headers });
+  if (env.URENAVI_FREE_REDIS_URL !== 'https://chief-panda-222800.upstash.io') return reply(503, false, 'URL_BINDING');
+  if (!env.URENAVI_FREE_REDIS_TOKEN) return reply(503, false, 'TOKEN_BINDING');
   try {
     const nonce = randomUUID();
     const script = "if not redis.call('SET',KEYS[1],ARGV[1],'NX','EX',30) then return 0 end; local v=redis.call('GET',KEYS[1]); redis.call('DEL',KEYS[1]); if v==ARGV[1] then return 1 end; return 0";
@@ -85,9 +85,12 @@ async function redisDiagnostic(env) {
       body: JSON.stringify(['EVAL', script, 1, 'urenavi:qa:probe:' + nonce, nonce]),
       redirect: 'error', signal: AbortSignal.timeout(2500)
     });
-    if (!response.ok || (await response.json()).result !== 1) return reply(503, false);
-    return reply(200, true);
-  } catch { return reply(503, false); }
+    if (!response.ok) return reply(503, false, 'REDIS_HTTP_' + response.status);
+    const body = await response.json();
+    if (body.error) return reply(503, false, /readonly|read.only|NOPERM/i.test(String(body.error)) ? 'REDIS_WRITE_DENIED' : 'REDIS_COMMAND_ERROR');
+    if (body.result !== 1) return reply(503, false, 'REDIS_RESULT_MISMATCH');
+    return reply(200, true, 'OK');
+  } catch { return reply(503, false, 'REDIS_TRANSPORT_OR_PARSE'); }
 }
 
 export default {
