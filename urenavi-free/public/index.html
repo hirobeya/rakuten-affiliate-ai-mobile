@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="楽天市場の商品を検索し、価格とレビューを見比べられる無料の商品検索サービス。">
+  <meta name="description" content="楽天市場の商品検索・比較と、他の通販サイトの公式ランキングへの商品発見導線。">
   <title>無料ウレナビ | 商品検索・比較</title>
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
@@ -13,12 +13,12 @@
   <header><div class="wrap"><a href="/">ウレナビ</a><span>無料・ログイン不要</span></div></header>
   <main class="wrap">
     <section class="hero" aria-labelledby="heading">
-      <p class="source">楽天市場の商品検索</p>
+      <p class="source">商品発見・比較</p>
       <p class="notice">広告・PRを含みます。購入リンク経由で運営者が報酬を受け取る場合があります。</p>
       <h1 id="heading">探して、比べて、<br>選べる。</h1>
       <p>価格やレビューを見比べて、気になった商品はお気に入りに。</p>
       <form id="search">
-        <label for="keyword">商品名・キーワード</label>
+        <label for="keyword">商品名・キーワード（楽天市場内検索）</label>
         <div class="search-row">
           <input type="search" id="keyword" placeholder="例：折りたたみ傘" required maxlength="128" enterkeyhint="search">
           <button type="submit">検索</button>
@@ -39,6 +39,23 @@
       <button type="button" data-mode="rising" hidden>急上昇商品</button>
       <button type="button" id="favorites">お気に入り</button>
     </nav>
+    <section class="themes" aria-labelledby="external-title">
+      <h2 id="external-title">他の通販サイトで商品を探す</h2>
+      <p class="meta">楽天APIの接続状況に関係なく利用できます。外部サイトの公式情報を表示します。ウレナビ内への商品情報の取り込み・横断比較は未対応です。</p>
+      <div class="actions">
+        <a class="buy" href="https://shopping.yahoo.co.jp/categoryranking/" target="_blank" rel="noopener noreferrer">Yahoo! 人気ランキング</a>
+        <a class="buy" href="https://shopping.yahoo.co.jp/categoryranking/?rterm=realtime" target="_blank" rel="noopener noreferrer">Yahoo! リアルタイム</a>
+        <a class="buy" href="https://www.amazon.co.jp/gp/bestsellers" target="_blank" rel="noopener noreferrer">Amazon 売れ筋ランキング</a>
+      </div>
+      <form action="https://shopping.yahoo.co.jp/search" method="get" target="_blank" rel="noopener" class="search-row">
+        <input type="search" name="p" aria-label="Yahoo!ショッピングの商品検索" placeholder="Yahoo!で商品を探す" maxlength="128" required>
+        <button type="submit">Yahoo!検索</button>
+      </form>
+      <form action="https://www.amazon.co.jp/s" method="get" target="_blank" rel="noopener" class="search-row">
+        <input type="search" name="k" aria-label="Amazonの商品検索" placeholder="Amazonで商品を探す" maxlength="128" required>
+        <button type="submit">Amazon検索</button>
+      </form>
+    </section>
     <section class="themes" aria-labelledby="theme-title">
       <h2 id="theme-title">季節のキーワード</h2>
       <div id="themes"></div>
