@@ -14,6 +14,7 @@
   <main class="wrap">
     <section class="hero" aria-labelledby="heading">
       <p class="source">楽天市場の商品検索</p>
+      <p class="notice">広告・PRを含みます。購入リンク経由で運営者が報酬を受け取る場合があります。</p>
       <h1 id="heading">探して、比べて、<br>選べる。</h1>
       <p>価格やレビューを見比べて、気になった商品はお気に入りに。</p>
       <form id="search">
@@ -42,7 +43,6 @@
       <h2 id="theme-title">季節のキーワード</h2>
       <div id="themes"></div>
     </section>
-    <p class="notice">広告・PRを含みます。購入リンク経由で運営者が報酬を受け取る場合があります。</p>
     <section aria-labelledby="results-title">
       <h2 id="results-title">検索結果</h2>
       <p id="status" role="status">キーワードを入力するか、ランキングを選んでください。</p>
@@ -50,7 +50,11 @@
     </section>
   </main>
   <footer class="wrap">
-    <p>商品情報の提供元 <a href="https://webservice.rakuten.co.jp/">Rakuten Web Service</a></p>
+    <p>
+      <!-- Rakuten Web Services Attribution Snippet FROM HERE -->
+      <a href="https://developers.rakuten.com/" target="_blank">Supported by Rakuten Developers</a>
+      <!-- Rakuten Web Services Attribution Snippet TO HERE -->
+    </p>
     <p>検索と購入導線の改善のため、表示した商品詳細と購入リンクのクリックを集計します。集計ではIPアドレスから生成した識別子を一時的に使用します。お気に入りはこの端末に保存されます。</p>
   </footer>
   <aside id="compare-bar" hidden><button type="button" id="compare">選んだ商品を比較</button></aside>

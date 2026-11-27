@@ -6,11 +6,12 @@ const { parseQuery, orderProducts, risingProducts } = require('../lib/catalog');
 const { createRakuten } = require('../lib/rakuten');
 const { createState } = require('../lib/state');
 
-function liveAllowed(env) {
-  const sha = env.VERCEL_GIT_COMMIT_SHA;
+function liveAllowed(env, preview) {
+  const sha = preview ? preview.sha : env.VERCEL_GIT_COMMIT_SHA;
+  const isPreview = preview ? preview.isIsolatedPreview :
+    env.VERCEL_ENV === 'preview' && env.VERCEL_GIT_COMMIT_REF === 'feature/urenavi-free-20261127';
   const deadline = Date.parse(env.URENAVI_FREE_APPROVED_UNTIL);
-  return env.VERCEL_ENV === 'preview' &&
-    env.VERCEL_GIT_COMMIT_REF === 'feature/urenavi-free-20261127' &&
+  return isPreview &&
     /^[a-f0-9]{40}$/.test(sha || '') && sha === env.URENAVI_FREE_APPROVED_SHA &&
     Number.isFinite(deadline) && Date.now() < deadline;
 }
@@ -32,10 +33,10 @@ function makeHandler(env = process.env, deps = {}) {
     const query = req.method === 'GET' ? parseQuery(req.query ?? {}) : null;
     if (req.method === 'GET' && !query) return send(400, { message: '検索語や価格の入力を確認してください。' });
     const closed = { message: '現在、楽天市場の商品データ取得を停止しています。' };
-    if (!liveAllowed(env)) return send(503, closed);
+    if (!liveAllowed(env, deps.preview)) return send(503, closed);
     const provider = (deps.createRakuten ?? createRakuten)(env);
     const state = (deps.createState ?? createState)(env);
-    const ip = req.headers['x-vercel-forwarded-for'];
+    const ip = deps.preview ? req.clientIp : req.headers['x-vercel-forwarded-for'];
     if (!provider || !state || typeof ip !== 'string' || !isIP(ip)) return send(503, closed);
     const secret = env.URENAVI_FREE_EVENT_SECRET;
     const client = sign(secret, ip);
