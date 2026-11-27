@@ -47,11 +47,12 @@ async function parseBody(request) {
 function deployment(url, env) {
   const version = env.WORKER_VERSION;
   const host = new RegExp('^verify-' + workerName + '\\.[a-z0-9-]+\\.workers\\.dev$');
-  const [ref, sha] = (version?.tag ?? '').split(':');
-  const matches = ref === branch && Boolean(version?.id) && url.origin === env.URENAVI_FREE_RAKUTEN_ORIGIN;
+  const qaHost = host.test(url.hostname);
+  const [ref, sha] = (qaHost ? (env.URENAVI_FREE_BUILD_REF ?? '') : (version?.tag ?? '')).split(':');
+  const matches = ref === branch && /^[a-f0-9]{40}$/.test(sha || '') && Boolean(version?.id) && url.origin === env.URENAVI_FREE_RAKUTEN_ORIGIN;
   return {
     sha,
-    isIsolatedPreview: matches && host.test(url.hostname),
+    isIsolatedPreview: matches && qaHost,
     isPublic: matches && url.origin === env.URENAVI_FREE_PUBLIC_ORIGIN &&
       /^urenavi-free-public\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)
   };
@@ -74,7 +75,7 @@ function protectPreview(request, env) {
 // Authenticated QA only. Never calls Rakuten or touches the live reservation keys.
 async function redisDiagnostic(env) {
   const headers = jsonHeaders;
-  const reply = (status, ok, stage) => Response.json({ redis: ok, stage, sha: env.WORKER_VERSION?.tag?.split(':')[1] ?? null }, { status, headers });
+  const reply = (status, ok, stage) => Response.json({ redis: ok, stage, sha: env.URENAVI_FREE_BUILD_REF?.split(':')[1] ?? null, versionId: env.WORKER_VERSION?.id ?? null, yahooConfigured: Boolean(env.URENAVI_FREE_YAHOO_APP_ID) }, { status, headers });
   if (env.URENAVI_FREE_REDIS_URL !== 'https://chief-panda-222800.upstash.io') return reply(503, false, 'URL_BINDING');
   if (!env.URENAVI_FREE_REDIS_TOKEN) return reply(503, false, 'TOKEN_BINDING');
   try {
