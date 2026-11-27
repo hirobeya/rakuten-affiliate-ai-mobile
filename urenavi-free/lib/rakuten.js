@@ -97,7 +97,7 @@ function createRakuten(env, send = fetch) {
         params.set('sort', sort[query.mode] || 'standard');
       }
       url.search = params;
-      const response = await send(url, { headers: { accessKey: access, Origin: site, Referer: site + '/' }, signal: AbortSignal.timeout(7000), redirect: 'error' });
+      const response = await send(url, { headers: { accessKey: access, Origin: site, Referer: site + '/' }, signal: AbortSignal.timeout(7000), redirect: 'manual' });
       if ([400, 404].includes(response.status)) {
         const body = await response.json();
         if (response.status === 404 && body.error === 'not_found') {
