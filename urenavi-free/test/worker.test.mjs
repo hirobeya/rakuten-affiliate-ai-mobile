@@ -65,3 +65,13 @@ test('Cloudflare verification URL requires authentication before static files or
   assert.equal((await worker.fetch(new Request(origin), env)).status, 401);
   assert.equal((await worker.fetch(new Request(origin + '/api/catalog'), env)).status, 401);
 });
+
+test('QA Redis probe is POST-only, requires authorization, and is not a public route', async () => {
+  const origin = 'https://verify-urenavi-free-qa-191.fixture.workers.dev';
+  const env = { URENAVI_FREE_PREVIEW_PASSWORD: 'test-fixture-password'.repeat(2) };
+  const headers = { Authorization: 'Basic ' + Buffer.from('urenavi:' + env.URENAVI_FREE_PREVIEW_PASSWORD).toString('base64') };
+  assert.equal((await worker.fetch(new Request(origin + '/api/qa-redis', { method: 'POST' }), env)).status, 401);
+  assert.equal((await worker.fetch(new Request(origin + '/api/qa-redis', { headers }), env)).status, 405);
+  assert.equal((await worker.fetch(new Request(origin + '/api/qa-redis', { method: 'POST', headers }), env)).status, 503);
+  assert.equal((await worker.fetch(new Request('https://urenavi-free-public.fixture.workers.dev/api/qa-redis', { method: 'POST', headers }), env)).status, 404);
+});
