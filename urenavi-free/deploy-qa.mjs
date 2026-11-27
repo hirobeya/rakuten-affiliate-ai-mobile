@@ -33,7 +33,12 @@ async function main() {
   const dir = mkdtempSync(join(tmpdir(), 'urenavi-qa-'));
   try {
     const file = join(dir, 'secrets.json');
-    writeFileSync(file, JSON.stringify({ URENAVI_FREE_PREVIEW_PASSWORD: password, URENAVI_FREE_REDIS_TOKEN: token }), { mode: 0o600 });
+    const secrets = { URENAVI_FREE_PREVIEW_PASSWORD: password, URENAVI_FREE_REDIS_TOKEN: token };
+    if (env.URENAVI_FREE_YAHOO_APP_ID) {
+      secrets.URENAVI_FREE_YAHOO_APP_ID = env.URENAVI_FREE_YAHOO_APP_ID;
+      console.log('QA_YAHOO_ID_CONFIGURED (live access remains disabled)');
+    }
+    writeFileSync(file, JSON.stringify(secrets), { mode: 0o600 });
     const result = spawnSync('npx', ['--yes', 'wrangler@4.168.0', 'versions', 'upload',
       '--preview-alias', 'verify', '--tag', 'feature/urenavi-free-20261127:' + sha,
       '--var', 'URENAVI_FREE_RAKUTEN_ORIGIN:' + origin,
