@@ -74,7 +74,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const preview = deployment(url, env);
-    if (preview.isIsolatedPreview) {
+    // Protect the QA alias independently of deployment metadata and origin configuration.
+    if (/^verify-urenavi-free-qa-191\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)) {
       const denied = protectPreview(request, env);
       if (denied) return denied;
     }
