@@ -61,7 +61,8 @@
   },
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": true,
+      "feature/urenavi-free-20261127": false
     }
   }
 }

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="楽天市場の商品を検索し、価格とレビューを見比べられる無料の商品検索サービス。">
+  <title>無料ウレナビ | 商品検索・比較</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header><div class="wrap"><a href="/">ウレナビ</a><span>無料・ログイン不要</span></div></header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="heading">
+      <p class="source">楽天市場の商品検索</p>
+      <h1 id="heading">探して、比べて、<br>選べる。</h1>
+      <p>価格やレビューを見比べて、気になった商品はお気に入りに。</p>
+      <form id="search">
+        <label for="keyword">商品名・キーワード</label>
+        <div class="search-row">
+          <input type="search" id="keyword" placeholder="例：折りたたみ傘" required maxlength="128" enterkeyhint="search">
+          <button type="submit">検索</button>
+        </div>
+        <div class="options">
+          <label for="mode">探し方
+            <select id="mode"><option value="search">標準</option><option value="budget">お買い得候補（価格の安い順）</option><option value="commission">高報酬候補（推定額順）</option></select>
+          </label>
+          <label for="price">予算上限（円）
+            <input type="number" id="price" min="1" max="999999999" inputmode="numeric" placeholder="指定なし">
+          </label>
+        </div>
+      </form>
+    </section>
+    <nav aria-label="商品を探す">
+      <button type="button" data-mode="ranking">売れ筋ランキング</button>
+      <button type="button" data-mode="realtime">リアルタイムランキング</button>
+      <button type="button" data-mode="rising">急上昇商品</button>
+      <button type="button" id="favorites">お気に入り</button>
+    </nav>
+    <section class="themes" aria-labelledby="theme-title">
+      <h2 id="theme-title">季節のキーワード</h2>
+      <div id="themes"></div>
+    </section>
+    <p class="notice">広告・PRを含みます。購入リンク経由で運営者が報酬を受け取る場合があります。</p>
+    <section aria-labelledby="results-title">
+      <h2 id="results-title">検索結果</h2>
+      <p id="status" role="status">キーワードを入力するか、ランキングを選んでください。</p>
+      <div id="results"></div>
+    </section>
+  </main>
+  <footer class="wrap">
+    <p>商品情報の提供元 <a href="https://webservice.rakuten.co.jp/">Rakuten Web Service</a></p>
+    <p>検索と購入導線の改善のため、表示した商品詳細と購入リンクのクリックを集計します。集計ではIPアドレスから生成した識別子を一時的に使用します。お気に入りはこの端末に保存されます。</p>
+  </footer>
+  <aside id="compare-bar" hidden><button type="button" id="compare">選んだ商品を比較</button></aside>
+  <dialog id="panel" aria-labelledby="panel-title">
+    <div class="dialog-head"><h2 id="panel-title"></h2><form method="dialog"><button>閉じる</button></form></div>
+    <div id="panel-body"></div>
+  </dialog>
+</body>
+</html>
