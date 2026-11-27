@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
 import catalog from './api/catalog.js';
 
 const branch = 'feature/urenavi-free-20261127';
@@ -70,6 +70,25 @@ function protectPreview(request, env) {
   });
 }
 
+// Authenticated QA only. Never calls Rakuten or touches the live reservation keys.
+async function redisDiagnostic(env) {
+  const headers = jsonHeaders;
+  const reply = (status, ok) => Response.json({ redis: ok, sha: env.WORKER_VERSION?.tag?.split(':')[1] ?? null }, { status, headers });
+  if (env.URENAVI_FREE_REDIS_URL !== 'https://chief-panda-222800.upstash.io' ||
+      !env.URENAVI_FREE_REDIS_TOKEN) return reply(503, false);
+  try {
+    const nonce = randomUUID();
+    const script = "if not redis.call('SET',KEYS[1],ARGV[1],'NX','EX',30) then return 0 end; local v=redis.call('GET',KEYS[1]); redis.call('DEL',KEYS[1]); if v==ARGV[1] then return 1 end; return 0";
+    const response = await fetch(env.URENAVI_FREE_REDIS_URL, {
+      method: 'POST', headers: { Authorization: 'Bearer ' + env.URENAVI_FREE_REDIS_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(['EVAL', script, 1, 'urenavi:qa:probe:' + nonce, nonce]),
+      redirect: 'error', signal: AbortSignal.timeout(2500)
+    });
+    if (!response.ok || (await response.json()).result !== 1) return reply(503, false);
+    return reply(200, true);
+  } catch { return reply(503, false); }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -78,6 +97,12 @@ export default {
     if (/^verify-urenavi-free-qa-191\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)) {
       const denied = protectPreview(request, env);
       if (denied) return denied;
+    }
+    if (url.pathname === '/api/qa-redis') {
+      if (!/^verify-urenavi-free-qa-191\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname))
+        return new Response(null, { status: 404, headers: jsonHeaders });
+      if (request.method !== 'POST') return new Response(null, { status: 405, headers: jsonHeaders });
+      return redisDiagnostic(env);
     }
     if (url.pathname !== '/api/catalog') {
       if (url.pathname.startsWith('/api/')) return new Response(null, { status: 404, headers: jsonHeaders });
