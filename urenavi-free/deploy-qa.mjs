@@ -1,0 +1,83 @@
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+const env = process.env;
+const origin = 'https://verify-urenavi-free-qa-191.hirobeya.workers.dev';
+const redis = 'https://chief-panda-222800.upstash.io';
+const password = env.URENAVI_FREE_PREVIEW_PASSWORD;
+const token = env.URENAVI_FREE_REDIS_TOKEN;
+function requireCondition(ok, label) { if (!ok) throw new Error(label); }
+async function main() {
+  requireCondition(typeof password === 'string' && password.length >= 32, 'QA_PASSWORD_MISSING');
+  requireCondition(typeof token === 'string' && token.length > 0, 'REDIS_TOKEN_MISSING');
+  let endpoint;
+  try { endpoint = new URL(env.URENAVI_FREE_REDIS_URL); } catch { throw new Error('REDIS_ENDPOINT_INVALID'); }
+  requireCondition(endpoint.href === redis + '/', 'REDIS_ENDPOINT_MISMATCH');
+  console.log('QA_CONFIG_OK');
+  const git = spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' });
+  const sha = git.stdout?.trim();
+  requireCondition(git.status === 0 && /^[a-f0-9]{40}$/.test(sha), 'GIT_SHA_INVALID');
+  // Test the dedicated Redis credentials with a single non-mutating command.
+  let response;
+  try { response = await fetch(redis, {
+    method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(['PING']), redirect: 'error', signal: AbortSignal.timeout(5000)
+  }); } catch { throw new Error('REDIS_NETWORK_FAILED'); }
+  if (!response.ok) throw new Error('REDIS_HTTP_' + response.status);
+  let body;
+  try { body = await response.json(); } catch { throw new Error('REDIS_RESPONSE_INVALID'); }
+  requireCondition(body.result === 'PONG', 'REDIS_PING_FAILED');
+  console.log('QA_REDIS_PING_OK (one command; no Rakuten request)');
+  let uploadedVersionId;
+  const dir = mkdtempSync(join(tmpdir(), 'urenavi-qa-'));
+  try {
+    const file = join(dir, 'secrets.json');
+    const secrets = { URENAVI_FREE_PREVIEW_PASSWORD: password, URENAVI_FREE_REDIS_TOKEN: token };
+    if (env.URENAVI_FREE_YAHOO_APP_ID) {
+      secrets.URENAVI_FREE_YAHOO_APP_ID = env.URENAVI_FREE_YAHOO_APP_ID;
+      console.log('QA_YAHOO_ID_CONFIGURED (live access remains disabled)');
+    }
+    writeFileSync(file, JSON.stringify(secrets), { mode: 0o600 });
+    const result = spawnSync('npx', ['--yes', 'wrangler@4.168.0', 'versions', 'upload',
+      '--preview-alias', 'verify', '--tag', 'feature/urenavi-free-20261127:' + sha,
+      '--var', 'URENAVI_FREE_RAKUTEN_ORIGIN:' + origin,
+      '--var', 'URENAVI_FREE_REDIS_URL:' + redis,
+      '--var', 'URENAVI_FREE_BUILD_REF:feature/urenavi-free-20261127:' + sha,
+      '--secrets-file', file], { encoding: 'utf8', stdio: ['ignore','pipe','pipe'] });
+    requireCondition(result.status === 0, 'QA_UPLOAD_FAILED');
+    const ids = [...(result.stdout || '').matchAll(/Worker Version ID:\s*([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/ig)];
+    requireCondition(ids.length === 1, 'QA_UPLOAD_VERSION_ID_MISSING');
+    uploadedVersionId = ids[0][1].toLowerCase();
+    console.log('QA_UPLOADED_VERSION_ID ' + uploadedVersionId);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  console.log('QA_UPLOAD_OK ' + sha);
+  // Check the actual deployed alias exactly once, without any Rakuten request.
+  let probe;
+  try {
+    probe = await fetch(origin + '/api/qa-redis', {
+      method: 'POST', headers: { Authorization: 'Basic ' + Buffer.from('urenavi:' + password).toString('base64') },
+      redirect: 'error', signal: AbortSignal.timeout(8000)
+    });
+  } catch { throw new Error('QA_RUNTIME_NETWORK_FAILED'); }
+  let proof;
+  try { proof = await probe.json(); } catch { throw new Error('QA_RUNTIME_HTTP_' + probe.status); }
+  if (!probe.ok) {
+    const stage = typeof proof?.stage === 'string' && /^(URL_BINDING|TOKEN_BINDING|REDIS_HTTP_[1-5][0-9]{2}|REDIS_WRITE_DENIED|REDIS_COMMAND_ERROR|REDIS_RESULT_MISMATCH|REDIS_TRANSPORT_OR_PARSE)$/.test(proof.stage) ? proof.stage : 'UNKNOWN';
+    console.error('QA_RUNTIME_STAGE: ' + stage);
+    throw new Error('QA_RUNTIME_HTTP_' + probe.status);
+  }
+  console.log('QA_RUNTIME_OBSERVED_SHA ' + (/^[a-f0-9]{40}$/.test(proof?.sha || '') ? proof.sha : 'MISSING_OR_INVALID'));
+  console.log('QA_RUNTIME_REDIS_RESULT ' + (proof?.redis === true ? 'OK' : 'INVALID'));
+  console.log('QA_RUNTIME_EXPECTED_SHA ' + sha);
+  console.log('QA_RUNTIME_VERSION_ID ' + (/^[a-f0-9-]{36}$/i.test(proof?.versionId || '') ? proof.versionId : 'MISSING_OR_INVALID'));
+  requireCondition(proof.sha === sha && proof.redis === true && proof.versionId === uploadedVersionId && proof.yahooConfigured === Boolean(env.URENAVI_FREE_YAHOO_APP_ID), 'QA_RUNTIME_PROOF_MISMATCH');
+  console.log('QA_RUNTIME_REDIS_OK ' + sha);
+}
+main().catch(error => {
+  const code = error instanceof Error ? error.message : '';
+  const allowed = /^(QA_PASSWORD_MISSING|REDIS_TOKEN_MISSING|REDIS_ENDPOINT_INVALID|REDIS_ENDPOINT_MISMATCH|GIT_SHA_INVALID|REDIS_NETWORK_FAILED|REDIS_HTTP_[1-5][0-9]{2}|REDIS_RESPONSE_INVALID|REDIS_PING_FAILED|QA_UPLOAD_FAILED|QA_UPLOAD_VERSION_ID_MISSING|QA_RUNTIME_NETWORK_FAILED|QA_RUNTIME_HTTP_[1-5][0-9]{2}|QA_RUNTIME_RESPONSE_INVALID|QA_RUNTIME_PROOF_MISMATCH)$/;
+  console.error('QA_DEPLOY_STOPPED: ' + (allowed.test(code) ? code : 'UNEXPECTED_FAILURE'));
+  process.exitCode = 1;
+});

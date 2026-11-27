@@ -1,0 +1,141 @@
+import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
+import catalog from './api/catalog.js';
+import yahoo from './api/yahoo.js';
+
+const branch = 'feature/urenavi-free-20261127';
+const workerName = 'urenavi-free-qa-191';
+const jsonHeaders = {
+  'Cache-Control': 'no-store',
+  'X-Robots-Tag': 'noindex, nofollow',
+  'X-Content-Type-Options': 'nosniff'
+};
+
+function asQuery(url) {
+  const query = Object.create(null);
+  for (const [name, value] of url.searchParams) {
+    query[name] = Object.hasOwn(query, name) ? null : value;
+  }
+  return query;
+}
+
+async function parseBody(request) {
+  if (request.headers.get('content-type')?.split(';')[0] !== 'application/json' || !request.body) {
+    throw new Error('invalid-body');
+  }
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder('utf-8', { fatal: true });
+  let text = '';
+  let bytes = 0;
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > 2048) throw new Error('body-too-large');
+      text += decoder.decode(value, { stream: true });
+    }
+    return JSON.parse(text + decoder.decode());
+  } catch (error) {
+    await reader.cancel().catch(() => {});
+    throw error;
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+function deployment(url, env) {
+  const version = env.WORKER_VERSION;
+  const host = new RegExp('^verify-' + workerName + '\\.[a-z0-9-]+\\.workers\\.dev$');
+  const qaHost = host.test(url.hostname);
+  const [ref, sha] = (qaHost ? (env.URENAVI_FREE_BUILD_REF ?? '') : (version?.tag ?? '')).split(':');
+  const matches = ref === branch && /^[a-f0-9]{40}$/.test(sha || '') && Boolean(version?.id) && url.origin === env.URENAVI_FREE_RAKUTEN_ORIGIN;
+  return {
+    sha,
+    isIsolatedPreview: matches && qaHost,
+    isPublic: matches && url.origin === env.URENAVI_FREE_PUBLIC_ORIGIN &&
+      /^urenavi-free-public\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)
+  };
+}
+
+function protectPreview(request, env) {
+  const password = env.URENAVI_FREE_PREVIEW_PASSWORD;
+  if (typeof password !== 'string' || password.length < 32) {
+    return new Response(null, { status: 503, headers: jsonHeaders });
+  }
+  const expected = 'Basic ' + Buffer.from('urenavi:' + password, 'utf8').toString('base64');
+  const digest = value => createHash('sha256').update(value).digest();
+  if (timingSafeEqual(digest(request.headers.get('Authorization') || ''), digest(expected))) return null;
+  return new Response(null, {
+    status: 401,
+    headers: { ...jsonHeaders, 'WWW-Authenticate': 'Basic realm="Urenavi QA", charset="UTF-8"' }
+  });
+}
+
+// Authenticated QA only. Never calls Rakuten or touches the live reservation keys.
+async function redisDiagnostic(env) {
+  const headers = jsonHeaders;
+  const reply = (status, ok, stage) => Response.json({ redis: ok, stage, sha: env.URENAVI_FREE_BUILD_REF?.split(':')[1] ?? null, versionId: env.WORKER_VERSION?.id ?? null, yahooConfigured: Boolean(env.URENAVI_FREE_YAHOO_APP_ID) }, { status, headers });
+  if (env.URENAVI_FREE_REDIS_URL !== 'https://chief-panda-222800.upstash.io') return reply(503, false, 'URL_BINDING');
+  if (!env.URENAVI_FREE_REDIS_TOKEN) return reply(503, false, 'TOKEN_BINDING');
+  try {
+    const nonce = randomUUID();
+    const script = "if not redis.call('SET',KEYS[1],ARGV[1],'NX','EX',30) then return 0 end; local v=redis.call('GET',KEYS[1]); redis.call('DEL',KEYS[1]); if v==ARGV[1] then return 1 end; return 0";
+    const response = await fetch(env.URENAVI_FREE_REDIS_URL, {
+      method: 'POST', headers: { Authorization: 'Bearer ' + env.URENAVI_FREE_REDIS_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(['EVAL', script, 1, 'urenavi:qa:probe:' + nonce, nonce]),
+      redirect: 'manual', signal: AbortSignal.timeout(2500)
+    });
+    if (!response.ok) return reply(503, false, 'REDIS_HTTP_' + response.status);
+    const body = await response.json();
+    if (body.error) return reply(503, false, /readonly|read.only|NOPERM/i.test(String(body.error)) ? 'REDIS_WRITE_DENIED' : 'REDIS_COMMAND_ERROR');
+    if (body.result !== 1) return reply(503, false, 'REDIS_RESULT_MISMATCH');
+    return reply(200, true, 'OK');
+  } catch { return reply(503, false, 'REDIS_TRANSPORT_OR_PARSE'); }
+}
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const preview = deployment(url, env);
+    // Protect the QA alias independently of deployment metadata and origin configuration.
+    if (/^verify-urenavi-free-qa-191\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname)) {
+      const denied = protectPreview(request, env);
+      if (denied) return denied;
+    }
+    if (url.pathname === '/api/qa-redis') {
+      if (!/^verify-urenavi-free-qa-191\.[a-z0-9-]+\.workers\.dev$/.test(url.hostname))
+        return new Response(null, { status: 404, headers: jsonHeaders });
+      if (request.method !== 'POST') return new Response(null, { status: 405, headers: jsonHeaders });
+      return redisDiagnostic(env);
+    }
+    if (url.pathname === '/api/yahoo') {
+      if (request.method !== 'GET') return new Response(null, { status: 405, headers: jsonHeaders });
+      const result = await yahoo.handleYahoo(env, preview, asQuery(url));
+      return Response.json(result.data, { status: result.status, headers: jsonHeaders });
+    }
+    if (url.pathname !== '/api/catalog') {
+      if (url.pathname.startsWith('/api/')) return new Response(null, { status: 404, headers: jsonHeaders });
+      return env.ASSETS.fetch(request);
+    }
+    let body;
+    if (request.method === 'POST') {
+      try {
+        body = await parseBody(request);
+      } catch {
+        return Response.json({}, { status: 400, headers: jsonHeaders });
+      }
+    }
+    const headers = new Headers(jsonHeaders);
+    const handler = catalog.makeHandler(env, { preview });
+    return handler({
+      method: request.method,
+      query: asQuery(url),
+      body,
+      clientIp: request.headers.get('CF-Connecting-IP')
+    }, {
+      setHeader: (name, value) => headers.set(name, value),
+      status: status => ({ json: data => Response.json(data, { status, headers }) })
+    });
+  }
+};
