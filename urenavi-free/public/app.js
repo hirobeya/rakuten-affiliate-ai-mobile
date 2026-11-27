@@ -46,6 +46,13 @@ function track(product, event) {
 }
 
 function buyLink(product) {
+  if (product.source === 'yahoo') {
+    const link = element('a', 'Yahoo!ショッピングで見る', 'buy');
+    link.href = product.productUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    return link;
+  }
   if (!product.affiliateUrl || product.expires <= Date.now()) return element('span', '購入リンクを表示できません。', 'meta');
   const link = element('a', '楽天市場で見る', 'buy');
   link.href = product.affiliateUrl;
@@ -84,7 +91,8 @@ function detail(product) {
 
 function renderProduct(product, mode) {
   const card = element('article');
-  const info = element('p', product.rank ? product.rank + '位' + (product.rankGain ? '（' + product.rankGain + '位上昇）' : '') + ' ｜ 楽天市場' : '楽天市場', 'meta');
+  const source = product.source === 'yahoo' ? 'Yahoo!ショッピング' : '楽天市場';
+  const info = element('p', product.rank ? product.rank + '位' + (product.rankGain ? '（' + product.rankGain + '位上昇）' : '') + ' ｜ ' + source : source, 'meta');
   card.append(info, element('h3', product.title), element('p', yen(product.price), 'money'),
     element('p', product.shop + ' ｜ ' + review(product), 'meta'));
   if (product.estimatedCommission !== null && mode === 'commission') {
@@ -108,6 +116,7 @@ function renderProduct(product, mode) {
     }
   });
   favorite.setAttribute('aria-pressed', String(savedCodes().includes(product.code)));
+  if (product.source === 'yahoo') { favorite.disabled = true; favorite.title = 'Yahoo!のお気に入り再取得は未対応です'; }
 
   const compare = button('比較に追加', () => {
     if (selected.has(product.code)) selected.delete(product.code);
@@ -136,7 +145,7 @@ find('compare').addEventListener('click', () => {
   const table = element('table');
   const products = [...selected.values()];
   for (const [label, getter] of [
-    ['商品', item => item.title], ['価格', item => yen(item.price)],
+    ['商品', item => item.title], ['取得元', item => item.source === 'yahoo' ? 'Yahoo!ショッピング' : '楽天市場'], ['価格', item => yen(item.price)],
     ['販売ショップ', item => item.shop], ['レビュー', review]
   ]) {
     const row = element('tr');
@@ -159,7 +168,7 @@ find('compare').addEventListener('click', () => {
   showPanel('商品を比較', body);
 });
 
-async function load(query, title) {
+async function load(query, title, provider = 'rakuten') {
   currentRequest?.abort();
   const request = new AbortController();
   currentRequest = request;
@@ -167,7 +176,7 @@ async function load(query, title) {
   results.replaceChildren();
   status.textContent = '商品情報を取得中です。';
   try {
-    const response = await fetch('/api/catalog?' + new URLSearchParams(query), { signal: request.signal });
+    const response = await fetch((provider === 'yahoo' ? '/api/yahoo?' : '/api/catalog?') + new URLSearchParams(query), { signal: request.signal });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || '商品情報を読み込めませんでした。');
     if (request.signal.aborted) return;
@@ -188,9 +197,14 @@ async function load(query, title) {
   }
 }
 
+find('provider').addEventListener('change', () => {
+  const commission = find('mode').querySelector('option[value="commission"]');
+  commission.disabled = find('provider').value === 'yahoo';
+  if (commission.disabled && find('mode').value === 'commission') find('mode').value = 'search';
+});
 find('search').addEventListener('submit', event => {
   event.preventDefault();
-  load({ keyword: find('keyword').value, mode: find('mode').value, maxPrice: find('price').value }, '検索結果');
+  load({ keyword: find('keyword').value, mode: find('mode').value, maxPrice: find('price').value }, '検索結果', find('provider').value);
 });
 document.querySelectorAll('nav [data-mode]').forEach(node => {
   node.addEventListener('click', () => load({ mode: node.dataset.mode }, node.textContent));
@@ -231,7 +245,7 @@ for (const keyword of themes) {
     find('keyword').value = keyword;
     find('mode').value = 'search';
     find('price').value = '';
-    load({ keyword }, '季節のおすすめ検索');
+    load({ keyword, mode: 'search' }, '季節のおすすめ検索', find('provider').value);
   }));
 }
 
